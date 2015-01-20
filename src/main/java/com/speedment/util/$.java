@@ -28,13 +28,13 @@ public class $ implements CharSequence {
 		this("");
 	}
 	
-	public $(CharSequence... objects) {
+	public $(final CharSequence... objects) {
 		str = new StringBuilder();
 		$(objects);
 	}
 	
-	public final $ $(CharSequence... objects) {
-		for (CharSequence object : objects) {
+	public final $ $(final CharSequence... objects) {
+		for (final CharSequence object : objects) {
 			str.append(object);
 		}
 		return this;
@@ -46,12 +46,12 @@ public class $ implements CharSequence {
 	}
 
 	@Override
-	public char charAt(int index) {
+	public char charAt(final int index) {
 		return str.charAt(index);
 	}
 
 	@Override
-	public CharSequence subSequence(int start, int end) {
+	public CharSequence subSequence(final int start, final int end) {
 		return str.subSequence(start, end);
 	}
 
