@@ -9,7 +9,7 @@ public class Field_ {
     protected boolean private_;
     protected boolean static_;
     protected boolean final_;
-    protected Type_ type_;
+    private Type_ type_;
     private CharSequence name_;
     private Expression_ expression_;
 
@@ -94,5 +94,13 @@ public class Field_ {
 
     public void setExpression_(Expression_ expression_) {
         this.expression_ = expression_;
+    }
+
+    public Type_ getType_() {
+        return type_;
+    }
+
+    public void setType_(Type_ type_) {
+        this.type_ = type_;
     }
 }

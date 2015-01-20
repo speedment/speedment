@@ -12,6 +12,7 @@ public class Class_ {
     private final List<Field_> fields;
     private final List<Constructor_> constructors;
     private final List<Method_> methods;
+    private Package_ pagage;
 
     public Class_() {
         this.fields = new ArrayList<>();
@@ -44,6 +45,14 @@ public class Class_ {
 
     public List<Method_> getMethods() {
         return methods;
+    }
+
+    public Package_ getPagage() {
+        return pagage;
+    }
+
+    public void setPagage(Package_ pagage) {
+        this.pagage = pagage;
     }
 
 }
