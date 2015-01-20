@@ -7,10 +7,10 @@ package com.speedment.util;
 public class $ implements CharSequence {
 
 	private static final CharSequence[] EMPTY = new CharSequence[0];
-	
+
 	private final StringBuilder str;
 
-	public $() {
+	private $() {
 		this(EMPTY);
 	}
 
@@ -19,9 +19,15 @@ public class $ implements CharSequence {
 		$(objects);
 	}
 
-	public final $ $(Object... objects) {
-		for (Object object : objects) {
-			str.append(object);
+	public final $ $(Object firstObject) {
+		str.append(firstObject);
+		return this;
+	}
+
+	public final $ $(Object firstObject, Object... theRest) {
+		$(firstObject);
+		for (Object object : theRest) {
+			$(object);
 		}
 		return this;
 	}
