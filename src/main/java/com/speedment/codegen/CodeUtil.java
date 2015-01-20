@@ -88,12 +88,13 @@ public class CodeUtil {
 		tab = "\t",
 		nltab = "\n\t";
 	
-	public final static String 
+	public final static CharSequence 
 		BS = "{", 
 		BE = "}", 
 		PS = "(",
 		PE = ")",
 		AS = "[",
 		AE = "]",
-		SPACE = " ";
+		SPACE = " ",
+		EMPTY = "";
 }

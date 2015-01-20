@@ -18,7 +18,7 @@ public class Method_ extends CodeModel {
     private CharSequence name_;
     private Expression_ expression_;
     private List<Field_> parameters; // Todo: Introduce parameter
-    private List<Statement_> statements;
+    private List<Statement_> statements; // Todo: Block instead of statements.
 
     public Method_(Type_ type_, CharSequence name_) {
         this.parameters = new ArrayList<>();
@@ -108,6 +108,16 @@ public class Method_ extends CodeModel {
     public void setParameters(List<Field_> parameters) {
         this.parameters = parameters;
     }
+	
+	public void setBlock_(Block_ block_) {
+		throw new UnsupportedOperationException();
+		// TODO: Implement Method_.setBlock_
+	}
+	
+	public Block_ getBlock_() {
+		throw new UnsupportedOperationException();
+		// TODO: Implement Method_.getBlock_
+	}
 
 	@Override
 	public Type getType() {
