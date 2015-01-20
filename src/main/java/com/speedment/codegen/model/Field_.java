@@ -9,7 +9,7 @@ public class Field_ extends CodeModel {
     protected boolean private_;
     protected boolean static_;
     protected boolean final_;
-    protected Type_ type_;
+    private Type_ type_;
     private CharSequence name_;
     private Expression_ expression_;
 
@@ -100,4 +100,12 @@ public class Field_ extends CodeModel {
 	public Type getType() {
 		return Type.FIELD;
 	}
+
+    public Type_ getType_() {
+        return type_;
+    }
+
+    public void setType_(Type_ type_) {
+        this.type_ = type_;
+    }
 }

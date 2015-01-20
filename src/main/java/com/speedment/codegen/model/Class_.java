@@ -12,6 +12,7 @@ public class Class_ extends CodeModel {
     private final List<Field_> fields;
     private final List<Constructor_> constructors;
     private final List<Method_> methods;
+    private Package_ pagage;
 
     public Class_() {
         this.fields = new ArrayList<>();
@@ -50,4 +51,12 @@ public class Class_ extends CodeModel {
 	public Type getType() {
 		return Type.CLASS;
 	}
+    public Package_ getPagage() {
+        return pagage;
+    }
+
+    public void setPagage(Package_ pagage) {
+        this.pagage = pagage;
+    }
+
 }
