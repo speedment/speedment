@@ -16,47 +16,44 @@
  */
 package com.speedment.util;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
 /**
  *
  * @author Duncan
  */
-public class $ implements CharSequence {
-
-	private final StringBuilder str;
-
-	public $() {
-		this("");
+public class TestDollar {
+	
+	private $ instance;
+	
+	public TestDollar() {
 	}
 	
-	public $(CharSequence... objects) {
-		str = new StringBuilder();
-		$(objects);
+	@BeforeClass
+	public static void setUpClass() {
 	}
 	
-	public final $ $(CharSequence... objects) {
-		for (CharSequence object : objects) {
-			str.append(object);
-		}
-		return this;
+	@AfterClass
+	public static void tearDownClass() {
 	}
-
-	@Override
-	public int length() {
-		return str.length();
+	
+	@Before
+	public void setUp() {
+		instance = new $();
 	}
-
-	@Override
-	public char charAt(int index) {
-		return str.charAt(index);
+	
+	@After
+	public void tearDown() {
 	}
-
-	@Override
-	public CharSequence subSequence(int start, int end) {
-		return str.subSequence(start, end);
-	}
-
-	@Override
-	public String toString() {
-		return str.toString();
+	
+	@Test
+	public void testConcatenation() {
+		instance.$("qwerty").$("asdfg", "zxcvb");
+		assertEquals("qwertyasdfgzxcvb", instance.toString());
 	}
 }
