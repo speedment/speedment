@@ -1,12 +1,44 @@
 package com.speedment.codegen;
 
 import com.speedment.util.$;
+import java.util.function.Function;
 
 /**
  *
  * @author Duncan
  */
 public class CodeUtil {
+	/**
+	 * Returns the specified text but with the first character lowercase.
+	 * @param input The text.
+	 * @return The resulting text.
+	 */
+	public static CharSequence lcfirst(CharSequence input) {
+		return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
+	}
+	
+	/**
+	 * Returns the specified text but with the first character uppercase.
+	 * @param input The text.
+	 * @return The resulting text.
+	 */
+	public static CharSequence ucfirst(CharSequence input) {
+		return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
+	}
+	
+	public static CharSequence withFirst(CharSequence input, Function<Character, CharSequence> callback) {
+		if (input == null) {
+            return null;
+        } else if (input.length() == 0) {
+			return "";
+		} else {
+			return String.join(
+				callback.apply(input.charAt(0)),
+				input.subSequence(1, input.length())
+			);
+		}
+	}
+	
 	/**
 	 * Surrounds the specified text with brackets.
 	 * @param text The text to surround.
