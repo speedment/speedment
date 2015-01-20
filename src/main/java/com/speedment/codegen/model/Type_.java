@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Type_ {
+public class Type_ extends CodeModel {
 
     public static final Type_ INT_PRIMITIVE = new Type_(int.class);
     public static final Type_ INTEGER = new Type_(Integer.class);
@@ -71,4 +71,8 @@ public class Type_ {
         return genericTypes;
     }
 
+	@Override
+	public Type getType() {
+		return Type.TYPE;
+	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Package_ {
+public class Package_ extends CodeModel {
 
     private String name_;
     private final List<Class_> classes;
@@ -24,4 +24,8 @@ public class Package_ {
         this.name_ = name_;
     }
 
+	@Override
+	public Type getType() {
+		return Type.PACKAGE;
+	}
 }

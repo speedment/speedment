@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Statement_ {
+public class Statement_ extends CodeModel {
 
     private CharSequence statementText;
 
@@ -20,4 +20,8 @@ public class Statement_ {
         this.statementText = statementText;
     }
 
+	@Override
+	public Type getType() {
+		return Type.STATEMENT;
+	}
 }

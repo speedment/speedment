@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Method_ {
+public class Method_ extends CodeModel {
 
     private boolean private_;
     private boolean static_;
@@ -120,4 +120,8 @@ public class Method_ {
         this.parameters = parameters;
     }
 
+	@Override
+	public Type getType() {
+		return Type.METHOD;
+	}
 }

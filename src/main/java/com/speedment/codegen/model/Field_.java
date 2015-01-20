@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Field_ {
+public class Field_ extends CodeModel {
 
     protected boolean private_;
     protected boolean static_;
@@ -95,4 +95,9 @@ public class Field_ {
     public void setExpression_(Expression_ expression_) {
         this.expression_ = expression_;
     }
+	
+	@Override
+	public Type getType() {
+		return Type.FIELD;
+	}
 }
