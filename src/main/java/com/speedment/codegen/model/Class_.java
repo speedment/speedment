@@ -51,6 +51,10 @@ public class Class_ extends CodeModel {
         return this;
     }
 
+    public boolean is(ClassModifier_ modifier) {
+        return classModifiers.contains(modifier);
+    }
+
     public List<Field_> getFields() {
         return fields;
     }

@@ -29,16 +29,16 @@ public enum InterfaceModifier_ implements Modifier_<InterfaceModifier_> {
         return value;
     }
 
-    public static InterfaceModifier_ byName(final String text) {
-        return support.byName(text);
+    public static InterfaceModifier_ by(final String text) {
+        return support.by(text);
     }
 
-    public static Set<InterfaceModifier_> byText(final String text) {
-        return support.byText(text);
+    public static Set<InterfaceModifier_> of(final String text) {
+        return support.of(text);
     }
 
-    public static Set<InterfaceModifier_> byCode(final int code) {
-        return support.byCode(code);
+    public static Set<InterfaceModifier_> of(final int code) {
+        return support.of(code);
     }
 
     public static Set<InterfaceModifier_> of(final InterfaceModifier_... classModifiers) {

@@ -32,16 +32,16 @@ public enum MethodModifier_ implements Modifier_<MethodModifier_> {
         return value;
     }
 
-    public static MethodModifier_ byName(final String text) {
-        return staticSupport.byName(text);
+    public static MethodModifier_ by(final String text) {
+        return staticSupport.by(text);
     }
 
-    public static Set<MethodModifier_> byText(final String text) {
-        return staticSupport.byText(text);
+    public static Set<MethodModifier_> of(final String text) {
+        return staticSupport.of(text);
     }
 
-    public static Set<MethodModifier_> byCode(final int code) {
-        return staticSupport.byCode(code);
+    public static Set<MethodModifier_> of(final int code) {
+        return staticSupport.of(code);
     }
 
     public static Set<MethodModifier_> of(final MethodModifier_... classModifiers) {

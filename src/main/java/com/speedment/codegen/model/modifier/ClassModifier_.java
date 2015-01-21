@@ -30,16 +30,16 @@ public enum ClassModifier_ implements Modifier_<ClassModifier_> {
         return value;
     }
 
-    public static ClassModifier_ byName(final String text) {
-        return staticSupport.byName(text);
+    public static ClassModifier_ by(final String text) {
+        return staticSupport.by(text);
     }
 
-    public static Set<ClassModifier_> byText(final String text) {
-        return staticSupport.byText(text);
+    public static Set<ClassModifier_> of(final String text) {
+        return staticSupport.of(text);
     }
 
-    public static Set<ClassModifier_> byCode(final int code) {
-        return staticSupport.byCode(code);
+    public static Set<ClassModifier_> of(final int code) {
+        return staticSupport.of(code);
     }
 
     public static Set<ClassModifier_> of(final ClassModifier_... classModifiers) {

@@ -20,16 +20,16 @@ public class StaticSupport<T extends Modifier_> {
         this.nameMap = Stream.of(values).collect(Collectors.toMap((m) -> m.name().toLowerCase(), (m) -> m));
     }
 
-    public T byName(final String name) {
+    public T by(final String name) {
         return nameMap.get(name.toLowerCase());
     }
 
-    public Set<T> byText(final String text) {
+    public Set<T> of(final String text) {
         final String[] tokens = text.split("\\s+");
-        return Stream.of(tokens).filter((token) -> byName(token) != null).map((token) -> byName(token)).collect(Collectors.toSet());
+        return Stream.of(tokens).filter((token) -> by(token) != null).map((token) -> by(token)).collect(Collectors.toSet());
     }
 
-    public Set<T> byCode(final int code) {
+    public Set<T> of(final int code) {
         return Stream.of(values).filter((cm) -> Modifier_.valuesContains(code, cm.getValue())).collect(Collectors.toSet());
     }
 

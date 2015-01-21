@@ -26,16 +26,16 @@ public enum ConstructorModifier_ implements Modifier_<ConstructorModifier_> {
         return value;
     }
 
-    public static ConstructorModifier_ byName(final String text) {
-        return staticSupport.byName(text);
+    public static ConstructorModifier_ by(final String text) {
+        return staticSupport.by(text);
     }
 
-    public static Set<ConstructorModifier_> byText(final String text) {
-        return staticSupport.byText(text);
+    public static Set<ConstructorModifier_> of(final String text) {
+        return staticSupport.of(text);
     }
 
-    public static Set<ConstructorModifier_> byCode(final int code) {
-        return staticSupport.byCode(code);
+    public static Set<ConstructorModifier_> of(final int code) {
+        return staticSupport.of(code);
     }
 
     public static Set<ConstructorModifier_> of(final ConstructorModifier_... classModifiers) {

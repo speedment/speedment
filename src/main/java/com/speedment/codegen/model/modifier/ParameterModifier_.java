@@ -24,16 +24,16 @@ public enum ParameterModifier_ implements Modifier_<ParameterModifier_> {
         return value;
     }
 
-    public static ParameterModifier_ byName(final String text) {
-        return staticSupport.byName(text);
+    public static ParameterModifier_ by(final String text) {
+        return staticSupport.by(text);
     }
 
-    public static Set<ParameterModifier_> byText(final String text) {
-        return staticSupport.byText(text);
+    public static Set<ParameterModifier_> of(final String text) {
+        return staticSupport.of(text);
     }
 
-    public static Set<ParameterModifier_> byCode(final int code) {
-        return staticSupport.byCode(code);
+    public static Set<ParameterModifier_> of(final int code) {
+        return staticSupport.of(code);
     }
 
     public static Set<ParameterModifier_> of(final ParameterModifier_... classModifiers) {
