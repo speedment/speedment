@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Expression_ {
+public class Expression_ extends CodeModel {
 
     private String stringExpression;
 
@@ -21,4 +21,8 @@ public class Expression_ {
         return this;
     }
 
+	@Override
+	public Type getType() {
+		return Type.EXPRESSION;
+	}
 }

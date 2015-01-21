@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Class_ {
+public class Class_ extends CodeModel {
 
     private final List<Field_> fields;
     private final List<Constructor_> constructors;
@@ -47,6 +47,10 @@ public class Class_ {
         return methods;
     }
 
+	@Override
+	public Type getType() {
+		return Type.CLASS;
+	}
     public Package_ getPagage() {
         return pagage;
     }

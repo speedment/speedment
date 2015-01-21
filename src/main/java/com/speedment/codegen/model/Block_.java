@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Block_ {
+public class Block_ extends CodeModel {
 
     private final List<Statement_> statements;
 
@@ -24,4 +24,8 @@ public class Block_ {
         return statements;
     }
 
+	@Override
+	public Type getType() {
+		return Type.BLOCK;
+	}
 }
