@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T>
  */
-public class StaticSupport<T extends Modifier_> {
+public class StaticSupport<T extends Modifier_<T>> {
 
     private final T[] values;
     private final Map<String, T> nameMap;
@@ -33,7 +33,9 @@ public class StaticSupport<T extends Modifier_> {
         return Stream.of(values).filter((cm) -> Modifier_.valuesContains(code, cm.getValue())).collect(Collectors.toSet());
     }
 
-    public Set<T> of(final T... classModifiers) {
+    @SafeVarargs
+    @SuppressWarnings({"unchecked", "varargs"})
+    public final Set<T> of(final T... classModifiers) {
         return Stream.of(classModifiers).collect(Collectors.toSet());
     }
 

@@ -54,16 +54,28 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>    
+            </plugin> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>   
         </plugins>
     </build>
         
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>com.sun.codemodel</groupId>
             <artifactId>codemodel-project</artifactId>
             <version>2.6</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

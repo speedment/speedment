@@ -5,12 +5,12 @@ package com.speedment.codegen.model.modifier;
  * @author pemi
  * @param <T>
  */
-public interface Modifier_<T> {
+public interface Modifier_<T extends Modifier_<T>> {
 
     String name();
 
     int getValue();
-
+    
     public static boolean valuesContains(int values, int value) {
         return ((values & values) != 0);
     }
