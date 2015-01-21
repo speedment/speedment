@@ -18,32 +18,40 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
     private final List<Method_> methods;
+    private final Set<M> modifiers;
+    private final List<Annotation_> annotations;
     private Package_ pagage;
     private CharSequence name;
-    private final Set<M> modifiers;
 
-    public ClassAndInterfaceBase(Class<M> mClass) {
+    public ClassAndInterfaceBase(final Class<M> mClass) {
         fields = new ArrayList<>();
         methods = new ArrayList<>();
         interfaces = new ArrayList<>();
         modifiers = EnumSet.noneOf(mClass);
+        annotations = new ArrayList<>();
     }
 
     @SuppressWarnings("unchecked")
-    public T add(Interface_ interf) {
+    public T add(final Interface_ interf) {
         getInterfaces().add(interf);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public T add(Field_ field) {
+    public T add(final Field_ field) {
         getFields().add(field);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public T add(Method_ method_) {
+    public T add(final Method_ method_) {
         getMethods().add(method_);
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T add(final Annotation_ annotation) {
+        getAnnotations().add(annotation);
         return (T) this;
     }
 
@@ -52,14 +60,14 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 //        return (T) this;
 //    }
     @SuppressWarnings("unchecked")
-    public T add(M firstClassModifier_m, M... restClassModifiers) {
+    public T add(final M firstClassModifier_m, final M... restClassModifiers) {
         getModifiers().add(firstClassModifier_m);
         Stream.of(restClassModifiers).forEach(getModifiers()::add);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public T set(Set<M> newSet) {
+    public T set(final Set<M> newSet) {
         getModifiers().clear();
         getModifiers().addAll(newSet);
         return (T) this;
@@ -85,7 +93,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return pagage;
     }
 
-    public void setPackage(Package_ pagage) {
+    public void setPackage(final Package_ pagage) {
         this.pagage = pagage;
     }
 
@@ -93,11 +101,15 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return name;
     }
 
-    public void setName(CharSequence name) {
+    public void setName(final CharSequence name) {
         this.name = name;
     }
 
     public Set<M> getModifiers() {
         return modifiers;
+    }
+
+    public List<Annotation_> getAnnotations() {
+        return annotations;
     }
 }
