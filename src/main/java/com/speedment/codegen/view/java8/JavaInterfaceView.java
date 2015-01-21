@@ -1,20 +1,17 @@
 package com.speedment.codegen.view.java8;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.view.CodeView;
-import com.speedment.util.$;
-import static com.speedment.codegen.CodeUtil.*;
-import static com.speedment.codegen.view.java8.ClassAndInterfaceView.*;
 import com.speedment.codegen.model.Interface_;
+import com.speedment.codegen.model.modifier.InterfaceModifier_;
 
 /**
  *
  * @author Duncan
  * @param <Model>
  */
-public class JavaInterfaceView<Model extends Interface_> extends CodeView<Model> {
+public class JavaInterfaceView extends ClassAndInterfaceView<Interface_, InterfaceModifier_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Model interf) {
+	public CharSequence render(CodeGenerator renderer, Interface_ interf) {
 		return new $(
 			renderPackage(renderer, interf), dnl(),
 			renderModifiers(interf, renderer, SPACE),
