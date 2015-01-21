@@ -3,29 +3,27 @@ package com.speedment.codegen.view.java8;
 import com.speedment.codegen.CodeGenerator;
 import static com.speedment.codegen.CodeUtil.EMPTY;
 import static com.speedment.codegen.CodeUtil.SC;
+import static com.speedment.codegen.CodeUtil.SPACE;
+import com.speedment.codegen.model.ClassAndInterfaceBase;
 import com.speedment.codegen.model.CodeModel;
 import static com.speedment.codegen.model.CodeModel.Type.PACKAGE;
 import com.speedment.codegen.model.Interface_;
 import com.speedment.codegen.model.Package_;
-import com.speedment.codegen.model.modifier.ClassModifier_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.ABSTRACT;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.PRIVATE;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.PROTECTED;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.PUBLIC;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.STATIC;
-import static com.speedment.codegen.model.modifier.InterfaceModifier_.STRICTFP;
 import com.speedment.util.$;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Duncan
+ * @param <Model>
  */
-public class JavaRenderSupport {
+public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase> {
 	public final static String 
 		PACKAGE_STRING = "package ",
 		EXTENDS_STRING = "extends ",
@@ -34,12 +32,9 @@ public class JavaRenderSupport {
 	private final static Map<InterfaceModifier_, CharSequence> interfaceModifierTexts = new EnumMap<>(InterfaceModifier_.class);
 	
 	static {
-		interfaceModifierTexts.put(PRIVATE, "private ");
-		interfaceModifierTexts.put(PROTECTED, "protected ");
-		interfaceModifierTexts.put(PUBLIC, "public ");
-		interfaceModifierTexts.put(ABSTRACT, "abstract ");
-		interfaceModifierTexts.put(STATIC, "static ");
-		interfaceModifierTexts.put(STRICTFP, "strict ");
+		Stream.of(InterfaceModifier_.values()).collect(Collectors.toMap(
+			Function.identity(), v -> new $(v.name().toLowerCase(), SPACE)
+		));
 	}
 	
 	public static CharSequence renderPackage(CodeGenerator cg, Interface_ interf) {
@@ -65,7 +60,7 @@ public class JavaRenderSupport {
 	}
 	
 	public static CharSequence renderModifiers(Interface_ interf, CodeGenerator cg, CharSequence delimiter) {
-		return interf.getInterfaceModifiers().stream()
+		return interf.getClassModifiers().stream()
 			.map((m) -> interfaceModifierTexts.get(m))
 			.collect(Collectors.joining(delimiter));
 	}
