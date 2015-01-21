@@ -19,13 +19,13 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     private final List<Method_> methods;
     private Package_ pagage;
     private CharSequence name;
-    private final Set<M> classModifiers;
+    private final Set<M> modifiers;
 
     public ClassAndInterfaceBase(Class<M> mClass) {
         fields = new ArrayList<>();
         methods = new ArrayList<>();
         interfaces = new ArrayList<>();
-        classModifiers = EnumSet.noneOf(mClass);
+        modifiers = EnumSet.noneOf(mClass);
     }
 
     public T add(Interface_ interf) {
@@ -44,18 +44,18 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     public T add(M classModifier_) {
-        getClassModifiers().add(classModifier_);
+        getModifiers().add(classModifier_);
         return (T) this;
     }
 
     public T set(Set<M> newSet) {
-        getClassModifiers().clear();
-        getClassModifiers().addAll(newSet);
+        getModifiers().clear();
+        getModifiers().addAll(newSet);
         return (T) this;
     }
 
     public boolean is(M modifier) {
-        return classModifiers.contains(modifier);
+        return modifiers.contains(modifier);
     }
 
     public List<Interface_> getInterfaces() {
@@ -86,7 +86,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         this.name = name;
     }
 
-    public Set<M> getClassModifiers() {
-        return classModifiers;
+    public Set<M> getModifiers() {
+        return modifiers;
     }
 }
