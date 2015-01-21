@@ -93,7 +93,16 @@ public class CodeUtil {
 	 */
 	public static void nl(String nl) {
 		CodeUtil.nl = nl;
+		CodeUtil.dnl = nl + nl;
 		CodeUtil.nltab = nl + tab;
+	}
+	
+	/**
+	 * Returns the new-line-character as defined in <code>nl(String)</code>.
+	 * @return The new-line character.
+	 */
+	public static CharSequence dnl() {
+		return dnl;
 	}
 	
 	/**
@@ -117,6 +126,7 @@ public class CodeUtil {
 	
 	private static String 
 		nl = "\n",
+		dnl = "\n\n",
 		tab = "\t",
 		nltab = "\n\t";
 	

@@ -22,14 +22,17 @@ public class JavaClassView extends CodeView<Class_> {
 		PUBLIC_STRING = "public ",
 		FINAL_STRING = "final ",
 		ABSTRACT_STRING = "abstract ",
-		STATIC_STRING = "static ";
+		STATIC_STRING = "static ",
+		EXTENDS_STRING = "extends ",
+		IMPLEMENTS_STRING = "implements ",
+		COMMA_STRING = ", ";
 			
 	@Override
 	public CharSequence render(CodeGenerator renderer, Class_ clazz) {
 		return new $(
 			PACKAGE_STRING, 
 			((Package_) renderer.last(PACKAGE)).getName_(), 
-			SC, NL, NL,
+			SC, dnl(),
 			// TODO: Imports.
 				
 			// Accessability
@@ -46,7 +49,16 @@ public class JavaClassView extends CodeView<Class_> {
 			// Staticality
 			clazz.is(STATIC) ? STATIC_STRING : EMPTY,
 				
-			// TODO: Class name, parent name, implemented interfaces, etc.
+			// Name
+			clazz.getName(), SPACE,
+				
+			// Parent
+			clazz.getParent() == null ? EMPTY : new $(EXTENDS_STRING, clazz.getParent().getName(), SPACE),
+				
+			// Implemented interfaces.
+			clazz.getInterfaces().stream()
+				.map((i) -> i.getName())
+				.collect(Collectors.joining(COMMA_STRING, IMPLEMENTS_STRING, SPACE)),
 				
 			// Block of content
 			looseBracketsIndent(new $(
@@ -54,19 +66,19 @@ public class JavaClassView extends CodeView<Class_> {
 				// Render fields.
 				clazz.getFields().stream()
 					.map((f) -> renderer.on(f))
-					.collect(Collectors.joining(NL)),
-				NL, NL,
+					.collect(Collectors.joining(nl())),
+				dnl(),
 					
 				// Render constructors.
 				clazz.getConstructors().stream()
 					.map((c) -> renderer.on(c))
-					.collect(Collectors.joining(NL)),
-				NL, NL,
+					.collect(Collectors.joining(nl())),
+				dnl(),
 					
 				// Render methods.
 				clazz.getMethods().stream()
 					.map((m) -> renderer.on(m))
-					.collect(Collectors.joining(NL))
+					.collect(Collectors.joining(nl()))
 			))
 		);
 	}

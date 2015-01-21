@@ -8,9 +8,14 @@ import java.util.List;
  * @author pemi
  */
 public class Package_ extends CodeModel {
+	
+	// TODO: An idea might be to let classes be part of a package rather than having
+	// a package contain a number of classes. Since the primary purpose of the code
+	// generator is to have each class render to a particular java file, iterating
+	// over each class in a package is secondary.
 
     private String name_;
-    private final List<Class_> classes;
+    private final List<Class_> classes; 
     private final List<Package_> packages;
 
     public Package_() {

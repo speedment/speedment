@@ -12,20 +12,28 @@ import java.util.Set;
  */
 public class Class_ extends CodeModel {
 	
-	// TODO: Shouldn't a class have a name?
 	// TODO: Parent class and implemented interfaces.
 
+	private final List<Interface_> interfaces;
     private final List<Field_> fields;
     private final List<Constructor_> constructors;
     private final List<Method_> methods;
     private Package_ pagage;
+	private CharSequence name;
+	private Class_ parent;
     private final Set<ClassModifier_> classModifiers;
 
     public Class_() {
-        this.fields = new ArrayList<>();
-        constructors = new ArrayList<>();
-        methods = new ArrayList<>();
-        classModifiers = EnumSet.noneOf(ClassModifier_.class);
+        fields			= new ArrayList<>();
+        constructors	= new ArrayList<>();
+        methods			= new ArrayList<>();
+		interfaces		= new ArrayList<>();
+        classModifiers	= EnumSet.noneOf(ClassModifier_.class);
+    }
+	
+	public Class_ add(Interface_ interf) {
+        getInterfaces().add(interf);
+        return this;
     }
 
     public Class_ add(Field_ field) {
@@ -57,6 +65,10 @@ public class Class_ extends CodeModel {
     public boolean is(ClassModifier_ modifier) {
         return classModifiers.contains(modifier);
     }
+	
+	public List<Interface_> getInterfaces() {
+        return interfaces;
+    }
 
     public List<Field_> getFields() {
         return fields;
@@ -82,6 +94,22 @@ public class Class_ extends CodeModel {
     public void setPackage(Package_ pagage) {
         this.pagage = pagage;
     }
+
+	public CharSequence getName() {
+		return name;
+	}
+
+	public void setName(CharSequence name) {
+		this.name = name;
+	}
+
+	public Class_ getParent() {
+		return parent;
+	}
+
+	public void setParent(Class_ parent) {
+		this.parent = parent;
+	}
 
     public Set<ClassModifier_> getClassModifiers() {
         return classModifiers;

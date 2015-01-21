@@ -13,7 +13,8 @@ public abstract class CodeModel {
 	 */
 	public static enum Type {
 		BLOCK, CLASS, CONSTRUCTOR, EXPRESSION, 
-		FIELD, METHOD, PACKAGE, STATEMENT, TYPE
+		FIELD, METHOD, PACKAGE, STATEMENT, TYPE,
+		INTERFACE
 	}
 
 	/**

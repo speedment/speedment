@@ -10,7 +10,7 @@ public interface Modifier_<T> {
     String name();
 
     int getValue();
-
+	
     public static boolean valuesContains(int values, int value) {
         return ((values & values) != 0);
     }
@@ -21,5 +21,4 @@ public interface Modifier_<T> {
         }
         return value;
     }
-
 }
