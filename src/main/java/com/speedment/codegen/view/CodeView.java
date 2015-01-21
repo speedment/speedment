@@ -9,7 +9,5 @@ import com.speedment.codegen.model.CodeModel;
  * @param <Model>
  */
 public abstract class CodeView<Model extends CodeModel> {
-	public static final String NL = "\n", TAB = "\t", BS = "{", BE = "}";
-	
 	public abstract CharSequence render(final CodeGenerator renderer, final Model model);
 }
