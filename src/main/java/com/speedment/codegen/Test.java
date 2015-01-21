@@ -5,7 +5,7 @@ import com.speedment.codegen.model.Class_;
 import com.speedment.codegen.model.Field_;
 import com.speedment.codegen.model.Package_;
 import static com.speedment.codegen.model.Type_.STRING;
-import com.speedment.codegen.model.modifier.ClassModifier_;
+import static com.speedment.codegen.model.modifier.ClassModifier_.*;
 
 /**
  *
@@ -25,12 +25,12 @@ public class Test {
         final Class_ class_ = new Class_();
         class_.add(field);
         class_.add(new Field_(STRING, "bar"));
-        class_.add(ClassModifier_.PUBLIC).add(ClassModifier_.STATIC);
+        class_.add(PUBLIC, STATIC);
 
         new AccessorImplementer(class_).apply();
 
         final Class_ c2 = new Class_();
-        c2.set(ClassModifier_.of("private static final"));
+        c2.set(of("private static final"));
 
     }
 

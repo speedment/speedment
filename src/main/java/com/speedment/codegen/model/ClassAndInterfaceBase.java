@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  *
@@ -28,26 +29,36 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         modifiers = EnumSet.noneOf(mClass);
     }
 
+    @SuppressWarnings("unchecked")
     public T add(Interface_ interf) {
         getInterfaces().add(interf);
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     public T add(Field_ field) {
         getFields().add(field);
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     public T add(Method_ method_) {
         getMethods().add(method_);
         return (T) this;
     }
 
-    public T add(M classModifier_) {
-        getModifiers().add(classModifier_);
+//    public T add(M classModifier_) {
+//        getModifiers().add(classModifier_);
+//        return (T) this;
+//    }
+    @SuppressWarnings("unchecked")
+    public T add(M firstClassModifier_m, M... restClassModifiers) {
+        getModifiers().add(firstClassModifier_m);
+        Stream.of(restClassModifiers).forEach(getModifiers()::add);
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     public T set(Set<M> newSet) {
         getModifiers().clear();
         getModifiers().addAll(newSet);

@@ -6,12 +6,12 @@ import java.util.List;
 
 /**
  *
- * @author pemiClassModifier_
+ * @author pemi
  */
 public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
 
     private final List<Constructor_> constructors;
-    private Class_ baseClass;
+    private Class_ superClass;
 
     public Class_() {
         super(ClassModifier_.class);
@@ -32,12 +32,12 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         return Type.CLASS;
     }
 
-    public Class_ getBaseClass() {
-        return baseClass;
+    public Class_ getSuperClass() {
+        return superClass;
     }
 
-    public void setBaseClass(Class_ parent) {
-        this.baseClass = parent;
+    public void setSuperClass(Class_ parent) {
+        this.superClass = parent;
     }
 
 }

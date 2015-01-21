@@ -53,7 +53,7 @@ public class JavaClassView extends CodeView<Class_> {
 			clazz.getName(), SPACE,
 				
 			// Parent
-			clazz.getBaseClass() == null ? EMPTY : new $(EXTENDS_STRING, clazz.getBaseClass().getName(), SPACE),
+			clazz.getSuperClass() == null ? EMPTY : new $(EXTENDS_STRING, clazz.getSuperClass().getName(), SPACE),
 				
 			// Implemented interfaces.
 			clazz.getInterfaces().stream()
