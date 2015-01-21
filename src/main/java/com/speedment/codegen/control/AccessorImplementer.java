@@ -35,7 +35,7 @@ public class AccessorImplementer implements Controller {
 
     protected void generateSetter(final Field_ field_) {
         final Method_ method_ = new Method_(field_.getType_(), "set" + firstCharCapital(field_.getName_())).add(new Field_(field_.getType_(), field_.getName_()));
-        method_.add(new Statement_("this." + field_.getName_() + " = "));
+        method_.add(new Statement_("this." + field_.getName_() + " = " + field_.getName_()));
         class_.add(method_);
     }
 
