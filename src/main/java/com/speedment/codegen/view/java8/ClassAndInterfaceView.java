@@ -60,7 +60,7 @@ public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase> {
 	}
 	
 	public static CharSequence renderModifiers(Interface_ interf, CodeGenerator cg, CharSequence delimiter) {
-		return interf.getClassModifiers().stream()
+		return interf.getModifiers().stream()
 			.map((m) -> interfaceModifierTexts.get(m))
 			.collect(Collectors.joining(delimiter));
 	}
