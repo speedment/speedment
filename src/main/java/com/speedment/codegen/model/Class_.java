@@ -75,16 +75,15 @@ public class Class_ extends CodeModel {
         return Type.CLASS;
     }
 
-    public Package_ getPagage() {
+    public Package_ getPackage() {
         return pagage;
     }
 
-    public void setPagage(Package_ pagage) {
+    public void setPackage(Package_ pagage) {
         this.pagage = pagage;
     }
 
     public Set<ClassModifier_> getClassModifiers() {
         return classModifiers;
     }
-
 }
