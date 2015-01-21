@@ -11,6 +11,9 @@ import java.util.Set;
  * @author pemi
  */
 public class Class_ extends CodeModel {
+	
+	// TODO: Shouldn't a class have a name?
+	// TODO: Parent class and implemented interfaces.
 
     private final List<Field_> fields;
     private final List<Constructor_> constructors;

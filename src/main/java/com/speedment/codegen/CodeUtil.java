@@ -128,5 +128,6 @@ public class CodeUtil {
 		AS = "[",
 		AE = "]",
 		SPACE = " ",
-		EMPTY = "";
+		EMPTY = "",
+		SC = ";";
 }
