@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Package_ extends CodeModel implements Packagable {
+public class Package_ implements CodeModel, Packagable {
 
     // TODO: An idea might be to let classes be part of a package rather than having
     // a package contain a number of classes. Since the primary purpose of the code

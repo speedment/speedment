@@ -14,14 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view;
+package com.speedment.codegen.view.java8;
+
+import com.speedment.codegen.CodeGenerator;
+import com.speedment.codegen.model.Operator_;
+import com.speedment.codegen.view.CodeView;
 
 /**
  *
- * @author pemi
+ * @author Duncan
  */
-public enum DefaultJavaVersion implements JavaVersion {
+public class OperatorView extends CodeView<Operator_> {
 
-    JAVA_7, JAVA_8;
-
+	@Override
+	public CharSequence render(CodeGenerator renderer, Operator_ op) {
+		return op.name();
+	}
+	
 }

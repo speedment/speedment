@@ -2,10 +2,10 @@ package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Field_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
 import com.speedment.codegen.model.method.Methodable;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -25,8 +25,7 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
-        extends CodeModel
-        implements Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
+        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;

@@ -14,14 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view;
+package com.speedment.codegen.view.java8;
+
+import com.speedment.codegen.CodeGenerator;
+import com.speedment.codegen.model.field.Field_;
+import com.speedment.codegen.view.CodeView;
+import com.speedment.util.$;
+import static com.speedment.codegen.CodeUtil.*;
 
 /**
  *
- * @author pemi
+ * @author Duncan
  */
-public enum DefaultJavaVersion implements JavaVersion {
-
-    JAVA_7, JAVA_8;
-
+public class FieldView extends CodeView<Field_> {
+	@Override
+	public CharSequence render(CodeGenerator renderer, Field_ field) {
+		return new $(
+			renderer.on(field.getType_()),
+			SPACE,
+			lcfirst(field.getName_())
+		);
+	}
 }

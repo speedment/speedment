@@ -14,14 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view;
+package com.speedment.codegen.view.java8;
+
+import com.speedment.codegen.CodeGenerator;
+import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.view.CodeView;
+import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.util.$;
 
 /**
  *
- * @author pemi
+ * @author Duncan
  */
-public enum DefaultJavaVersion implements JavaVersion {
-
-    JAVA_7, JAVA_8;
-
+public class AnnotationView extends CodeView<Annotation_> {
+	@Override
+	public CharSequence render(CodeGenerator renderer, Annotation_ model) {
+		return new $(AT, model.getAnnotationClass().getName());
+	}
 }

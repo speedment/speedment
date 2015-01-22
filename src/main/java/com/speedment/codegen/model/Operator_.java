@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.codegen.model;
 
 /**
@@ -5,7 +21,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public enum Operator_ {
+public enum Operator_ implements CodeModel {
 
     ASSIGN("="), GREATER_THAN(">"), LESS_THAN("<"), NOT("!"), COMPLEMENT("~"), QUESTION_MARK("?"), COLON(":"), ARROW("->"),
     EQUALS("=="), GREATER_OR_EQAL(">="), LESS_OR_EQUAL("<="), NOT_EQUAL("!="),
@@ -30,5 +46,10 @@ public enum Operator_ {
     public String getText() {
         return text;
     }
+
+	@Override
+	public Type getType() {
+		return Type.OPERATOR;
+	}
 
 }

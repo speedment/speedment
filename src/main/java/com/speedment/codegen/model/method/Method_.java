@@ -3,7 +3,7 @@ package com.speedment.codegen.model.method;
 import com.speedment.codegen.model.Block_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Expression_;
-import com.speedment.codegen.model.Field_;
+import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.modifier.MethodModifier_;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ extends CodeModel implements Modifiable<MethodModifier_> {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
 
     private final Set<MethodModifier_> modifiers;
     private Type_ type_;

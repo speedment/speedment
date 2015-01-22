@@ -1,6 +1,5 @@
 package com.speedment.codegen.model.field;
 
-import com.speedment.codegen.model.Field_;
 import java.util.List;
 
 /**
