@@ -1,12 +1,12 @@
 package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
-import com.speedment.codegen.model.Annotation_;
-import com.speedment.codegen.model.Class_;
+import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.Field_;
-import com.speedment.codegen.model.Package_;
 import static com.speedment.codegen.model.Type_.STRING;
+import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.model.modifier.ClassModifier_.*;
+import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.view.java8.JavaCodeGen;
 
 /**

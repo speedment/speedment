@@ -1,6 +1,17 @@
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.class_;
 
+import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.CodeModel;
+import com.speedment.codegen.model.Field_;
+import com.speedment.codegen.model.annotation.Annotatable;
+import com.speedment.codegen.model.method.Method_;
+import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.field.Fieldable;
+import com.speedment.codegen.model.method.Methodable;
+import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.modifier.Modifier_;
+import com.speedment.codegen.model.package_.Packagable;
+import com.speedment.codegen.model.package_.Package_;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -13,7 +24,9 @@ import java.util.stream.Stream;
  * @param <T>
  * @param <M>
  */
-public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>> extends CodeModel {
+public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
+        extends CodeModel
+        implements Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
@@ -32,24 +45,28 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T add(final Interface_ interf) {
         getInterfaces().add(interf);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T add(final Field_ field) {
         getFields().add(field);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T add(final Method_ method_) {
         getMethods().add(method_);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T add(final Annotation_ annotation) {
         getAnnotations().add(annotation);
         return (T) this;
@@ -58,8 +75,9 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 //    public T add(M classModifier_) {
 //        getModifiers().add(classModifier_);
 //        return (T) this;
-//    }
+//    }Modifier_<M>
     @SuppressWarnings("unchecked")
+    @Override
     public T add(final M firstClassModifier_m, final M... restClassModifiers) {
         getModifiers().add(firstClassModifier_m);
         Stream.of(restClassModifiers).forEach(getModifiers()::add);
@@ -67,49 +85,67 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     @SuppressWarnings("unchecked")
+    @Override
+    public boolean has(Annotation_ annotation_) {
+        return annotations.contains(annotation_);
+    }
+
+    @Override
     public T set(final Set<M> newSet) {
         getModifiers().clear();
         getModifiers().addAll(newSet);
         return (T) this;
     }
 
-    public boolean is(M modifier) {
-        return modifiers.contains(modifier);
-    }
-
+    @Override
     public List<Interface_> getInterfaces() {
         return interfaces;
     }
 
+    @Override
     public List<Field_> getFields() {
         return fields;
     }
 
+    @Override
     public List<Method_> getMethods() {
         return methods;
     }
 
+    @Override
     public Package_ getPackage() {
         return pagage;
     }
 
-    public void setPackage(final Package_ pagage) {
+    @Override
+    public T setPackage(final Package_ pagage) {
         this.pagage = pagage;
+        return (T) this;
     }
 
+    @Override
     public CharSequence getName() {
         return name;
     }
 
+    @Override
     public void setName(final CharSequence name) {
         this.name = name;
     }
 
+    @Override
     public Set<M> getModifiers() {
         return modifiers;
     }
 
+    @Override
+    public boolean is(M modifier) {
+        return modifiers.contains(modifier);
+    }
+
+    @Override
     public List<Annotation_> getAnnotations() {
         return annotations;
     }
+
 }

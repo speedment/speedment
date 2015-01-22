@@ -1,5 +1,6 @@
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.class_;
 
+import com.speedment.codegen.model.Constructor_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
 import java.util.ArrayList;
 import java.util.List;

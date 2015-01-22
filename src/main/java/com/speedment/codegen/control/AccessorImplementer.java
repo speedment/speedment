@@ -1,9 +1,9 @@
 package com.speedment.codegen.control;
 
-import com.speedment.codegen.model.Class_;
 import com.speedment.codegen.model.Field_;
-import com.speedment.codegen.model.Method_;
+import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.class_.Class_;
 
 /**
  *

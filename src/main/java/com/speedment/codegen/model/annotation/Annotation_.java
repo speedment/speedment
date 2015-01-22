@@ -1,4 +1,4 @@
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.annotation;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedHashMap;

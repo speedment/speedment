@@ -1,4 +1,4 @@
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
 
