@@ -3,7 +3,6 @@ package com.speedment.codegen.view.java8;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.Interface_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
-import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.util.$;
 import static com.speedment.codegen.CodeUtil.*;
 
@@ -14,7 +13,7 @@ import static com.speedment.codegen.CodeUtil.*;
  */
 public class JavaInterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
 
-	public JavaInterfaceView(Class<Modifier_> modifierClass) {
+	public JavaInterfaceView() {
 		super (InterfaceModifier_.class, InterfaceModifier_.values());
 	}
 	

@@ -2,21 +2,12 @@ package com.speedment.codegen.view.java8;
 
 import com.speedment.codegen.CodeGenerator;
 import static com.speedment.codegen.CodeUtil.EMPTY;
-import static com.speedment.codegen.CodeUtil.SC;
 import static com.speedment.codegen.CodeUtil.SPACE;
-import static com.speedment.codegen.CodeUtil.dnl;
-import static com.speedment.codegen.CodeUtil.looseBracketsIndent;
-import static com.speedment.codegen.CodeUtil.nl;
 import com.speedment.codegen.model.ClassAndInterfaceBase;
 import com.speedment.codegen.model.CodeModel;
-import static com.speedment.codegen.model.CodeModel.Type.PACKAGE;
-import com.speedment.codegen.model.Interface_;
-import com.speedment.codegen.model.Package_;
-import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +24,6 @@ import java.util.stream.Stream;
 public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Modifier_<Modifier>, Model extends ClassAndInterfaceBase<Model, Modifier>> extends CodeView<Model> {
 	
 	public final static String 
-		PACKAGE_STRING = "package ",
 		EXTENDS_STRING = "extends ",
 		COMMA_STRING = ", ";
 	
@@ -48,8 +38,8 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 		));
 	}
 	
-	public CharSequence renderPackage(CodeGenerator cg, Model interf) {
-		return new $(PACKAGE_STRING, ((Package_) cg.last(PACKAGE)).getName_(), SC);
+	public CharSequence renderPackage(CodeGenerator cg, Model model) {
+		return cg.on(model.getPackage());
 	}
 	
 	public CharSequence renderIf(Model model, Modifier condition, CharSequence text) {

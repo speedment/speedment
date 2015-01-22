@@ -139,5 +139,6 @@ public class CodeUtil {
 		AE = "]",
 		SPACE = " ",
 		EMPTY = "",
-		SC = ";";
+		SC = ";",
+		DOT = ".";
 }

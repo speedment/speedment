@@ -28,7 +28,7 @@ public class CodeGenerator {
 	
 	/**
 	 * Generates a textual representation of the model based on the installed
-	 * view fo that kind of model.
+	 * view of that kind of model.
 	 * @param model The model to view.
 	 * @return A text representation of that (often code).
 	 */
