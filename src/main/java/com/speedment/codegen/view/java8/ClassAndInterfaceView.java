@@ -16,6 +16,7 @@ import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,8 @@ import java.util.stream.Stream;
  * @param <Model>
  * @param <Modifier>
  */
-public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase<Model, Modifier>, Modifier extends Enum<Modifier> & Modifier_<Modifier>> extends CodeView<Model> {
+public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Modifier_<Modifier>, Model extends ClassAndInterfaceBase<Model, Modifier>> extends CodeView<Model> {
+	
 	public final static String 
 		PACKAGE_STRING = "package ",
 		EXTENDS_STRING = "extends ",
@@ -37,11 +39,12 @@ public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase<Model, Mo
 	
 	private final Map<Modifier, CharSequence> modifierTexts;
 	
-	public ClassAndInterfaceView(Class<Modifier> modifierClass) {
-		modifierTexts = new EnumMap<>(modifierClass);
-
-		Stream.of(modifierClass.getEnumConstants()).collect(Collectors.toMap(
-			Function.identity(), v -> new $(v.name(), SPACE)
+	public ClassAndInterfaceView(Class<? extends Modifier_> modifierClass, Modifier_[] enumConstants) {
+		modifierTexts = new EnumMap(modifierClass);
+		
+		Stream.of(enumConstants).collect(Collectors.toMap(
+			Function.identity(),
+			(v) -> new $(v.name().toLowerCase(), SPACE)
 		));
 	}
 	
@@ -49,12 +52,12 @@ public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase<Model, Mo
 		return new $(PACKAGE_STRING, ((Package_) cg.last(PACKAGE)).getName_(), SC);
 	}
 	
-	public CharSequence renderIf(Model interf, Modifier_<Model> condition, CharSequence text) {
-		return interf.is(condition) ? text : EMPTY;
+	public CharSequence renderIf(Model model, Modifier condition, CharSequence text) {
+		return model.is(condition) ? text : EMPTY;
 	}
 	
-	public CharSequence renderName(Model clazz) {
-		return clazz.getName();
+	public CharSequence renderName(Model model) {
+		return model.getName();
 	}
 	
 	public <T extends CodeModel> CharSequence renderList(List<T> models, CodeGenerator cg, CharSequence delimiter) {
@@ -71,19 +74,5 @@ public class ClassAndInterfaceView<Model extends ClassAndInterfaceBase<Model, Mo
 		return model.getModifiers().stream()
 			.map((m) -> modifierTexts.get(m))
 			.collect(Collectors.joining(delimiter));
-	}
-
-	@Override
-	public CharSequence render(CodeGenerator renderer, Model model) {
-		return new $(
-			renderPackage(renderer, model), dnl(),
-			renderModifiers(model, renderer, SPACE),
-			renderName(model), SPACE,
-			renderList(model.getInterfaces(), renderer, COMMA_STRING, EXTENDS_STRING, SPACE),
-			looseBracketsIndent(new $(
-				renderList(model.getFields(), renderer, nl()), dnl(),
-				renderList(model.getMethods(), renderer, dnl())
-			))
-		);
 	}
 }

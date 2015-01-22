@@ -2,8 +2,6 @@ package com.speedment.codegen.view.java8;
 
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.view.CodeView;
-import com.speedment.codegen.view.CodeViewBuilder;
 
 /**
  *
