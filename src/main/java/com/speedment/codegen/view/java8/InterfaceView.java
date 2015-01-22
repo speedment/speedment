@@ -9,7 +9,6 @@ import static com.speedment.codegen.CodeUtil.*;
 /**
  *
  * @author Duncan
- * @param <Model>
  */
 public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
 
