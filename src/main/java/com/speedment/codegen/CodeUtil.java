@@ -140,5 +140,6 @@ public class CodeUtil {
 		SPACE = " ",
 		EMPTY = "",
 		SC = ";",
-		DOT = ".";
+		DOT = ".",
+		AT = "@";
 }

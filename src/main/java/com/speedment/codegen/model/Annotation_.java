@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author pemi
  */
-public class Annotation_ {
+public class Annotation_ extends CodeModel {
 
     public static final Annotation_ OVERRIDE = new UnmodifiableAnnotation_(Override.class);
     public static final Annotation_ DEPRECATED = new UnmodifiableAnnotation_(Deprecated.class);
@@ -45,6 +45,11 @@ public class Annotation_ {
     public Map<String, Object> getValuePairs() {
         return valuePairs;
     }
+
+	@Override
+	public Type getType() {
+		return Type.ANNOTATION;
+	}
 
     public static final class UnmodifiableAnnotation_ extends Annotation_ {
 

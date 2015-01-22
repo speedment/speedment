@@ -11,7 +11,7 @@ public class JavaCodeGen extends CodeGenerator {
 	public JavaCodeGen() {
 		super ((CodeModel.Type type) -> {
 			switch (type) {
-				case ANNOTATION		: throw new UnsupportedOperationException("Missing implementation for type " + type + ".");
+				case ANNOTATION		: return new AnnotationView();
 				case BLOCK			: return new BlockView();
 				case CLASS			: return new ClassView();
 				case CONSTRUCTOR	: return new ConstructorView();
