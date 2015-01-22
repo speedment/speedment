@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Package_ extends CodeModel {
+public class Package_ implements CodeModel {
 
     private String name_;
     private Package_ parentPackage;

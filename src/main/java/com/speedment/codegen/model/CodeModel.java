@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author Duncan
  */
-public abstract class CodeModel {
+public interface CodeModel {
 	/**
 	 * The number of model types there are. If new types are added to this enum,
 	 * new models and new views will have be be created. All implementations of
@@ -20,5 +20,5 @@ public abstract class CodeModel {
 	 * Returns the type of this model.
 	 * @return the type.
 	 */
-	public abstract Type getType();
+	Type getType();
 }

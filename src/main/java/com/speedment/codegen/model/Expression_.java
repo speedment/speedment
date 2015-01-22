@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Expression_ extends CodeModel {
+public class Expression_ implements CodeModel {
 
     private String stringExpression;
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @param <T>
  * @param <M>
  */
-public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>> extends CodeModel {
+public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>> implements CodeModel {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;

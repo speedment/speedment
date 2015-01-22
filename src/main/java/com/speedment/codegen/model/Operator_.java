@@ -5,7 +5,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public enum Operator_ {
+public enum Operator_ implements CodeModel {
 
     ASSIGN("="), GREATER_THAN(">"), LESS_THAN("<"), NOT("!"), COMPLEMENT("~"), QUESTION_MARK("?"), COLON(":"), ARROW("->"),
     EQUALS("=="), GREATER_OR_EQAL(">="), LESS_OR_EQUAL("<="), NOT_EQUAL("!="),
@@ -30,5 +30,10 @@ public enum Operator_ {
     public String getText() {
         return text;
     }
+
+	@Override
+	public Type getType() {
+		return Type.OPERATOR;
+	}
 
 }

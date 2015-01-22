@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Type_ extends CodeModel {
+public class Type_ implements CodeModel {
 
     public static final Type_ INT_PRIMITIVE = new Type_(int.class);
     public static final Type_ INTEGER = new Type_(Integer.class);

@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Block_ extends CodeModel {
+public class Block_ implements CodeModel {
 
     private final List<Statement_> statements;
 

@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author pemi
  */
-public class Method_ extends CodeModel {
+public class Method_ implements CodeModel {
 
     private boolean private_;
 	private boolean protected_;

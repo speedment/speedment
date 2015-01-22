@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author pemi
  */
-public class Annotation_ extends CodeModel {
+public class Annotation_ implements CodeModel {
 
     public static final Annotation_ OVERRIDE = new UnmodifiableAnnotation_(Override.class);
     public static final Annotation_ DEPRECATED = new UnmodifiableAnnotation_(Deprecated.class);

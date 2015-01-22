@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Field_ extends CodeModel {
+public class Field_ implements CodeModel {
 
     protected boolean private_;
     protected boolean static_;

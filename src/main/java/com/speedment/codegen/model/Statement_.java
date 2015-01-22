@@ -4,7 +4,7 @@ package com.speedment.codegen.model;
  *
  * @author pemi
  */
-public class Statement_ extends CodeModel {
+public class Statement_ implements CodeModel {
 
     private CharSequence statementText_;
     private Block_ block_;
