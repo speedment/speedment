@@ -25,11 +25,26 @@ import java.util.List;
  */
 public class Type_ implements CodeModel {
 
-    public static final Type_ INT_PRIMITIVE = new Type_(int.class);
-    public static final Type_ INTEGER = new Type_(Integer.class);
-    public static final Type_ LONG_PRIMITIVE = new Type_(long.class);
-    public static final Type_ LONG = new Type_(Long.class);
-    public static final Type_ STRING = new Type_(String.class);
+    public static final Type_ 
+		BYTE_PRIMITIVE = new Type_(byte.class),
+		SHORT_PRIMITIVE = new Type_(short.class),
+		INT_PRIMITIVE = new Type_(int.class),
+		LONG_PRIMITIVE = new Type_(long.class),
+		FLOAT_PRIMITIVE = new Type_(float.class),
+		DOUBLE_PRIMITIVE = new Type_(double.class),
+		BOOLEAN_PRIMITIVE = new Type_(boolean.class),
+		CHAR_PRIMITIVE = new Type_(char.class),
+			
+		BYTE = new Type_(Byte.class),
+		SHORT = new Type_(Short.class),
+		INT = new Type_(Integer.class),
+		LONG = new Type_(Long.class),
+		FLOAT  = new Type_(Float.class),
+		DOUBLE = new Type_(Double.class),
+		BOOLEAN = new Type_(Boolean.class),
+		CHARACTER = new Type_(Character.class),
+			
+		STRING = new Type_(String.class);
 
     private String typeName;
     private Class<?> typeClass;
