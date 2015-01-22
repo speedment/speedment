@@ -12,17 +12,17 @@ public class JavaCodeGen extends CodeGenerator {
 		super ((CodeModel.Type type) -> {
 			switch (type) {
 				case ANNOTATION		: throw new UnsupportedOperationException("Missing implementation for type " + type + ".");
-				case BLOCK			: return new JavaBlockView();
-				case CLASS			: return new JavaClassView();
-				case CONSTRUCTOR	: return new JavaConstructorView();
-				case EXPRESSION		: return new JavaExpressionView();
-				case FIELD			: return new JavaFieldView();
-				case INTERFACE		: return new JavaInterfaceView();
-				case METHOD			: return new JavaMethodView();
+				case BLOCK			: return new BlockView();
+				case CLASS			: return new ClassView();
+				case CONSTRUCTOR	: return new ConstructorView();
+				case EXPRESSION		: return new ExpressionView();
+				case FIELD			: return new FieldView();
+				case INTERFACE		: return new InterfaceView();
+				case METHOD			: return new MethodView();
 				case OPERATOR		: throw new UnsupportedOperationException("Missing implementation for type " + type + ".");
-				case PACKAGE		: return new JavaPackageView();
-				case STATEMENT		: return new JavaStatementView();
-				case TYPE			: return new JavaTypeView();
+				case PACKAGE		: return new PackageView();
+				case STATEMENT		: return new StatementView();
+				case TYPE			: return new TypeView();
 				default : throw new UnsupportedOperationException("Missing implementation for type " + type + ".");
 			}
 		});

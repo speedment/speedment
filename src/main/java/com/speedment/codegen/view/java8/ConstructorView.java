@@ -9,10 +9,10 @@ import com.speedment.util.$;
  *
  * @author Duncan
  */
-public class JavaConstructorView extends CodeView<Constructor_> {
+public class ConstructorView extends CodeView<Constructor_> {
 
 	@Override
-	public CharSequence render(CodeGenerator renderer, Constructor_ constructor) {	
+	public CharSequence render(CodeGenerator renderer, Constructor_ constructor) {
 		return "";
 	}
 }

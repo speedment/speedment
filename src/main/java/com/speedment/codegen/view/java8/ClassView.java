@@ -10,10 +10,10 @@ import static com.speedment.codegen.CodeUtil.*;
  *
  * @author Duncan
  */
-public class JavaClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
+public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 	private final static String IMPLEMENTS_STRING = "implements ";
 
-	public JavaClassView() {
+	public ClassView() {
 		super(ClassModifier_.class, ClassModifier_.values());
 	}
 

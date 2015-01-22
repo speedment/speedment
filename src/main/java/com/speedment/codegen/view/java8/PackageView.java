@@ -11,7 +11,7 @@ import static com.speedment.codegen.CodeUtil.*;
  *
  * @author Duncan
  */
-public class JavaPackageView extends CodeView<Package_> {
+public class PackageView extends CodeView<Package_> {
 	private final static String PACKAGE_STRING = "package ";
 	
 	@Override

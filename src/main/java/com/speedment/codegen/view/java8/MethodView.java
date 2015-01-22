@@ -11,7 +11,7 @@ import com.speedment.util.$;
  *
  * @author Duncan
  */
-public class JavaMethodView extends CodeView<Method_> {
+public class MethodView extends CodeView<Method_> {
 	private final static CharSequence 
 		PUBLIC = "public ",
 		PROTECTED = "protected ",

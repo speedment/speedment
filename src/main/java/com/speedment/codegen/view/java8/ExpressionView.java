@@ -8,7 +8,7 @@ import com.speedment.codegen.view.CodeView;
  *
  * @author Duncan
  */
-public class JavaExpressionView extends CodeView<Expression_> {
+public class ExpressionView extends CodeView<Expression_> {
 
 	@Override
 	public CharSequence render(CodeGenerator renderer, Expression_ expression) {

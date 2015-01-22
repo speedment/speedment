@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  *
  * @author Duncan
  */
-public class JavaBlockView extends CodeView<Block_> {
+public class BlockView extends CodeView<Block_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Block_ block) {
 		return looseBracketsIndent(

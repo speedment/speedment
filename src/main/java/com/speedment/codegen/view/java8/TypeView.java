@@ -8,7 +8,7 @@ import com.speedment.codegen.view.CodeView;
  *
  * @author Duncan
  */
-public class JavaTypeView extends CodeView<Type_> {
+public class TypeView extends CodeView<Type_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Type_ type) {
 		return "";

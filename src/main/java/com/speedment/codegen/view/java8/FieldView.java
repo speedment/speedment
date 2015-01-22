@@ -10,7 +10,7 @@ import static com.speedment.codegen.CodeUtil.*;
  *
  * @author Duncan
  */
-public class JavaFieldView extends CodeView<Field_> {
+public class FieldView extends CodeView<Field_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Field_ field) {
 		return new $(

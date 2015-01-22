@@ -11,9 +11,9 @@ import static com.speedment.codegen.CodeUtil.*;
  * @author Duncan
  * @param <Model>
  */
-public class JavaInterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
+public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
 
-	public JavaInterfaceView() {
+	public InterfaceView() {
 		super (InterfaceModifier_.class, InterfaceModifier_.values());
 	}
 	
