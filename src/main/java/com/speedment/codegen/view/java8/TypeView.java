@@ -27,6 +27,6 @@ import com.speedment.codegen.view.CodeView;
 public class TypeView extends CodeView<Type_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Type_ type) {
-		return "";
+		return type.getTypeName();
 	}
 }
