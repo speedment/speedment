@@ -1,2 +1,5 @@
 /target/
 /nb-configuration.xml
+/.gitignore~
+/pom.xml~
+
