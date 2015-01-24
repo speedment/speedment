@@ -21,7 +21,6 @@ import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
-import com.speedment.codegen.model.Block_;
 
 /**
  *
@@ -40,14 +39,15 @@ public class AccessorImplementer implements Controller<Class_> {
     }
 
     protected void generateGetter(final Class_ class_, final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType_(), "get" + ucfirst(field_.getName_()));
-        method_.setBlock_(new Block_().add(new Statement_("return " + field_.getName_() + ";")));
+        final Method_ method_ = new Method_(field_.getType(), "get" + ucfirst(field_.getName()));
+        method_.add(new Statement_("return " + field_.getName()));
         class_.add(method_);
     }
 
     protected void generateSetter(final Class_ class_, final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType_(), "set" + ucfirst(field_.getName_())).add(new Field_(field_.getType_(), field_.getName_()));
-        method_.setBlock_(new Block_().add(new Statement_("this." + field_.getName_() + " = " + field_.getName_() + ";")));
+        final Method_ method_ = new Method_(field_.getType(), "set" + ucfirst(field_.getName()))
+				.add(new Field_(field_.getType(), field_.getName()));
+        method_.add(new Statement_("this." + field_.getName() + " = " + field_.getName()));
         class_.add(method_);
     }
 }
