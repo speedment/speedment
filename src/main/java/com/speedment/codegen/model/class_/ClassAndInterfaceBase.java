@@ -16,8 +16,10 @@
  */
 package com.speedment.codegen.model.class_;
 
+import com.speedment.codegen.CodeUtil;
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
+import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
@@ -217,4 +219,12 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         dependencies.add(dep);
         return (T) this;
     }
+	
+	public Type_ toType() {
+//		
+//		this.get
+//		
+//		return new Type_(CodeUtil.flattenName(this)).add();
+		return null;
+	}
 }
