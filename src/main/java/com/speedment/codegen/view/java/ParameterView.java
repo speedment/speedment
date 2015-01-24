@@ -2,7 +2,7 @@ package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
 import static com.speedment.codegen.CodeUtil.SPACE;
-import com.speedment.codegen.model.field.parameter.Parameter_;
+import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
 

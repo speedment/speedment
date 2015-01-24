@@ -23,7 +23,7 @@ import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.Type_;
-import com.speedment.codegen.model.field.parameter.Parameter_;
+import com.speedment.codegen.model.parameter.Parameter_;
 
 /**
  *
