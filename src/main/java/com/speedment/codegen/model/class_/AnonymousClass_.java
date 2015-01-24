@@ -43,8 +43,9 @@ public class AnonymousClass_ extends Class_ {
     }
 
     @Override
-    public void setName(CharSequence name) {
+    public AnonymousClass_ setName(CharSequence name) {
         throwUnsupportedOperationException("setName");
+        return this;
     }
 
     @Override

@@ -17,7 +17,6 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.field.Field_;
 import org.junit.After;

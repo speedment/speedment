@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.model.method;
 
+import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Expression_;
@@ -28,7 +29,6 @@ import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -37,28 +37,23 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable {
 
     private final Set<MethodModifier_> modifiers;
-	private final List<Annotation_> annotations;
-    private Type_ type_;
-    private CharSequence name_;
-    private Expression_ expression_;
+    private final List<Annotation_> annotations;
     private List<Field_> parameters; // Todo: Introduce parameter
     private final List<Statement_> statements; // Todo: Block instead of statements.
     private Type_ type;
     private CharSequence name;
-    private Expression_ expression;
-    private List<Field_> parameters; // Todo: Introduce parameter
 
     public Method_(Type_ type_, CharSequence name_) {
         this.parameters = new ArrayList<>();
         this.statements = new ArrayList<>();
-		this.annotations = new ArrayList<>();
-        this.type_ = type_;
-        this.name_ = name_;
+        this.annotations = new ArrayList<>();
+        this.type = type_;
+        this.name = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
-		
+
     }
 
     @SuppressWarnings("unchecked")
@@ -79,28 +74,23 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return this;
     }
 
-    public Type_ getType_() {
+    public Type_ getType() {
         return type;
     }
 
-    public void setType_(Type_ type_) {
+    public void setType(Type_ type_) {
         this.type = type_;
     }
 
-    public CharSequence getName_() {
+    @Override
+    public CharSequence getName() {
         return name;
     }
 
-    public void setName_(CharSequence name_) {
-        this.name = name_;
-    }
-
-    public Expression_ getExpression_() {
-        return expression;
-    }
-
-    public void setExpression_(Expression_ expression_) {
-        this.expression = expression_;
+    @Override
+    public Method_ setName(CharSequence name) {
+        this.name = name;
+        return this;
     }
 
     public List<Field_> getParameters() {
@@ -144,19 +134,19 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return this;
     }
 
-	@Override
-	public List<Annotation_> getAnnotations() {
-		return annotations;
-	}
+    @Override
+    public List<Annotation_> getAnnotations() {
+        return annotations;
+    }
 
-	@Override
-	public boolean has(Annotation_ annotation_) {
-		return annotations.contains(annotation_);
-	}
+    @Override
+    public boolean has(Annotation_ annotation_) {
+        return annotations.contains(annotation_);
+    }
 
-	@Override
-	public Method_ add(Annotation_ annotation) {
-		annotations.add(annotation);
-		return this;
-	}
+    @Override
+    public Method_ add(Annotation_ annotation) {
+        annotations.add(annotation);
+        return this;
+    }
 }

@@ -52,8 +52,9 @@ public class Constructor_ implements CodeModel, Nameable, Modifiable<Constructor
     }
 
     @Override
-    public void setName(CharSequence name) {
+    public Constructor_ setName(CharSequence name) {
         this.name = name;
+        return this;
     }
 
     public List<Field_> getParameters() {

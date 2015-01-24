@@ -85,4 +85,7 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         this.superClass = superClassType.getTypeClass();
     }
 
+    
+    
+    
 }

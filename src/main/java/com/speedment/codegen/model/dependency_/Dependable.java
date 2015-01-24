@@ -23,6 +23,10 @@ import java.util.Set;
  * @author Duncan
  */
 public interface Dependable {
-	Set<Dependency_> getDependencies();
+
+    Set<Dependency_> getDependencies();
+
     Dependable add(final Dependency_ dep);
+
+    boolean has(Dependency_ dep);
 }

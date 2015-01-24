@@ -60,8 +60,9 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
     }
 
     @Override
-    public void setName(CharSequence name_) {
+    public Field_ setName(CharSequence name_) {
         this.name = name_;
+        return this;
     }
 
     public void setType(Type_ type) {

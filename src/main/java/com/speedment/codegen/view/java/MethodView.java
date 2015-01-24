@@ -34,7 +34,7 @@ public class MethodView extends CodeView<Method_> {
 			method.getAnnotations().stream()
 				.map((anno) -> renderer.on(anno))
 				.collect(Collectors.joining(nl(), EMPTY, nl())),
-			method.getName_(), PS,
+			method.getName(), PS,
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))
 					.collect(Collectors.joining(COMMA_SPACE)),

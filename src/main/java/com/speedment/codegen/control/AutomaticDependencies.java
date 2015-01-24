@@ -47,17 +47,17 @@ public class AutomaticDependencies implements Controller<Class_> {
 			model.getMethods().stream()
 				.flatMap(m -> typesUsedIn(m).stream()),
 			model.getFields().stream()
-				.map(f -> f.getType_())
+				.map(f -> f.getType())
 		).filter(t -> isDependantOf(model, t))
 		.forEach(t -> model.add(dependency(t)));
 	}
 	
 	protected static Set<Type_> typesUsedIn(Method_ method) {
 		final Set<Type_> types = method.getParameters().stream()
-			.map(p -> p.getType_())
+			.map(p -> p.getType())
 			.collect(Collectors.toSet());
 		
-		types.add(method.getType_());
+		types.add(method.getType());
 		
 		return types;
 	}
