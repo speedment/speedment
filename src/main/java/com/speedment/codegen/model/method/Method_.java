@@ -22,10 +22,13 @@ import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.annotation.Annotatable;
+import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -34,9 +37,10 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable {
 
     private final Set<MethodModifier_> modifiers;
+	private final List<Annotation_> annotations;
     private Type_ type_;
     private CharSequence name_;
     private Expression_ expression_;
@@ -46,9 +50,11 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
     public Method_(Type_ type_, CharSequence name_) {
         this.parameters = new ArrayList<>();
         this.statements = new ArrayList<>();
+		this.annotations = new ArrayList<>();
         this.type_ = type_;
         this.name_ = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
+		
     }
 
     @SuppressWarnings("unchecked")
@@ -134,4 +140,19 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
         return this;
     }
 
+	@Override
+	public List<Annotation_> getAnnotations() {
+		return annotations;
+	}
+
+	@Override
+	public boolean has(Annotation_ annotation_) {
+		return annotations.contains(annotation_);
+	}
+
+	@Override
+	public Method_ add(Annotation_ annotation) {
+		annotations.add(annotation);
+		return this;
+	}
 }

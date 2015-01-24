@@ -20,7 +20,6 @@ import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.view.CodeView;
 import static com.speedment.codegen.CodeUtil.*;
-import com.speedment.codegen.model.modifier.Modifier_;
 import java.util.stream.Collectors;
 import com.speedment.util.$;
 
@@ -29,27 +28,17 @@ import com.speedment.util.$;
  * @author Duncan
  */
 public class MethodView extends CodeView<Method_> {
-	private final static CharSequence 
-		PUBLIC = "public ",
-		PROTECTED = "protected ",
-		PRIVATE = "private ",
-		FINAL = "final ",
-		STATIC = "static ",
-		COMMA = ", ";
-	
 	@Override
 	public CharSequence render(CodeGenerator renderer, Method_ method) {
 		return new $(
-//			method. ? PUBLIC :
-//			method.isProtected_() ? PROTECTED :
-//			method.isPrivate_() ? PRIVATE : EMPTY, 
-//			method.isFinal_() ? FINAL : EMPTY,
-//			method.isStatic_() ? STATIC : EMPTY,
+			method.getAnnotations().stream()
+				.map((anno) -> renderer.on(anno))
+				.collect(Collectors.joining(nl(), EMPTY, nl())),
 			method.getName_(), PS,
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))
-					.collect(Collectors.joining(COMMA)),
-			PE, renderer.on(method.getBlock_())
+					.collect(Collectors.joining(COMMA_SPACE)),
+			PE, SPACE, renderer.on(method.getBlock_())
 		);
 	}
 }

@@ -166,6 +166,8 @@ public class CodeUtil {
 		AE = "]",
 		SPACE = " ",
 		EMPTY = "",
+		COMMA = ",",
+		COMMA_SPACE = " ",
 		SC = ";",
 		DOT = ".",
 		AT = "@";
