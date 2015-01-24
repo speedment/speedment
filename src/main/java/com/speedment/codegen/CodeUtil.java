@@ -48,6 +48,12 @@ public class CodeUtil {
 		return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
 	}
 	
+	/**
+	 * Does something with the first character in the specified CharSequence.
+	 * @param input The CharSequence.
+	 * @param callback The something.
+	 * @return The new CharSequence.
+	 */
 	public static CharSequence withFirst(CharSequence input, Function<Character, CharSequence> callback) {
 		if (input == null) {
             return null;
@@ -227,6 +233,8 @@ public class CodeUtil {
 		PE = ")",
 		AS = "[",
 		AE = "]",
+		SS = "<",
+		SE = ">",
 		SPACE = " ",
 		EMPTY = "",
 		COMMA = ",",
