@@ -16,32 +16,39 @@
  */
 package com.speedment.codegen.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author pemi
  */
-public class Block_ implements CodeModel {
+public class ArrayType_ extends Type_ {
 
-    private final List<Statement_> statements;
+    private int arrayDimension;
 
-    public Block_() {
-        this.statements = new ArrayList<>();
+    public ArrayType_(Class<?> typeClass, int arrayDimension) {
+        super(typeClass);
+        this.arrayDimension = arrayDimension;
     }
 
-    Block_ add(Statement_ statement_) {
-        getStatements().add(statement_);
+    public ArrayType_(CharSequence typeName, int arrayDimension) {
+        super(typeName);
+        this.arrayDimension = arrayDimension;
+    }
+
+    @Override
+    public ArrayType_ add(Type_ genericType) {
+        super.add(genericType);
         return this;
     }
 
-    public List<Statement_> getStatements() {
-        return statements;
+    public boolean isArray() {
+        return getArrayDimension() == 0;
     }
 
-	@Override
-	public Type getType() {
-		return Type.BLOCK;
-	}
+    public void setArrayDimension(int arrayDimension) {
+        this.arrayDimension = arrayDimension;
+    }
+
+    public int getArrayDimension() {
+        return arrayDimension;
+    }
 }

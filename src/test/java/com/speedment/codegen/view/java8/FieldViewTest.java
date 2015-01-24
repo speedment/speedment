@@ -1,8 +1,9 @@
 package com.speedment.codegen.view.java8;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.Field_;
+
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.field.Field_;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

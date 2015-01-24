@@ -5,6 +5,8 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.block.Initializable;
+import com.speedment.codegen.model.block.InitializerBlock_;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
 import com.speedment.codegen.model.method.Methodable;
@@ -25,13 +27,15 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
-        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
+        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable, Initializable, Nestable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
     private final List<Method_> methods;
     private final Set<M> modifiers;
     private final List<Annotation_> annotations;
+    private final List<ClassAndInterfaceBase<?, ?>> nestedClasses;
+    private final List<InitializerBlock_> initializers;
     private Package_ pagage;
     private CharSequence name;
 
@@ -41,6 +45,8 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         interfaces = new ArrayList<>();
         modifiers = EnumSet.noneOf(mClass);
         annotations = new ArrayList<>();
+        nestedClasses = new ArrayList<>();
+        initializers = new ArrayList<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -70,6 +76,20 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         getAnnotations().add(annotation);
         return (T) this;
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public T add(final Class_ nestedClass) {
+        getNestedClasses().add(nestedClass);
+        return (T) this;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public T add(final InitializerBlock_ initializer) {
+        getInitializers().add(initializer);
+        return (T) this;
+    }
 
 //    public T add(M classModifier_) {
 //        getModifiers().add(classModifier_);
@@ -89,6 +109,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return annotations.contains(annotation_);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T set(final Set<M> newSet) {
         getModifiers().clear();
@@ -116,6 +137,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return pagage;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T setPackage(final Package_ pagage) {
         this.pagage = pagage;
@@ -145,6 +167,16 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     @Override
     public List<Annotation_> getAnnotations() {
         return annotations;
+    }
+
+    @Override
+    public List<ClassAndInterfaceBase<?, ?>> getNestedClasses() {
+        return nestedClasses;
+    }
+
+    @Override
+    public List<InitializerBlock_> getInitializers() {
+        return initializers;
     }
 
 }

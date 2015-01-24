@@ -30,9 +30,9 @@ public class FieldView extends CodeView<Field_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Field_ field) {
 		return new $(
-			renderer.on(field.getType_()),
+			renderer.on(field.getType()),
 			SPACE,
-			lcfirst(field.getName_())
+			lcfirst(field.getName())
 		);
 	}
 }

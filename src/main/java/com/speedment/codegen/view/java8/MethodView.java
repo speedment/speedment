@@ -40,11 +40,11 @@ public class MethodView extends CodeView<Method_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Method_ method) {
 		return new $(
-			method.isPublic_() ? PUBLIC :
-			method.isProtected_() ? PROTECTED :
-			method.isPrivate_() ? PRIVATE : EMPTY, 
-			method.isFinal_() ? FINAL : EMPTY,
-			method.isStatic_() ? STATIC : EMPTY,
+//			method.isPublic_() ? PUBLIC :
+//			method.isProtected_() ? PROTECTED :
+//			method.isPrivate_() ? PRIVATE : EMPTY, 
+//			method.isFinal_() ? FINAL : EMPTY,
+//			method.isStatic_() ? STATIC : EMPTY,
 			method.getName_(), PS,
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))

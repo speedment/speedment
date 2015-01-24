@@ -44,14 +44,14 @@ public class AccessorImplementer implements Controller {
     }
 
     protected void generateGetter(final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType_(), "get" + firstCharCapital(field_.getName_()));
-        method_.add(new Statement_("return " + field_.getName_()));
+        final Method_ method_ = new Method_(field_.getType(), "get" + firstCharCapital(field_.getName()));
+        method_.add(new Statement_("return " + field_.getName()));
         class_.add(method_);
     }
 
     protected void generateSetter(final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType_(), "set" + firstCharCapital(field_.getName_())).add(new Field_(field_.getType_(), field_.getName_()));
-        method_.add(new Statement_("this." + field_.getName_() + " = " + field_.getName_()));
+        final Method_ method_ = new Method_(field_.getType(), "set" + firstCharCapital(field_.getName())).add(new Field_(field_.getType(), field_.getName()));
+        method_.add(new Statement_("this." + field_.getName() + " = " + field_.getName()));
         class_.add(method_);
     }
 
