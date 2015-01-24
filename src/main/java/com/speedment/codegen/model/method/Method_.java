@@ -24,6 +24,8 @@ import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.field.parameter.Parameter_;
+import com.speedment.codegen.model.field.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
@@ -36,11 +38,11 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable {
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
-    private List<Field_> parameters; // Todo: Introduce parameter
+    private List<Parameter_> parameters; // Todo: Introduce parameter
     private final List<Statement_> statements; // Todo: Block instead of statements.
     private Type_ type;
     private CharSequence name;
@@ -63,7 +65,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return this;
     }
 
-    public Method_ add(Field_ field_) {
+    @Override
+    public Method_ add(Parameter_ field_) {
         getParameters().add(field_);
         return this;
     }
@@ -92,13 +95,14 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return this;
     }
 
-    public List<Field_> getParameters() {
+    @Override
+    public List<Parameter_> getParameters() {
         return parameters;
     }
 
-    public Method_ setParameters(List<Field_> parameters) {
-        this.parameters = parameters;
-		return this;
+    @Override
+    public boolean hasParameter(Parameter_ parameter) {
+        return parameters.contains(parameter);
     }
 	
 	public List<Statement_> getStatements() {
@@ -143,4 +147,50 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         annotations.add(annotation);
         return this;
     }
+
+    public Method_ abstract_() {
+        add(MethodModifier_.ABSTRACT);
+        return this;
+    }
+
+    public Method_ final_() {
+        add(MethodModifier_.FINAL);
+        return this;
+    }
+
+    public Method_ native_() {
+        add(MethodModifier_.NATIVE);
+        return this;
+    }
+
+    public Method_ private_() {
+        add(MethodModifier_.PRIVATE);
+        return this;
+    }
+
+    public Method_ protected_() {
+        add(MethodModifier_.PROTECTED);
+        return this;
+    }
+
+    public Method_ public_() {
+        add(MethodModifier_.PUBLIC);
+        return this;
+    }
+
+    public Method_ static_() {
+        add(MethodModifier_.STATIC);
+        return this;
+    }
+
+    public Method_ strictfp_() {
+        add(MethodModifier_.STRICTFP);
+        return this;
+    }
+
+    public Method_ synchronized_() {
+        add(MethodModifier_.SYNCHRONIZED);
+        return this;
+    }
+
 }

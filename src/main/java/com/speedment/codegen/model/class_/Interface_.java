@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.model.class_;
 
+import com.speedment.codegen.model.modifier.ClassModifier_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
 
 /**
@@ -32,4 +33,35 @@ public class Interface_ extends ClassAndInterfaceBase<Interface_, InterfaceModif
     public Type getModelType() {
         return Type.INTERFACE;
     }
+
+    public Interface_ abstract_() {
+        add(InterfaceModifier_.ABSTRACT);
+        return this;
+    }
+
+    public Interface_ private_() {
+        add(InterfaceModifier_.PRIVATE);
+        return this;
+    }
+
+    public Interface_ protected_() {
+        add(InterfaceModifier_.PROTECTED);
+        return this;
+    }
+
+    public Interface_ public_() {
+        add(InterfaceModifier_.PUBLIC);
+        return this;
+    }
+
+    public Interface_ static_() {
+        add(InterfaceModifier_.STATIC);
+        return this;
+    }
+
+    public Interface_ strictfp_() {
+        add(InterfaceModifier_.STRICTFP);
+        return this;
+    }
+
 }

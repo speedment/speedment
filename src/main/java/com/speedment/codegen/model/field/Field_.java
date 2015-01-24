@@ -131,37 +131,37 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
     }
 
     public Field_ public_() {
-        modifiers.add(FieldModifier_.PUBLIC);
+        add(FieldModifier_.PUBLIC);
         return this;
     }
 
     public Field_ protected_() {
-        modifiers.add(FieldModifier_.PROTECTED);
+        add(FieldModifier_.PROTECTED);
         return this;
     }
 
     public Field_ private_() {
-        modifiers.add(FieldModifier_.PRIVATE);
+        add(FieldModifier_.PRIVATE);
         return this;
     }
 
     public Field_ static_() {
-        modifiers.add(FieldModifier_.STATIC);
+        add(FieldModifier_.STATIC);
         return this;
     }
 
     public Field_ final_() {
-        modifiers.add(FieldModifier_.FINAL);
+        add(FieldModifier_.FINAL);
         return this;
     }
 
     public Field_ transient_() {
-        modifiers.add(FieldModifier_.TRANSIENT);
+        add(FieldModifier_.TRANSIENT);
         return this;
     }
 
     public Field_ volatile_() {
-        modifiers.add(FieldModifier_.VOLATILE);
+        add(FieldModifier_.VOLATILE);
         return this;
     }
 
