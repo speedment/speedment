@@ -22,12 +22,11 @@ import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
 import static com.speedment.codegen.model.Type_.STRING;
-import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
+
 import com.speedment.codegen.model.method.Method_;
-import static com.speedment.codegen.model.modifier.ClassModifier_.*;
-import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.package_.Package_;
+import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.view.java.JavaCodeGen;
 
 /**
@@ -46,23 +45,21 @@ public class Test {
 			.setPackage(new Package_("speedment")
 			.setPackage(new Package_("org"))));
 
-        final Field_ field = new Field_(STRING, "foo").private_();
-		
 		CodeUtil.tab("   ");
 
         final Class_ class_ = new Class_()
 			.setPackage(package_)
-			.add(PUBLIC, STATIC)
-			.add(field)
-			.add(new Field_(STRING, "bar"))
-			.add(new Method_(
-				STRING, "getFooBar"
-				).add(MethodModifier_.PUBLIC, MethodModifier_.FINAL)
+			.public_()
+			.setName("TestClass")
+			.add(new Field_(STRING, "foo").private_().final_())
+			.add(new Field_(STRING, "bar").private_().final_())
+			.add(new Method_(STRING, "getFooBar")
+				.public_().final_()
+				.add(new Parameter_(STRING, "baz"))
 				.add(new Statement_(
-					"return (foo + bar);"
+					"return (foo + baz + bar);"
 				))
 			);
-		class_.setName("TestClass");
 			
         new AccessorImplementer().apply(class_);
 		new AutomaticDependencies().apply(class_);

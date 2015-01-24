@@ -17,6 +17,7 @@
 package com.speedment.codegen.model.dependency_;
 
 import com.speedment.codegen.model.CodeModel;
+import java.util.Objects;
 
 /**
  *
@@ -24,14 +25,14 @@ import com.speedment.codegen.model.CodeModel;
  */
 public class Dependency_ implements CodeModel {
 
-    private String source;
+    private CharSequence source;
     private boolean isStatic;
 
-    public String getSource() {
+    public CharSequence getSource() {
         return source;
     }
 
-    public Dependency_ setSource(final String source) {
+    public Dependency_ setSource(final CharSequence source) {
         this.source = source;
         return this;
     }
@@ -53,4 +54,30 @@ public class Dependency_ implements CodeModel {
     public static Dependency_ of(Class<?> javaClass) {
         return new Dependency_().setSource(javaClass.getName());
     }
+	
+	public static Dependency_ of(CharSequence className) {
+        return new Dependency_().setSource(className);
+    }
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 11 * hash + Objects.hashCode(this.source);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Dependency_ other = (Dependency_) obj;
+		if (!Objects.equals(this.source, other.source)) {
+			return false;
+		}
+		return true;
+	}
 }

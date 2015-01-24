@@ -221,10 +221,10 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 	
 	public Type_ toType() {
-//		
-//		this.get
-//		
-//		return new Type_(CodeUtil.flattenName(this)).add();
+		
+		
+		
+		//return new Type_(CodeUtil.flattenName(this)).add();
 		return null;
 	}
 }

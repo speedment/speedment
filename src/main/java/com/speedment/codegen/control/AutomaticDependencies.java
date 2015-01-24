@@ -73,18 +73,7 @@ public class AutomaticDependencies implements Controller<Class_> {
 	}
 	
 	protected static boolean isDependantOf(ClassAndInterfaceBase model, String typeName) {
-		final String fullPackageName = typeName.substring(0, typeName.lastIndexOf("."));
-		
-		final List<CharSequence> packages = new ArrayList<>();
-		Package_ p = model.getPackage();
-		do { packages.add(p.getName_()); } 
-		while ((p = p.getPackage()) != null);
-		
-		Collections.reverse(packages);
-		
-		final String currentPackage = packages.stream().collect(Collectors.joining(DOT));
-		
-		return !fullPackageName.equals(currentPackage);
+		return !typeName.equalsIgnoreCase(packageName(flattenName(model).toString()).toString());
 	}
 	
 	protected static Dependency_ dependency(Annotation_ anno) {
@@ -92,6 +81,6 @@ public class AutomaticDependencies implements Controller<Class_> {
 	}
 	
 	protected static Dependency_ dependency(Type_ type) {
-		return Dependency_.of(type.getTypeClass());
+		return Dependency_.of(type.getTypeName());
 	}
 }

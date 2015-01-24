@@ -20,7 +20,7 @@ package com.speedment.util;
  *
  * @author Duncan
  */
-public class $ implements CharSequence {
+public class $ implements CharSequence, Comparable<CharSequence> {
 
 	private final StringBuilder str;
 
@@ -58,5 +58,10 @@ public class $ implements CharSequence {
 	@Override
 	public String toString() {
 		return str.toString();
+	}
+
+	@Override
+	public int compareTo(CharSequence o) {
+		return str.toString().compareTo(o.toString());
 	}
 }
