@@ -20,7 +20,6 @@ import com.speedment.codegen.model.Block_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.model.field.Field_;
-import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
@@ -28,7 +27,6 @@ import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -45,11 +43,10 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     private CharSequence name_;
     private Expression_ expression_;
     private List<Field_> parameters; // Todo: Introduce parameter
-    private final List<Statement_> statements; // Todo: Block instead of statements.
+    private Block_ block;
 
     public Method_(Type_ type_, CharSequence name_) {
         this.parameters = new ArrayList<>();
-        this.statements = new ArrayList<>();
 		this.annotations = new ArrayList<>();
         this.type_ = type_;
         this.name_ = name_;
@@ -70,51 +67,49 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return this;
     }
 
-    public Method_ add(Statement_ statement) {
-        statements.add(statement);
-        return this;
-    }
-
     public Type_ getType_() {
         return type_;
     }
 
-    public void setType_(Type_ type_) {
+    public Method_ setType_(Type_ type_) {
         this.type_ = type_;
+		return this;
     }
 
     public CharSequence getName_() {
         return name_;
     }
 
-    public void setName_(CharSequence name_) {
+    public Method_ setName_(CharSequence name_) {
         this.name_ = name_;
+		return this;
     }
 
     public Expression_ getExpression_() {
         return expression_;
     }
 
-    public void setExpression_(Expression_ expression_) {
+    public Method_ setExpression_(Expression_ expression_) {
         this.expression_ = expression_;
+		return this;
     }
 
     public List<Field_> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<Field_> parameters) {
+    public Method_ setParameters(List<Field_> parameters) {
         this.parameters = parameters;
+		return this;
     }
 
-    public void setBlock_(Block_ block_) {
-        throw new UnsupportedOperationException();
-        // TODO: Implement Method_.setBlock_
+    public Method_ setBlock_(Block_ block) {
+        this.block = block;
+		return this;
     }
 
     public Block_ getBlock_() {
-        throw new UnsupportedOperationException();
-        // TODO: Implement Method_.getBlock_
+		return block;
     }
 
     @Override

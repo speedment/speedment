@@ -46,11 +46,13 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	
 	public ClassAndInterfaceView(Class<? extends Modifier_> modifierClass, Modifier_[] enumConstants) {
 		modifierTexts = new EnumMap(modifierClass);
-		
+
 		Stream.of(enumConstants).collect(Collectors.toMap(
 			Function.identity(),
-			(v) -> new $(v.name().toLowerCase(), SPACE)
-		));
+			(v) -> new $(v.name().toLowerCase())
+		)).forEach((k,v) -> {
+			modifierTexts.put((Modifier) k, v);
+		});
 	}
 	
 	public CharSequence renderPackage(CodeGenerator cg, Model model) {
@@ -77,14 +79,20 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	}
 	
 	public <T extends CodeModel> CharSequence renderList(List<T> models, CodeGenerator cg, CharSequence delimiter, CharSequence pre, CharSequence suf) {
-		return models.stream()
-			.map((m) -> cg.on(m))
-			.collect(Collectors.joining(delimiter, pre, suf));
+		if (models.isEmpty()) {
+			return models.stream()
+				.map((m) -> cg.on(m))
+				.collect(Collectors.joining(delimiter));
+		} else {
+			return models.stream()
+				.map((m) -> cg.on(m))
+				.collect(Collectors.joining(delimiter, pre, suf));
+		}
 	}
 	
 	public CharSequence renderModifiers(Model model, CodeGenerator cg, CharSequence delimiter) {
 		return model.getModifiers().stream()
 			.map((m) -> modifierTexts.get(m))
-			.collect(Collectors.joining(delimiter));
+			.collect(Collectors.joining(delimiter, EMPTY, delimiter));
 	}
 }

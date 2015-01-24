@@ -31,7 +31,7 @@ public class Block_ implements CodeModel {
         this.statements = new ArrayList<>();
     }
 
-    Block_ add(Statement_ statement_) {
+    public Block_ add(Statement_ statement_) {
         getStatements().add(statement_);
         return this;
     }

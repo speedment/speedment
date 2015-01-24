@@ -24,8 +24,10 @@ import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.package_.Package_;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,10 +75,12 @@ public class AutomaticDependencies implements Controller<Class_> {
 	protected static boolean isDependantOf(ClassAndInterfaceBase model, String typeName) {
 		final String fullPackageName = typeName.substring(0, typeName.lastIndexOf("."));
 		
-		final Stack<CharSequence> packages = new Stack<>();
+		final List<CharSequence> packages = new ArrayList<>();
 		Package_ p = model.getPackage();
 		do { packages.add(p.getName_()); } 
 		while ((p = p.getPackage()) != null);
+		
+		Collections.reverse(packages);
 		
 		final String currentPackage = packages.stream().collect(Collectors.joining(DOT));
 		
