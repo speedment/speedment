@@ -17,15 +17,14 @@
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Nameable;
-import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Statement_;
-import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.parameter.Parameter_;
-import com.speedment.codegen.model.field.parameter.Parameterable;
+import com.speedment.codegen.model.parameter.Parameter_;
+import com.speedment.codegen.model.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;

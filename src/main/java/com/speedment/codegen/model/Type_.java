@@ -47,14 +47,18 @@ public class Type_ implements CodeModel {
     private Class<?> typeClass;
     private final List<Type_> genericTypes;
 
+    public Type_() {
+        this.genericTypes = new ArrayList<>();
+    }
+
     public Type_(Class<?> typeClass) {
         this(typeClass.getName());
         setTypeClass(typeClass);
     }
 
     public Type_(CharSequence typeName) {
+        this();
         setTypeName(typeName);
-        genericTypes = new ArrayList<>();
     }
 
     public Type_ add(Type_ genericType) {
