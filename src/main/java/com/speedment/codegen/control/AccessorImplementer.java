@@ -19,7 +19,7 @@ package com.speedment.codegen.control;
 import com.speedment.codegen.CodeUtil;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.method.Method_;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.Type_;

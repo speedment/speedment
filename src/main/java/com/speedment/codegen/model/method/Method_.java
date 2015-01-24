@@ -17,14 +17,12 @@
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Nameable;
-import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Statement_;
-import com.speedment.codegen.model.field.Field_;
+import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
-import com.speedment.codegen.model.parameter.Parameter_;
+import com.speedment.codegen.model.field.parameter.Parameter_;
 import com.speedment.codegen.model.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -42,8 +40,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
-    private List<Parameter_> parameters; // Todo: Introduce parameter
-    private final List<Statement_> statements; // Todo: Block instead of statements.
+    private final List<Parameter_> parameters; 
+    private final List<Statement_> statements; 
     private Type_ type;
     private CharSequence name;
 
@@ -54,7 +52,6 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         this.type = type_;
         this.name = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
-
     }
 
     @SuppressWarnings("unchecked")
@@ -104,8 +101,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     public boolean hasParameter(Parameter_ parameter) {
         return parameters.contains(parameter);
     }
-	
-	public List<Statement_> getStatements() {
+
+    public List<Statement_> getStatements() {
         return statements;
     }
 

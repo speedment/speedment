@@ -18,6 +18,7 @@ package com.speedment.codegen.model.package_;
 
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
+import java.util.stream.Stream;
 
 /**
  *
@@ -28,12 +29,13 @@ public class Package_ implements CodeModel, Packagable {
     private String name_;
     private Package_ package_;
 
-	public Package_() {}
-	
-	public Package_(final String name_) {
-		this.name_ = name_;
-	}
-	
+    public Package_() {
+    }
+
+    public Package_(final String name_) {
+        this.name_ = name_;
+    }
+
     public String getName_() {
         return name_;
     }
@@ -57,5 +59,10 @@ public class Package_ implements CodeModel, Packagable {
         this.package_ = package_;
         return this;
     }
+    
+//    public static final byQualifiedName(CharSequence path) {
+//        final String[] items = new StringBuilder(path).reverse().toString().split("\\.");
+//        Stream.of(items).
+//    }
 
 }

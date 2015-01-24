@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.statement;
 
+import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.block.Block_;
 
 /**
@@ -24,31 +25,31 @@ import com.speedment.codegen.model.block.Block_;
  */
 public class Statement_ implements CodeModel {
 
-    private CharSequence statementText_;
-    private Block_ block_;
+    private CharSequence statementText;
+    private Block_ block;
 
     public Statement_(CharSequence statementText) {
-        this.statementText_ = statementText;
+        this.statementText = statementText;
     }
 
-    public Statement_(Block_ block_) {
-        this.block_ = block_;
+    public Statement_(Block_ block) {
+        this.block = block;
     }
 
     public CharSequence getStatementText() {
-        return statementText_;
+        return statementText;
     }
 
     public void setStatementText(CharSequence statementText) {
-        this.statementText_ = statementText;
+        this.statementText = statementText;
     }
 
     public Block_ getBlock() {
-        return block_;
+        return block;
     }
 
     public void setBlock(Block_ block_) {
-        this.block_ = block_;
+        this.block = block_;
     }
 
     @Override

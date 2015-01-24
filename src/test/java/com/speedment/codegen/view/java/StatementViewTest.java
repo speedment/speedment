@@ -1,7 +1,7 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.statement.Statement_;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

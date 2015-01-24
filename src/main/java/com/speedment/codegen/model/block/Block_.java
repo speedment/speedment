@@ -17,7 +17,7 @@
 package com.speedment.codegen.model.block;
 
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.statement.Statement_;
 import java.util.ArrayList;
 import java.util.List;
 

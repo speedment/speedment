@@ -18,7 +18,7 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
 import static com.speedment.codegen.model.Type_.STRING;

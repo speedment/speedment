@@ -3,7 +3,7 @@ package com.speedment.codegen.model.class_;
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.field.Field_;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.modifier.ConstructorModifier_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
