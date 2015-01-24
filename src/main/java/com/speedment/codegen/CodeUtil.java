@@ -111,6 +111,16 @@ public class CodeUtil {
 		CodeUtil.nl = nl;
 		CodeUtil.dnl = nl + nl;
 		CodeUtil.nltab = nl + tab;
+		CodeUtil.scnl = SC + nl;
+	}
+	
+	/**
+	 * Returns a semicolon followed by a new line character as defined by the
+	 * <code>nl(String)</code> function.
+	 * @return A semicolon (;) followed by a new line.
+	 */
+	public static CharSequence scnl() {
+		return scnl;
 	}
 	
 	/**
@@ -144,7 +154,8 @@ public class CodeUtil {
 		nl = "\n",
 		dnl = "\n\n",
 		tab = "\t",
-		nltab = "\n\t";
+		nltab = "\n\t",
+		scnl = ";\n";
 	
 	public final static CharSequence 
 		BS = "{", 

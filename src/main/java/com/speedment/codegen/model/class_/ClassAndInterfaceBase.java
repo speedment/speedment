@@ -5,6 +5,8 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.dependency_.Dependable;
+import com.speedment.codegen.model.dependency_.Dependency_;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
 import com.speedment.codegen.model.method.Methodable;
@@ -14,6 +16,7 @@ import com.speedment.codegen.model.package_.Packagable;
 import com.speedment.codegen.model.package_.Package_;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -25,13 +28,14 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
-        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
+        implements CodeModel, Modifiable<M>, Annotatable, Dependable, Fieldable, Methodable, Interfaceable, Nameable, Packagable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
     private final List<Method_> methods;
     private final Set<M> modifiers;
     private final List<Annotation_> annotations;
+	private final Set<Dependency_> dependencies;
     private Package_ pagage;
     private CharSequence name;
 
@@ -41,6 +45,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         interfaces = new ArrayList<>();
         modifiers = EnumSet.noneOf(mClass);
         annotations = new ArrayList<>();
+		dependencies = new HashSet<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -147,4 +152,15 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return annotations;
     }
 
+	@Override
+	public Set<Dependency_> getDependencies() {
+		return dependencies;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T add(Dependency_ dep) {
+		dependencies.add(dep);
+		return (T) this;
+	}
 }

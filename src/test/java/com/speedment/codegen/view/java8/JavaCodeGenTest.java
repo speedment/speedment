@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.view.java8;
 
+import com.speedment.codegen.view.java.JavaCodeGen;
 import com.speedment.codegen.model.CodeModel;
 import org.junit.After;
 import org.junit.AfterClass;

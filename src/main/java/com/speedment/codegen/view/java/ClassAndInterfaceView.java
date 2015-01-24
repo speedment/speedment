@@ -14,11 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import static com.speedment.codegen.CodeUtil.EMPTY;
-import static com.speedment.codegen.CodeUtil.SPACE;
+import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.modifier.Modifier_;
@@ -56,6 +55,13 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	
 	public CharSequence renderPackage(CodeGenerator cg, Model model) {
 		return cg.on(model.getPackage());
+	}
+	
+	public CharSequence renderDependencies(CodeGenerator cg, Model model) {
+		return model.getDependencies().stream()
+			.map(d -> cg.on(d))
+			.sorted()
+			.collect(Collectors.joining(scnl()));
 	}
 	
 	public CharSequence renderIf(Model model, Modifier condition, CharSequence text) {

@@ -23,7 +23,7 @@ import static com.speedment.codegen.model.Type_.STRING;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.model.modifier.ClassModifier_.*;
 import com.speedment.codegen.model.package_.Package_;
-import com.speedment.codegen.view.java8.JavaCodeGen;
+import com.speedment.codegen.view.java.JavaCodeGen;
 
 /**
  *
@@ -45,7 +45,7 @@ public class Test {
         class_.add(new Field_(STRING, "bar"));
         class_.add(PUBLIC, STATIC);
 
-        new AccessorImplementer(class_).apply();
+        new AccessorImplementer().apply(class_);
 
         final Class_ c2 = new Class_();
         c2.set(of("private static final"));

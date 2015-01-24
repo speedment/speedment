@@ -14,10 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.CodeModel;
+import com.speedment.codegen.view.CodeView;
+import com.speedment.codegen.view.CodeViewBuilder;
 
 /**
  *
@@ -28,6 +30,7 @@ public class JavaCodeGen extends CodeGenerator {
 		super ((CodeModel.Type type) -> {
 			switch (type) {
 				case ANNOTATION		: return new AnnotationView();
+				case DEPENDENCY		: return new DependencyView();
 				case BLOCK			: return new BlockView();
 				case CLASS			: return new ClassView();
 				case CONSTRUCTOR	: return new ConstructorView();

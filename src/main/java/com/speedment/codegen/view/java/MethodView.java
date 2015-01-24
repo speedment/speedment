@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.method.Method_;
@@ -40,11 +40,11 @@ public class MethodView extends CodeView<Method_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Method_ method) {
 		return new $(
-			method.isPublic_() ? PUBLIC :
-			method.isProtected_() ? PROTECTED :
-			method.isPrivate_() ? PRIVATE : EMPTY, 
-			method.isFinal_() ? FINAL : EMPTY,
-			method.isStatic_() ? STATIC : EMPTY,
+//			method. ? PUBLIC :
+//			method.isProtected_() ? PROTECTED :
+//			method.isPrivate_() ? PRIVATE : EMPTY, 
+//			method.isFinal_() ? FINAL : EMPTY,
+//			method.isStatic_() ? STATIC : EMPTY,
 			method.getName_(), PS,
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))

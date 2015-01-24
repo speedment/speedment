@@ -56,7 +56,7 @@ public class Type_ implements CodeModel {
     }
 
     public Type_(Class<?> typeClass, int arrayDimension) {
-        this.typeName = null;
+        this.typeName = typeClass.getName();
         this.typeClass = typeClass;
         this.arrayDimension = arrayDimension;
         genericTypes = new ArrayList<>();
@@ -88,6 +88,7 @@ public class Type_ implements CodeModel {
 
     public void setTypeClass(Class<?> typeClass) {
         this.typeClass = typeClass;
+		this.typeName = typeClass.getName();
     }
 
     public boolean isArray() {
