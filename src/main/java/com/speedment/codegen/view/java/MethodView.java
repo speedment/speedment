@@ -38,7 +38,11 @@ public class MethodView extends CodeView<Method_> {
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))
 					.collect(Collectors.joining(COMMA_SPACE)),
-			PE, SPACE, renderer.on(method.getBlock_())
+			PE, SPACE, looseBracketsIndent(
+				method.getStatements().stream()
+					.map(s -> renderer.on(s))
+					.collect(Collectors.joining(nl()))
+			)
 		);
 	}
 }

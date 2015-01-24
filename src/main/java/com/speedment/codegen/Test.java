@@ -17,11 +17,16 @@
 package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
+import com.speedment.codegen.control.AutomaticDependencies;
+import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
 import static com.speedment.codegen.model.Type_.STRING;
+import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
+import com.speedment.codegen.model.method.Method_;
 import static com.speedment.codegen.model.modifier.ClassModifier_.*;
+import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.view.java.JavaCodeGen;
 
@@ -30,33 +35,41 @@ import com.speedment.codegen.view.java.JavaCodeGen;
  * @author pemi
  */
 public class Test {
-
+	
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
 
-        Package_ package_ = new Package_();
+        Package_ package_ = new Package_("test")
+			.setPackage(new Package_("codegen")
+			.setPackage(new Package_("speedment")
+			.setPackage(new Package_("org"))));
 
         final Field_ field = new Field_(STRING, "foo").private_();
+		
+		CodeUtil.tab("   ");
 
-        final Class_ class_ = new Class_();
-        class_.add(field);
-        class_.add(new Field_(STRING, "bar"));
-        class_.add(PUBLIC, STATIC);
-
+        final Class_ class_ = new Class_()
+			.setPackage(package_)
+			.add(PUBLIC, STATIC)
+			.add(field)
+			.add(new Field_(STRING, "bar"))
+			.add(new Method_(
+				STRING, "getFooBar"
+				).add(MethodModifier_.PUBLIC, MethodModifier_.FINAL)
+				.add(new Statement_(
+					"return (foo + bar);"
+				))
+			);
+		class_.setName("TestClass");
+			
         new AccessorImplementer().apply(class_);
+		new AutomaticDependencies().apply(class_);
 
-        final Class_ c2 = new Class_();
-        c2.set(of("private static final"));
-
-        c2.add(Annotation_.DEPRECATED);
-
+        class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();
-
-        Field_ f = new Field_(STRING, "olle");
-
-        System.out.println(gen.on(f));
+        System.out.println(gen.on(class_));
 
     }
 

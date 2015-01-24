@@ -27,6 +27,7 @@ import static com.speedment.codegen.CodeUtil.*;
  * @author Duncan
  */
 public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
+	private final static String INTERFACE_STRING = "interface ";
 
 	public InterfaceView() {
 		super (InterfaceModifier_.class, InterfaceModifier_.values());
@@ -37,6 +38,7 @@ public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Int
 		return new $(
 			renderPackage(renderer, interf), dnl(),
 			renderModifiers(interf, renderer, SPACE),
+			INTERFACE_STRING,
 			renderName(interf), SPACE,
 			renderList(interf.getInterfaces(), renderer, COMMA_STRING, EXTENDS_STRING, SPACE),
 			looseBracketsIndent(new $(

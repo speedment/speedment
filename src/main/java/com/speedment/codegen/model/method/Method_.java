@@ -20,6 +20,7 @@ import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
@@ -103,15 +104,9 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     public boolean hasParameter(Parameter_ parameter) {
         return parameters.contains(parameter);
     }
-
-    public void setBlock_(Block_ block_) {
-        throw new UnsupportedOperationException();
-        // TODO: Implement Method_.setBlock_
-    }
-
-    public Block_ getBlock_() {
-        throw new UnsupportedOperationException();
-        // TODO: Implement Method_.getBlock_
+	
+	public List<Statement_> getStatements() {
+        return statements;
     }
 
     @Override

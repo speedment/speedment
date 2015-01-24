@@ -48,7 +48,7 @@ public class CodeUtil {
         } else if (input.length() == 0) {
 			return "";
 		} else {
-			return String.join(
+			return String.join(EMPTY,
 				callback.apply(input.charAt(0)),
 				input.subSequence(1, input.length())
 			);
@@ -112,6 +112,7 @@ public class CodeUtil {
 		CodeUtil.dnl = nl + nl;
 		CodeUtil.nltab = nl + tab;
 		CodeUtil.scnl = SC + nl;
+		CodeUtil.scdnl = SC + dnl;
 	}
 	
 	/**
@@ -121,6 +122,15 @@ public class CodeUtil {
 	 */
 	public static CharSequence scnl() {
 		return scnl;
+	}
+	
+	/**
+	 * Returns a semicolon followed by two new lines character as defined by the
+	 * <code>nl(String)</code> function.
+	 * @return A semicolon (;) followed by two new new lines.
+	 */
+	public static CharSequence scdnl() {
+		return scdnl;
 	}
 	
 	/**
@@ -155,7 +165,8 @@ public class CodeUtil {
 		dnl = "\n\n",
 		tab = "\t",
 		nltab = "\n\t",
-		scnl = ";\n";
+		scnl = ";\n",
+		scdnl = ";\n\n";
 	
 	public final static CharSequence 
 		BS = "{", 

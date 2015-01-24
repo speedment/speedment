@@ -45,7 +45,8 @@ public class AccessorImplementer implements Controller<Class_> {
     }
 
     protected void generateSetter(final Class_ class_, final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType(), "set" + ucfirst(field_.getName())).add(new Field_(field_.getType(), field_.getName()));
+        final Method_ method_ = new Method_(field_.getType(), "set" + ucfirst(field_.getName()))
+				.add(new Field_(field_.getType(), field_.getName()));
         method_.add(new Statement_("this." + field_.getName() + " = " + field_.getName()));
         class_.add(method_);
     }
