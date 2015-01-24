@@ -43,7 +43,7 @@ public class Package_ implements CodeModel, Packagable {
     }
 
     @Override
-    public Type getType() {
+    public Type getModelType() {
         return Type.PACKAGE;
     }
 

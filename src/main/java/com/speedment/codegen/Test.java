@@ -18,11 +18,11 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
-import com.speedment.codegen.model.Block_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
 import static com.speedment.codegen.model.Type_.STRING;
+import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
 import com.speedment.codegen.model.method.Method_;
 import static com.speedment.codegen.model.modifier.ClassModifier_.*;
@@ -58,9 +58,9 @@ public class Test {
 			.add(new Method_(
 				STRING, "getFooBar"
 				).add(MethodModifier_.PUBLIC, MethodModifier_.FINAL)
-				.setBlock_(new Block_().add(new Statement_(
+				.add(new Statement_(
 					"return (foo + bar);"
-				)))
+				))
 			);
 		class_.setName("TestClass");
 			

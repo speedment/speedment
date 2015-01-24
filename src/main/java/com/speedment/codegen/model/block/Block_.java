@@ -14,15 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.block;
+
+import com.speedment.codegen.model.CodeModel;
+import com.speedment.codegen.model.Statement_;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author pemi
  */
-public class Constructor_ implements CodeModel {
+public class Block_ implements CodeModel {
+
+    private final List<Statement_> statements;
+
+    public Block_() {
+        this.statements = new ArrayList<>();
+    }
+
+    public Block_ add(Statement_ statement_) {
+        getStatements().add(statement_);
+        return this;
+    }
+
+    public List<Statement_> getStatements() {
+        return statements;
+    }
+
     @Override
-	public Type getType() {
-		return Type.CONSTRUCTOR;
-	}
+    public Type getModelType() {
+        return Type.BLOCK;
+    }
 }

@@ -29,7 +29,7 @@ public class Interface_ extends ClassAndInterfaceBase<Interface_, InterfaceModif
     }
 
     @Override
-    public Type getType() {
+    public Type getModelType() {
         return Type.INTERFACE;
     }
 }

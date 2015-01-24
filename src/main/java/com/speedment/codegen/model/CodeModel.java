@@ -36,5 +36,5 @@ public interface CodeModel {
 	 * Returns the type of this model.
 	 * @return the type.
 	 */
-	Type getType();
+	Type getModelType();
 }

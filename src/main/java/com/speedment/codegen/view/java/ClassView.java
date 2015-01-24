@@ -27,7 +27,9 @@ import static com.speedment.codegen.CodeUtil.*;
  * @author Duncan
  */
 public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
-	private final static String IMPLEMENTS_STRING = "implements ";
+	private final static String 
+		CLASS_STRING = "class ",
+		IMPLEMENTS_STRING = "implements ";
 
 	public ClassView() {
 		super(ClassModifier_.class, ClassModifier_.values());
@@ -43,13 +45,14 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 		return new $(
 			renderPackage(renderer, model), dnl(),
 			renderModifiers(model, renderer, SPACE),
+			CLASS_STRING,
 			renderName(model), SPACE,
 			renderParent(model),
 			renderList(model.getInterfaces(), renderer, COMMA_STRING, IMPLEMENTS_STRING, SPACE),
 			looseBracketsIndent(new $(
-				renderList(model.getFields(), renderer, scnl(), EMPTY, SC), dnl(),
-				renderList(model.getConstructors(), renderer, nl()), dnl(),
-				renderList(model.getMethods(), renderer, dnl())
+				renderList(model.getFields(), renderer, scnl(), EMPTY, scnl()),
+				renderList(model.getConstructors(), renderer, nl(), EMPTY, nl()),
+				renderList(model.getMethods(), renderer, nl())
 			))
 		);
 	}

@@ -23,33 +23,34 @@ import com.speedment.codegen.model.CodeModel;
  * @author Duncan
  */
 public class Dependency_ implements CodeModel {
-	private String source;
-	private boolean isStatic;
 
-	public String getSource() {
-		return source;
-	}
+    private String source;
+    private boolean isStatic;
 
-	public Dependency_ setSource(final String source) {
-		this.source = source;
-		return this;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public boolean isStatic() {
-		return isStatic;
-	}
+    public Dependency_ setSource(final String source) {
+        this.source = source;
+        return this;
+    }
 
-	public Dependency_ setStatic(final boolean isStatic) {
-		this.isStatic = isStatic;
-		return this;
-	}
-	
-	@Override
-	public Type getType() {
-		return Type.DEPENDENCY;
-	}
-	
-	public static Dependency_ of(Class<?> javaClass) {
-		return new Dependency_().setSource(javaClass.getName());
-	}
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public Dependency_ setStatic(final boolean isStatic) {
+        this.isStatic = isStatic;
+        return this;
+    }
+
+    @Override
+    public Type getModelType() {
+        return Type.DEPENDENCY;
+    }
+
+    public static Dependency_ of(Class<?> javaClass) {
+        return new Dependency_().setSource(javaClass.getName());
+    }
 }

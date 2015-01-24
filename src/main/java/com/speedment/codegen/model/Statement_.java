@@ -16,6 +16,8 @@
  */
 package com.speedment.codegen.model;
 
+import com.speedment.codegen.model.block.Block_;
+
 /**
  *
  * @author pemi
@@ -49,8 +51,8 @@ public class Statement_ implements CodeModel {
         this.block_ = block_;
     }
 
-	@Override
-	public Type getType() {
-		return Type.STATEMENT;
-	}
+    @Override
+    public Type getModelType() {
+        return Type.STATEMENT;
+    }
 }

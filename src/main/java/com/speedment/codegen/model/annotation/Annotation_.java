@@ -32,7 +32,7 @@ public class Annotation_ implements CodeModel {
     public static final Annotation_ DEPRECATED = new UnmodifiableAnnotation_(Deprecated.class);
 
     private Class<? extends Annotation> annotationClass;
-//    private String annotaionClassName;
+    //private CharSequence annotaionClassName;
     private final Map<String, Object> valuePairs;
 
     public Annotation_() {
@@ -64,10 +64,10 @@ public class Annotation_ implements CodeModel {
         return valuePairs;
     }
 
-	@Override
-	public Type getType() {
-		return Type.ANNOTATION;
-	}
+    @Override
+    public Type getModelType() {
+        return Type.ANNOTATION;
+    }
 
     public static final class UnmodifiableAnnotation_ extends Annotation_ {
 

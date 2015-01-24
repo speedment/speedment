@@ -34,11 +34,15 @@ public class MethodView extends CodeView<Method_> {
 			method.getAnnotations().stream()
 				.map((anno) -> renderer.on(anno))
 				.collect(Collectors.joining(nl(), EMPTY, nl())),
-			method.getName_(), PS,
+			method.getName(), PS,
 				method.getParameters().stream()
 					.map((param) -> renderer.on(param))
 					.collect(Collectors.joining(COMMA_SPACE)),
-			PE, SPACE, renderer.on(method.getBlock_())
+			PE, SPACE, looseBracketsIndent(
+				method.getStatements().stream()
+					.map(s -> renderer.on(s))
+					.collect(Collectors.joining(nl()))
+			)
 		);
 	}
 }

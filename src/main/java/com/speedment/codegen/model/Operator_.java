@@ -23,7 +23,7 @@ package com.speedment.codegen.model;
  */
 public enum Operator_ implements CodeModel {
 
-    ASSIGN("="), GREATER_THAN(">"), LESS_THAN("<"), NOT("!"), COMPLEMENT("~"), QUESTION_MARK("?"), COLON(":"), ARROW("->"),
+    ASSIGN("="), GREATER_THAN("String>"), LESS_THAN("<"), NOT("!"), COMPLEMENT("~"), QUESTION_MARK("?"), COLON(":"), ARROW("->"),
     EQUALS("=="), GREATER_OR_EQAL(">="), LESS_OR_EQUAL("<="), NOT_EQUAL("!="),
     AND_LOGICAL("&&"), OR_LOGICAL("||"), INCREMENT("++"), DECREMENT("--"),
     PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"), AND_BINARY("&"), OR_BINARY("|"), XOR_BINARY("^"), MODULO("%"),
@@ -48,7 +48,7 @@ public enum Operator_ implements CodeModel {
     }
 
 	@Override
-	public Type getType() {
+	public Type getModelType() {
 		return Type.OPERATOR;
 	}
 

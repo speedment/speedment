@@ -16,117 +16,153 @@
  */
 package com.speedment.codegen.model.field;
 
+import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.annotation.Annotatable;
+import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.modifier.FieldModifier_;
+import com.speedment.codegen.model.modifier.Modifiable;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public class Field_ implements CodeModel {
+public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, Annotatable {
 
-    protected boolean private_;
-    protected boolean static_;
-    protected boolean final_;
-    private Type_ type_;
-    private CharSequence name_;
-    private Expression_ expression_;
+    private final Set<FieldModifier_> modifiers;
+    private final List<Annotation_> annotations;
+    private Type_ type;
+    private CharSequence name;
+    private Expression_ expression;
 
-    public Field_(Type_ type_, CharSequence name_) {
-        this.type_ = type_;
-        this.name_ = name_;
+    public Field_() {
+        this.modifiers = EnumSet.noneOf(FieldModifier_.class);
+        this.annotations = new ArrayList<>();
+    }
+
+    public Field_(Type_ type, CharSequence name) {
+        this();
+        setType(type);
+        setName(name);
+    }
+
+    @Override
+    public CharSequence getName() {
+        return name;
+    }
+
+    @Override
+    public Field_ setName(CharSequence name_) {
+        this.name = name_;
+        return this;
+    }
+
+    public void setType(Type_ type) {
+        this.setType_(type);
+    }
+
+    public Expression_ getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression_ expression_) {
+        this.expression = expression_;
+    }
+
+    @Override
+    public Type getModelType() {
+        return Type.FIELD;
+    }
+
+    public Type_ getType() {
+        return type;
+    }
+
+    public void setType_(Type_ type) {
+        this.type = type;
+    }
+
+    @Override
+    public Set<FieldModifier_> getModifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public Field_ add(final FieldModifier_ firstClassModifier_m, final FieldModifier_... restClassModifiers) {
+        getModifiers().add(firstClassModifier_m);
+        Stream.of(restClassModifiers).forEach(getModifiers()::add);
+        return this;
+    }
+
+    @Override
+    public Field_ set(final Set<FieldModifier_> newSet) {
+        getModifiers().clear();
+        getModifiers().addAll(newSet);
+        return this;
+    }
+
+    @Override
+    public boolean is(FieldModifier_ modifier) {
+        return modifiers.contains(modifier);
+    }
+
+    @Override
+    public Field_ add(final Annotation_ annotation) {
+        getAnnotations().add(annotation);
+        return this;
+    }
+
+    @Override
+    public List<Annotation_> getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public boolean has(Annotation_ annotation_) {
+        return annotations.contains(annotation_);
+    }
+
+    public Field_ public_() {
+        modifiers.add(FieldModifier_.PUBLIC);
+        return this;
+    }
+
+    public Field_ protected_() {
+        modifiers.add(FieldModifier_.PROTECTED);
+        return this;
     }
 
     public Field_ private_() {
-        return private_(true);
-    }
-
-    public Field_ private_(boolean private_) {
-        this.private_ = private_;
+        modifiers.add(FieldModifier_.PRIVATE);
         return this;
     }
 
     public Field_ static_() {
-        return static_(true);
-    }
-
-    public Field_ static_(boolean static_) {
-        this.final_ = static_;
-        return this;
-    }
-
-    public Field_ final_(boolean final_) {
-        this.final_ = final_;
+        modifiers.add(FieldModifier_.STATIC);
         return this;
     }
 
     public Field_ final_() {
-        return final_(true);
+        modifiers.add(FieldModifier_.FINAL);
+        return this;
     }
 
-//    public static class Builder extends Field_ {
-//
-//        public Builder(Type_ type_, CharSequence name_) {
-//            super(type_, name_);
-//        }
-//
-//        public Builder private_() {
-//            return private_(true);
-//        }
-//
-//        public Builder private_(boolean private_) {
-//            this.private_ = private_;
-//            return this;
-//        }
-//
-//        public Builder static_(boolean static_) {
-//            this.final_ = static_;
-//            return this;
-//        }
-//
-//        public Builder final_(boolean final_) {
-//            this.final_ = final_;
-//            return this;
-//        }
-//
-//        public Field_ build() {
-//            return new Field_(private_, static_, final_, type_, name_);
-//        }
-//
-//    }
-//
-//    public static Builder builder(Type_ type_, CharSequence name_) {
-//        return new Builder(type_, name_);
-//    }
-
-    public CharSequence getName_() {
-        return name_;
+    public Field_ transient_() {
+        modifiers.add(FieldModifier_.TRANSIENT);
+        return this;
     }
 
-    public void setName_(CharSequence name_) {
-        this.name_ = name_;
+    public Field_ volatile_() {
+        modifiers.add(FieldModifier_.VOLATILE);
+        return this;
     }
 
-    public Expression_ getExpression_() {
-        return expression_;
-    }
-
-    public void setExpression_(Expression_ expression_) {
-        this.expression_ = expression_;
-    }
-	
-	@Override
-	public Type getType() {
-		return Type.FIELD;
-	}
-
-    public Type_ getType_() {
-        return type_;
-    }
-
-    public void setType_(Type_ type_) {
-        this.type_ = type_;
-    }
 }

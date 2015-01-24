@@ -49,7 +49,7 @@ public class CodeGenerator {
 	 * @return A text representation of that (often code).
 	 */
 	public CharSequence on(CodeModel model) {
-		return generators.get(model.getType()).on(model);
+		return generators.get(model.getModelType()).on(model);
 	}
 	
 	/**

@@ -24,6 +24,6 @@ public interface Nameable {
 
     public CharSequence getName();
 
-    void setName(final CharSequence name);
+    Nameable setName(final CharSequence name);
 
 }

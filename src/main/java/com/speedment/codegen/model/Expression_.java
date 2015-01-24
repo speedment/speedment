@@ -22,23 +22,23 @@ package com.speedment.codegen.model;
  */
 public class Expression_ implements CodeModel {
 
-    private String stringExpression;
+    private CharSequence stringExpression;
 
-    public Expression_(String stringExpression) {
+    public Expression_(CharSequence stringExpression) {
         this.stringExpression = stringExpression;
     }
 
-    public String getStringExpression() {
+    public CharSequence getStringExpression() {
         return stringExpression;
     }
 
-    public Expression_ setStringExpression(String stringExpression) {
+    public Expression_ setStringExpression(CharSequence stringExpression) {
         this.stringExpression = stringExpression;
         return this;
     }
 
-	@Override
-	public Type getType() {
-		return Type.EXPRESSION;
-	}
+    @Override
+    public Type getModelType() {
+        return Type.EXPRESSION;
+    }
 }
