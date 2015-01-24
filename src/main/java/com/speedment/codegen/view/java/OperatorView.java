@@ -14,16 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen;
+package com.speedment.codegen.view.java;
+
+import com.speedment.codegen.CodeGenerator;
+import com.speedment.codegen.model.Operator_;
+import com.speedment.codegen.view.CodeView;
 
 /**
  *
- * @author pemi
+ * @author Duncan
  */
-public interface Nameable {
+public class OperatorView extends CodeView<Operator_> {
 
-    public CharSequence getName();
-
-    void setName(final CharSequence name);
-
+	@Override
+	public CharSequence render(CodeGenerator renderer, Operator_ op) {
+		return op.name();
+	}
+	
 }

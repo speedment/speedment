@@ -14,20 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.class_.Constructor_;
+import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.view.CodeView;
+import com.speedment.util.$;
+import static com.speedment.codegen.CodeUtil.*;
 
 /**
  *
  * @author Duncan
  */
-public class ConstructorView extends CodeView<Constructor_> {
-
-    @Override
-    public CharSequence render(CodeGenerator renderer, Constructor_ constructor) {
-        return "";
-    }
+public class FieldView extends CodeView<Field_> {
+	@Override
+	public CharSequence render(CodeGenerator renderer, Field_ field) {
+		return new $(
+			renderer.on(field.getType()),
+			SPACE,
+			lcfirst(field.getName())
+		);
+	}
 }

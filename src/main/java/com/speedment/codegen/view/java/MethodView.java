@@ -14,19 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.view.CodeView;
+import static com.speedment.codegen.CodeUtil.*;
+import java.util.stream.Collectors;
+import com.speedment.util.$;
 
 /**
  *
  * @author Duncan
  */
-public class TypeView extends CodeView<Type_> {
+public class MethodView extends CodeView<Method_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Type_ type) {
-		return type.getTypeName();
+	public CharSequence render(CodeGenerator renderer, Method_ method) {
+		return new $(
+			method.getAnnotations().stream()
+				.map((anno) -> renderer.on(anno))
+				.collect(Collectors.joining(nl(), EMPTY, nl())),
+			method.getName_(), PS,
+				method.getParameters().stream()
+					.map((param) -> renderer.on(param))
+					.collect(Collectors.joining(COMMA_SPACE)),
+			PE, SPACE, renderer.on(method.getBlock_())
+		);
 	}
 }

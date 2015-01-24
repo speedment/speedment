@@ -16,8 +16,8 @@
  */
 package com.speedment.codegen.control;
 
-public interface Controller {
+import com.speedment.codegen.model.CodeModel;
 
-    void apply();
-
+public interface Controller<T extends CodeModel> {
+    void apply(T model);
 }

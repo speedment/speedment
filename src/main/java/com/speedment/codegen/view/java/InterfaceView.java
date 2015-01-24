@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.field.Field_;
-import com.speedment.codegen.view.CodeView;
+import com.speedment.codegen.model.class_.Interface_;
+import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.util.$;
 import static com.speedment.codegen.CodeUtil.*;
 
@@ -26,13 +26,23 @@ import static com.speedment.codegen.CodeUtil.*;
  *
  * @author Duncan
  */
-public class FieldView extends CodeView<Field_> {
+public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Interface_> {
+
+	public InterfaceView() {
+		super (InterfaceModifier_.class, InterfaceModifier_.values());
+	}
+	
 	@Override
-	public CharSequence render(CodeGenerator renderer, Field_ field) {
+	public CharSequence render(CodeGenerator renderer, Interface_ interf) {
 		return new $(
-			renderer.on(field.getType()),
-			SPACE,
-			lcfirst(field.getName())
+			renderPackage(renderer, interf), dnl(),
+			renderModifiers(interf, renderer, SPACE),
+			renderName(interf), SPACE,
+			renderList(interf.getInterfaces(), renderer, COMMA_STRING, EXTENDS_STRING, SPACE),
+			looseBracketsIndent(new $(
+				renderList(interf.getFields(), renderer, nl()), dnl(),
+				renderList(interf.getMethods(), renderer, dnl())
+			))
 		);
 	}
 }

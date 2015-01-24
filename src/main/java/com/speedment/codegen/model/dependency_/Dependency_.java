@@ -14,21 +14,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.model.dependency_;
 
-import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.annotation.Annotation_;
-import com.speedment.codegen.view.CodeView;
-import static com.speedment.codegen.CodeUtil.*;
-import com.speedment.util.$;
+import com.speedment.codegen.model.CodeModel;
 
 /**
  *
  * @author Duncan
  */
-public class AnnotationView extends CodeView<Annotation_> {
+public class Dependency_ implements CodeModel {
+	private String source;
+	private boolean isStatic;
+
+	public String getSource() {
+		return source;
+	}
+
+	public Dependency_ setSource(final String source) {
+		this.source = source;
+		return this;
+	}
+
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public Dependency_ setStatic(final boolean isStatic) {
+		this.isStatic = isStatic;
+		return this;
+	}
+	
 	@Override
-	public CharSequence render(CodeGenerator renderer, Annotation_ model) {
-		return new $(AT, model.getAnnotationClass().getName());
+	public Type getType() {
+		return Type.DEPENDENCY;
+	}
+	
+	public static Dependency_ of(Class<?> javaClass) {
+		return new Dependency_().setSource(javaClass.getName());
 	}
 }

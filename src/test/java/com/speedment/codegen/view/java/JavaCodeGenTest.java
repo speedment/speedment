@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
+import com.speedment.codegen.view.java.JavaCodeGen;
 import com.speedment.codegen.model.CodeModel;
 import org.junit.After;
 import org.junit.AfterClass;

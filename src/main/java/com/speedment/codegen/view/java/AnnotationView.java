@@ -14,19 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java8;
+package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.Statement_;
+import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.view.CodeView;
+import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.util.$;
 
 /**
  *
  * @author Duncan
  */
-public class StatementView extends CodeView<Statement_> {
+public class AnnotationView extends CodeView<Annotation_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Statement_ statement) {
-		return "";
+	public CharSequence render(CodeGenerator renderer, Annotation_ model) {
+		return new $(AT, model.getAnnotationClass().getName());
 	}
 }

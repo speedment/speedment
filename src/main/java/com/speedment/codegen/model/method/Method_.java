@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.model.block.Block_;
@@ -6,10 +22,13 @@ import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.annotation.Annotatable;
+import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -18,9 +37,14 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable {
 
     private final Set<MethodModifier_> modifiers;
+	private final List<Annotation_> annotations;
+    private Type_ type_;
+    private CharSequence name_;
+    private Expression_ expression_;
+    private List<Field_> parameters; // Todo: Introduce parameter
     private final List<Statement_> statements; // Todo: Block instead of statements.
     private Type_ type;
     private CharSequence name;
@@ -30,9 +54,11 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
     public Method_(Type_ type_, CharSequence name_) {
         this.parameters = new ArrayList<>();
         this.statements = new ArrayList<>();
-        this.type = type_;
-        this.name = name_;
+		this.annotations = new ArrayList<>();
+        this.type_ = type_;
+        this.name_ = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
+		
     }
 
     @SuppressWarnings("unchecked")
@@ -118,4 +144,19 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_> {
         return this;
     }
 
+	@Override
+	public List<Annotation_> getAnnotations() {
+		return annotations;
+	}
+
+	@Override
+	public boolean has(Annotation_ annotation_) {
+		return annotations.contains(annotation_);
+	}
+
+	@Override
+	public Method_ add(Annotation_ annotation) {
+		annotations.add(annotation);
+		return this;
+	}
 }
