@@ -16,8 +16,14 @@
  */
 package com.speedment.codegen;
 
+import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
+import com.speedment.codegen.model.package_.Package_;
 import com.speedment.util.$;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -158,6 +164,24 @@ public class CodeUtil {
 	public static void tab(String tab) {
 		CodeUtil.tab = tab;
 		CodeUtil.nltab = nl + tab;
+	}
+	
+	/**
+	 * Returns a full string representation of the specified class name
+	 * with all parent packages separated by dots.
+	 * @param model The model.
+	 * @return The full name.
+	 */
+	public static CharSequence flattenName(ClassAndInterfaceBase model) {
+		final List<CharSequence> packages = new ArrayList<>();
+		packages.add(model.getName());
+		
+		Package_ p = model.getPackage();
+		do { packages.add(p.getName_()); } 
+		while ((p = p.getPackage()) != null);
+		
+		Collections.reverse(packages);
+		return packages.stream().collect(Collectors.joining(DOT));
 	}
 	
 	private static String 

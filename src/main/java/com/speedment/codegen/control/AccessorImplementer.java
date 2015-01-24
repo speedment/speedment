@@ -16,11 +16,13 @@
  */
 package com.speedment.codegen.control;
 
+import com.speedment.codegen.CodeUtil;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.codegen.model.Type_;
 
 /**
  *
@@ -45,9 +47,13 @@ public class AccessorImplementer implements Controller<Class_> {
     }
 
     protected void generateSetter(final Class_ class_, final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType(), "set" + ucfirst(field_.getName()))
-				.add(new Field_(field_.getType(), field_.getName()));
-        method_.add(new Statement_("this." + field_.getName() + " = " + field_.getName()));
-        class_.add(method_);
+        class_.add(new Method_(
+			new Type_(CodeUtil.flattenName(class_)), 
+			"set" + ucfirst(field_.getName())
+		)
+			.add(new Field_(field_.getType(), field_.getName()))
+			.add(new Statement_("this." + field_.getName() + " = " + field_.getName()))
+			.add(new Statement_("return this"))
+		);
     }
 }
