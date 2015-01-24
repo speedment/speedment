@@ -17,9 +17,7 @@
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.model.Type_;
-import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
-import com.speedment.codegen.model.modifier.FieldModifier_;
 import java.util.ArrayList;
 import java.util.List;
 

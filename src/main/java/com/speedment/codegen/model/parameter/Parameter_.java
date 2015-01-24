@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model.field.parameter;
+package com.speedment.codegen.model.parameter;
 
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;

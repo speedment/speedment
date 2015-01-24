@@ -1,4 +1,4 @@
-package com.speedment.codegen.model.field.parameter;
+package com.speedment.codegen.model.parameter;
 
 import java.util.List;
 
