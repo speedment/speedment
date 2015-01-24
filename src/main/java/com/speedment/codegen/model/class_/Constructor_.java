@@ -5,6 +5,7 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.modifier.ConstructorModifier_;
+import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -81,6 +82,21 @@ public class Constructor_ implements CodeModel, Nameable, Modifiable<Constructor
     public Constructor_ set(final Set<ConstructorModifier_> newSet) {
         getModifiers().clear();
         getModifiers().addAll(newSet);
+        return this;
+    }
+
+    public Constructor_ private_() {
+        add(ConstructorModifier_.PRIVATE);
+        return this;
+    }
+
+    public Constructor_ protected_() {
+        add(ConstructorModifier_.PROTECTED);
+        return this;
+    }
+
+    public Constructor_ puplic_() {
+        add(ConstructorModifier_.PUBLIC);
         return this;
     }
 

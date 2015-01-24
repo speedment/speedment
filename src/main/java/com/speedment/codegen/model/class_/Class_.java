@@ -17,7 +17,9 @@
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
+import com.speedment.codegen.model.modifier.FieldModifier_;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,39 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         this.superClass = superClassType.getTypeClass();
     }
 
-    
-    
-    
+    public Class_ abstract_() {
+        add(ClassModifier_.ABSTRACT);
+        return this;
+    }
+
+    public Class_ final_() {
+        add(ClassModifier_.FINAL);
+        return this;
+    }
+
+    public Class_ private_() {
+        add(ClassModifier_.PRIVATE);
+        return this;
+    }
+
+    public Class_ protected_() {
+        add(ClassModifier_.PROTECTED);
+        return this;
+    }
+
+    public Class_ public_() {
+        add(ClassModifier_.PUBLIC);
+        return this;
+    }
+
+    public Class_ static_() {
+        add(ClassModifier_.STATIC);
+        return this;
+    }
+
+    public Class_ strictfp_() {
+        add(ClassModifier_.STRICTFP);
+        return this;
+    }
+
 }
