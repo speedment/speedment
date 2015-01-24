@@ -27,6 +27,6 @@ import com.speedment.codegen.view.CodeView;
 public class StatementView extends CodeView<Statement_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Statement_ statement) {
-		return "";
+		return statement.getStatementText();
 	}
 }
