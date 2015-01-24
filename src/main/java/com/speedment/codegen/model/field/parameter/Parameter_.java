@@ -69,7 +69,7 @@ public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModi
 
     @Override
     public Type getModelType() {
-        return Type.FIELD;
+        return Type.PARAMETER;
     }
 
     public Type_ getType() {

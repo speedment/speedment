@@ -121,6 +121,5 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     public Class_ strictfp_() {
         add(ClassModifier_.STRICTFP);
         return this;
-    }
-
+	}
 }

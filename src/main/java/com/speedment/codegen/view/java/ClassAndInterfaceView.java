@@ -63,7 +63,7 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 		return model.getDependencies().stream()
 			.map(d -> cg.on(d))
 			.sorted()
-			.collect(Collectors.joining(scnl()));
+			.collect(Collectors.joining(nl(), EMPTY, dnl()));
 	}
 	
 	public CharSequence renderIf(Model model, Modifier condition, CharSequence text) {

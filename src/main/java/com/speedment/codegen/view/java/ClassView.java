@@ -44,6 +44,7 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 	public CharSequence render(CodeGenerator renderer, Class_ model) {
 		return new $(
 			renderPackage(renderer, model), dnl(),
+			renderDependencies(renderer, model),
 			renderModifiers(model, renderer, SPACE),
 			CLASS_STRING,
 			renderName(model), SPACE,

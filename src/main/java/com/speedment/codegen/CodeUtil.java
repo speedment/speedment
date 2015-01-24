@@ -36,7 +36,7 @@ public class CodeUtil {
 	 * @return The resulting text.
 	 */
 	public static CharSequence lcfirst(CharSequence input) {
-		return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
+		return withFirst(input, (first) -> String.valueOf(Character.toLowerCase(first)));
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class CodeUtil {
 		if (input == null) {
             return null;
         } else if (input.length() == 0) {
-			return "";
+			return EMPTY;
 		} else {
 			return String.join(EMPTY,
 				callback.apply(input.charAt(0)),
@@ -184,6 +184,32 @@ public class CodeUtil {
 		return packages.stream().collect(Collectors.joining(DOT));
 	}
 	
+	/**
+	 * Returns the 'name' part of a long name. This is everything after the last
+	 * dot.
+	 * @param longName The long name.
+	 * @return The name part.
+	 */
+	public static CharSequence shortName(String longName) {
+		if (longName.contains(DOT_STRING)) {
+			return longName.substring(longName.lastIndexOf(DOT_STRING) + 1);
+		} else {
+			return longName;
+		}
+	}
+	
+	/**
+	 * Returns the 'package' part of a long name. This is everything before the
+	 * last dot.
+	 * @param longName The long name.
+	 * @return The package part.
+	 */
+	public static CharSequence packageName(String longName) {
+		return longName.substring(0,
+			longName.lastIndexOf(DOT_STRING)
+		);
+	}
+	
 	private static String 
 		nl = "\n",
 		dnl = "\n\n",
@@ -191,6 +217,8 @@ public class CodeUtil {
 		nltab = "\n\t",
 		scnl = ";\n",
 		scdnl = ";\n\n";
+	
+	public final static String DOT_STRING = ".";
 	
 	public final static CharSequence 
 		BS = "{", 

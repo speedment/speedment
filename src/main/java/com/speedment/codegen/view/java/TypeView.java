@@ -19,6 +19,7 @@ package com.speedment.codegen.view.java;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.view.CodeView;
+import static com.speedment.codegen.CodeUtil.*;
 
 /**
  *
@@ -27,6 +28,6 @@ import com.speedment.codegen.view.CodeView;
 public class TypeView extends CodeView<Type_> {
 	@Override
 	public CharSequence render(CodeGenerator renderer, Type_ type) {
-		return type.getTypeName();
+		return shortName(type.getTypeName().toString());
 	}
 }

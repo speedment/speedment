@@ -23,6 +23,7 @@ import com.speedment.codegen.model.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.field.parameter.Parameter_;
 
 /**
  *
@@ -42,7 +43,7 @@ public class AccessorImplementer implements Controller<Class_> {
 
     protected void generateGetter(final Class_ class_, final Field_ field_) {
         final Method_ method_ = new Method_(field_.getType(), "get" + ucfirst(field_.getName()));
-        method_.add(new Statement_("return " + field_.getName()));
+        method_.add(new Statement_("return " + field_.getName() + ";"));
         class_.add(method_);
     }
 
@@ -51,9 +52,9 @@ public class AccessorImplementer implements Controller<Class_> {
 			new Type_(CodeUtil.flattenName(class_)), 
 			"set" + ucfirst(field_.getName())
 		)
-			.add(new Field_(field_.getType(), field_.getName()))
-			.add(new Statement_("this." + field_.getName() + " = " + field_.getName()))
-			.add(new Statement_("return this"))
+			.add(new Parameter_(field_.getType(), field_.getName()))
+			.add(new Statement_("this." + field_.getName() + " = " + field_.getName() + ";"))
+			.add(new Statement_("return this;"))
 		);
     }
 }

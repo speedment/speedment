@@ -18,8 +18,6 @@ package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.view.CodeView;
-import com.speedment.codegen.view.CodeViewBuilder;
 
 /**
  *
@@ -40,6 +38,7 @@ public class JavaCodeGen extends CodeGenerator {
 				case METHOD			: return new MethodView();
 				case OPERATOR		: return new OperatorView();
 				case PACKAGE		: return new PackageView();
+				case PARAMETER		: return new ParameterView();
 				case STATEMENT		: return new StatementView();
 				case TYPE			: return new TypeView();
 				default : throw new UnsupportedOperationException("Missing implementation for type " + type + ".");

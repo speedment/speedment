@@ -45,7 +45,6 @@ public class Type_ implements CodeModel {
 
     private CharSequence typeName;
     private Class<?> typeClass;
-
     private final List<Type_> genericTypes;
 
     public Type_(Class<?> typeClass) {
