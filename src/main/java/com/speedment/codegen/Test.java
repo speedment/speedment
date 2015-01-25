@@ -18,6 +18,7 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
+import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
@@ -28,6 +29,7 @@ import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.view.java.JavaCodeGen;
+import java.io.InputStream;
 
 /**
  *
@@ -46,13 +48,15 @@ public class Test {
 			.setPackage(new Package_("org"))));
 
 		CodeUtil.tab("   ");
+		
+		final Type_ stringbuilder = new Type_(InputStream.class);
 
         final Class_ class_ = new Class_()
 			.setPackage(package_)
 			.public_()
 			.setName("TestClass")
 			.add(new Field_(STRING, "foo").private_().final_())
-			.add(new Field_(STRING, "bar").private_().final_())
+			.add(new Field_(stringbuilder, "bar").private_().final_())
 			.add(new Method_(STRING, "getFooBar")
 				.public_().final_()
 				.add(new Parameter_(STRING, "baz"))
