@@ -63,8 +63,9 @@ public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModi
         return this;
     }
 
-    public void setType(Type_ type) {
+    public Parameter_ setType(Type_ type) {
         this.setType_(type);
+        return this;
     }
 
     @Override

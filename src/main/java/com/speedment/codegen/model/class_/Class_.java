@@ -16,7 +16,6 @@
  */
 package com.speedment.codegen.model.class_;
 
-import com.speedment.codegen.CodeUtil;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
 import java.util.ArrayList;
@@ -119,5 +118,5 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     public Class_ strictfp_() {
         add(ClassModifier_.STRICTFP);
         return this;
-	}
+    }
 }

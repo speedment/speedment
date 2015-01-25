@@ -37,7 +37,7 @@ public class PackageView extends CodeView<Package_> {
 		final List<CharSequence> packages = new ArrayList<>();
 
 		Package_ p = model;
-		do { packages.add(p.getName_()); } 
+		do { packages.add(p.getName()); } 
 		while ((p = p.getPackage()) != null);
 		
 		Collections.reverse(packages);

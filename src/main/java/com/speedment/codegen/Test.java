@@ -34,35 +34,37 @@ import com.speedment.codegen.view.java.JavaCodeGen;
  * @author pemi
  */
 public class Test {
-	
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
 
-        Package_ package_ = new Package_("test")
-			.setPackage(new Package_("codegen")
-			.setPackage(new Package_("speedment")
-			.setPackage(new Package_("org"))));
+//        Package_ package_ = new Package_("test")
+//			.setPackage(new Package_("codegen")
+//			.setPackage(new Package_("speedment")
+//			.setPackage(new Package_("org"))));
+        Package_ package_ = Package_.by("org.speedment.codegen.test");
 
-		CodeUtil.tab("   ");
+        CodeUtil.tab("   ");
 
         final Class_ class_ = new Class_()
-			.setPackage(package_)
-			.public_()
-			.setName("TestClass")
-			.add(new Field_(STRING, "foo").private_().final_())
-			.add(new Field_(STRING, "bar").private_().final_())
-			.add(new Method_(STRING, "getFooBar")
-				.public_().final_()
-				.add(new Parameter_(STRING, "baz"))
-				.add(new Statement_(
-					"return (foo + baz + bar);"
-				))
-			);
-			
+                .package_("org.speedment.codegen.test")
+                .public_()
+                .setName("TestClass")
+                .add(new Field_(STRING, "foo").private_().final_())
+                .add(new Field_(STRING, "bar").private_().final_())
+                .add(new Method_(STRING, "getFooBar")
+                        .public_().final_()
+                        .add(new Parameter_().final_().setType(STRING).setName("baz"))
+                        .add(new Parameter_(STRING, "bazer"))
+                        .add(new Statement_(
+                                        "return (foo + baz + bar);"
+                                ))
+                );
+
         new AccessorImplementer().apply(class_);
-		new AutomaticDependencies().apply(class_);
+        new AutomaticDependencies().apply(class_);
 
         class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();

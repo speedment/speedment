@@ -18,7 +18,12 @@ package com.speedment.codegen.model.package_;
 
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
-import java.util.stream.Stream;
+import com.speedment.util.CharSequences;
+import com.speedment.util.Trees;
+import java.util.List;
+import java.util.Optional;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -26,22 +31,23 @@ import java.util.stream.Stream;
  */
 public class Package_ implements CodeModel, Packagable {
 
-    private String name_;
+    private CharSequence name;
     private Package_ package_;
 
     public Package_() {
     }
 
-    public Package_(final String name_) {
-        this.name_ = name_;
+    public Package_(final String name) {
+        this.name = name;
     }
 
-    public String getName_() {
-        return name_;
+    public CharSequence getName() {
+        return name;
     }
 
-    public void setName_(final String name_) {
-        this.name_ = name_;
+    public Package_ setName(final CharSequence name) {
+        this.name = name;
+        return this;
     }
 
     @Override
@@ -59,10 +65,26 @@ public class Package_ implements CodeModel, Packagable {
         this.package_ = package_;
         return this;
     }
-    
-//    public static final byQualifiedName(CharSequence path) {
-//        final String[] items = new StringBuilder(path).reverse().toString().split("\\.");
-//        Stream.of(items).
-//    }
+
+    public static final Package_ by(CharSequence packagePath) {
+        return make(null, packagePath);
+    }
+
+    private static Package_ make(Package_ parent, CharSequence cs) {
+        if (cs.length() == 0) {
+            return parent;
+        }
+        int dotIndex = CharSequences.indexOf(cs, '.');
+        final Package_ result = new Package_().setPackage(parent);
+        if (dotIndex == -1) {
+            return result.setName(cs);
+        }
+        return make(result.setName(cs.subSequence(0, dotIndex)), cs.subSequence(dotIndex + 1, cs.length()));
+    }
+
+    @Override
+    public String toString() {
+        return Trees.walk(this, Package_::getPackage).map(Package_::getName).collect(Collectors.joining("."));
+    }
 
 }

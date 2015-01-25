@@ -49,7 +49,7 @@ import java.util.stream.Stream;
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
         implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable {
-    
+
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
     private final List<Method_> methods;
@@ -60,7 +60,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     private final Set<Dependency_> dependencies;
     private Package_ pagage;
     private CharSequence name;
-    
+
     public ClassAndInterfaceBase(final Class<M> mClass) {
         fields = new ArrayList<>();
         methods = new ArrayList<>();
@@ -71,42 +71,42 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         initializers = new ArrayList<>();
         dependencies = new HashSet<>();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Interface_ interf) {
         getInterfaces().add(interf);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Field_ field) {
         getFields().add(field);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Method_ method_) {
         getMethods().add(method_);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Annotation_ annotation) {
         getAnnotations().add(annotation);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Class_ nestedClass) {
         getNestedClasses().add(nestedClass);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(final InitializerBlock_ initializer) {
@@ -125,13 +125,13 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         Stream.of(restClassModifiers).forEach(getModifiers()::add);
         return (T) this;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean has(Annotation_ annotation_) {
         return annotations.contains(annotation_);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T set(final Set<M> newSet) {
@@ -139,92 +139,99 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         getModifiers().addAll(newSet);
         return (T) this;
     }
-    
+
     @Override
     public List<Interface_> getInterfaces() {
         return interfaces;
     }
-    
+
     @Override
     public List<Field_> getFields() {
         return fields;
     }
-    
+
     @Override
     public List<Method_> getMethods() {
         return methods;
     }
-    
+
     @Override
     public Package_ getPackage() {
         return pagage;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T setPackage(final Package_ pagage) {
         this.pagage = pagage;
         return (T) this;
     }
-    
+
     @Override
     public CharSequence getName() {
         return name;
     }
-    
+
     @Override
     public T setName(final CharSequence name) {
         this.name = name;
         return (T) this;
     }
-    
+
     @Override
     public Set<M> getModifiers() {
         return modifiers;
     }
-    
+
     @Override
     public boolean is(M modifier) {
         return modifiers.contains(modifier);
     }
-    
+
     @Override
     public List<Annotation_> getAnnotations() {
         return annotations;
     }
-    
+
     @Override
     public List<ClassAndInterfaceBase<?, ?>> getNestedClasses() {
         return nestedClasses;
     }
-    
+
     @Override
     public List<InitializerBlock_> getInitializers() {
         return initializers;
     }
-    
+
     @Override
     public Set<Dependency_> getDependencies() {
         return dependencies;
     }
-    
+
     @Override
     public boolean has(Dependency_ dep) {
         return dependencies.contains(dep);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public T add(Dependency_ dep) {
         dependencies.add(dep);
         return (T) this;
     }
-	
-	public Type_ toType() {
-		
-		
-		
-		//return new Type_(CodeUtil.flattenName(this)).add();
-		return null;
-	}
+
+    public Type_ toType() {
+
+        //return new Type_(CodeUtil.flattenName(this)).add();
+        return null;
+    }
+
+    public T package_(CharSequence packagePath) {
+        return setPackage(Package_.by(packagePath));
+    }
+    
+//    public T method() {
+//        return 
+//    }
+    
 }
