@@ -71,15 +71,10 @@ public class AutomaticDependencies implements Controller<Class_> {
 	protected static boolean isDependantOf(ClassAndInterfaceBase model, String typeName) {
 		final String flatten = flattenName(model).toString();
 		final String pack = packageName(flatten).toString();
-		final String test = null;
-		if (false) {}
-		
-		return !packageName(typeName)
-			.toString()
-			.equalsIgnoreCase(
-				packageName(flattenName(model).toString())
-				.toString()
-			);
+
+		return !packageName(typeName).toString().equalsIgnoreCase(
+				packageName(flattenName(model).toString()).toString()
+		);
 	}
 	
 	protected static Dependency_ dependency(Annotation_ anno) {
