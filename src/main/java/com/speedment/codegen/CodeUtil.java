@@ -49,6 +49,13 @@ public class CodeUtil {
         return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
     }
 
+    /**
+     * Does something with the first character in the specified CharSequence.
+     *
+     * @param input The CharSequence.
+     * @param callback The something.
+     * @return The new CharSequence.
+     */
     public static CharSequence withFirst(CharSequence input, Function<Character, CharSequence> callback) {
         if (input == null) {
             return null;
@@ -102,7 +109,7 @@ public class CodeUtil {
      * @return The indented text.
      */
     public static CharSequence indent(CharSequence text) {
-        return new $(tab, text.toString().replaceAll("\\r?\\n", nltab));
+        return new $(tab, text.toString().replaceAll("\\r?\\n", nltab.toString()));
     }
 
     /**
@@ -120,12 +127,12 @@ public class CodeUtil {
      *
      * @param nl The new character to use.
      */
-    public static void nl(String nl) {
+    public static void nl(CharSequence nl) {
         CodeUtil.nl = nl;
-        CodeUtil.dnl = nl + nl;
-        CodeUtil.nltab = nl + tab;
-        CodeUtil.scnl = SC + nl;
-        CodeUtil.scdnl = SC + dnl;
+        CodeUtil.dnl = new $(nl, nl);
+        CodeUtil.nltab = new $(nl, tab);
+        CodeUtil.scnl = new $(SC, nl);
+        CodeUtil.scdnl = new $(SC, dnl);
     }
 
     /**
@@ -175,7 +182,7 @@ public class CodeUtil {
      */
     public static void tab(String tab) {
         CodeUtil.tab = tab;
-        CodeUtil.nltab = nl + tab;
+        CodeUtil.nltab = new $(nl, tab);
     }
 
     /**
@@ -196,9 +203,10 @@ public class CodeUtil {
      * @param longName The long name.
      * @return The name part.
      */
-    public static CharSequence shortName(String longName) {
-        if (longName.contains(DOT_STRING)) {
-            return longName.substring(longName.lastIndexOf(DOT_STRING) + 1);
+    public static CharSequence shortName(CharSequence longName) {
+        final String longNameS = longName.toString();
+        if (longNameS.contains(DOT_STRING)) {
+            return longNameS.substring(longNameS.lastIndexOf(DOT_STRING) + 1);
         } else {
             return longName;
         }
@@ -211,13 +219,14 @@ public class CodeUtil {
      * @param longName The long name.
      * @return The package part.
      */
-    public static CharSequence packageName(String longName) {
-        return longName.substring(0,
-                longName.lastIndexOf(DOT_STRING)
+    public static CharSequence packageName(CharSequence longName) {
+        final String longNameS = longName.toString();
+        return longNameS.substring(0,
+                longNameS.lastIndexOf(DOT_STRING)
         );
     }
 
-    private static String nl = "\n",
+    private static CharSequence nl = "\n",
             dnl = "\n\n",
             tab = "\t",
             nltab = "\n\t",
@@ -232,6 +241,8 @@ public class CodeUtil {
             PE = ")",
             AS = "[",
             AE = "]",
+            SS = "<",
+            SE = ">",
             SPACE = " ",
             EMPTY = "",
             COMMA = ",",

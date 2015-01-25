@@ -23,10 +23,6 @@ import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.method.Method_;
-import com.speedment.codegen.model.package_.Package_;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -73,7 +69,9 @@ public class AutomaticDependencies implements Controller<Class_> {
 	}
 	
 	protected static boolean isDependantOf(ClassAndInterfaceBase model, String typeName) {
-		return !typeName.equalsIgnoreCase(packageName(flattenName(model).toString()).toString());
+		return !packageName(typeName).toString().equalsIgnoreCase(
+				packageName(flattenName(model)).toString()
+		);
 	}
 	
 	protected static Dependency_ dependency(Annotation_ anno) {

@@ -19,6 +19,7 @@ package com.speedment.codegen.view.java;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.field.Field_;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -71,7 +72,9 @@ public class FieldViewTest {
 			"static final private double width"
 		};
 
-		CharSequence result = view.render(renderer, field);
+		Optional<CharSequence> result = view.render(renderer, field);
+		
+		assertTrue("FieldView.render did not return any output.", result.isPresent());
 		
 		boolean success = false;
 		for (CharSequence exp : expResult) {

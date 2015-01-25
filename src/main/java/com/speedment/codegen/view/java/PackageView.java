@@ -21,28 +21,27 @@ import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.view.CodeView;
 import java.util.stream.Collectors;
 import static com.speedment.codegen.CodeUtil.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.speedment.util.Trees;
+import java.util.Optional;
+import com.speedment.util.$;
 
 /**
  *
  * @author Duncan
  */
 public class PackageView extends CodeView<Package_> {
-	private final static String PACKAGE_STRING = "package ";
-	
-	@Override
-	public CharSequence render(CodeGenerator renderer, Package_ model) {
-		final List<CharSequence> packages = new ArrayList<>();
 
-		Package_ p = model;
-		do { packages.add(p.getName()); } 
-		while ((p = p.getPackage()) != null);
-		
-		Collections.reverse(packages);
-		
-		return packages.stream()
-			.collect(Collectors.joining(DOT, PACKAGE_STRING, SC));
-	}
+    private final static String PACKAGE_STRING = "package ";
+
+    @Override
+    public Optional<CharSequence> render(CodeGenerator renderer, Package_ model) {
+        if (model == null) {
+            return Optional.empty();
+        } else {
+            // TOdo: replace with a generic flattener
+            return Optional.of(
+                    new $(PACKAGE_STRING, Trees.walk(model.getPackage(), Package_::getPackage).map(Package_::getName).collect(Collectors.joining(DOT)), SC)
+            );
+        }
+    }
 }

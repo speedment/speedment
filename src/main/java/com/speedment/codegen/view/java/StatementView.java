@@ -19,6 +19,7 @@ package com.speedment.codegen.view.java;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.view.CodeView;
+import java.util.Optional;
 
 /**
  *
@@ -26,7 +27,7 @@ import com.speedment.codegen.view.CodeView;
  */
 public class StatementView extends CodeView<Statement_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Statement_ statement) {
-		return statement.getStatementText();
+	public Optional<CharSequence> render(CodeGenerator renderer, Statement_ statement) {
+		return Optional.of(statement.getStatementText());
 	}
 }

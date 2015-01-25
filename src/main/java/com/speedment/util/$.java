@@ -16,6 +16,8 @@
  */
 package com.speedment.util;
 
+import java.util.Optional;
+
 /**
  *
  * @author Duncan
@@ -33,9 +35,23 @@ public class $ implements CharSequence, Comparable<CharSequence> {
 		$(objects);
 	}
 	
+	public $(final Optional<CharSequence>... objects) {
+		str = new StringBuilder();
+		$(objects);
+	}
+	
 	public final $ $(final CharSequence... objects) {
 		for (final CharSequence object : objects) {
 			str.append(object);
+		}
+		return this;
+	}
+	
+	public final $ $(final Optional<CharSequence>... objects) {
+		for (final Optional<CharSequence> object : objects) {
+			if (object.isPresent()) {
+				str.append(object);
+			}
 		}
 		return this;
 	}

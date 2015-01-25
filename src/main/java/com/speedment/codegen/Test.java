@@ -18,6 +18,7 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
+import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
@@ -28,6 +29,7 @@ import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.view.java.JavaCodeGen;
+import java.io.InputStream;
 
 /**
  *
@@ -68,7 +70,7 @@ public class Test {
 
         class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();
-        System.out.println(gen.on(class_));
+        System.out.println(gen.on(class_).get());
 
     }
 

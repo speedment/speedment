@@ -21,6 +21,7 @@ import com.speedment.codegen.model.dependency_.Dependency_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
 import static com.speedment.codegen.CodeUtil.*;
+import java.util.Optional;
 
 /**
  *
@@ -29,15 +30,20 @@ import static com.speedment.codegen.CodeUtil.*;
 public class DependencyView extends CodeView<Dependency_> {
 	private final static String 
 		IMPORT_STRING = "import ", 
-		STATIC_STRING = "static ";
+		STATIC_STRING = "static ",
+		JAVA_LANG_STRING = "java.lang";
 	
 	@Override
-	public CharSequence render(CodeGenerator renderer, Dependency_ model) {
-		return new $(
-			IMPORT_STRING, 
-			model.isStatic() ? STATIC_STRING : EMPTY, 
-			model.getSource(),
-			SC
-		);
+	public Optional<CharSequence> render(CodeGenerator renderer, Dependency_ model) {
+		if (JAVA_LANG_STRING.equals(packageName(model.getSource()))) {
+			return Optional.empty();
+		} else {
+			return Optional.of(new $(
+				IMPORT_STRING, 
+				model.isStatic() ? STATIC_STRING : EMPTY, 
+				model.getSource(),
+				SC
+			));
+		}
 	}
 }

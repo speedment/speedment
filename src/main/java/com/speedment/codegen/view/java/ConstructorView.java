@@ -19,15 +19,15 @@ package com.speedment.codegen.view.java;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.class_.Constructor_;
 import com.speedment.codegen.view.CodeView;
+import java.util.Optional;
 
 /**
  *
  * @author Duncan
  */
 public class ConstructorView extends CodeView<Constructor_> {
-
     @Override
-    public CharSequence render(CodeGenerator renderer, Constructor_ constructor) {
-        return "";
+    public Optional<CharSequence> render(CodeGenerator renderer, Constructor_ constructor) {
+        return Optional.empty();
     }
 }
