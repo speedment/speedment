@@ -23,9 +23,11 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
+import com.speedment.util.StreamUtil;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -56,12 +58,14 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	}
 	
 	public CharSequence renderPackage(CodeGenerator cg, Model model) {
-		return cg.on(model.getPackage());
+		Optional<CharSequence> o = cg.on(model.getPackage());
+		return o.isPresent() ? o.get() : EMPTY;
 	}
 	
 	public CharSequence renderDependencies(CodeGenerator cg, Model model) {
 		return model.getDependencies().stream()
 			.map(d -> cg.on(d))
+			.flatMap(StreamUtil::mandatory)
 			.sorted()
 			.collect(Collectors.joining(nl(), EMPTY, dnl()));
 	}
@@ -80,13 +84,9 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	
 	public <T extends CodeModel> CharSequence renderList(List<T> models, CodeGenerator cg, CharSequence delimiter, CharSequence pre, CharSequence suf) {
 		if (models.isEmpty()) {
-			return models.stream()
-				.map((m) -> cg.on(m))
-				.collect(Collectors.joining(delimiter));
+			return EMPTY;
 		} else {
-			return models.stream()
-				.map((m) -> cg.on(m))
-				.collect(Collectors.joining(delimiter, pre, suf));
+			return cg.onEach(models).collect(Collectors.joining(delimiter, pre, suf));
 		}
 	}
 	

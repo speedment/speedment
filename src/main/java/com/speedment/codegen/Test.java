@@ -70,7 +70,7 @@ public class Test {
 
         class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();
-        System.out.println(gen.on(class_));
+        System.out.println(gen.on(class_).get());
 
     }
 

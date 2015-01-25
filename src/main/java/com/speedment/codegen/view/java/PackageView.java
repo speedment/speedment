@@ -24,6 +24,7 @@ import static com.speedment.codegen.CodeUtil.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -33,16 +34,20 @@ public class PackageView extends CodeView<Package_> {
 	private final static String PACKAGE_STRING = "package ";
 	
 	@Override
-	public CharSequence render(CodeGenerator renderer, Package_ model) {
-		final List<CharSequence> packages = new ArrayList<>();
+	public Optional<CharSequence> render(CodeGenerator renderer, Package_ model) {
+		if (model == null) {
+			return Optional.empty();
+		} else {
+			final List<CharSequence> packages = new ArrayList<>();
 
-		Package_ p = model;
-		do { packages.add(p.getName_()); } 
-		while ((p = p.getPackage()) != null);
-		
-		Collections.reverse(packages);
-		
-		return packages.stream()
-			.collect(Collectors.joining(DOT, PACKAGE_STRING, SC));
+			Package_ p = model;
+			do { packages.add(p.getName_()); } 
+			while ((p = p.getPackage()) != null);
+
+			Collections.reverse(packages);
+
+			return Optional.of(packages.stream()
+				.collect(Collectors.joining(DOT, PACKAGE_STRING, SC)));
+		}
 	}
 }

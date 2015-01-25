@@ -2,6 +2,7 @@ package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.statement.Statement_;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -45,8 +46,10 @@ public class StatementViewTest {
 		
 		Statement_ statement = new Statement_("System.out.println(\"Hello, Speedment!\");");
 		
-		CharSequence result = view.render(renderer, statement);
-		assertEquals(expResult, result);
+		Optional<CharSequence> result = view.render(renderer, statement);
+		
+		assertTrue("StatementView.render did not return any output.", result.isPresent());
+		assertEquals(expResult, result.get());
 	}
 	
 }

@@ -4,7 +4,7 @@ import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.generic.Generic_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
-import static com.speedment.codegen.CodeUtil.*;
+import java.util.Optional;
 
 /**
  *
@@ -14,12 +14,11 @@ public class GenericView extends CodeView<Generic_> {
 	private final static String EXTENDS_STRING = " extends ";
 
 	@Override
-	public CharSequence render(CodeGenerator renderer, Generic_ model) {
-		return new $(
-			model.getName(), 
-			model.getExtendsType() == null ? EMPTY : 
-				new $(EXTENDS_STRING, renderer.on(model.getExtendsType()))
-		);
+	public Optional<CharSequence> render(CodeGenerator renderer, Generic_ model) {
+		$ s = new $(model.getName());
+		renderer.on(model.getExtendsType())
+			.ifPresent(t -> s.$(new $(EXTENDS_STRING, t)));
+		return Optional.of(s);
 	}
 	
 }

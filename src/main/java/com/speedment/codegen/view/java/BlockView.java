@@ -21,6 +21,7 @@ import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.view.CodeView;
 
 import static com.speedment.codegen.CodeUtil.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -29,11 +30,10 @@ import java.util.stream.Collectors;
  */
 public class BlockView extends CodeView<Block_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Block_ block) {
-		return looseBracketsIndent(
-			block.getStatements().stream()
-				.map((statement) -> renderer.on(statement))
+	public Optional<CharSequence> render(CodeGenerator renderer, Block_ block) {
+		return Optional.of(looseBracketsIndent(
+			renderer.onEach(block.getStatements())
 				.collect(Collectors.joining(nl()))
-		);
+		));
 	}
 }

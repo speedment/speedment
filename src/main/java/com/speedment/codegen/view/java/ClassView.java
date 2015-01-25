@@ -21,6 +21,7 @@ import com.speedment.codegen.model.class_.Class_;
 import com.speedment.util.$;
 import com.speedment.codegen.model.modifier.ClassModifier_;
 import static com.speedment.codegen.CodeUtil.*;
+import java.util.Optional;
 
 /**
  *
@@ -41,8 +42,8 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 	}
 
 	@Override
-	public CharSequence render(CodeGenerator renderer, Class_ model) {
-		return new $(
+	public Optional<CharSequence> render(CodeGenerator renderer, Class_ model) {
+		return Optional.of(new $(
 			renderPackage(renderer, model), dnl(),
 			renderDependencies(renderer, model),
 			renderModifiers(model, renderer, SPACE),
@@ -55,6 +56,6 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 				renderList(model.getConstructors(), renderer, nl(), EMPTY, nl()),
 				renderList(model.getMethods(), renderer, nl())
 			))
-		);
+		));
 	}
 }

@@ -21,6 +21,7 @@ import com.speedment.codegen.model.class_.Interface_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
 import com.speedment.util.$;
 import static com.speedment.codegen.CodeUtil.*;
+import java.util.Optional;
 
 /**
  *
@@ -34,8 +35,8 @@ public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Int
 	}
 	
 	@Override
-	public CharSequence render(CodeGenerator renderer, Interface_ interf) {
-		return new $(
+	public Optional<CharSequence> render(CodeGenerator renderer, Interface_ interf) {
+		return Optional.of(new $(
 			renderPackage(renderer, interf), dnl(),
 			renderModifiers(interf, renderer, SPACE),
 			INTERFACE_STRING,
@@ -45,6 +46,6 @@ public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Int
 				renderList(interf.getFields(), renderer, nl()), dnl(),
 				renderList(interf.getMethods(), renderer, dnl())
 			))
-		);
+		));
 	}
 }

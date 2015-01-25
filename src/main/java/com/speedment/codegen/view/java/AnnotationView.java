@@ -21,6 +21,7 @@ import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.view.CodeView;
 import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.util.$;
+import java.util.Optional;
 
 /**
  *
@@ -28,7 +29,7 @@ import com.speedment.util.$;
  */
 public class AnnotationView extends CodeView<Annotation_> {
 	@Override
-	public CharSequence render(CodeGenerator renderer, Annotation_ model) {
-		return new $(AT, model.getAnnotationClass().getName());
+	public Optional<CharSequence> render(CodeGenerator renderer, Annotation_ model) {
+		return Optional.of(new $(AT, model.getAnnotationClass().getName()));
 	}
 }

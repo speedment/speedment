@@ -19,10 +19,14 @@ package com.speedment.codegen;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.codegen.view.CodeViewBuilder;
+import com.speedment.util.StreamUtil;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 /**
  *
@@ -48,8 +52,24 @@ public class CodeGenerator {
 	 * @param model The model to view.
 	 * @return A text representation of that (often code).
 	 */
-	public CharSequence on(CodeModel model) {
+	public Optional<CharSequence> on(CodeModel model) {
 		return generators.get(model.getModelType()).on(model);
+	}
+	
+	/**
+	 * Creates a stream of CharSequence representations of every present model
+	 * in the specified collection.
+	 * @param <T> The type of CodeModel to view.
+	 * @param models The models to create from.
+	 * @return A stream of representations.
+	 */
+	public <T extends CodeModel> Stream<CharSequence> onEach(Collection<T> models) {
+		final Stream.Builder<CharSequence> build = Stream.builder();
+		models.forEach(m -> {
+			final Optional<CharSequence> str = on(m);
+			if (str.isPresent()) build.add(str.get());
+		});
+		return build.build();
 	}
 	
 	/**
@@ -90,9 +110,9 @@ public class CodeGenerator {
 			return invocationStack.peek();
 		}
 
-		public CharSequence on(CodeModel model) {
+		public Optional<CharSequence> on(CodeModel model) {
 			invocationStack.add(model);
-			CharSequence result = view.render(generator, model);
+			Optional<CharSequence> result = view.render(generator, model);
 			invocationStack.pop();
 			return result;
 		}

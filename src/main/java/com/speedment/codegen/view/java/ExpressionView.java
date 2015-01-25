@@ -19,15 +19,15 @@ package com.speedment.codegen.view.java;
 import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.view.CodeView;
+import java.util.Optional;
 
 /**
  *
  * @author Duncan
  */
 public class ExpressionView extends CodeView<Expression_> {
-
 	@Override
-	public CharSequence render(CodeGenerator renderer, Expression_ expression) {
-		return expression.getStringExpression();
+	public Optional<CharSequence> render(CodeGenerator renderer, Expression_ expression) {
+		return Optional.of(expression.getStringExpression());
 	}
 }
