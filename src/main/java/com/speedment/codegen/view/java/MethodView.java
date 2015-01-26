@@ -22,6 +22,7 @@ import com.speedment.codegen.view.CodeView;
 import static com.speedment.codegen.CodeUtil.*;
 import java.util.stream.Collectors;
 import com.speedment.util.$;
+import com.speedment.util.CodeCombiner;
 import java.util.Optional;
 
 /**
@@ -33,14 +34,17 @@ public class MethodView extends CodeView<Method_> {
 	public Optional<CharSequence> render(CodeGenerator cg, Method_ method) {
 		return Optional.of(new $(
 			cg.onEach(method.getAnnotations())
-				.collect(Collectors.joining(nl(), EMPTY, nl())),
+				.collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())),
+			method.getModifiers().stream()
+				.map(m -> m.name().toLowerCase())
+				.collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)),
 			cg.on(method.getType()).get(), SPACE,
 			method.getName(), PS,
 				cg.onEach(method.getParameters())
-					.collect(Collectors.joining(COMMA_SPACE)),
+				.collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE)),
 			PE, SPACE, looseBracketsIndent(
 				cg.onEach(method.getStatements())
-					.collect(Collectors.joining(nl()))
+					.collect(CodeCombiner.joinIfNotEmpty(nl()))
 			)
 		));
 	}

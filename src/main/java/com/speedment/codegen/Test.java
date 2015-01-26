@@ -47,9 +47,9 @@ public class Test {
 //			.setPackage(new Package_("codegen")
 //			.setPackage(new Package_("speedment")
 //			.setPackage(new Package_("org"))));
-        Package_ package_ = Package_.by("org.speedment.codegen.test");
-
         CodeUtil.tab("   ");
+		
+		Type_ type = new Type_(InputStream.class);
 
         final Statement_ s = new Statement_("int bar = 1");
 
@@ -61,7 +61,7 @@ public class Test {
                 .setName("TestClass")
                 .add(new Field_(STRING, "foo").private_().final_())
                 .add(new Field_(STRING, "bar").private_().final_())
-                .add(new Method_(STRING, "getFooBar")
+                .add(new Method_(type, "getFooBar")
                         .public_().final_()
                         .add(new Parameter_().final_().setType(STRING).setName("baz"))
                         .add(new Parameter_(STRING, "bazer"))

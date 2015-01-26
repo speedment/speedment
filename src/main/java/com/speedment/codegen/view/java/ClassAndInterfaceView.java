@@ -23,6 +23,7 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
+import com.speedment.util.CodeCombiner;
 import com.speedment.util.StreamUtil;
 import java.util.EnumMap;
 import java.util.List;
@@ -63,11 +64,8 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 	}
 	
 	public CharSequence renderDependencies(CodeGenerator cg, Model model) {
-		return model.getDependencies().stream()
-			.map(d -> cg.on(d))
-			.flatMap(StreamUtil::mandatory)
-			.sorted()
-			.collect(Collectors.joining(nl(), EMPTY, dnl()));
+		return cg.onEach(model.getDependencies()).sorted()
+			.collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, dnl()));
 	}
 	
 	public CharSequence renderIf(Model model, Modifier condition, CharSequence text) {
@@ -86,13 +84,15 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 		if (models.isEmpty()) {
 			return EMPTY;
 		} else {
-			return cg.onEach(models).collect(Collectors.joining(delimiter, pre, suf));
+			return cg.onEach(models)
+				.collect(CodeCombiner.joinIfNotEmpty(delimiter, pre, suf));
 		}
 	}
 	
 	public CharSequence renderModifiers(Model model, CodeGenerator cg, CharSequence delimiter) {
-		return model.getModifiers().stream()
-			.map((m) -> modifierTexts.get(m))
-			.collect(Collectors.joining(delimiter, EMPTY, delimiter));
+		CharSequence r = model.getModifiers().stream()
+			.map(m -> modifierTexts.get(m))
+			.collect(CodeCombiner.joinIfNotEmpty(delimiter, EMPTY, delimiter));
+		return r;
 	}
 }

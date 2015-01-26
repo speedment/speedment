@@ -52,9 +52,9 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 			renderParent(model),
 			renderList(model.getInterfaces(), renderer, COMMA_STRING, IMPLEMENTS_STRING, SPACE),
 			looseBracketsIndent(new $(
-				renderList(model.getFields(), renderer, scnl(), EMPTY, scnl()),
-				renderList(model.getConstructors(), renderer, nl(), EMPTY, nl()),
-				renderList(model.getMethods(), renderer, nl())
+				renderList(model.getFields(), renderer, scnl(), EMPTY, scdnl()),
+				renderList(model.getConstructors(), renderer, nl(), EMPTY, dnl()),
+				renderList(model.getMethods(), renderer, dnl())
 			))
 		));
 	}

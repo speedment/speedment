@@ -20,7 +20,13 @@ import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.util.$;
 import com.speedment.util.Trees;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -248,7 +254,7 @@ public class CodeUtil {
             SPACE = " ",
             EMPTY = "",
             COMMA = ",",
-            COMMA_SPACE = " ",
+            COMMA_SPACE = ", ",
             SC = ";",
             DOT = ".",
             AT = "@";
