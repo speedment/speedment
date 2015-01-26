@@ -18,8 +18,10 @@ package com.speedment.codegen.model.block;
 
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.statement.Statement_;
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -45,5 +47,10 @@ public class Block_ implements CodeModel {
     @Override
     public Type getModelType() {
         return Type.BLOCK;
+    }
+
+    @Override
+    public Stream<CodeModel> stream() {
+        return StreamUtil.<CodeModel>streamBuilder(statements).build();
     }
 }

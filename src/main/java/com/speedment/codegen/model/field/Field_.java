@@ -25,6 +25,7 @@ import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.FieldModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -163,4 +164,8 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
         return this;
     }
 
+        @Override
+    public Stream<CodeModel> stream() {
+        return StreamUtil.<CodeModel>streamBuilder(annotations, modifiers).build();
+    }
 }

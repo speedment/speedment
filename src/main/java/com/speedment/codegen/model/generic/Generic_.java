@@ -3,10 +3,11 @@ package com.speedment.codegen.model.generic;
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Type_;
-import com.speedment.codegen.model.class_.Class_;
 import com.speedment.codegen.model.class_.Interface_;
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -18,7 +19,7 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
     private final List<Generic_> generics;
     private Type_ extendsType;
     private List<Interface_> interfaces;
- /// Todo; Add "extends" and "super" stuff
+    /// Todo; Add "extends" and "super" stuff
 
     public Generic_() {
         this.generics = new ArrayList<>();
@@ -69,4 +70,8 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
         return this;
     }
 
+    @Override
+    public Stream<CodeModel> stream() {
+        return StreamUtil.<CodeModel>streamBuilder(generics, interfaces).build();
+    }
 }

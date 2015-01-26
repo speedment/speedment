@@ -16,8 +16,10 @@
  */
 package com.speedment.codegen.model;
 
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -59,6 +61,11 @@ public class Type_ implements CodeModel {
     public Type_(CharSequence typeName) {
         this();
         setTypeName(typeName);
+    }
+
+    @Override
+    public Stream<CodeModel> stream() {
+        return StreamUtil.<CodeModel>streamBuilder(genericTypes).build();
     }
 
     public Type_ add(Type_ genericType) {

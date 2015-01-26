@@ -39,4 +39,9 @@ public interface Modifier_<T extends Modifier_<T>> extends CodeModel {
         }
         return value;
     }
+
+    default Type getModelType() {
+        return Type.MODIFIER;
+    }
+
 }

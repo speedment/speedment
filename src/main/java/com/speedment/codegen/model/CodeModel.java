@@ -33,7 +33,7 @@ public interface CodeModel {
     public static enum Type {
 
         ANNOTATION, BLOCK, CLASS, CONSTRUCTOR, DEPENDENCY, EXPRESSION, FIELD,
-        INTERFACE, METHOD, OPERATOR, PACKAGE, STATEMENT, TYPE, PARAMETER, GENERIC_PARAMETER;
+        INTERFACE, METHOD, OPERATOR, PACKAGE, STATEMENT, TYPE, PARAMETER, GENERIC_PARAMETER, MODIFIER;
     }
 
     /**
@@ -43,7 +43,7 @@ public interface CodeModel {
      */
     Type getModelType();
 
-    default Stream<CodeModel> stream() {
+    default Stream<? extends CodeModel> stream() {
         return Stream.empty();
     }
 
