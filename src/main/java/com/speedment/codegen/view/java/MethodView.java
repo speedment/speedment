@@ -30,6 +30,8 @@ import java.util.Optional;
  * @author Duncan
  */
 public class MethodView extends CodeView<Method_> {
+	private final static boolean useTightBrackets = false;
+	
 	@Override
 	public Optional<CharSequence> render(CodeGenerator cg, Method_ method) {
 		return Optional.of(new $(
@@ -42,10 +44,16 @@ public class MethodView extends CodeView<Method_> {
 			method.getName(), PS,
 				cg.onEach(method.getParameters())
 				.collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE)),
-			PE, SPACE, looseBracketsIndent(
-				cg.onEach(method.getStatements())
+			PE, SPACE, 
+			(useTightBrackets && method.getStatements().size() < 2) ?
+				tightBrackets(
+					cg.onEach(method.getStatements())
 					.collect(CodeCombiner.joinIfNotEmpty(nl()))
-			)
+				) :
+				looseBracketsIndent(
+					cg.onEach(method.getStatements())
+					.collect(CodeCombiner.joinIfNotEmpty(nl()))
+				)
 		));
 	}
 }

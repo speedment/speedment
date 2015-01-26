@@ -15,6 +15,7 @@ public class ParameterView extends CodeView<Parameter_> {
 	@Override
 	public Optional<CharSequence> render(CodeGenerator renderer, Parameter_ model) {
 		return Optional.of(new $(
+			
 			renderer.on(model.getType()).get(),
 			SPACE,
 			model.getName()

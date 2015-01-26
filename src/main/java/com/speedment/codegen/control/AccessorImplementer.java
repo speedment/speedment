@@ -24,12 +24,20 @@ import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.parameter.Parameter_;
+import com.speedment.util.$;
 
 /**
  *
  * @author pemi
  */
 public class AccessorImplementer implements Controller<Class_> {
+	
+	private final static CharSequence 
+		GET_STRING = "get",
+		SET_STRING = "set",
+		RETURN_STRING = "return ",
+		THIS_STRING = "this",
+		ASSIGNMENT_STRING = " = ";
 
     @Override
     public void accept(Class_ class_) {
@@ -42,19 +50,29 @@ public class AccessorImplementer implements Controller<Class_> {
     }
 
     protected void generateGetter(final Class_ class_, final Field_ field_) {
-        final Method_ method_ = new Method_(field_.getType(), "get" + ucfirst(field_.getName()));
-        method_.add(new Statement_("return " + field_.getName() + ";"));
-        class_.add(method_);
+		class_.add(new Method_(
+			field_.getType(), 
+			new $(GET_STRING, ucfirst(field_.getName()))
+		).public_()
+			.add(new Statement_(
+				new $(RETURN_STRING, field_.getName(), SC)
+			))
+		);
     }
 
     protected void generateSetter(final Class_ class_, final Field_ field_) {
-        class_.add(new Method_(
+		class_.add(new Method_(
 			new Type_(CodeUtil.flattenName(class_)), 
-			"set" + ucfirst(field_.getName())
-		)
-			.add(new Parameter_(field_.getType(), field_.getName()))
-			.add(new Statement_("this." + field_.getName() + " = " + field_.getName() + ";"))
-			.add(new Statement_("return this;"))
+			new $(SET_STRING, ucfirst(field_.getName()))
+		).public_()
+			.add(new Parameter_(
+				field_.getType(), 
+				field_.getName()
+			)).add(new Statement_(
+				new $(THIS_STRING, DOT, field_.getName(), ASSIGNMENT_STRING, field_.getName(), SC)
+			)).add(new Statement_(
+				new $(RETURN_STRING, THIS_STRING, SC)
+			))
 		);
     }
 }
