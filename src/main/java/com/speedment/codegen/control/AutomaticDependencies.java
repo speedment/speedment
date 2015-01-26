@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  */
 public class AutomaticDependencies implements Controller<Class_> {
 	@Override
-	public void apply(Class_ model) {
+	public void accept(Class_ model) {
 		model.getAnnotations().stream()
 			.filter(a -> isDependantOf(model, a.getAnnotationClass()))
 			.forEach(a -> model.add(dependency(a)));

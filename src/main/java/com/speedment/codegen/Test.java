@@ -23,6 +23,7 @@ import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
 import static com.speedment.codegen.model.Type_.STRING;
+import com.speedment.codegen.model.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
 
 import com.speedment.codegen.model.method.Method_;
@@ -50,6 +51,10 @@ public class Test {
 
         CodeUtil.tab("   ");
 
+        final Statement_ s = new Statement_("int bar = 1");
+
+        final Block_ block = new Block_().add(new Statement_("int foo=1")).add(new Statement_("int bar=1"));
+
         final Class_ class_ = new Class_()
                 .package_("org.speedment.codegen.test")
                 .public_()
@@ -63,10 +68,13 @@ public class Test {
                         .add(new Statement_(
                                         "return (foo + baz + bar);"
                                 ))
-                );
+                )
+                .methodAdder().public_().setType(STRING).setName("bar").add(s).add()
+                .methodAdder().public_().setType(STRING).setName("foo").add(new Statement_("int foo=1")).add()
+                .methodAdder().public_().setType(STRING).setName("fooBar").add(new Statement_(block)).add();
 
-        new AccessorImplementer().apply(class_);
-        new AutomaticDependencies().apply(class_);
+        new AccessorImplementer().accept(class_);
+        new AutomaticDependencies().accept(class_);
 
         class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();

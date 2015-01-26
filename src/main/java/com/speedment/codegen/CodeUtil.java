@@ -193,7 +193,9 @@ public class CodeUtil {
      * @return The full name.
      */
     public static CharSequence flattenName(ClassAndInterfaceBase model) {
-        return new $(Trees.walk(model.getPackage(), Package_::getPackage).map(Package_::getName).collect(Collectors.joining(DOT)), DOT, model.getName());
+        return new $(Trees.walk(model.getPackage(), Package_::getPackage, Trees.Order.BACKWARD).map(Package_::getName).collect(Collectors.joining(DOT)),
+                DOT,
+                model.getName());
     }
 
     /**

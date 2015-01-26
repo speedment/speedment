@@ -40,8 +40,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
-    private final List<Parameter_> parameters; 
-    private final List<Statement_> statements; 
+    private final List<Parameter_> parameters;
+    private final List<Statement_> statements;
     private Type_ type;
     private CharSequence name;
 
@@ -77,8 +77,9 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         return type;
     }
 
-    public void setType(Type_ type_) {
+    public Method_ setType(Type_ type_) {
         this.type = type_;
+        return this;
     }
 
     @Override

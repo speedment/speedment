@@ -65,8 +65,9 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
         return this;
     }
 
-    public void setType(Type_ type) {
-        this.setType_(type);
+    public Field_ setType(Type_ type) {
+        this.type = type;
+        return this;
     }
 
     public Expression_ getExpression() {
@@ -86,9 +87,6 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
         return type;
     }
 
-    public void setType_(Type_ type) {
-        this.type = type;
-    }
 
     @Override
     public Set<FieldModifier_> getModifiers() {

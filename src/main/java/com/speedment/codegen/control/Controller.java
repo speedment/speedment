@@ -17,7 +17,12 @@
 package com.speedment.codegen.control;
 
 import com.speedment.codegen.model.CodeModel;
+import java.util.function.Consumer;
 
-public interface Controller<T extends CodeModel> {
-    void apply(T model);
+@FunctionalInterface
+public interface Controller<T extends CodeModel> extends Consumer<T> {
+
+    @Override
+    abstract void accept(T model);
+
 }

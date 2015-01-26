@@ -16,7 +16,6 @@
  */
 package com.speedment.codegen.model.class_;
 
-import com.speedment.codegen.model.modifier.ClassModifier_;
 import com.speedment.codegen.model.modifier.InterfaceModifier_;
 
 /**

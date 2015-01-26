@@ -32,7 +32,7 @@ import com.speedment.codegen.model.parameter.Parameter_;
 public class AccessorImplementer implements Controller<Class_> {
 
     @Override
-    public void apply(Class_ class_) {
+    public void accept(Class_ class_) {
         class_.getFields().forEach((f) -> generateAccessors(class_, f));
     }
 

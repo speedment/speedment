@@ -16,12 +16,14 @@
  */
 package com.speedment.codegen.model.modifier;
 
+import com.speedment.codegen.model.CodeModel;
+
 /**
  *
  * @author pemi
  * @param <T>
  */
-public interface Modifier_<T extends Modifier_<T>> {
+public interface Modifier_<T extends Modifier_<T>> extends CodeModel {
 
     String name();
 

@@ -20,9 +20,7 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import com.speedment.util.CharSequences;
 import com.speedment.util.Trees;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import com.speedment.util.Trees.Order;
 import java.util.stream.Collectors;
 
 /**
@@ -76,7 +74,7 @@ public class Package_ implements CodeModel, Packagable {
         }
         int dotIndex = CharSequences.indexOf(cs, '.');
         final Package_ result = new Package_().setPackage(parent);
-        if (dotIndex == -1) {
+        if (dotIndex == CharSequences.INDEX_NOT_FOUND) {
             return result.setName(cs);
         }
         return make(result.setName(cs.subSequence(0, dotIndex)), cs.subSequence(dotIndex + 1, cs.length()));
@@ -84,7 +82,7 @@ public class Package_ implements CodeModel, Packagable {
 
     @Override
     public String toString() {
-        return Trees.walk(this, Package_::getPackage).map(Package_::getName).collect(Collectors.joining("."));
+        return Trees.walk(this, Package_::getPackage, Order.BACKWARD).map(Package_::getName).collect(Collectors.joining("."));
     }
 
 }

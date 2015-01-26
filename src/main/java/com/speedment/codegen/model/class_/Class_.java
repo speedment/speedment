@@ -16,10 +16,13 @@
  */
 package com.speedment.codegen.model.class_;
 
+import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -51,6 +54,11 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         this();
         setName(className);
         setSuperClassType(superClass);
+    }
+
+    @Override
+    protected Stream.Builder<CodeModel> streamBuilder() {
+        return StreamUtil.streamBuilder(super.streamBuilder(), constructors);
     }
 
     public Class_ add(Constructor_ constructor) {

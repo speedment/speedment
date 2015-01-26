@@ -16,7 +16,6 @@
  */
 package com.speedment.codegen.model.class_;
 
-import com.speedment.codegen.CodeUtil;
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Type_;
@@ -27,14 +26,18 @@ import com.speedment.codegen.model.block.Initializable;
 import com.speedment.codegen.model.block.InitializerBlock_;
 import com.speedment.codegen.model.dependency_.Dependable;
 import com.speedment.codegen.model.dependency_.Dependency_;
+import com.speedment.codegen.model.field.FieldAdder;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
+import com.speedment.codegen.model.method.MethodAdder;
 import com.speedment.codegen.model.method.Methodable;
 import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.model.package_.Packagable;
 import com.speedment.codegen.model.package_.Package_;
+import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -70,6 +73,15 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         nestedClasses = new ArrayList<>();
         initializers = new ArrayList<>();
         dependencies = new HashSet<>();
+    }
+
+    @Override
+    public Stream<CodeModel> stream() {
+        return streamBuilder().build();
+    }
+
+    protected Stream.Builder<CodeModel> streamBuilder() {
+        return StreamUtil.streamBuilder(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
     }
 
     @SuppressWarnings("unchecked")
@@ -229,9 +241,39 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     public T package_(CharSequence packagePath) {
         return setPackage(Package_.by(packagePath));
     }
-    
-//    public T method() {
-//        return 
-//    }
-    
+
+    public MethodAdder<T> methodAdder() {
+        return new MyMethodAdder();
+    }
+
+    public FieldAdder<T> fieldAdder() {
+        return new MyFieldAdder();
+    }
+
+    private class MyMethodAdder extends MethodAdder<T> {
+
+        public MyMethodAdder() {
+            super((T) ClassAndInterfaceBase.this);
+        }
+
+        @Override
+        public void addToParent(T parent) {
+            parent.add(this);
+        }
+
+    }
+
+    private class MyFieldAdder extends FieldAdder<T> {
+
+        public MyFieldAdder() {
+            super((T) ClassAndInterfaceBase.this);
+        }
+
+        @Override
+        public void addToParent(T parent) {
+            parent.add(this);
+        }
+
+    }
+
 }
