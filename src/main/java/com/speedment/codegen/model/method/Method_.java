@@ -46,13 +46,17 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     private Type_ type;
     private CharSequence name;
 
-    public Method_(Type_ type_, CharSequence name_) {
+    public Method_() {
         this.parameters = new ArrayList<>();
         this.statements = new ArrayList<>();
         this.annotations = new ArrayList<>();
-        this.type = type_;
-        this.name = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
+    }
+
+    public Method_(Type_ type, CharSequence name) {
+        this();
+        this.type = type;
+        this.name = name;
     }
 
     @SuppressWarnings("unchecked")

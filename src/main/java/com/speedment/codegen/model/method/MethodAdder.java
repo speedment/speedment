@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Adder;
@@ -11,26 +6,28 @@ import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.model.statement.Statement_;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
  */
-public abstract class MethodAdder<T> extends Method_ implements Adder<T> {
+public class MethodAdder<T> extends Method_ implements Adder<T> {
 
-    T parent;
+    final T parent;
+    final Consumer<MethodAdder<T>> updater;
 
-    public MethodAdder(T parent) {
-        super(null, null);
-        this.parent = parent;
+    public MethodAdder(T parent, Consumer<MethodAdder<T>> updater) {
+        super();
+        this.parent = Objects.requireNonNull(parent);
+        this.updater = Objects.requireNonNull(updater);
     }
-
-    protected abstract void addToParent(T parent);
 
     @Override
     public T add() {
-        addToParent(parent);
+        updater.accept(this);
         return parent;
     }
 

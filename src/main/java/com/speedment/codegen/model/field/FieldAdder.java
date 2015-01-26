@@ -3,27 +3,29 @@ package com.speedment.codegen.model.field;
 import com.speedment.codegen.Adder;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.FieldModifier_;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
  * @param <T>
  */
-public abstract class FieldAdder<T> extends Field_ implements Adder<T> {
+public class FieldAdder<T> extends Field_ implements Adder<T> {
 
-    T parent;
+    final T parent;
+    final Consumer<FieldAdder<T>> updater;
 
-    public FieldAdder(T parent) {
-        super(null, null);
-        this.parent = parent;
+    public FieldAdder(T parent, Consumer<FieldAdder<T>> updater) {
+        super();
+        this.parent = Objects.requireNonNull(parent);
+        this.updater = Objects.requireNonNull(updater);
     }
-
-    protected abstract void addToParent(T parent);
 
     @Override
     public T add() {
-        addToParent(parent);
+        updater.accept(this);
         return parent;
     }
 

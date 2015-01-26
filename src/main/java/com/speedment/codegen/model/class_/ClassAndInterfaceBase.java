@@ -37,11 +37,11 @@ import com.speedment.codegen.model.package_.Packagable;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.util.StreamUtil;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -243,37 +243,11 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     public MethodAdder<T> methodAdder() {
-        return new MyMethodAdder();
+        return new MethodAdder<>((T) this, this::add);
     }
 
     public FieldAdder<T> fieldAdder() {
-        return new MyFieldAdder();
-    }
-
-    private class MyMethodAdder extends MethodAdder<T> {
-
-        public MyMethodAdder() {
-            super((T) ClassAndInterfaceBase.this);
-        }
-
-        @Override
-        public void addToParent(T parent) {
-            parent.add(this);
-        }
-
-    }
-
-    private class MyFieldAdder extends FieldAdder<T> {
-
-        public MyFieldAdder() {
-            super((T) ClassAndInterfaceBase.this);
-        }
-
-        @Override
-        public void addToParent(T parent) {
-            parent.add(this);
-        }
-
+        return new FieldAdder<>((T) this, this::add);
     }
 
 }
