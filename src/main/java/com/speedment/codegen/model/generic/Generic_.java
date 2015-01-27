@@ -4,7 +4,7 @@ import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.class_.Interface_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -72,6 +72,6 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(generics, interfaces).build();
+        return StreamUtil.<CodeModel>of(generics, interfaces);
     }
 }

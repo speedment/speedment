@@ -26,7 +26,7 @@ import com.speedment.codegen.model.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.parameter.Parameter_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -198,7 +198,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(annotations, modifiers, parameters, statements).build();
+        return StreamUtil.<CodeModel>of(annotations, modifiers, parameters, statements);
     }
 
 }

@@ -6,7 +6,7 @@ import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.modifier.ConstructorModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -102,7 +102,7 @@ public class Constructor_ implements CodeModel, Nameable, Modifiable<Constructor
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(modifiers, parameters, statements).build();
+        return StreamUtil.<CodeModel>of(modifiers, parameters, statements);
     }
 
 }

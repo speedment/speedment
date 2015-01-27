@@ -19,7 +19,7 @@ package com.speedment.codegen.model.package_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import com.speedment.util.CharSequences;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import com.speedment.util.Trees;
 import com.speedment.util.Trees.Order;
 import java.util.stream.Collectors;

@@ -19,14 +19,10 @@ package com.speedment.codegen;
 import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.package_.Package_;
 import com.speedment.util.$;
+import com.speedment.util.CharSequences;
 import com.speedment.util.Trees;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
+import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +38,7 @@ public class CodeUtil {
      * @return The resulting text.
      */
     public static CharSequence lcfirst(CharSequence input) {
-        return withFirst(input, (first) -> String.valueOf(Character.toLowerCase(first)));
+        return withFirst(input, Character::toLowerCase);
     }
 
     /**
@@ -52,25 +48,27 @@ public class CodeUtil {
      * @return The resulting text.
      */
     public static CharSequence ucfirst(CharSequence input) {
-        return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
+        return withFirst(input, Character::toUpperCase);
     }
 
     /**
-     * Does something with the first character in the specified CharSequence.
+     * Creates and returns a new CharSequence on which the call back has been
+     * applied to the first character.
      *
      * @param input The CharSequence.
      * @param callback The something.
      * @return The new CharSequence.
      */
-    public static CharSequence withFirst(CharSequence input, Function<Character, CharSequence> callback) {
+    public static CharSequence withFirst(CharSequence input, Function<Character, Character> callback) {
+        Objects.requireNonNull(callback);
         if (input == null) {
             return null;
         } else if (input.length() == 0) {
             return EMPTY;
         } else {
-            return String.join(EMPTY,
-                    callback.apply(input.charAt(0)),
-                    input.subSequence(1, input.length())
+            return new $(
+                    Character.toString(callback.apply(input.charAt(0))),
+                    CharSequences.subSequence(input, 1)
             );
         }
     }

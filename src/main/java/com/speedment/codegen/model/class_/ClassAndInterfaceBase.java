@@ -35,7 +35,7 @@ import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.model.package_.Packagable;
 import com.speedment.codegen.model.package_.Package_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -77,11 +77,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public Stream<CodeModel> stream() {
-        return streamBuilder().build();
-    }
-
-    protected Stream.Builder<CodeModel> streamBuilder() {
-        return StreamUtil.streamBuilder(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
+        return StreamUtil.of(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
     }
 
     @SuppressWarnings("unchecked")

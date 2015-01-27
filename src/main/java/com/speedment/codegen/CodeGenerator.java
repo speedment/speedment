@@ -19,7 +19,7 @@ package com.speedment.codegen;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.codegen.view.CodeViewBuilder;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;

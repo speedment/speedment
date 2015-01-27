@@ -19,7 +19,7 @@ package com.speedment.codegen.model.class_;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -57,8 +57,8 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     }
 
     @Override
-    protected Stream.Builder<CodeModel> streamBuilder() {
-        return StreamUtil.streamBuilder(super.streamBuilder(), constructors);
+    public Stream<CodeModel> stream() {
+        return StreamUtil.of(super.stream(), constructors.stream());
     }
 
     public Class_ add(Constructor_ constructor) {

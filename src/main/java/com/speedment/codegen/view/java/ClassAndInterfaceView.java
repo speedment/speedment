@@ -24,7 +24,6 @@ import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
 import com.speedment.util.CodeCombiner;
-import com.speedment.util.StreamUtil;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;

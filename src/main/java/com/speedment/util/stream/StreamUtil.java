@@ -1,7 +1,8 @@
-package com.speedment.util;
+package com.speedment.util.stream;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -16,6 +17,14 @@ public class StreamUtil {
 
     public static <T> Stream<T> of(Collection<Optional<? extends T>> collection) {
         return collection.stream().filter(Optional::isPresent).map((o) -> o.get());
+    }
+
+    public static <T> Stream<T> of(Collection<? extends T>... collections) {
+        return Stream.of(collections).flatMap(Collection::stream);
+    }
+
+    public static <T> Stream<T> of(Stream<? extends T>... streams) {
+        return Stream.of(streams).flatMap(Function.identity());
     }
 
     public static <T> Stream.Builder<T> streamBuilder(Collection<? extends T>... collections) {
