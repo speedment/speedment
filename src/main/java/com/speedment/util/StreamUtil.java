@@ -1,10 +1,8 @@
 package com.speedment.util;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import java.util.stream.Stream.Builder;
 
 /**
  *
@@ -12,22 +10,12 @@ import java.util.stream.Stream.Builder;
  */
 public class StreamUtil {
 
-    public static <T> Stream<T> mandatory(Optional<T> element) {
-        if (element.isPresent()) {
-            return Stream.of(element.get());
-        } else {
-            return Stream.empty();
-        }
+    public static <T> Stream<T> mandatory(Optional<? extends T> element) {
+        return element.isPresent() ? Stream.of(element.get()) : Stream.empty();
     }
 
-    public static <T> Stream<T> of(List<Optional<T>> list) {
-        final Builder<T> build = Stream.builder();
-        list.forEach(t -> {
-            if (t.isPresent()) {
-                build.add(t.get());
-            }
-        });
-        return build.build();
+    public static <T> Stream<T> of(Collection<Optional<? extends T>> collection) {
+        return collection.stream().filter(Optional::isPresent).map((o) -> o.get());
     }
 
     public static <T> Stream.Builder<T> streamBuilder(Collection<? extends T>... collections) {
