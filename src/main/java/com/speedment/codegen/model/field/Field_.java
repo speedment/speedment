@@ -23,6 +23,9 @@ import com.speedment.codegen.model.Expression_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.modifier.FieldModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.util.stream.StreamUtil;
@@ -36,10 +39,11 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, Annotatable {
+public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, Annotatable, Javadockable {
 
     private final Set<FieldModifier_> modifiers;
     private final List<Annotation_> annotations;
+    private Javadoc_ javadoc;
     private Type_ type;
     private CharSequence name;
     private Expression_ expression;
@@ -167,4 +171,20 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
     public Stream<CodeModel> stream() {
         return StreamUtil.<CodeModel>of(annotations, modifiers);
     }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public Field_ setJavadoc(Javadoc_ javadoc) {
+        this.javadoc = javadoc;
+        return this;
+    }
+
+    public JavadocAdder<Field_> javadocAdder() {
+        return new JavadocAdder<>(this, this::setJavadoc);
+    }
+
 }

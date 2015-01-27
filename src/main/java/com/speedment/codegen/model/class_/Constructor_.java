@@ -3,6 +3,9 @@ package com.speedment.codegen.model.class_;
 import com.speedment.codegen.Nameable;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.field.Field_;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.modifier.ConstructorModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -17,11 +20,12 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Constructor_ implements CodeModel, Nameable, Modifiable<ConstructorModifier_> {
+public class Constructor_ implements CodeModel, Nameable, Modifiable<ConstructorModifier_>, Javadockable {
 
     private final Set<ConstructorModifier_> modifiers;
     private final List<Field_> parameters;
     private final List<Statement_> statements;
+    private Javadoc_ javadoc;
     private CharSequence name;
 
     public Constructor_() {
@@ -103,6 +107,21 @@ public class Constructor_ implements CodeModel, Nameable, Modifiable<Constructor
     @Override
     public Stream<CodeModel> stream() {
         return StreamUtil.<CodeModel>of(modifiers, parameters, statements);
+    }
+
+    public JavadocAdder<Constructor_> javadocAdder() {
+        return new JavadocAdder<>(this, this::setJavadoc);
+    }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public Constructor_ setJavadoc(Javadoc_ javadoc) {
+        this.javadoc = javadoc;
+        return this;
     }
 
 }

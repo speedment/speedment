@@ -143,30 +143,6 @@ public class JavaLanguage {
         return word;
     }
 
-    public static Function<Character, Character> initialLetterUppercase = new Function<Character, Character>() {
-
-        @Override
-        public Character apply(Character t) {
-            return Character.toLowerCase(t);
-        }
-    };
-    
-    public void  applyTo(Function<Character, Character> modifier) {
-        
-    }
-    
-    public static String getInitialLetterUpperCase(CharSequence name) {
-        String firstChar = name.charAt(0) + "";
-        firstChar = firstChar.toUpperCase();
-        return firstChar + CharSequences.subSequence(name,1);
-    }
-
-    public static String getInitialLetterLowerCase(String name) {
-        String firstChar = name.charAt(0) + "";
-        firstChar = firstChar.toLowerCase();
-        return firstChar + name.substring(1);
-    }
-
     public static String getJavaObjectName(final String javaTypeName) {
         String result = null;
         if (javaTypeName.startsWith("int")) {

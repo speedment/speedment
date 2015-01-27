@@ -22,6 +22,10 @@ import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.field.Field_;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -37,12 +41,13 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable {
+public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable, Javadockable {
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
     private final List<Parameter_> parameters;
     private final List<Statement_> statements;
+    private Javadoc_ javadoc;
     private Type_ type;
     private CharSequence name;
 
@@ -199,6 +204,21 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     @Override
     public Stream<CodeModel> stream() {
         return StreamUtil.<CodeModel>of(annotations, modifiers, parameters, statements);
+    }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public Method_ setJavadoc(Javadoc_ javadoc) {
+        this.javadoc = javadoc;
+        return this;
+    }
+
+    public JavadocAdder<Method_> javadocAdder() {
+        return new JavadocAdder<>(this, this::setJavadoc);
     }
 
 }

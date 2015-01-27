@@ -29,6 +29,9 @@ import com.speedment.codegen.model.dependency_.Dependency_;
 import com.speedment.codegen.model.field.FieldAdder;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.method.MethodAdder;
 import com.speedment.codegen.model.method.Methodable;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -41,7 +44,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -51,7 +53,8 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
-        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable {
+        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable,
+        Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable, Javadockable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
@@ -61,6 +64,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     private final List<ClassAndInterfaceBase<?, ?>> nestedClasses;
     private final List<InitializerBlock_> initializers;
     private final Set<Dependency_> dependencies;
+    private Javadoc_ javadoc;
     private Package_ pagage;
     private CharSequence name;
 
@@ -244,6 +248,21 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     public FieldAdder<T> fieldAdder() {
         return new FieldAdder<>((T) this, this::add);
+    }
+
+    public JavadocAdder<T> javadocAdder() {
+        return new JavadocAdder<>((T) this, this::setJavadoc);
+    }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public T setJavadoc(Javadoc_ javadoc) {
+        this.javadoc = javadoc;
+        return (T) this;
     }
 
 }
