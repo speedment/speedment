@@ -1,7 +1,5 @@
-package com.speedment.codegen.model.block;
+package com.speedment.codegen.model.statement.block;
 
-import com.speedment.codegen.model.field.Field_;
-import com.speedment.codegen.model.modifier.FieldModifier_;
 import com.speedment.codegen.model.modifier.InitializerModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import java.util.EnumSet;
@@ -12,7 +10,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class InitializerBlock_ extends Block_ implements Modifiable<InitializerModifier_> {
+public class InitializerBlock_ extends Block_<InitializerBlock_> implements Modifiable<InitializerModifier_> {
 
     private final Set<InitializerModifier_> modifiers;
 
@@ -28,26 +26,27 @@ public class InitializerBlock_ extends Block_ implements Modifiable<InitializerM
 
     @Override
     public InitializerBlock_ add(final InitializerModifier_ firstClassModifier_m, final InitializerModifier_... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return this;
+        return add(firstClassModifier_m, restClassModifiers, (f, r) -> {
+            getModifiers().add(firstClassModifier_m);
+            Stream.of(restClassModifiers).forEach(getModifiers()::add);
+        });
     }
 
     @Override
     public InitializerBlock_ set(final Set<InitializerModifier_> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return this;
+        return set(newSet, s -> {
+            getModifiers().clear();
+            getModifiers().addAll(newSet);
+        });
     }
 
     @Override
     public boolean is(InitializerModifier_ modifier) {
-        return modifiers.contains(modifier);
+        return getModifiers().contains(modifier);
     }
 
     public InitializerBlock_ static_() {
-        modifiers.add(InitializerModifier_.STATIC);
-        return this;
+        return add(InitializerModifier_.STATIC, getModifiers()::add);
     }
 
 }

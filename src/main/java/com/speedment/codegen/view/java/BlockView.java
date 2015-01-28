@@ -17,7 +17,7 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.block.Block_;
+import com.speedment.codegen.model.statement.block.Block_;
 import com.speedment.codegen.view.CodeView;
 
 import static com.speedment.codegen.CodeUtil.*;

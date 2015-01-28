@@ -17,7 +17,7 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.field.Field_;
 import java.util.Optional;
 import org.junit.After;
@@ -62,7 +62,7 @@ public class FieldViewTest {
 	 */
 	@Test
 	public void testRender() {
-		Field_ field = new Field_(Type_.DOUBLE_PRIMITIVE, "width").final_().private_().static_();
+		Field_ field = new Field_(ScalarType_.DOUBLE_PRIMITIVE, "width").final_().private_().static_();
 		CharSequence[] expResult = new CharSequence[] {
 			"private final static double width",
 			"private static final double width",

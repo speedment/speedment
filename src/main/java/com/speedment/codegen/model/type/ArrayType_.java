@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.type;
 
 /**
  *
  * @author pemi
  */
-public class ArrayType_ extends Type_ {
+public class ArrayType_ extends Type_<ArrayType_> {
 
     private int arrayDimension;
 
@@ -34,18 +34,12 @@ public class ArrayType_ extends Type_ {
         this.arrayDimension = arrayDimension;
     }
 
-    @Override
-    public ArrayType_ add(Type_ genericType) {
-        super.add(genericType);
-        return this;
-    }
-
     public boolean isArray() {
         return getArrayDimension() == 0;
     }
 
-    public void setArrayDimension(int arrayDimension) {
-        this.arrayDimension = arrayDimension;
+    public ArrayType_ setArrayDimension(int arrayDimension) {
+        return set(arrayDimension, ad -> this.arrayDimension = ad);
     }
 
     public int getArrayDimension() {

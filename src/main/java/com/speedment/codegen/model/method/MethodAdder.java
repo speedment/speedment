@@ -1,7 +1,7 @@
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Adder;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.parameter.Parameter_;
@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 /**
  *
  * @author pemi
+ * @param <T>
  */
 public class MethodAdder<T> extends Method_ implements Adder<T> {
 
@@ -29,12 +30,6 @@ public class MethodAdder<T> extends Method_ implements Adder<T> {
     public T add() {
         updater.accept(this);
         return parent;
-    }
-
-    @Override
-    public MethodAdder<T> public_() {
-        super.public_();
-        return this;
     }
 
     @Override
@@ -76,6 +71,60 @@ public class MethodAdder<T> extends Method_ implements Adder<T> {
     @Override
     public MethodAdder<T> add(MethodModifier_ firstClassModifier_m, MethodModifier_... restClassModifiers) {
         super.add(firstClassModifier_m, restClassModifiers);
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> abstract_() {
+        super.abstract_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> final_() {
+        super.final_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> native_() {
+        super.native_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> private_() {
+        super.private_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> protected_() {
+        super.protected_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> public_() {
+        super.public_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> static_() {
+        super.static_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> strictfp_() {
+        super.strictfp_();
+        return this;
+    }
+
+    @Override
+    public MethodAdder<T> synchronized_() {
+        super.synchronized_();
         return this;
     }
 

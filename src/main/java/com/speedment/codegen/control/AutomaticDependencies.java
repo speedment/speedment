@@ -16,10 +16,10 @@
  */
 package com.speedment.codegen.control;
 
-import com.speedment.codegen.model.Type_;
 import com.speedment.codegen.model.class_.Class_;
 import com.speedment.codegen.model.dependency_.Dependency_;
 import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.class_.ClassAndInterfaceBase;
 import com.speedment.codegen.model.method.Method_;

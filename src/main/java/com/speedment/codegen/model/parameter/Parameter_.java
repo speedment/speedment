@@ -17,9 +17,10 @@
 package com.speedment.codegen.model.parameter;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.modifier.Modifiable;
@@ -28,13 +29,12 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModifier_>, Annotatable {
+public class Parameter_ extends AbstractModifiableCodeModel<Parameter_, ParameterModifier_> implements CodeModel, Nameable, Modifiable<ParameterModifier_>, Annotatable {
 
     private final Set<ParameterModifier_> modifiers;
     private final List<Annotation_> annotations;
@@ -59,13 +59,11 @@ public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModi
 
     @Override
     public Parameter_ setName(CharSequence name_) {
-        this.name = name_;
-        return this;
+        return set(name_, n -> this.name = n);
     }
 
     public Parameter_ setType(Type_ type) {
-        this.setType_(type);
-        return this;
+        return set(type, t -> this.type = t);
     }
 
     @Override
@@ -87,28 +85,8 @@ public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModi
     }
 
     @Override
-    public Parameter_ add(final ParameterModifier_ firstClassModifier_m, final ParameterModifier_... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return this;
-    }
-
-    @Override
-    public Parameter_ set(final Set<ParameterModifier_> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return this;
-    }
-
-    @Override
-    public boolean is(ParameterModifier_ modifier) {
-        return modifiers.contains(modifier);
-    }
-
-    @Override
     public Parameter_ add(final Annotation_ annotation) {
-        getAnnotations().add(annotation);
-        return this;
+        return add(annotation, getAnnotations()::add);
     }
 
     @Override
@@ -122,8 +100,7 @@ public class Parameter_ implements CodeModel, Nameable, Modifiable<ParameterModi
     }
 
     public Parameter_ final_() {
-        add(ParameterModifier_.FINAL);
-        return this;
+        return add(ParameterModifier_.FINAL);
     }
 
 }

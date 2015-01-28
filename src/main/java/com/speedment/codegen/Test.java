@@ -18,17 +18,20 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
-import static com.speedment.codegen.model.Type_.STRING;
-import com.speedment.codegen.model.block.Block_;
+import static com.speedment.codegen.model.type.Type_.STRING;
+import com.speedment.codegen.model.statement.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
 
 import com.speedment.codegen.model.method.Method_;
-import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.model.parameter.Parameter_;
+import com.speedment.codegen.model.statement.If;
+import com.speedment.codegen.model.statement.block.InitializerBlock_;
+import com.speedment.codegen.model.statement.expression.Expression;
+import com.speedment.codegen.model.statement.expression.binary.Equals;
 import com.speedment.codegen.view.java.JavaCodeGen;
 import java.io.InputStream;
 
@@ -45,11 +48,17 @@ public class Test {
 
         CodeUtil.tab("   ");
 
-        Type_ type = new Type_(InputStream.class);
+        ScalarType_ type = new ScalarType_(InputStream.class);
 
-        final Statement_ s = new Statement_("int bar = 1");
+        final Statement_ s = Statement_.of("int bar = 1");
 
-        final Block_ block = new Block_().add(new Statement_("int foo=1")).add(new Statement_("int bar=1"));
+        final Block_ block = new Block_().add(Statement_.of("int foo=1")).add(Statement_.of("int bar=1"));
+
+        final Block_ ifBlockTest = new Block_().add(
+                Statement_.of("final thatCoolFeeling"),
+                new If(new Equals(Expression.of("1"), Expression.of("1")))
+                .addTrue("thatCoolFeeling=1", "int foo = 1")
+                .addFalse("thatCoolFeeling=0"));
 
         final Class_ class_ = new Class_()
                 .package_("org.speedment.codegen.test")
@@ -64,13 +73,15 @@ public class Test {
                         .public_().final_()
                         .add(new Parameter_().final_().setType(STRING).setName("baz"))
                         .add(new Parameter_(STRING, "bazer"))
-                        .add(new Statement_(
+                        .add(Statement_.of(
                                         "return (foo + baz + bar);"
                                 ))
                         .add(Annotation_.OVERRIDE))
                 .methodAdder().public_().setType(STRING).setName("bar").add(s).add()
-                .methodAdder().public_().setType(STRING).setName("foo").add(new Statement_("int foo=1")).add()
-                .methodAdder().public_().setType(STRING).setName("fooBar").add(new Statement_(block)).add();
+                .methodAdder().public_().setType(STRING).setName("foo").add(Statement_.of("int foo=1")).add()
+                .methodAdder().public_().setType(STRING).setName("fooBar").add(block).add()
+                .methodAdder().public_().setType(STRING).setName("ifTester").add(ifBlockTest).add()
+                .add(new InitializerBlock_().static_().add(Statement_.of("int fool = 42")));
 
         new AccessorImplementer().accept(class_);
         new AutomaticDependencies().accept(class_);

@@ -22,7 +22,7 @@ import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.class_.Class_;
 import static com.speedment.codegen.CodeUtil.*;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.util.$;
 
@@ -54,7 +54,7 @@ public class AccessorImplementer implements Controller<Class_> {
 			field_.getType(), 
 			new $(GET_STRING, ucfirst(field_.getName()))
 		).public_()
-			.add(new Statement_(
+			.add(Statement_.of(
 				new $(RETURN_STRING, field_.getName(), SC)
 			))
 		);
@@ -62,15 +62,15 @@ public class AccessorImplementer implements Controller<Class_> {
 
     protected void generateSetter(final Class_ class_, final Field_ field_) {
 		class_.add(new Method_(
-			new Type_(CodeUtil.flattenName(class_)), 
+			new ScalarType_(CodeUtil.flattenName(class_)), 
 			new $(SET_STRING, ucfirst(field_.getName()))
 		).public_()
 			.add(new Parameter_(
 				field_.getType(), 
 				field_.getName()
-			)).add(new Statement_(
+			)).add(Statement_.of(
 				new $(THIS_STRING, DOT, field_.getName(), ASSIGNMENT_STRING, field_.getName(), SC)
-			)).add(new Statement_(
+			)).add(Statement_.of(
 				new $(RETURN_STRING, THIS_STRING, SC)
 			))
 		);

@@ -26,8 +26,9 @@ import java.util.Optional;
  * @author Duncan
  */
 public class StatementView extends CodeView<Statement_> {
-	@Override
-	public Optional<CharSequence> render(CodeGenerator renderer, Statement_ statement) {
-		return Optional.of(statement.getStatementText());
-	}
+
+    @Override
+    public Optional<CharSequence> render(CodeGenerator renderer, Statement_ statement) {
+        return Optional.of(statement.get().orElse(""));
+    }
 }

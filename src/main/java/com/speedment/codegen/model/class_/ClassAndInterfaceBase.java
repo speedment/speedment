@@ -17,13 +17,14 @@
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
-import com.speedment.codegen.model.block.Initializable;
-import com.speedment.codegen.model.block.InitializerBlock_;
+import com.speedment.codegen.model.statement.block.Initializable;
+import com.speedment.codegen.model.statement.block.InitializerBlock_;
 import com.speedment.codegen.model.dependency_.Dependable;
 import com.speedment.codegen.model.dependency_.Dependency_;
 import com.speedment.codegen.model.field.FieldAdder;
@@ -53,6 +54,7 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
+        extends AbstractModifiableCodeModel<T, M>
         implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable,
         Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable, Javadockable {
 
@@ -84,72 +86,41 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return StreamUtil.of(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Interface_ interf) {
-        getInterfaces().add(interf);
-        return (T) this;
+        return add(interf, interfaces::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Field_ field) {
-        getFields().add(field);
-        return (T) this;
+        return add(field, fields::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Method_ method_) {
-        getMethods().add(method_);
-        return (T) this;
+        return add(method_, methods::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Annotation_ annotation) {
-        getAnnotations().add(annotation);
-        return (T) this;
+        return add(annotation, annotations::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Class_ nestedClass) {
-        getNestedClasses().add(nestedClass);
-        return (T) this;
+        return add(nestedClass, nestedClasses::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final InitializerBlock_ initializer) {
-        getInitializers().add(initializer);
-        return (T) this;
+        return add(initializer, initializers::add);
     }
 
-//    public T add(M classModifier_) {
-//        getModifiers().add(classModifier_);
-//        return (T) this;
-//    }Modifier_<M>
-    @SuppressWarnings("unchecked")
-    @Override
-    public T add(final M firstClassModifier_m, final M... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return (T) this;
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     public boolean has(Annotation_ annotation_) {
         return annotations.contains(annotation_);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T set(final Set<M> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return (T) this;
     }
 
     @Override
@@ -174,9 +145,8 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setPackage(final Package_ pagage) {
-        this.pagage = pagage;
-        return (T) this;
+    public T setPackage(final Package_ package_) {
+        return set(package_, p -> pagage = p);
     }
 
     @Override
@@ -186,8 +156,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T setName(final CharSequence name) {
-        this.name = name;
-        return (T) this;
+        return set(name, n -> this.name = n);
     }
 
     @Override
@@ -195,10 +164,6 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return modifiers;
     }
 
-    @Override
-    public boolean is(M modifier) {
-        return modifiers.contains(modifier);
-    }
 
     @Override
     public List<Annotation_> getAnnotations() {
@@ -225,11 +190,9 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return dependencies.contains(dep);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(Dependency_ dep) {
-        dependencies.add(dep);
-        return (T) this;
+        return add(dep, dependencies::add);
     }
 
     public Type_ toType() {
@@ -260,9 +223,8 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     @Override
-    public T setJavadoc(Javadoc_ javadoc) {
-        this.javadoc = javadoc;
-        return (T) this;
+    public T setJavadoc(Javadoc_ javadoc_) {
+        return set(javadoc_, j -> javadoc = j);
     }
 
 }

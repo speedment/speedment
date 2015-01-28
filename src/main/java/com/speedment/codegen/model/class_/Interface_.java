@@ -34,33 +34,27 @@ public class Interface_ extends ClassAndInterfaceBase<Interface_, InterfaceModif
     }
 
     public Interface_ abstract_() {
-        add(InterfaceModifier_.ABSTRACT);
-        return this;
+        return add(InterfaceModifier_.ABSTRACT);
     }
 
     public Interface_ private_() {
-        add(InterfaceModifier_.PRIVATE);
-        return this;
+        return add(InterfaceModifier_.PRIVATE);
     }
 
     public Interface_ protected_() {
-        add(InterfaceModifier_.PROTECTED);
-        return this;
+        return add(InterfaceModifier_.PROTECTED);
     }
 
     public Interface_ public_() {
-        add(InterfaceModifier_.PUBLIC);
-        return this;
+        return add(InterfaceModifier_.PUBLIC);
     }
 
     public Interface_ static_() {
-        add(InterfaceModifier_.STATIC);
-        return this;
+        return add(InterfaceModifier_.STATIC);
     }
 
     public Interface_ strictfp_() {
-        add(InterfaceModifier_.STRICTFP);
-        return this;
+        return add(InterfaceModifier_.STRICTFP);
     }
 
 }

@@ -14,8 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model;
+package com.speedment.codegen.model.type;
 
+import com.speedment.codegen.model.AbstractCodeModel;
+import com.speedment.codegen.model.CodeModel;
 import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Type_ implements CodeModel {
+public class Type_<T extends Type_<T>> extends AbstractCodeModel<T> implements CodeModel {
 
     public static final Type_ BYTE_PRIMITIVE = new Type_(byte.class),
             SHORT_PRIMITIVE = new Type_(short.class),
@@ -68,31 +70,36 @@ public class Type_ implements CodeModel {
         return StreamUtil.<CodeModel>of(genericTypes);
     }
 
-    public Type_ add(Type_ genericType) {
-        genericType.add(genericType);
-        return this;
+    public T add(Type_ genericType) {
+        return add(genericType, getGenericTypes()::add);
     }
 
     public CharSequence getTypeName() {
         return typeName;
     }
 
-    public void setTypeName(CharSequence typeName) {
-        this.typeName = typeName;
-        try {
-            this.typeClass = Class.forName(typeName.toString());
-        } catch (ClassNotFoundException cnfe) {
-            this.typeClass = null;
-        }
+    public T setTypeName(CharSequence typeName) {
+        return set(typeName, tn -> {
+            this.typeName = tn;
+            try {
+                this.typeClass = Class.forName(tn.toString());
+            } catch (ClassNotFoundException cnfe) {
+                this.typeClass = null;
+            }
+        });
+
     }
 
     public Class<?> getTypeClass() {
         return typeClass;
     }
 
-    public void setTypeClass(Class<?> typeClass) {
-        this.typeClass = typeClass;
-        this.typeName = typeClass.getName();
+    public T setTypeClass(Class<?> typeClass) {
+        return set(typeClass, tc -> {
+            this.typeClass = tc;
+            this.typeName = tc != null ? typeClass.getName() : null;
+        });
+
     }
 
     public List<Type_> getGenericTypes() {

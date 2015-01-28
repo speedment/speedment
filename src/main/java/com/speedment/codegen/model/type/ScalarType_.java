@@ -14,21 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.view.java;
-
-import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.view.CodeView;
-import static com.speedment.codegen.CodeUtil.*;
-import com.speedment.codegen.model.type.Type_;
-import java.util.Optional;
+package com.speedment.codegen.model.type;
 
 /**
  *
- * @author Duncan
+ * @author pemi
  */
-public class TypeView extends CodeView<Type_> {
-	@Override
-	public Optional<CharSequence> render(CodeGenerator renderer, Type_ type) {
-		return Optional.of(shortName(type.getTypeName().toString()));
-	}
+public class ScalarType_ extends Type_<ScalarType_> {
+
+    public ScalarType_() {
+        super();
+    }
+
+    public ScalarType_(Class<?> typeClass) {
+        super(typeClass);
+    }
+
+    public ScalarType_(CharSequence typeName) {
+        super(typeName);
+    }
 }

@@ -19,7 +19,10 @@ package com.speedment.codegen.model;
 /**
  *
  * @author pemi
+ * @deprecated replaced by
+ * com.speedment.codegen.model.statement.expression.Expression
  */
+@Deprecated
 public class Expression_ implements CodeModel {
 
     private CharSequence stringExpression;

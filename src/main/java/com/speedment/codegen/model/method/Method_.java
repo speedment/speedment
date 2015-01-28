@@ -17,12 +17,12 @@
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.statement.Statement_;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
-import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.javadoc.JavadocAdder;
 import com.speedment.codegen.model.javadoc.Javadoc_;
 import com.speedment.codegen.model.javadoc.Javadockable;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable, Javadockable {
+public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier_> implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable, Javadockable {
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
@@ -64,23 +64,13 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
         this.name = name;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Method_ add(final MethodModifier_ firstClassModifier_m, final MethodModifier_... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return this;
-    }
-
     @Override
     public Method_ add(Parameter_ field_) {
-        getParameters().add(field_);
-        return this;
+        return add(field_, getParameters()::add);
     }
 
     public Method_ add(Statement_ statement) {
-        statements.add(statement);
-        return this;
+        return add(statement, getStatements()::add);
     }
 
     public Type_ getType() {
@@ -88,8 +78,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     }
 
     public Method_ setType(Type_ type_) {
-        this.type = type_;
-        return this;
+        return set(type_, t -> this.type = t);
     }
 
     @Override
@@ -99,8 +88,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Method_ setName(CharSequence name) {
-        this.name = name;
-        return this;
+        return set(name, n -> this.name = n);
     }
 
     @Override
@@ -123,21 +111,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     }
 
     @Override
-    public boolean is(MethodModifier_ modifier) {
-        return modifiers.contains(modifier);
-    }
-
-    @Override
     public Set<MethodModifier_> getModifiers() {
         return modifiers;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Method_ set(final Set<MethodModifier_> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return this;
     }
 
     @Override
@@ -152,53 +127,43 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Method_ add(Annotation_ annotation) {
-        annotations.add(annotation);
-        return this;
+        return add(annotation, getAnnotations()::add);
     }
 
     public Method_ abstract_() {
-        add(MethodModifier_.ABSTRACT);
-        return this;
+        return add(MethodModifier_.ABSTRACT);
     }
 
     public Method_ final_() {
-        add(MethodModifier_.FINAL);
-        return this;
+        return add(MethodModifier_.FINAL);
     }
 
     public Method_ native_() {
-        add(MethodModifier_.NATIVE);
-        return this;
+        return add(MethodModifier_.NATIVE);
     }
 
     public Method_ private_() {
-        add(MethodModifier_.PRIVATE);
-        return this;
+        return add(MethodModifier_.PRIVATE);
     }
 
     public Method_ protected_() {
-        add(MethodModifier_.PROTECTED);
-        return this;
+        return add(MethodModifier_.PROTECTED);
     }
 
     public Method_ public_() {
-        add(MethodModifier_.PUBLIC);
-        return this;
+        return add(MethodModifier_.PUBLIC);
     }
 
     public Method_ static_() {
-        add(MethodModifier_.STATIC);
-        return this;
+        return add(MethodModifier_.STATIC);
     }
 
     public Method_ strictfp_() {
-        add(MethodModifier_.STRICTFP);
-        return this;
+        return add(MethodModifier_.STRICTFP);
     }
 
     public Method_ synchronized_() {
-        add(MethodModifier_.SYNCHRONIZED);
-        return this;
+        return add(MethodModifier_.SYNCHRONIZED);
     }
 
     @Override
@@ -213,8 +178,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Method_ setJavadoc(Javadoc_ javadoc) {
-        this.javadoc = javadoc;
-        return this;
+        return set(javadoc, j -> this.javadoc = j);
     }
 
     public JavadocAdder<Method_> javadocAdder() {
