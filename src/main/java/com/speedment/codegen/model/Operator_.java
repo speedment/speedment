@@ -18,6 +18,7 @@ package com.speedment.codegen.model;
 
 import com.speedment.codegen.model.statement.expression.Expression;
 import com.speedment.codegen.model.statement.expression.SimpleExpression;
+import com.speedment.codegen.model.statement.expression.binary.Assign;
 import com.speedment.codegen.model.statement.expression.binary.Equals;
 import com.speedment.codegen.model.statement.expression.binary.Minus;
 import com.speedment.codegen.model.statement.expression.binary.Plus;
@@ -32,8 +33,10 @@ import java.util.function.Supplier;
  */
 public enum Operator_ implements CodeModel {
 
-    NONE(""),
-    ASSIGN("="), GREATER_THAN(">"), LESS_THAN("<"), NOT("!", Not::new), COMPLEMENT("~"), CONDITIONAL("?", Conditional::new), COLON(":"), ARROW("->"),
+    // Virtual Operators
+    NONE(""), CONSTANT(""),
+    // Real Operators
+    ASSIGN("=", Assign::new), GREATER_THAN(">"), LESS_THAN("<"), NOT("!", Not::new), COMPLEMENT("~"), CONDITIONAL("?", Conditional::new), COLON(":"), ARROW("->"),
     EQUALS("==", Equals::new), GREATER_OR_EQAL(">="), LESS_OR_EQUAL("<="), NOT_EQUAL("!="),
     AND_LOGICAL("&&"), OR_LOGICAL("||"), INCREMENT("++"), DECREMENT("--"),
     PLUS("+", Plus::new), MINUS("-", Minus::new), MULTIPLY("*"), DIVIDE("/"), AND_BINARY("&"), OR_BINARY("|"), XOR_BINARY("^"), MODULO("%"),

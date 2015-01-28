@@ -1,8 +1,10 @@
 package com.speedment.codegen.model.statement.expression.binary;
 
+import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.Operator_;
 import com.speedment.codegen.model.statement.expression.Expression;
 import com.speedment.codegen.model.statement.expression.DefaultExpression;
+import java.util.stream.Stream;
 
 /**
  *
@@ -37,6 +39,16 @@ public class BinaryExpression<T extends BinaryExpression<T>> extends DefaultExpr
 
     public T setRight(Expression right) {
         return set(right, r -> this.right = r);
+    }
+
+    @Override
+    public Stream<? extends Expression> stream() {
+        return Stream.of(left, right);
+    }
+
+    @Override
+    public String toString() {
+        return left.toString() + " " + getOperator() + " " + right.toString();
     }
 
 }

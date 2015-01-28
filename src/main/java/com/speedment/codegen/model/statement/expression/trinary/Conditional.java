@@ -17,4 +17,11 @@ public class Conditional extends TrinaryExpression<Conditional> {
         super(Operator_.CONDITIONAL, first, second, third);
     }
 
+    @Override
+    public String toString() {
+        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
 }

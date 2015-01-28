@@ -31,7 +31,9 @@ import com.speedment.codegen.model.parameter.Parameter_;
 import com.speedment.codegen.model.statement.If;
 import com.speedment.codegen.model.statement.block.InitializerBlock_;
 import com.speedment.codegen.model.statement.expression.Expression;
+import com.speedment.codegen.model.statement.expression.binary.Assign;
 import com.speedment.codegen.model.statement.expression.binary.Equals;
+import com.speedment.codegen.model.statement.expression.constant.IntegerConst;
 import com.speedment.codegen.view.java.JavaCodeGen;
 import java.io.InputStream;
 
@@ -58,6 +60,7 @@ public class Test {
                 Statement_.of("final thatCoolFeeling"),
                 new If(new Equals(Expression.of("1"), Expression.of("1")))
                 .addTrue("thatCoolFeeling=1", "int foo = 1")
+                .addTrue(new Assign(Expression.of("int bazz"), IntegerConst.ONE))
                 .addFalse("thatCoolFeeling=0"));
 
         final Class_ class_ = new Class_()

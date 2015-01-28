@@ -3,6 +3,7 @@ package com.speedment.codegen.model.statement.expression.trinary;
 import com.speedment.codegen.model.Operator_;
 import com.speedment.codegen.model.statement.expression.Expression;
 import com.speedment.codegen.model.statement.expression.DefaultExpression;
+import java.util.stream.Stream;
 
 /**
  *
@@ -45,6 +46,11 @@ public class TrinaryExpression<T extends TrinaryExpression<T>> extends DefaultEx
 
     public T setThird(Expression third) {
         return set(third, t -> this.third = t);
+    }
+
+    @Override
+    public Stream<? extends Expression> stream() {
+        return Stream.of(first, second, third);
     }
 
 }
