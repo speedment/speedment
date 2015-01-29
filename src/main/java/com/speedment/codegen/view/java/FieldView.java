@@ -21,6 +21,7 @@ import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
 import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.util.CodeCombiner;
 import java.util.Optional;
 
 /**
@@ -31,6 +32,9 @@ public class FieldView extends CodeView<Field_> {
 	@Override
 	public Optional<CharSequence> render(CodeGenerator renderer, Field_ field) {
 		return Optional.of(new $(
+			field.getModifiers().stream()
+				.map(m -> m.name().toLowerCase())
+				.collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)),
 			renderer.on(field.getType()).get(),
 			SPACE,
 			lcfirst(field.getName())
