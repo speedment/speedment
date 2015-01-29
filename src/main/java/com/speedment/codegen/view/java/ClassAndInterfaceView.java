@@ -24,7 +24,6 @@ import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.view.CodeView;
 import com.speedment.util.$;
 import com.speedment.util.CodeCombiner;
-import com.speedment.util.StreamUtil;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +86,10 @@ public abstract class ClassAndInterfaceView<Modifier extends Enum<Modifier> & Mo
 			return cg.onEach(models)
 				.collect(CodeCombiner.joinIfNotEmpty(delimiter, pre, suf));
 		}
+	}
+	
+	public <T extends CodeModel> CharSequence renderJavadoc(CodeGenerator cg, Model model) {
+		return cg.on(model.getJavadoc()).orElse(EMPTY);
 	}
 	
 	public CharSequence renderModifiers(Model model, CodeGenerator cg, CharSequence delimiter) {

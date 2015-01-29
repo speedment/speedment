@@ -17,16 +17,20 @@
 package com.speedment.codegen.model.method;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.statement.Statement_;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.parameter.Parameterable;
 import com.speedment.codegen.model.modifier.MethodModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.parameter.Parameter_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -37,41 +41,36 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable {
+public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier_> implements CodeModel, Modifiable<MethodModifier_>, Annotatable, Nameable, Parameterable, Javadockable {
 
     private final Set<MethodModifier_> modifiers;
     private final List<Annotation_> annotations;
     private final List<Parameter_> parameters;
     private final List<Statement_> statements;
+    private Javadoc_ javadoc;
     private Type_ type;
     private CharSequence name;
 
-    public Method_(Type_ type_, CharSequence name_) {
+    public Method_() {
         this.parameters = new ArrayList<>();
         this.statements = new ArrayList<>();
         this.annotations = new ArrayList<>();
-        this.type = type_;
-        this.name = name_;
         this.modifiers = EnumSet.noneOf(MethodModifier_.class);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Method_ add(final MethodModifier_ firstClassModifier_m, final MethodModifier_... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return this;
+    public Method_(Type_ type, CharSequence name) {
+        this();
+        this.type = type;
+        this.name = name;
     }
 
     @Override
     public Method_ add(Parameter_ field_) {
-        getParameters().add(field_);
-        return this;
+        return add(field_, getParameters()::add);
     }
 
     public Method_ add(Statement_ statement) {
-        statements.add(statement);
-        return this;
+        return add(statement, getStatements()::add);
     }
 
     public Type_ getType() {
@@ -79,8 +78,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     }
 
     public Method_ setType(Type_ type_) {
-        this.type = type_;
-        return this;
+        return set(type_, t -> this.type = t);
     }
 
     @Override
@@ -90,8 +88,7 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Method_ setName(CharSequence name) {
-        this.name = name;
-        return this;
+        return set(name, n -> this.name = n);
     }
 
     @Override
@@ -114,21 +111,8 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
     }
 
     @Override
-    public boolean is(MethodModifier_ modifier) {
-        return modifiers.contains(modifier);
-    }
-
-    @Override
     public Set<MethodModifier_> getModifiers() {
         return modifiers;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Method_ set(final Set<MethodModifier_> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return this;
     }
 
     @Override
@@ -143,58 +127,62 @@ public class Method_ implements CodeModel, Modifiable<MethodModifier_>, Annotata
 
     @Override
     public Method_ add(Annotation_ annotation) {
-        annotations.add(annotation);
-        return this;
+        return add(annotation, getAnnotations()::add);
     }
 
     public Method_ abstract_() {
-        add(MethodModifier_.ABSTRACT);
-        return this;
+        return add(MethodModifier_.ABSTRACT);
     }
 
     public Method_ final_() {
-        add(MethodModifier_.FINAL);
-        return this;
+        return add(MethodModifier_.FINAL);
     }
 
     public Method_ native_() {
-        add(MethodModifier_.NATIVE);
-        return this;
+        return add(MethodModifier_.NATIVE);
     }
 
     public Method_ private_() {
-        add(MethodModifier_.PRIVATE);
-        return this;
+        return add(MethodModifier_.PRIVATE);
     }
 
     public Method_ protected_() {
-        add(MethodModifier_.PROTECTED);
-        return this;
+        return add(MethodModifier_.PROTECTED);
     }
 
     public Method_ public_() {
-        add(MethodModifier_.PUBLIC);
-        return this;
+        return add(MethodModifier_.PUBLIC);
     }
 
     public Method_ static_() {
-        add(MethodModifier_.STATIC);
-        return this;
+        return add(MethodModifier_.STATIC);
     }
 
     public Method_ strictfp_() {
-        add(MethodModifier_.STRICTFP);
-        return this;
+        return add(MethodModifier_.STRICTFP);
     }
 
     public Method_ synchronized_() {
-        add(MethodModifier_.SYNCHRONIZED);
-        return this;
+        return add(MethodModifier_.SYNCHRONIZED);
     }
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(annotations, modifiers, parameters, statements).build();
+        return StreamUtil.<CodeModel>of(annotations, modifiers, parameters, statements);
+    }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public Method_ setJavadoc(Javadoc_ javadoc) {
+        return set(javadoc, j -> this.javadoc = j);
+    }
+
+    public JavadocAdder<Method_> javadocAdder() {
+        return new JavadocAdder<>(this, this::setJavadoc);
     }
 
 }

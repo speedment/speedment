@@ -17,9 +17,9 @@
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.modifier.ClassModifier_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
 
     private final List<Constructor_> constructors;
-    private Type_ superClassType;
+    private ScalarType_ superClassType;
     private Class<?> superClass;
 
     public Class_() {
@@ -50,20 +50,19 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         setSuperClass(superClass);
     }
 
-    public Class_(String className, Type_ superClass) {
+    public Class_(String className, ScalarType_ superClass) {
         this();
         setName(className);
         setSuperClassType(superClass);
     }
 
     @Override
-    protected Stream.Builder<CodeModel> streamBuilder() {
-        return StreamUtil.streamBuilder(super.streamBuilder(), constructors);
+    public Stream<CodeModel> stream() {
+        return StreamUtil.of(super.stream(), constructors.stream());
     }
 
     public Class_ add(Constructor_ constructor) {
-        getConstructors().add(constructor);
-        return this;
+        return add(constructor, constructors::add);
     }
 
     public List<Constructor_> getConstructors() {
@@ -79,52 +78,49 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
         return superClass;
     }
 
-    public void setSuperClass(Class<?> superClass) {
-        this.superClass = superClass;
-        this.setSuperClassType(new Type_(superClass));
+    public Class_ setSuperClass(Class<?> superClass) {
+        return set(superClass, s -> {
+            this.superClass = s;
+            this.superClassType = new ScalarType_(s);
+        });
     }
 
-    public Type_ getSuperClassType() {
+    public ScalarType_ getSuperClassType() {
         return superClassType;
     }
 
-    public void setSuperClassType(Type_ superClassType) {
-        this.superClassType = superClassType;
-        this.superClass = superClassType.getTypeClass();
+    public Class_ setSuperClassType(ScalarType_ superClassType) {
+        return set(superClassType, s -> {
+            this.superClassType = s;
+            this.superClass = s.getTypeClass();
+        });
     }
 
     public Class_ abstract_() {
-        add(ClassModifier_.ABSTRACT);
-        return this;
+        return add(ClassModifier_.ABSTRACT);
     }
 
     public Class_ final_() {
-        add(ClassModifier_.FINAL);
-        return this;
+        return add(ClassModifier_.FINAL);
     }
 
     public Class_ private_() {
-        add(ClassModifier_.PRIVATE);
-        return this;
+        return add(ClassModifier_.PRIVATE);
     }
 
     public Class_ protected_() {
-        add(ClassModifier_.PROTECTED);
-        return this;
+        return add(ClassModifier_.PROTECTED);
     }
 
     public Class_ public_() {
-        add(ClassModifier_.PUBLIC);
-        return this;
+        return add(ClassModifier_.PUBLIC);
     }
 
     public Class_ static_() {
-        add(ClassModifier_.STATIC);
-        return this;
+        return add(ClassModifier_.STATIC);
     }
 
     public Class_ strictfp_() {
-        add(ClassModifier_.STRICTFP);
-        return this;
+        return add(ClassModifier_.STRICTFP);
     }
 }

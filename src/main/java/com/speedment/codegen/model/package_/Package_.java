@@ -16,10 +16,10 @@
  */
 package com.speedment.codegen.model.package_;
 
+import com.speedment.codegen.model.AbstractCodeModel;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import com.speedment.util.CharSequences;
-import com.speedment.util.StreamUtil;
 import com.speedment.util.Trees;
 import com.speedment.util.Trees.Order;
 import java.util.stream.Collectors;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Package_ implements CodeModel, Packagable {
+public class Package_ extends AbstractCodeModel<Package_> implements CodeModel, Packagable {
 
     private CharSequence name;
     private Package_ package_;
@@ -46,8 +46,7 @@ public class Package_ implements CodeModel, Packagable {
     }
 
     public Package_ setName(final CharSequence name) {
-        this.name = name;
-        return this;
+        return set(name, n -> this.name = n);
     }
 
     @Override
@@ -62,8 +61,7 @@ public class Package_ implements CodeModel, Packagable {
 
     @Override
     public Package_ setPackage(final Package_ package_) {
-        this.package_ = package_;
-        return this;
+        return set(package_, p->this.package_=p);
     }
 
     public static final Package_ by(CharSequence packagePath) {

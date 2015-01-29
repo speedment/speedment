@@ -20,7 +20,6 @@ import com.speedment.codegen.CodeGenerator;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.view.CodeView;
 import static com.speedment.codegen.CodeUtil.*;
-import java.util.stream.Collectors;
 import com.speedment.util.$;
 import com.speedment.util.CodeCombiner;
 import java.util.Optional;
@@ -35,6 +34,7 @@ public class MethodView extends CodeView<Method_> {
 	@Override
 	public Optional<CharSequence> render(CodeGenerator cg, Method_ method) {
 		return Optional.of(new $(
+			cg.on(method.getJavadoc()).orElse(EMPTY),
 			cg.onEach(method.getAnnotations())
 				.collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())),
 			method.getModifiers().stream()

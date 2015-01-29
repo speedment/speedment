@@ -46,6 +46,7 @@ public class ClassView extends ClassAndInterfaceView<ClassModifier_, Class_> {
 		return Optional.of(new $(
 			renderPackage(renderer, model), dnl(),
 			renderDependencies(renderer, model),
+			renderJavadoc(renderer, model),
 			renderModifiers(model, renderer, SPACE),
 			CLASS_STRING,
 			renderName(model), SPACE,

@@ -18,17 +18,22 @@ package com.speedment.codegen;
 
 import com.speedment.codegen.control.AccessorImplementer;
 import com.speedment.codegen.control.AutomaticDependencies;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.model.annotation.Annotation_;
 import com.speedment.codegen.model.field.Field_;
-import static com.speedment.codegen.model.Type_.STRING;
-import com.speedment.codegen.model.block.Block_;
+import static com.speedment.codegen.model.type.Type_.STRING;
+import com.speedment.codegen.model.statement.block.Block_;
 import com.speedment.codegen.model.class_.Class_;
 
 import com.speedment.codegen.model.method.Method_;
-import com.speedment.codegen.model.package_.Package_;
 import com.speedment.codegen.model.parameter.Parameter_;
+import com.speedment.codegen.model.statement.If;
+import com.speedment.codegen.model.statement.block.InitializerBlock_;
+import com.speedment.codegen.model.statement.expression.Expression;
+import com.speedment.codegen.model.statement.expression.binary.Assign;
+import com.speedment.codegen.model.statement.expression.binary.Equals;
+import com.speedment.codegen.model.statement.expression.constant.IntegerConst;
 import com.speedment.codegen.view.java.JavaCodeGen;
 import java.io.InputStream;
 
@@ -43,40 +48,47 @@ public class Test {
      */
     public static void main(String[] args) {
 
-//        Package_ package_ = new Package_("test")
-//			.setPackage(new Package_("codegen")
-//			.setPackage(new Package_("speedment")
-//			.setPackage(new Package_("org"))));
         CodeUtil.tab("   ");
-		
-		Type_ type = new Type_(InputStream.class);
 
-        final Statement_ s = new Statement_("int bar = 1");
+        ScalarType_ type = new ScalarType_(InputStream.class);
 
-        final Block_ block = new Block_().add(new Statement_("int foo=1")).add(new Statement_("int bar=1"));
+        final Statement_ s = Statement_.of("int bar = 1");
+
+        final Block_ block = new Block_().add(Statement_.of("int foo=1")).add(Statement_.of("int bar=1"));
+
+        final Block_ ifBlockTest = new Block_().add(
+                Statement_.of("final thatCoolFeeling"),
+                new If(new Equals(Expression.of("1"), Expression.of("1")))
+                .addTrue("thatCoolFeeling=1", "int foo = 1")
+                .addTrue(new Assign(Expression.of("int bazz"), IntegerConst.ONE))
+                .addFalse("thatCoolFeeling=0"));
 
         final Class_ class_ = new Class_()
                 .package_("org.speedment.codegen.test")
+                .javadocAdder().add("A test class for code generation.").add("This class is just a dummy.").add()
+                .add(Annotation_.DEPRECATED)
                 .public_()
                 .setName("TestClass")
                 .add(new Field_(STRING, "foo").private_().final_())
                 .add(new Field_(STRING, "bar").private_().final_())
                 .add(new Method_(type, "getFooBar")
+                        .javadocAdder().add("A freeking method.").throws_(NullPointerException.class, "if called").add()
                         .public_().final_()
                         .add(new Parameter_().final_().setType(STRING).setName("baz"))
                         .add(new Parameter_(STRING, "bazer"))
-                        .add(new Statement_(
+                        .add(Statement_.of(
                                         "return (foo + baz + bar);"
                                 ))
-                )
+                        .add(Annotation_.OVERRIDE))
                 .methodAdder().public_().setType(STRING).setName("bar").add(s).add()
-                .methodAdder().public_().setType(STRING).setName("foo").add(new Statement_("int foo=1")).add()
-                .methodAdder().public_().setType(STRING).setName("fooBar").add(new Statement_(block)).add();
+                .methodAdder().public_().setType(STRING).setName("foo").add(Statement_.of("int foo=1")).add()
+                .methodAdder().public_().setType(STRING).setName("fooBar").add(block).add()
+                .methodAdder().public_().setType(STRING).setName("ifTester").add(ifBlockTest).add()
+                .add(new InitializerBlock_().static_().add(Statement_.of("int fool = 42")));
 
         new AccessorImplementer().accept(class_);
         new AutomaticDependencies().accept(class_);
 
-        class_.add(Annotation_.DEPRECATED);
         JavaCodeGen gen = new JavaCodeGen();
         System.out.println(gen.on(class_).get());
 

@@ -14,11 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.model.block;
+package com.speedment.codegen.model.statement.block;
 
 import com.speedment.codegen.model.CodeModel;
+import com.speedment.codegen.model.statement.SimpleStatement;
 import com.speedment.codegen.model.statement.Statement_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -26,8 +27,9 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public class Block_ implements CodeModel {
+public class Block_<T extends Block_<T>> extends SimpleStatement<T> {
 
     private final List<Statement_> statements;
 
@@ -35,22 +37,28 @@ public class Block_ implements CodeModel {
         this.statements = new ArrayList<>();
     }
 
-    public Block_ add(Statement_ statement_) {
-        getStatements().add(statement_);
-        return this;
+    public T add(Statement_... statements_) {
+        return addSeveral(statements_, statements::add);
     }
 
+    @Override
     public List<Statement_> getStatements() {
         return statements;
     }
 
     @Override
+    public T set(CharSequence statement) {
+        throw new UnsupportedOperationException("set() is unsupported for " + getClass().getSimpleName());
+    }
+
+    @Override
     public Type getModelType() {
+        // Todo: Change to Type.STATEMENT ???
         return Type.BLOCK;
     }
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(statements).build();
+        return StreamUtil.<CodeModel>of(statements);
     }
 }

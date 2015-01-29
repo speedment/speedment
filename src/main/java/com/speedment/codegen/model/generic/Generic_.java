@@ -1,10 +1,11 @@
 package com.speedment.codegen.model.generic;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractCodeModel;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.ScalarType_;
 import com.speedment.codegen.model.class_.Interface_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -13,11 +14,11 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Generic_ implements CodeModel, Nameable, Genericable {
+public class Generic_ extends AbstractCodeModel<Generic_> implements CodeModel, Nameable, Genericable {
 
     private CharSequence name;
     private final List<Generic_> generics;
-    private Type_ extendsType;
+    private ScalarType_ extendsType;
     private List<Interface_> interfaces;
     /// Todo; Add "extends" and "super" stuff
 
@@ -37,14 +38,13 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
 
     @Override
     public Generic_ setName(CharSequence name) {
-        this.name = name;
-        return this;
+        return set(name, n -> this.name = n);
+
     }
 
     @Override
     public Genericable add(Generic_ generic) {
-        generics.add(generic);
-        return this;
+        return add(generic, getGenerics()::add);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
         return generics.contains(generic);
     }
 
-    public Type_ getExtendsType() {
+    public ScalarType_ getExtendsType() {
         return extendsType;
     }
 
@@ -65,13 +65,12 @@ public class Generic_ implements CodeModel, Nameable, Genericable {
         return interfaces;
     }
 
-    public Generic_ setExtendsType(Type_ extendsType) {
-        this.extendsType = extendsType;
-        return this;
+    public Generic_ setExtendsType(ScalarType_ extendsType) {
+        return set(extendsType, e -> this.extendsType = e);
     }
 
     @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(generics, interfaces).build();
+        return StreamUtil.<CodeModel>of(generics, interfaces);
     }
 }

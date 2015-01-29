@@ -38,6 +38,7 @@ public class InterfaceView extends ClassAndInterfaceView<InterfaceModifier_, Int
 	public Optional<CharSequence> render(CodeGenerator renderer, Interface_ interf) {
 		return Optional.of(new $(
 			renderPackage(renderer, interf), dnl(),
+			renderJavadoc(renderer, interf),
 			renderModifiers(interf, renderer, SPACE),
 			INTERFACE_STRING,
 			renderName(interf), SPACE,

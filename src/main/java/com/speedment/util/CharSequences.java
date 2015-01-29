@@ -50,4 +50,21 @@ public class CharSequences {
         return INDEX_NOT_FOUND;
     }
 
+    /**
+     * Returns a <code>CharSequence</code> that is a subsequence of the provided
+     * sequence. The returned subsequence starts with the <code>char</code>
+     * value at the specified index and ends the same as the provided sequence.
+     *
+     * @param cs the provided CharSequence
+     * @param startIndex the start index, inclusive
+     *
+     * @return the specified subsequence
+     *
+     * @throws IndexOutOfBoundsException if <tt>start</tt> is negative.
+     *
+     */
+    public static CharSequence subSequence(CharSequence cs, int startIndex) {
+        return cs.subSequence(startIndex, cs.length());
+    }
+
 }

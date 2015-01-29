@@ -16,7 +16,9 @@
  */
 package com.speedment.codegen.model.modifier;
 
+import static com.speedment.codegen.CodeUtil.lcfirst;
 import com.speedment.codegen.model.CodeModel;
+import com.speedment.util.java.JavaLanguage;
 
 /**
  *
@@ -40,8 +42,13 @@ public interface Modifier_<T extends Modifier_<T>> extends CodeModel {
         return value;
     }
 
+    @Override
     default Type getModelType() {
         return Type.MODIFIER;
+    }
+
+    default CharSequence toJavaCode() {
+        return lcfirst(JavaLanguage.getJavaNameFromSqlName(name()));
     }
 
 }

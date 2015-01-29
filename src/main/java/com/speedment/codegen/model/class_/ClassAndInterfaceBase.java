@@ -17,27 +17,30 @@
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.method.Method_;
 import com.speedment.codegen.model.annotation.Annotation_;
-import com.speedment.codegen.model.block.Initializable;
-import com.speedment.codegen.model.block.InitializerBlock_;
+import com.speedment.codegen.model.statement.block.Initializable;
+import com.speedment.codegen.model.statement.block.InitializerBlock_;
 import com.speedment.codegen.model.dependency_.Dependable;
 import com.speedment.codegen.model.dependency_.Dependency_;
 import com.speedment.codegen.model.field.FieldAdder;
 import com.speedment.codegen.model.field.Field_;
 import com.speedment.codegen.model.field.Fieldable;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.method.MethodAdder;
 import com.speedment.codegen.model.method.Methodable;
 import com.speedment.codegen.model.modifier.Modifiable;
 import com.speedment.codegen.model.modifier.Modifier_;
 import com.speedment.codegen.model.package_.Packagable;
 import com.speedment.codegen.model.package_.Package_;
-import com.speedment.util.StreamUtil;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +54,9 @@ import java.util.stream.Stream;
  * @param <M>
  */
 public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M>, M extends Enum<M> & Modifier_<M>>
-        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable, Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable {
+        extends AbstractModifiableCodeModel<T, M>
+        implements CodeModel, Modifiable<M>, Annotatable, Fieldable, Methodable,
+        Interfaceable, Nameable, Packagable, Initializable, Nestable, Dependable, Javadockable {
 
     private final List<Interface_> interfaces;
     private final List<Field_> fields;
@@ -61,6 +66,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     private final List<ClassAndInterfaceBase<?, ?>> nestedClasses;
     private final List<InitializerBlock_> initializers;
     private final Set<Dependency_> dependencies;
+    private Javadoc_ javadoc;
     private Package_ pagage;
     private CharSequence name;
 
@@ -77,79 +83,44 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public Stream<CodeModel> stream() {
-        return streamBuilder().build();
+        return StreamUtil.of(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
     }
 
-    protected Stream.Builder<CodeModel> streamBuilder() {
-        return StreamUtil.streamBuilder(fields, methods, interfaces, modifiers, annotations, nestedClasses, initializers, dependencies);
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Interface_ interf) {
-        getInterfaces().add(interf);
-        return (T) this;
+        return add(interf, interfaces::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Field_ field) {
-        getFields().add(field);
-        return (T) this;
+        return add(field, fields::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Method_ method_) {
-        getMethods().add(method_);
-        return (T) this;
+        return add(method_, methods::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Annotation_ annotation) {
-        getAnnotations().add(annotation);
-        return (T) this;
+        return add(annotation, annotations::add);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(final Class_ nestedClass) {
-        getNestedClasses().add(nestedClass);
-        return (T) this;
+        return add(nestedClass, nestedClasses::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final InitializerBlock_ initializer) {
-        getInitializers().add(initializer);
-        return (T) this;
+        return add(initializer, initializers::add);
     }
 
-//    public T add(M classModifier_) {
-//        getModifiers().add(classModifier_);
-//        return (T) this;
-//    }Modifier_<M>
-    @SuppressWarnings("unchecked")
-    @Override
-    public T add(final M firstClassModifier_m, final M... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return (T) this;
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     public boolean has(Annotation_ annotation_) {
         return annotations.contains(annotation_);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T set(final Set<M> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return (T) this;
     }
 
     @Override
@@ -174,9 +145,8 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setPackage(final Package_ pagage) {
-        this.pagage = pagage;
-        return (T) this;
+    public T setPackage(final Package_ package_) {
+        return set(package_, p -> pagage = p);
     }
 
     @Override
@@ -186,8 +156,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T setName(final CharSequence name) {
-        this.name = name;
-        return (T) this;
+        return set(name, n -> this.name = n);
     }
 
     @Override
@@ -195,10 +164,6 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return modifiers;
     }
 
-    @Override
-    public boolean is(M modifier) {
-        return modifiers.contains(modifier);
-    }
 
     @Override
     public List<Annotation_> getAnnotations() {
@@ -225,11 +190,9 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
         return dependencies.contains(dep);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T add(Dependency_ dep) {
-        dependencies.add(dep);
-        return (T) this;
+        return add(dep, dependencies::add);
     }
 
     public Type_ toType() {
@@ -243,37 +206,25 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     }
 
     public MethodAdder<T> methodAdder() {
-        return new MyMethodAdder();
+        return new MethodAdder<>((T) this, this::add);
     }
 
     public FieldAdder<T> fieldAdder() {
-        return new MyFieldAdder();
+        return new FieldAdder<>((T) this, this::add);
     }
 
-    private class MyMethodAdder extends MethodAdder<T> {
-
-        public MyMethodAdder() {
-            super((T) ClassAndInterfaceBase.this);
-        }
-
-        @Override
-        public void addToParent(T parent) {
-            parent.add(this);
-        }
-
+    public JavadocAdder<T> javadocAdder() {
+        return new JavadocAdder<>((T) this, this::setJavadoc);
     }
 
-    private class MyFieldAdder extends FieldAdder<T> {
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
 
-        public MyFieldAdder() {
-            super((T) ClassAndInterfaceBase.this);
-        }
-
-        @Override
-        public void addToParent(T parent) {
-            parent.add(this);
-        }
-
+    @Override
+    public T setJavadoc(Javadoc_ javadoc_) {
+        return set(javadoc_, j -> javadoc = j);
     }
 
 }

@@ -17,10 +17,11 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
-import com.speedment.codegen.model.block.Block_;
+import com.speedment.codegen.model.statement.block.Block_;
 import com.speedment.codegen.view.CodeView;
 
 import static com.speedment.codegen.CodeUtil.*;
+import com.speedment.util.CodeCombiner;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,10 +31,10 @@ import java.util.stream.Collectors;
  */
 public class BlockView extends CodeView<Block_> {
 	@Override
-	public Optional<CharSequence> render(CodeGenerator renderer, Block_ block) {
-		return Optional.of(looseBracketsIndent(
-			renderer.onEach(block.getStatements())
-				.collect(Collectors.joining(nl()))
+	public Optional<CharSequence> render(CodeGenerator cg, Block_ block) {
+		return Optional.of(looseBracketsIndent((CharSequence) 
+			cg.onEach(block.getStatements())
+			.collect(CodeCombiner.joinIfNotEmpty(nl()))
 		));
 	}
 }

@@ -1,4 +1,4 @@
-package com.speedment.codegen.model.block;
+package com.speedment.codegen.model.statement.block;
 
 import java.util.List;
 

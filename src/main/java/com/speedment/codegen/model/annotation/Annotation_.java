@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.model.annotation;
 
+import com.speedment.codegen.model.AbstractCodeModel;
 import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import java.lang.annotation.Annotation;
@@ -26,7 +27,7 @@ import java.util.Map;
  *
  * @author pemi
  */
-public class Annotation_ implements CodeModel {
+public class Annotation_ extends AbstractCodeModel<Annotation_> implements CodeModel {
 
     public static final Annotation_ OVERRIDE = new UnmodifiableAnnotation_(Override.class);
     public static final Annotation_ DEPRECATED = new UnmodifiableAnnotation_(Deprecated.class);
@@ -49,8 +50,9 @@ public class Annotation_ implements CodeModel {
 //        this.annotaionClassName = annotaionClassName;
 //    }
     public Annotation_ put(final String key, final Object value) {
-        getValuePairs().put(key, value);
-        return this;
+        return add(key, value, (k, v) -> {
+            getValuePairs().put(k, v);
+        });
     }
 
     public Class<? extends Annotation> getAnnotationClass() {

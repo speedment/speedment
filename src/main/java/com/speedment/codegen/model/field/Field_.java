@@ -17,15 +17,18 @@
 package com.speedment.codegen.model.field;
 
 import com.speedment.codegen.Nameable;
+import com.speedment.codegen.model.AbstractModifiableCodeModel;
 import com.speedment.codegen.model.CodeModel;
-import com.speedment.codegen.model.CodeModel.Type;
-import com.speedment.codegen.model.Expression_;
-import com.speedment.codegen.model.Type_;
+import com.speedment.codegen.model.type.Type_;
 import com.speedment.codegen.model.annotation.Annotatable;
 import com.speedment.codegen.model.annotation.Annotation_;
+import com.speedment.codegen.model.javadoc.JavadocAdder;
+import com.speedment.codegen.model.javadoc.Javadoc_;
+import com.speedment.codegen.model.javadoc.Javadockable;
 import com.speedment.codegen.model.modifier.FieldModifier_;
 import com.speedment.codegen.model.modifier.Modifiable;
-import com.speedment.util.StreamUtil;
+import com.speedment.codegen.model.statement.expression.Expression;
+import com.speedment.util.stream.StreamUtil;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -36,13 +39,14 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, Annotatable {
+public class Field_ extends AbstractModifiableCodeModel<Field_, FieldModifier_> implements CodeModel, Nameable, Modifiable<FieldModifier_>, Annotatable, Javadockable {
 
     private final Set<FieldModifier_> modifiers;
     private final List<Annotation_> annotations;
+    private Javadoc_ javadoc;
     private Type_ type;
     private CharSequence name;
-    private Expression_ expression;
+    private Expression expression;
 
     public Field_() {
         this.modifiers = EnumSet.noneOf(FieldModifier_.class);
@@ -62,21 +66,19 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
 
     @Override
     public Field_ setName(CharSequence name_) {
-        this.name = name_;
-        return this;
+        return set(name_, n -> name = n);
     }
 
     public Field_ setType(Type_ type) {
-        this.type = type;
-        return this;
+        return set(type, t -> this.type = t);
     }
 
-    public Expression_ getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
-    public void setExpression(Expression_ expression_) {
-        this.expression = expression_;
+    public Field_ setExpression(Expression expression) {
+        return set(expression, e -> this.expression = e);
     }
 
     @Override
@@ -88,24 +90,9 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
         return type;
     }
 
-
     @Override
     public Set<FieldModifier_> getModifiers() {
         return modifiers;
-    }
-
-    @Override
-    public Field_ add(final FieldModifier_ firstClassModifier_m, final FieldModifier_... restClassModifiers) {
-        getModifiers().add(firstClassModifier_m);
-        Stream.of(restClassModifiers).forEach(getModifiers()::add);
-        return this;
-    }
-
-    @Override
-    public Field_ set(final Set<FieldModifier_> newSet) {
-        getModifiers().clear();
-        getModifiers().addAll(newSet);
-        return this;
     }
 
     @Override
@@ -115,8 +102,7 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
 
     @Override
     public Field_ add(final Annotation_ annotation) {
-        getAnnotations().add(annotation);
-        return this;
+        return add(annotation, getAnnotations()::add);
     }
 
     @Override
@@ -130,42 +116,50 @@ public class Field_ implements CodeModel, Nameable, Modifiable<FieldModifier_>, 
     }
 
     public Field_ public_() {
-        add(FieldModifier_.PUBLIC);
-        return this;
+        return add(FieldModifier_.PUBLIC);
     }
 
     public Field_ protected_() {
-        add(FieldModifier_.PROTECTED);
-        return this;
+        return add(FieldModifier_.PROTECTED);
     }
 
     public Field_ private_() {
-        add(FieldModifier_.PRIVATE);
-        return this;
+        return add(FieldModifier_.PRIVATE);
     }
 
     public Field_ static_() {
-        add(FieldModifier_.STATIC);
-        return this;
+        return add(FieldModifier_.STATIC);
     }
 
     public Field_ final_() {
-        add(FieldModifier_.FINAL);
-        return this;
+        return add(FieldModifier_.FINAL);
     }
 
     public Field_ transient_() {
-        add(FieldModifier_.TRANSIENT);
-        return this;
+        return add(FieldModifier_.TRANSIENT);
     }
 
     public Field_ volatile_() {
-        add(FieldModifier_.VOLATILE);
-        return this;
+        return add(FieldModifier_.VOLATILE);
     }
 
-        @Override
+    @Override
     public Stream<CodeModel> stream() {
-        return StreamUtil.<CodeModel>streamBuilder(annotations, modifiers).build();
+        return StreamUtil.<CodeModel>of(annotations, modifiers);
     }
+
+    @Override
+    public Javadoc_ getJavadoc() {
+        return javadoc;
+    }
+
+    @Override
+    public Field_ setJavadoc(Javadoc_ javadoc) {
+        return set(javadoc, j -> this.javadoc = j);
+    }
+
+    public JavadocAdder<Field_> javadocAdder() {
+        return new JavadocAdder<>(this, this::setJavadoc);
+    }
+
 }
