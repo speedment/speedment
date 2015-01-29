@@ -17,17 +17,27 @@
 package com.speedment.codegen.view.java;
 
 import com.speedment.codegen.CodeGenerator;
+import com.speedment.codegen.model.statement.SimpleStatement;
 import com.speedment.codegen.model.statement.Statement_;
 import com.speedment.codegen.view.CodeView;
+import com.speedment.util.CodeCombiner;
 import java.util.Optional;
+import static com.speedment.codegen.CodeUtil.*;
 
 /**
  *
  * @author Duncan
  */
 public class StatementView extends CodeView<Statement_> {
-	@Override
-	public Optional<CharSequence> render(CodeGenerator renderer, Statement_ statement) {
-		return Optional.ofNullable(statement.getStatementText());
-	}
+
+    @Override
+    public Optional<CharSequence> render(CodeGenerator cg, Statement_ statement) {
+		if (statement instanceof SimpleStatement) {
+			return ((SimpleStatement) statement).get();
+		} else {
+			return Optional.of(cg.onEach(statement.getStatements())
+				.collect(CodeCombiner.joinIfNotEmpty(EMPTY))
+			);
+		}
+    }
 }
