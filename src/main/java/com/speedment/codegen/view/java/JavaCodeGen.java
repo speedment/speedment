@@ -42,6 +42,7 @@ public class JavaCodeGen extends CodeGenerator {
 				case PARAMETER			: return new ParameterView();
 				case STATEMENT			: return new StatementView();
 				case TYPE				: return new TypeView();
+				case MODIFIER			: return new ModifierView();
 				default : throw new UnsupportedOperationException("Missing implementation for type " + type + ".");
 			}
 		});

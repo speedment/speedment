@@ -28,6 +28,6 @@ import java.util.Optional;
 public class StatementView extends CodeView<Statement_> {
 	@Override
 	public Optional<CharSequence> render(CodeGenerator renderer, Statement_ statement) {
-		return Optional.of(statement.getStatementText());
+		return Optional.ofNullable(statement.getStatementText());
 	}
 }

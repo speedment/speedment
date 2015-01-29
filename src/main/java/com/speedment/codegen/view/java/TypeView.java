@@ -29,6 +29,6 @@ import java.util.Optional;
 public class TypeView extends CodeView<Type_> {
 	@Override
 	public Optional<CharSequence> render(CodeGenerator renderer, Type_ type) {
-		return Optional.of(shortName(type.getTypeName().toString()));
+		return Optional.of(shortName(type.getTypeName()));
 	}
 }

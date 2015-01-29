@@ -78,7 +78,7 @@ public class FieldViewTest {
 		
 		boolean success = false;
 		for (CharSequence exp : expResult) {
-			if (exp.equals(result)) {
+			if (exp.equals(result.get())) {
 				success = true;
 				break;
 			}
