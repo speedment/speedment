@@ -39,7 +39,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * @author pemi
  */
 public class DelegatorGroovyTest {
-
+/*
     // http://blog.andresteingress.com/2013/10/19/groovy-sneak-peak-the-delegatingscript-base-class/
     public static void main(String[] args) throws CompilationFailedException, IOException {
 
@@ -299,5 +299,5 @@ public class DelegatorGroovyTest {
         }
 
     }
-
+*/
 }

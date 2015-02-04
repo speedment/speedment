@@ -48,83 +48,83 @@ public class Trees {
         DEPTH_FIRST_PRE, /*DEPTH_FIRST_IN, Supported only for left/right trees*/ DEPTH_FIRST_POST, BREADTH_FIRST;
     }
 
-    public static <T> Stream<T> walk(T leaf, Function<T, T> traverser) {
-        return walk(leaf, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
+    public static <T> Stream<T> walk(T first, Function<T, T> traverser) {
+        return walk(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walk(T leaf, Function<T, T> traverser, WalkingOrder order) {
-        return walk(leaf, traverser, order, Stream.builder()).build();
+    public static <T> Stream<T> walk(T first, Function<T, T> traverser, WalkingOrder order) {
+        return walk(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walkOptional(T leaf, Function<T, Optional<T>> traverser) {
-        return walkOptional(leaf, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
+    public static <T> Stream<T> walkOptional(T first, Function<T, Optional<T>> traverser) {
+        return walkOptional(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, WalkingOrder order) {
-        return walkOptional(leaf, traverser, order, Stream.builder()).build();
+    public static <T> Stream<T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order) {
+        return walkOptional(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> traverse(T leaf, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder) {
+    public static <T> Stream<T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder) {
         if (traversalOrder == TraversalOrder.BREADTH_FIRST) {
-            return traverseBredthFirst(leaf, traverser, Stream.builder()).build();
+            return traverseBredthFirst(first, traverser, Stream.builder()).build();
         } else {
-            return traverse(leaf, traverser, traversalOrder, Stream.builder()).build();
+            return traverse(first, traverser, traversalOrder, Stream.builder()).build();
         }
     }
 
     //
     // Private support methods
     //
-    private static <T> Stream.Builder<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
         if (order == WalkingOrder.FORWARD) {
-            builder.add(leaf);
+            builder.add(first);
         }
-        traverser.apply(leaf).ifPresent(p -> walkOptional(leaf, traverser, order, builder));
+        traverser.apply(first).ifPresent(p -> walkOptional(p, traverser, order, builder));
         if (order == WalkingOrder.BACKWARD) {
-            builder.add(leaf);
+            builder.add(first);
         }
         return builder;
     }
 
-    private static <T> Stream.Builder<T> walk(T leaf, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<T> walk(T first, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
         if (order == WalkingOrder.FORWARD) {
-            builder.add(leaf);
+            builder.add(first);
         }
-        final T next = traverser.apply(leaf);
+        final T next = traverser.apply(first);
         if (next != null) {
             walk(next, traverser, order, builder);
         }
         if (order == WalkingOrder.BACKWARD) {
-            builder.add(leaf);
+            builder.add(first);
         }
         return builder;
     }
 
-    private static <T> Stream.Builder<T> traverse(T leaf, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
-        if (leaf == null) {
+    private static <T> Stream.Builder<T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
+        if (first == null) {
             return builder;
         }
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_PRE) {
-            builder.add(leaf);
+            builder.add(first);
         }
-        final Stream<T> next = traverser.apply(leaf);
+        final Stream<T> next = traverser.apply(first);
         if (next != null) {
             next.filter(Objects::nonNull).forEach((T n) -> {
                 traverse(n, traverser, traversalOrder, builder);
             });
         }
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_POST) {
-            builder.add(leaf);
+            builder.add(first);
         }
         return builder;
     }
 
-    private static <T> Stream.Builder<T> traverseBredthFirst(T leaf, Function<T, Stream<T>> traverser, Stream.Builder<T> builder) {
-        if (leaf == null) {
+    private static <T> Stream.Builder<T> traverseBredthFirst(T first, Function<T, Stream<T>> traverser, Stream.Builder<T> builder) {
+        if (first == null) {
             return builder;
         }
         final Queue<T> q = new ArrayDeque<>();
-        q.add(leaf);
+        q.add(first);
         while (!q.isEmpty()) {
             final T node = q.poll();
             builder.add(node);

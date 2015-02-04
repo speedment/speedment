@@ -14,19 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.platform;
+package com.speedment.orm.config.model.impl;
+
+import com.speedment.orm.config.model.*;
 
 /**
  *
  * @author pemi
  */
-public interface Component {
-
-    // Lifecycle operations for plugins
-    default void added() {
-    }
-
-    default void removed() {
-    }
+public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<Table, ?, ?>> implements Table {
 
 }
