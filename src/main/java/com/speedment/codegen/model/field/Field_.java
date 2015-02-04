@@ -66,11 +66,11 @@ public class Field_ extends AbstractModifiableCodeModel<Field_, FieldModifier_> 
 
     @Override
     public Field_ setName(CharSequence name_) {
-        return set(name_, n -> name = n);
+        return with(name_, n -> name = n);
     }
 
     public Field_ setType(Type_ type) {
-        return set(type, t -> this.type = t);
+        return with(type, t -> this.type = t);
     }
 
     public Expression getExpression() {
@@ -78,7 +78,7 @@ public class Field_ extends AbstractModifiableCodeModel<Field_, FieldModifier_> 
     }
 
     public Field_ setExpression(Expression expression) {
-        return set(expression, e -> this.expression = e);
+        return with(expression, e -> this.expression = e);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Field_ extends AbstractModifiableCodeModel<Field_, FieldModifier_> 
 
     @Override
     public Field_ add(final Annotation_ annotation) {
-        return add(annotation, getAnnotations()::add);
+        return with(annotation, getAnnotations()::add);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class Field_ extends AbstractModifiableCodeModel<Field_, FieldModifier_> 
 
     @Override
     public Field_ setJavadoc(Javadoc_ javadoc) {
-        return set(javadoc, j -> this.javadoc = j);
+        return with(javadoc, j -> this.javadoc = j);
     }
 
     public JavadocAdder<Field_> javadocAdder() {

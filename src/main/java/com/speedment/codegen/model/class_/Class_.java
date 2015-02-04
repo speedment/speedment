@@ -62,7 +62,7 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     }
 
     public Class_ add(Constructor_ constructor) {
-        return add(constructor, constructors::add);
+        return with(constructor, constructors::add);
     }
 
     public List<Constructor_> getConstructors() {
@@ -79,7 +79,7 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     }
 
     public Class_ setSuperClass(Class<?> superClass) {
-        return set(superClass, s -> {
+        return with(superClass, s -> {
             this.superClass = s;
             this.superClassType = new ScalarType_(s);
         });
@@ -90,7 +90,7 @@ public class Class_ extends ClassAndInterfaceBase<Class_, ClassModifier_> {
     }
 
     public Class_ setSuperClassType(ScalarType_ superClassType) {
-        return set(superClassType, s -> {
+        return with(superClassType, s -> {
             this.superClassType = s;
             this.superClass = s.getTypeClass();
         });

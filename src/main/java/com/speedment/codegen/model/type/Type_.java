@@ -71,7 +71,7 @@ public class Type_<T extends Type_<T>> extends AbstractCodeModel<T> implements C
     }
 
     public T add(Type_ genericType) {
-        return add(genericType, getGenericTypes()::add);
+        return with(genericType, getGenericTypes()::add);
     }
 
     public CharSequence getTypeName() {
@@ -79,7 +79,7 @@ public class Type_<T extends Type_<T>> extends AbstractCodeModel<T> implements C
     }
 
     public T setTypeName(CharSequence typeName) {
-        return set(typeName, tn -> {
+        return with(typeName, tn -> {
             this.typeName = tn;
             try {
                 this.typeClass = Class.forName(tn.toString());
@@ -95,7 +95,7 @@ public class Type_<T extends Type_<T>> extends AbstractCodeModel<T> implements C
     }
 
     public T setTypeClass(Class<?> typeClass) {
-        return set(typeClass, tc -> {
+        return with(typeClass, tc -> {
             this.typeClass = tc;
             this.typeName = tc != null ? typeClass.getName() : null;
         });

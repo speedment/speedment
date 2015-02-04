@@ -38,7 +38,7 @@ public class Block_<T extends Block_<T>> extends SimpleStatement<T> {
     }
 
     public T add(Statement_... statements_) {
-        return addSeveral(statements_, statements::add);
+        return withSeveral(statements_, statements::add);
     }
 
     @Override

@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.codegen.model.statement;
 
 import com.speedment.codegen.model.statement.expression.Expression;
@@ -26,11 +42,11 @@ public class If extends BaseStatement<If> {
     }
 
     public If addTrue(Statement_... statements) {
-        return addSeveral(statements, getTrueStatements()::add);
+        return withSeveral(statements, getTrueStatements()::add);
     }
 
     public If addFalse(Statement_... statements) {
-        return addSeveral(statements, getFalseStatements()::add);
+        return withSeveral(statements, getFalseStatements()::add);
     }
 
     public If addTrue(CharSequence... statements) {
@@ -52,7 +68,7 @@ public class If extends BaseStatement<If> {
     }
 
     public If setExpression(Expression expression) {
-        return set(expression, e -> this.expression = e);
+        return with(expression, e -> this.expression = e);
     }
 
     public List<Statement_> getTrueStatements() {

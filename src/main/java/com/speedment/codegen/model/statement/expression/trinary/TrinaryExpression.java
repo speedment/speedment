@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.codegen.model.statement.expression.trinary;
 
 import com.speedment.codegen.model.Operator_;
@@ -29,7 +45,7 @@ public class TrinaryExpression<T extends TrinaryExpression<T>> extends DefaultEx
     }
 
     public T setFirst(Expression first) {
-        return set(first, f -> this.first = f);
+        return with(first, f -> this.first = f);
     }
 
     public Expression getSecond() {
@@ -37,7 +53,7 @@ public class TrinaryExpression<T extends TrinaryExpression<T>> extends DefaultEx
     }
 
     public T setSecond(Expression second) {
-        return set(second, s -> this.second = s);
+        return with(second, s -> this.second = s);
     }
 
     public Expression getThird() {
@@ -45,7 +61,7 @@ public class TrinaryExpression<T extends TrinaryExpression<T>> extends DefaultEx
     }
 
     public T setThird(Expression third) {
-        return set(third, t -> this.third = t);
+        return with(third, t -> this.third = t);
     }
 
     @Override

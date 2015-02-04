@@ -88,34 +88,34 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T add(final Interface_ interf) {
-        return add(interf, interfaces::add);
+        return with(interf, interfaces::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final Field_ field) {
-        return add(field, fields::add);
+        return with(field, fields::add);
     }
 
     @Override
     public T add(final Method_ method_) {
-        return add(method_, methods::add);
+        return with(method_, methods::add);
     }
 
     @Override
     public T add(final Annotation_ annotation) {
-        return add(annotation, annotations::add);
+        return with(annotation, annotations::add);
     }
 
     @Override
     public T add(final Class_ nestedClass) {
-        return add(nestedClass, nestedClasses::add);
+        return with(nestedClass, nestedClasses::add);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T add(final InitializerBlock_ initializer) {
-        return add(initializer, initializers::add);
+        return with(initializer, initializers::add);
     }
 
     @Override
@@ -146,7 +146,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
     @SuppressWarnings("unchecked")
     @Override
     public T setPackage(final Package_ package_) {
-        return set(package_, p -> pagage = p);
+        return with(package_, p -> pagage = p);
     }
 
     @Override
@@ -156,7 +156,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T setName(final CharSequence name) {
-        return set(name, n -> this.name = n);
+        return with(name, n -> this.name = n);
     }
 
     @Override
@@ -192,7 +192,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T add(Dependency_ dep) {
-        return add(dep, dependencies::add);
+        return with(dep, dependencies::add);
     }
 
     public Type_ toType() {
@@ -224,7 +224,7 @@ public abstract class ClassAndInterfaceBase<T extends ClassAndInterfaceBase<T, M
 
     @Override
     public T setJavadoc(Javadoc_ javadoc_) {
-        return set(javadoc_, j -> javadoc = j);
+        return with(javadoc_, j -> javadoc = j);
     }
 
 }

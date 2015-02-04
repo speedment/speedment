@@ -66,11 +66,11 @@ public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier
 
     @Override
     public Method_ add(Parameter_ field_) {
-        return add(field_, getParameters()::add);
+        return with(field_, getParameters()::add);
     }
 
     public Method_ add(Statement_ statement) {
-        return add(statement, getStatements()::add);
+        return with(statement, getStatements()::add);
     }
 
     public Type_ getType() {
@@ -78,7 +78,7 @@ public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier
     }
 
     public Method_ setType(Type_ type_) {
-        return set(type_, t -> this.type = t);
+        return with(type_, t -> this.type = t);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier
 
     @Override
     public Method_ setName(CharSequence name) {
-        return set(name, n -> this.name = n);
+        return with(name, n -> this.name = n);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier
 
     @Override
     public Method_ add(Annotation_ annotation) {
-        return add(annotation, getAnnotations()::add);
+        return with(annotation, getAnnotations()::add);
     }
 
     public Method_ abstract_() {
@@ -178,7 +178,7 @@ public class Method_ extends AbstractModifiableCodeModel<Method_, MethodModifier
 
     @Override
     public Method_ setJavadoc(Javadoc_ javadoc) {
-        return set(javadoc, j -> this.javadoc = j);
+        return with(javadoc, j -> this.javadoc = j);
     }
 
     public JavadocAdder<Method_> javadocAdder() {

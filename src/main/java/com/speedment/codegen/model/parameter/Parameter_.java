@@ -59,11 +59,11 @@ public class Parameter_ extends AbstractModifiableCodeModel<Parameter_, Paramete
 
     @Override
     public Parameter_ setName(CharSequence name_) {
-        return set(name_, n -> this.name = n);
+        return with(name_, n -> this.name = n);
     }
 
     public Parameter_ setType(Type_ type) {
-        return set(type, t -> this.type = t);
+        return with(type, t -> this.type = t);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Parameter_ extends AbstractModifiableCodeModel<Parameter_, Paramete
 
     @Override
     public Parameter_ add(final Annotation_ annotation) {
-        return add(annotation, getAnnotations()::add);
+        return with(annotation, getAnnotations()::add);
     }
 
     @Override

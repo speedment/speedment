@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.util;
 
 import java.util.ArrayDeque;
@@ -5,7 +21,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -17,7 +32,7 @@ public class Trees {
     public Trees() {
     }
 
-    public static enum Order {
+    public static enum WalkingOrder {
 
         FORWARD, BACKWARD;
     }
@@ -34,18 +49,18 @@ public class Trees {
     }
 
     public static <T> Stream<T> walk(T leaf, Function<T, T> traverser) {
-        return walk(leaf, traverser, Order.FORWARD, Stream.builder()).build();
+        return walk(leaf, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walk(T leaf, Function<T, T> traverser, Order order) {
+    public static <T> Stream<T> walk(T leaf, Function<T, T> traverser, WalkingOrder order) {
         return walk(leaf, traverser, order, Stream.builder()).build();
     }
 
     public static <T> Stream<T> walkOptional(T leaf, Function<T, Optional<T>> traverser) {
-        return walkOptional(leaf, traverser, Order.FORWARD, Stream.builder()).build();
+        return walkOptional(leaf, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, Order order) {
+    public static <T> Stream<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, WalkingOrder order) {
         return walkOptional(leaf, traverser, order, Stream.builder()).build();
     }
 
@@ -60,26 +75,26 @@ public class Trees {
     //
     // Private support methods
     //
-    private static <T> Stream.Builder<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, Order order, Stream.Builder<T> builder) {
-        if (order == Order.FORWARD) {
+    private static <T> Stream.Builder<T> walkOptional(T leaf, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+        if (order == WalkingOrder.FORWARD) {
             builder.add(leaf);
         }
         traverser.apply(leaf).ifPresent(p -> walkOptional(leaf, traverser, order, builder));
-        if (order == Order.BACKWARD) {
+        if (order == WalkingOrder.BACKWARD) {
             builder.add(leaf);
         }
         return builder;
     }
 
-    private static <T> Stream.Builder<T> walk(T leaf, Function<T, T> traverser, Order order, Stream.Builder<T> builder) {
-        if (order == Order.FORWARD) {
+    private static <T> Stream.Builder<T> walk(T leaf, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+        if (order == WalkingOrder.FORWARD) {
             builder.add(leaf);
         }
         final T next = traverser.apply(leaf);
         if (next != null) {
             walk(next, traverser, order, builder);
         }
-        if (order == Order.BACKWARD) {
+        if (order == WalkingOrder.BACKWARD) {
             builder.add(leaf);
         }
         return builder;

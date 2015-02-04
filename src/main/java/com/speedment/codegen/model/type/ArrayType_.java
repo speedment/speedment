@@ -39,7 +39,7 @@ public class ArrayType_ extends Type_<ArrayType_> {
     }
 
     public ArrayType_ setArrayDimension(int arrayDimension) {
-        return set(arrayDimension, ad -> this.arrayDimension = ad);
+        return with(arrayDimension, ad -> this.arrayDimension = ad);
     }
 
     public int getArrayDimension() {

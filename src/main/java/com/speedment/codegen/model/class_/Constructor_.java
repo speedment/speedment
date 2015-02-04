@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.codegen.model.class_;
 
 import com.speedment.codegen.Nameable;
@@ -36,11 +52,11 @@ public class Constructor_ extends AbstractModifiableCodeModel<Constructor_, Cons
     }
 
     public Constructor_ add(Field_ field_) {
-        return add(field_, parameters::add);
+        return with(field_, parameters::add);
     }
 
     public Constructor_ add(Statement_ statement) {
-        return add(statement, statements::add);
+        return with(statement, statements::add);
     }
 
     @Override
@@ -50,7 +66,7 @@ public class Constructor_ extends AbstractModifiableCodeModel<Constructor_, Cons
 
     @Override
     public Constructor_ setName(CharSequence name) {
-        return set(name, n -> this.name = n);
+        return with(name, n -> this.name = n);
     }
 
     public List<Field_> getParameters() {
@@ -100,7 +116,7 @@ public class Constructor_ extends AbstractModifiableCodeModel<Constructor_, Cons
 
     @Override
     public Constructor_ setJavadoc(Javadoc_ javadoc) {
-        return set(javadoc, j -> this.javadoc = j);
+        return with(javadoc, j -> this.javadoc = j);
     }
 
 }

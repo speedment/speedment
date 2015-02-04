@@ -50,7 +50,7 @@ public class Annotation_ extends AbstractCodeModel<Annotation_> implements CodeM
 //        this.annotaionClassName = annotaionClassName;
 //    }
     public Annotation_ put(final String key, final Object value) {
-        return add(key, value, (k, v) -> {
+        return with(key, value, (k, v) -> {
             getValuePairs().put(k, v);
         });
     }

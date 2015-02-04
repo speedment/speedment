@@ -21,7 +21,7 @@ import com.speedment.codegen.model.CodeModel;
 import com.speedment.codegen.model.CodeModel.Type;
 import com.speedment.util.CharSequences;
 import com.speedment.util.Trees;
-import com.speedment.util.Trees.Order;
+import com.speedment.util.Trees.WalkingOrder;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,7 +46,7 @@ public class Package_ extends AbstractCodeModel<Package_> implements CodeModel, 
     }
 
     public Package_ setName(final CharSequence name) {
-        return set(name, n -> this.name = n);
+        return with(name, n -> this.name = n);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Package_ extends AbstractCodeModel<Package_> implements CodeModel, 
 
     @Override
     public Package_ setPackage(final Package_ package_) {
-        return set(package_, p->this.package_=p);
+        return with(package_, p->this.package_=p);
     }
 
     public static final Package_ by(CharSequence packagePath) {
@@ -82,12 +82,12 @@ public class Package_ extends AbstractCodeModel<Package_> implements CodeModel, 
 
     @Override
     public String toString() {
-        return Trees.walk(this, Package_::getPackage, Order.BACKWARD).map(Package_::getName).collect(Collectors.joining("."));
+        return Trees.walk(this, Package_::getPackage, WalkingOrder.BACKWARD).map(Package_::getName).collect(Collectors.joining("."));
     }
 
     @Override
     public Stream<Package_> stream() {
-        return Trees.walk(this, Package_::getPackage, Order.BACKWARD);
+        return Trees.walk(this, Package_::getPackage, WalkingOrder.BACKWARD);
     }
 
 }
