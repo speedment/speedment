@@ -24,4 +24,26 @@ import com.speedment.orm.config.model.*;
  */
 public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, Dbms> implements Project {
 
+    private CharSequence packetName, packetLocation;
+
+    @Override
+    public CharSequence getPacketName() {
+        return packetName;
+    }
+
+    @Override
+    public Project getPacketName(CharSequence packetName) {
+        return with(packetName, pn -> this.packetName = pn);
+    }
+
+    @Override
+    public CharSequence getPacketLocation() {
+        return packetLocation;
+    }
+
+    @Override
+    public Project setPacketLocation(CharSequence packetLocation) {
+        return with(packetLocation, pl -> this.packetLocation = pl);
+    }
+
 }

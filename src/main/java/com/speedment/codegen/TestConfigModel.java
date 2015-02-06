@@ -40,6 +40,13 @@ public class TestConfigModel {
 
         final Table table = Table.newInstance();
 
+        pm.addNewProject().setName("olle")
+                .addNewDbms()
+                .addNewSchema()
+                .addNewTable()
+                .addNewColumn()
+                .setName("id");
+
         pm.add(Project.newInstance()
                 .setName("myProject")
                 .add(Dbms.newInstance()

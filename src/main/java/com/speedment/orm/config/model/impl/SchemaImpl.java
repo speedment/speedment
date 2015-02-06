@@ -17,11 +17,59 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.parameters.ColumnCompressionType;
+import com.speedment.orm.config.model.parameters.FieldStorageType;
+import com.speedment.orm.config.model.parameters.StorageEngineType;
 
 /**
  *
  * @author pemi
  */
 public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implements Schema {
+
+    private boolean default_;
+    private FieldStorageType fieldStorageType;
+    private ColumnCompressionType columnCompressionType;
+    private StorageEngineType storageEngineType;
+
+    @Override
+    public boolean isDefault() {
+        return default_;
+    }
+
+    @Override
+    public Schema setDefault(boolean default_) {
+        return with(default_, d -> this.default_ = d);
+    }
+
+    @Override
+    public FieldStorageType getFieldStorageType() {
+        return fieldStorageType;
+    }
+
+    @Override
+    public Schema setFieldStorageType(FieldStorageType fieldStorageType) {
+        return with(fieldStorageType, f -> this.fieldStorageType = f);
+    }
+
+    @Override
+    public ColumnCompressionType getColumnCompressionType() {
+        return columnCompressionType;
+    }
+
+    @Override
+    public Schema setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        return with(fieldStorageType, c -> this.fieldStorageType = c);
+    }
+
+    @Override
+    public StorageEngineType getStorageEngineType() {
+        return storageEngineType;
+    }
+
+    @Override
+    public Schema setFieldStorageType(StorageEngineType storageEngineType) {
+        return with(storageEngineType, s -> this.storageEngineType = s);
+    }
 
 }

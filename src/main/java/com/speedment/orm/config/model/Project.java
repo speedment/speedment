@@ -16,15 +16,31 @@
  */
 package com.speedment.orm.config.model;
 
-import com.speedment.orm.config.model.impl.ProjectImpl;
+import com.speedment.orm.annotations.Api;
 
 /**
  *
  * @author pemi
  */
+@Api(version = 0)
 public interface Project extends ConfigEntity<Project, ProjectManager, Dbms> {
 
     public static Project newInstance() {
-        return new ProjectImpl();
+        return ConfigEntityFactory.getInstance().newProject();
     }
+
+    default Dbms addNewDbms() {
+        final Dbms e = Dbms.newInstance();
+        add(e);
+        return e;
+    }
+
+    CharSequence getPacketName();
+
+    Project getPacketName(CharSequence packetName);
+
+    CharSequence getPacketLocation();
+
+    Project setPacketLocation(CharSequence packetLocation);
+
 }

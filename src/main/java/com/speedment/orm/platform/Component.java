@@ -16,10 +16,13 @@
  */
 package com.speedment.orm.platform;
 
+import com.speedment.orm.annotations.Api;
+
 /**
  *
  * @author pemi
  */
+@Api(version = 0)
 public interface Component {
 
     // Lifecycle operations for plugins

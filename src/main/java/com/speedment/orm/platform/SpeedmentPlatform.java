@@ -16,8 +16,10 @@
  */
 package com.speedment.orm.platform;
 
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.ConfigEntityFactory;
 import com.speedment.orm.config.model.ProjectManager;
-import com.speedment.orm.config.model.impl.ProjectManagerImpl;
+import com.speedment.orm.config.model.impl.ConfigEntityFactoryImpl;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -40,6 +42,7 @@ public class SpeedmentPlatform {
         init();
     }
 
+    @Api(version = 0)
     public static SpeedmentPlatform getInstance() {
         return PlatformHolder.INSTANCE;
     }
@@ -49,48 +52,60 @@ public class SpeedmentPlatform {
         private static final SpeedmentPlatform INSTANCE = new SpeedmentPlatform();
     }
 
+    @Api(version = 0)
     public <T extends Component> T put(Class<T> clazz, T component) {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(component);
-        final T oldPlugin = (T) plugins.get(clazz);
         component.added();
-        plugins.put(clazz, component);
-        if (oldPlugin != null) {
-            oldPlugin.removed();
+        final T old = (T) plugins.put(clazz, component);
+        if (old != null) {
+            old.removed();
         }
-        return oldPlugin;
+        return old;
     }
 
+    // Todo: Remove this method?
     public <T extends Component> T remove(Class<T> clazz) {
-        final T result = (T) plugins.remove(clazz);
-        if (result != null) {
-            result.removed();
+        final T old = (T) plugins.remove(clazz);
+        if (old != null) {
+            old.removed();
         }
-        return result;
+        return old;
     }
 
+    @Api(version = 0)
     public <T extends Component> T get(Class<T> clazz) {
         return (T) plugins.get(clazz);
     }
 
+    @Api(version = 0)
     public Stream<Entry<Class<?>, Component>> componentStream() {
         return plugins.entrySet().stream();
     }
 
     private void init() {
-        put(ProjectManager.class, new ProjectManagerImpl());
+        final ConfigEntityFactory configEntityFactory = new ConfigEntityFactoryImpl();
+        put(ConfigEntityFactory.class, configEntityFactory);
+        put(ProjectManager.class, configEntityFactory.newProjectManager());
     }
 
+    @Api(version = 0)
     public SpeedmentPlatform start() {
         // Todo: apply standard component
         running.set(true);
         return this;
     }
 
+    @Api(version = 0)
     public SpeedmentPlatform stop() {
         running.set(false);
-        componentStream().map(Entry::getValue).forEach(Component::removed);
+        //componentStream().map(Entry::getValue).forEach(Component::removed);
         return this;
+    }
+
+    @Api(version = 0)
+    public boolean isRunning() {
+        return running.get();
     }
 
 }

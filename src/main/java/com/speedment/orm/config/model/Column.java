@@ -16,13 +16,20 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.impl.ColumnImpl;
+import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
+import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 
 /**
  *
  * @author pemi
  */
-public interface Column extends ConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> {
+@Api(version = 0)
+public interface Column extends
+        ConfigEntity<Column, Table, ConfigEntity<?, Column, ?>>,
+        FieldStorageTypeable<Column>,
+        ColumnCompressionTypeable<Column> {
 
     public static Column newInstance() {
         return new ColumnImpl();

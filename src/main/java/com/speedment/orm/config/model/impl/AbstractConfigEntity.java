@@ -29,9 +29,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -47,6 +44,7 @@ import java.util.stream.Stream;
 public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
         implements ConfigEntity<T, P, C> {
 
+    private boolean enabled;
     private String name;
     private P parent;
     private final Map<String, C> children;
@@ -61,11 +59,22 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     }
 
     protected void setDefaults() {
+        setEnabled(true);
         setName(getBaseName() + "_" + Integer.toString(namingSequence.getAndIncrement()));
     }
 
     protected CharSequence getBaseName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public T setEnabled(boolean enabled) {
+        return with(enabled, e -> this.enabled = e);
     }
 
     @Override

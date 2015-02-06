@@ -18,17 +18,31 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.Component;
+import com.speedment.orm.platform.SpeedmentPlatform;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface ProjectManager extends ConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project>, Component {
+public interface ConfigEntityFactory extends Component {
 
-    default Project addNewProject() {
-        final Project e = Project.newInstance();
-        add(e);
-        return e;
+    static ConfigEntityFactory getInstance() {
+        return SpeedmentPlatform.getInstance().get(ConfigEntityFactory.class);
     }
+
+    ProjectManager newProjectManager();
+
+    Project newProject();
+
+    Dbms newDbms();
+
+    Schema newSchema();
+
+    Table newTable();
+
+    Column newColumn();
+
+    Index newIndex();
+
 }

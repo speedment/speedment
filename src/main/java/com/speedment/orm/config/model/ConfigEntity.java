@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.ConfigParameter;
 import com.speedment.util.Trees;
 import java.util.Optional;
@@ -32,7 +33,12 @@ import java.util.stream.Stream;
  * @param <C> The type of the child class.
  */
 //public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<P, ?, T>, C extends ConfigEntity<?, ?, ?>> extends Comparable<T> {
+@Api(version = 0)
 public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends Comparable<T> {
+
+    boolean isEnabled();
+
+    T setEnabled(boolean enabled);
 
     String getName();
 
@@ -83,6 +89,12 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
 
     default String getRelativeName(ConfigEntity<?, ?, ?> from) {
         return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.BACKWARD).map(NAME_MAPPER).collect(Collectors.joining("."));
+    }
+
+    default <E extends ConfigEntity> Optional<E> getParent(final Class<E> clazz) {
+        return (Optional<E>) Trees.walkOptional((ConfigEntity) this, PARENT_TRAVERSER, Trees.WalkingOrder.FORWARD)
+                .filter(e -> clazz.isAssignableFrom(e.getClass()))
+                .findFirst();
     }
 
     /**

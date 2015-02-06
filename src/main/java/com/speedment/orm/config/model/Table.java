@@ -16,16 +16,36 @@
  */
 package com.speedment.orm.config.model;
 
-import com.speedment.orm.config.model.impl.TableImpl;
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
+import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
+import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
 
 /**
  *
  * @author pemi
  */
-public interface Table extends ConfigEntity<Table, Schema, ConfigEntity<Table, ?, ?>> {
+@Api(version = 0)
+public interface Table extends
+        ConfigEntity<Table, Schema, ConfigEntity<?, Table, ?>>,
+        FieldStorageTypeable<Table>,
+        ColumnCompressionTypeable<Table>,
+        StorageEngineTypeable<Table> {
 
     public static Table newInstance() {
-        return new TableImpl();
+        return ConfigEntityFactory.getInstance().newTable();
+    }
+
+    default Column addNewColumn() {
+        final Column e = Column.newInstance();
+        add(e);
+        return e;
+    }
+
+    default Index addNewIndex() {
+        final Index e = Index.newInstance();
+        add(e);
+        return e;
     }
 
 }

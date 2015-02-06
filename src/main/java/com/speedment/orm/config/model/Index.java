@@ -16,12 +16,14 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.impl.IndexImpl;
 
 /**
  *
  * @author pemi
  */
+@Api(version = 0)
 public interface Index extends ConfigEntity<Index, Table, ConfigEntity<?, Index, ?>> {
 
     public static Index newInstance() {

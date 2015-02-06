@@ -92,6 +92,19 @@
             </plugin>-->
         </plugins>
     </build>
+            
+    <!--    Make sure that the Log4J API and Log4J Core versionw stay in sync-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>2.1</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
         
     <dependencies>
 
@@ -108,7 +121,7 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-        
+        <!--            <version>2.1</version>-->
         <!-- LICENSE INFORMATION
         Groovy:2.2.2
         Apache 2 License
@@ -121,6 +134,33 @@
             <groupId>org.codehaus.groovy</groupId>
             <version>2.2.2</version>
         </dependency>
+
+        <!-- The logger "Log4j2" was selected because of license terms (SLF4J (MIT), Logback(LGPL)) -->
+        <!-- LICENSE INFORMATION
+        Log4j2:2.1
+        Apache 2 License
+        http://logging.apache.org/log4j/2.x/license.html
+        2015-01-05
+        permin
+        -->        
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <!-- LICENSE INFORMATION
+                
+
+        Log4j2:2.1
+        Apache 2 License
+        http://logging.apache.org/log4j/2.x/license.html
+        2015-01-05
+        permin
+        -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        
     </dependencies>
     
 

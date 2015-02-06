@@ -16,16 +16,53 @@
  */
 package com.speedment.orm.config.model;
 
-import com.speedment.orm.config.model.impl.DbmsImpl;
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.parameters.DbmsType;
 
 /**
  *
  * @author pemi
  */
+@Api(version = 0)
 public interface Dbms extends ConfigEntity<Dbms, Project, Schema> {
 
     public static Dbms newInstance() {
-        return new DbmsImpl();
+        return ConfigEntityFactory.getInstance().newDbms();
     }
+
+    default Schema addNewSchema() {
+        final Schema e = Schema.newInstance();
+        add(e);
+        return e;
+    }
+
+    DbmsType getType();
+
+    Dbms setType(DbmsType dbmsType);
+
+    /**
+     *
+     * @param dbmsTypeName
+     * @return the DbmsType
+     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
+     * could not be found
+     */
+    Dbms setType(CharSequence dbmsTypeName);
+
+    CharSequence getIpAddress();
+
+    Dbms setIpAddress(CharSequence ipAddress);
+
+    int getPort();
+
+    Dbms setPort(int port);
+
+    CharSequence getUsername();
+
+    Dbms setUsername(CharSequence name);
+
+    CharSequence getPassword();
+
+    Dbms setPassword(CharSequence password);
 
 }

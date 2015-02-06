@@ -17,11 +17,36 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.parameters.ColumnCompressionType;
+import com.speedment.orm.config.model.parameters.FieldStorageType;
 
 /**
  *
  * @author pemi
  */
 public class ColumnImpl extends AbstractConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> implements Column {
+
+    private FieldStorageType fieldStorageType;
+    private ColumnCompressionType columnCompressionType;
+
+    @Override
+    public FieldStorageType getFieldStorageType() {
+        return fieldStorageType;
+    }
+
+    @Override
+    public Column setFieldStorageType(FieldStorageType fieldStorageType) {
+        return with(fieldStorageType, f -> this.fieldStorageType = f);
+    }
+
+    @Override
+    public ColumnCompressionType getColumnCompressionType() {
+        return columnCompressionType;
+    }
+
+    @Override
+    public Column setColumnCompressionType(ColumnCompressionType fieldStorageType) {
+        return with(fieldStorageType, f -> this.columnCompressionType = f);
+    }
 
 }

@@ -14,21 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model;
-
-import com.speedment.orm.annotations.Api;
-import com.speedment.orm.platform.Component;
+package com.speedment.orm.db;
 
 /**
  *
  * @author pemi
  */
-@Api(version = 0)
-public interface ProjectManager extends ConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project>, Component {
-
-    default Project addNewProject() {
-        final Project e = Project.newInstance();
-        add(e);
-        return e;
-    }
+public class MySQL {
+    
 }

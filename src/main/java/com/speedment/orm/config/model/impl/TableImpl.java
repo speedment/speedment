@@ -17,11 +17,48 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.parameters.ColumnCompressionType;
+import com.speedment.orm.config.model.parameters.FieldStorageType;
+import com.speedment.orm.config.model.parameters.StorageEngineType;
 
 /**
  *
  * @author pemi
  */
-public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<Table, ?, ?>> implements Table {
+public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<?, Table, ?>> implements Table {
+
+    private FieldStorageType fieldStorageType;
+    private ColumnCompressionType columnCompressionType;
+    private StorageEngineType storageEngineType;
+
+    @Override
+    public FieldStorageType getFieldStorageType() {
+        return fieldStorageType;
+    }
+
+    @Override
+    public Table setFieldStorageType(FieldStorageType fieldStorageType) {
+        return with(fieldStorageType, f -> this.fieldStorageType = f);
+    }
+
+    @Override
+    public ColumnCompressionType getColumnCompressionType() {
+        return columnCompressionType;
+    }
+
+    @Override
+    public Table setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        return with(fieldStorageType, c -> this.fieldStorageType = c);
+    }
+
+    @Override
+    public StorageEngineType getStorageEngineType() {
+        return storageEngineType;
+    }
+
+    @Override
+    public Table setFieldStorageType(StorageEngineType storageEngineType) {
+        return with(storageEngineType, s -> this.storageEngineType = s);
+    }
 
 }
