@@ -20,6 +20,8 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
+import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
@@ -32,18 +34,21 @@ public interface Schema extends
         ColumnCompressionTypeable<Schema>,
         StorageEngineTypeable<Schema> {
 
-    public static Schema newInstance() {
-        return ConfigEntityFactory.getInstance().newSchema();
+    @Override
+    default Optional<Class<? extends Dbms>> getParentInterfaceMainClass() {
+        return Optional.of(Dbms.class);
     }
 
     default Table addNewTable() {
-        final Table e = Table.newInstance();
+        final Table e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newTable();
         add(e);
         return e;
     }
 
+    @External
     boolean isDefault();
 
+    @External
     Schema setDefault(boolean default_);
 
 }

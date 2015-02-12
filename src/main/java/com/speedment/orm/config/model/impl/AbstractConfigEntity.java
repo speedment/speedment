@@ -17,18 +17,33 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.ConfigParameter;
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.External;
+import com.speedment.orm.config.model.OrdinalConfigEntity;
 import com.speedment.util.Beans;
+import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
+import com.speedment.util.Trees;
+import com.speedment.util.stream.CollectorUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -44,26 +59,33 @@ import java.util.stream.Stream;
 public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
         implements ConfigEntity<T, P, C> {
 
+    private static final String NL = "\n";
+
     private boolean enabled;
     private String name;
     private P parent;
     private final Map<String, C> children;
     private final Set<ConfigParameter<?>> configParameters;
     private final AtomicInteger namingSequence;
+    private final Map<Class<? extends ConfigEntity<?, ?, ?>>, AtomicInteger> childSequences;
 
     public AbstractConfigEntity() {
         children = new ConcurrentSkipListMap<>();
         configParameters = new ConcurrentSkipListSet<>();
-        namingSequence = new AtomicInteger(1);
+        namingSequence = new AtomicInteger(ORDINAL_FIRST);
+        childSequences = new ConcurrentHashMap<>();
+        init();
+    }
+
+    protected void init() {
+        setEnabled(true);
+        setName(getBaseName() + "_" + Integer.toString(getNamingSequence().getAndIncrement()));
         setDefaults();
     }
 
-    protected void setDefaults() {
-        setEnabled(true);
-        setName(getBaseName() + "_" + Integer.toString(namingSequence.getAndIncrement()));
-    }
+    protected abstract void setDefaults();
 
-    protected CharSequence getBaseName() {
+    protected String getBaseName() {
         return getClass().getSimpleName();
     }
 
@@ -83,8 +105,8 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     }
 
     @Override
-    public T setName(CharSequence name) {
-        return with(name, n -> this.name = Objects.requireNonNull(n).toString());
+    public T setName(String name) {
+        return with(name, n -> this.name = Objects.requireNonNull(n));
     }
 
     @Override
@@ -124,11 +146,18 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     // Children
     @Override
     public T add(final C child) {
-        getParent().ifPresent(p -> {
+        child.getParent().ifPresent(p -> {
             throw new IllegalStateException("It is illegal to add a child that already has a parent. child=" + child + ", parent=" + p);
         });
         //addParentToChild((ConfigEntity<P, ?, C>) (ConfigEntity) this, (ConfigEntity<C, P, ?>) (ConfigEntity) child);
         castAndSetParent(child);
+        if (child instanceof OrdinalConfigEntity) {
+            @SuppressWarnings("cast")
+            final OrdinalConfigEntity<?, T, ?> ordinalConfigEntity = (OrdinalConfigEntity<?, T, ?>) child;
+            if (ordinalConfigEntity.getOrdinalPosition() == ORDINAL_UNSET) {
+                ordinalConfigEntity.setOrdinalPosition(getChildSequence(child.getInterfaceMainClass()).getAndIncrement());
+            }
+        }
         /*
          addParentToChild(this, child);
          @SuppressWarnings("unchecked")
@@ -142,7 +171,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
     @Override
     public T remove(C child) {
-        if (getParent().isPresent() && getParent().get() == this) {
+        if (child.getParent().isPresent() && child.getParent().get() == this) {
             setParent(null);
         }
         return with(child, children::remove);
@@ -154,7 +183,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     }
 
     @Override
-    public Stream<? extends C> childrenStream() {
+    public Stream<? extends C> stream() {
         return children.values().stream();
     }
 
@@ -188,6 +217,88 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     @Override
     public int compareTo(T o) {
         return getName().compareTo(o.getName());
+    }
+
+    protected static String makeNullSafeString(CharSequence charSequence) {
+        return (charSequence == null) ? null : charSequence.toString();
+    }
+
+    protected AtomicInteger getNamingSequence() {
+        return namingSequence;
+    }
+
+    protected AtomicInteger getChildSequence(Class<? extends ConfigEntity<?, ?, ?>> clazz) {
+        return childSequences.computeIfAbsent(clazz, c -> new AtomicInteger(ORDINAL_FIRST));
+    }
+
+    protected Set<Method> getMethods(Predicate<Method> filter) {
+        return addMethods(new HashSet<>(), getClass(), filter);
+    }
+
+    private static final Predicate<Method> METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers());
+    private static final Predicate<Method> METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is"));
+    private static final Predicate<Method> METHOD_IS_EXTERNAL = AbstractConfigEntity::isExternal;
+
+    private static boolean isExternal(Method method) {
+        return isExternal(method, method.getDeclaringClass());
+    }
+
+    private static boolean isExternal(final Method method, final Class<?> clazz) {
+        if (method == null || clazz == null) {
+            return false;
+        }
+        if (method.getAnnotation(External.class) != null) {
+            return true;
+        }
+        // Also try the superClass and all the interfaces it implements
+        final List<Class<?>> classCandidates = new ArrayList<>(Arrays.asList(clazz.getInterfaces()));
+        final Class<?> superClass = clazz.getSuperclass();
+        if (superClass != null) {
+            classCandidates.add(superClass);
+        }
+        for (final Class<?> classCandidate : classCandidates) {
+            try {
+                if (isExternal(classCandidate.getMethod(method.getName(), method.getParameterTypes()), classCandidate)) {
+                    return true;
+                }
+            } catch (NoSuchMethodException | SecurityException e) {
+                // ignore
+            }
+        }
+        return false;
+    }
+
+    private Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {
+        if (clazz == Object.class) {
+            return methods;
+        }
+        Stream.of(clazz.getDeclaredMethods())
+                .filter(filter)
+                .forEach(methods::add);
+        addMethods(methods, clazz.getSuperclass(), filter); // Recursively add the superclass methods
+        return methods;
+    }
+
+    private StringBuilder indent(StringBuilder sb, int indentLevel) {
+        IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
+        return sb;
+    }
+
+    @Override
+    public String toGroovy(int indentLevel) {
+        return CollectorUtil.of(StringBuilder::new, sb -> {
+            getMethods(METHOD_IS_GETTER.and(METHOD_IS_PUBLIC).and(METHOD_IS_EXTERNAL))
+                    .stream()
+                    .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
+                    .forEach(m -> getterBeanPropertyNameAndValue(m, this)
+                            .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL)));
+
+            stream().forEach(c -> {
+                indent(sb, indentLevel).append(c.getInterfaceMainClass().getSimpleName()).append(" {").append(NL);
+                sb.append(c.toGroovy(indentLevel + 1));
+                indent(sb, indentLevel).append("}").append(NL);
+            });
+        }, StringBuilder::toString);
     }
 
 }

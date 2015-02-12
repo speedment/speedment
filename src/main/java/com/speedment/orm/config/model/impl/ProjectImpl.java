@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import java.util.Objects;
 
 /**
  *
@@ -24,26 +25,37 @@ import com.speedment.orm.config.model.*;
  */
 public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, Dbms> implements Project {
 
-    private CharSequence packetName, packetLocation;
+    private String packetName, packetLocation;
 
     @Override
-    public CharSequence getPacketName() {
+    protected void setDefaults() {
+        setPacketLocation("src/main/java");
+        setPacketName("com.company.speedment.orm.test");
+    }
+
+    @Override
+    public Class<Project> getInterfaceMainClass() {
+        return Project.class;
+    }
+
+    @Override
+    public String getPacketName() {
         return packetName;
     }
 
     @Override
-    public Project getPacketName(CharSequence packetName) {
-        return with(packetName, pn -> this.packetName = pn);
+    public Project setPacketName(CharSequence packetName) {
+        return with(Objects.requireNonNull(packetName), pn -> this.packetName = makeNullSafeString(pn));
     }
 
     @Override
-    public CharSequence getPacketLocation() {
+    public String getPacketLocation() {
         return packetLocation;
     }
 
     @Override
     public Project setPacketLocation(CharSequence packetLocation) {
-        return with(packetLocation, pl -> this.packetLocation = pl);
+        return with(Objects.requireNonNull(packetLocation), pl -> this.packetLocation = makeNullSafeString(pl));
     }
 
 }

@@ -16,6 +16,9 @@
  */
 package com.speedment.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -42,6 +45,41 @@ public class Beans {
     public static <P1, P2, T> T with(final T thizz, final P1 firstParameter, final P2 secondParameter, final BiConsumer<P1, P2> biConsumer) {
         biConsumer.accept(firstParameter, secondParameter);
         return thizz;
+    }
+
+    public static String beanPropertyName(String getterName) {
+        final int startIndex = (getterName.startsWith("is")) ? 2 : 3;
+        return getterName.substring(startIndex, startIndex + 1).toLowerCase() + getterName.substring(startIndex + 1);
+    }
+
+    public static String beanPropertyName(Method m) {
+        return beanPropertyName(m.getName());
+    }
+
+    public static Optional<String> getterBeanPropertyNameAndValue(Method m, Object invocationTarget) {
+
+        Object value;
+        try {
+            value = m.invoke(invocationTarget);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            return Optional.empty();
+        }
+        if (value instanceof Optional) {
+            final Optional<?> optional = (Optional) value;
+            if (optional.isPresent()) {
+                value = optional.get();
+            } else {
+                return Optional.empty();
+            }
+        }
+
+        final String quote;
+        if (value instanceof String) {
+            quote = "\"";
+        } else {
+            quote = "";
+        }
+        return Optional.of(beanPropertyName(m.getName()) + " = " + quote + String.valueOf(value) + quote + ";");
     }
 
 }

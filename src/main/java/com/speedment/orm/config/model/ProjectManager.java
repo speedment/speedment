@@ -18,16 +18,24 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.Component;
+import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface ProjectManager extends ConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project>, Component {
+public interface ProjectManager extends
+        ConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project>, Component {
+
+    @Override
+    default Optional<Class<? extends ConfigEntity<?, ?, ProjectManager>>> getParentInterfaceMainClass() {
+        return Optional.empty();
+    }
 
     default Project addNewProject() {
-        final Project e = Project.newInstance();
+        final Project e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
         add(e);
         return e;
     }

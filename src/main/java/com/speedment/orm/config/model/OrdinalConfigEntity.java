@@ -14,26 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.speedment.orm.config.model.parameters;
-
-import com.speedment.orm.config.model.External;
+package com.speedment.orm.config.model;
 
 /**
  *
  * @author pemi
- * @param <T> Setter return type.
+ * @param <T> The type of the implementing class
+ * @param <P> The type of the parent class.
+ * @param <C> The type of the child class.
  */
-public interface StorageEngineTypeable<T> {
+public interface OrdinalConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
+        ConfigEntity<T, P, C> {
 
-    @External
-    StorageEngineType getStorageEngineType();
+    int getOrdinalPosition();
 
-    @External
-    T setStorageEngineType(StorageEngineType storageEngineType);
+    T setOrdinalPosition(int ordinalPosition);
 
 }

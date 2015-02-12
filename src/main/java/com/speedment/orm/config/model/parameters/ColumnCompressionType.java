@@ -23,6 +23,7 @@ package com.speedment.orm.config.model.parameters;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
 @Api(version = 0)
 public enum ColumnCompressionType implements Nameable<ColumnCompressionType> {
 
-    INHERIT("Inherit from Table"), NONE("None"), DEDUPLICATION("Deduplication");
+    INHERIT("Inherit from parent"), NONE("None"), DEDUPLICATION("Deduplication");
     static final Map<String, ColumnCompressionType> NAME_MAP = Nameable.Hidden.buildMap(values());
 
     private ColumnCompressionType(final String name) {
@@ -53,12 +54,13 @@ public enum ColumnCompressionType implements Nameable<ColumnCompressionType> {
 
     private static final Predicate<ColumnCompressionType> IS_INHERIT_PREDICATE = (f) -> f == INHERIT;
 
-    public static <T extends ConfigEntity<?, ?, ?>> Stream<ColumnCompressionType> streamFor(final T entity) {
+    public static <T extends ConfigEntity<T, ?, ?>> Stream<ColumnCompressionType> streamFor(final T entity) {
+        Objects.requireNonNull(entity);
         try {
-            final Optional<? extends ConfigEntity<?, ?, ?>> parent = entity.getParent();
-            if (parent.isPresent()) {
+            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
+            if (parentClass.isPresent()) {
                 // Check if the parent can have FieldStorageTypes. 
-                parent.get().getClass().getMethod("get" + FieldStorageType.class.getSimpleName());
+                parentClass.get().getMethod("get" + ColumnCompressionType.class.getSimpleName());
                 return stream();
             }
         } catch (NoSuchMethodException nsm) {
@@ -67,7 +69,8 @@ public enum ColumnCompressionType implements Nameable<ColumnCompressionType> {
         return stream().filter(IS_INHERIT_PREDICATE.negate());
     }
 
-    public static <T extends ConfigEntity<?, ?, ?>> ColumnCompressionType defaultFor(final T entity) {
+    public static <T extends ConfigEntity<T, ?, ?>> ColumnCompressionType defaultFor(final T entity) {
+        Objects.requireNonNull(entity);
         return streamFor(entity).filter(IS_INHERIT_PREDICATE).findAny().orElse(NONE);
     }
 

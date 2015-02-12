@@ -52,6 +52,12 @@ public class SpeedmentPlatform {
         private static final SpeedmentPlatform INSTANCE = new SpeedmentPlatform();
     }
 
+    private void init() {
+        final ConfigEntityFactory configEntityFactory = new ConfigEntityFactoryImpl();
+        put(ConfigEntityFactory.class, configEntityFactory);
+        put(ProjectManager.class, configEntityFactory.newProjectManager());
+    }
+
     @Api(version = 0)
     public <T extends Component> T put(Class<T> clazz, T component) {
         Objects.requireNonNull(clazz);
@@ -83,12 +89,6 @@ public class SpeedmentPlatform {
         return plugins.entrySet().stream();
     }
 
-    private void init() {
-        final ConfigEntityFactory configEntityFactory = new ConfigEntityFactoryImpl();
-        put(ConfigEntityFactory.class, configEntityFactory);
-        put(ProjectManager.class, configEntityFactory.newProjectManager());
-    }
-
     @Api(version = 0)
     public SpeedmentPlatform start() {
         // Todo: apply standard component
@@ -108,4 +108,9 @@ public class SpeedmentPlatform {
         return running.get();
     }
 
+    @Api(version = 0)
+    public ConfigEntityFactory getConfigEntityFactory() {
+        return get(ConfigEntityFactory.class);
+    }
+    
 }

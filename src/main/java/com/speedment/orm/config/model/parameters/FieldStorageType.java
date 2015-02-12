@@ -19,6 +19,7 @@ package com.speedment.orm.config.model.parameters;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -49,12 +50,13 @@ public enum FieldStorageType implements Nameable<FieldStorageType> {
 
     private static final Predicate<FieldStorageType> IS_INHERIT_PREDICATE = (f) -> f == INHERIT;
 
-    public static <T extends ConfigEntity<?, ?, ?>> Stream<FieldStorageType> streamFor(final T entity) {
+    public static <T extends ConfigEntity<T, ?, ?>> Stream<FieldStorageType> streamFor(final T entity) {
+        Objects.requireNonNull(entity);
         try {
-            final Optional<? extends ConfigEntity<?, ?, ?>> parent = entity.getParent();
-            if (parent.isPresent()) {
+            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
+            if (parentClass.isPresent()) {
                 // Check if the parent can have FieldStorageTypes. 
-                parent.get().getClass().getMethod("get" + FieldStorageType.class.getSimpleName());
+                parentClass.get().getMethod("get" + FieldStorageType.class.getSimpleName());
                 return stream();
             }
         } catch (NoSuchMethodException nsm) {
@@ -63,7 +65,8 @@ public enum FieldStorageType implements Nameable<FieldStorageType> {
         return stream().filter(IS_INHERIT_PREDICATE.negate());
     }
 
-    public static <T extends ConfigEntity<?, ?, ?>> FieldStorageType defaultFor(final T entity) {
+    public static <T extends ConfigEntity<T, ?, ?>> FieldStorageType defaultFor(final T entity) {
+        Objects.requireNonNull(entity);
         return streamFor(entity).filter(IS_INHERIT_PREDICATE).findAny().orElse(WRAPPER);
     }
 

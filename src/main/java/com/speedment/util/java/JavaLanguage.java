@@ -18,11 +18,11 @@ package com.speedment.util.java;
 
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
+import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
 import com.speedment.util.stream.StreamUtil;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  *
@@ -182,10 +182,6 @@ public class JavaLanguage {
         }
 
         return result;
-    }
-
-    private static <T> Set<T> unmodifiableSetOf(T... items) {
-        return Stream.of(items).collect(toUnmodifiableSet());
     }
 
 }

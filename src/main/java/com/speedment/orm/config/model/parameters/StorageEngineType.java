@@ -21,9 +21,12 @@
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.ConfigEntity;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -33,19 +36,23 @@ import java.util.stream.Stream;
 @Api(version = 0)
 public enum StorageEngineType implements Nameable<StorageEngineType> {
 
+    INHERIT("Inherit from parent", ConcurrentHashMap.class, true),
     ON_HEAP("On Heap", ConcurrentHashMap.class, true),
     OFF_HEAP("Off Heap", ConcurrentHashMap.class, true),
     HAZELCAST("Hazelcast", ConcurrentHashMap.class, false);
     private final String name;
-    private final Class<? extends Map> implementationClass;
+    private final Class<?> implementationClass;
     private final boolean useNativeMaps;
     public final static StorageEngineType DEFAULT_STORAGE_ENGINE = ON_HEAP;
 
     static final Map<String, StorageEngineType> NAME_MAP = Nameable.Hidden.buildMap(values());
 
-    private StorageEngineType(final String name, final Class<? extends Map> implementationClass, boolean useNativeMaps) {
-        this.name = name;
-        this.implementationClass = implementationClass;
+    private StorageEngineType(final String name, final Class<?> implementationClass, boolean useNativeMaps) {
+        this.name = Objects.requireNonNull(name);
+        this.implementationClass = Objects.requireNonNull(implementationClass);
+        if (!Map.class.isAssignableFrom(implementationClass)) {
+            throw new IllegalArgumentException("Implementing class must implement Map");
+        }
         this.useNativeMaps = useNativeMaps;
     }
 
@@ -57,7 +64,7 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
     /**
      * @return the implName
      */
-    public Class<? extends Map> getImplementationClass() {
+    public Class<?> getImplementationClass() {
         return implementationClass;
     }
 
@@ -97,6 +104,28 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
 
     public boolean isUseNativeMaps() {
         return useNativeMaps;
+    }
+
+    private static final Predicate<StorageEngineType> IS_INHERIT_PREDICATE = (f) -> f == INHERIT;
+
+    public static <T extends ConfigEntity<T, ?, ?>> Stream<StorageEngineType> streamFor(final T entity) {
+        Objects.requireNonNull(entity);
+        try {
+            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
+            if (parentClass.isPresent()) {
+                // Check if the parent can have FieldStorageTypes. 
+                parentClass.get().getMethod("get" + StorageEngineType.class.getSimpleName());
+                return stream();
+            }
+        } catch (NoSuchMethodException nsm) {
+            // Ignore
+        }
+        return stream().filter(IS_INHERIT_PREDICATE.negate());
+    }
+
+    public static <T extends ConfigEntity<T, ?, ?>> StorageEngineType defaultFor(final T entity) {
+        Objects.requireNonNull(entity);
+        return streamFor(entity).filter(IS_INHERIT_PREDICATE).findAny().orElse(ON_HEAP);
     }
 
     public static Stream<StorageEngineType> stream() {

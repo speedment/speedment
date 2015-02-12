@@ -24,4 +24,26 @@ import com.speedment.orm.config.model.*;
  */
 public class IndexImpl extends AbstractConfigEntity<Index, Table, ConfigEntity<?, Index, ?>> implements Index {
 
+    private int ordinalPosition;
+
+    @Override
+    protected void setDefaults() {
+        ordinalPosition = ORDINAL_UNSET;
+    }
+
+    @Override
+    public Class<Index> getInterfaceMainClass() {
+        return Index.class;
+    }
+
+    @Override
+    public int getOrdinalPosition() {
+        return ordinalPosition;
+    }
+
+    @Override
+    public Index setOrdinalPosition(int ordinalPosition) {
+        return with(ordinalPosition, op -> this.ordinalPosition = op);
+    }
+
 }

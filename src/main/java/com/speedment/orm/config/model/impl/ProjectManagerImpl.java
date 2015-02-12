@@ -27,4 +27,13 @@ import com.speedment.orm.config.model.ProjectManager;
 public class ProjectManagerImpl extends AbstractConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project> implements ProjectManager {
 
     
+    @Override
+    protected void setDefaults() {
+        setName(ProjectManager.class.getSimpleName());
+    }
+
+    @Override
+    public Class<ProjectManager> getInterfaceMainClass() {
+        return ProjectManager.class;
+    }
 }

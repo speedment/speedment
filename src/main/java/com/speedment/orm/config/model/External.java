@@ -14,26 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.orm.config.model;
 
-import com.speedment.orm.config.model.External;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Marks a Method as exposed to external configuration.
+ * <p>
+ * A Method that is marked as exposed will be usable in GUI, configuration files
+ * etc.
  *
  * @author pemi
- * @param <T> Setter return type.
  */
-public interface StorageEngineTypeable<T> {
-
-    @External
-    StorageEngineType getStorageEngineType();
-
-    @External
-    T setStorageEngineType(StorageEngineType storageEngineType);
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface External {
 
 }

@@ -32,6 +32,18 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     private StorageEngineType storageEngineType;
 
     @Override
+    protected void setDefaults() {
+        setFieldStorageType(FieldStorageType.defaultFor(this));
+        setColumnCompressionType(ColumnCompressionType.defaultFor(this));
+        setStorageEngineType(StorageEngineType.defaultFor(this));
+    }
+
+    @Override
+    public Class<Table> getInterfaceMainClass() {
+        return Table.class;
+    }
+
+    @Override
     public FieldStorageType getFieldStorageType() {
         return fieldStorageType;
     }
@@ -48,7 +60,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
 
     @Override
     public Table setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return with(fieldStorageType, c -> this.fieldStorageType = c);
+        return with(columnCompressionType, c -> this.columnCompressionType = c);
     }
 
     @Override
@@ -57,7 +69,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     }
 
     @Override
-    public Table setFieldStorageType(StorageEngineType storageEngineType) {
+    public Table setStorageEngineType(StorageEngineType storageEngineType) {
         return with(storageEngineType, s -> this.storageEngineType = s);
     }
 

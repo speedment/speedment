@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.ConfigEntityFactory;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Index;
@@ -24,6 +25,9 @@ import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.ProjectManager;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 
 /**
  *
@@ -31,39 +35,33 @@ import com.speedment.orm.config.model.Table;
  */
 public class ConfigEntityFactoryImpl implements ConfigEntityFactory {
 
-    @Override
-    public ProjectManager newProjectManager() {
-        return new ProjectManagerImpl();
+    private final ConcurrentMap<Class<? extends ConfigEntity<?, ?, ?>>, Supplier<? extends ConfigEntity<?, ?, ?>>> factoryMap;
+
+    public ConfigEntityFactoryImpl() {
+        this.factoryMap = new ConcurrentHashMap<>();
+        init();
+    }
+
+    protected void init() {
+        registerFactoryClass(ProjectManager.class, ProjectManagerImpl::new);
+        registerFactoryClass(Project.class, ProjectImpl::new);
+        registerFactoryClass(Dbms.class, DbmsImpl::new);
+        registerFactoryClass(Schema.class, SchemaImpl::new);
+        registerFactoryClass(Table.class, TableImpl::new);
+        registerFactoryClass(Column.class, ColumnImpl::new);
+        registerFactoryClass(Index.class, IndexImpl::new);
+    }
+
+    // Using a method instead of just put(), we can correlate the type of the Key and Value.
+    private <T extends ConfigEntity<T, ?, ?>> void registerFactoryClass(Class<T> clazz, Supplier<? extends T> supplier) {
+        factoryMap.put(clazz, supplier);
     }
 
     @Override
-    public Project newProject() {
-        return new ProjectImpl();
-    }
-
-    @Override
-    public Dbms newDbms() {
-        return new DbmsImpl();
-    }
-
-    @Override
-    public Schema newSchema() {
-        return new SchemaImpl();
-    }
-
-    @Override
-    public Table newTable() {
-        return new TableImpl();
-    }
-
-    @Override
-    public Column newColumn() {
-        return new ColumnImpl();
-    }
-
-    @Override
-    public Index newIndex() {
-        return new IndexImpl();
+    public <T extends ConfigEntity<T, ?, ?>> T newOf(Class<T> interfaceMainClass) {
+        return (T) factoryMap.getOrDefault(interfaceMainClass, () -> {
+            throw new IllegalArgumentException("Unable to instanciate class of " + interfaceMainClass.getName() + ", know " + factoryMap.keySet());
+        }).get();
     }
 
 }

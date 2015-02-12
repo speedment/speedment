@@ -18,6 +18,7 @@ package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.parameters.DbmsType;
+import java.util.Optional;
 
 /**
  *
@@ -26,9 +27,23 @@ import com.speedment.orm.config.model.parameters.DbmsType;
 public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implements Dbms {
 
     private DbmsType type;
-    private CharSequence ipAddress;
-    private int port;
-    private CharSequence username, password;
+    private String ipAddress;
+    private Integer port;
+    private String username, password;
+
+    @Override
+    protected void setDefaults() {
+        setType(DbmsType.MYSQL);
+        setIpAddress("localhost");
+        setPort(getType().getDefaultPort());
+        setUsername("root");
+        setPassword("");
+    }
+
+    @Override
+    public Class<Dbms> getInterfaceMainClass() {
+        return Dbms.class;
+    }
 
     @Override
     public DbmsType getType() {
@@ -46,43 +61,43 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public CharSequence getIpAddress() {
-        return ipAddress;
+    public Optional<String> getIpAddress() {
+        return Optional.ofNullable(ipAddress);
     }
 
     @Override
     public Dbms setIpAddress(CharSequence ipAddress) {
-        return with(ipAddress, i -> this.ipAddress = i);
+        return with(ipAddress, i -> this.ipAddress = makeNullSafeString(i));
     }
 
     @Override
-    public int getPort() {
-        return port;
+    public Optional<Integer> getPort() {
+        return Optional.of(port);
     }
 
     @Override
-    public Dbms setPort(int port) {
+    public Dbms setPort(Integer port) {
         return with(port, p -> this.port = p);
     }
 
     @Override
-    public CharSequence getUsername() {
-        return username;
+    public Optional<String> getUsername() {
+        return Optional.of(username);
     }
 
     @Override
     public Dbms setUsername(CharSequence name) {
-        return with(name, n -> this.username = n);
+        return with(name, n -> this.username = makeNullSafeString(n));
     }
 
     @Override
-    public CharSequence getPassword() {
-        return password;
+    public Optional<String> getPassword() {
+        return Optional.ofNullable(password);
     }
 
     @Override
     public Dbms setPassword(CharSequence password) {
-        return with(password, p -> this.password = p);
+        return with(password, p -> this.password = makeNullSafeString(p));
     }
 
 }

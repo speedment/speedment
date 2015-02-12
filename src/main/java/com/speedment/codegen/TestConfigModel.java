@@ -17,11 +17,13 @@
 package com.speedment.codegen;
 
 import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.ConfigEntityFactory;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.ProjectManager;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.config.model.impl.AbstractConfigEntity;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import com.speedment.util.Trees;
 import java.util.stream.Collectors;
@@ -35,32 +37,47 @@ public class TestConfigModel {
     public static void main(String[] args) {
 
         final SpeedmentPlatform sp = SpeedmentPlatform.getInstance().start();
+        ConfigEntityFactory factory = sp.getConfigEntityFactory();
 
         ProjectManager pm = sp.get(ProjectManager.class);
 
-        final Table table = Table.newInstance();
+        final Table table = factory.newTable();
 
-        pm.addNewProject().setName("olle")
-                .addNewDbms()
-                .addNewSchema()
-                .addNewTable()
-                .addNewColumn()
-                .setName("id");
+        pm.addNewProject().setName("myProject")
+                .addNewDbms().setName("myDbms")
+                .addNewSchema().setName("mySchema")
+                .addNewTable().setName("myTable")
+                .addNewColumn().setName("myColumn");
 
-        pm.add(Project.newInstance()
+//        ((AbstractConfigEntity) factory.newTable()).test();
+//        System.out.println(pm.toGroovy(0));
+//
+//        System.out.println(factory.newDbms().toGroovy(0));
+//
+//        System.out.println(factory.newSchema().toGroovy(0));
+//        System.out.println(factory.newTable().toGroovy(0));
+        Project p = pm.stream().findAny().get();
+
+        System.out.println(p.toGrovy());
+
+        if (1 == 1) {
+            return;
+        }
+
+        pm.add(factory.newProject()
                 .setName("myProject")
-                .add(Dbms.newInstance()
+                .add(factory.newDbms()
                         .setName("someDatabase")
-                        .add(Schema.newInstance()
+                        .add(factory.newSchema()
                                 .add(table)
                         )
                 )
         );
 
-        final String s = pm.childrenStream().map(Project::getName).collect(Collectors.joining());
+        final String s = pm.stream().map(Project::getName).collect(Collectors.joining());
         System.out.println(s);
 
-        System.out.println(Trees.traverse((ConfigEntity) pm, ConfigEntity::childrenStream, Trees.TraversalOrder.DEPTH_FIRST_PRE)
+        System.out.println(Trees.traverse((ConfigEntity) pm, ConfigEntity::stream, Trees.TraversalOrder.DEPTH_FIRST_PRE)
                 .map(ConfigEntity::getName)
                 .collect(Collectors.joining(", ", "[", "]")
                 ));
@@ -75,7 +92,7 @@ public class TestConfigModel {
         System.out.println(pm.getName());
         System.out.println(pm);
 
-        System.out.println(pm.childrenStream().count());
+        System.out.println(pm.stream().count());
 
     }
 

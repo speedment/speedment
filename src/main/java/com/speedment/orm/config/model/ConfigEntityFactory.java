@@ -18,7 +18,6 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.Component;
-import com.speedment.orm.platform.SpeedmentPlatform;
 
 /**
  *
@@ -27,22 +26,38 @@ import com.speedment.orm.platform.SpeedmentPlatform;
 @Api(version = 0)
 public interface ConfigEntityFactory extends Component {
 
-    static ConfigEntityFactory getInstance() {
-        return SpeedmentPlatform.getInstance().get(ConfigEntityFactory.class);
+    default ProjectManager newProjectManager() {
+        return newOf(ProjectManager.class);
     }
 
-    ProjectManager newProjectManager();
+    default Project newProject() {
+        return newOf(Project.class);
+    }
 
-    Project newProject();
+    default Dbms newDbms() {
+        return newOf(Dbms.class);
+    }
 
-    Dbms newDbms();
+    default public Schema newSchema() {
+        return newOf(Schema.class);
+    }
 
-    Schema newSchema();
+    default Table newTable() {
+        return newOf(Table.class);
+    }
 
-    Table newTable();
+    default Column newColumn() {
+        return newOf(Column.class);
+    }
 
-    Column newColumn();
+    default Index newIndex() {
+        return newOf(Index.class);
+    }
 
-    Index newIndex();
+    default <T extends ConfigEntity<T, ?, ?>> T newOf(T rawModel) {
+        return newOf(rawModel.getInterfaceMainClass());
+    }
+
+    <T extends ConfigEntity<T, ?, ?>> T newOf(Class<T> interfaceMainClass);
 
 }

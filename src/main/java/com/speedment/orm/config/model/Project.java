@@ -17,30 +17,38 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface Project extends ConfigEntity<Project, ProjectManager, Dbms> {
+public interface Project extends
+        ConfigEntity<Project, ProjectManager, Dbms> {
 
-    public static Project newInstance() {
-        return ConfigEntityFactory.getInstance().newProject();
+    @Override
+    default Optional<Class<? extends ProjectManager>> getParentInterfaceMainClass() {
+        return Optional.of(ProjectManager.class);
     }
 
     default Dbms addNewDbms() {
-        final Dbms e = Dbms.newInstance();
+        final Dbms e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newDbms();;
         add(e);
         return e;
     }
 
-    CharSequence getPacketName();
+    @External
+    String getPacketName();
 
-    Project getPacketName(CharSequence packetName);
+    @External
+    Project setPacketName(CharSequence packetName);
 
-    CharSequence getPacketLocation();
+    @External
+    String getPacketLocation();
 
+    @External
     Project setPacketLocation(CharSequence packetLocation);
 
 }

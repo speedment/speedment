@@ -28,7 +28,8 @@ import java.lang.annotation.Target;
  * <p>
  * "Compatible" is defined as follows:
  * <p>
- * Method: Its signature (i.e. name and parameters), and return type will remain.
+ * Method: Its signature (i.e. name and parameters), and return type will
+ * remain.
  * <p>
  * Interface: Its name and all its declared methods with its return type and
  * signature and static fields will remain. New methods and static field might
@@ -39,9 +40,23 @@ import java.lang.annotation.Target;
  *
  * @author pemi
  */
+@Api(version = 0, snapshot = true)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.CONSTRUCTOR})
 public @interface Api {
 
+    /**
+     * Returns the current API version.
+     *
+     * @return the current API version.
+     */
     int version();
+
+    /**
+     * Returns if this API version is a snapshot, i.e. it is not yet "frozen"
+     * and may change within the given API version.
+     *
+     * @return true if this API version is a snapshot, false otherwise.
+     */
+    boolean snapshot() default false;
 }

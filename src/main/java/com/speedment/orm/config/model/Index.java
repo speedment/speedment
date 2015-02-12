@@ -17,17 +17,19 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.impl.IndexImpl;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface Index extends ConfigEntity<Index, Table, ConfigEntity<?, Index, ?>> {
+public interface Index extends
+        OrdinalConfigEntity<Index, Table, ConfigEntity<?, Index, ?>> {
 
-    public static Index newInstance() {
-        return new IndexImpl();
+    @Override
+    default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
+        return Optional.of(Table.class);
     }
 
 }

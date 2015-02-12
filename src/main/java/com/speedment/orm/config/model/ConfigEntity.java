@@ -34,15 +34,26 @@ import java.util.stream.Stream;
  */
 //public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<P, ?, T>, C extends ConfigEntity<?, ?, ?>> extends Comparable<T> {
 @Api(version = 0)
-public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends Comparable<T> {
+public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
+        Comparable<T> {
 
+    static final int INDEX_FIRST = 0;
+    static final int ORDINAL_FIRST = 1;
+    static final int ORDINAL_UNSET = 0;
+
+    Class<T> getInterfaceMainClass();
+
+    @External
     boolean isEnabled();
 
+    @External
     T setEnabled(boolean enabled);
 
+    @External
     String getName();
 
-    T setName(CharSequence name);
+    @External
+    T setName(String name);
 
     /*
      Set<DBEntityType> getContainingTypes();
@@ -51,9 +62,11 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
      */
     // Parent
     Optional<P> getParent();
-
+   
     T setParent(final P parent);
 
+    Optional<Class<? extends P>> getParentInterfaceMainClass();
+    
     default boolean isRoot() {
         return getParent().isPresent();
     }
@@ -65,10 +78,10 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
 
     boolean contains(final C child);
 
-    Stream<? extends C> childrenStream();
+    Stream<? extends C> stream();
 
     default boolean hasChildren() {
-        return childrenStream().findAny().isPresent();
+        return stream().findAny().isPresent();
     }
 
     // Configuration
@@ -84,11 +97,18 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
         return configStream().findAny().isPresent();
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     static final Function<ConfigEntity, Optional<ConfigEntity>> PARENT_TRAVERSER = (ConfigEntity c) -> c.getParent();
-    static final Function<ConfigEntity, CharSequence> NAME_MAPPER = ConfigEntity<?, ?, ?>::getName;
 
+//    static <T extends ConfigEntity<T, P, ?>, P extends ConfigEntity<P,?,T>> Function<T, Optional<P>> parentTraverser() {
+//        return ConfigEntity::getParent;
+//    }
+//
+//    static <T extends ConfigEntity<T, ?, ?>> Function<T, String> nameMapper() {
+//        return ConfigEntity::getName;
+//    }
     default String getRelativeName(ConfigEntity<?, ?, ?> from) {
-        return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.BACKWARD).map(NAME_MAPPER).collect(Collectors.joining("."));
+        return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.BACKWARD).map(ConfigEntity::getName).collect(Collectors.joining("."));
     }
 
     default <E extends ConfigEntity> Optional<E> getParent(final Class<E> clazz) {
@@ -164,4 +184,10 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
      }
 
      */
+    String toGroovy(int indentLevel);
+
+    default String toGrovy() {
+        return toGroovy(0);
+    }
+
 }

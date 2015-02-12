@@ -17,9 +17,9 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.impl.ColumnImpl;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
+import java.util.Optional;
 
 /**
  *
@@ -27,12 +27,19 @@ import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
  */
 @Api(version = 0)
 public interface Column extends
-        ConfigEntity<Column, Table, ConfigEntity<?, Column, ?>>,
+        OrdinalConfigEntity<Column, Table, ConfigEntity<?, Column, ?>>,
         FieldStorageTypeable<Column>,
         ColumnCompressionTypeable<Column> {
 
-    public static Column newInstance() {
-        return new ColumnImpl();
+    @Override
+    default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
+        return Optional.of(Table.class);
     }
+
+    @External
+    Optional<String> getAlias();
+
+    @External
+    Column setAlias(CharSequence alias);
 
 }

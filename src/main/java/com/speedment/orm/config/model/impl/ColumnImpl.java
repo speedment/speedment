@@ -19,6 +19,7 @@ package com.speedment.orm.config.model.impl;
 import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
+import java.util.Optional;
 
 /**
  *
@@ -26,8 +27,42 @@ import com.speedment.orm.config.model.parameters.FieldStorageType;
  */
 public class ColumnImpl extends AbstractConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> implements Column {
 
+    private int ordinalPosition;
+    private String alias;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
+
+    @Override
+    protected void setDefaults() {
+        ordinalPosition = ORDINAL_UNSET;
+        setFieldStorageType(FieldStorageType.defaultFor(this));
+        setColumnCompressionType(ColumnCompressionType.defaultFor(this));
+    }
+
+    @Override
+    public Class<Column> getInterfaceMainClass() {
+        return Column.class;
+    }
+
+    @Override
+    public int getOrdinalPosition() {
+        return ordinalPosition;
+    }
+
+    @Override
+    public Column setOrdinalPosition(int ordinalPosition) {
+        return with(ordinalPosition, op -> this.ordinalPosition = op);
+    }
+
+    @Override
+    public Optional<String> getAlias() {
+        return Optional.ofNullable(alias);
+    }
+
+    @Override
+    public Column setAlias(CharSequence alias) {
+        return with(alias, n -> this.alias = makeNullSafeString(n));
+    }
 
     @Override
     public FieldStorageType getFieldStorageType() {
@@ -45,8 +80,8 @@ public class ColumnImpl extends AbstractConfigEntity<Column, Table, ConfigEntity
     }
 
     @Override
-    public Column setColumnCompressionType(ColumnCompressionType fieldStorageType) {
-        return with(fieldStorageType, f -> this.columnCompressionType = f);
+    public Column setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        return with(columnCompressionType, c -> this.columnCompressionType = c);
     }
 
 }

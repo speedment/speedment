@@ -18,24 +18,29 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface Dbms extends ConfigEntity<Dbms, Project, Schema> {
+public interface Dbms extends
+        ConfigEntity<Dbms, Project, Schema> {
 
-    public static Dbms newInstance() {
-        return ConfigEntityFactory.getInstance().newDbms();
+    @Override
+    default Optional<Class<? extends Project>> getParentInterfaceMainClass() {
+        return Optional.of(Project.class);
     }
 
     default Schema addNewSchema() {
-        final Schema e = Schema.newInstance();
+        final Schema e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newSchema();
         add(e);
         return e;
     }
 
+    @External
     DbmsType getType();
 
     Dbms setType(DbmsType dbmsType);
@@ -47,22 +52,31 @@ public interface Dbms extends ConfigEntity<Dbms, Project, Schema> {
      * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
      * could not be found
      */
+    @External
     Dbms setType(CharSequence dbmsTypeName);
 
-    CharSequence getIpAddress();
+    @External
+    Optional<String> getIpAddress();
 
+    @External
     Dbms setIpAddress(CharSequence ipAddress);
 
-    int getPort();
+    @External
+    Optional<Integer> getPort();
 
-    Dbms setPort(int port);
+    @External
+    Dbms setPort(Integer port);
 
-    CharSequence getUsername();
+    @External
+    Optional<String> getUsername();
 
+    @External
     Dbms setUsername(CharSequence name);
 
-    CharSequence getPassword();
+    @External
+    Optional<String> getPassword();
 
+    @External
     Dbms setPassword(CharSequence password);
 
 }
