@@ -32,6 +32,11 @@ public interface Column extends
         ColumnCompressionTypeable<Column> {
 
     @Override
+    default Class<Column> getInterfaceMainClass() {
+        return Column.class;
+    }
+
+    @Override
     default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
         return Optional.of(Table.class);
     }

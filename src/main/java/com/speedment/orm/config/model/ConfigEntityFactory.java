@@ -54,6 +54,10 @@ public interface ConfigEntityFactory extends Component {
         return newOf(Index.class);
     }
 
+    default IndexColumn newIndexColumn() {
+        return newOf(IndexColumn.class);
+    }
+
     default <T extends ConfigEntity<T, ?, ?>> T newOf(T rawModel) {
         return newOf(rawModel.getInterfaceMainClass());
     }

@@ -35,6 +35,11 @@ public interface Table extends
         StorageEngineTypeable<Table> {
 
     @Override
+    default Class<Table> getInterfaceMainClass() {
+        return Table.class;
+    }
+
+    @Override
     default Optional<Class<? extends Schema>> getParentInterfaceMainClass() {
         return Optional.of(Schema.class);
     }
@@ -50,5 +55,11 @@ public interface Table extends
         add(e);
         return e;
     }
+
+    @External
+    Optional<String> getTableName();
+
+    @External
+    Table setTableName(CharSequence tableName);
 
 }

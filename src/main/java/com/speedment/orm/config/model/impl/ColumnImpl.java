@@ -25,33 +25,17 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class ColumnImpl extends AbstractConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> implements Column {
+public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> implements Column {
 
-    private int ordinalPosition;
     private String alias;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
 
     @Override
     protected void setDefaults() {
-        ordinalPosition = ORDINAL_UNSET;
+        setOrdinalPosition(ORDINAL_UNSET);
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
-    }
-
-    @Override
-    public Class<Column> getInterfaceMainClass() {
-        return Column.class;
-    }
-
-    @Override
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-
-    @Override
-    public Column setOrdinalPosition(int ordinalPosition) {
-        return with(ordinalPosition, op -> this.ordinalPosition = op);
     }
 
     @Override

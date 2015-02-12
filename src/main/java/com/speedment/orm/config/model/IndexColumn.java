@@ -17,7 +17,7 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import com.speedment.orm.config.model.parameters.OrderTypeable;
 import java.util.Optional;
 
 /**
@@ -25,29 +25,18 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Index extends
-        OrdinalConfigEntity<Index, Table, IndexColumn> {
+public interface IndexColumn extends
+        OrdinalConfigEntity<IndexColumn, Index, ConfigEntity<?, IndexColumn, ?>>,
+        OrderTypeable<IndexColumn> {
 
     @Override
-    default Class<Index> getInterfaceMainClass() {
-        return Index.class;
+    default Class<IndexColumn> getInterfaceMainClass() {
+        return IndexColumn.class;
     }
 
     @Override
-    default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
-        return Optional.of(Table.class);
+    default Optional<Class<? extends Index>> getParentInterfaceMainClass() {
+        return Optional.of(Index.class);
     }
-
-    default IndexColumn addNewIndexColumn() {
-        final IndexColumn e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newIndexColumn();
-        add(e);
-        return e;
-    }
-
-    @External
-    boolean isUnique();
-
-    @External
-    Index setUnique(boolean unique);
 
 }

@@ -14,31 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.impl;
+package com.speedment.orm.config.model.parameters;
 
-import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.External;
 
 /**
  *
  * @author pemi
+ * @param <T> Setter return type.
  */
-public class IndexImpl extends AbstractOrdinalConfigEntity<Index, Table, IndexColumn> implements Index {
+public interface OrderTypeable<T> {
 
-    private boolean unique;
+    @External
+    OrderType getOrderType();
 
-    @Override
-    protected void setDefaults() {
-        setOrdinalPosition(ORDINAL_UNSET);
-    }
-
-    @Override
-    public boolean isUnique() {
-        return unique;
-    }
-
-    @Override
-    public Index setUnique(boolean unique) {
-        return with(unique, u -> this.unique = u);
-    }
+    @External
+    T setOrderType(OrderType orderType);
 
 }

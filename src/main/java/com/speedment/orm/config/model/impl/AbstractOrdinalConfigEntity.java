@@ -16,29 +16,33 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.OrdinalConfigEntity;
 
 /**
+ * Generic representation of a ConfigEntity.
+ *
+ * This class is thread safe.
  *
  * @author pemi
+ * @param <T>
+ * @param <P>
+ * @param <C>
  */
-public class IndexImpl extends AbstractOrdinalConfigEntity<Index, Table, IndexColumn> implements Index {
+public abstract class AbstractOrdinalConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
+        extends AbstractConfigEntity<T, P, C>
+        implements OrdinalConfigEntity<T, P, C> {
 
-    private boolean unique;
+    private int ordinalPosition;
 
     @Override
-    protected void setDefaults() {
-        setOrdinalPosition(ORDINAL_UNSET);
+    public int getOrdinalPosition() {
+        return ordinalPosition;
     }
 
     @Override
-    public boolean isUnique() {
-        return unique;
-    }
-
-    @Override
-    public Index setUnique(boolean unique) {
-        return with(unique, u -> this.unique = u);
+    public T setOrdinalPosition(int ordinalPosition) {
+        return with(ordinalPosition, op -> this.ordinalPosition = op);
     }
 
 }

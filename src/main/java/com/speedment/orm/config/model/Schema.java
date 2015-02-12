@@ -35,6 +35,11 @@ public interface Schema extends
         StorageEngineTypeable<Schema> {
 
     @Override
+    default Class<Schema> getInterfaceMainClass() {
+        return Schema.class;
+    }
+
+    @Override
     default Optional<Class<? extends Dbms>> getParentInterfaceMainClass() {
         return Optional.of(Dbms.class);
     }
@@ -50,5 +55,17 @@ public interface Schema extends
 
     @External
     Schema setDefault(boolean default_);
+
+    @External
+    Optional<String> getCatalogName();
+
+    @External
+    Schema setCatalogName(CharSequence catalogName);
+
+    @External
+    Optional<String> getSchemaName();
+
+    @External
+    Schema setSchemaName(CharSequence catalogName);
 
 }

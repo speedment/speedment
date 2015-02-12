@@ -20,6 +20,7 @@ import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
+import java.util.Optional;
 
 /**
  *
@@ -28,6 +29,8 @@ import com.speedment.orm.config.model.parameters.StorageEngineType;
 public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implements Schema {
 
     private boolean default_;
+    private String schemaName;
+    private String catalogName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
@@ -37,11 +40,6 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
         setStorageEngineType(StorageEngineType.defaultFor(this));
-    }
-
-    @Override
-    public Class<Schema> getInterfaceMainClass() {
-        return Schema.class;
     }
 
     @Override
@@ -82,6 +80,29 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     @Override
     public Schema setStorageEngineType(StorageEngineType storageEngineType) {
         return with(storageEngineType, s -> this.storageEngineType = s);
+    }
+
+    @Override
+    public Optional<String> getCatalogName() {
+        return Optional.ofNullable(catalogName);
+    }
+
+    @Override
+    public Schema setCatalogName(CharSequence catalogName) {
+        return with(catalogName, c -> this.catalogName = catalogName.toString());
+    }
+
+    @Override
+    public Optional<String> getSchemaName() {
+        if (schemaName == null) {
+            return Optional.ofNullable(getName());
+        }
+        return Optional.of(schemaName);
+    }
+
+    @Override
+    public Schema setSchemaName(CharSequence catalogName) {
+        return with(catalogName, c -> this.catalogName = c.toString());
     }
 
 }

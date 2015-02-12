@@ -20,6 +20,7 @@ import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
+import java.util.Optional;
 
 /**
  *
@@ -27,6 +28,7 @@ import com.speedment.orm.config.model.parameters.StorageEngineType;
  */
 public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<?, Table, ?>> implements Table {
 
+    private String tableName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
@@ -36,11 +38,6 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
         setStorageEngineType(StorageEngineType.defaultFor(this));
-    }
-
-    @Override
-    public Class<Table> getInterfaceMainClass() {
-        return Table.class;
     }
 
     @Override
@@ -71,6 +68,19 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     @Override
     public Table setStorageEngineType(StorageEngineType storageEngineType) {
         return with(storageEngineType, s -> this.storageEngineType = s);
+    }
+
+    @Override
+    public Optional<String> getTableName() {
+        if (tableName == null) {
+            return Optional.ofNullable(getName());
+        }
+        return Optional.of(tableName);
+    }
+
+    @Override
+    public Table setTableName(CharSequence tableName) {
+        return with(tableName, t -> this.tableName = t.toString());
     }
 
 }

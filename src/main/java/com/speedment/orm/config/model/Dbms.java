@@ -30,6 +30,11 @@ public interface Dbms extends
         ConfigEntity<Dbms, Project, Schema> {
 
     @Override
+    default Class<Dbms> getInterfaceMainClass() {
+        return Dbms.class;
+    }
+
+    @Override
     default Optional<Class<? extends Project>> getParentInterfaceMainClass() {
         return Optional.of(Project.class);
     }

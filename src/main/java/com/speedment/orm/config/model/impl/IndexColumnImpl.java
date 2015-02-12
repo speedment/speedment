@@ -17,28 +17,30 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.parameters.OrderType;
 
 /**
  *
  * @author pemi
  */
-public class IndexImpl extends AbstractOrdinalConfigEntity<Index, Table, IndexColumn> implements Index {
+public class IndexColumnImpl extends AbstractOrdinalConfigEntity<IndexColumn, Index, ConfigEntity<?, IndexColumn, ?>> implements IndexColumn {
 
-    private boolean unique;
+    private OrderType orderType;
 
     @Override
     protected void setDefaults() {
         setOrdinalPosition(ORDINAL_UNSET);
+        setOrderType(OrderType.defaultFor(this));
     }
 
     @Override
-    public boolean isUnique() {
-        return unique;
+    public OrderType getOrderType() {
+        return orderType;
     }
 
     @Override
-    public Index setUnique(boolean unique) {
-        return with(unique, u -> this.unique = u);
+    public IndexColumn setOrderType(OrderType orderType) {
+        return with(orderType, o -> this.orderType = o);
     }
 
 }

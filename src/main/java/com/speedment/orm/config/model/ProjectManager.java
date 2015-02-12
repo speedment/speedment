@@ -30,6 +30,11 @@ public interface ProjectManager extends
         ConfigEntity<ProjectManager, ConfigEntity<?, ?, ProjectManager>, Project>, Component {
 
     @Override
+    default Class<ProjectManager> getInterfaceMainClass() {
+        return ProjectManager.class;
+    }
+
+    @Override
     default Optional<Class<? extends ConfigEntity<?, ?, ProjectManager>>> getParentInterfaceMainClass() {
         return Optional.empty();
     }

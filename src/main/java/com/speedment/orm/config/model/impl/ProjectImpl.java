@@ -34,11 +34,6 @@ public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, D
     }
 
     @Override
-    public Class<Project> getInterfaceMainClass() {
-        return Project.class;
-    }
-
-    @Override
     public String getPacketName() {
         return packetName;
     }

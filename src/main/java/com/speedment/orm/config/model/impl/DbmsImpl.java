@@ -41,11 +41,6 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Class<Dbms> getInterfaceMainClass() {
-        return Dbms.class;
-    }
-
-    @Override
     public DbmsType getType() {
         return type;
     }

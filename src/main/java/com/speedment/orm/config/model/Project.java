@@ -29,6 +29,11 @@ public interface Project extends
         ConfigEntity<Project, ProjectManager, Dbms> {
 
     @Override
+    default Class<Project> getInterfaceMainClass() {
+        return Project.class;
+    }
+
+    @Override
     default Optional<Class<? extends ProjectManager>> getParentInterfaceMainClass() {
         return Optional.of(ProjectManager.class);
     }
