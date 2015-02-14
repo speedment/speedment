@@ -22,23 +22,33 @@ import com.speedment.orm.config.model.*;
  *
  * @author pemi
  */
-public class IndexImpl extends AbstractConfigEntity<Index, Table, IndexColumn> implements Index {
+public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity<ForeignKeyColumn, ForeignKey, ConfigEntity<?, ForeignKeyColumn, ?>> implements ForeignKeyColumn {
 
-    private boolean unique;
+    private String foreignColumnName;
+    private String foreignTableName;
 
     @Override
     protected void setDefaults() {
-        setUnique(false);
     }
 
     @Override
-    public boolean isUnique() {
-        return unique;
+    public String getForeignColumnName() {
+        return foreignColumnName;
     }
 
     @Override
-    public Index setUnique(boolean unique) {
-        return run(() -> this.unique = unique);
+    public ForeignKeyColumn setForeignColumnName(CharSequence foreignColumnName) {
+        return run(() -> this.foreignColumnName = makeNullSafeString(foreignColumnName));
+    }
+
+    @Override
+    public String getForeignTableName() {
+        return foreignTableName;
+    }
+
+    @Override
+    public ForeignKeyColumn setForeignTableName(CharSequence foreignTableName) {
+        return run(() -> this.foreignTableName = makeNullSafeString(foreignTableName));
     }
 
 }

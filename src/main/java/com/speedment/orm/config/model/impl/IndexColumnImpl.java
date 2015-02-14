@@ -40,7 +40,7 @@ public class IndexColumnImpl extends AbstractOrdinalConfigEntity<IndexColumn, In
 
     @Override
     public IndexColumn setOrderType(OrderType orderType) {
-        return with(orderType, o -> this.orderType = o);
+        return run(() -> this.orderType = orderType);
     }
 
 }

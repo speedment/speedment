@@ -23,7 +23,7 @@ package com.speedment.orm.config.model;
  * @param <P> The type of the parent class.
  * @param <C> The type of the child class.
  */
-public interface OrdinalConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
+public interface OrdinalConfigEntity<T extends OrdinalConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
         ConfigEntity<T, P, C> {
 
     int getOrdinalPosition();

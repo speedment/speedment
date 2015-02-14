@@ -29,7 +29,7 @@ import com.speedment.orm.config.model.OrdinalConfigEntity;
  * @param <P>
  * @param <C>
  */
-public abstract class AbstractOrdinalConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
+public abstract class AbstractOrdinalConfigEntity<T extends OrdinalConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
         extends AbstractConfigEntity<T, P, C>
         implements OrdinalConfigEntity<T, P, C> {
 
@@ -42,7 +42,12 @@ public abstract class AbstractOrdinalConfigEntity<T extends ConfigEntity<T, P, C
 
     @Override
     public T setOrdinalPosition(int ordinalPosition) {
-        return with(ordinalPosition, op -> this.ordinalPosition = op);
+        return run(() -> this.ordinalPosition = ordinalPosition);
+    }
+
+    @Override
+    public int compareTo(T o) {
+        return Integer.compare(getOrdinalPosition(), o.getOrdinalPosition());
     }
 
 }

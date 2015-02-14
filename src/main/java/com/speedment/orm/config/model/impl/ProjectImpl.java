@@ -40,7 +40,7 @@ public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, D
 
     @Override
     public Project setPacketName(CharSequence packetName) {
-        return with(Objects.requireNonNull(packetName), pn -> this.packetName = makeNullSafeString(pn));
+        return run(() -> this.packetName = makeNullSafeString(Objects.requireNonNull(packetName)));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, D
 
     @Override
     public Project setPacketLocation(CharSequence packetLocation) {
-        return with(Objects.requireNonNull(packetLocation), pl -> this.packetLocation = makeNullSafeString(pl));
+        return run(() -> this.packetLocation = makeNullSafeString(Objects.requireNonNull(packetLocation)));
     }
 
 }

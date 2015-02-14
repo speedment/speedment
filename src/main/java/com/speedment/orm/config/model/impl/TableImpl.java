@@ -47,7 +47,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
 
     @Override
     public Table setFieldStorageType(FieldStorageType fieldStorageType) {
-        return with(fieldStorageType, f -> this.fieldStorageType = f);
+        return run(() -> this.fieldStorageType = fieldStorageType);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
 
     @Override
     public Table setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return with(columnCompressionType, c -> this.columnCompressionType = c);
+        return run(() -> this.columnCompressionType = columnCompressionType);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
 
     @Override
     public Table setStorageEngineType(StorageEngineType storageEngineType) {
-        return with(storageEngineType, s -> this.storageEngineType = s);
+        return run(() -> this.storageEngineType = storageEngineType);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
 
     @Override
     public Table setTableName(CharSequence tableName) {
-        return with(tableName, t -> this.tableName = t.toString());
+        return run(() -> this.tableName = makeNullSafeString(tableName));
     }
 
 }

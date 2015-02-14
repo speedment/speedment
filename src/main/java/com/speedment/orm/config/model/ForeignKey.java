@@ -14,31 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.impl;
+package com.speedment.orm.config.model;
 
-import com.speedment.orm.config.model.*;
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class IndexImpl extends AbstractConfigEntity<Index, Table, IndexColumn> implements Index {
-
-    private boolean unique;
+@Api(version = 0)
+public interface ForeignKey extends
+        ConfigEntity<ForeignKey, Table, ForeignKeyColumn> {
 
     @Override
-    protected void setDefaults() {
-        setUnique(false);
+    default Class<ForeignKey> getInterfaceMainClass() {
+        return ForeignKey.class;
     }
 
     @Override
-    public boolean isUnique() {
-        return unique;
+    default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
+        return Optional.of(Table.class);
     }
 
-    @Override
-    public Index setUnique(boolean unique) {
-        return run(() -> this.unique = unique);
+    default ForeignKeyColumn addNewForeignKeyColumn() {
+        final ForeignKeyColumn e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newForeignKeyColumn();
+        add(e);
+        return e;
     }
 
 }

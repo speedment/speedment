@@ -52,7 +52,7 @@ interface Nameable<R extends Enum<R> & Nameable<R>> {
         }
 
         private static String normalize(String string) {
-            return string.toLowerCase();
+            return string == null ? null : string.toLowerCase();
         }
     }
 

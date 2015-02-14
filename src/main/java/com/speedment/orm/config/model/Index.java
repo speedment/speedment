@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface Index extends
-        OrdinalConfigEntity<Index, Table, IndexColumn> {
+        ConfigEntity<Index, Table, IndexColumn> {
 
     @Override
     default Class<Index> getInterfaceMainClass() {

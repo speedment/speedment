@@ -96,7 +96,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
     @Override
     public T setEnabled(boolean enabled) {
-        return with(enabled, e -> this.enabled = e);
+        return run(() -> this.enabled = enabled);
     }
 
     @Override
@@ -106,7 +106,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
     @Override
     public T setName(String name) {
-        return with(name, n -> this.name = Objects.requireNonNull(n));
+        return run(() -> this.name = Objects.requireNonNull(name));
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
     @Override
     public T setParent(P parent) {
-        return with(parent, p -> this.parent = p);
+        return run(() -> this.parent = parent);
     }
 
     private void castAndSetParent(final C child) {
@@ -166,7 +166,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
          final final ConfigEntity<?, ConfigEntity<? super T, ? super P, ? super C>, ?> _child = (ConfigEntity<?, ?, ?>) child;
          _child2.setParent(this);
          addParentToChild(parent, _child2);*/
-        return with(child, c -> children.put(makeKey(c), child));
+        return run(() -> children.put(makeKey(child), child));
     }
 
     @Override
@@ -174,7 +174,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
         if (child.getParent().isPresent() && child.getParent().get() == this) {
             setParent(null);
         }
-        return with(child, children::remove);
+        return run(() -> children.remove(makeKey(child)));
     }
 
     @Override
@@ -212,6 +212,11 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     @SuppressWarnings("unchecked")
     protected <P> T with(final P item, final Consumer<P> consumer) {
         return Beans.with((T) this, item, consumer);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <P> T run(final Runnable runnable) {
+        return Beans.run((T) this, runnable);
     }
 
     @Override

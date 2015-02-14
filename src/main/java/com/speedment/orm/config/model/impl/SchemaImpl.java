@@ -49,7 +49,7 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
 
     @Override
     public Schema setDefault(boolean default_) {
-        return with(default_, d -> this.default_ = d);
+        return run(() -> this.default_ = default_);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
 
     @Override
     public Schema setFieldStorageType(FieldStorageType fieldStorageType) {
-        return with(fieldStorageType, f -> this.fieldStorageType = f);
+        return run(() -> this.fieldStorageType = fieldStorageType);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
 
     @Override
     public Schema setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return with(columnCompressionType, c -> this.columnCompressionType = c);
+        return run(() -> this.columnCompressionType = columnCompressionType);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
 
     @Override
     public Schema setStorageEngineType(StorageEngineType storageEngineType) {
-        return with(storageEngineType, s -> this.storageEngineType = s);
+        return run(() -> this.storageEngineType = storageEngineType);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
 
     @Override
     public Schema setCatalogName(CharSequence catalogName) {
-        return with(catalogName, c -> this.catalogName = catalogName.toString());
+        return run(() -> this.catalogName = makeNullSafeString(catalogName));
     }
 
     @Override
@@ -101,8 +101,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setSchemaName(CharSequence catalogName) {
-        return with(catalogName, c -> this.catalogName = c.toString());
+    public Schema setSchemaName(CharSequence schemaName) {
+        return run(() -> this.catalogName = makeNullSafeString(schemaName));
     }
 
 }

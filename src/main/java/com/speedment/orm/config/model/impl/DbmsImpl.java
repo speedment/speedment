@@ -47,12 +47,12 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
 
     @Override
     public Dbms setType(DbmsType dbmsType) {
-        return with(dbmsType, dt -> this.type = dt);
+        return run(() -> this.type = dbmsType);
     }
 
     @Override
     public Dbms setType(CharSequence dbmsTypeName) {
-        return setType(DbmsType.findByNameIgnoreCase(dbmsTypeName.toString()).orElseThrow(IllegalArgumentException::new));
+        return setType(DbmsType.findByNameIgnoreCase(makeNullSafeString(dbmsTypeName)).orElseThrow(IllegalArgumentException::new));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
 
     @Override
     public Dbms setIpAddress(CharSequence ipAddress) {
-        return with(ipAddress, i -> this.ipAddress = makeNullSafeString(i));
+        return run(() -> this.ipAddress = makeNullSafeString(ipAddress));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
 
     @Override
     public Dbms setPort(Integer port) {
-        return with(port, p -> this.port = p);
+        return run(() -> this.port = port);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
 
     @Override
     public Dbms setUsername(CharSequence name) {
-        return with(name, n -> this.username = makeNullSafeString(n));
+        return run(() -> this.username = makeNullSafeString(name));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
 
     @Override
     public Dbms setPassword(CharSequence password) {
-        return with(password, p -> this.password = makeNullSafeString(p));
+        return run(() -> this.password = makeNullSafeString(password));
     }
 
 }

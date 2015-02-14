@@ -45,7 +45,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
 
     @Override
     public Column setAlias(CharSequence alias) {
-        return with(alias, n -> this.alias = makeNullSafeString(n));
+        return run(() -> this.alias = makeNullSafeString(alias));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
 
     @Override
     public Column setFieldStorageType(FieldStorageType fieldStorageType) {
-        return with(fieldStorageType, f -> this.fieldStorageType = f);
+        return run(() -> this.fieldStorageType = fieldStorageType);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
 
     @Override
     public Column setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return with(columnCompressionType, c -> this.columnCompressionType = c);
+        return run(() -> this.columnCompressionType = columnCompressionType);
     }
 
 }

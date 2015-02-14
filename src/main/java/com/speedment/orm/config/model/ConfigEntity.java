@@ -62,11 +62,11 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
      */
     // Parent
     Optional<P> getParent();
-   
+
     T setParent(final P parent);
 
     Optional<Class<? extends P>> getParentInterfaceMainClass();
-    
+
     default boolean isRoot() {
         return getParent().isPresent();
     }
@@ -79,6 +79,10 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
     boolean contains(final C child);
 
     Stream<? extends C> stream();
+
+    default <CHILD_CLASS extends C> Stream<CHILD_CLASS> streamOf(final Class<CHILD_CLASS> clazz) {
+        return (Stream<CHILD_CLASS>) stream().filter(c -> clazz.isAssignableFrom(c.getClass()));
+    }
 
     default boolean hasChildren() {
         return stream().findAny().isPresent();
@@ -188,6 +192,50 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
 
     default String toGrovy() {
         return toGroovy(0);
+    }
+
+    static class Hidden {
+
+        static protected Column findColumnByName(ConfigEntity configEntity, Optional<Table> optionalTable, String name) {
+            final Table table = optionalTable
+                    .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " associated with this " + configEntity.toString()));
+            return table
+                    .streamOf(Column.class)
+                    .filter(c -> c.getName().equals(name))
+                    .findAny()
+                    .orElseThrow(() -> new IllegalStateException("There is no " + Column.class.getSimpleName() + " in the " + table.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
+        }
+
+        static protected Table findTableByName(ConfigEntity configEntity, Optional<Schema> optionalSchema, String name) {
+            final Schema currentSchema = optionalSchema.orElseThrow(() -> new IllegalStateException("There is no " + Schema.class.getSimpleName() + " associated with this " + configEntity.toString()));
+            final String[] paths = name.split("\\.");
+            // Just the name of the table
+            if (paths.length == 0) {
+                return currentSchema
+                        .stream()
+                        .filter(c -> c.getName().equals(name))
+                        .findAny()
+                        .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " in the " + currentSchema.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
+            }
+            // The name is "schema.table"
+            if (paths.length == 1) {
+                final String otherSchemaName = paths[0];
+                final String tableName = paths[1];
+                final Dbms dbms = currentSchema.getParent().orElseThrow(() -> new IllegalStateException("No " + Dbms.class.getSimpleName() + " for " + currentSchema.toString()));
+                final Schema otherSchema = dbms
+                        .stream()
+                        .filter(t -> t.getName().equals(otherSchemaName))
+                        .findAny()
+                        .orElseThrow(() -> new IllegalStateException("No " + Schema.class.getSimpleName() + " named " + otherSchemaName + " in " + Dbms.class.getSimpleName() + " " + dbms.toString()));
+
+                   return otherSchema
+                        .stream()
+                        .filter(t -> t.getName().equals(tableName))
+                        .findAny()
+                        .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " in the " + currentSchema.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
+            }
+            throw new IllegalStateException("There is no " + Table.class.getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name);
+        }
     }
 
 }

@@ -36,6 +36,11 @@ public class Beans {
         consumer.accept(item);
         return thizz;
     }
+    
+    public static <P, T> T run(final T thizz, final Runnable runnable) {
+        runnable.run();
+        return thizz;
+    }
 
     public static <P, T> T withSeveral(final T thizz, final P[] restOfParameters, final Consumer<P> consumer) {
         Stream.of(restOfParameters).forEach(consumer::accept);

@@ -20,6 +20,8 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.ConfigEntityFactory;
 import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.ForeignKey;
+import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Index;
 import com.speedment.orm.config.model.IndexColumn;
 import com.speedment.orm.config.model.Project;
@@ -52,6 +54,8 @@ public class ConfigEntityFactoryImpl implements ConfigEntityFactory {
         registerFactoryClass(Column.class, ColumnImpl::new);
         registerFactoryClass(Index.class, IndexImpl::new);
         registerFactoryClass(IndexColumn.class, IndexColumnImpl::new);
+        registerFactoryClass(ForeignKey.class, ForeignKeyImpl::new);
+        registerFactoryClass(ForeignKeyColumn.class, ForeignKeyColumnImpl::new);
     }
 
     // Using a method instead of just put(), we can correlate the type of the Key and Value.

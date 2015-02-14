@@ -66,6 +66,6 @@ public interface Schema extends
     Optional<String> getSchemaName();
 
     @External
-    Schema setSchemaName(CharSequence catalogName);
+    Schema setSchemaName(CharSequence schemaName);
 
 }

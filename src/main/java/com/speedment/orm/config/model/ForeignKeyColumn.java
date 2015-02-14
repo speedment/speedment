@@ -17,7 +17,6 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.parameters.OrderTypeable;
 import java.util.Optional;
 
 /**
@@ -25,22 +24,41 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface IndexColumn extends
-        OrdinalConfigEntity<IndexColumn, Index, ConfigEntity<?, IndexColumn, ?>>,
-        OrderTypeable<IndexColumn> {
+public interface ForeignKeyColumn extends
+        OrdinalConfigEntity<ForeignKeyColumn, ForeignKey, ConfigEntity<?, ForeignKeyColumn, ?>> {
 
     @Override
-    default Class<IndexColumn> getInterfaceMainClass() {
-        return IndexColumn.class;
+    default Class<ForeignKeyColumn> getInterfaceMainClass() {
+        return ForeignKeyColumn.class;
     }
 
     @Override
-    default Optional<Class<? extends Index>> getParentInterfaceMainClass() {
-        return Optional.of(Index.class);
+    default Optional<Class<? extends ForeignKey>> getParentInterfaceMainClass() {
+        return Optional.of(ForeignKey.class);
     }
 
     default Column getColumn() {
         return Hidden.findColumnByName(this, getParent(Table.class), getName());
+    }
+
+    @External
+    String getForeignColumnName();
+
+    @External
+    ForeignKeyColumn setForeignColumnName(CharSequence foreignColumnName);
+
+    @External
+    String getForeignTableName();
+
+    @External
+    ForeignKeyColumn setForeignTableName(CharSequence foreignTableName);
+
+    default Column getForeignColumn() {
+        return Hidden.findColumnByName(this, Optional.of(getForeignTable()), getForeignColumnName());
+    }
+
+    default Table getForeignTable() {
+        return Hidden.findTableByName(this, getParent(Schema.class), getForeignTableName());
     }
 
 }

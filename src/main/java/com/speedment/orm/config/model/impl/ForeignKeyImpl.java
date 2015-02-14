@@ -22,23 +22,10 @@ import com.speedment.orm.config.model.*;
  *
  * @author pemi
  */
-public class IndexImpl extends AbstractConfigEntity<Index, Table, IndexColumn> implements Index {
-
-    private boolean unique;
+public class ForeignKeyImpl extends AbstractConfigEntity<ForeignKey, Table, ForeignKeyColumn> implements ForeignKey {
 
     @Override
     protected void setDefaults() {
-        setUnique(false);
-    }
-
-    @Override
-    public boolean isUnique() {
-        return unique;
-    }
-
-    @Override
-    public Index setUnique(boolean unique) {
-        return run(() -> this.unique = unique);
     }
 
 }
