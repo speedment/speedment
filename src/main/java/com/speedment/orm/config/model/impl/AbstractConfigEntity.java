@@ -17,17 +17,20 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.ConfigParameter;
-import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.DelegatorGroovyTest;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.External;
 import com.speedment.orm.config.model.OrdinalConfigEntity;
 import com.speedment.util.Beans;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
-import com.speedment.util.Trees;
 import com.speedment.util.stream.CollectorUtil;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+import groovy.util.DelegatingScript;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,9 +45,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -304,6 +307,57 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
                 indent(sb, indentLevel).append("}").append(NL);
             });
         }, StringBuilder::toString);
+    }
+
+    public void readGroovy(final Path path) throws IOException {
+
+        final Binding binding = new Binding();
+        binding.setVariable("implementationVersion", getClass().getPackage().getImplementationVersion());
+        binding.setVariable("specificationVersion", getClass().getPackage().getSpecificationVersion());
+
+        final CompilerConfiguration configuration = new CompilerConfiguration();
+        configuration.setScriptBaseClass(DelegatingScript.class.getName());
+        configuration.setDebug(true);
+        configuration.setVerbose(true);
+        configuration.setRecompileGroovySource(true);
+
+        final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
+
+        final DelegatingScript script = (DelegatingScript) shell.parse(path.toFile());
+
+        //final Project project = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
+        script.setDelegate(this);
+
+        final Object value = script.run();
+
+        System.out.println(value);
+
+        System.out.println(binding.getVariables());
+
+        System.out.println(this.toString());
+
+        /*
+         final Binding binding = new Binding();
+         binding.setVariable("implementationVersion", getClass().getPackage().getImplementationVersion());
+         binding.setVariable("specificationVersion", getClass().getPackage().getSpecificationVersion());
+
+         final CompilerConfiguration configuration = new CompilerConfiguration();
+         configuration.setScriptBaseClass(GroovyTest.Project.class.getName());
+         configuration.setDebug(true);
+         configuration.setVerbose(true);
+         configuration.setRecompileGroovySource(true);
+
+         final GroovyShell shell = new GroovyShell(GroovyTest.Project.class.getClassLoader(), binding, configuration);
+
+         Object value = shell.evaluate("println 'Hello World!'; x = 123; setName('Sven');return this");
+
+         System.out.println(value);
+         assert binding.getVariable("x").equals(123);
+
+         //System.out.println(binding);
+         //System.out.println(binding.getVariable("myClass"));
+         System.out.println(binding.getVariables());
+         */
     }
 
 }

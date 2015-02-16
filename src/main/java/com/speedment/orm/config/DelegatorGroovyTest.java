@@ -39,7 +39,9 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * @author pemi
  */
 public class DelegatorGroovyTest {
-/*
+
+    public static final int FOO = 1;
+
     // http://blog.andresteingress.com/2013/10/19/groovy-sneak-peak-the-delegatingscript-base-class/
     public static void main(String[] args) throws CompilationFailedException, IOException {
 
@@ -240,7 +242,7 @@ public class DelegatorGroovyTest {
 
         public DbEntity() {
             childs = new ArrayList<C>();
-            
+
 //            {
 //                public boolean add(C c) {
 //                    System.out.println("Added " + c.toString());
@@ -299,5 +301,4 @@ public class DelegatorGroovyTest {
         }
 
     }
-*/
 }
