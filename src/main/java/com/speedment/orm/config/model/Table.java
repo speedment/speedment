@@ -40,7 +40,7 @@ public interface Table extends
     }
 
     @Override
-    default Optional<Class<? extends Schema>> getParentInterfaceMainClass() {
+    default Optional<Class<Schema>> getParentInterfaceMainClass() {
         return Optional.of(Schema.class);
     }
 

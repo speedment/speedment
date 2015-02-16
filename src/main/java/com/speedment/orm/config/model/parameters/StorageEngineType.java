@@ -111,10 +111,10 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
     public static <T extends ConfigEntity<T, ?, ?>> Stream<StorageEngineType> streamFor(final T entity) {
         Objects.requireNonNull(entity);
         try {
-            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
-            if (parentClass.isPresent()) {
+            final Class<? extends ConfigEntity<?, ?, ?>> parentClass = entity.getParentInterfaceMainClass().orElse(null);
+            if (parentClass != null) {
                 // Check if the parent can have FieldStorageTypes. 
-                parentClass.get().getMethod("get" + StorageEngineType.class.getSimpleName());
+                parentClass.getMethod("get" + StorageEngineType.class.getSimpleName());
                 return stream();
             }
         } catch (NoSuchMethodException nsm) {

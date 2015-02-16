@@ -33,7 +33,7 @@ public interface ForeignKeyColumn extends
     }
 
     @Override
-    default Optional<Class<? extends ForeignKey>> getParentInterfaceMainClass() {
+    default Optional<Class<ForeignKey>> getParentInterfaceMainClass() {
         return Optional.of(ForeignKey.class);
     }
 

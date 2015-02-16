@@ -40,7 +40,7 @@ public interface Schema extends
     }
 
     @Override
-    default Optional<Class<? extends Dbms>> getParentInterfaceMainClass() {
+    default Optional<Class<Dbms>> getParentInterfaceMainClass() {
         return Optional.of(Dbms.class);
     }
 

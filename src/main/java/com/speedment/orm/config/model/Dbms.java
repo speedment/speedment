@@ -35,7 +35,7 @@ public interface Dbms extends
     }
 
     @Override
-    default Optional<Class<? extends Project>> getParentInterfaceMainClass() {
+    default Optional<Class<Project>> getParentInterfaceMainClass() {
         return Optional.of(Project.class);
     }
 

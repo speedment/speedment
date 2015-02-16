@@ -34,7 +34,7 @@ public interface Project extends
     }
 
     @Override
-    default Optional<Class<? extends ProjectManager>> getParentInterfaceMainClass() {
+    default Optional<Class<ProjectManager>> getParentInterfaceMainClass() {
         return Optional.of(ProjectManager.class);
     }
 

@@ -27,6 +27,7 @@ import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -155,7 +156,7 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
         //addParentToChild((ConfigEntity<P, ?, C>) (ConfigEntity) this, (ConfigEntity<C, P, ?>) (ConfigEntity) child);
         castAndSetParent(child);
         if (child instanceof OrdinalConfigEntity) {
-            @SuppressWarnings("cast")
+            @SuppressWarnings({"cast", "unchecked"})
             final OrdinalConfigEntity<?, T, ?> ordinalConfigEntity = (OrdinalConfigEntity<?, T, ?>) child;
             if (ordinalConfigEntity.getOrdinalPosition() == ORDINAL_UNSET) {
                 ordinalConfigEntity.setOrdinalPosition(getChildSequence(child.getInterfaceMainClass()).getAndIncrement());
@@ -336,28 +337,6 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
         System.out.println(this.toString());
 
-        /*
-         final Binding binding = new Binding();
-         binding.setVariable("implementationVersion", getClass().getPackage().getImplementationVersion());
-         binding.setVariable("specificationVersion", getClass().getPackage().getSpecificationVersion());
-
-         final CompilerConfiguration configuration = new CompilerConfiguration();
-         configuration.setScriptBaseClass(GroovyTest.Project.class.getName());
-         configuration.setDebug(true);
-         configuration.setVerbose(true);
-         configuration.setRecompileGroovySource(true);
-
-         final GroovyShell shell = new GroovyShell(GroovyTest.Project.class.getClassLoader(), binding, configuration);
-
-         Object value = shell.evaluate("println 'Hello World!'; x = 123; setName('Sven');return this");
-
-         System.out.println(value);
-         assert binding.getVariable("x").equals(123);
-
-         //System.out.println(binding);
-         //System.out.println(binding.getVariable("myClass"));
-         System.out.println(binding.getVariables());
-         */
     }
 
 }

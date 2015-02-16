@@ -39,7 +39,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * @author pemi
  */
 public class DelegatorGroovyTest {
-
+/*
     public static final int FOO = 1;
 
     // http://blog.andresteingress.com/2013/10/19/groovy-sneak-peak-the-delegatingscript-base-class/
@@ -300,5 +300,5 @@ public class DelegatorGroovyTest {
 
         }
 
-    }
+    }*/
 }

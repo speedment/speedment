@@ -35,7 +35,7 @@ public interface IndexColumn extends
     }
 
     @Override
-    default Optional<Class<? extends Index>> getParentInterfaceMainClass() {
+    default Optional<Class<Index>> getParentInterfaceMainClass() {
         return Optional.of(Index.class);
     }
 

@@ -63,6 +63,7 @@ public class SpeedmentPlatform {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(component);
         component.added();
+        @SuppressWarnings("unchecked") // Must be same type!
         final T old = (T) plugins.put(clazz, component);
         if (old != null) {
             old.removed();
@@ -72,6 +73,7 @@ public class SpeedmentPlatform {
 
     // Todo: Remove this method?
     public <T extends Component> T remove(Class<T> clazz) {
+        @SuppressWarnings("unchecked") // Must be same type!
         final T old = (T) plugins.remove(clazz);
         if (old != null) {
             old.removed();
@@ -80,6 +82,7 @@ public class SpeedmentPlatform {
     }
 
     @Api(version = 0)
+    @SuppressWarnings("unchecked") // Must be same type!
     public <T extends Component> T get(Class<T> clazz) {
         return (T) plugins.get(clazz);
     }
@@ -112,5 +115,5 @@ public class SpeedmentPlatform {
     public ConfigEntityFactory getConfigEntityFactory() {
         return get(ConfigEntityFactory.class);
     }
-    
+
 }

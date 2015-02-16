@@ -34,7 +34,7 @@ public interface Index extends
     }
 
     @Override
-    default Optional<Class<? extends Table>> getParentInterfaceMainClass() {
+    default Optional<Class<Table>> getParentInterfaceMainClass() {
         return Optional.of(Table.class);
     }
 

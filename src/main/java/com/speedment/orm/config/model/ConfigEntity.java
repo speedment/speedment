@@ -65,10 +65,10 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
 
     T setParent(final P parent);
 
-    Optional<Class<? extends P>> getParentInterfaceMainClass();
+    Optional<Class<P>> getParentInterfaceMainClass();
 
     default boolean isRoot() {
-        return getParent().isPresent();
+        return !getParent().isPresent();
     }
 
     // Children
@@ -81,7 +81,9 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
     Stream<? extends C> stream();
 
     default <CHILD_CLASS extends C> Stream<CHILD_CLASS> streamOf(final Class<CHILD_CLASS> clazz) {
-        return (Stream<CHILD_CLASS>) stream().filter(c -> clazz.isAssignableFrom(c.getClass()));
+        @SuppressWarnings({"cast", "unchecked"})
+        final Stream<CHILD_CLASS> result = (Stream<CHILD_CLASS>) stream().filter(c -> clazz.isAssignableFrom(c.getClass()));
+        return result;
     }
 
     default boolean hasChildren() {
@@ -115,9 +117,11 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
         return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.BACKWARD).map(ConfigEntity::getName).collect(Collectors.joining("."));
     }
 
-    default <E extends ConfigEntity> Optional<E> getParent(final Class<E> clazz) {
-        return (Optional<E>) Trees.walkOptional((ConfigEntity) this, PARENT_TRAVERSER, Trees.WalkingOrder.FORWARD)
+    @SuppressWarnings("unchecked")
+    default <E extends ConfigEntity<E, ?, ?>> Optional<E> getParent(final Class<E> clazz) {
+        return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.FORWARD)
                 .filter(e -> clazz.isAssignableFrom(e.getClass()))
+                .map((e) -> (E) e)
                 .findFirst();
     }
 
@@ -196,7 +200,7 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
 
     static class Hidden {
 
-        static protected Column findColumnByName(ConfigEntity configEntity, Optional<Table> optionalTable, String name) {
+        static protected Column findColumnByName(ConfigEntity<?, ?, ?> configEntity, Optional<Table> optionalTable, String name) {
             final Table table = optionalTable
                     .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " associated with this " + configEntity.toString()));
             return table
@@ -206,7 +210,7 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
                     .orElseThrow(() -> new IllegalStateException("There is no " + Column.class.getSimpleName() + " in the " + table.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
         }
 
-        static protected Table findTableByName(ConfigEntity configEntity, Optional<Schema> optionalSchema, String name) {
+        static protected Table findTableByName(ConfigEntity<?, ?, ?> configEntity, Optional<Schema> optionalSchema, String name) {
             final Schema currentSchema = optionalSchema.orElseThrow(() -> new IllegalStateException("There is no " + Schema.class.getSimpleName() + " associated with this " + configEntity.toString()));
             final String[] paths = name.split("\\.");
             // Just the name of the table
@@ -228,7 +232,7 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
                         .findAny()
                         .orElseThrow(() -> new IllegalStateException("No " + Schema.class.getSimpleName() + " named " + otherSchemaName + " in " + Dbms.class.getSimpleName() + " " + dbms.toString()));
 
-                   return otherSchema
+                return otherSchema
                         .stream()
                         .filter(t -> t.getName().equals(tableName))
                         .findAny()

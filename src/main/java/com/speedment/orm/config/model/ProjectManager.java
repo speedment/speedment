@@ -35,7 +35,7 @@ public interface ProjectManager extends
     }
 
     @Override
-    default Optional<Class<? extends ConfigEntity<?, ?, ProjectManager>>> getParentInterfaceMainClass() {
+    default Optional<Class<ConfigEntity<?, ?, ProjectManager>>> getParentInterfaceMainClass() {
         return Optional.empty();
     }
 

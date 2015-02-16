@@ -22,8 +22,10 @@
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.impl.ColumnImpl;
+import com.speedment.orm.config.model.impl.SchemaImpl;
 import com.speedment.orm.config.model.impl.TableImpl;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
@@ -43,6 +45,7 @@ public class FieldStorageTypeTest {
 
     private static final Column column = new ColumnImpl();
     private static final Table table = new TableImpl().add(column);
+    private static final Schema schema = new SchemaImpl().add(table);
 
     public FieldStorageTypeTest() {
     }
@@ -103,7 +106,8 @@ public class FieldStorageTypeTest {
     public void testDefaultFor() {
         System.out.println("defaultFor");
         assertEquals(FieldStorageType.INHERIT, FieldStorageType.defaultFor(column));
-        assertEquals(FieldStorageType.WRAPPER, FieldStorageType.defaultFor(table));
+        assertEquals(FieldStorageType.INHERIT, FieldStorageType.defaultFor(table));
+        assertEquals(FieldStorageType.WRAPPER, FieldStorageType.defaultFor(schema));
     }
 
 }

@@ -57,10 +57,10 @@ public enum ColumnCompressionType implements Nameable<ColumnCompressionType> {
     public static <T extends ConfigEntity<T, ?, ?>> Stream<ColumnCompressionType> streamFor(final T entity) {
         Objects.requireNonNull(entity);
         try {
-            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
-            if (parentClass.isPresent()) {
+            final Class<? extends ConfigEntity<?, ?, ?>> parentClass = entity.getParentInterfaceMainClass().orElse(null);
+            if (parentClass != null) {
                 // Check if the parent can have FieldStorageTypes. 
-                parentClass.get().getMethod("get" + ColumnCompressionType.class.getSimpleName());
+                parentClass.getMethod("get" + ColumnCompressionType.class.getSimpleName());
                 return stream();
             }
         } catch (NoSuchMethodException nsm) {

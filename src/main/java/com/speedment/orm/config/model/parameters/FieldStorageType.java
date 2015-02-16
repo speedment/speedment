@@ -53,10 +53,10 @@ public enum FieldStorageType implements Nameable<FieldStorageType> {
     public static <T extends ConfigEntity<T, ?, ?>> Stream<FieldStorageType> streamFor(final T entity) {
         Objects.requireNonNull(entity);
         try {
-            final Optional<Class<?>> parentClass = (Optional<Class<?>>) (Object) entity.getParentInterfaceMainClass();
-            if (parentClass.isPresent()) {
+            final Class<? extends ConfigEntity<?, ?, ?>> parentClass = entity.getParentInterfaceMainClass().orElse(null);
+            if (parentClass != null) {
                 // Check if the parent can have FieldStorageTypes. 
-                parentClass.get().getMethod("get" + FieldStorageType.class.getSimpleName());
+                parentClass.getMethod("get" + FieldStorageType.class.getSimpleName());
                 return stream();
             }
         } catch (NoSuchMethodException nsm) {
