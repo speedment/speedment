@@ -3,7 +3,7 @@ Speedment ORM - An accelerated ORM
 
 About
 -----
-The Speedment ORM accelerates your JVM applications and makes programming so much easy!
+The Speedment ORM accelerates your JVM applications and makes programming so easy to do!
 
 Here is an example of how you could use Speedment from your code:
 ```java
