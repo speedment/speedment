@@ -3,7 +3,7 @@ Speedment ORM - An accelerated ORM
 
 About
 -----
-The Speedment ORM accelerates your JVM applications!
+The Speedment ORM accelerates your JVM applications and makes programming so much easy!
 
 Here is an example of how you could use Speedment from your code:
 ```java
@@ -13,7 +13,7 @@ Here is an example of how you could use Speedment from your code:
                                       .streamByStateAndType("CA", "INC")
                                       .filter(Company::isLarge)
                                       .limit(20)
-                                      .sort()
+                                      .sorted()
                                       .collect(toList());
 ```
 
