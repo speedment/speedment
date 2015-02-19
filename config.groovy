@@ -14,14 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-mySql {
+dbms {
     schema { 
         table {
             column {
-                name = "id";
-            }
-            column {
-                name = "value";
+                name = "name";
             }
         }
     }
