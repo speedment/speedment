@@ -33,4 +33,4 @@ When ready, you can just add the following to your project's `pom.xml` to use Sp
 	</dependency>
 ```
 
-N.B. Speedment is not yet on Maven Central Repository so you can't use it in your pom yet...
+N.B. Speedment is not yet on Maven Central Repository so you can't use it in your pom yet unless you manually build and install it.
