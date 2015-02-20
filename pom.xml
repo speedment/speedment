@@ -109,6 +109,12 @@
     <dependencies>
 
         <!-- LICENSE INFORMATION
+        junit:4.12
+        Eclipse Public License 1.0
+        http://junit.org/license.html
+        2015-02-20
+        permin
+        -
         junit:4.10
         Eclipse Public License 1.0
         http://junit.org/license.html
@@ -118,11 +124,17 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <!--            <version>2.1</version>-->
+
         <!-- LICENSE INFORMATION
+        Groovy:2.4.0
+        Apache 2 License
+        http://groovy.codehaus.org/License+Information
+        2015-02-20
+        permin
+        -
         Groovy:2.2.2
         Apache 2 License
         http://groovy.codehaus.org/License+Information
@@ -132,7 +144,7 @@
         <dependency>
             <artifactId>groovy-all</artifactId>
             <groupId>org.codehaus.groovy</groupId>
-            <version>2.2.2</version>
+            <version>2.4.0</version>
         </dependency>
 
         <!-- The logger "Log4j2" was selected because of license terms (SLF4J (MIT), Logback(LGPL)) -->
