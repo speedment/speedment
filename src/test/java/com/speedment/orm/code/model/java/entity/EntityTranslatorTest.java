@@ -37,7 +37,7 @@ import org.junit.Test;
  * @author pemi
  */
 public class EntityTranslatorTest {
-    
+  ;  
     private static final String TABLE_NAME = "user";
     
     Project project = new ProjectImpl().setName("myProject")

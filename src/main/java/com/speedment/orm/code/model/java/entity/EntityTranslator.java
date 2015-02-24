@@ -19,6 +19,7 @@ package com.speedment.orm.code.model.java.entity;
 import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
@@ -28,7 +29,6 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Builder;
-import java.util.function.Consumer;
 
 /**
  *
@@ -36,21 +36,22 @@ import java.util.function.Consumer;
  */
 public class EntityTranslator extends DefaultJavaClassTranslator<Table> {
 
-    private final File file;
+    private final Type type;
 
     public EntityTranslator(Table configEntity) {
         super(configEntity);
-        file = new File(project().getPacketLocation() + "/" + javaTypeName());
+        type = new Type(packagePath() + "." + javaTypeName());
     }
 
     @Override
     public File get() {
-        return with(file, baseInterface);
+        final File file = new File(project().getPacketLocation() + "/" + javaTypeName());
+        file.add(iface());
+        return file;
     }
 
-    private final Consumer<File> baseInterface = (f) -> {
-
-        final Interface iface = new Interface(packagePath() + "." + javaTypeName())
+    private Interface iface() {
+        final Interface iface = new Interface(type.getName())
                 .public_()
                 .setJavadoc(new Javadoc("An interface representing an entity (for example, a row) in the " + getConfigEntity().toString() + "." + GENERATED_JAVADOC_MESSAGE)
                         .add(Default.AUTHOR.copy().setValue("Speedment")))
@@ -59,33 +60,33 @@ public class EntityTranslator extends DefaultJavaClassTranslator<Table> {
         columns().forEach(c -> {
             iface.add(new Method("get" + javaTypeName(c), new Type(c.getMappedClass())));
         });
-        addBean(iface);
-        addBuilder(iface);
-        f.add(iface);
-    };
+        iface.add(bean());
+        iface.add(builder());
+        return iface;
+    }
 
-    private void addBean(Interface iface) {
+    private Interface bean() {
         final Interface beanInterface = new Interface("Bean")
                 .public_()
-                .add(new Type(javaTypeName()));
+                .add(type);
 
         columns().forEach(c -> {
             beanInterface.add(new Method("set" + javaTypeName(c), Default.VOID).add(new Field(javaTypeName(), new Type(c.getMappedClass()))));
         });
-        iface.add(beanInterface);
+        return beanInterface;
     }
 
-    private void addBuilder(Interface iface) {
+    private Interface builder() {
         final Interface beanInterface = new Interface("Bean")
                 .public_()
-                .add(new Type(javaTypeName()))
-                .add(new Type(Builder.class));
+                .add(type)
+                .add(new Type(Builder.class))
+                .add(new Generic(type));
 
         columns().forEach(c -> {
             beanInterface.add(new Method("with" + javaTypeName(c), new Type("Bean")).add(new Field(javaTypeName(), new Type(c.getMappedClass()))));
         });
-        iface.add(beanInterface);
+        return beanInterface;
     }
-;
 
 }
