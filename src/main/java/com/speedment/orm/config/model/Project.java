@@ -18,6 +18,7 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.SpeedmentPlatform;
+import groovy.lang.Closure;
 import java.util.Optional;
 
 /**
@@ -55,5 +56,10 @@ public interface Project extends
 
     @External
     Project setPacketLocation(CharSequence packetLocation);
+
+    // Groovy
+    default Dbms dbms(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewDbms);
+    }
 
 }

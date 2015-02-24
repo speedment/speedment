@@ -23,6 +23,7 @@ import com.speedment.util.stream.StreamUtil;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  *
@@ -128,8 +129,32 @@ public class JavaLanguage {
 
     private static final Set<String> REPLACEMENT_STRING_SET = unmodifiableSetOf("_", "-", "+", " ");
 
-    public static String getJavaNameFromSqlName(final String sqlName) {
-        String result = unQuote(sqlName.trim()); // Trim if there are initial spaces or trailing spaces...
+    public static String javaTypeName(final String externalName) {
+        return javaName(externalName, Character::toUpperCase);
+    }
+
+    public static String javaVariableName(final String externalName) {
+        return javaName(externalName, Character::toLowerCase);
+    }
+
+    private static String javaName(final String externalName, Function<Character, Character> mutator) {
+        int startIndex = 0;
+        for (int i = 0; i < externalName.length(); i++) {
+            if (Character.isAlphabetic(externalName.charAt(i))) {
+                // Skip over any non alphabetic characers like "_"
+                startIndex = i;
+                break;
+            }
+        }
+        final StringBuilder sb = new StringBuilder(javaNameFromExternal(externalName));
+        if (sb.length() > startIndex) {
+            sb.replace(startIndex, startIndex + 1, String.valueOf(mutator.apply(sb.charAt(startIndex))));
+        }
+        return sb.toString();
+    }
+
+    public static String javaNameFromExternal(final String externalName) {
+        String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
         int underscoreIndex;
         for (String replacement : REPLACEMENT_STRING_SET) {
             while ((underscoreIndex = result.indexOf(replacement)) != -1) {
@@ -157,7 +182,7 @@ public class JavaLanguage {
         return word;
     }
 
-    public static String getJavaObjectName(final String javaTypeName) {
+    public static String javaObjectName(final String javaTypeName) {
         String result = null;
         if (javaTypeName.startsWith("int")) {
             result = Integer.class.getSimpleName();
@@ -182,6 +207,25 @@ public class JavaLanguage {
         }
 
         return result;
+    }
+
+    public static String toUnderscoreSeparated(final String javaName) {
+        final StringBuilder result = new StringBuilder();
+        final String input = unQuote(javaName.trim());
+        for (int i = 0; i < input.length(); i++) {
+            final char c = input.charAt(i);
+            if (result.length() == 0) {
+                result.append(Character.toLowerCase(c));
+            } else {
+                if (Character.isUpperCase(c)) {
+                    result.append("_").append(Character.toLowerCase(c));
+                } else {
+                    result.append(c);
+                }
+
+            }
+        }
+        return result.toString();
     }
 
 }

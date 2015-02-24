@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implements Schema {
 
-    private boolean default_;
+    private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
     private FieldStorageType fieldStorageType;
@@ -43,13 +43,13 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public boolean isDefault() {
-        return default_;
+    public boolean isDefaultSchema() {
+        return defaultSchema;
     }
 
     @Override
-    public Schema setDefault(boolean default_) {
-        return run(() -> this.default_ = default_);
+    public Schema setDefaultSchema(boolean defaultSchema) {
+        return run(() -> this.defaultSchema = defaultSchema);
     }
 
     @Override

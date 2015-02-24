@@ -40,7 +40,7 @@ public interface IndexColumn extends
     }
 
     default Column getColumn() {
-        return Hidden.findColumnByName(this, getParent(Table.class), getName());
+        return ConfigEntityUtil.findColumnByName(this, getParent(Table.class), getName());
     }
 
 }

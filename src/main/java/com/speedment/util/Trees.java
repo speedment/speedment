@@ -48,23 +48,23 @@ public class Trees {
         DEPTH_FIRST_PRE, /*DEPTH_FIRST_IN, Supported only for left/right trees*/ DEPTH_FIRST_POST, BREADTH_FIRST;
     }
 
-    public static <T> Stream<T> walk(T first, Function<T, T> traverser) {
+    public static <T> Stream<? extends T> walk(T first, Function<T, T> traverser) {
         return walk(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walk(T first, Function<T, T> traverser, WalkingOrder order) {
+    public static <T> Stream<? extends T> walk(T first, Function<T, T> traverser, WalkingOrder order) {
         return walk(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walkOptional(T first, Function<T, Optional<T>> traverser) {
+    public static <T> Stream<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser) {
         return walkOptional(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order) {
+    public static <T> Stream<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order) {
         return walkOptional(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder) {
+    public static <T> Stream<? extends T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder) {
         if (traversalOrder == TraversalOrder.BREADTH_FIRST) {
             return traverseBredthFirst(first, traverser, Stream.builder()).build();
         } else {
@@ -75,7 +75,7 @@ public class Trees {
     //
     // Private support methods
     //
-    private static <T> Stream.Builder<T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
         if (order == WalkingOrder.FORWARD) {
             builder.add(first);
         }
@@ -86,7 +86,7 @@ public class Trees {
         return builder;
     }
 
-    private static <T> Stream.Builder<T> walk(T first, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> walk(T first, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
         if (order == WalkingOrder.FORWARD) {
             builder.add(first);
         }
@@ -100,7 +100,7 @@ public class Trees {
         return builder;
     }
 
-    private static <T> Stream.Builder<T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
         if (first == null) {
             return builder;
         }
@@ -119,7 +119,7 @@ public class Trees {
         return builder;
     }
 
-    private static <T> Stream.Builder<T> traverseBredthFirst(T first, Function<T, Stream<T>> traverser, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverseBredthFirst(T first, Function<T, Stream<T>> traverser, Stream.Builder<T> builder) {
         if (first == null) {
             return builder;
         }

@@ -17,8 +17,9 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.ConfigParameter;
 import com.speedment.util.Trees;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,18 +29,18 @@ import java.util.stream.Stream;
  * Copyright (c), Speedment AB
  *
  * @author pemi
- * @param <T> The type of the implementing class
+ * @param <T> The type of the implementing class (self)
  * @param <P> The type of the parent class.
  * @param <C> The type of the child class.
  */
-//public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<P, ?, T>, C extends ConfigEntity<?, ?, ?>> extends Comparable<T> {
 @Api(version = 0)
 public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
         Comparable<T> {
 
-    static final int INDEX_FIRST = 0;
-    static final int ORDINAL_FIRST = 1;
-    static final int ORDINAL_UNSET = 0;
+    final int INDEX_FIRST = 0;
+    final int INDEX_UNSET = -1;
+    final int ORDINAL_FIRST = 1;
+    final int ORDINAL_UNSET = -1;
 
     Class<T> getInterfaceMainClass();
 
@@ -86,33 +87,20 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
         return result;
     }
 
-    default boolean hasChildren() {
-        return stream().findAny().isPresent();
+    default <CHILD_CLASS> Stream<? extends CHILD_CLASS> traversalOf(final Class<CHILD_CLASS> clazz) {
+        @SuppressWarnings({"cast", "unchecked"})
+        final Stream<CHILD_CLASS> result = (Stream<CHILD_CLASS>) Trees.traverse((ConfigEntity) this, ConfigEntity::stream, Trees.TraversalOrder.DEPTH_FIRST_PRE)
+                .filter(ce -> clazz.isAssignableFrom(ce.getClass()));
+        return result;
     }
 
-    // Configuration
-    <E> T add(ConfigParameter<? extends E> configParameter);
-
-    <E> T remove(ConfigParameter<? extends E> configParameter);
-
-    <E> boolean contains(ConfigParameter<? extends E> configParameter);
-
-    Stream<ConfigParameter<?>> configStream();
-
-    default boolean hasConfig() {
-        return configStream().findAny().isPresent();
+    default boolean hasChildren() {
+        return stream().findAny().isPresent();
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     static final Function<ConfigEntity, Optional<ConfigEntity>> PARENT_TRAVERSER = (ConfigEntity c) -> c.getParent();
 
-//    static <T extends ConfigEntity<T, P, ?>, P extends ConfigEntity<P,?,T>> Function<T, Optional<P>> parentTraverser() {
-//        return ConfigEntity::getParent;
-//    }
-//
-//    static <T extends ConfigEntity<T, ?, ?>> Function<T, String> nameMapper() {
-//        return ConfigEntity::getName;
-//    }
     default String getRelativeName(ConfigEntity<?, ?, ?> from) {
         return Trees.walkOptional(this, PARENT_TRAVERSER, Trees.WalkingOrder.BACKWARD).map(ConfigEntity::getName).collect(Collectors.joining("."));
     }
@@ -126,13 +114,12 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
     }
 
     /**
-     * Returns a value if the ConfigEntity by definition is not existing. For
-     * example, a Project does not have an overlying Dbms.
+     * Returns a value if the ConfigEntity by definition is not existing.
      *
      * @param <T>
      * @return
      */
-    static <T extends ConfigEntity<?, ?, ?>> Optional<T> emptyConfigEntity() {
+    static <T extends ConfigEntity<T, ?, ?>> Optional<T> emptyConfigEntity() {
         return Optional.empty();
     }
 
@@ -198,48 +185,6 @@ public abstract interface ConfigEntity<T extends ConfigEntity<T, P, C>, P extend
         return toGroovy(0);
     }
 
-    static class Hidden {
-
-        static protected Column findColumnByName(ConfigEntity<?, ?, ?> configEntity, Optional<Table> optionalTable, String name) {
-            final Table table = optionalTable
-                    .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " associated with this " + configEntity.toString()));
-            return table
-                    .streamOf(Column.class)
-                    .filter(c -> c.getName().equals(name))
-                    .findAny()
-                    .orElseThrow(() -> new IllegalStateException("There is no " + Column.class.getSimpleName() + " in the " + table.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
-        }
-
-        static protected Table findTableByName(ConfigEntity<?, ?, ?> configEntity, Optional<Schema> optionalSchema, String name) {
-            final Schema currentSchema = optionalSchema.orElseThrow(() -> new IllegalStateException("There is no " + Schema.class.getSimpleName() + " associated with this " + configEntity.toString()));
-            final String[] paths = name.split("\\.");
-            // Just the name of the table
-            if (paths.length == 0) {
-                return currentSchema
-                        .stream()
-                        .filter(c -> c.getName().equals(name))
-                        .findAny()
-                        .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " in the " + currentSchema.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
-            }
-            // The name is "schema.table"
-            if (paths.length == 1) {
-                final String otherSchemaName = paths[0];
-                final String tableName = paths[1];
-                final Dbms dbms = currentSchema.getParent().orElseThrow(() -> new IllegalStateException("No " + Dbms.class.getSimpleName() + " for " + currentSchema.toString()));
-                final Schema otherSchema = dbms
-                        .stream()
-                        .filter(t -> t.getName().equals(otherSchemaName))
-                        .findAny()
-                        .orElseThrow(() -> new IllegalStateException("No " + Schema.class.getSimpleName() + " named " + otherSchemaName + " in " + Dbms.class.getSimpleName() + " " + dbms.toString()));
-
-                return otherSchema
-                        .stream()
-                        .filter(t -> t.getName().equals(tableName))
-                        .findAny()
-                        .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " in the " + currentSchema.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
-            }
-            throw new IllegalStateException("There is no " + Table.class.getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name);
-        }
-    }
+    public void fromGroovy(final Path path) throws IOException;
 
 }

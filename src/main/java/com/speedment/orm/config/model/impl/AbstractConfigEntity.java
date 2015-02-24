@@ -16,15 +16,17 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.ConfigParameter;
 import com.speedment.orm.config.DelegatorGroovyTest;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.External;
 import com.speedment.orm.config.model.OrdinalConfigEntity;
+import com.speedment.orm.config.model.Project;
 import com.speedment.util.Beans;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
+import com.speedment.util.java.JavaLanguage;
 import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
 import java.io.IOException;
@@ -42,10 +44,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -69,13 +71,11 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     private String name;
     private P parent;
     private final Map<String, C> children;
-    private final Set<ConfigParameter<?>> configParameters;
     private final AtomicInteger namingSequence;
     private final Map<Class<? extends ConfigEntity<?, ?, ?>>, AtomicInteger> childSequences;
 
     public AbstractConfigEntity() {
         children = new ConcurrentSkipListMap<>();
-        configParameters = new ConcurrentSkipListSet<>();
         namingSequence = new AtomicInteger(ORDINAL_FIRST);
         childSequences = new ConcurrentHashMap<>();
         init();
@@ -83,14 +83,14 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
     protected void init() {
         setEnabled(true);
-        setName(getBaseName() + "_" + Integer.toString(getNamingSequence().getAndIncrement()));
+        setName(getDefaultBaseName() + "_" + Integer.toString(getNamingSequence().getAndIncrement()));
         setDefaults();
     }
 
     protected abstract void setDefaults();
 
-    protected String getBaseName() {
-        return getClass().getSimpleName();
+    protected String getDefaultBaseName() {
+        return JavaLanguage.toUnderscoreSeparated(getInterfaceMainClass().getSimpleName());
     }
 
     @Override
@@ -191,27 +191,6 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
         return children.values().stream();
     }
 
-    // Config
-    @Override
-    public <E> T add(ConfigParameter<? extends E> configParameter) {
-        return with(configParameter, configParameters::add);
-    }
-
-    @Override
-    public <E> T remove(ConfigParameter<? extends E> configParameter) {
-        return with(configParameter, configParameters::remove);
-    }
-
-    @Override
-    public <E> boolean contains(ConfigParameter<? extends E> configParameter) {
-        return configParameters.contains(configParameter);
-    }
-
-    @Override
-    public Stream<ConfigParameter<?>> configStream() {
-        return configParameters.stream();
-    }
-
     // Util methods
     @SuppressWarnings("unchecked")
     protected <P> T with(final P item, final Consumer<P> consumer) {
@@ -310,7 +289,8 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
         }, StringBuilder::toString);
     }
 
-    public void readGroovy(final Path path) throws IOException {
+    @Override
+    public void fromGroovy(final Path path) throws IOException {
 
         final Binding binding = new Binding();
         binding.setVariable("implementationVersion", getClass().getPackage().getImplementationVersion());
@@ -337,6 +317,25 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
 
         System.out.println(this.toString());
 
+    }
+
+//    public <S> S groovyDelegatorHelper(Closure c, Supplier<S> supplier, Consumer<S> updater) {
+//        Objects.requireNonNull(supplier);
+//        Objects.requireNonNull(updater);
+//        final S result = supplier.get();
+//        c.setDelegate(result);
+//        c.setResolveStrategy(Closure.DELEGATE_ONLY);
+//        ((Consumer) updater).accept(result);
+//        c.call();
+//        return result;
+//    }
+    @Override
+    public String toString() {
+        final Optional<Project> optionalProject = getParent(Project.class);
+        if (optionalProject.isPresent()) {
+            return getInterfaceMainClass().getSimpleName() + " '" + getRelativeName(optionalProject.get()) + "'";
+        }
+        return getInterfaceMainClass().getSimpleName() + " '?." + getName() + "'";
     }
 
 }

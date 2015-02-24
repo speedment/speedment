@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
 import com.speedment.orm.platform.SpeedmentPlatform;
+import groovy.lang.Closure;
 import java.util.Optional;
 
 /**
@@ -61,5 +62,10 @@ public interface Table extends
 
     @External
     Table setTableName(CharSequence tableName);
+
+    // Groovy
+    default Column column(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewColumn);
+    }
 
 }

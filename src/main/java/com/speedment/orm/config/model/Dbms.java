@@ -19,6 +19,7 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import com.speedment.orm.platform.SpeedmentPlatform;
+import groovy.lang.Closure;
 import java.util.Optional;
 
 /**
@@ -83,5 +84,10 @@ public interface Dbms extends
 
     @External
     Dbms setPassword(CharSequence password);
+
+    // Groovy
+    default Schema schema(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewSchema);
+    }
 
 }

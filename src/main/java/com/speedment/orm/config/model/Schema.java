@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
 import com.speedment.orm.platform.SpeedmentPlatform;
+import groovy.lang.Closure;
 import java.util.Optional;
 
 /**
@@ -51,10 +52,10 @@ public interface Schema extends
     }
 
     @External
-    boolean isDefault();
+    boolean isDefaultSchema();
 
     @External
-    Schema setDefault(boolean default_);
+    Schema setDefaultSchema(boolean defaultSchema);
 
     @External
     Optional<String> getCatalogName();
@@ -67,5 +68,10 @@ public interface Schema extends
 
     @External
     Schema setSchemaName(CharSequence schemaName);
+
+    // Groovy
+    default Table table(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewTable);
+    }
 
 }

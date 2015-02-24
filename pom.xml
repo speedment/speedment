@@ -173,6 +173,12 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>codegen</groupId>
+            <artifactId>CodeGen</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
     </dependencies>
     
 

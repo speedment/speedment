@@ -38,7 +38,7 @@ public interface ForeignKeyColumn extends
     }
 
     default Column getColumn() {
-        return Hidden.findColumnByName(this, getParent(Table.class), getName());
+        return ConfigEntityUtil.findColumnByName(this, getParent(Table.class), getName());
     }
 
     @External
@@ -54,11 +54,11 @@ public interface ForeignKeyColumn extends
     ForeignKeyColumn setForeignTableName(CharSequence foreignTableName);
 
     default Column getForeignColumn() {
-        return Hidden.findColumnByName(this, Optional.of(getForeignTable()), getForeignColumnName());
+        return ConfigEntityUtil.findColumnByName(this, Optional.of(getForeignTable()), getForeignColumnName());
     }
 
     default Table getForeignTable() {
-        return Hidden.findTableByName(this, getParent(Schema.class), getForeignTableName());
+        return ConfigEntityUtil.findTableByName(this, getParent(Schema.class), getForeignTableName());
     }
 
 }
