@@ -33,19 +33,19 @@ import com.speedment.util.java.JavaLanguage;
  */
 public interface JavaClassTranslator<T extends ConfigEntity<?, ?, ?>> extends Translator<T, File> {
 
-    default String javaVariableName() {
-        return javaVariableName(getConfigEntity());
+    default String variableName() {
+        return variableName(getConfigEntity());
     }
 
-    default String javaVariableName(ConfigEntity<?, ?, ?> configEntity) {
+    default String variableName(ConfigEntity<?, ?, ?> configEntity) {
         return JavaLanguage.javaVariableName(configEntity.getName());
     }
 
-    default String javaTypeName() {
-        return javaTypeName(getConfigEntity());
+    default String typeName() {
+        return typeName(getConfigEntity());
     }
 
-    default String javaTypeName(ConfigEntity<?, ?, ?> configEntity) {
+    default String typeName(ConfigEntity<?, ?, ?> configEntity) {
         return JavaLanguage.javaTypeName(configEntity.getName());
     }
 

@@ -16,17 +16,18 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Field;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Interface;
-import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.constants.Default;
+import com.speedment.codegen.lang.models.implementation.AnnotationUsageImpl;
+import com.speedment.codegen.lang.models.implementation.FieldImpl;
+import com.speedment.codegen.lang.models.implementation.GenericImpl;
+import com.speedment.codegen.lang.models.implementation.InterfaceImpl;
+import com.speedment.codegen.lang.models.implementation.MethodImpl;
+import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Builder;
 
@@ -34,31 +35,20 @@ import com.speedment.orm.core.Builder;
  *
  * @author pemi
  */
-public class EntityTranslator extends DefaultJavaClassTranslator<Table> {
-
-    private final Type type;
+public class EntityTranslator extends BaseEntityTranslator {
 
     public EntityTranslator(Table configEntity) {
         super(configEntity);
-        type = new Type(packagePath() + "." + javaTypeName());
     }
 
     @Override
-    public File get() {
-        final File file = new File(project().getPacketLocation() + "/" + javaTypeName());
-        file.add(iface());
-        return file;
-    }
-
-    private Interface iface() {
-        final Interface iface = new Interface(type.getName())
+    protected ClassOrInterface make() {
+        final Interface iface = new InterfaceImpl(INTERFACE.getType().getName())
                 .public_()
-                .setJavadoc(new Javadoc("An interface representing an entity (for example, a row) in the " + getConfigEntity().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-                        .add(Default.AUTHOR.copy().setValue("Speedment")))
-                .add(new AnnotationUsage(new Type(Api.class)));
+                .add(new AnnotationUsageImpl(new TypeImpl(Api.class)));
 
         columns().forEach(c -> {
-            iface.add(new Method("get" + javaTypeName(c), new Type(c.getMappedClass())));
+            iface.add(new MethodImpl("get" + typeName(c), new TypeImpl(c.getMappedClass())));
         });
         iface.add(bean());
         iface.add(builder());
@@ -66,27 +56,43 @@ public class EntityTranslator extends DefaultJavaClassTranslator<Table> {
     }
 
     private Interface bean() {
-        final Interface beanInterface = new Interface("Bean")
+        final Interface beanInterface = new InterfaceImpl("Bean")
                 .public_()
-                .add(type);
+                .add(INTERFACE.getType());
 
         columns().forEach(c -> {
-            beanInterface.add(new Method("set" + javaTypeName(c), Default.VOID).add(new Field(javaTypeName(), new Type(c.getMappedClass()))));
+            Field f = new FieldImpl(typeName(), new TypeImpl(c.getMappedClass()));
+            Method m = new MethodImpl("set" + typeName(c), Default.VOID);
+            m.add(f);
+            beanInterface.add(m);
         });
         return beanInterface;
     }
 
     private Interface builder() {
-        final Interface beanInterface = new Interface("Bean")
+        final Interface builderInterface = new InterfaceImpl("Builder")
                 .public_()
-                .add(type)
-                .add(new Type(Builder.class))
-                .add(new Generic(type));
+                .add(INTERFACE.getType())
+                .add(new TypeImpl(Builder.class))
+                .add(new GenericImpl(INTERFACE.getType()));
 
         columns().forEach(c -> {
-            beanInterface.add(new Method("with" + javaTypeName(c), new Type("Bean")).add(new Field(javaTypeName(), new Type(c.getMappedClass()))));
+            Field f = new FieldImpl(typeName(), new TypeImpl(c.getMappedClass()));
+            Method m = new MethodImpl("with" + typeName(c), new TypeImpl("Builder"));
+            m.add(f);
+            builderInterface.add(m);
         });
-        return beanInterface;
+        return builderInterface;
+    }
+
+    @Override
+    protected String getJavadocRepresentText() {
+        return "An interface";
+    }
+
+    @Override
+    protected String getFileName() {
+        return INTERFACE.getType().getName();
     }
 
 }
