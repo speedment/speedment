@@ -34,7 +34,7 @@ public interface User {
         Bean setFirstName(String firstName);
     }
 
-    public interface Builder extends User, com.speedment.orm.core.Builder<User> {
+    public interface Builder extends User, com.speedment.orm.core.Buildable<User> {
 
         Builder firstName(String firstName);
     }

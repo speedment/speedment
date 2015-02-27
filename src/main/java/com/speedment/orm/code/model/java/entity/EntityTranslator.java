@@ -16,20 +16,17 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.constants.Default;
-import com.speedment.codegen.lang.models.implementation.AnnotationUsageImpl;
-import com.speedment.codegen.lang.models.implementation.FieldImpl;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.codegen.lang.models.implementation.InterfaceImpl;
-import com.speedment.codegen.lang.models.implementation.MethodImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.core.Builder;
+import com.speedment.orm.core.Buildable;
 
 /**
  *
@@ -43,46 +40,48 @@ public class EntityTranslator extends BaseEntityTranslator {
 
     @Override
     protected ClassOrInterface make() {
-        final Interface iface = new InterfaceImpl(INTERFACE.getType().getName())
-                .public_()
-                .add(new AnnotationUsageImpl(new TypeImpl(Api.class)));
-
-        columns().forEach(c -> {
-            iface.add(new MethodImpl("get" + typeName(c), new TypeImpl(c.getMappedClass())));
+        return with(Interface.of(INTERFACE.getType().getName()), i -> {
+            i
+                    .public_()
+                    .add(AnnotationUsage.of(Type.of(Api.class)))
+                    .add(bean())
+                    .add(builder());
+            columns().forEach(c -> {
+                i.add(Method.of("get" + typeName(c), Type.of(c.getMappedClass())));
+            });
         });
-        iface.add(bean());
-        iface.add(builder());
-        return iface;
+
     }
 
     private Interface bean() {
-        final Interface beanInterface = new InterfaceImpl("Bean")
-                .public_()
-                .add(INTERFACE.getType());
+        return with(Interface.of("Bean"), i -> {
+            i
+                    .public_()
+                    .add(INTERFACE.getType());
 
-        columns().forEach(c -> {
-            Field f = new FieldImpl(typeName(), new TypeImpl(c.getMappedClass()));
-            Method m = new MethodImpl("set" + typeName(c), Default.VOID);
-            m.add(f);
-            beanInterface.add(m);
+            columns().forEach(c -> {
+                final Field f = Field.of(typeName(c), Type.of(c.getMappedClass()));
+                final Method m = Method.of("set" + typeName(c), Default.VOID).add(f);
+                i.add(m);
+            });
+
         });
-        return beanInterface;
     }
 
     private Interface builder() {
-        final Interface builderInterface = new InterfaceImpl("Builder")
-                .public_()
-                .add(INTERFACE.getType())
-                .add(new TypeImpl(Builder.class))
-                .add(new GenericImpl(INTERFACE.getType()));
+        return with(Interface.of("Builder"), i -> {
+            i
+                    .public_()
+                    .add(INTERFACE.getType())
+                    .add(Type.of(Buildable.class).add(new GenericImpl(INTERFACE.getType())));
 
-        columns().forEach(c -> {
-            Field f = new FieldImpl(typeName(), new TypeImpl(c.getMappedClass()));
-            Method m = new MethodImpl("with" + typeName(c), new TypeImpl("Builder"));
-            m.add(f);
-            builderInterface.add(m);
+            columns().forEach(c -> {
+                Field f = Field.of(typeName(), Type.of(c.getMappedClass()));
+                Method m = Method.of("with" + typeName(c), Type.of("Builder")).add(f);
+                i.add(m);
+            });
+
         });
-        return builderInterface;
     }
 
     @Override
