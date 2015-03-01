@@ -16,15 +16,10 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.constants.Default;
-import com.speedment.codegen.lang.models.implementation.ClassImpl;
-import com.speedment.codegen.lang.models.implementation.ConstructorImpl;
-import com.speedment.codegen.lang.models.implementation.FieldImpl;
-import com.speedment.codegen.lang.models.implementation.MethodImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.config.model.Table;
 
 /**
@@ -38,27 +33,41 @@ public class EntityImplTranslator extends BaseEntityTranslator {
     }
 
     @Override
-    protected ClassOrInterface make() {
-        final com.speedment.codegen.lang.models.Class clazz = new ClassImpl(INTERFACE.getImplType().getName())
-                .public_()
-                .add(INTERFACE.getType());
-
-        final Constructor constructor = new ConstructorImpl().public_();
-        constructor.add(new FieldImpl(variableName(), INTERFACE.getType()).final_());
-        clazz.add(constructor);
-
-        columns().forEach(c -> {
-            final Type getterType = new TypeImpl(c.getMappedClass());
-            clazz.add(new FieldImpl(variableName(c), getterType).private_().final_());
-            clazz.add(new MethodImpl("get" + typeName(c), getterType).public_().add("return " + variableName(c) + ";").add(Default.OVERRIDE));
-            constructor.add("this." + variableName(c) + " = " + variableName() + "." + "get" + typeName(c) + "();");
+    protected Class make() {
+        return with(new BaseClass(INTERFACE.getImplType().getName(), (cl, c) -> {
+            cl
+                    .add(cl.fieldFor(c).private_().final_())
+                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
+                            .add(Default.OVERRIDE)
+                            .public_()
+                            .add("return " + variableName(c) + ";"));
+        }), cl -> {
+            cl
+                    .add(INTERFACE.getType())
+                    .add(cl.emptyConstructor())
+                    .add(cl.copyConstructor());
         });
-        return clazz;
+//
+//        final com.speedment.codegen.lang.models.Class clazz = new ClassImpl(INTERFACE.getImplType().getName())
+//                .public_()
+//                .add(INTERFACE.getType());
+//
+//        final Constructor constructor = new ConstructorImpl().public_();
+//        constructor.add(new FieldImpl(variableName(), INTERFACE.getType()).final_());
+//        clazz.add(constructor);
+//
+//        columns().forEach(c -> {
+//            final Type getterType = new TypeImpl(c.getMappedClass());
+//            clazz.add(new FieldImpl(variableName(c), getterType).private_().final_());
+//            clazz.add(new MethodImpl("get" + typeName(c), getterType).public_().add("return " + variableName(c) + ";").add(Default.OVERRIDE));
+//            constructor.add("this." + variableName(c) + " = " + variableName() + "." + "get" + typeName(c) + "();");
+//        });
+//        return clazz;
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "An implementation";
+        return "An immutable implementation";
     }
 
     @Override

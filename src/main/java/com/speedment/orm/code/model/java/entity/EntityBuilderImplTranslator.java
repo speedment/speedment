@@ -16,16 +16,10 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.constants.Default;
-import com.speedment.codegen.lang.models.implementation.ClassImpl;
-import com.speedment.codegen.lang.models.implementation.ConstructorImpl;
-import com.speedment.codegen.lang.models.implementation.FieldImpl;
-import com.speedment.codegen.lang.models.implementation.MethodImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.config.model.Table;
 
 /**
@@ -41,48 +35,36 @@ public class EntityBuilderImplTranslator extends BaseEntityTranslator {
     }
 
     @Override
-    protected ClassOrInterface make() {
-        final com.speedment.codegen.lang.models.Class clazz = new ClassImpl(BUILDER.getImplType().getName())
-                .public_()
-                .add(BUILDER.getType());
-
-        clazz.add(new ConstructorImpl().public_());
-
-        final Constructor copyConstructor = new ConstructorImpl().public_();
-        copyConstructor.add(new FieldImpl(variableName(), INTERFACE.getType()).final_());
-        clazz.add(copyConstructor);
-
-        columns().forEach(c -> {
-            final Type columnType = new TypeImpl(c.getMappedClass());
-            clazz.add(new FieldImpl(variableName(c), columnType).private_());
-
-            clazz.add(new MethodImpl("get" + typeName(c), columnType)
-                    .public_()
-                    .add(Default.OVERRIDE)
-                    .add("return " + variableName(c) + ";"));
-            clazz.add(new MethodImpl(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType())
-                    .public_()
-                    .add(Default.OVERRIDE)
-                    .add(new FieldImpl(variableName(c), columnType))
-                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                    .add("return this;")
-            );
-            copyConstructor.add(BUILDER_METHOD_PREFIX + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
+    protected Class make() {
+        return with(new BaseClass(BUILDER.getImplType().getName(), (cl, c) -> {
+            cl
+                    .add(cl.fieldFor(c).private_())
+                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
+                            .public_()
+                            .add(Default.OVERRIDE)
+                            .add("return " + variableName(c) + ";"))
+                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType())
+                            .public_()
+                            .add(Default.OVERRIDE)
+                            .add(cl.fieldFor(c))
+                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                            .add("return this;")
+                    );
+        }), cl -> {
+            cl
+                    .add(BUILDER.getType())
+                    .add(cl.emptyConstructor())
+                    .add(cl.copyConstructor())
+                    .add(Method.of("build", INTERFACE.getType())
+                            .add(Default.OVERRIDE)
+                            .public_()
+                            .add("return new " + INTERFACE.getImplType().getName() + "(this);"));
         });
-
-        final Method build = new MethodImpl("build", INTERFACE.getType())
-                .add(Default.OVERRIDE)
-                .public_()
-                .add("return new " + INTERFACE.getImplType().getName() + "(this);");
-        clazz.add(build);
-
-        // clazz.call(new SetGetAdd());
-        return clazz;
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "An builder";
+        return "A builder implementation ";
     }
 
     @Override

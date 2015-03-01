@@ -17,8 +17,6 @@
 package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.lang.models.AnnotationUsage;
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
@@ -39,48 +37,31 @@ public class EntityTranslator extends BaseEntityTranslator {
     }
 
     @Override
-    protected ClassOrInterface make() {
-        return with(Interface.of(INTERFACE.getType().getName()), i -> {
+    protected Interface make() {
+        return with(new BaseInterface(INTERFACE.getType().getName(), (i, c) -> {
+            i.add(Method.of("get" + typeName(c), Type.of(c.getMappedClass())));
+        }), i -> {
             i
-                    .public_()
                     .add(AnnotationUsage.of(Type.of(Api.class)))
                     .add(bean())
                     .add(builder());
-            columns().forEach(c -> {
-                i.add(Method.of("get" + typeName(c), Type.of(c.getMappedClass())));
-            });
         });
-
     }
 
     private Interface bean() {
-        return with(Interface.of("Bean"), i -> {
-            i
-                    .public_()
-                    .add(INTERFACE.getType());
-
-            columns().forEach(c -> {
-                final Field f = Field.of(typeName(c), Type.of(c.getMappedClass()));
-                final Method m = Method.of("set" + typeName(c), Default.VOID).add(f);
-                i.add(m);
-            });
-
+        return with(new BaseInterface("Bean", (i, c) -> {
+            i.add(Method.of("set" + typeName(c), Default.VOID).add(i.fieldFor(c)));
+        }), i -> {
+            i.add(INTERFACE.getType());
         });
     }
 
     private Interface builder() {
-        return with(Interface.of("Builder"), i -> {
-            i
-                    .public_()
-                    .add(INTERFACE.getType())
+        return with(new BaseInterface("Builder", (cl, c) -> {
+            cl.add(Method.of("with" + typeName(c), Type.of("Builder")).add(cl.fieldFor(c)));
+        }), cl -> {
+            cl.add(INTERFACE.getType())
                     .add(Type.of(Buildable.class).add(new GenericImpl(INTERFACE.getType())));
-
-            columns().forEach(c -> {
-                Field f = Field.of(typeName(), Type.of(c.getMappedClass()));
-                Method m = Method.of("with" + typeName(c), Type.of("Builder")).add(f);
-                i.add(m);
-            });
-
         });
     }
 
@@ -93,5 +74,6 @@ public class EntityTranslator extends BaseEntityTranslator {
     protected String getFileName() {
         return INTERFACE.getType().getName();
     }
+
 
 }

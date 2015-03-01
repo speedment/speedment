@@ -17,15 +17,21 @@
 package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.lang.models.Constructor;
+import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.constants.Default;
+import com.speedment.codegen.lang.models.implementation.ClassImpl;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
+import com.speedment.codegen.lang.models.implementation.InterfaceImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
+import java.util.function.BiConsumer;
 
 /**
  *
@@ -84,6 +90,47 @@ public abstract class BaseEntityTranslator extends DefaultJavaClassTranslator<Ta
 
     protected boolean isInImplPackage() {
         return false;
+    }
+
+    protected class BaseInterface extends InterfaceImpl {
+
+        public BaseInterface(String name, BiConsumer<BaseInterface, Column> columnActor) {
+            super(name);
+            public_();
+            columns().forEachOrdered(c -> columnActor.accept(this, c));
+        }
+
+        public Field fieldFor(Column c) {
+            return Field.of(variableName(c), Type.of(c.getMappedClass()));
+        }
+
+    }
+
+    protected class BaseClass extends ClassImpl {
+
+        public BaseClass(String name, BiConsumer<BaseClass, Column> columnActor) {
+            super(name);
+            public_();
+            columns().forEachOrdered(c -> columnActor.accept(this, c));
+        }
+
+        public Field fieldFor(Column c) {
+            return Field.of(variableName(c), Type.of(c.getMappedClass()));
+        }
+
+        public Constructor emptyConstructor() {
+            return Constructor.of().public_();
+        }
+
+        public Constructor copyConstructor() {
+            return with(Constructor.of().public_().add(Field.of(variableName(), INTERFACE.getType()).final_()), constructor -> {
+                columns().forEachOrdered(c -> {
+                    constructor.add("set" + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
+                });
+            });
+
+        }
+
     }
 
 }

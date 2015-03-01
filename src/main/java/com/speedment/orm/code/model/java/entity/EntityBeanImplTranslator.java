@@ -16,15 +16,9 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Constructor;
-import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.constants.Default;
-import com.speedment.codegen.lang.models.implementation.ClassImpl;
-import com.speedment.codegen.lang.models.implementation.ConstructorImpl;
-import com.speedment.codegen.lang.models.implementation.FieldImpl;
-import com.speedment.codegen.lang.models.implementation.MethodImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.config.model.Table;
 
 /**
@@ -38,42 +32,32 @@ public class EntityBeanImplTranslator extends BaseEntityTranslator {
     }
 
     @Override
-    protected ClassOrInterface make() {
-        final com.speedment.codegen.lang.models.Class clazz = new ClassImpl(BEAN.getImplType().getName())
-                .public_()
-                .add(BEAN.getType());
-
-        clazz.add(new ConstructorImpl().public_());
-
-        final Constructor copyConstructor = new ConstructorImpl().public_();
-        copyConstructor.add(new FieldImpl(variableName(), INTERFACE.getType()).final_());
-        clazz.add(copyConstructor);
-
-        columns().forEach(c -> {
-            final Type columnType = new TypeImpl(c.getMappedClass());
-            clazz.add(new FieldImpl(variableName(c), columnType));
-
-            clazz.add(new MethodImpl("get" + typeName(c), columnType)
-                    .public_()
-                    .add(Default.OVERRIDE)
-                    .add("return " + variableName(c) + ";"));
-            clazz.add(new MethodImpl("set" + typeName(c), BEAN.getType())
-                    .public_()
-                    .add(Default.OVERRIDE)
-                    .add(new FieldImpl(variableName(c), columnType))
-                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                    .add("return this;")
-            );
-            copyConstructor.add("set" + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
+    protected Class make() {
+        return with(new BaseClass(BEAN.getImplType().getName(), (cl, c) -> {
+            cl
+                    .add(cl.fieldFor(c).private_())
+                    .add(Method.of("get" + typeName(c), cl.fieldFor(c).getType())
+                            .public_()
+                            .add(Default.OVERRIDE)
+                            .add("return " + variableName(c) + ";"))
+                    .add(Method.of("set" + typeName(c), BEAN.getType())
+                            .public_()
+                            .add(Default.OVERRIDE)
+                            .add(cl.fieldFor(c))
+                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                            .add("return this;")
+                    );
+        }), cl -> {
+            cl
+                    .add(BEAN.getType())
+                    .add(cl.emptyConstructor())
+                    .add(cl.copyConstructor());
         });
-
-        // clazz.call(new SetGetAdd());
-        return clazz;
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A bean";
+        return "A bean implementation";
     }
 
     @Override

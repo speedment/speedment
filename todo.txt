@@ -1,0 +1,2 @@
+Use a normal POJO as configuration source instead of a database (Like JPA)
+JPA
