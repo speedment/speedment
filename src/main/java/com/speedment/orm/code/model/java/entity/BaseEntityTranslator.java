@@ -17,27 +17,23 @@
 package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Constructor;
-import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
-import com.speedment.codegen.lang.models.constants.Default;
-import com.speedment.codegen.lang.models.implementation.ClassImpl;
+import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
-import com.speedment.codegen.lang.models.implementation.InterfaceImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
-import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
-import java.util.function.BiConsumer;
 
 /**
  *
  * @author pemi
+ * @param <T> Type of item to generate
  */
-public abstract class BaseEntityTranslator extends DefaultJavaClassTranslator<Table> {
+public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table> {
+
 
     public class ClassType {
         //INTERFACE("","Impl"), BEAN(".Bean","BeanImpl"), BUILDER(".Builder","BuilderImpl");
@@ -73,64 +69,23 @@ public abstract class BaseEntityTranslator extends DefaultJavaClassTranslator<Ta
     @Override
     public File get() {
         final File file = new FileImpl(packagePath().replace('.', '/') + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
-        final ClassOrInterface clazz = make();
-        clazz.setJavadoc(getJavaDoc());
-        file.add(clazz);
+        final T item = make();
+        item.set(getJavaDoc());
+        file.add(item);
         return file;
     }
 
-    protected abstract ClassOrInterface make();
+    protected abstract T make();
 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
         return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getConfigEntity().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-                .add(Default.AUTHOR.copy().setValue("Speedment"));
+                .add(AUTHOR.setValue("Speedment"));
     }
 
     protected boolean isInImplPackage() {
         return false;
-    }
-
-    protected class BaseInterface extends InterfaceImpl {
-
-        public BaseInterface(String name, BiConsumer<BaseInterface, Column> columnActor) {
-            super(name);
-            public_();
-            columns().forEachOrdered(c -> columnActor.accept(this, c));
-        }
-
-        public Field fieldFor(Column c) {
-            return Field.of(variableName(c), Type.of(c.getMappedClass()));
-        }
-
-    }
-
-    protected class BaseClass extends ClassImpl {
-
-        public BaseClass(String name, BiConsumer<BaseClass, Column> columnActor) {
-            super(name);
-            public_();
-            columns().forEachOrdered(c -> columnActor.accept(this, c));
-        }
-
-        public Field fieldFor(Column c) {
-            return Field.of(variableName(c), Type.of(c.getMappedClass()));
-        }
-
-        public Constructor emptyConstructor() {
-            return Constructor.of().public_();
-        }
-
-        public Constructor copyConstructor() {
-            return with(Constructor.of().public_().add(Field.of(variableName(), INTERFACE.getType()).final_()), constructor -> {
-                columns().forEachOrdered(c -> {
-                    constructor.add("set" + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
-                });
-            });
-
-        }
-
     }
 
 }

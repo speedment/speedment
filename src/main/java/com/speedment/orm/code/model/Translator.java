@@ -24,7 +24,9 @@ package com.speedment.orm.code.model;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.ForeignKey;
 import com.speedment.orm.config.model.Index;
+import com.speedment.orm.config.model.PrimaryKeyColumn;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
@@ -72,6 +74,14 @@ public interface Translator<T extends ConfigEntity<?, ?, ?>, R> extends Supplier
 
     default Stream<Index> indexes() {
         return table().streamOf(Index.class);
+    }
+    
+    default Stream<ForeignKey> foreignKeys() {
+        return table().streamOf(ForeignKey.class);
+    }
+    
+    default Stream<PrimaryKeyColumn> primaryKeyColumns() {
+        return table().streamOf(PrimaryKeyColumn.class);
     }
 
     default <T extends ConfigEntity<T, ?, ?>> T getGenericConfigEntity(Class<T> clazz) {

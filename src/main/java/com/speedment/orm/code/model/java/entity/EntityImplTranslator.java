@@ -19,14 +19,14 @@ package com.speedment.orm.code.model.java.entity;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.constants.Default;
+import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 
 /**
  *
  * @author pemi
  */
-public class EntityImplTranslator extends BaseEntityTranslator {
+public class EntityImplTranslator extends BaseEntityTranslator<Class> {
 
     public EntityImplTranslator(Table configEntity) {
         super(configEntity);
@@ -34,38 +34,40 @@ public class EntityImplTranslator extends BaseEntityTranslator {
 
     @Override
     protected Class make() {
-        return with(new BaseClass(INTERFACE.getImplType().getName(), (cl, c) -> {
-            cl
-                    .add(cl.fieldFor(c).private_().final_())
-                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
-                            .add(Default.OVERRIDE)
+        return new ClassBuilder(INTERFACE.getImplType().getName())
+                .addColumnConsumer((cl, c) -> {
+                    cl
+                    .add(fieldFor(c).private_().final_())
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMappedClass()))
+                            .add(OVERRIDE)
                             .public_()
                             .add("return " + variableName(c) + ";"));
-        }), cl -> {
-            cl
-                    .add(INTERFACE.getType())
-                    .add(cl.emptyConstructor())
-                    .add(cl.copyConstructor());
-        });
-//
-//        final com.speedment.codegen.lang.models.Class clazz = new ClassImpl(INTERFACE.getImplType().getName())
-//                .public_()
-//                .add(INTERFACE.getType());
-//
-//        final Constructor constructor = new ConstructorImpl().public_();
-//        constructor.add(new FieldImpl(variableName(), INTERFACE.getType()).final_());
-//        clazz.add(constructor);
-//
-//        columns().forEach(c -> {
-//            final Type getterType = new TypeImpl(c.getMappedClass());
-//            clazz.add(new FieldImpl(variableName(c), getterType).private_().final_());
-//            clazz.add(new MethodImpl("get" + typeName(c), getterType).public_().add("return " + variableName(c) + ";").add(Default.OVERRIDE));
-//            constructor.add("this." + variableName(c) + " = " + variableName() + "." + "get" + typeName(c) + "();");
-//        });
-//        return clazz;
+                })
+                .build()
+                .public_()
+                .add(INTERFACE.getType())
+                //.add(emptyConstructor())
+                .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.FIELD));
+
     }
 
+//        
+//        return with(new BaseClass(INTERFACE.getImplType().getName(), (cl, c) -> {
+//            cl
+//                    .add(cl.fieldFor(c).private_().final_())
+//                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
+//                            .add(Default.OVERRIDE)
+//                            .public_()
+//                            .add("return " + variableName(c) + ";"));
+//        }), cl -> {
+//            cl
+//                    .add(INTERFACE.getType())
+//                    .add(cl.emptyConstructor())
+//                    .add(cl.copyConstructor());
+//        });
+//    }
     @Override
+
     protected String getJavadocRepresentText() {
         return "An immutable implementation";
     }

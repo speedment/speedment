@@ -18,41 +18,41 @@ package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.constants.Default;
+import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 
 /**
  *
  * @author pemi
  */
-public class EntityBeanImplTranslator extends BaseEntityTranslator {
-
+public class EntityBeanImplTranslator extends BaseEntityTranslator<Class> {
+  
     public EntityBeanImplTranslator(Table configEntity) {
         super(configEntity);
     }
 
     @Override
     protected Class make() {
-        return with(new BaseClass(BEAN.getImplType().getName(), (cl, c) -> {
-            cl
-                    .add(cl.fieldFor(c).private_())
-                    .add(Method.of("get" + typeName(c), cl.fieldFor(c).getType())
+        return new ClassBuilder(BEAN.getImplType().getName())
+                .addColumnConsumer((cl, c) -> {
+                    cl
+                    .add(fieldFor(c).private_())
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), fieldFor(c).getType())
                             .public_()
-                            .add(Default.OVERRIDE)
+                            .add(OVERRIDE)
                             .add("return " + variableName(c) + ";"))
-                    .add(Method.of("set" + typeName(c), BEAN.getType())
+                    .add(Method.of(SETTER_METHOD_PREFIX + typeName(c), BEAN.getType())
                             .public_()
-                            .add(Default.OVERRIDE)
-                            .add(cl.fieldFor(c))
+                            .add(OVERRIDE)
+                            .add(fieldFor(c))
                             .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                            .add("return this;")
-                    );
-        }), cl -> {
-            cl
-                    .add(BEAN.getType())
-                    .add(cl.emptyConstructor())
-                    .add(cl.copyConstructor());
-        });
+                            .add("return this;"));
+                })
+                .build()
+                .public_()
+                .add(BEAN.getType())
+                .add(emptyConstructor())
+                .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.SETTER));
     }
 
     @Override

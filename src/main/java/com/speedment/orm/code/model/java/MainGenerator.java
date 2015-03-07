@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.code.model.java;
 
+import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.java.JavaInstaller;
@@ -37,22 +38,23 @@ import java.util.function.Consumer;
  * @author pemi
  */
 public class MainGenerator implements Consumer<Project> {
-
+    
     @Override
     public void accept(Project project) {
         final List<Translator<?, File>> translators = new ArrayList<>();
-
+        
         project.traversalOf(Table.class).forEach(table -> {
             translators.add(new EntityTranslator(table));
             translators.add(new EntityImplTranslator(table));
             translators.add(new EntityBeanImplTranslator(table));
             translators.add(new EntityBuilderImplTranslator(table));
         });
-
+        
         final CodeGenerator cg = new JavaGenerator(
                 new JavaInstaller()
         );
-
+        
+        Formatting.tab("    ");
         translators.forEach(t -> {
             File file = t.get();
             final Optional<String> code = cg.on(file);
@@ -60,7 +62,7 @@ public class MainGenerator implements Consumer<Project> {
             System.out.println(code.get());
             System.out.println("*** END   File:" + file.getName());
         });
-
+        
     }
-
+    
 }
