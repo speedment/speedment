@@ -56,7 +56,7 @@ public class EntityTranslator extends BaseEntityTranslator<Interface> {
     protected Interface make() {
         return new InterfaceBuilder(INTERFACE.getType().getName())
                 .addColumnConsumer((i, c) -> {
-                    i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMappedClass())));
+                    i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
                 })
                 .build()
                 .public_()

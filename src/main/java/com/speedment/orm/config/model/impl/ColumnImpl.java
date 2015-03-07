@@ -30,14 +30,14 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     private String alias;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
-    private Class<?> mappedClass;
+    private Class<?> mapping;
 
     @Override
     protected void setDefaults() {
         setOrdinalPosition(ORDINAL_UNSET);
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
-        setMappedClass(String.class);
+        setMapping(String.class);
     }
 
     @Override
@@ -71,13 +71,13 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     }
 
     @Override
-    public Class<?> getMappedClass() {
-        return mappedClass;
+    public Class<?> getMapping() {
+        return mapping;
     }
 
     @Override
-    public Column setMappedClass(Class<?> mappedClass) {
-        return run(() -> this.mappedClass = mappedClass);
+    public Column setMapping(Class<?> mappedClass) {
+        return run(() -> this.mapping = mappedClass);
     }
 
 }

@@ -41,7 +41,7 @@ public class EntityBuilderImplTranslator extends BaseEntityTranslator<Class> {
                 .addColumnConsumer((cl, c) -> {
                     cl
                     .add(fieldFor(c).private_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMappedClass()))
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
                             .public_()
                             .add(OVERRIDE)
                             .add("return " + variableName(c) + ";"))

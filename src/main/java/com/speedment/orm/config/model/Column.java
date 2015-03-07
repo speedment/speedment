@@ -48,9 +48,9 @@ public interface Column extends
     Column setAlias(CharSequence alias);
 
     @External
-    Class<?> getMappedClass();
+    Class<?> getMapping();
 
     @External
-    Column setMappedClass(Class<?> mappedClass);
+    Column setMapping(Class<?> mappedClass);
 
 }

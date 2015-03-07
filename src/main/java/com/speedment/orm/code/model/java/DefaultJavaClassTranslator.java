@@ -152,7 +152,7 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity<?, ?, ?>
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(variableName(c), Type.of(c.getMappedClass()));
+        return Field.of(variableName(c), Type.of(c.getMapping()));
     }
 
     public Constructor emptyConstructor() {

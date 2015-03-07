@@ -38,7 +38,7 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
                 .addColumnConsumer((cl, c) -> {
                     cl
                     .add(fieldFor(c).private_().final_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMappedClass()))
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
                             .add(OVERRIDE)
                             .public_()
                             .add("return " + variableName(c) + ";"));
