@@ -58,7 +58,7 @@ public class MainGenerator implements Consumer<Project> {
             .map(t -> t.get())
             .collect(Collectors.toList()))
             .forEach(c -> {
-                
+                c.
             });
         
         Formatting.tab("    ");

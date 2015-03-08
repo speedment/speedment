@@ -36,9 +36,7 @@ public class EntityTranslatorTest extends SimpleModelTest {
     public void testApply() {
         System.out.println("apply");
         
-        final CodeGenerator cg = new JavaGenerator(
-                new JavaInstaller()
-        );
+        final CodeGenerator cg = new JavaGenerator();
         
         final Table table2 = project.traversalOf(Table.class)
                 .filter(e -> TABLE_NAME.equals(e.getName()))
