@@ -30,6 +30,7 @@ import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.util.Beans;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,14 +59,14 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
     }
 
     @Override
-    public T getConfigEntity() {
+    public T getNode() {
         return configEntity;
     }
 
     protected abstract class Builder<T extends ClassOrInterface<T>> {
 
         private final String name;
-        private final Map<Class<?>, List<BiConsumer>> map;
+        private final Map<Class<? extends Node>, List<BiConsumer<T, ? extends Node>>> map;
 
         public Builder(String name) {
             this.name = name;
@@ -100,16 +101,18 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
             return Beans.run(this, () -> aquireListAndAdd(ForeignKey.class, consumer));
         }
 
-        protected <C> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
+        protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
             aquireList(clazz).add(consumer);
         }
 
-        protected List<BiConsumer> aquireList(Class<?> clazz) {
-            return map.computeIfAbsent(clazz, $ -> new ArrayList<>());
+        @SuppressWarnings("unchecked")
+        protected <C extends Node> List<BiConsumer<T, C>> aquireList(Class<C> clazz) {
+            return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(clazz, $ -> new ArrayList<>());
         }
 
-        public void act(T item, Child<?> configEntity) {
-            aquireList(configEntity.getInterfaceMainClass()).forEach((BiConsumer c) -> c.accept(item, configEntity));
+        public void act(T item, Node node) {
+            aquireList(node.getInterfaceMainClass())
+                .forEach(c -> c.accept(item, node));
         }
 
         public abstract T newInstance(String name);

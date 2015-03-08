@@ -80,7 +80,7 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getConfigEntity().toString() + "." + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
                 .add(AUTHOR.setValue("Speedment"));
     }
 

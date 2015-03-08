@@ -42,9 +42,9 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> The ConfigEntity type to use
  */
-public interface Translator<T extends ConfigEntity, R> extends Supplier<R> {
+public interface Translator<T extends Node, R> extends Supplier<R> {
 
-    T getConfigEntity();
+    T getNode();
 
     default Project project() {
         return getGenericConfigEntity(Project.class);
@@ -67,7 +67,7 @@ public interface Translator<T extends ConfigEntity, R> extends Supplier<R> {
     }
 
     default String packagePath() {
-        return getConfigEntity().getRelativeName(project());
+        return getNode().getRelativeName(project());
     }
 
     default Stream<Column> columns() {
@@ -87,15 +87,16 @@ public interface Translator<T extends ConfigEntity, R> extends Supplier<R> {
     }
 
     default <E extends Node> E getGenericConfigEntity(Class<E> clazz) {
-        if (clazz.isAssignableFrom(getConfigEntity().getInterfaceMainClass())) {
-            return (E) getConfigEntity();
+        if (clazz.isAssignableFrom(getNode().getInterfaceMainClass())) {
+            @SuppressWarnings("unchecked")
+            final E result = (E) getNode();
+            return result;
         }
         
-        return getConfigEntity().ancestor(clazz)
+        return getNode().ancestor(clazz)
             .orElseThrow(() -> new IllegalStateException(
-                getConfigEntity() + " is not a " + 
-                    clazz.getSimpleName() + " and does not have a parent that is a " + 
-                    clazz.getSimpleName()
+                getNode() + " is not a " + clazz.getSimpleName() + 
+                " and does not have a parent that is a " + clazz.getSimpleName()
             ));
     }
 

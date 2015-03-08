@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public interface Node extends Nameable {
-    default <P extends Parent> Optional<P> getParent() {
+    default <P extends Parent<?, ?>> Optional<P> getParent() {
         return Optional.empty();
     }
     
@@ -42,18 +42,18 @@ public interface Node extends Nameable {
         return false;
     }
     
-    default Optional<Child<?>> asChild() {
+    default Optional<? extends Child<?, ?>> asChild() {
         return Optional.empty();
     }
     
-    default Optional<Parent<?>> asParent() {
+    default Optional<? extends Parent<?, ?>> asParent() {
         return Optional.empty();
     }
     
     @SuppressWarnings("unchecked")
-    default Stream<? extends Parent> ancestors() {
+    default Stream<? extends Parent<?, ?>> ancestors() {
         return Trees.walkOptional(
-            getParent().map(p -> (Parent) p).get(), 
+            getParent().map(p -> (Parent<?, ?>) p).get(), 
             p -> Optional.of(p).flatMap(p2 -> p2.getParent()),
             Trees.WalkingOrder.BACKWARD
         );
@@ -71,5 +71,5 @@ public interface Node extends Nameable {
         return ancestors().map(Nameable::getName).collect(joining("."));
     }
     
-    <T> Class<T> getInterfaceMainClass();
+    <T extends Node> Class<T> getInterfaceMainClass();
 }

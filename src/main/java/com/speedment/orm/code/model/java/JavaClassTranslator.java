@@ -24,6 +24,7 @@ package com.speedment.orm.code.model.java;
 import com.speedment.orm.code.model.Translator;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.util.java.JavaLanguage;
 
 /**
@@ -31,22 +32,22 @@ import com.speedment.util.java.JavaLanguage;
  * @author pemi
  * @param <T>
  */
-public interface JavaClassTranslator<T extends ConfigEntity> extends Translator<T, File> {
+public interface JavaClassTranslator<T extends Node> extends Translator<T, File> {
 
     default String variableName() {
-        return variableName(getConfigEntity());
+        return variableName(getNode());
     }
 
-    default String variableName(ConfigEntity configEntity) {
-        return JavaLanguage.javaVariableName(configEntity.getName());
+    default String variableName(Node node) {
+        return JavaLanguage.javaVariableName(node.getName());
     }
 
     default String typeName() {
-        return typeName(getConfigEntity());
+        return typeName(getNode());
     }
 
-    default String typeName(ConfigEntity configEntity) {
-        return JavaLanguage.javaTypeName(configEntity.getName());
+    default String typeName(Node node) {
+        return JavaLanguage.javaTypeName(node.getName());
     }
 
 }
