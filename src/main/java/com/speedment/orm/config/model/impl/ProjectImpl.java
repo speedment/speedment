@@ -27,7 +27,7 @@ import java.util.Optional;
 public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
 
     private ProjectManager parent;
-    private final ChildHolder<Project, Dbms> children;
+    private final ChildHolder<Dbms> children;
     private String packetName, packetLocation;
 
     public ProjectImpl() {
@@ -61,7 +61,7 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     }
 
     @Override
-    public ChildHolder<Project, Dbms> getChildren() {
+    public ChildHolder<Dbms> getChildren() {
         return children;
     }
 
