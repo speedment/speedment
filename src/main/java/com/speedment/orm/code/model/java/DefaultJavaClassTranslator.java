@@ -29,6 +29,7 @@ import com.speedment.orm.config.model.Index;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.util.Beans;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ import java.util.function.BiConsumer;
  * @author pemi
  * @param <T> ConfigEntity type.
  */
-public abstract class DefaultJavaClassTranslator<T extends ConfigEntity<?, ?, ?>> implements JavaClassTranslator<T> {
+public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> implements JavaClassTranslator<T> {
 
     public static final String GETTER_METHOD_PREFIX = "get";
     public static final String SETTER_METHOD_PREFIX = "set";
@@ -107,7 +108,7 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity<?, ?, ?>
             return map.computeIfAbsent(clazz, $ -> new ArrayList<>());
         }
 
-        public void act(T item, ConfigEntity<?, ?, ?> configEntity) {
+        public void act(T item, Parentable<?> configEntity) {
             aquireList(configEntity.getInterfaceMainClass()).forEach((BiConsumer c) -> c.accept(item, configEntity));
         }
 

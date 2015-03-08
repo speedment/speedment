@@ -17,6 +17,7 @@
 package com.speedment.util.stream;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -37,6 +38,10 @@ public class StreamUtil {
 
     public static <T> Stream<T> of(Collection<? extends T>... collections) {
         return Stream.of(collections).flatMap(Collection::stream);
+    }
+    
+    public static <K, V> Stream<V> of(Map<? extends K, ? extends V>... maps) {
+        return Stream.of(maps).flatMap(m -> m.values().stream());
     }
 
     public static <T> Stream<T> of(Stream<? extends T>... streams) {

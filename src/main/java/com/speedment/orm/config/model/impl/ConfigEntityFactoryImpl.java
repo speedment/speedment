@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  */
 public class ConfigEntityFactoryImpl implements ConfigEntityFactory {
 
-    private final ConcurrentMap<Class<? extends ConfigEntity<?, ?, ?>>, Supplier<? extends ConfigEntity<?, ?, ?>>> factoryMap;
+    private final ConcurrentMap<Class<? extends ConfigEntity>, Supplier<? extends ConfigEntity>> factoryMap;
 
     public ConfigEntityFactoryImpl() {
         this.factoryMap = new ConcurrentHashMap<>();
@@ -59,12 +59,12 @@ public class ConfigEntityFactoryImpl implements ConfigEntityFactory {
     }
 
     // Using a method instead of just put(), we can correlate the type of the Key and Value.
-    private <T extends ConfigEntity<T, ?, ?>> void registerFactoryClass(Class<T> clazz, Supplier<? extends T> supplier) {
+    private <T extends ConfigEntity> void registerFactoryClass(Class<T> clazz, Supplier<? extends T> supplier) {
         factoryMap.put(clazz, supplier);
     }
 
     @Override
-    public <T extends ConfigEntity<T, ?, ?>> T newOf(Class<T> interfaceMainClass) {
+    public <T extends ConfigEntity> T newOf(Class<T> interfaceMainClass) {
         return (T) factoryMap.getOrDefault(interfaceMainClass, () -> {
             throw new IllegalArgumentException("Unable to instanciate class of " + interfaceMainClass.getName() + ", know " + factoryMap.keySet());
         }).get();

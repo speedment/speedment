@@ -16,16 +16,16 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
-import java.util.Optional;
+import com.speedment.orm.config.model.aspects.Parentable;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface PrimaryKeyColumn extends
-        OrdinalConfigEntity<PrimaryKeyColumn, Table, ConfigEntity<?, PrimaryKeyColumn, ?>>    {
+public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Parentable<Table> {
 
     @Override
     default Class<PrimaryKeyColumn> getInterfaceMainClass() {
@@ -33,12 +33,12 @@ public interface PrimaryKeyColumn extends
     }
 
     @Override
-    default Optional<Class<Table>> getParentInterfaceMainClass() {
-        return Optional.of(Table.class);
+    default Class<Table> getParentInterfaceMainClass() {
+        return Table.class;
     }
 
     default Column getColumn() {
-        return ConfigEntityUtil.findColumnByName(this, getParent(Table.class), getName());
+        return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
 
 }

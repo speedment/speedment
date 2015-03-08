@@ -31,13 +31,13 @@ import com.speedment.util.java.JavaLanguage;
  * @author pemi
  * @param <T>
  */
-public interface JavaClassTranslator<T extends ConfigEntity<?, ?, ?>> extends Translator<T, File> {
+public interface JavaClassTranslator<T extends ConfigEntity> extends Translator<T, File> {
 
     default String variableName() {
         return variableName(getConfigEntity());
     }
 
-    default String variableName(ConfigEntity<?, ?, ?> configEntity) {
+    default String variableName(ConfigEntity configEntity) {
         return JavaLanguage.javaVariableName(configEntity.getName());
     }
 
@@ -45,7 +45,7 @@ public interface JavaClassTranslator<T extends ConfigEntity<?, ?, ?>> extends Tr
         return typeName(getConfigEntity());
     }
 
-    default String typeName(ConfigEntity<?, ?, ?> configEntity) {
+    default String typeName(ConfigEntity configEntity) {
         return JavaLanguage.javaTypeName(configEntity.getName());
     }
 

@@ -17,6 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
@@ -29,11 +31,10 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Schema extends
-        ConfigEntity<Schema, Dbms, Table>,
-        FieldStorageTypeable<Schema>,
-        ColumnCompressionTypeable<Schema>,
-        StorageEngineTypeable<Schema> {
+public interface Schema extends ConfigEntity, Parentable<Dbms>, Childable<Table>,
+        FieldStorageTypeable,
+        ColumnCompressionTypeable,
+        StorageEngineTypeable {
 
     @Override
     default Class<Schema> getInterfaceMainClass() {
@@ -41,8 +42,8 @@ public interface Schema extends
     }
 
     @Override
-    default Optional<Class<Dbms>> getParentInterfaceMainClass() {
-        return Optional.of(Dbms.class);
+    default Class<Dbms> getParentInterfaceMainClass() {
+        return Dbms.class;
     }
 
     default Table addNewTable() {
@@ -55,19 +56,19 @@ public interface Schema extends
     boolean isDefaultSchema();
 
     @External
-    Schema setDefaultSchema(boolean defaultSchema);
+    void setDefaultSchema(boolean defaultSchema);
 
     @External
     Optional<String> getCatalogName();
 
     @External
-    Schema setCatalogName(CharSequence catalogName);
+    void setCatalogName(String catalogName);
 
     @External
     Optional<String> getSchemaName();
 
     @External
-    Schema setSchemaName(CharSequence schemaName);
+    void setSchemaName(String schemaName);
 
     // Groovy
     default Table table(Closure<?> c) {

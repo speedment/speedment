@@ -16,41 +16,8 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.DelegatorGroovyTest;
 import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.External;
-import com.speedment.orm.config.model.OrdinalConfigEntity;
-import com.speedment.orm.config.model.Project;
-import com.speedment.util.Beans;
-import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
-import com.speedment.util.java.JavaLanguage;
-import com.speedment.util.stream.CollectorUtil;
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.lang.GroovyShell;
-import groovy.util.DelegatingScript;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -58,40 +25,19 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * This class is thread safe.
  *
  * @author pemi
- * @param <T>
- * @param <P>
- * @param <C>
  */
-public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
-        implements ConfigEntity<T, P, C> {
-
-    private static final String NL = "\n";
+public abstract class AbstractConfigEntity implements ConfigEntity {
 
     private boolean enabled;
     private String name;
-    private P parent;
-    private final Map<String, C> children;
-    private final AtomicInteger namingSequence;
-    private final Map<Class<? extends ConfigEntity<?, ?, ?>>, AtomicInteger> childSequences;
 
-    public AbstractConfigEntity() {
-        children = new ConcurrentSkipListMap<>();
-        namingSequence = new AtomicInteger(ORDINAL_FIRST);
-        childSequences = new ConcurrentHashMap<>();
-        init();
-    }
-
-    protected void init() {
-        setEnabled(true);
-        setName(getDefaultBaseName() + "_" + Integer.toString(getNamingSequence().getAndIncrement()));
+    protected AbstractConfigEntity(String defaultName) {
+        enabled = true;
+        name = defaultName;
         setDefaults();
     }
 
     protected abstract void setDefaults();
-
-    protected String getDefaultBaseName() {
-        return JavaLanguage.toUnderscoreSeparated(getInterfaceMainClass().getSimpleName());
-    }
 
     @Override
     public boolean isEnabled() {
@@ -99,8 +45,8 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     }
 
     @Override
-    public T setEnabled(boolean enabled) {
-        return run(() -> this.enabled = enabled);
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -109,233 +55,16 @@ public abstract class AbstractConfigEntity<T extends ConfigEntity<T, P, C>, P ex
     }
 
     @Override
-    public T setName(String name) {
-        return run(() -> this.name = Objects.requireNonNull(name));
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name);
     }
 
-    @Override
-    public Optional<P> getParent() {
-        return Optional.ofNullable(parent);
-    }
-
-    @Override
-    public T setParent(P parent) {
-        return run(() -> this.parent = parent);
-    }
-
-    private void castAndSetParent(final C child) {
-        final String methodName = "setParent";
-        try {
-            // I finally got tired of fiddeling around with generics in three dimensions and
-            // brought out the Bazooka in the shape of reflection... Erasure makes this work!
-            // Todo: Fix this in a typesafe way with generics.
-            //System.out.println(Stream.of(child.getClass().getMethods()).map(Method::getName).collect(Collectors.joining(", ")));
-
-            final Method method = child.getClass().getMethod(methodName, ConfigEntity.class);
-            method.setAccessible(true);
-            method.invoke(child, this);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            throw new RuntimeException("Unable to invoke " + methodName, ex);
-        }
-    }
-
-    private static <P extends ConfigEntity<P, ?, C>, C extends ConfigEntity<C, P, ?>> void addParentToChild(P parent, C child) {
-        child.setParent(parent);
-    }
-
-    protected String makeKey(C child) {
-        return child.getName();
-    }
-
-    // Children
-    @Override
-    public T add(final C child) {
-        child.getParent().ifPresent(p -> {
-            throw new IllegalStateException("It is illegal to add a child that already has a parent. child=" + child + ", parent=" + p);
-        });
-        //addParentToChild((ConfigEntity<P, ?, C>) (ConfigEntity) this, (ConfigEntity<C, P, ?>) (ConfigEntity) child);
-        castAndSetParent(child);
-        if (child instanceof OrdinalConfigEntity) {
-            @SuppressWarnings({"cast", "unchecked"})
-            final OrdinalConfigEntity<?, T, ?> ordinalConfigEntity = (OrdinalConfigEntity<?, T, ?>) child;
-            if (ordinalConfigEntity.getOrdinalPosition() == ORDINAL_UNSET) {
-                ordinalConfigEntity.setOrdinalPosition(getChildSequence(child.getInterfaceMainClass()).getAndIncrement());
-            }
-        }
-        /*
-         addParentToChild(this, child);
-         @SuppressWarnings("unchecked")
-         //final DBEntity<DBEntity<P, C>, ?> _child = (DBEntity<DBEntity<P, C>, ?>) child;
-         final ConfigEntity<?, T, ?> _child2 = (ConfigEntity<?, T, ?>) child;
-         final final ConfigEntity<?, ConfigEntity<? super T, ? super P, ? super C>, ?> _child = (ConfigEntity<?, ?, ?>) child;
-         _child2.setParent(this);
-         addParentToChild(parent, _child2);*/
-        return run(() -> children.put(makeKey(child), child));
-    }
-
-    @Override
-    public T remove(C child) {
-        if (child.getParent().isPresent() && child.getParent().get() == this) {
-            setParent(null);
-        }
-        return run(() -> children.remove(makeKey(child)));
-    }
-
-    @Override
-    public boolean contains(C child) {
-        return children.containsKey(makeKey(child));
-    }
-
-    @Override
-    public Stream<? extends C> stream() {
-        return children.values().stream();
-    }
-
-    // Util methods
-    @SuppressWarnings("unchecked")
-    protected <P> T with(final P item, final Consumer<P> consumer) {
-        return Beans.with((T) this, item, consumer);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <P> T run(final Runnable runnable) {
-        return Beans.run((T) this, runnable);
-    }
-
-    @Override
-    public int compareTo(T o) {
-        return getName().compareTo(o.getName());
-    }
-
-    protected static String makeNullSafeString(CharSequence charSequence) {
-        return (charSequence == null) ? null : charSequence.toString();
-    }
-
-    protected AtomicInteger getNamingSequence() {
-        return namingSequence;
-    }
-
-    protected AtomicInteger getChildSequence(Class<? extends ConfigEntity<?, ?, ?>> clazz) {
-        return childSequences.computeIfAbsent(clazz, c -> new AtomicInteger(ORDINAL_FIRST));
-    }
-
-    protected Set<Method> getMethods(Predicate<Method> filter) {
-        return addMethods(new HashSet<>(), getClass(), filter);
-    }
-
-    private static final Predicate<Method> METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers());
-    private static final Predicate<Method> METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is"));
-    private static final Predicate<Method> METHOD_IS_EXTERNAL = AbstractConfigEntity::isExternal;
-
-    private static boolean isExternal(Method method) {
-        return isExternal(method, method.getDeclaringClass());
-    }
-
-    private static boolean isExternal(final Method method, final Class<?> clazz) {
-        if (method == null || clazz == null) {
-            return false;
-        }
-        if (method.getAnnotation(External.class) != null) {
-            return true;
-        }
-        // Also try the superClass and all the interfaces it implements
-        final List<Class<?>> classCandidates = new ArrayList<>(Arrays.asList(clazz.getInterfaces()));
-        final Class<?> superClass = clazz.getSuperclass();
-        if (superClass != null) {
-            classCandidates.add(superClass);
-        }
-        for (final Class<?> classCandidate : classCandidates) {
-            try {
-                if (isExternal(classCandidate.getMethod(method.getName(), method.getParameterTypes()), classCandidate)) {
-                    return true;
-                }
-            } catch (NoSuchMethodException | SecurityException e) {
-                // ignore
-            }
-        }
-        return false;
-    }
-
-    private Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {
-        if (clazz == Object.class) {
-            return methods;
-        }
-        Stream.of(clazz.getDeclaredMethods())
-                .filter(filter)
-                .forEach(methods::add);
-        addMethods(methods, clazz.getSuperclass(), filter); // Recursively add the superclass methods
-        return methods;
-    }
-
-    private StringBuilder indent(StringBuilder sb, int indentLevel) {
-        IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
-        return sb;
-    }
-
-    @Override
-    public String toGroovy(int indentLevel) {
-        return CollectorUtil.of(StringBuilder::new, sb -> {
-            getMethods(METHOD_IS_GETTER.and(METHOD_IS_PUBLIC).and(METHOD_IS_EXTERNAL))
-                    .stream()
-                    .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
-                    .forEach(m -> getterBeanPropertyNameAndValue(m, this)
-                            .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL)));
-
-            stream().forEach(c -> {
-                indent(sb, indentLevel).append(c.getInterfaceMainClass().getSimpleName()).append(" {").append(NL);
-                sb.append(c.toGroovy(indentLevel + 1));
-                indent(sb, indentLevel).append("}").append(NL);
-            });
-        }, StringBuilder::toString);
-    }
-
-    @Override
-    public void fromGroovy(final Path path) throws IOException {
-
-        final Binding binding = new Binding();
-        binding.setVariable("implementationVersion", getClass().getPackage().getImplementationVersion());
-        binding.setVariable("specificationVersion", getClass().getPackage().getSpecificationVersion());
-
-        final CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.setScriptBaseClass(DelegatingScript.class.getName());
-        configuration.setDebug(true);
-        configuration.setVerbose(true);
-        configuration.setRecompileGroovySource(true);
-
-        final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
-
-        final DelegatingScript script = (DelegatingScript) shell.parse(path.toFile());
-
-        //final Project project = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
-        script.setDelegate(this);
-
-        final Object value = script.run();
-
-        System.out.println(value);
-
-        System.out.println(binding.getVariables());
-
-        System.out.println(this.toString());
-
-    }
-
-//    public <S> S groovyDelegatorHelper(Closure c, Supplier<S> supplier, Consumer<S> updater) {
-//        Objects.requireNonNull(supplier);
-//        Objects.requireNonNull(updater);
-//        final S result = supplier.get();
-//        c.setDelegate(result);
-//        c.setResolveStrategy(Closure.DELEGATE_ONLY);
-//        ((Consumer) updater).accept(result);
-//        c.call();
-//        return result;
-//    }
     @Override
     public String toString() {
-        final Optional<Project> optionalProject = getParent(Project.class);
-        if (optionalProject.isPresent()) {
-            return getInterfaceMainClass().getSimpleName() + " '" + getRelativeName(optionalProject.get()) + "'";
-        }
-        return getInterfaceMainClass().getSimpleName() + " '?." + getName() + "'";
+        return getInterfaceMainClass().getSimpleName()
+            + " '" + getParent()
+            .map(p -> this.getRelativeName(p))
+            .orElse("?." + getName())
+            + "'";
     }
-
 }

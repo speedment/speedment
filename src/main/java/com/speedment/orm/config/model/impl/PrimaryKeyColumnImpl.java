@@ -17,16 +17,28 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity<PrimaryKeyColumn, Table, ConfigEntity<?, PrimaryKeyColumn, ?>> implements PrimaryKeyColumn {
+public class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity implements PrimaryKeyColumn {
+    
+    private Table parent;
 
     @Override
     protected void setDefaults() {
-        setOrdinalPosition(ORDINAL_UNSET);
+        setOrdinalPosition(UNSET);
     }
 
+    @Override
+    public void setParent(Table parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Table> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

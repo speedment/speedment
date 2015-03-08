@@ -17,6 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import java.util.Optional;
 
@@ -25,8 +27,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface ForeignKey extends
-        ConfigEntity<ForeignKey, Table, ForeignKeyColumn> {
+public interface ForeignKey extends ConfigEntity, Parentable<Table>, Childable<ForeignKeyColumn> {
 
     @Override
     default Class<ForeignKey> getInterfaceMainClass() {
@@ -34,8 +35,8 @@ public interface ForeignKey extends
     }
 
     @Override
-    default Optional<Class<Table>> getParentInterfaceMainClass() {
-        return Optional.of(Table.class);
+    default Class<Table> getParentInterfaceMainClass() {
+        return Table.class;
     }
 
     default ForeignKeyColumn addNewForeignKeyColumn() {

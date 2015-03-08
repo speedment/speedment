@@ -17,15 +17,23 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Childable;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, Dbms> implements Project {
+public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
 
+    private ProjectManager parent;
+    private final ChildHolder<Dbms> children;
     private String packetName, packetLocation;
+
+    public ProjectImpl() {
+        this.children = new ChildHolder<>();
+    }
 
     @Override
     protected void setDefaults() {
@@ -39,8 +47,8 @@ public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, D
     }
 
     @Override
-    public Project setPacketName(CharSequence packetName) {
-        return run(() -> this.packetName = makeNullSafeString(Objects.requireNonNull(packetName)));
+    public void setPacketName(String packetName) {
+        this.packetName = Objects.requireNonNull(packetName);
     }
 
     @Override
@@ -49,8 +57,22 @@ public class ProjectImpl extends AbstractConfigEntity<Project, ProjectManager, D
     }
 
     @Override
-    public Project setPacketLocation(CharSequence packetLocation) {
-        return run(() -> this.packetLocation = makeNullSafeString(Objects.requireNonNull(packetLocation)));
+    public void setPacketLocation(String packetLocation) {
+        this.packetLocation = Objects.requireNonNull(packetLocation);
     }
 
+    @Override
+    public ChildHolder<Dbms> getChildren() {
+        return children;
+    }
+
+    @Override
+    public void setParent(ProjectManager parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<ProjectManager> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

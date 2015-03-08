@@ -30,7 +30,9 @@ import com.speedment.orm.config.model.PrimaryKeyColumn;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
-import java.util.Optional;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Node;
+import com.speedment.orm.config.model.aspects.Parentable;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -40,7 +42,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> The ConfigEntity type to use
  */
-public interface Translator<T extends ConfigEntity<?, ?, ?>, R> extends Supplier<R> {
+public interface Translator<T extends ConfigEntity, R> extends Supplier<R> {
 
     T getConfigEntity();
 
@@ -84,15 +86,17 @@ public interface Translator<T extends ConfigEntity<?, ?, ?>, R> extends Supplier
         return table().streamOf(PrimaryKeyColumn.class);
     }
 
-    default <T extends ConfigEntity<T, ?, ?>> T getGenericConfigEntity(Class<T> clazz) {
-        if (getConfigEntity().getInterfaceMainClass() == clazz) {
-            return (T) getConfigEntity();
+    default <E extends Node> E getGenericConfigEntity(Class<E> clazz) {
+        if (clazz.isAssignableFrom(getConfigEntity().getInterfaceMainClass())) {
+            return (E) getConfigEntity();
         }
-        final Optional<T> optionalTable = getConfigEntity().getParent(clazz);
-        if (optionalTable.isPresent()) {
-            return optionalTable.get();
-        }
-        throw new IllegalStateException(getConfigEntity() + " is not a " + clazz.getSimpleName() + " and does not have a parent that is a " + clazz.getSimpleName());
+        
+        return getConfigEntity().ancestor(clazz)
+            .orElseThrow(() -> new IllegalStateException(
+                getConfigEntity() + " is not a " + 
+                    clazz.getSimpleName() + " and does not have a parent that is a " + 
+                    clazz.getSimpleName()
+            ));
     }
 
     default <T> T with(T initial, Consumer<T> consumer) {

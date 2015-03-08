@@ -18,6 +18,7 @@ package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.aspects.Childable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,49 +30,31 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public enum FieldStorageType implements Nameable<FieldStorageType> {
+public enum FieldStorageType implements EnumHelper<FieldStorageType> {
 
     INHERIT("Inherit from parent"), WRAPPER("Wrapper class"), PRIMITIVE("Primitive class");
-    static final Map<String, FieldStorageType> NAME_MAP = Nameable.Hidden.buildMap(values());
+    static final Map<String, FieldStorageType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
     private FieldStorageType(final String name) {
         this.name = name;
     }
+    
     private final String name;
 
     @Override
     public String getName() {
         return name;
     }
-
-    public static Optional<FieldStorageType> findByNameIgnoreCase(final String name) {
-        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
+    
+    public static Optional<FieldStorageType> findByIgnoreCase(String name) {
+        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
-
-    private static final Predicate<FieldStorageType> IS_INHERIT_PREDICATE = (f) -> f == INHERIT;
-
-    public static <T extends ConfigEntity<T, ?, ?>> Stream<FieldStorageType> streamFor(final T entity) {
-        Objects.requireNonNull(entity);
-        try {
-            final Class<? extends ConfigEntity<?, ?, ?>> parentClass = entity.getParentInterfaceMainClass().orElse(null);
-            if (parentClass != null) {
-                // Check if the parent can have FieldStorageTypes. 
-                parentClass.getMethod("get" + FieldStorageType.class.getSimpleName());
-                return stream();
-            }
-        } catch (NoSuchMethodException nsm) {
-            // Ignore
-        }
-        return stream().filter(IS_INHERIT_PREDICATE.negate());
-    }
-
-    public static <T extends ConfigEntity<T, ?, ?>> FieldStorageType defaultFor(final T entity) {
-        Objects.requireNonNull(entity);
-        return streamFor(entity).filter(IS_INHERIT_PREDICATE).findAny().orElse(WRAPPER);
+    
+    public static FieldStorageType defaultFor(final ConfigEntity entity) {
+        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, WRAPPER);
     }
 
     public static Stream<FieldStorageType> stream() {
         return Stream.of(values());
     }
-
 }

@@ -16,8 +16,7 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.OrdinalConfigEntity;
+import com.speedment.orm.config.model.aspects.Ordinable;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -25,15 +24,16 @@ import com.speedment.orm.config.model.OrdinalConfigEntity;
  * This class is thread safe.
  *
  * @author pemi
- * @param <T>
- * @param <P>
- * @param <C>
  */
-public abstract class AbstractOrdinalConfigEntity<T extends OrdinalConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>>
-        extends AbstractConfigEntity<T, P, C>
-        implements OrdinalConfigEntity<T, P, C> {
+public abstract class AbstractOrdinalConfigEntity extends AbstractConfigEntity
+    implements Ordinable, Comparable<Ordinable> {
 
     private int ordinalPosition;
+    
+    public AbstractOrdinalConfigEntity() {
+        super(null);
+        ordinalPosition = Ordinable.UNSET;
+    }
 
     @Override
     public int getOrdinalPosition() {
@@ -41,13 +41,12 @@ public abstract class AbstractOrdinalConfigEntity<T extends OrdinalConfigEntity<
     }
 
     @Override
-    public T setOrdinalPosition(int ordinalPosition) {
-        return run(() -> this.ordinalPosition = ordinalPosition);
+    public void setOrdinalPosition(int ordinalPosition) {
+        this.ordinalPosition = ordinalPosition;
     }
 
     @Override
-    public int compareTo(T o) {
-        return Integer.compare(getOrdinalPosition(), o.getOrdinalPosition());
+    public int compareTo(Ordinable o) {
+        return compareToHelper(o);
     }
-
 }

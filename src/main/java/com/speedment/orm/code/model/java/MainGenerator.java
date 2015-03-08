@@ -42,7 +42,7 @@ public class MainGenerator implements Consumer<Project> {
     @Override
     public void accept(Project project) {
         final List<Translator<?, File>> translators = new ArrayList<>();
-        
+       
         project.traversalOf(Table.class).forEach(table -> {
             translators.add(new EntityTranslator(table));
             translators.add(new EntityImplTranslator(table));

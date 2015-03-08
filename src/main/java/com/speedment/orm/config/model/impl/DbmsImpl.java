@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Childable;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import java.util.Optional;
 
@@ -24,12 +25,18 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implements Dbms {
+public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
 
+    private Project parent;
+    private final ChildHolder<Schema> children;
     private DbmsType type;
     private String ipAddress;
     private Integer port;
     private String username, password;
+
+    public DbmsImpl() {
+        children = new ChildHolder<>();
+    }
 
     @Override
     protected void setDefaults() {
@@ -46,13 +53,14 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Dbms setType(DbmsType dbmsType) {
-        return run(() -> this.type = dbmsType);
+    public void setType(DbmsType dbmsType) {
+        this.type = dbmsType;
     }
 
     @Override
-    public Dbms setType(CharSequence dbmsTypeName) {
-        return setType(DbmsType.findByNameIgnoreCase(makeNullSafeString(dbmsTypeName)).orElseThrow(IllegalArgumentException::new));
+    public void setType(String dbmsTypeName) {
+        setType(DbmsType.findByIgnoreCase(dbmsTypeName)
+            .orElseThrow(IllegalArgumentException::new));
     }
 
     @Override
@@ -61,8 +69,8 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Dbms setIpAddress(CharSequence ipAddress) {
-        return run(() -> this.ipAddress = makeNullSafeString(ipAddress));
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     @Override
@@ -71,8 +79,8 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Dbms setPort(Integer port) {
-        return run(() -> this.port = port);
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     @Override
@@ -81,8 +89,8 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Dbms setUsername(CharSequence name) {
-        return run(() -> this.username = makeNullSafeString(name));
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     @Override
@@ -91,8 +99,23 @@ public class DbmsImpl extends AbstractConfigEntity<Dbms, Project, Schema> implem
     }
 
     @Override
-    public Dbms setPassword(CharSequence password) {
-        return run(() -> this.password = makeNullSafeString(password));
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public void setParent(Project parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Project> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public ChildHolder<Schema> getChildren() {
+        return children;
     }
 
 }

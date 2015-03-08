@@ -16,7 +16,9 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Parentable;
 import java.util.Optional;
 
 /**
@@ -24,8 +26,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface ForeignKeyColumn extends
-        OrdinalConfigEntity<ForeignKeyColumn, ForeignKey, ConfigEntity<?, ForeignKeyColumn, ?>> {
+public interface ForeignKeyColumn extends ConfigEntity, Ordinable, Parentable<ForeignKey> {
 
     @Override
     default Class<ForeignKeyColumn> getInterfaceMainClass() {
@@ -33,32 +34,32 @@ public interface ForeignKeyColumn extends
     }
 
     @Override
-    default Optional<Class<ForeignKey>> getParentInterfaceMainClass() {
-        return Optional.of(ForeignKey.class);
+    default Class<ForeignKey> getParentInterfaceMainClass() {
+        return ForeignKey.class;
     }
 
     default Column getColumn() {
-        return ConfigEntityUtil.findColumnByName(this, getParent(Table.class), getName());
+        return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
 
     @External
     String getForeignColumnName();
 
     @External
-    ForeignKeyColumn setForeignColumnName(CharSequence foreignColumnName);
+    void setForeignColumnName(String foreignColumnName);
 
     @External
     String getForeignTableName();
 
     @External
-    ForeignKeyColumn setForeignTableName(CharSequence foreignTableName);
+    void setForeignTableName(String foreignTableName);
 
     default Column getForeignColumn() {
         return ConfigEntityUtil.findColumnByName(this, Optional.of(getForeignTable()), getForeignColumnName());
     }
 
     default Table getForeignTable() {
-        return ConfigEntityUtil.findTableByName(this, getParent(Schema.class), getForeignTableName());
+        return ConfigEntityUtil.findTableByName(this, ancestor(Schema.class), getForeignTableName());
     }
 
 }

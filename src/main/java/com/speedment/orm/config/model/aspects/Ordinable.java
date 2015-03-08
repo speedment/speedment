@@ -14,20 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model;
+package com.speedment.orm.config.model.aspects;
 
 /**
  *
  * @author pemi
- * @param <T> The type of the implementing class
- * @param <P> The type of the parent class.
- * @param <C> The type of the child class.
  */
-public interface OrdinalConfigEntity<T extends OrdinalConfigEntity<T, P, C>, P extends ConfigEntity<?, ?, ?>, C extends ConfigEntity<?, ?, ?>> extends
-        ConfigEntity<T, P, C> {
+public interface Ordinable extends Node {
+    
+    final int ORDINAL_FIRST = 1, UNSET = -1;
 
     int getOrdinalPosition();
 
-    T setOrdinalPosition(int ordinalPosition);
+    void setOrdinalPosition(int ordinalPosition);
+    
+    @Override
+    default boolean isOrdinable() {
+        return true;
+    }
 
+    default int compareToHelper(Ordinable that) {
+        return Integer.compare(
+            this.getOrdinalPosition(), 
+            that.getOrdinalPosition()
+        );
+    }
 }

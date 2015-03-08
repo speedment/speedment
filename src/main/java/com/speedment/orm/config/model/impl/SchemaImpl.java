@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Childable;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
@@ -26,14 +27,20 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implements Schema {
+public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
 
+    private Dbms parent;
+    private final ChildHolder<Table> children;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
+
+    public SchemaImpl() {
+        children = new ChildHolder<>();
+    }
 
     @Override
     protected void setDefaults() {
@@ -48,8 +55,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setDefaultSchema(boolean defaultSchema) {
-        return run(() -> this.defaultSchema = defaultSchema);
+    public void setDefaultSchema(boolean defaultSchema) {
+        this.defaultSchema = defaultSchema;
     }
 
     @Override
@@ -58,8 +65,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setFieldStorageType(FieldStorageType fieldStorageType) {
-        return run(() -> this.fieldStorageType = fieldStorageType);
+    public void setFieldStorageType(FieldStorageType fieldStorageType) {
+        this.fieldStorageType = fieldStorageType;
     }
 
     @Override
@@ -68,8 +75,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return run(() -> this.columnCompressionType = columnCompressionType);
+    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        this.columnCompressionType = columnCompressionType;
     }
 
     @Override
@@ -78,8 +85,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setStorageEngineType(StorageEngineType storageEngineType) {
-        return run(() -> this.storageEngineType = storageEngineType);
+    public void setStorageEngineType(StorageEngineType storageEngineType) {
+        this.storageEngineType = storageEngineType;
     }
 
     @Override
@@ -88,8 +95,8 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setCatalogName(CharSequence catalogName) {
-        return run(() -> this.catalogName = makeNullSafeString(catalogName));
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
     }
 
     @Override
@@ -101,8 +108,22 @@ public class SchemaImpl extends AbstractConfigEntity<Schema, Dbms, Table> implem
     }
 
     @Override
-    public Schema setSchemaName(CharSequence schemaName) {
-        return run(() -> this.catalogName = makeNullSafeString(schemaName));
+    public void setSchemaName(String schemaName) {
+        this.catalogName = schemaName;
     }
 
+    @Override
+    public void setParent(Dbms parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Dbms> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public ChildHolder<Table> getChildren() {
+        return children;
+    }
 }

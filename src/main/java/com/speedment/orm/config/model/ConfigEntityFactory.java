@@ -66,10 +66,9 @@ public interface ConfigEntityFactory extends Component {
         return newOf(ForeignKeyColumn.class);
     }
 
-    default <T extends ConfigEntity<T, ?, ?>> T newOf(T rawModel) {
+    default <T extends ConfigEntity> T newOf(T rawModel) {
         return newOf(rawModel.getInterfaceMainClass());
     }
 
-    <T extends ConfigEntity<T, ?, ?>> T newOf(Class<T> interfaceMainClass);
-
+    <T extends ConfigEntity> T newOf(Class<T> interfaceMainClass);
 }

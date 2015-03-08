@@ -16,7 +16,9 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import java.util.Optional;
@@ -26,10 +28,9 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Column extends
-        OrdinalConfigEntity<Column, Table, ConfigEntity<?, Column, ?>>,
-        FieldStorageTypeable<Column>,
-        ColumnCompressionTypeable<Column> {
+public interface Column extends ConfigEntity, Ordinable, Parentable<Table>,
+        FieldStorageTypeable,
+        ColumnCompressionTypeable {
 
     @Override
     default Class<Column> getInterfaceMainClass() {
@@ -37,20 +38,20 @@ public interface Column extends
     }
 
     @Override
-    default Optional<Class<Table>> getParentInterfaceMainClass() {
-        return Optional.of(Table.class);
+    default Class<Table> getParentInterfaceMainClass() {
+        return Table.class;
     }
 
     @External
     Optional<String> getAlias();
 
     @External
-    Column setAlias(CharSequence alias);
+    void setAlias(String alias);
 
     @External
     Class<?> getMapping();
 
     @External
-    Column setMapping(Class<?> mappedClass);
+    void setMapping(Class<?> mappedClass);
 
 }

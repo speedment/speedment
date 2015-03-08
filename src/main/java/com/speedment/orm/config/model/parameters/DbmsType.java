@@ -17,8 +17,10 @@
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.ConfigEntity;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -26,7 +28,7 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public enum DbmsType implements Nameable<DbmsType> {
+public enum DbmsType implements EnumHelper<DbmsType> {
 
     MYSQL("MySQL", "MySQL-AB JDBC Driver", 3306),
     ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
@@ -37,7 +39,7 @@ public enum DbmsType implements Nameable<DbmsType> {
     INFORMIX("Informix", "Informix JDBC Driver", 1526, ":", "SID"),
     MONETDB("MonetDB", "MonetDB JDBC Driver", 50000, ".", "Database");
 
-    static final Map<String, DbmsType> NAME_MAP = Nameable.Hidden.buildMap(values());
+    static final Map<String, DbmsType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
     private DbmsType(final String value, final String driverManagerName, final int defaultPort) {
         this(value, driverManagerName, defaultPort, ".");
@@ -65,10 +67,6 @@ public enum DbmsType implements Nameable<DbmsType> {
     @Override
     public String getName() {
         return name;
-    }
-
-    public static Optional<DbmsType> findByNameIgnoreCase(final String name) {
-        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
 
     public String getDriverManagerName() {
@@ -99,9 +97,16 @@ public enum DbmsType implements Nameable<DbmsType> {
     public String getImplementingClassName() {
         return implementingClassName;
     }
+    
+    public static Optional<DbmsType> findByIgnoreCase(String name) {
+        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+    }
+    
+    public static DbmsType defaultFor(final ConfigEntity entity) {
+        return Hidden.defaultFor(stream(), t -> false, entity, MYSQL);
+    }
 
     public static Stream<DbmsType> stream() {
         return Stream.of(values());
     }
-
 }

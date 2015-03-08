@@ -16,7 +16,9 @@
  */
 package com.speedment.orm.config.model;
 
+import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.OrderTypeable;
 import java.util.Optional;
 
@@ -25,9 +27,8 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface IndexColumn extends
-        OrdinalConfigEntity<IndexColumn, Index, ConfigEntity<?, IndexColumn, ?>>,
-        OrderTypeable<IndexColumn> {
+public interface IndexColumn extends ConfigEntity, Ordinable, Parentable<Index>,
+        OrderTypeable {
 
     @Override
     default Class<IndexColumn> getInterfaceMainClass() {
@@ -35,12 +36,12 @@ public interface IndexColumn extends
     }
 
     @Override
-    default Optional<Class<Index>> getParentInterfaceMainClass() {
-        return Optional.of(Index.class);
+    default Class<Index> getParentInterfaceMainClass() {
+        return Index.class;
     }
 
     default Column getColumn() {
-        return ConfigEntityUtil.findColumnByName(this, getParent(Table.class), getName());
+        return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
 
 }

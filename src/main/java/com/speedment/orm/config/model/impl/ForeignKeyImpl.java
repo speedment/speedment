@@ -17,15 +17,37 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Childable;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class ForeignKeyImpl extends AbstractConfigEntity<ForeignKey, Table, ForeignKeyColumn> implements ForeignKey {
+public class ForeignKeyImpl extends AbstractNamedConfigEntity implements ForeignKey {
+
+    private Table parent;
+    private final ChildHolder<ForeignKeyColumn> children;
+    
+    public ForeignKeyImpl() {
+        children = new ChildHolder<>();
+    }
+    
+    @Override
+    protected void setDefaults() {}
 
     @Override
-    protected void setDefaults() {
+    public void setParent(Table parent) {
+        this.parent = parent;
     }
 
+    @Override
+    public Optional<Table> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public ChildHolder<ForeignKeyColumn> getChildren() {
+        return children;
+    }
 }

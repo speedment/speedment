@@ -23,12 +23,12 @@ import com.speedment.orm.config.model.External;
  * @author pemi
  * @param <T> Setter return type.
  */
-public interface ColumnCompressionTypeable<T> {
+public interface ColumnCompressionTypeable {
 
     @External
     ColumnCompressionType getColumnCompressionType();
 
     @External
-    T setColumnCompressionType(ColumnCompressionType fieldStorageType);
+    void setColumnCompressionType(ColumnCompressionType fieldStorageType);
 
 }

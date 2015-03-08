@@ -22,10 +22,10 @@ package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.IndexColumn;
+import com.speedment.orm.config.model.aspects.Childable;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -33,10 +33,10 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public enum OrderType implements Nameable<OrderType> {
+public enum OrderType implements EnumHelper<OrderType> {
 
     ASC("Asc"), DESC("Desc");
-    static final Map<String, OrderType> NAME_MAP = Nameable.Hidden.buildMap(values());
+    static final Map<String, OrderType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
     private OrderType(final String name) {
         this.name = name;
@@ -47,22 +47,38 @@ public enum OrderType implements Nameable<OrderType> {
     public String getName() {
         return name;
     }
+//
+//    public static Optional<OrderType> findByNameIgnoreCase(final String name) {
+//        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
+//    }
+//
+//    public static <T extends ConfigEntity<T, ?, ?>> Stream<OrderType> streamFor(final T entity) {
+//        Objects.requireNonNull(entity);
+//        if (entity instanceof IndexColumn) {
+//            return stream();
+//        }
+//        return Stream.empty();
+//    }
+//
+//    public static <T extends ConfigEntity<T, ?, ?>> OrderType defaultFor(final T entity) {
+//        Objects.requireNonNull(entity);
+//        return ASC;
+//    }
+//
+//    public static Stream<OrderType> stream() {
+//        return Stream.of(values());
+//    }
 
-    public static Optional<OrderType> findByNameIgnoreCase(final String name) {
-        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
+    public static Optional<OrderType> findByIgnoreCase(String name) {
+        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
-
-    public static <T extends ConfigEntity<T, ?, ?>> Stream<OrderType> streamFor(final T entity) {
-        Objects.requireNonNull(entity);
-        if (entity instanceof IndexColumn) {
-            return stream();
-        }
-        return Stream.empty();
+    
+    public static OrderType defaultFor(final ConfigEntity entity) {
+        return Hidden.defaultFor(stream(), p -> false, entity, ASC);
     }
-
-    public static <T extends ConfigEntity<T, ?, ?>> OrderType defaultFor(final T entity) {
-        Objects.requireNonNull(entity);
-        return ASC;
+    
+    public static Stream<OrderType> streamFor(final Childable parent) {
+        return Hidden.streamFor(stream(), p -> false, parent);
     }
 
     public static Stream<OrderType> stream() {

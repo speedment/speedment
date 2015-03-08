@@ -17,19 +17,20 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity<ForeignKeyColumn, ForeignKey, ConfigEntity<?, ForeignKeyColumn, ?>> implements ForeignKeyColumn {
+public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity implements ForeignKeyColumn {
 
+    private ForeignKey parent;
     private String foreignColumnName;
     private String foreignTableName;
 
     @Override
-    protected void setDefaults() {
-    }
+    protected void setDefaults() {}
 
     @Override
     public String getForeignColumnName() {
@@ -37,8 +38,8 @@ public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity<ForeignKey
     }
 
     @Override
-    public ForeignKeyColumn setForeignColumnName(CharSequence foreignColumnName) {
-        return run(() -> this.foreignColumnName = makeNullSafeString(foreignColumnName));
+    public void setForeignColumnName(String foreignColumnName) {
+        this.foreignColumnName = foreignColumnName;
     }
 
     @Override
@@ -47,8 +48,17 @@ public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity<ForeignKey
     }
 
     @Override
-    public ForeignKeyColumn setForeignTableName(CharSequence foreignTableName) {
-        return run(() -> this.foreignTableName = makeNullSafeString(foreignTableName));
+    public void setForeignTableName(String foreignTableName) {
+        this.foreignTableName = foreignTableName;
     }
 
+    @Override
+    public void setParent(ForeignKey parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<ForeignKey> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

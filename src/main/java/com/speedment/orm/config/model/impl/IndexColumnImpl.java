@@ -18,18 +18,19 @@ package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.parameters.OrderType;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class IndexColumnImpl extends AbstractOrdinalConfigEntity<IndexColumn, Index, ConfigEntity<?, IndexColumn, ?>> implements IndexColumn {
+public class IndexColumnImpl extends AbstractOrdinalConfigEntity implements IndexColumn {
 
+    private Index parent;
     private OrderType orderType;
 
     @Override
     protected void setDefaults() {
-        setOrdinalPosition(ORDINAL_UNSET);
         setOrderType(OrderType.defaultFor(this));
     }
 
@@ -39,8 +40,17 @@ public class IndexColumnImpl extends AbstractOrdinalConfigEntity<IndexColumn, In
     }
 
     @Override
-    public IndexColumn setOrderType(OrderType orderType) {
-        return run(() -> this.orderType = orderType);
+    public void setOrderType(OrderType orderType) {
+        this.orderType = orderType;
     }
 
+    @Override
+    public void setParent(Index parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Index> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

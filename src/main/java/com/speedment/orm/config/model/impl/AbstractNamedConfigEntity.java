@@ -16,29 +16,24 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.Project;
-import com.speedment.orm.config.model.ProjectManager;
+import com.speedment.orm.config.model.aspects.Nameable;
 
 /**
+ * Generic representation of a ConfigEntity.
+ *
+ * This class is thread safe.
  *
  * @author pemi
  */
-public class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager {
-    
-    private final ChildHolder<Project> children;
+public abstract class AbstractNamedConfigEntity extends AbstractConfigEntity
+    implements Comparable<Nameable> {
 
-    public ProjectManagerImpl() {
-        children = new ChildHolder<>();
+    public AbstractNamedConfigEntity() {
+        super(null);
     }
 
     @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
-
-    @Override
-    public ChildHolder<Project> getChildren() {
-        return children;
+    public int compareTo(Nameable o) {
+        return compareToHelper(o);
     }
 }

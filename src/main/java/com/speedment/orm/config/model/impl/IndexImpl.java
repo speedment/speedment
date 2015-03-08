@@ -17,14 +17,21 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class IndexImpl extends AbstractConfigEntity<Index, Table, IndexColumn> implements Index {
+public class IndexImpl extends AbstractNamedConfigEntity implements Index {
 
+    private Table parent;
+    private final ChildHolder<IndexColumn> children;
     private boolean unique;
+
+    public IndexImpl() {
+        this.children = new ChildHolder<>();
+    }
 
     @Override
     protected void setDefaults() {
@@ -37,8 +44,22 @@ public class IndexImpl extends AbstractConfigEntity<Index, Table, IndexColumn> i
     }
 
     @Override
-    public Index setUnique(boolean unique) {
-        return run(() -> this.unique = unique);
+    public void setUnique(boolean unique) {
+        this.unique = unique;
     }
 
+    @Override
+    public void setParent(Table parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Table> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public ChildHolder<IndexColumn> getChildren() {
+        return children;
+    }
 }

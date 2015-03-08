@@ -17,6 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
@@ -29,11 +31,10 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Table extends
-        ConfigEntity<Table, Schema, ConfigEntity<?, Table, ?>>,
-        FieldStorageTypeable<Table>,
-        ColumnCompressionTypeable<Table>,
-        StorageEngineTypeable<Table> {
+public interface Table extends ConfigEntity, Parentable<Schema>, Childable<Parentable<Table>>,
+    FieldStorageTypeable,
+    ColumnCompressionTypeable,
+    StorageEngineTypeable {
 
     @Override
     default Class<Table> getInterfaceMainClass() {
@@ -41,8 +42,8 @@ public interface Table extends
     }
 
     @Override
-    default Optional<Class<Schema>> getParentInterfaceMainClass() {
-        return Optional.of(Schema.class);
+    default Class<Schema> getParentInterfaceMainClass() {
+        return Schema.class;
     }
 
     default Column addNewColumn() {
@@ -61,10 +62,11 @@ public interface Table extends
     Optional<String> getTableName();
 
     @External
-    Table setTableName(CharSequence tableName);
+    void setTableName(String tableName);
 
     // Groovy
     default Column column(Closure<?> c) {
+        System.out.println("Called for " + c);
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewColumn);
     }
 

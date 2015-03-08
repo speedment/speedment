@@ -14,10 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
@@ -34,7 +30,7 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public enum StorageEngineType implements Nameable<StorageEngineType> {
+public enum StorageEngineType implements EnumHelper<StorageEngineType> {
 
     INHERIT("Inherit from parent", ConcurrentHashMap.class, true),
     ON_HEAP("On Heap", ConcurrentHashMap.class, true),
@@ -45,7 +41,7 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
     private final boolean useNativeMaps;
     public final static StorageEngineType DEFAULT_STORAGE_ENGINE = ON_HEAP;
 
-    static final Map<String, StorageEngineType> NAME_MAP = Nameable.Hidden.buildMap(values());
+    static final Map<String, StorageEngineType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
     private StorageEngineType(final String name, final Class<?> implementationClass, boolean useNativeMaps) {
         this.name = Objects.requireNonNull(name);
@@ -66,10 +62,6 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
      */
     public Class<?> getImplementationClass() {
         return implementationClass;
-    }
-
-    public static Optional<StorageEngineType> findByNameIgnoreCase(final String name) {
-        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
 
     /**
@@ -105,27 +97,13 @@ public enum StorageEngineType implements Nameable<StorageEngineType> {
     public boolean isUseNativeMaps() {
         return useNativeMaps;
     }
-
-    private static final Predicate<StorageEngineType> IS_INHERIT_PREDICATE = (f) -> f == INHERIT;
-
-    public static <T extends ConfigEntity<T, ?, ?>> Stream<StorageEngineType> streamFor(final T entity) {
-        Objects.requireNonNull(entity);
-        try {
-            final Class<? extends ConfigEntity<?, ?, ?>> parentClass = entity.getParentInterfaceMainClass().orElse(null);
-            if (parentClass != null) {
-                // Check if the parent can have FieldStorageTypes. 
-                parentClass.getMethod("get" + StorageEngineType.class.getSimpleName());
-                return stream();
-            }
-        } catch (NoSuchMethodException nsm) {
-            // Ignore
-        }
-        return stream().filter(IS_INHERIT_PREDICATE.negate());
+    
+    public static Optional<StorageEngineType> findByIgnoreCase(String name) {
+        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
-
-    public static <T extends ConfigEntity<T, ?, ?>> StorageEngineType defaultFor(final T entity) {
-        Objects.requireNonNull(entity);
-        return streamFor(entity).filter(IS_INHERIT_PREDICATE).findAny().orElse(ON_HEAP);
+    
+    public static StorageEngineType defaultFor(final ConfigEntity entity) {
+        return Hidden.defaultFor(stream(), p -> false, entity, ON_HEAP);
     }
 
     public static Stream<StorageEngineType> stream() {

@@ -17,6 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import groovy.lang.Closure;
@@ -27,8 +29,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Dbms extends
-        ConfigEntity<Dbms, Project, Schema> {
+public interface Dbms extends ConfigEntity, Parentable<Project>, Childable<Schema> {
 
     @Override
     default Class<Dbms> getInterfaceMainClass() {
@@ -36,8 +37,8 @@ public interface Dbms extends
     }
 
     @Override
-    default Optional<Class<Project>> getParentInterfaceMainClass() {
-        return Optional.of(Project.class);
+    default Class<Project> getParentInterfaceMainClass() {
+        return Project.class;
     }
 
     default Schema addNewSchema() {
@@ -49,7 +50,7 @@ public interface Dbms extends
     @External
     DbmsType getType();
 
-    Dbms setType(DbmsType dbmsType);
+    void setType(DbmsType dbmsType);
 
     /**
      *
@@ -59,31 +60,31 @@ public interface Dbms extends
      * could not be found
      */
     @External
-    Dbms setType(CharSequence dbmsTypeName);
+    void setType(String dbmsTypeName);
 
     @External
     Optional<String> getIpAddress();
 
     @External
-    Dbms setIpAddress(CharSequence ipAddress);
+    void setIpAddress(String ipAddress);
 
     @External
     Optional<Integer> getPort();
 
     @External
-    Dbms setPort(Integer port);
+    void setPort(Integer port);
 
     @External
     Optional<String> getUsername();
 
     @External
-    Dbms setUsername(CharSequence name);
+    void setUsername(String name);
 
     @External
     Optional<String> getPassword();
 
     @External
-    Dbms setPassword(CharSequence password);
+    void setPassword(String password);
 
     // Groovy
     default Schema schema(Closure<?> c) {

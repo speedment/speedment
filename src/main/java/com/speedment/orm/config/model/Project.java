@@ -17,6 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import groovy.lang.Closure;
 import java.util.Optional;
@@ -26,8 +28,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Project extends
-        ConfigEntity<Project, ProjectManager, Dbms> {
+public interface Project extends ConfigEntity, Childable<Dbms>, Parentable<ProjectManager> {
 
     @Override
     default Class<Project> getInterfaceMainClass() {
@@ -35,8 +36,8 @@ public interface Project extends
     }
 
     @Override
-    default Optional<Class<ProjectManager>> getParentInterfaceMainClass() {
-        return Optional.of(ProjectManager.class);
+    default Class<ProjectManager> getParentInterfaceMainClass() {
+        return ProjectManager.class;
     }
 
     default Dbms addNewDbms() {
@@ -49,13 +50,13 @@ public interface Project extends
     String getPacketName();
 
     @External
-    Project setPacketName(CharSequence packetName);
+    void setPacketName(String packetName);
 
     @External
     String getPacketLocation();
 
     @External
-    Project setPacketLocation(CharSequence packetLocation);
+    void setPacketLocation(String packetLocation);
 
     // Groovy
     default Dbms dbms(Closure<?> c) {

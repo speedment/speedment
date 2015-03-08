@@ -17,21 +17,39 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
+import java.util.Comparator;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<?, Table, ?>> implements Table {
+public class TableImpl extends AbstractNamedConfigEntity implements Table {
 
+    private Schema parent;
+    private final ChildHolder<Parentable<Table>> children;
     private String tableName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
+
+    private static int valueOfClass(Class clazz) {
+        if (Column.class.equals(clazz)) return 0;
+        if (Index.class.equals(clazz)) return 1;
+        if (ForeignKey.class.equals(clazz)) return 2;
+        if (PrimaryKeyColumn.class.equals(clazz)) return 3;
+        return 4;
+    }
+    
+    private final static Comparator<Class> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
+
+    public TableImpl() {
+        children = new ChildHolder<>(CLASS_COMPARATOR);
+    }
 
     @Override
     protected void setDefaults() {
@@ -46,8 +64,8 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     }
 
     @Override
-    public Table setFieldStorageType(FieldStorageType fieldStorageType) {
-        return run(() -> this.fieldStorageType = fieldStorageType);
+    public void setFieldStorageType(FieldStorageType fieldStorageType) {
+        this.fieldStorageType = fieldStorageType;
     }
 
     @Override
@@ -56,8 +74,8 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     }
 
     @Override
-    public Table setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return run(() -> this.columnCompressionType = columnCompressionType);
+    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        this.columnCompressionType = columnCompressionType;
     }
 
     @Override
@@ -66,8 +84,8 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     }
 
     @Override
-    public Table setStorageEngineType(StorageEngineType storageEngineType) {
-        return run(() -> this.storageEngineType = storageEngineType);
+    public void setStorageEngineType(StorageEngineType storageEngineType) {
+        this.storageEngineType = storageEngineType;
     }
 
     @Override
@@ -79,8 +97,22 @@ public class TableImpl extends AbstractConfigEntity<Table, Schema, ConfigEntity<
     }
 
     @Override
-    public Table setTableName(CharSequence tableName) {
-        return run(() -> this.tableName = makeNullSafeString(tableName));
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
+    @Override
+    public void setParent(Schema parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public ChildHolder<Parentable<Table>> getChildren() {
+        return children;
+    }
+
+    @Override
+    public Optional<Schema> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

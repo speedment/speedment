@@ -25,16 +25,16 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, ConfigEntity<?, Column, ?>> implements Column {
+public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
 
     private String alias;
+    private Table parent;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private Class<?> mapping;
 
     @Override
     protected void setDefaults() {
-        setOrdinalPosition(ORDINAL_UNSET);
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
         setMapping(String.class);
@@ -46,8 +46,8 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     }
 
     @Override
-    public Column setAlias(CharSequence alias) {
-        return run(() -> this.alias = makeNullSafeString(alias));
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     }
 
     @Override
-    public Column setFieldStorageType(FieldStorageType fieldStorageType) {
-        return run(() -> this.fieldStorageType = fieldStorageType);
+    public void setFieldStorageType(FieldStorageType fieldStorageType) {
+        this.fieldStorageType = fieldStorageType;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     }
 
     @Override
-    public Column setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        return run(() -> this.columnCompressionType = columnCompressionType);
+    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
+        this.columnCompressionType = columnCompressionType;
     }
 
     @Override
@@ -76,8 +76,17 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity<Column, Table, Confi
     }
 
     @Override
-    public Column setMapping(Class<?> mappedClass) {
-        return run(() -> this.mapping = mappedClass);
+    public void setMapping(Class<?> mappedClass) {
+        this.mapping = mappedClass;
     }
 
+    @Override
+    public void setParent(Table parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Optional<Table> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }

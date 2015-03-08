@@ -31,7 +31,7 @@ class ConfigEntityUtil {
         throw new IllegalStateException("No instances of this class allowed");
     }
 
-    static protected Column findColumnByName(ConfigEntity<?, ?, ?> configEntity, Optional<Table> optionalTable, String name) {
+    static protected Column findColumnByName(ConfigEntity configEntity, Optional<Table> optionalTable, String name) {
         final Table table = optionalTable
                 .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " associated with this " + configEntity.toString()));
         return table
@@ -41,7 +41,7 @@ class ConfigEntityUtil {
                 .orElseThrow(() -> new IllegalStateException("There is no " + Column.class.getSimpleName() + " in the " + table.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
     }
 
-    static protected Table findTableByName(ConfigEntity<?, ?, ?> configEntity, Optional<Schema> optionalSchema, String name) {
+    static protected Table findTableByName(ConfigEntity configEntity, Optional<Schema> optionalSchema, String name) {
         final Schema currentSchema = optionalSchema.orElseThrow(() -> new IllegalStateException("There is no " + Schema.class.getSimpleName() + " associated with this " + configEntity.toString()));
         final String[] paths = name.split("\\.");
         // Just the name of the table
@@ -56,7 +56,7 @@ class ConfigEntityUtil {
         if (paths.length == 1) {
             final String otherSchemaName = paths[0];
             final String tableName = paths[1];
-            final Dbms dbms = currentSchema.getParent().orElseThrow(() -> new IllegalStateException("No " + Dbms.class.getSimpleName() + " for " + currentSchema.toString()));
+            final Dbms dbms = currentSchema.ancestor(Dbms.class).orElseThrow(() -> new IllegalStateException("No " + Dbms.class.getSimpleName() + " for " + currentSchema.toString()));
             final Schema otherSchema = dbms
                     .stream()
                     .filter(t -> t.getName().equals(otherSchemaName))
@@ -88,6 +88,7 @@ class ConfigEntityUtil {
         c.setDelegate(result);
         c.setResolveStrategy(Closure.DELEGATE_ONLY);
         c.call();
+        System.out.println(result);
         return result;
     }
 

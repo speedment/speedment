@@ -17,16 +17,16 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parentable;
 import com.speedment.orm.platform.SpeedmentPlatform;
-import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface Index extends
-        ConfigEntity<Index, Table, IndexColumn> {
+public interface Index extends ConfigEntity, Parentable<Table>, Childable<IndexColumn> {
 
     @Override
     default Class<Index> getInterfaceMainClass() {
@@ -34,8 +34,8 @@ public interface Index extends
     }
 
     @Override
-    default Optional<Class<Table>> getParentInterfaceMainClass() {
-        return Optional.of(Table.class);
+    default Class<Table> getParentInterfaceMainClass() {
+        return Table.class;
     }
 
     default IndexColumn addNewIndexColumn() {
@@ -48,6 +48,6 @@ public interface Index extends
     boolean isUnique();
 
     @External
-    Index setUnique(boolean unique);
+    void setUnique(boolean unique);
 
 }
