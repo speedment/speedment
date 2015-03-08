@@ -16,8 +16,11 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
+import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
@@ -28,44 +31,28 @@ import com.speedment.orm.config.model.Table;
  */
 public class EntityImplTranslator extends BaseEntityTranslator<Class> {
 
-    public EntityImplTranslator(Table configEntity) {
-        super(configEntity);
+    public EntityImplTranslator(CodeGenerator cg, Table configEntity) {
+        super(cg, configEntity);
     }
 
     @Override
-    protected Class make() {
+    protected Class make(File file) {
         return new ClassBuilder(INTERFACE.getImplType().getName())
-                .addColumnConsumer((cl, c) -> {
-                    cl
-                    .add(fieldFor(c).private_().final_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
-                            .add(OVERRIDE)
-                            .public_()
-                            .add("return " + variableName(c) + ";"));
-                })
-                .build()
-                .public_()
-                .add(INTERFACE.getType())
-                //.add(emptyConstructor())
-                .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.FIELD));
-
+            .addColumnConsumer((cl, c) -> {
+                cl
+                .add(fieldFor(c).private_().final_())
+                .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
+                    .add(OVERRIDE)
+                    .public_()
+                    .add("return " + variableName(c) + ";"));
+            })
+            .build()
+            .public_()
+            .add(INTERFACE.getType())
+            //.add(emptyConstructor())
+            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.FIELD));
     }
 
-//        
-//        return with(new BaseClass(INTERFACE.getImplType().getName(), (cl, c) -> {
-//            cl
-//                    .add(cl.fieldFor(c).private_().final_())
-//                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
-//                            .add(Default.OVERRIDE)
-//                            .public_()
-//                            .add("return " + variableName(c) + ";"));
-//        }), cl -> {
-//            cl
-//                    .add(INTERFACE.getType())
-//                    .add(cl.emptyConstructor())
-//                    .add(cl.copyConstructor());
-//        });
-//    }
     @Override
 
     protected String getJavadocRepresentText() {
@@ -74,7 +61,7 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
 
     @Override
     protected String getFileName() {
-        return INTERFACE.getImplType().getName();
+        return Formatting.shortName(INTERFACE.getImplType().getName());
     }
 
     @Override

@@ -16,9 +16,13 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
+import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Import;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 
@@ -28,64 +32,38 @@ import com.speedment.orm.config.model.Table;
  */
 public class EntityBuilderImplTranslator extends BaseEntityTranslator<Class> {
 
-
-
-    public EntityBuilderImplTranslator(Table configEntity) {
-        super(configEntity);
+    public EntityBuilderImplTranslator(CodeGenerator cg, Table configEntity) {
+        super(cg, configEntity);
     }
 
     @Override
-    protected Class make() {
+    protected Class make(File file) {
 
         return new ClassBuilder(BUILDER.getImplType().getName())
-                .addColumnConsumer((cl, c) -> {
-                    cl
-                    .add(fieldFor(c).private_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
-                            .public_()
-                            .add(OVERRIDE)
-                            .add("return " + variableName(c) + ";"))
-                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType())
-                            .public_()
-                            .add(OVERRIDE)
-                            .add(fieldFor(c))
-                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                            .add("return this;"));
-                })
-                .build()
+            .addColumnConsumer((cl, c) -> {
+                cl
+                .add(fieldFor(c).private_())
+                .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
+                    .public_()
+                    .add(OVERRIDE)
+                    .add("return " + variableName(c) + ";"))
+                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType())
+                    .public_()
+                    .add(OVERRIDE)
+                    .add(fieldFor(c))
+                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                    .add("return this;"));
+            })
+            .build()
+            .public_()
+            .add(BUILDER.getType())
+            .add(emptyConstructor())
+            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.BUILDER))
+            .add(Method.of("build", INTERFACE.getType())
+                .add(OVERRIDE)
                 .public_()
-                .add(BUILDER.getType())
-                .add(emptyConstructor())
-                .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.BUILDER))
-                .add(Method.of("build", INTERFACE.getType())
-                        .add(OVERRIDE)
-                        .public_()
-                        .add("return new " + INTERFACE.getImplType().getName() + "(this);"));
-//
-//        return with(new BaseClass(BUILDER.getImplType().getName(), (cl, c) -> {
-//            cl
-//                    .add(cl.fieldFor(c).private_())
-//                    .add(Method.of("get" + typeName(c), Type.of(c.getMappedClass()))
-//                            .public_()
-//                            .add(Default.OVERRIDE)
-//                            .add("return " + variableName(c) + ";"))
-//                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType())
-//                            .public_()
-//                            .add(Default.OVERRIDE)
-//                            .add(cl.fieldFor(c))
-//                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
-//                            .add("return this;")
-//                    );
-//        }), cl -> {
-//            cl
-//                    .add(BUILDER.getType())
-//                    .add(cl.emptyConstructor())
-//                    .add(cl.copyConstructor())
-//                    .add(Method.of("build", INTERFACE.getType())
-//                            .add(Default.OVERRIDE)
-//                            .public_()
-//                            .add("return new " + INTERFACE.getImplType().getName() + "(this);"));
-//        });
+                .call(m -> file.add(Import.of(INTERFACE.getImplType())))
+                .add("return new " + Formatting.shortName(INTERFACE.getImplType().getName()) + "(this);"));
     }
 
     @Override
@@ -95,7 +73,7 @@ public class EntityBuilderImplTranslator extends BaseEntityTranslator<Class> {
 
     @Override
     protected String getFileName() {
-        return BUILDER.getImplType().getName();
+        return Formatting.shortName(BUILDER.getImplType().getName());
     }
 
     @Override

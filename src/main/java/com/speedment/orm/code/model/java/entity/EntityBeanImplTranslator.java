@@ -16,7 +16,10 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
+import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
@@ -26,33 +29,33 @@ import com.speedment.orm.config.model.Table;
  * @author pemi
  */
 public class EntityBeanImplTranslator extends BaseEntityTranslator<Class> {
-  
-    public EntityBeanImplTranslator(Table configEntity) {
-        super(configEntity);
+
+    public EntityBeanImplTranslator(CodeGenerator cg, Table configEntity) {
+        super(cg, configEntity);
     }
 
     @Override
-    protected Class make() {
+    protected Class make(File file) {
         return new ClassBuilder(BEAN.getImplType().getName())
-                .addColumnConsumer((cl, c) -> {
-                    cl
-                    .add(fieldFor(c).private_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), fieldFor(c).getType())
-                            .public_()
-                            .add(OVERRIDE)
-                            .add("return " + variableName(c) + ";"))
-                    .add(Method.of(SETTER_METHOD_PREFIX + typeName(c), BEAN.getType())
-                            .public_()
-                            .add(OVERRIDE)
-                            .add(fieldFor(c))
-                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                            .add("return this;"));
-                })
-                .build()
-                .public_()
-                .add(BEAN.getType())
-                .add(emptyConstructor())
-                .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.SETTER));
+            .addColumnConsumer((cl, c) -> {
+                cl
+                .add(fieldFor(c).private_())
+                .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), fieldFor(c).getType())
+                    .public_()
+                    .add(OVERRIDE)
+                    .add("return " + variableName(c) + ";"))
+                .add(Method.of(SETTER_METHOD_PREFIX + typeName(c), BEAN.getType())
+                    .public_()
+                    .add(OVERRIDE)
+                    .add(fieldFor(c))
+                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                    .add("return this;"));
+            })
+            .build()
+            .public_()
+            .add(BEAN.getType())
+            .add(emptyConstructor())
+            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.SETTER));
     }
 
     @Override
@@ -62,7 +65,7 @@ public class EntityBeanImplTranslator extends BaseEntityTranslator<Class> {
 
     @Override
     protected String getFileName() {
-        return BEAN.getImplType().getName();
+        return Formatting.shortName(BEAN.getImplType().getName());
     }
 
     @Override

@@ -67,7 +67,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
     }
 
     default String packagePath() {
-        return getNode().getRelativeName(project());
+        return project().getPacketName();
+        
+        //return getNode().getRelativeName(project());
     }
 
     default Stream<Column> columns() {

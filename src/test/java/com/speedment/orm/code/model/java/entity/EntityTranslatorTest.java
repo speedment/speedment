@@ -42,7 +42,7 @@ public class EntityTranslatorTest extends SimpleModelTest {
                 .filter(e -> TABLE_NAME.equals(e.getName()))
                 .findAny().get();
         
-        final EntityTranslator instance = new EntityTranslator(table2);
+        final EntityTranslator instance = new EntityTranslator(cg, table2);
         final File file = instance.get();
         
         file.call(new AutoImports(cg.getDependencyMgr()));

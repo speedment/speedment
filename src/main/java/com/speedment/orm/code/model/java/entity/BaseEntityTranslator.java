@@ -16,6 +16,9 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.lang.controller.AutoImports;
+import com.speedment.codegen.lang.controller.AutoJavadoc;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Javadoc;
@@ -34,13 +37,13 @@ import com.speedment.orm.config.model.Table;
  */
 public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table> {
 
+    private final CodeGenerator cg;
 
     public class ClassType {
-        //INTERFACE("","Impl"), BEAN(".Bean","BeanImpl"), BUILDER(".Builder","BuilderImpl");
 
         private ClassType(String typeName, String implTypeName) {
-            this.type = new TypeImpl(typeName() + typeName);
-            this.implType = new TypeImpl(typeName() + implTypeName);
+            this.type = Type.of(fullyQualifiedTypeName() + typeName);
+            this.implType = Type.of(fullyQualifiedTypeName("impl") + implTypeName);
         }
 
         private final Type type;
@@ -60,8 +63,9 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
     public final ClassType BEAN = new ClassType(".Bean", "BeanImpl");
     public final ClassType BUILDER = new ClassType(".Builder", "BuilderImpl");
 
-    public BaseEntityTranslator(Table configEntity) {
+    public BaseEntityTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);
+        this.cg = cg;
     }
 
     protected abstract String getFileName();
@@ -69,19 +73,24 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
     @Override
     public File get() {
         final File file = new FileImpl(packagePath().replace('.', '/') + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
-        final T item = make();
+        final T item = make(file);
         item.set(getJavaDoc());
         file.add(item);
+        file.call(new AutoImports(cg.getDependencyMgr()));
         return file;
     }
 
-    protected abstract T make();
+    protected abstract T make(File file);
 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
         return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-                .add(AUTHOR.setValue("Speedment"));
+            .add(AUTHOR.setValue("Speedment"));
+    }
+
+    public CodeGenerator getCodeGenerator() {
+        return cg;
     }
 
     protected boolean isInImplPackage() {

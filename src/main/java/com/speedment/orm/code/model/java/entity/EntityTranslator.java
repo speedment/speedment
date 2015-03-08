@@ -16,7 +16,10 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
+import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
@@ -32,59 +35,43 @@ import com.speedment.orm.core.Buildable;
  */
 public class EntityTranslator extends BaseEntityTranslator<Interface> {
 
-
-
-    public EntityTranslator(Table configEntity) {
-        super(configEntity);
+    public EntityTranslator(CodeGenerator cg, Table configEntity) {
+        super(cg, configEntity);
     }
 
-//    protected Interface make3() {
-//        return Interface.of(INTERFACE.getType().getName())
-//                .call(new GenerateMgrClass(table));
-//    }
-//    class GenerateMgrClass<T> extends Consumer<ClassOrInterface<T>> {
-//
-//        public GenerateMgrClass(Table table) {
-//
-//        }
-//
-//        public void accept(T classOrInterface) {
-//
-//        }
-//    }
     @Override
-    protected Interface make() {
-        return new InterfaceBuilder(INTERFACE.getType().getName())
-                .addColumnConsumer((i, c) -> {
-                    i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
-                })
-                .build()
-                .public_()
-                .add(AnnotationUsage.of(Type.of(Api.class)))
-                .add(bean())
-                .add(builder());
+    protected Interface make(File file) {
+        return new InterfaceBuilder(Formatting.shortName(INTERFACE.getType().getName()))
+            .addColumnConsumer((i, c) -> {
+                i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
+            })
+            .build()
+            .public_()
+            .add(AnnotationUsage.of(Type.of(Api.class)))
+            .add(bean())
+            .add(builder());
     }
 
     private Interface bean() {
         return new InterfaceBuilder("Bean")
-                .addColumnConsumer((i, c) -> {
-                    i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), VOID).add(fieldFor(c)));
-                })
-                .build()
-                .public_()
-                .add(INTERFACE.getType());
+            .addColumnConsumer((i, c) -> {
+                i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), BEAN.getType()).add(fieldFor(c)));
+            })
+            .build()
+            .public_()
+            .add(INTERFACE.getType());
     }
 
     private Interface builder() {
         return new InterfaceBuilder("Builder")
-                .addColumnConsumer((i, c) -> {
-                    i.add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), Type.of("Builder")).add(fieldFor(c)));
-                })
-                .build()
-                .public_()
-                .add(INTERFACE.getType())
-                .add(Type.of(Buildable.class)
-                        .add(new GenericImpl(INTERFACE.getType())));
+            .addColumnConsumer((i, c) -> {
+                i.add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), BUILDER.getType()).add(fieldFor(c)));
+            })
+            .build()
+            .public_()
+            .add(INTERFACE.getType())
+            .add(Type.of(Buildable.class)
+                .add(new GenericImpl(INTERFACE.getType())));
     }
 
     @Override
@@ -94,7 +81,7 @@ public class EntityTranslator extends BaseEntityTranslator<Interface> {
 
     @Override
     protected String getFileName() {
-        return INTERFACE.getType().getName();
+        return Formatting.shortName(INTERFACE.getType().getName());
     }
 
 }
