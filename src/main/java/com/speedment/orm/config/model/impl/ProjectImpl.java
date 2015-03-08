@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,11 +28,11 @@ import java.util.Optional;
 public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
 
     private ProjectManager parent;
-    private final ChildHolder<Dbms> children;
+    private final ChildHolder children;
     private String packetName, packetLocation;
 
     public ProjectImpl() {
-        this.children = new ChildHolder<>();
+        this.children = new ChildHolder();
     }
 
     @Override
@@ -61,16 +62,16 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     }
 
     @Override
-    public ChildHolder<Dbms> getChildren() {
+    public ChildHolder getChildren() {
         return children;
     }
 
     @Override
-    public void setParent(ProjectManager parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, ProjectManager.class)
+            .ifPresent(p -> this.parent = p);
     }
 
-    @Override
     public Optional<ProjectManager> getParent() {
         return Optional.ofNullable(parent);
     }

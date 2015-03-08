@@ -30,6 +30,7 @@ import groovy.lang.Closure;
 public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManager> {
 
     @Override
+    @SuppressWarnings("unchecked")
     default Class<Project> getInterfaceMainClass() {
         return Project.class;
     }

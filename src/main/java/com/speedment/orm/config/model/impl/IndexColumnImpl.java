@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.parameters.OrderType;
 import java.util.Optional;
 
@@ -45,8 +46,9 @@ public class IndexColumnImpl extends AbstractOrdinalConfigEntity implements Inde
     }
 
     @Override
-    public void setParent(Index parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, Index.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override

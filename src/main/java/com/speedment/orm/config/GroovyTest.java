@@ -18,9 +18,7 @@ package com.speedment.orm.config;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import com.speedment.util.$;
 import groovy.lang.Script;
-import java.util.ArrayList;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
@@ -58,14 +56,12 @@ public class GroovyTest {
     }
 
     public static String script() {
-        final $ result = new $();
-        result.$(
-                "println 'Hello World!';",
-                "x = 123",
-                "setName('Sven')",
-                "return this"
-        );
-        return result.toString();
+        return new StringBuilder()
+            .append("println 'Hello World!';")
+            .append("x = 123")
+            .append("setName('Sven')")
+            .append("return this")
+        .toString();
     }
 
     public static class Project extends Script {

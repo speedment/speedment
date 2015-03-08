@@ -17,7 +17,11 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.aspects.Node;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -62,9 +66,12 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
     @Override
     public String toString() {
         return getInterfaceMainClass().getSimpleName()
-            + " '" + getParent()
-            .map(p -> this.getRelativeName(p))
-            .orElse(getName())
+            + " '" + Optional.of(this)
+                .filter(e -> e.isChildInterface())
+                .map(e -> (Child<?>) e)
+                .flatMap(e -> e.getParent())
+                .map(e -> getRelativeName(e))
+                .orElse(getName())
             + "'";
     }
 }

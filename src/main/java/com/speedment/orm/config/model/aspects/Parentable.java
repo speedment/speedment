@@ -14,31 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.impl;
+package com.speedment.orm.config.model.aspects;
 
-import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.Project;
-import com.speedment.orm.config.model.ProjectManager;
+import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager {
+public interface Parentable<P extends Parent<?>> extends Node {
     
-    private final ChildHolder children;
-
-    public ProjectManagerImpl() {
-        children = new ChildHolder();
-    }
-
-    @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
-
-    @Override
-    public ChildHolder getChildren() {
-        return children;
-    }
+    Optional<P> getParent();
 }

@@ -26,8 +26,15 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public interface Node extends Nameable {
-    default <P extends Parent<?>> Optional<P> getParent() {
-        return Optional.empty();
+    
+    @SuppressWarnings("unchecked")
+    default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
+        return Optional.of(this)
+            .filter(e -> e.isChildInterface())
+            .map(e -> (Child<?>) e)
+            .flatMap(e -> e.getParent())
+            .filter(e -> parentClass.isAssignableFrom(e.getClass()))
+            .map(e -> (P) e);
     }
     
     default boolean isParentInterface() {
@@ -53,8 +60,8 @@ public interface Node extends Nameable {
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
         return Trees.walkOptional(
-            getParent().map(p -> (Parent<?>) p).get(), 
-            p -> Optional.of(p).flatMap(p2 -> p2.getParent()),
+            getParent(Parent.class).get(), 
+            (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2), 
             Trees.WalkingOrder.BACKWARD
         );
     }
@@ -71,5 +78,10 @@ public interface Node extends Nameable {
         return ancestors().map(Nameable::getName).collect(joining("."));
     }
     
-    <T extends Node> Class<T> getInterfaceMainClass();
+    Class<?> getInterfaceMainClass();
+    
+    default boolean is(Class<?> clazz) {
+        final Class<?> first = getInterfaceMainClass();
+        return clazz.isAssignableFrom(first);
+    }
 }

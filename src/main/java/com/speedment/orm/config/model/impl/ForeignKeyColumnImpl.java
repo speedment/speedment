@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Optional;
 
 /**
@@ -53,8 +54,9 @@ public class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity implements
     }
 
     @Override
-    public void setParent(ForeignKey parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, ForeignKey.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override

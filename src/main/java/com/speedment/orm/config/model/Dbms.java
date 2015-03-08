@@ -75,5 +75,4 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
     default Schema schema(Closure<?> c) {
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewSchema);
     }
-
 }

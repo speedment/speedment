@@ -61,5 +61,4 @@ public interface ForeignKeyColumn extends ConfigEntity, Ordinable, Child<Foreign
     default Table getForeignTable() {
         return ConfigEntityUtil.findTableByName(this, ancestor(Schema.class), getForeignTableName());
     }
-
 }

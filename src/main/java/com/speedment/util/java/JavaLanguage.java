@@ -19,11 +19,11 @@ package com.speedment.util.java;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
-import com.speedment.util.stream.StreamUtil;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
@@ -125,7 +125,11 @@ public class JavaLanguage {
 
     public final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toUnmodifiableSet());
 
-    public final static Set<String> JAVA_USED_WORDS = StreamUtil.of(JAVA_LITERAL_WORDS, JAVA_RESERVED_WORDS, JAVA_BUILT_IN_CLASS_WORDS).collect(toUnmodifiableSet());
+    public final static Set<String> JAVA_USED_WORDS = Stream.of(
+        JAVA_LITERAL_WORDS, 
+        JAVA_RESERVED_WORDS, 
+        JAVA_BUILT_IN_CLASS_WORDS
+    ).flatMap(s -> s.stream()).collect(toUnmodifiableSet());
 
     private static final Set<String> REPLACEMENT_STRING_SET = unmodifiableSetOf("_", "-", "+", " ");
 

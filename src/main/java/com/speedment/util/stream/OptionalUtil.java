@@ -14,31 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.impl;
+package com.speedment.util.stream;
 
-import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.Project;
-import com.speedment.orm.config.model.ProjectManager;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager {
+public final class OptionalUtil {
     
-    private final ChildHolder children;
-
-    public ProjectManagerImpl() {
-        children = new ChildHolder();
-    }
-
-    @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
-
-    @Override
-    public ChildHolder getChildren() {
-        return children;
+    private OptionalUtil() {}
+    
+    public static <T> Stream<T> from(Optional<T> optional) {
+        return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
     }
 }

@@ -44,5 +44,4 @@ public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKe
         add(e);
         return e;
     }
-
 }

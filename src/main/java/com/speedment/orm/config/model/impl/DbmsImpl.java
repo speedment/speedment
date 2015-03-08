@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import java.util.Optional;
 
@@ -27,14 +28,14 @@ import java.util.Optional;
 public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
 
     private Project parent;
-    private final ChildHolder<Schema> children;
+    private final ChildHolder children;
     private DbmsType type;
     private String ipAddress;
     private Integer port;
     private String username, password;
 
     public DbmsImpl() {
-        children = new ChildHolder<>();
+        children = new ChildHolder();
     }
 
     @Override
@@ -97,8 +98,9 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     }
 
     @Override
-    public void setParent(Project parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, Project.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     }
 
     @Override
-    public ChildHolder<Schema> getChildren() {
+    public ChildHolder getChildren() {
         return children;
     }
 }

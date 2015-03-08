@@ -29,7 +29,6 @@ import com.speedment.orm.config.model.Index;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.util.Beans;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
     protected abstract class Builder<T extends ClassOrInterface<T>> {
 
         private final String name;
-        private final Map<Class<? extends Node>, List<BiConsumer<T, ? extends Node>>> map;
+        private final Map<Class<?>, List<BiConsumer<T, ? extends Node>>> map;
 
         public Builder(String name) {
             this.name = name;
@@ -101,12 +100,14 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
             return Beans.run(this, () -> aquireListAndAdd(ForeignKey.class, consumer));
         }
 
+        @SuppressWarnings("unchecked")
         protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
-            aquireList(clazz).add(consumer);
+            aquireList(clazz)
+                .add((BiConsumer<T, Node>) consumer);
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Node> List<BiConsumer<T, C>> aquireList(Class<C> clazz) {
+        protected <C extends Node> List<BiConsumer<T, C>> aquireList(Class<?> clazz) {
             return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(clazz, $ -> new ArrayList<>());
         }
 

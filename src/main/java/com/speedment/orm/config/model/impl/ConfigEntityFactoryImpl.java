@@ -64,6 +64,7 @@ public class ConfigEntityFactoryImpl implements ConfigEntityFactory {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ConfigEntity> T newOf(Class<T> interfaceMainClass) {
         return (T) factoryMap.getOrDefault(interfaceMainClass, () -> {
             throw new IllegalArgumentException("Unable to instanciate class of " + interfaceMainClass.getName() + ", know " + factoryMap.keySet());

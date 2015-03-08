@@ -78,7 +78,7 @@ public enum OrderType implements EnumHelper<OrderType> {
         return Hidden.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
     }
     
-    public static Stream<OrderType> streamFor(final Child entity) {
+    public static Stream<OrderType> streamFor(final Child<?> entity) {
         return Hidden.streamFor(stream(), p -> false, entity, OrderTypeable.class);
     }
 

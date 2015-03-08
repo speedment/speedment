@@ -17,7 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
-import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
@@ -31,13 +31,13 @@ import java.util.Optional;
 public class TableImpl extends AbstractNamedConfigEntity implements Table {
 
     private Schema parent;
-    private final ChildHolder<Child<Table>> children;
+    private final ChildHolder children;
     private String tableName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
 
-    private static int valueOfClass(Class clazz) {
+    private static int valueOfClass(Class<?> clazz) {
         if (Column.class.equals(clazz)) return 0;
         if (Index.class.equals(clazz)) return 1;
         if (ForeignKey.class.equals(clazz)) return 2;
@@ -45,10 +45,10 @@ public class TableImpl extends AbstractNamedConfigEntity implements Table {
         return 4;
     }
     
-    private final static Comparator<Class> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
+    private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
     public TableImpl() {
-        children = new ChildHolder<>(CLASS_COMPARATOR);
+        children = new ChildHolder(CLASS_COMPARATOR);
     }
 
     @Override
@@ -102,12 +102,13 @@ public class TableImpl extends AbstractNamedConfigEntity implements Table {
     }
 
     @Override
-    public void setParent(Schema parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, Schema.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override
-    public ChildHolder<Child<Table>> getChildren() {
+    public ChildHolder getChildren() {
         return children;
     }
 

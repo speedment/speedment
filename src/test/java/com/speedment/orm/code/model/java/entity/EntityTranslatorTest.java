@@ -21,49 +21,17 @@ import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.java.JavaInstaller;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.orm.config.model.Project;
+import com.speedment.orm.code.model.java.SimpleModelTest;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.config.model.impl.ProjectImpl;
 import java.util.Optional;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
  * @author pemi
  */
-public class EntityTranslatorTest {
+public class EntityTranslatorTest extends SimpleModelTest {
    
-    private static final String TABLE_NAME = "user";
-    
-    Project project = new ProjectImpl().setName("myProject")
-            .addNewDbms().setName("myDbms")
-            .addNewSchema().setName("myCoolApp")
-            .addNewTable().setName(TABLE_NAME)
-            .addNewColumn().setName("first_name").getParent(Project.class).get();
-    
-    public EntityTranslatorTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-    
     @Test
     public void testApply() {
         System.out.println("apply");
@@ -72,11 +40,11 @@ public class EntityTranslatorTest {
                 new JavaInstaller()
         );
         
-        Table table = project.traversalOf(Table.class)
+        final Table table2 = project.traversalOf(Table.class)
                 .filter(e -> TABLE_NAME.equals(e.getName()))
                 .findAny().get();
         
-        final EntityTranslator instance = new EntityTranslator(table);
+        final EntityTranslator instance = new EntityTranslator(table2);
         final File file = instance.get();
         
         file.call(new AutoImports(cg.getDependencyMgr()));
@@ -84,7 +52,5 @@ public class EntityTranslatorTest {
         final Optional<String> code = cg.on(file);
         
         System.out.println(code.get());
-        
-    }
-    
+    }   
 }

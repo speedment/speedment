@@ -30,7 +30,7 @@ import java.util.Optional;
 public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
 
     private Dbms parent;
-    private final ChildHolder<Table> children;
+    private final ChildHolder children;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
@@ -39,7 +39,7 @@ public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
     private StorageEngineType storageEngineType;
 
     public SchemaImpl() {
-        children = new ChildHolder<>();
+        children = new ChildHolder();
     }
 
     @Override
@@ -113,8 +113,9 @@ public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
     }
 
     @Override
-    public void setParent(Dbms parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, Dbms.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
     }
 
     @Override
-    public ChildHolder<Table> getChildren() {
+    public ChildHolder getChildren() {
         return children;
     }
 }

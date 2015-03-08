@@ -20,6 +20,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
@@ -49,5 +50,4 @@ public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
 
     @External
     void setUnique(boolean unique);
-
 }

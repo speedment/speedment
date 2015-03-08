@@ -37,6 +37,8 @@ public class CollectorUtil {
     private CollectorUtil() {
     }
 
+    @SafeVarargs
+    @SuppressWarnings({"unchecked", "varargs"})
     public static <T> T of(Supplier<T> supplier, Consumer<T> modifier, Consumer<T>... additionalModifiers) {
         Objects.requireNonNull(supplier, "supplier " + NULL_TEXT);
         Objects.requireNonNull(modifier, "modifier " + NULL_TEXT);
@@ -63,7 +65,9 @@ public class CollectorUtil {
             return left;
         }, Collections::unmodifiableSet, Collector.Characteristics.UNORDERED);
     }
-
+    
+    @SafeVarargs
+    @SuppressWarnings({"unchecked", "varargs"})
     public static <T> Set<T> unmodifiableSetOf(T... items) {
         return Stream.of(items).collect(toUnmodifiableSet());
     }

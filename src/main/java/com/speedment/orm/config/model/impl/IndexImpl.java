@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Optional;
 
 /**
@@ -26,11 +27,11 @@ import java.util.Optional;
 public class IndexImpl extends AbstractNamedConfigEntity implements Index {
 
     private Table parent;
-    private final ChildHolder<IndexColumn> children;
+    private final ChildHolder children;
     private boolean unique;
 
     public IndexImpl() {
-        this.children = new ChildHolder<>();
+        this.children = new ChildHolder();
     }
 
     @Override
@@ -49,8 +50,9 @@ public class IndexImpl extends AbstractNamedConfigEntity implements Index {
     }
 
     @Override
-    public void setParent(Table parent) {
-        this.parent = parent;
+    public void setParentTo(Parent<?> parent) {
+        setParentHelper(parent, Table.class)
+            .ifPresent(p -> this.parent = p);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class IndexImpl extends AbstractNamedConfigEntity implements Index {
     }
 
     @Override
-    public ChildHolder<IndexColumn> getChildren() {
+    public ChildHolder getChildren() {
         return children;
     }
 }

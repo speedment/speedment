@@ -16,17 +16,28 @@
  */
 package com.speedment.orm.config.model.aspects;
 
+import com.speedment.orm.config.model.Table;
 import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface Child<P extends Parent> extends Node {
-//    @Override
-//    Optional<P> getParent();
+public interface Child<P extends Parent<?>> extends Node {
+
+    Optional<P> getParent();
     
-    void setParent(P parent);
+    void setParentTo(Parent<?> parent);
+    
+    default void setParent(P parent) {
+        setParentTo(parent);
+    }
+
+    default <C> Optional<C> setParentHelper(Parent<?> parent, Class<C> ifClass) {
+        return Optional.ofNullable(parent)
+            .filter(p -> p.is(ifClass))
+            .map(t -> ifClass.cast(t));
+    }
     
     Class<P> getParentInterfaceMainClass();
     

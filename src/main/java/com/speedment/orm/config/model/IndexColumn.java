@@ -43,5 +43,4 @@ public interface IndexColumn extends ConfigEntity, Ordinable, Child<Index>,
     default Column getColumn() {
         return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
-
 }

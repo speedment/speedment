@@ -66,8 +66,9 @@ public interface ConfigEntityFactory extends Component {
         return newOf(ForeignKeyColumn.class);
     }
 
+    @SuppressWarnings("unchecked")
     default <T extends ConfigEntity> T newOf(T rawModel) {
-        return newOf(rawModel.getInterfaceMainClass());
+        return newOf((Class<T>) rawModel.getInterfaceMainClass());
     }
 
     <T extends ConfigEntity> T newOf(Class<T> interfaceMainClass);

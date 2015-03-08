@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.config.model.Column;
@@ -43,23 +38,18 @@ import static org.junit.Assert.*;
  */
 public class FieldStorageTypeTest {
 
-    private static final Column column = new ColumnImpl();
-    private static final Table table = new TableImpl().add(column);
-    private static final Schema schema = new SchemaImpl().add(table);
-
-    public FieldStorageTypeTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    private Column column;
+    private Table table;
+    private Schema schema;
 
     @Before
     public void setUp() {
+        column = new ColumnImpl();
+        table = new TableImpl();
+        schema = new SchemaImpl();
+        
+        table.add(column);
+        schema.add(table);
     }
 
     @After
@@ -82,9 +72,9 @@ public class FieldStorageTypeTest {
     public void testFindByNameIgnoreCase() {
         System.out.println("findByNameIgnoreCase");
         Stream.of(FieldStorageType.values()).forEach(f -> {
-            assertEquals(f, FieldStorageType.findByNameIgnoreCase(f.getName()).get());
-            assertEquals(f, FieldStorageType.findByNameIgnoreCase(f.getName().toUpperCase()).get());
-            assertEquals(f, FieldStorageType.findByNameIgnoreCase(f.getName().toLowerCase()).get());
+            assertEquals(f, FieldStorageType.findByIgnoreCase(f.getName()).get());
+            assertEquals(f, FieldStorageType.findByIgnoreCase(f.getName().toUpperCase()).get());
+            assertEquals(f, FieldStorageType.findByIgnoreCase(f.getName().toLowerCase()).get());
         });
     }
 
