@@ -64,7 +64,7 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
         return getInterfaceMainClass().getSimpleName()
             + " '" + getParent()
             .map(p -> this.getRelativeName(p))
-            .orElse("?." + getName())
+            .orElse(getName())
             + "'";
     }
 }

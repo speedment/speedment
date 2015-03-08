@@ -66,7 +66,6 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
 
     // Groovy
     default Column column(Closure<?> c) {
-        System.out.println("Called for " + c);
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewColumn);
     }
 
