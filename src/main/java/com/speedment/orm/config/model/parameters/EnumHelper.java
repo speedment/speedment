@@ -17,7 +17,7 @@
 package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Child;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -39,17 +39,20 @@ public interface EnumHelper<E extends Enum<E>> {
 //            return findByNameIgnoreCase(helper.getNameMap(), name);
 //        }
         
-        static <E extends Enum<E> & EnumHelper<E>, C extends ConfigEntity> E defaultFor(Stream<E> stream, Predicate<E> predicate, final C entity, final E defaultValue) {
+        static <E extends Enum<E> & EnumHelper<E>, C extends ConfigEntity> E defaultFor(
+            Stream<E> stream, Predicate<E> predicate, final C entity, final Class<?> ableClass, final E defaultValue) {
+            
             return Optional.ofNullable(entity)
-                .flatMap(e -> e.getParent())
+                .flatMap(e -> e.asChild())
                 .flatMap(e -> streamFor(
-                    stream, predicate, e
+                    stream, predicate, e, ableClass
                 ).filter(predicate).findAny())
                 .orElse(defaultValue);
         }
     
-        static <E extends Enum<E>, H extends EnumHelper<E>, C extends Childable> Stream<E> streamFor(Stream<E> stream, Predicate<E> predicate, final C parent) {
-            if (FieldStorageType.class.isAssignableFrom(parent.getInterfaceMainClass())) {
+        static <E extends Enum<E>, H extends EnumHelper<E>, C extends Child<?>> Stream<E> streamFor(
+            Stream<E> stream, Predicate<E> predicate, final C entity, final Class<?> ableClass) {
+            if (ableClass.isAssignableFrom(entity.getParentInterfaceMainClass())) {
                 return stream;
             } else {
                 return stream.filter(predicate.negate());

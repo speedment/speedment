@@ -47,7 +47,7 @@ public enum ColumnCompressionType implements EnumHelper<ColumnCompressionType> {
     }
     
     public static ColumnCompressionType defaultFor(final ConfigEntity entity) {
-        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, NONE);
+        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, ColumnCompressionTypeable.class, NONE);
     }
     
     public static Stream<ColumnCompressionType> stream() {

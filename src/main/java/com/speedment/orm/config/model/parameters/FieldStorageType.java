@@ -18,7 +18,7 @@ package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public enum FieldStorageType implements EnumHelper<FieldStorageType> {
     }
     
     public static FieldStorageType defaultFor(final ConfigEntity entity) {
-        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, WRAPPER);
+        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, FieldStorageTypeable.class, WRAPPER);
     }
 
     public static Stream<FieldStorageType> stream() {

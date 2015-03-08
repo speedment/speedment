@@ -17,8 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Childable;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import groovy.lang.Closure;
 import java.util.Optional;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Project extends ConfigEntity, Childable<Dbms>, Parentable<ProjectManager> {
+public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManager> {
 
     @Override
     default Class<Project> getInterfaceMainClass() {

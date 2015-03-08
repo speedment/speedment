@@ -17,7 +17,6 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
-import com.speedment.orm.config.model.aspects.Childable;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import java.util.Optional;
 
@@ -55,12 +54,6 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     @Override
     public void setType(DbmsType dbmsType) {
         this.type = dbmsType;
-    }
-
-    @Override
-    public void setType(String dbmsTypeName) {
-        setType(DbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
     }
 
     @Override
@@ -117,5 +110,4 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     public ChildHolder<Schema> getChildren() {
         return children;
     }
-
 }

@@ -17,7 +17,6 @@
 package com.speedment.orm.config.model.impl.utils;
 
 import com.speedment.orm.config.DelegatorGroovyTest;
-import com.speedment.orm.config.model.aspects.Childable;
 import com.speedment.orm.config.model.aspects.Node;
 import static com.speedment.orm.config.model.impl.utils.MethodsParser.*;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
@@ -38,8 +37,12 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 public class GroovyParser {
 
     private static final String NL = "\n";
+    
+    public static String toGroovy(final Node node) {
+        return toGroovy(node, 0);
+    }
 
-    public static String toGroovy(final Node node, final int indentLevel) {
+    private static String toGroovy(final Node node, final int indentLevel) {
         return CollectorUtil.of(StringBuilder::new, sb -> {
             MethodsParser.getMethods(node.getClass(),
                 METHOD_IS_GETTER.and(METHOD_IS_PUBLIC).and(METHOD_IS_EXTERNAL))
@@ -49,7 +52,7 @@ public class GroovyParser {
                     .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
                 );
 
-            Optional.of(node).filter(n -> n.isChildable()).map(n -> (Childable<?>) n).ifPresent(n
+            Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
                 -> n.stream().forEach(c -> {
                     indent(sb, indentLevel).append(c.getInterfaceMainClass().getSimpleName()).append(" {").append(NL);
                     sb.append(toGroovy(c, indentLevel + 1));

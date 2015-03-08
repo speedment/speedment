@@ -17,8 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Childable;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
@@ -31,7 +31,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Table extends ConfigEntity, Parentable<Schema>, Childable<Parentable<Table>>,
+public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>,
     FieldStorageTypeable,
     ColumnCompressionTypeable,
     StorageEngineTypeable {

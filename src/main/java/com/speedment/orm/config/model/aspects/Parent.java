@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public interface Childable<C extends Parentable> extends Node {
+public interface Parent<C extends Child> extends Node {
     ChildHolder<C> getChildren();
     
     default Optional<C> add(final C child) {
@@ -48,9 +48,8 @@ public interface Childable<C extends Parentable> extends Node {
         return getChildren().streamOf(childClass);
     }
 
-    default <T extends Childable> Stream<T> traversalOf(Class<T> childClass) {
-        final Stream<? extends Childable> s = Trees.traverse(
-            (Childable) this, 
+    default <T extends Parent> Stream<T> traversalOf(Class<T> childClass) {
+        final Stream<? extends Parent> s = Trees.traverse((Parent) this, 
             t -> t.stream(), 
             Trees.TraversalOrder.BREADTH_FIRST
         );
@@ -69,7 +68,12 @@ public interface Childable<C extends Parentable> extends Node {
     }
     
     @Override
-    default boolean isChildable() {
+    default boolean isParentInterface() {
         return true;
+    }
+    
+    @Override
+    default Optional<Parent<?>> asParent() {
+        return Optional.of(this);
     }
 }

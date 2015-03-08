@@ -29,7 +29,7 @@ import com.speedment.orm.config.model.Index;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.util.Beans;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +108,7 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
             return map.computeIfAbsent(clazz, $ -> new ArrayList<>());
         }
 
-        public void act(T item, Parentable<?> configEntity) {
+        public void act(T item, Child<?> configEntity) {
             aquireList(configEntity.getInterfaceMainClass()).forEach((BiConsumer c) -> c.accept(item, configEntity));
         }
 

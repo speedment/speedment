@@ -17,8 +17,8 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Childable;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.platform.SpeedmentPlatform;
 
 /**
@@ -26,7 +26,7 @@ import com.speedment.orm.platform.SpeedmentPlatform;
  * @author pemi
  */
 @Api(version = 0)
-public interface Index extends ConfigEntity, Parentable<Table>, Childable<IndexColumn> {
+public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
 
     @Override
     default Class<Index> getInterfaceMainClass() {

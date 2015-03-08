@@ -22,7 +22,8 @@ package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
-import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.aspects.Child;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -74,11 +75,11 @@ public enum OrderType implements EnumHelper<OrderType> {
     }
     
     public static OrderType defaultFor(final ConfigEntity entity) {
-        return Hidden.defaultFor(stream(), p -> false, entity, ASC);
+        return Hidden.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
     }
     
-    public static Stream<OrderType> streamFor(final Childable parent) {
-        return Hidden.streamFor(stream(), p -> false, parent);
+    public static Stream<OrderType> streamFor(final Child entity) {
+        return Hidden.streamFor(stream(), p -> false, entity, OrderTypeable.class);
     }
 
     public static Stream<OrderType> stream() {

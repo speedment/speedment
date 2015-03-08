@@ -84,6 +84,11 @@ public class Beans {
         } else {
             quote = "";
         }
+        
+        if (value instanceof Class) {
+            value = ((Class) value).getName() + ".class";
+        }
+        
         return Optional.of(beanPropertyName(m.getName()) + " = " + quote + String.valueOf(value) + quote + ";");
     }
 

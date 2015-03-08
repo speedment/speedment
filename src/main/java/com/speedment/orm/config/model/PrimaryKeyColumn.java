@@ -18,14 +18,14 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Child;
 
 /**
  *
  * @author pemi
  */
 @Api(version = 0)
-public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Parentable<Table> {
+public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Child<Table> {
 
     @Override
     default Class<PrimaryKeyColumn> getInterfaceMainClass() {

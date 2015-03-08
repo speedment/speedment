@@ -14,26 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.aspects;
+package com.speedment.orm.config.model.parameters;
+
+import com.speedment.orm.config.model.External;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface Parentable<P extends Childable> extends Node {
-//    @Override
-//    Optional<P> getParent();
-    
-    void setParent(P parent);
-    
-    Class<P> getParentInterfaceMainClass();
-    
-    default boolean isRoot() {
-        return !getParent().isPresent();
-    }
+public interface DbmsTypeable {
+    @External
+    DbmsType getType();
 
-//    @Override
-//    default boolean isParentable() {
-//        return true;
-//    }
+    void setType(DbmsType dbmsType);
+    
+    /**
+     *
+     * @param dbmsTypeName
+     * @return the DbmsType
+     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
+     * could not be found
+     */
+    @External
+    default void setType(String dbmsTypeName) {
+        setType(DbmsType.findByIgnoreCase(dbmsTypeName)
+            .orElseThrow(IllegalArgumentException::new));
+    }
 }

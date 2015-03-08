@@ -103,7 +103,7 @@ public enum DbmsType implements EnumHelper<DbmsType> {
     }
     
     public static DbmsType defaultFor(final ConfigEntity entity) {
-        return Hidden.defaultFor(stream(), t -> false, entity, MYSQL);
+        return Hidden.defaultFor(stream(), t -> false, entity, DbmsTypeable.class, MYSQL);
     }
 
     public static Stream<DbmsType> stream() {

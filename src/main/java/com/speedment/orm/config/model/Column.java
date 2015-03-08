@@ -18,7 +18,7 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import java.util.Optional;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Column extends ConfigEntity, Ordinable, Parentable<Table>,
+public interface Column extends ConfigEntity, Ordinable, Child<Table>,
         FieldStorageTypeable,
         ColumnCompressionTypeable {
 

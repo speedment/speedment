@@ -26,30 +26,35 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public interface Node extends Nameable {
-    default <P extends Childable> Optional<P> getParent() {
+    default <P extends Parent> Optional<P> getParent() {
         return Optional.empty();
     }
     
-    default boolean isChildable() {
+    default boolean isParentInterface() {
         return false;
     }
 
-//    default boolean isParentable() {
-//        return false;
-//    }
+    default boolean isChildInterface() {
+        return false;
+    }
     
     default boolean isOrdinable() {
         return false;
     }
     
+    default Optional<Child<?>> asChild() {
+        return Optional.empty();
+    }
+    
+    default Optional<Parent<?>> asParent() {
+        return Optional.empty();
+    }
+    
     @SuppressWarnings("unchecked")
-    default Stream<? extends Childable> ancestors() {
+    default Stream<? extends Parent> ancestors() {
         return Trees.walkOptional(
-            getParent().map(p -> (Childable) p).get(), 
-            p -> Optional.of(p)
-                .map(p2 -> p2.getParent())
-                .filter(p2 -> p2.isPresent())
-                .map(p2 -> (Childable) p2.get()),
+            getParent().map(p -> (Parent) p).get(), 
+            p -> Optional.of(p).flatMap(p2 -> p2.getParent()),
             Trees.WalkingOrder.BACKWARD
         );
     }

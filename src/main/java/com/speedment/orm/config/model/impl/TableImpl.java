@@ -17,7 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.parameters.ColumnCompressionType;
 import com.speedment.orm.config.model.parameters.FieldStorageType;
 import com.speedment.orm.config.model.parameters.StorageEngineType;
@@ -31,7 +31,7 @@ import java.util.Optional;
 public class TableImpl extends AbstractNamedConfigEntity implements Table {
 
     private Schema parent;
-    private final ChildHolder<Parentable<Table>> children;
+    private final ChildHolder<Child<Table>> children;
     private String tableName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
@@ -107,7 +107,7 @@ public class TableImpl extends AbstractNamedConfigEntity implements Table {
     }
 
     @Override
-    public ChildHolder<Parentable<Table>> getChildren() {
+    public ChildHolder<Child<Table>> getChildren() {
         return children;
     }
 

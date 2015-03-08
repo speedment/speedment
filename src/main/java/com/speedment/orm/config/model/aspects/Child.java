@@ -14,28 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model;
+package com.speedment.orm.config.model.aspects;
 
-import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Parent;
-import com.speedment.orm.platform.Component;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-@Api(version = 0)
-public interface ProjectManager extends ConfigEntity, Component, Parent<Project> {
-
-    @Override
-    default Class<ProjectManager> getInterfaceMainClass() {
-        return ProjectManager.class;
+public interface Child<P extends Parent> extends Node {
+//    @Override
+//    Optional<P> getParent();
+    
+    void setParent(P parent);
+    
+    Class<P> getParentInterfaceMainClass();
+    
+    default boolean isRoot() {
+        return !getParent().isPresent();
     }
 
-    default Project addNewProject() {
-        final Project e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
-        add(e);
-        return e;
+    @Override
+    default boolean isChildInterface() {
+        return true;
+    }
+    
+    @Override
+    default Optional<Child<?>> asChild() {
+        return Optional.of(this);
     }
 }

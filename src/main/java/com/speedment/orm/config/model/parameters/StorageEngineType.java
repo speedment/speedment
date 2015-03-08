@@ -103,7 +103,7 @@ public enum StorageEngineType implements EnumHelper<StorageEngineType> {
     }
     
     public static StorageEngineType defaultFor(final ConfigEntity entity) {
-        return Hidden.defaultFor(stream(), p -> false, entity, ON_HEAP);
+        return Hidden.defaultFor(stream(), p -> p == INHERIT, entity, StorageEngineTypeable.class, ON_HEAP);
     }
 
     public static Stream<StorageEngineType> stream() {

@@ -17,7 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
-import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parent;
 import java.util.Objects;
 import java.util.Optional;
 

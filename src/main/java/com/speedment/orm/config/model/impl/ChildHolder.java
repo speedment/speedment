@@ -16,10 +16,10 @@
  */
 package com.speedment.orm.config.model.impl;
 
-import com.speedment.orm.config.model.aspects.Childable;
+import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Nameable;
 import com.speedment.orm.config.model.aspects.Ordinable;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.util.java.JavaLanguage;
 import com.speedment.util.stream.StreamUtil;
 import java.util.Collections;
@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public class ChildHolder<C extends Parentable> {
+public class ChildHolder<C extends Child> {
 
     private final Map<Class, Map<String, C>> children;
     private final Map<Class, AtomicInteger> ordinalNumbers;
@@ -68,7 +68,7 @@ public class ChildHolder<C extends Parentable> {
         return Optional.of(ensureMap(childClass).get(name));
     }
 
-    public Optional<C> put(Childable parent, C child) {
+    public Optional<C> put(Parent parent, C child) {
         child.getParent().ifPresent(c -> {
             throw new IllegalStateException(
                 "It is illegal to add a child that already has a parent. child="
@@ -106,7 +106,7 @@ public class ChildHolder<C extends Parentable> {
         ).put(child.getName(), child));
     }
 
-    public Optional<C> remove(Childable parent, C child) {
+    public Optional<C> remove(Parent parent, C child) {
         if (child.getParent().filter(p -> p == parent).isPresent()) {
             child.setParent(null);
         }

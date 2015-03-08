@@ -17,9 +17,9 @@
 package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.aspects.Childable;
-import com.speedment.orm.config.model.aspects.Parentable;
-import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.parameters.DbmsTypeable;
 import com.speedment.orm.platform.SpeedmentPlatform;
 import groovy.lang.Closure;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author pemi
  */
 @Api(version = 0)
-public interface Dbms extends ConfigEntity, Parentable<Project>, Childable<Schema> {
+public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent<Schema> {
 
     @Override
     default Class<Dbms> getInterfaceMainClass() {
@@ -46,21 +46,6 @@ public interface Dbms extends ConfigEntity, Parentable<Project>, Childable<Schem
         add(e);
         return e;
     }
-
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-
-    /**
-     *
-     * @param dbmsTypeName
-     * @return the DbmsType
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    void setType(String dbmsTypeName);
 
     @External
     Optional<String> getIpAddress();
