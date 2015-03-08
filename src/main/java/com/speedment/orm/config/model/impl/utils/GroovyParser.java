@@ -18,7 +18,6 @@ package com.speedment.orm.config.model.impl.utils;
 
 import com.speedment.orm.config.DelegatorGroovyTest;
 import com.speedment.orm.config.model.aspects.Node;
-import static com.speedment.orm.config.model.impl.utils.MethodsParser.*;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
@@ -44,9 +43,7 @@ public class GroovyParser {
 
     private static String toGroovy(final Node node, final int indentLevel) {
         return CollectorUtil.of(StringBuilder::new, sb -> {
-            MethodsParser.getMethods(node.getClass(),
-                METHOD_IS_GETTER.and(METHOD_IS_PUBLIC).and(METHOD_IS_EXTERNAL))
-                .stream()
+            MethodsParser.streamOfExternal(node.getClass())
                 .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
                 .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                     .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))

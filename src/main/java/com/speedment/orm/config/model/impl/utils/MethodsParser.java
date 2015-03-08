@@ -17,7 +17,6 @@
 package com.speedment.orm.config.model.impl.utils;
 
 import com.speedment.orm.config.model.External;
-import com.speedment.orm.config.model.impl.AbstractConfigEntity;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -32,13 +31,24 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public class MethodsParser {
-
-    public static final Predicate<Method> METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers());
-    public static final Predicate<Method> METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is"));
-    public static final Predicate<Method> METHOD_IS_EXTERNAL = MethodsParser::isExternal;
+public final class MethodsParser {
     
-    public static Set<Method> getMethods(Class<?> clazz, Predicate<Method> filter) {
+    private MethodsParser() {}
+
+    private static final Predicate<Method> 
+        METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers()),
+        METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is")),
+        METHOD_IS_EXTERNAL = MethodsParser::isExternal;
+
+    public static Stream<Method> streamOfExternal(Class<?> clazz) {
+        return getMethods(clazz,
+            METHOD_IS_PUBLIC
+            .and(METHOD_IS_GETTER)
+            .and(METHOD_IS_EXTERNAL)
+        ).stream();
+    }
+
+    private static Set<Method> getMethods(Class<?> clazz, Predicate<Method> filter) {
         return addMethods(new HashSet<>(), clazz, filter);
     }
 
@@ -76,8 +86,8 @@ public class MethodsParser {
             return methods;
         }
         Stream.of(clazz.getDeclaredMethods())
-                .filter(filter)
-                .forEach(methods::add);
+            .filter(filter)
+            .forEach(methods::add);
         addMethods(methods, clazz.getSuperclass(), filter); // Recursively add the superclass methods
         return methods;
     }
