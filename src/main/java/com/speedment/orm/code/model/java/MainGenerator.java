@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,9 +51,15 @@ public class MainGenerator implements Consumer<Project> {
             translators.add(new EntityBuilderImplTranslator(table));
         });
         
-        final CodeGenerator cg = new JavaGenerator(
-                new JavaInstaller()
-        );
+        final CodeGenerator cg = new JavaGenerator();
+        
+        
+        cg.codeOn(translators.stream()
+            .map(t -> t.get())
+            .collect(Collectors.toList()))
+            .forEach(c -> {
+                
+            });
         
         Formatting.tab("    ");
         translators.forEach(t -> {
