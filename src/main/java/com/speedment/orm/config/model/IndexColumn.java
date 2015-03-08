@@ -19,8 +19,9 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.IndexColumnImpl;
 import com.speedment.orm.config.model.parameters.OrderTypeable;
-import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -28,7 +29,21 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface IndexColumn extends ConfigEntity, Ordinable, Child<Index>,
-        OrderTypeable {
+    OrderTypeable {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<IndexColumn> provider = () -> new IndexColumnImpl();
+    }
+
+    static void setSupplier(Supplier<IndexColumn> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static IndexColumn newIndexColumn() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<IndexColumn> getInterfaceMainClass() {

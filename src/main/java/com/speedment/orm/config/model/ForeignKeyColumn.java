@@ -19,7 +19,9 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.ForeignKeyColumnImpl;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -27,6 +29,20 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface ForeignKeyColumn extends ConfigEntity, Ordinable, Child<ForeignKey> {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<ForeignKeyColumn> provider = () -> new ForeignKeyColumnImpl();
+    }
+
+    static void setSupplier(Supplier<ForeignKeyColumn> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static ForeignKeyColumn newForeignKeyColumn() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<ForeignKeyColumn> getInterfaceMainClass() {

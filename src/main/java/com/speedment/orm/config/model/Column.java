@@ -19,10 +19,11 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Child;
-import com.speedment.orm.config.model.aspects.Parentable;
+import com.speedment.orm.config.model.impl.ColumnImpl;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -30,8 +31,22 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface Column extends ConfigEntity, Ordinable, Child<Table>,
-        FieldStorageTypeable,
-        ColumnCompressionTypeable {
+    FieldStorageTypeable,
+    ColumnCompressionTypeable {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Column> provider = () -> new ColumnImpl();
+    }
+
+    static void setSupplier(Supplier<Column> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Column newColumn() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<Column> getInterfaceMainClass() {

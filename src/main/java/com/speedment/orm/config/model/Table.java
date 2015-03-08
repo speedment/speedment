@@ -19,12 +19,14 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.TableImpl;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import com.speedment.orm.platform.SpeedmentBuilder;
 import groovy.lang.Closure;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -35,6 +37,20 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
     FieldStorageTypeable,
     ColumnCompressionTypeable,
     StorageEngineTypeable {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Table> provider = () -> new TableImpl();
+    }
+
+    static void setSupplier(Supplier<Table> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Table newTable() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<Table> getInterfaceMainClass() {
@@ -47,13 +63,25 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
     }
 
     default Column addNewColumn() {
-        final Column e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newColumn();
+        final Column e = Column.newColumn();
         add(e);
         return e;
     }
 
     default Index addNewIndex() {
-        final Index e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newIndex();
+        final Index e = Index.newIndex();
+        add(e);
+        return e;
+    }
+
+    default PrimaryKeyColumn addPrimaryKeyColumn() {
+        final PrimaryKeyColumn e = PrimaryKeyColumn.newPrimaryKeyColumn();
+        add(e);
+        return e;
+    }
+
+    default ForeignKey addForeignKey() {
+        final ForeignKey e = ForeignKey.newForeignKey();
         add(e);
         return e;
     }
@@ -67,6 +95,18 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
     // Groovy
     default Column column(Closure<?> c) {
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewColumn);
+    }
+
+    default Index index(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewIndex);
+    }
+
+    default ForeignKey foreignKey(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addForeignKey);
+    }
+
+    default PrimaryKeyColumn primaryKeyColumn(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addPrimaryKeyColumn);
     }
 
 }

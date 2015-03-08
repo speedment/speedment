@@ -27,7 +27,6 @@ import com.speedment.orm.code.model.java.entity.EntityImplTranslator;
 import com.speedment.orm.code.model.java.entity.EntityTranslator;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Table;
-import com.sun.istack.internal.logging.Logger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,23 +35,23 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author pemi
  */
 public class MainGenerator implements Consumer<Project> {
-    
-    private final static Logger LOGGER = Logger.getLogger(MainGenerator.class);
-    
+
+    private final static Logger LOGGER = LogManager.getLogger(MainGenerator.class);
+
     @Override
     public void accept(Project project) {
         final List<Translator<?, File>> translators = new ArrayList<>();
-        
+
         final CodeGenerator cg = new JavaGenerator();
 
         project.traversalOf(Table.class).forEach(table -> {
@@ -67,18 +66,22 @@ public class MainGenerator implements Consumer<Project> {
             .map(t -> t.get())
             .collect(Collectors.toList()))
             .forEach(c -> {
-                
-                final String fname = project.getPacketLocation() + "/" +c.getModel().getName();
+
+                final String fname = project.getPacketLocation()
+                + "/"
+                + c.getModel().getName();
                 final String content = c.getText();
                 final Path path = Paths.get(fname);
                 path.getParent().toFile().mkdirs();
-                
+
                 try {
                     Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
                 } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, "Failed to create file " + fname, ex);
+                    LOGGER.error("Failed to create file " + fname, ex);
                 }
-                
+
+                LOGGER.info("done");
+
                 System.out.println("*** BEGIN File:" + fname);
                 System.out.println(content);
                 System.out.println("*** END   File:" + fname);
@@ -92,7 +95,7 @@ public class MainGenerator implements Consumer<Project> {
 //            System.out.println(code.get());
 //            System.out.println("*** END   File:" + file.getName());
 //        });
-        
+
     }
-    
+
 }

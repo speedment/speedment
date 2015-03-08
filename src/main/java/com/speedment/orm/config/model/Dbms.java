@@ -19,10 +19,12 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.DbmsImpl;
 import com.speedment.orm.config.model.parameters.DbmsTypeable;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import com.speedment.orm.platform.SpeedmentBuilder;
 import groovy.lang.Closure;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -30,6 +32,20 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent<Schema> {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Dbms> provider = () -> new DbmsImpl();
+    }
+
+    static void setSupplier(Supplier<Dbms> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Dbms newDbms() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<Dbms> getInterfaceMainClass() {
@@ -42,7 +58,7 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
     }
 
     default Schema addNewSchema() {
-        final Schema e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newSchema();
+        final Schema e = Schema.newSchema();
         add(e);
         return e;
     }

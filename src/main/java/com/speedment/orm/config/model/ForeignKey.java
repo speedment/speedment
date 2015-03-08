@@ -19,8 +19,9 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
-import com.speedment.orm.platform.SpeedmentPlatform;
-import java.util.Optional;
+import com.speedment.orm.config.model.impl.ForeignKeyImpl;
+import com.speedment.orm.platform.SpeedmentBuilder;
+import java.util.function.Supplier;
 
 /**
  *
@@ -29,6 +30,21 @@ import java.util.Optional;
 @Api(version = 0)
 public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKeyColumn> {
 
+        enum Holder {
+
+        HOLDER;
+        private Supplier<ForeignKey> provider = () -> new ForeignKeyImpl();
+    }
+
+    static void setSupplier(Supplier<ForeignKey> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static ForeignKey newForeignKey() {
+        return Holder.HOLDER.provider.get();
+    }
+
+    
     @Override
     default Class<ForeignKey> getInterfaceMainClass() {
         return ForeignKey.class;
@@ -40,7 +56,7 @@ public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKe
     }
 
     default ForeignKeyColumn addNewForeignKeyColumn() {
-        final ForeignKeyColumn e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newForeignKeyColumn();
+        final ForeignKeyColumn e = ForeignKeyColumn.newForeignKeyColumn();
         add(e);
         return e;
     }

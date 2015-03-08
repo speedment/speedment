@@ -19,8 +19,9 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import com.speedment.orm.config.model.impl.ProjectImpl;
 import groovy.lang.Closure;
+import java.util.function.Supplier;
 
 /**
  *
@@ -28,6 +29,20 @@ import groovy.lang.Closure;
  */
 @Api(version = 0)
 public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManager> {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Project> provider = () -> new ProjectImpl();
+    }
+
+    static void setSupplier(Supplier<Project> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Project newProject() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -41,7 +56,7 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
     }
 
     default Dbms addNewDbms() {
-        final Dbms e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newDbms();;
+        final Dbms e = Dbms.newDbms();
         add(e);
         return e;
     }

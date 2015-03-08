@@ -19,8 +19,9 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
-import com.speedment.orm.platform.SpeedmentPlatform;
-import java.util.Optional;
+import com.speedment.orm.config.model.impl.IndexImpl;
+import com.speedment.orm.platform.SpeedmentBuilder;
+import java.util.function.Supplier;
 
 /**
  *
@@ -28,6 +29,20 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Index> provider = () -> new IndexImpl();
+    }
+
+    static void setSupplier(Supplier<Index> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Index newIndex() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<Index> getInterfaceMainClass() {
@@ -40,7 +55,7 @@ public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
     }
 
     default IndexColumn addNewIndexColumn() {
-        final IndexColumn e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newIndexColumn();
+        final IndexColumn e = IndexColumn.newIndexColumn();
         add(e);
         return e;
     }

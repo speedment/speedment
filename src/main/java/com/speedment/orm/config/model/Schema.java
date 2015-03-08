@@ -19,12 +19,13 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.SchemaImpl;
 import com.speedment.orm.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.orm.config.model.parameters.FieldStorageTypeable;
 import com.speedment.orm.config.model.parameters.StorageEngineTypeable;
-import com.speedment.orm.platform.SpeedmentPlatform;
 import groovy.lang.Closure;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  *
@@ -32,9 +33,23 @@ import java.util.Optional;
  */
 @Api(version = 0)
 public interface Schema extends ConfigEntity, Child<Dbms>, Parent<Table>,
-        FieldStorageTypeable,
-        ColumnCompressionTypeable,
-        StorageEngineTypeable {
+    FieldStorageTypeable,
+    ColumnCompressionTypeable,
+    StorageEngineTypeable {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<Schema> provider = () -> new SchemaImpl();
+    }
+
+    static void setSupplier(Supplier<Schema> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static Schema newSchema() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<Schema> getInterfaceMainClass() {
@@ -47,7 +62,7 @@ public interface Schema extends ConfigEntity, Child<Dbms>, Parent<Table>,
     }
 
     default Table addNewTable() {
-        final Table e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newTable();
+        final Table e = Table.newTable();
         add(e);
         return e;
     }

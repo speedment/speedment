@@ -14,23 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.code.model.java;
+package com.speedment.orm.platform;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.Project;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public class MainGeneratorTest extends SimpleModelTest {
+@Api(version = 0)
+public interface Speedment {
 
-    @Test
-    @Ignore
-    public void testAccept() {
-        System.out.println("accept");
-        final MainGenerator instance = new MainGenerator();
-        instance.accept(project);
-    }
+    boolean isRunning();
+
+    Optional<Project> getProject();
+
+    Optional<Path> getConfigPath();
+
+    <T extends Component> T get(Class<T> clazz);
+
+    public Stream<Map.Entry<Class<?>, Component>> components();
 
 }

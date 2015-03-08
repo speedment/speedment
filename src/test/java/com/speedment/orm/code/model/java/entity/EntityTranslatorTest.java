@@ -24,6 +24,7 @@ import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.java.SimpleModelTest;
 import com.speedment.orm.config.model.Table;
 import java.util.Optional;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**

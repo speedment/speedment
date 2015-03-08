@@ -18,8 +18,10 @@ package com.speedment.orm.config.model;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.impl.ProjectManagerImpl;
 import com.speedment.orm.platform.Component;
-import com.speedment.orm.platform.SpeedmentPlatform;
+import com.speedment.orm.platform.SpeedmentBuilder;
+import java.util.function.Supplier;
 
 /**
  *
@@ -28,13 +30,27 @@ import com.speedment.orm.platform.SpeedmentPlatform;
 @Api(version = 0)
 public interface ProjectManager extends ConfigEntity, Component, Parent<Project> {
 
+    enum Holder {
+
+        HOLDER;
+        private Supplier<ProjectManager> provider = () -> new ProjectManagerImpl();
+    }
+
+    static void setSupplier(Supplier<ProjectManager> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static ProjectManager newProjectManager() {
+        return Holder.HOLDER.provider.get();
+    }
+
     @Override
     default Class<ProjectManager> getInterfaceMainClass() {
         return ProjectManager.class;
     }
 
     default Project addNewProject() {
-        final Project e = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
+        final Project e = Project.newProject();
         add(e);
         return e;
     }

@@ -19,6 +19,8 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.config.model.aspects.Ordinable;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Child;
+import com.speedment.orm.config.model.impl.PrimaryKeyColumnImpl;
+import java.util.function.Supplier;
 
 /**
  *
@@ -26,6 +28,20 @@ import com.speedment.orm.config.model.aspects.Child;
  */
 @Api(version = 0)
 public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Child<Table> {
+
+    enum Holder {
+
+        HOLDER;
+        private Supplier<PrimaryKeyColumn> provider = () -> new PrimaryKeyColumnImpl();
+    }
+
+    static void setSupplier(Supplier<PrimaryKeyColumn> provider) {
+        Holder.HOLDER.provider = provider;
+    }
+
+    static PrimaryKeyColumn newPrimaryKeyColumn() {
+        return Holder.HOLDER.provider.get();
+    }
 
     @Override
     default Class<PrimaryKeyColumn> getInterfaceMainClass() {
