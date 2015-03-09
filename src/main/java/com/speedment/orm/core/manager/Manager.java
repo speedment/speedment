@@ -21,42 +21,54 @@
  */
 package com.speedment.orm.core.manager;
 
+import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.core.Buildable;
+import com.speedment.orm.core.Persistable;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public interface Manager<PK, ENTITY, BEAN, BUILDER> {
+@Api(version = 0)
+public interface Manager<T> {
 
     // Metadata
     Table getTable();
 
     // Entity Mapping
-    PK primaryKey(ENTITY entity);
+//    PK primaryKey(ENTITY entity);
+//
+//    BEAN bean(ENTITY entity);
+//
+//    BUILDER builder(ENTITY entity);
 
-    BEAN bean(ENTITY entity);
-
-    BUILDER builder(ENTITY entity);
-
-    ENTITY entity(ENTITY prototype);
-
-    ENTITY newEntity();
+    <B extends Buildable<T>> B builder(Class<B> builderClass);
+    
+    <B extends Buildable<T>> B builderOf(Class<B> builderClass, T model);
+    
+    <P extends Persistable<T>> P persister(Class<P> persistableClass);
+    
+    <P extends Persistable<T>> P persisterOf(Class<P> persistableClass, T model);
+    
+//    ENTITY entity(ENTITY prototype);
+//
+//    ENTITY newEntity();
 
     // Retrieval
-    Stream<ENTITY> stream();
+    Stream<T> stream();
 
     default long size() {
         return stream().count();
     }
 
     // Persistence
-    ENTITY insert(ENTITY entity);
+    T insert(T entity);
 
-    ENTITY update(ENTITY entity);
+    T update(T entity);
 
-    void delete(PK pk);
+    void delete(Object pk);
 
     void load();
 

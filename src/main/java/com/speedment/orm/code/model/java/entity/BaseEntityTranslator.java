@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.controller.AutoJavadoc;
@@ -43,7 +44,7 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
 
         private ClassType(String typeName, String implTypeName) {
             this.type = Type.of(fullyQualifiedTypeName() + typeName);
-            this.implType = Type.of(fullyQualifiedTypeName("impl") + implTypeName);
+            this.implType = Type.of(fullyQualifiedTypeName("impl") + typeName + implTypeName);
         }
 
         private final Type type;
@@ -57,11 +58,20 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
             return implType;
         }
 
+        public String getName() {
+            return Formatting.shortName(type.getName());
+        }
+
+        public String getImplName() {
+            return Formatting.shortName(implType.getName());
+        }
     }
 
     public final ClassType INTERFACE = new ClassType("", "Impl");
-    public final ClassType BEAN = new ClassType(".Bean", "BeanImpl");
-    public final ClassType BUILDER = new ClassType(".Builder", "BuilderImpl");
+    public final ClassType BEAN = new ClassType("Bean", "Impl");
+    public final ClassType BUILDER = new ClassType(".Builder", "Impl");
+    public final ClassType PERSISTER = new ClassType(".Persister", "Impl");
+    public final ClassType CONFIG = new ClassType("Config", "Impl");
 
     public BaseEntityTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);

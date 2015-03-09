@@ -20,6 +20,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.ProjectManager;
 import com.speedment.orm.config.model.impl.utils.GroovyParser;
+import com.speedment.orm.core.manager.Manager;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,11 +42,15 @@ public class SpeedmentBuilder implements Speedment {
     private final Logger logger = LogManager.getLogger(getClass());
 
     private final Map<Class<?>, Component> plugins;
+    private final Map<Class<?>, Manager> entityManagerMap;
+    private final Map<Class<?>, Manager> managerManagerMap;
     private Path configPath;
     private Project project;
 
     public SpeedmentBuilder() {
         plugins = new ConcurrentHashMap<>();
+        entityManagerMap = new ConcurrentHashMap<>();
+        managerManagerMap = new ConcurrentHashMap<>();
         init();
     }
 
@@ -104,10 +109,16 @@ public class SpeedmentBuilder implements Speedment {
         return this;
     }
 
+    public <T> SpeedmentBuilder setManager(Class<T> managedClass, Manager<T> manager) {
+        entityManagerMap.put(managedClass, manager);
+        managerManagerMap.put(manager.getClass(), manager);
+        return this;
+    }
+
     @Api(version = 0)
     public Speedment start() {
         // Todo: apply standard component
-        return new SpeedmentImpl(configPath, plugins, project);
+        return new SpeedmentImpl(configPath, project, plugins, entityManagerMap, managerManagerMap);
     }
 
     @Api(version = 0)
@@ -140,6 +151,16 @@ public class SpeedmentBuilder implements Speedment {
     @Override
     public Optional<Project> getProject() {
         return Optional.ofNullable(project);
+    }
+    
+    @Override
+    public <T> Manager<T> managerOf(Class<T> managedClass) {
+        return entityManagerMap.get(managedClass);
+    }
+
+    @Override
+    public <T> Manager<T> customManager(Class<Manager<T>> managedClass) {
+        return managerManagerMap.get(managedClass);
     }
 
 }

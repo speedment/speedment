@@ -14,35 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.platform;
+package com.speedment.orm.test;
 
-import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.Project;
 import com.speedment.orm.core.manager.Manager;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
+import com.speedment.orm.platform.Speedment;
 
 /**
  *
  * @author Emil Forslund
  */
-@Api(version = 0)
-public interface Speedment {
+public enum ImageConfig {
 
-    boolean isRunning();
+    INSTANCE;
 
-    Optional<Project> getProject();
+    // Use dependency injection to set this
+    boolean running = false;
+    Speedment speedment;
+/*
+    Manager<Image> manager() {
+        return speedment.managerOf(Image.class);
+    }*/
 
-    Optional<Path> getConfigPath();
+    public void setSpeedment(Speedment speedment) {
+        if (running) {
+            throw new IllegalStateException("Can't change Speedment instance while running!");
+        }
+        
+        INSTANCE.speedment = speedment;
+    }
 
-    <T extends Component> T get(Class<T> clazz);
-
-    public Stream<Map.Entry<Class<?>, Component>> components();
-    
-    <T> Manager<T> managerOf(Class<T> managedClass); 
-    
-    <T> Manager<T> customManager(Class<Manager<T>> managedClass); 
-    
+    public void setRunning() {
+        running = true;
+    }
 }

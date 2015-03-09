@@ -18,12 +18,10 @@ package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Generic;
-import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 
@@ -31,59 +29,39 @@ import com.speedment.orm.config.model.Table;
  *
  * @author pemi
  */
-public class EntityImplTranslator extends BaseEntityTranslator<Class> {
+public class EntityImplTranslator_OLD extends BaseEntityTranslator<Class> {
 
-    public EntityImplTranslator(CodeGenerator cg, Table configEntity) {
+    public EntityImplTranslator_OLD(CodeGenerator cg, Table configEntity) {
         super(cg, configEntity);
     }
 
     @Override
     protected Class make(File file) {
-
-        return new ClassBuilder(INTERFACE.getImplName())
+        return new ClassBuilder(INTERFACE.getImplType().getName())
             .addColumnConsumer((cl, c) -> {
                 cl
-                .add(fieldFor(c).private_())
+                .add(fieldFor(c).private_().final_())
                 .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
-                    .public_()
                     .add(OVERRIDE)
-                    .add("return " + variableName(c) + ";"))
-                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), INTERFACE.getImplType())
                     .public_()
-                    .add(OVERRIDE)
-                    .add(fieldFor(c))
-                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                    .add("return this;"));
+                    .add("return " + variableName(c) + ";"));
             })
             .build()
             .public_()
-            .add(PERSISTER.getType())
-            .add(BUILDER.getType())
-            .add(emptyConstructor())
-            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.BUILDER))
-            .add(Method.of("build", INTERFACE.getType())
-                .add(OVERRIDE)
-                .public_()
-                .call(m -> file.add(Import.of(INTERFACE.getImplType())))
-                .add("return new " + INTERFACE.getImplName() + "(this);"))
-            .add(Method.of("persist", INTERFACE.getType())
-                .add(OVERRIDE)
-                .public_()
-                .add("return this;"))
-            .add(Method.of("remove", INTERFACE.getType())
-                .add(OVERRIDE)
-                .public_()
-                .add("return this;"));
+            .add(INTERFACE.getType())
+            //.add(emptyConstructor())
+            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.FIELD));
     }
 
     @Override
+
     protected String getJavadocRepresentText() {
-        return "An implementation ";
+        return "An immutable implementation";
     }
 
     @Override
     protected String getFileName() {
-        return INTERFACE.getImplName();
+        return Formatting.shortName(INTERFACE.getImplType().getName());
     }
 
     @Override
