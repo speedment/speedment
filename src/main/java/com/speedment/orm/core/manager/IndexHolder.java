@@ -6,7 +6,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public interface IndexHolder<KEY, ENTITY> {
+public interface IndexHolder<KEY, PK, ENTITY> {
     
     Stream<ENTITY> stream();
 

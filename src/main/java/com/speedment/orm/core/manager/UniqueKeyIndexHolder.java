@@ -9,7 +9,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public class UniqueKeyIndexHolder<KEY, ENTITY> implements IndexHolder<KEY, ENTITY> {
+public class UniqueKeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENTITY> {
     
     private final Map<KEY, ENTITY> entities;
     

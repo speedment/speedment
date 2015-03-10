@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import static com.speedment.codegen.Formatting.*;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
@@ -25,7 +26,9 @@ import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
+import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.manager.Manager;
 import com.speedment.orm.platform.Platform;
@@ -49,7 +52,7 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
             .public_()
             .add(Type.of(Manager.class).add(GENERIC_OF_PK).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
             
-            .add(primaryKeyFor(file))
+            .add(generatePrimaryKeyFor(file))
             
             .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
                 .add("return \"" + table().getRelativeName(project()) + "\";"))
@@ -63,6 +66,8 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
             .add(Method.of("getBuilderClass", Type.of(Class.class).add(GENERIC_OF_BUILDER)).default_().add(OVERRIDE)
                 .add("return " + BUILDER.getName() + ".class;"))
             
+            .add(generateGet(file))
+            
             .call(i -> file.add(Import.of(Type.of(Platform.class))))
             .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
             .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
@@ -72,7 +77,7 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
             ;
     }
     
-    protected Method primaryKeyFor(File file) {
+    protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
             .add(Field.of("entity", ENTITY.getType()));
         
@@ -87,6 +92,17 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
         }
         
         return method;
+    }
+    
+    protected Method generateGet(File file) {
+        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        return Method.of("get", OBJECT).default_().add(OVERRIDE)
+            .add(Field.of("entity", ENTITY.getType()))
+            .add(Field.of("column", Type.of(Column.class)))
+            .add("switch (column.getName()) " + block(
+                columns().map(c -> "case \"" + variableName(c) + "\" : return entity.get" + typeName(c) + "();").collect(Collectors.joining(nl())) 
+                    + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+            ));
     }
 
     @Override
