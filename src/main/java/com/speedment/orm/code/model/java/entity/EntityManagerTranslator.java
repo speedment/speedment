@@ -17,6 +17,7 @@
 package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Interface;
@@ -29,6 +30,8 @@ import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.manager.Manager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -44,7 +47,9 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
     protected Interface make(File file) {
         return new InterfaceBuilder(MANAGER.getName()).build()
             .public_()
-            .add(Type.of(Manager.class).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
+            .add(Type.of(Manager.class).add(GENERIC_OF_PK).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
+            
+            .add(primaryKeyFor(file))
             
             .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
                 .add("return \"" + table().getRelativeName(project()) + "\";"))
@@ -65,6 +70,23 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
                     ".get().get(" + ManagerComponent.class.getSimpleName() + 
                     ".class).manager(" + MANAGER.getName() + ".class);"))
             ;
+    }
+    
+    protected Method primaryKeyFor(File file) {
+        final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
+            .add(Field.of("entity", ENTITY.getType()));
+        
+        if (primaryKeyColumns().count() == 1) {
+            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().getColumn()) + "();");
+        } else {
+            file.add(Import.of(Type.of(Arrays.class)));
+            method.add(primaryKeyColumns()
+                .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+            );
+        }
+        
+        return method;
     }
 
     @Override

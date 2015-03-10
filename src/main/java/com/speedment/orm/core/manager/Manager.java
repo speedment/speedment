@@ -24,9 +24,6 @@ package com.speedment.orm.core.manager;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
-import com.speedment.orm.core.Persistable;
-import com.speedment.orm.platform.component.Component;
-import com.speedment.orm.platform.Speedment;
 import java.util.stream.Stream;
 
 /**
@@ -34,7 +31,9 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public interface Manager<ENTITY, BUILDER extends Buildable<ENTITY>> {
+public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
+    
+    PK primaryKeyFor(ENTITY entity);
     
     String getTableName();
 
@@ -48,7 +47,7 @@ public interface Manager<ENTITY, BUILDER extends Buildable<ENTITY>> {
 //
 //    BUILDER builder(ENTITY entity);
     
-    <M extends Manager<ENTITY, BUILDER>> Class<M> getManagerClass();
+    <M extends Manager<PK, ENTITY, BUILDER>> Class<M> getManagerClass();
     
     Class<ENTITY> getEntityClass();
     

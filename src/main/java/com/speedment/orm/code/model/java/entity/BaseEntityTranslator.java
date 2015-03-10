@@ -25,10 +25,13 @@ import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
+import com.speedment.codegen.lang.models.constants.DefaultType;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
+import java.util.stream.Stream;
 
 /**
  *
@@ -73,6 +76,7 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
         MANAGER = new ClassType("Manager", "Impl");
     
     protected final Generic 
+        GENERIC_OF_PK = Generic.of().add(typeOfPK()),
         GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
         GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
         GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
@@ -80,6 +84,26 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
     public BaseEntityTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);
         this.cg = cg;
+    }
+
+    protected Type typeOfPK() {
+        final long pks = primaryKeyColumns().count();
+        
+        if (pks == 0) {
+            throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
+        }
+        
+        final Class<?> first = primaryKeyColumns().findAny().get().getColumn().getMapping();
+        
+        if (pks == 1) {
+            return Type.of(first);
+        } else {
+            if (primaryKeyColumns().allMatch(c -> c.getColumn().getMapping().equals(first))) {
+                return DefaultType.list(Type.of(first));
+            } else {
+                return DefaultType.list(DefaultType.WILDCARD);
+            }
+        }
     }
 
     protected abstract String getFileName();

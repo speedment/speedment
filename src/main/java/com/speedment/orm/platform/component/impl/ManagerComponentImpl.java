@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ManagerComponentImpl implements ManagerComponent {
     
-    private final Map<Class<?>, Manager<?, ?>> managersByEntity, managersByManager;
+    private final Map<Class<?>, Manager<?, ?, ?>> managersByEntity, managersByManager;
     
     public ManagerComponentImpl() {
         managersByEntity  = new ConcurrentHashMap<>();
@@ -36,20 +36,20 @@ public class ManagerComponentImpl implements ManagerComponent {
     }
     
     @Override
-    public <E, B extends Buildable<E>> void put(Manager<E, B> manager) {
+    public <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager) {
         managersByEntity.put(manager.getEntityClass(), manager);
         managersByManager.put(manager.getManagerClass(), manager);
     }
     
     @Override
     @SuppressWarnings("unchecked")
-    public <E, B extends Buildable<E>, M extends Manager<E, B>> Manager<E, B> manager(Class<M> managerClass) {
-        return (Manager<E, B>) managersByManager.get(managerClass);
+    public <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass) {
+        return (Manager<PK, E, B>) managersByManager.get(managerClass);
     }
     
     @Override
     @SuppressWarnings("unchecked")
-    public <E, B extends Buildable<E>> Manager<E, B> managerOf(Class<E> entityClass) {
-        return (Manager<E, B>) managersByManager.get(entityClass);
+    public <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass) {
+        return (Manager<PK, E, B>) managersByManager.get(entityClass);
     }
 }

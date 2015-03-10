@@ -21,11 +21,12 @@ import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
-import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.core.manager.AbstractManager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ProjectComponent;
 import java.util.stream.Stream;
@@ -44,6 +45,11 @@ public class EntityManagerImplTranslator extends BaseEntityTranslator<Class> {
     protected Class make(File file) {
         return new ClassBuilder(MANAGER.getImplName()).build()
             .public_()
+            .setSupertype(Type.of(AbstractManager.class)
+                .add(Generic.of().add(typeOfPK()))
+                .add(Generic.of().add(ENTITY.getType()))
+                .add(Generic.of().add(BUILDER.getType()))
+            )
             .add(MANAGER.getType())
             
             .call(i -> file.add(Import.of(Type.of(Platform.class))))
@@ -82,7 +88,7 @@ public class EntityManagerImplTranslator extends BaseEntityTranslator<Class> {
 
     @Override
     protected String getFileName() {
-        return MANAGER.getName();
+        return MANAGER.getImplName();
     }
 
     @Override

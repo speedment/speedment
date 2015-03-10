@@ -30,9 +30,9 @@ public interface ManagerComponent extends Component {
         return ManagerComponent.class;
     }
     
-    <E, B extends Buildable<E>> void put(Manager<E, B> manager);
+    <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager);
 
-    <E, B extends Buildable<E>, M extends Manager<E, B>> Manager<E, B> manager(Class<M> managerClass);
+    <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass);
 
-    <E, B extends Buildable<E>> Manager<E, B> managerOf(Class<E> entityClass);
+    <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass);
 }
