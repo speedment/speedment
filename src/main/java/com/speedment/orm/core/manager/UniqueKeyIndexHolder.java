@@ -8,6 +8,9 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
+ * @param <KEY> Key type used for this IndexHolder
+ * @param <PK> Primary Key type for this Manager
+ * @param <ENTITY> Entity type for this Manager
  */
 public class UniqueKeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENTITY> {
     

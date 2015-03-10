@@ -9,14 +9,17 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
+ * @param <KEY> Key type used for this IndexHolder
+ * @param <PK> Primary Key type for this Manager
+ * @param <ENTITY> Entity type for this Manager
  */
 public class KeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENTITY> {
-    
+
     private final Manager<PK, ENTITY, Buildable<ENTITY>> manager;
     private final Map<KEY, Map<PK, ENTITY>> entities;
-    
+
     public KeyIndexHolder(Manager<PK, ENTITY, Buildable<ENTITY>> manager) {
-        this.manager  = manager;
+        this.manager = manager;
         this.entities = new ConcurrentHashMap<>();
     }
 
@@ -33,12 +36,12 @@ public class KeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENT
     @Override
     public void put(KEY key, ENTITY entity) {
         entities.computeIfAbsent(key, k -> new ConcurrentHashMap<>())
-            .put(manager.primaryKeyFor(entity), entity);
+                .put(manager.primaryKeyFor(entity), entity);
     }
 
     @Override
     public void remove(KEY key) {
         entities.remove(key);
     }
-    
+
 }

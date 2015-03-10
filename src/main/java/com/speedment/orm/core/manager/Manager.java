@@ -28,50 +28,59 @@ import com.speedment.orm.core.Buildable;
 import java.util.stream.Stream;
 
 /**
+ * A Manager is responsible for abstracting away an Entity source from the
+ * application. Entity sources can be RDBMSes, files or other data sources.
+ *
+ * A Manager must be thread safe and be able to handle several reading and
+ * writing threads at the same time.
  *
  * @author pemi
+ * @param <PK> PrimaryKey type for this Manager
+ * @param <ENTITY> Entity type for this Manager
+ * @param <BUILDER> Builder type for this Manager
  */
 @Api(version = 0)
 public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
-    
-    // Inspection
+
+    // Entity Inspection
     PK primaryKeyFor(ENTITY entity);
-    
+
     Object get(ENTITY entity, Column column);
 
-    // Metadata
+    // Data source metadata
     Table getTable();
-    
+
     String getTableName(); // TODO Remove.
-    
+
+    // Introspectors
     <M extends Manager<PK, ENTITY, BUILDER>> Class<M> getManagerClass();
-    
+
     Class<ENTITY> getEntityClass();
-    
+
     Class<BUILDER> getBuilderClass();
 
+    // Factories
     <B extends BUILDER> B builder();
-    
+
     <B extends BUILDER> B toBuilder(ENTITY model);
 
-    // Retrieval
+    // Queries
     Stream<ENTITY> stream();
 
     default long size() {
         return stream().count();
     }
-    
+
     // Add and remove
     void insert(ENTITY entity);
-    
+
     void update(ENTITY entity);
-    
+
     void delete(ENTITY primaryKey);
 
     // Persistence
 //    void load();
-
     ENTITY persist(ENTITY entity);
-    
+
     ENTITY remove(ENTITY entity);
 }

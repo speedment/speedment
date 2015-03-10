@@ -10,43 +10,47 @@ import java.util.stream.Collectors;
 /**
  *
  * @author Emil Forslund
+ *
+ * @param <PK> PrimaryKey type for this Manager
+ * @param <ENTITY> Entity type for this Manager
+ * @param <BUILDER> Builder type for this Manager
  */
 public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements Manager<PK, ENTITY, BUILDER> {
 
     private final Map<List<Column>, IndexHolder> indexes;
-    
+
     public AbstractManager() {
         indexes = new ConcurrentHashMap<>();
     }
-    
+
     @Override
     public void insert(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().put(makeKey(e.getKey(), entity), entity);
         });
     }
-    
+
     @Override
     public void update(ENTITY entity) {
         //TODO Make atomic.
         delete(entity);
         insert(entity);
     }
-    
+
     @Override
     public void delete(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().remove(makeKey(e.getKey(), entity));
         });
     }
-    
+
     private Object makeKey(List<Column> columns, ENTITY entity) {
         if (columns.size() == 1) {
             return get(entity, columns.get(0));
         } else {
             return columns.stream()
-                .map(c -> get(entity, c))
-                .collect(Collectors.toList());
+                    .map(c -> get(entity, c))
+                    .collect(Collectors.toList());
         }
     }
 }
