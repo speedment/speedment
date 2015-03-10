@@ -27,71 +27,60 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public class DefaultManager<T> implements Manager<T> {
-
-    private final Table table;
-
-    private Supplier<? extends Buildable<T>> builderSupplier;
-    private Function<T, ? extends Buildable<T>> builderFunction;
-    private Supplier<? extends Persistable<T>> persistorSupplier;
-    private Function<T, ? extends Persistable<T>> persistorFunction;
-
-    public DefaultManager(Table table) {
-        this.table = table;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <B extends Buildable<T>> B builder(Class<B> builderClass) {
-        return (B) builderSupplier.get();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <B extends Buildable<T>> B builderOf(Class<B> builderClass, T model) {
-        return (B) builderFunction.apply(model);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <P extends Persistable<T>> P persister(Class<P> persistableClass) {
-        return (P) persistorSupplier.get();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <P extends Persistable<T>> P persisterOf(Class<P> persistableClass, T model) {
-        return (P) persistorFunction.apply(model);
-    }
-
-    @Override
-    public Table getTable() {
-        return table;
-    }
-
-    @Override
-    public Stream<T> stream() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public T insert(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public T update(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(Object pk) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void load() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+public class DefaultManager/*<T> implements Manager<T> */{
+//
+//    private final Table table;
+//
+//    private Supplier<? extends Buildable<T>> builderSupplier;
+//    private Function<T, ? extends Buildable<T>> builderFunction;
+//    private Supplier<? extends Persistable<T>> persistorSupplier;
+//    private Function<T, ? extends Persistable<T>> persistorFunction;
+//
+//    public DefaultManager(Table table) {
+//        this.table = table;
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <B extends Buildable<T>> B builder(Class<B> builderClass) {
+//        return (B) builderSupplier.get();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <B extends Buildable<T>> B builderOf(Class<B> builderClass, T model) {
+//        return (B) builderFunction.apply(model);
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <P extends Persistable<T>> P persister(Class<P> persistableClass) {
+//        return (P) persistorSupplier.get();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <P extends Persistable<T>> P persisterOf(Class<P> persistableClass, T model) {
+//        return (P) persistorFunction.apply(model);
+//    }
+//
+//    @Override
+//    public Table getTable() {
+//        return table;
+//    }
+//
+//    @Override
+//    public Stream<T> stream() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public T persist(T entity) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public T remove(T entity) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 }

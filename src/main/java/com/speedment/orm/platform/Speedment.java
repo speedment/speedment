@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.platform;
 
+import com.speedment.orm.platform.component.Component;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.core.manager.Manager;
@@ -30,19 +31,19 @@ import java.util.stream.Stream;
  */
 @Api(version = 0)
 public interface Speedment {
-
-    boolean isRunning();
-
-    Optional<Project> getProject();
-
-    Optional<Path> getConfigPath();
-
-    <T extends Component> T get(Class<T> clazz);
-
-    public Stream<Map.Entry<Class<?>, Component>> components();
-    
-    <T> Manager<T> managerOf(Class<T> managedClass); 
-    
-    <T> Manager<T> customManager(Class<Manager<T>> managedClass); 
-    
+//
+//    boolean isRunning();
+//
+//    Optional<Project> getProject();
+//
+//    Optional<Path> getConfigPath();
+//
+//    <T extends Component> T get(Class<T> clazz);
+//
+//    public Stream<Map.Entry<Class<?>, Component>> components();
+//    
+//    <T> Manager<T> managerOf(Class<T> managedClass); 
+//    
+//    <T> Manager<T> customManager(Class<Manager<T>> managedClass); 
+//    
 }

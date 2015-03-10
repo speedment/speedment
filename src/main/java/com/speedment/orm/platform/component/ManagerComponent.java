@@ -14,22 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.platform;
+package com.speedment.orm.platform.component;
 
-import com.speedment.orm.annotations.Api;
+import com.speedment.orm.core.Buildable;
+import com.speedment.orm.core.manager.Manager;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-@Api(version = 0)
-public interface Component {
+public interface ManagerComponent extends Component {
 
-    // Lifecycle operations for plugins
-    default void added() {
+    @Override
+    default Class<ManagerComponent> getComponentClass() {
+        return ManagerComponent.class;
     }
+    
+    <E, B extends Buildable<E>> void put(Manager<E, B> manager);
 
-    default void removed() {
-    }
+    <E, B extends Buildable<E>, M extends Manager<E, B>> Manager<E, B> manager(Class<M> managerClass);
 
+    <E, B extends Buildable<E>> Manager<E, B> managerOf(Class<E> entityClass);
 }

@@ -16,13 +16,11 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Import;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
@@ -40,7 +38,7 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
     @Override
     protected Class make(File file) {
 
-        return new ClassBuilder(INTERFACE.getImplName())
+        return new ClassBuilder(ENTITY.getImplName())
             .addColumnConsumer((cl, c) -> {
                 cl
                 .add(fieldFor(c).private_())
@@ -48,7 +46,7 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
                     .public_()
                     .add(OVERRIDE)
                     .add("return " + variableName(c) + ";"))
-                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), INTERFACE.getImplType())
+                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
                     .public_()
                     .add(OVERRIDE)
                     .add(fieldFor(c))
@@ -57,23 +55,13 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
             })
             .build()
             .public_()
-            .add(PERSISTER.getType())
             .add(BUILDER.getType())
             .add(emptyConstructor())
-            .add(copyConstructor(INTERFACE.getType(), CopyConstructorMode.BUILDER))
-            .add(Method.of("build", INTERFACE.getType())
+            .add(copyConstructor(ENTITY.getType(), CopyConstructorMode.BUILDER))
+            .add(Method.of("build", ENTITY.getType())
                 .add(OVERRIDE)
                 .public_()
-                .call(m -> file.add(Import.of(INTERFACE.getImplType())))
-                .add("return new " + INTERFACE.getImplName() + "(this);"))
-            .add(Method.of("persist", INTERFACE.getType())
-                .add(OVERRIDE)
-                .public_()
-                .add("return this;"))
-            .add(Method.of("remove", INTERFACE.getType())
-                .add(OVERRIDE)
-                .public_()
-                .add("return this;"));
+                .add("return new " + ENTITY.getImplName() + "(this);"));
     }
 
     @Override
@@ -83,12 +71,11 @@ public class EntityImplTranslator extends BaseEntityTranslator<Class> {
 
     @Override
     protected String getFileName() {
-        return INTERFACE.getImplName();
+        return ENTITY.getImplName();
     }
 
     @Override
     protected boolean isInImplPackage() {
         return true;
     }
-
 }

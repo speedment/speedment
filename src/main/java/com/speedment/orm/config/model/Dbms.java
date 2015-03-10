@@ -21,7 +21,7 @@ import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.DbmsImpl;
 import com.speedment.orm.config.model.parameters.DbmsTypeable;
-import com.speedment.orm.platform.SpeedmentBuilder;
+import com.speedment.orm.platform.Platform;
 import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;

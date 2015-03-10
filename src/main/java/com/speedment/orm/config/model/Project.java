@@ -78,4 +78,24 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewDbms);
     }
 
+    default Table findTableByName(String fullName) {
+        final String[] parts = fullName.split(".");
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException(
+                "fullName should consist of three parts separated by dots. These are dbms-name, schema-name and table-name."
+            );
+        }
+
+        final String dbmsName = parts[0];
+        final String schemaName = parts[1];
+        final String tableName = parts[2];
+
+        return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
+            .orElseThrow(() -> new IllegalArgumentException("Could not find dbms: '" + dbmsName + "'."))
+            .stream().filter(s -> schemaName.equals(s.getName())).findAny()
+            .orElseThrow(() -> new IllegalArgumentException("Could not find schema: '" + schemaName + "'."))
+            .stream().filter(t -> tableName.equals(t.getName())).findAny()
+            .orElseThrow(() -> new IllegalArgumentException("Could not find table: '" + tableName + "'."));
+    }
 }

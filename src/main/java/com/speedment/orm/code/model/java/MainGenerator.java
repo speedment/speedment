@@ -21,11 +21,10 @@ import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.Translator;
-import com.speedment.orm.code.model.java.entity.EntityBeanImplTranslator;
-import com.speedment.orm.code.model.java.entity.EntityBuilderImplTranslator;
-import com.speedment.orm.code.model.java.entity.EntityConfigTranslator;
-import com.speedment.orm.code.model.java.entity.EntityImplTranslator_OLD;
+import com.speedment.orm.code.model.java.entity.EntityBuilderTranslator;
 import com.speedment.orm.code.model.java.entity.EntityImplTranslator;
+import com.speedment.orm.code.model.java.entity.EntityManagerImplTranslator;
+import com.speedment.orm.code.model.java.entity.EntityManagerTranslator;
 import com.speedment.orm.code.model.java.entity.EntityTranslator;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Table;
@@ -58,11 +57,10 @@ public class MainGenerator implements Consumer<Project> {
 
         project.traversalOf(Table.class).forEach(table -> {
             translators.add(new EntityTranslator(cg, table));
+            translators.add(new EntityBuilderTranslator(cg, table));
             translators.add(new EntityImplTranslator(cg, table));
-            translators.add(new EntityConfigTranslator(cg, table));
-//            translators.add(new EntityImplTranslator(cg, table));
-//            translators.add(new EntityBeanImplTranslator(cg, table));
-//            translators.add(new EntityBuilderImplTranslator(cg, table));
+            translators.add(new EntityManagerTranslator(cg, table));
+            translators.add(new EntityManagerImplTranslator(cg, table));
         });
 
         Formatting.tab("    ");

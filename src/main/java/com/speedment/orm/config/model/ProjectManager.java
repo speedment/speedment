@@ -19,8 +19,8 @@ package com.speedment.orm.config.model;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.impl.ProjectManagerImpl;
-import com.speedment.orm.platform.Component;
-import com.speedment.orm.platform.SpeedmentBuilder;
+import com.speedment.orm.platform.component.Component;
+import com.speedment.orm.platform.Platform;
 import java.util.function.Supplier;
 
 /**
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = 0)
-public interface ProjectManager extends ConfigEntity, Component, Parent<Project> {
+public interface ProjectManager extends ConfigEntity, Parent<Project> {
 
     enum Holder {
 

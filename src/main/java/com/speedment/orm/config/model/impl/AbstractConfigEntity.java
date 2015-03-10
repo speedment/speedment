@@ -60,7 +60,9 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
 
     @Override
     public void setName(String name) {
-        this.name = Objects.requireNonNull(name);
+        this.name = Optional.ofNullable(name)
+            .filter(n -> !n.contains("."))
+            .orElseThrow(() -> new IllegalArgumentException("A name can't be null or contain '.'"));
     }
 
     @Override

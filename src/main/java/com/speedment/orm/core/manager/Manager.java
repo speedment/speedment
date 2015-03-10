@@ -25,6 +25,8 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.Persistable;
+import com.speedment.orm.platform.component.Component;
+import com.speedment.orm.platform.Speedment;
 import java.util.stream.Stream;
 
 /**
@@ -32,7 +34,9 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = 0)
-public interface Manager<T> {
+public interface Manager<ENTITY, BUILDER extends Buildable<ENTITY>> {
+    
+    String getTableName();
 
     // Metadata
     Table getTable();
@@ -43,33 +47,42 @@ public interface Manager<T> {
 //    BEAN bean(ENTITY entity);
 //
 //    BUILDER builder(ENTITY entity);
+    
+    <M extends Manager<ENTITY, BUILDER>> Class<M> getManagerClass();
+    
+    Class<ENTITY> getEntityClass();
+    
+    Class<BUILDER> getBuilderClass();
 
-    <B extends Buildable<T>> B builder(Class<B> builderClass);
+    <B extends BUILDER> B builder();
     
-    <B extends Buildable<T>> B builderOf(Class<B> builderClass, T model);
-    
-    <P extends Persistable<T>> P persister(Class<P> persistableClass);
-    
-    <P extends Persistable<T>> P persisterOf(Class<P> persistableClass, T model);
+    <B extends BUILDER> B toBuilder(ENTITY model);
+//    
+//    <P extends Persistable<ENTITY>> P persister(Class<P> persistableClass);
+//    
+//    <P extends Persistable<ENTITY>> P persisterOf(Class<P> persistableClass, ENTITY model);
     
 //    ENTITY entity(ENTITY prototype);
 //
 //    ENTITY newEntity();
 
     // Retrieval
-    Stream<T> stream();
+    Stream<ENTITY> stream();
 
     default long size() {
         return stream().count();
     }
 
     // Persistence
-    T insert(T entity);
+//    T insert(T entity);
+//
+//    T update(T entity);
+//
+//    void delete(Object pk);
+//
+//    void load();
 
-    T update(T entity);
-
-    void delete(Object pk);
-
-    void load();
-
+    ENTITY persist(ENTITY entity);
+    
+    ENTITY remove(ENTITY entity);
 }

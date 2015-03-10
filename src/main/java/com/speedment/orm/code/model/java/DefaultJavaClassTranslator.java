@@ -16,11 +16,14 @@
  */
 package com.speedment.orm.code.model.java;
 
+import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Type;
+import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
+import com.speedment.codegen.lang.models.values.TextValue;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.Dbms;
@@ -60,6 +63,10 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
     @Override
     public T getNode() {
         return configEntity;
+    }
+    
+    protected AnnotationUsage generated() {
+        return GENERATED.set(new TextValue("Speedment"));
     }
 
     protected abstract class Builder<T extends ClassOrInterface<T>> {
@@ -125,6 +132,7 @@ public abstract class DefaultJavaClassTranslator<T extends ConfigEntity> impleme
             act(i, schema());
             act(i, table());
             table().stream().forEachOrdered(c -> act(i, c));
+            i.add(generated());
             return i;
         }
 

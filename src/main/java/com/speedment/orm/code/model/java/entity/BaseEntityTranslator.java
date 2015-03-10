@@ -19,15 +19,14 @@ package com.speedment.orm.code.model.java.entity;
 import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.controller.AutoImports;
-import com.speedment.codegen.lang.controller.AutoJavadoc;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
 import com.speedment.orm.config.model.Table;
 
@@ -67,11 +66,16 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
         }
     }
 
-    public final ClassType INTERFACE = new ClassType("", "Impl");
-    public final ClassType BEAN = new ClassType("Bean", "Impl");
-    public final ClassType BUILDER = new ClassType(".Builder", "Impl");
-    public final ClassType PERSISTER = new ClassType(".Persister", "Impl");
-    public final ClassType CONFIG = new ClassType("Config", "Impl");
+    protected final ClassType 
+        ENTITY = new ClassType("", "Impl"),
+        BUILDER = new ClassType("Builder", "Impl"),
+        CONFIG = new ClassType("Config", "Impl"),
+        MANAGER = new ClassType("Manager", "Impl");
+    
+    protected final Generic 
+        GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
+        GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
+        GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
     public BaseEntityTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);

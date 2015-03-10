@@ -14,29 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.impl;
+package com.speedment.orm.platform.component;
 
-import com.speedment.orm.config.model.ProjectManager;
+import com.speedment.orm.annotations.Api;
 
 /**
  *
  * @author pemi
  */
-public class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager {
+@Api(version = 0)
+public interface Component {
     
-    private final ChildHolder children;
+    <T extends Component> Class<T> getComponentClass();
 
-    public ProjectManagerImpl() {
-        children = new ChildHolder();
-    }
+    // Lifecycle operations for plugins
+    default void onAdd() {}
 
-    @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
+    default void onRemove() {}
 
-    @Override
-    public ChildHolder getChildren() {
-        return children;
-    }
 }

@@ -16,4 +16,8 @@
 ====
 
 Use a normal POJO as configuration source instead of a database (Like JPA)
+
 JPA
+
+Introduce a rective model where one can subscribe to changes to a certain Entity. Listeners etc. Redraw GUI
+Have an EntityLatest that always will reflect the latest known state of an entity. Relies on the reactive model.

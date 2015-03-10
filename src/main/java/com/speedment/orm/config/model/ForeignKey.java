@@ -20,7 +20,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.ForeignKeyImpl;
-import com.speedment.orm.platform.SpeedmentBuilder;
+import com.speedment.orm.platform.Platform;
 import java.util.function.Supplier;
 
 /**
