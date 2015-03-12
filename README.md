@@ -3,17 +3,17 @@ Speedment ORM - An accelerated ORM
 
 About
 -----
-The Speedment ORM accelerates your JVM applications and makes programming so easy to do!
+The Speedment ORM accelerates your JVM based database applications and makes programming so easy!
 
 Here is an example of how you could use Speedment from your code:
 ```java
     new HelloSpeedment().start();
 
-	Employee employee = EmployeeManager().get().stream()
+	Employee employee = EmployeeManager.get().stream()
 		.filter(e -> e.getId() == 1001)
 		.findAny();
 
-	List<Company> companies = CompanyManager().get().stream()
+	List<Company> companies = CompanyManager.get().stream()
         .filter(c -> c.getState().equals("CA"))
         .filter(c -> c.getType().equals("INC"))
         .filter(Company::isLarge)
