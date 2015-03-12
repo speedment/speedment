@@ -7,19 +7,19 @@ The Speedment ORM accelerates your JVM applications and makes programming so eas
 
 Here is an example of how you could use Speedment from your code:
 ```java
-	Employee employee = EmployeeManager().get()
-		.stream()
+    new HelloSpeedment().start();
+
+	Employee employee = EmployeeManager().get().stream()
 		.filter(e -> e.getId() == 1001)
 		.findAny();
 
-	List<Company> companies = CompanyManager().get()
-                .stream()
-                .filter(c -> c.getState().equals("CA"))
-                .filter(c -> c.getType().equals("INC"))
-                .filter(Company::isLarge)
-                .limit(20)
-                .sorted()
-                .collect(toList());
+	List<Company> companies = CompanyManager().get().stream()
+        .filter(c -> c.getState().equals("CA"))
+        .filter(c -> c.getType().equals("INC"))
+        .filter(Company::isLarge)
+        .limit(20)
+        .sorted()
+        .collect(toList());
 ```
 
 
