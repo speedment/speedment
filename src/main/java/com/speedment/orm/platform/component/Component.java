@@ -25,7 +25,7 @@ import com.speedment.orm.annotations.Api;
 @Api(version = 0)
 public interface Component {
     
-    <T extends Component> Class<T> getComponentClass();
+    Class<? extends Component> getComponentClass();
 
     // Lifecycle operations for plugins
     default void onAdd() {}

@@ -27,12 +27,12 @@ import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
-import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.manager.Manager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
+import com.speedment.orm.platform.component.ProjectComponent;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -54,8 +54,15 @@ public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
             
             .add(generatePrimaryKeyFor(file))
             
-            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
-                .add("return \"" + table().getRelativeName(project()) + "\";"))
+            .call(i -> file.add(Import.of(Type.of(Platform.class))))
+            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+            .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+                .add("return " + Platform.class.getSimpleName() + 
+                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
+                    ".class).getProject().findTableByName(\""+table().getRelativeName(project())+"\");"))
+                
+//            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
+//                .add("return \"" + table().getRelativeName(project()) + "\";"))
             
             .add(Method.of("getManagerClass", Type.of(Class.class).add(GENERIC_OF_MANAGER)).default_().add(OVERRIDE)
                 .add("return " + MANAGER.getName() + ".class;"))

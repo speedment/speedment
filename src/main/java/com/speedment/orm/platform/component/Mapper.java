@@ -14,12 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.db;
+package com.speedment.orm.platform.component;
+
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public class MySQL {
-    
+public interface Mapper<K, V> {
+
+    V add(V item);
+
+    public V get(K key);
+
+    Stream<Map.Entry<K, V>> stream();
+
 }

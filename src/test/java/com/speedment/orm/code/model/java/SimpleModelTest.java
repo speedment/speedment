@@ -23,6 +23,7 @@ package com.speedment.orm.code.model.java;
 
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.PrimaryKeyColumn;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
@@ -35,12 +36,14 @@ import org.junit.Before;
  */
 public abstract class SimpleModelTest {
     protected static final String TABLE_NAME = "user";
+    protected static final String COLUMN_NAME = "first_name";
 
     protected Project project;
     protected Dbms dbms;
     protected Schema schema;
     protected Table table;
     protected Column column;
+    protected PrimaryKeyColumn pkColumn;
 
     @Before
     public void setUp() {
@@ -49,11 +52,13 @@ public abstract class SimpleModelTest {
         schema = dbms.addNewSchema();
         table = schema.addNewTable();
         column = table.addNewColumn();
+        pkColumn = table.addPrimaryKeyColumn();
         
         project.setName("myProject");
         dbms.setName("myDbms");
         schema.setName("myCoolApp");
         table.setName(TABLE_NAME);
-        column.setName("first_name");
+        column.setName(COLUMN_NAME);
+        pkColumn.setName(COLUMN_NAME);
     }
 }

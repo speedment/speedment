@@ -14,24 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.orm.platform.component;
+
+import java.util.List;
 
 /**
  *
  * @author pemi
  */
-public interface DbmsType {
+public interface PrimaryKeyFactoryComponent extends Component {
 
-    public String getName();
+    // Identity function by default
+    default <KEY> KEY make(KEY key) {
+        return key;
+    }
 
-    public String getDriverManagerName();
+    <K0, K1> List<?> make(K0 k0, K1 k1);
 
-    public int getDefaultPort();
+    <K0, K1, K2> List<?> make(K0 k0, K1 k1, K2 k2);
 
-    public String getSchemaTableDelimiter();
+    <K0, K1, K2, K3> List<?> make(K0 k0, K1 k1, K2 k2, K3 k3);
 
-    public String getDbmsNameMeaning();
+    <K0, K1, K2, K3, K4> List<?> make(K0 k0, K1 k1, K2 k2, K3 k3, K4 k4);
 
-    public boolean isSupported();
-    
+    <K0, K1, K2, K3, K4> List<?> make(K0 k0, K1 k1, K2 k2, K3 k3, K4 k4, Object... otherKeys);
+
 }

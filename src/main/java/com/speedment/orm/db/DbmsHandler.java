@@ -14,24 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.orm.db;
+
+import com.speedment.orm.config.model.Table;
+import com.speedment.orm.config.model.parameters.DbmsType;
+import java.sql.ResultSet;
+import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
  */
-public interface DbmsType {
+public interface DbmsHandler {
 
-    public String getName();
+    DbmsType getDbmsType();
 
-    public String getDriverManagerName();
+    <ENTITY> long readAll(Consumer<ENTITY> consumer);
 
-    public int getDefaultPort();
+    <PK> ResultSet read(Table table, PK primaryKey);
 
-    public String getSchemaTableDelimiter();
+    <ENTITY> void insert(Table table, ENTITY entity);
 
-    public String getDbmsNameMeaning();
+    <ENTITY> void update(Table table, ENTITY entity);
 
-    public boolean isSupported();
-    
+    <ENTITY> void delete(Table table, ENTITY entity);
+
 }

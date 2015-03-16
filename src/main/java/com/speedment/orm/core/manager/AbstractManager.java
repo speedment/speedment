@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.orm.core.manager;
 
 import com.speedment.orm.config.model.Column;
@@ -17,28 +33,28 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements Manager<PK, ENTITY, BUILDER> {
 
-    private final Map<List<Column>, IndexHolder> indexes;
+    private final Map<List<Column>, IndexHolder<Object, PK, ENTITY>> indexes;
 
     public AbstractManager() {
         indexes = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void insert(ENTITY entity) {
+    public void onInsert(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().put(makeKey(e.getKey(), entity), entity);
         });
     }
 
     @Override
-    public void update(ENTITY entity) {
+    public void onUpdate(ENTITY entity) {
         //TODO Make atomic.
-        delete(entity);
-        insert(entity);
+        onDelete(entity);
+        onInsert(entity);
     }
 
     @Override
-    public void delete(ENTITY entity) {
+    public void onDelete(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().remove(makeKey(e.getKey(), entity));
         });

@@ -50,7 +50,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
     // Data source metadata
     Table getTable();
 
-    String getTableName(); // TODO Remove.
+    //String getTableName(); // TODO Remove.
 
     // Introspectors
     <M extends Manager<PK, ENTITY, BUILDER>> Class<M> getManagerClass();
@@ -72,11 +72,11 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
     }
 
     // Add and remove
-    void insert(ENTITY entity);
+    void onInsert(ENTITY entity);
 
-    void update(ENTITY entity);
+    void onUpdate(ENTITY entity);
 
-    void delete(ENTITY primaryKey);
+    void onDelete(ENTITY primaryKey);
 
     // Persistence
 //    void load();

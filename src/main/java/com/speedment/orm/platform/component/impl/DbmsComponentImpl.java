@@ -19,20 +19,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.util.stream;
+package com.speedment.orm.platform.component.impl;
 
-import java.util.stream.Stream;
+import com.speedment.orm.annotations.Api;
+import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.db.DbmsHandler;
+import com.speedment.orm.db.impl.MySqlDbmsHandler;
 
 /**
  *
- * @author Emil Forslund
+ * @author pemi
  */
-public class StreamUtil {
-    public static <T> Stream<T> streamOfNullable(T element) {
-        if (element == null) {
-            return Stream.empty();
-        } else {
-            return Stream.of(element);
-        }
+public class DbmsComponentImpl extends DefaultMapper<DbmsType, DbmsHandler> {
+
+    public DbmsComponentImpl() {
+        add(new MySqlDbmsHandler());
     }
+
+    @Api(version = 0)
+    @Override
+    public DbmsHandler add(DbmsHandler dbmsHandler) {
+        return add(dbmsHandler, DbmsHandler::getDbmsType);
+    }
+
 }

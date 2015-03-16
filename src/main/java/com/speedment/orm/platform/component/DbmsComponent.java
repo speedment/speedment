@@ -14,24 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.orm.platform.component;
+
+import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.db.DbmsHandler;
 
 /**
  *
  * @author pemi
  */
-public interface DbmsType {
+public interface DbmsComponent {
 
-    public String getName();
+    DbmsHandler getDatabaseHandler(DbmsType dbmsType);
 
-    public String getDriverManagerName();
-
-    public int getDefaultPort();
-
-    public String getSchemaTableDelimiter();
-
-    public String getDbmsNameMeaning();
-
-    public boolean isSupported();
-    
 }

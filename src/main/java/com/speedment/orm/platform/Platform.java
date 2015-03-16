@@ -18,14 +18,10 @@ package com.speedment.orm.platform;
 
 import com.speedment.orm.platform.component.Component;
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.platform.component.ManagerComponent;
+import com.speedment.orm.platform.component.impl.DefaultMapper;
 import com.speedment.orm.platform.component.impl.ManagerComponentImpl;
+import com.speedment.orm.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.orm.platform.component.impl.ProjectComponentImpl;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,42 +29,24 @@ import org.apache.logging.log4j.Logger;
  *
  * @author pemi
  */
-public final class Platform {
+public final class Platform extends DefaultMapper<Class<?>, Component> {
 
     private final Logger logger = LogManager.getLogger(getClass());
-    private final Map<Class<?>, Component> plugins;
 
     private Platform() {
-        plugins = new ConcurrentHashMap<>();
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
+        add(new PrimaryKeyFactoryComponentImpl());
     }
 
     public static Platform get() {
         return PlatformHolder.INSTANCE;
     }
 
+    @Override
     @Api(version = 0)
-    public <T extends Component> T add(T component) {
-        Objects.requireNonNull(component);
-        component.onAdd();
-
-        @SuppressWarnings("unchecked") // Must be same type!
-        final T old = (T) plugins.put(component.getComponentClass(), component);
-        if (old != null) {
-            old.onRemove();
-        }
-
-        return old;
-    }
-
-    @SuppressWarnings("unchecked") // Must be same type!
-    public <T extends Component> T get(Class<T> clazz) {
-        return (T) plugins.get(clazz);
-    }
-
-    public Stream<Entry<Class<?>, Component>> stream() {
-        return plugins.entrySet().stream();
+    public Component add(Component item) {
+        return add(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
     }
 
     private static class PlatformHolder {

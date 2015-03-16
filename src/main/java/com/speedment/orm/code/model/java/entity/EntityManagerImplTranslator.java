@@ -52,12 +52,12 @@ public class EntityManagerImplTranslator extends BaseEntityTranslator<Class> {
             )
             .add(MANAGER.getType())
             
-            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-                .add("return " + Platform.class.getSimpleName() + 
-                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-                    ".class).getProject().findTableByName(getTableName());"))
+//            .call(i -> file.add(Import.of(Type.of(Platform.class))))
+//            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+//            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
+//                .add("return " + Platform.class.getSimpleName() + 
+//                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
+//                    ".class).getProject().findTableByName(getTableName());"))
             
             .call(i -> file.add(Import.of(ENTITY.getImplType())))
             .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)

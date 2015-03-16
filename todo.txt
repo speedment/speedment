@@ -21,3 +21,17 @@ JPA
 
 Introduce a rective model where one can subscribe to changes to a certain Entity. Listeners etc. Redraw GUI
 Have an EntityLatest that always will reflect the latest known state of an entity. Relies on the reactive model.
+
+Ability to map to own POJO:s. Annotated with JPA (@Column(name = "ID")) or BEAN ( @ConstructorProperties({ "title", "id"})
+
+
+ // JSR-303 annotations can be generated, optionally @NotNull. @Size(max=400)  ...   @Id @Column(name = "ID", unique = true, nullable = false, precision = 7) @Override  public Integer getId() { return this.id; }
+
+
+Update modes:
+  Read once
+  Poll
+  Timestamp inspection
+  Triggers
+  Transaction logs
+
