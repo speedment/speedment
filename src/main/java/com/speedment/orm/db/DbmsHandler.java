@@ -16,10 +16,13 @@
  */
 package com.speedment.orm.db;
 
+import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.parameters.DbmsType;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  *
@@ -28,6 +31,8 @@ import java.util.function.Consumer;
 public interface DbmsHandler {
 
     DbmsType getDbmsType();
+
+    Stream<Schema> readMetadata(Dbms dbms);
 
     <ENTITY> long readAll(Consumer<ENTITY> consumer);
 
