@@ -18,6 +18,7 @@ package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.aspects.Parent;
+import com.speedment.orm.config.model.parameters.DbmsType;
 import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
 
     private Project parent;
     private final ChildHolder children;
-    private StandardDbmsType type;
+    private DbmsType type;
     private String ipAddress;
     private Integer port;
     private String username, password;
@@ -48,7 +49,7 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     }
 
     @Override
-    public StandardDbmsType getType() {
+    public DbmsType getType() {
         return type;
     }
 

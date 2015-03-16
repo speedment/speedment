@@ -24,7 +24,7 @@ import com.speedment.orm.config.model.External;
  */
 public interface DbmsTypeable {
     @External
-    StandardDbmsType getType();
+    DbmsType getType();
 
     void setType(StandardDbmsType dbmsType);
     
