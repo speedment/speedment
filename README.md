@@ -5,7 +5,7 @@ About
 -----
 The Speedment ORM accelerates your JVM based database applications and makes programming so easy!
 
-Here is a few examples of how you could use Speedment from your code:
+Here are a few examples of how you could use Speedment from your code:
 ### Easy initialization
 ```java
 // A configuration-class is generated from the database.
