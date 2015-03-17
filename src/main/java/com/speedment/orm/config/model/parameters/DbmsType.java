@@ -16,6 +16,8 @@
  */
 package com.speedment.orm.config.model.parameters;
 
+import java.util.Optional;
+
 /**
  *
  * @author pemi
@@ -33,5 +35,16 @@ public interface DbmsType {
     public String getDbmsNameMeaning();
 
     public boolean isSupported();
-    
+
+    // Implementation specifics
+    String getDriverName();
+
+    Optional<String> getDefaultConnectorParameters();
+
+    String getJdbcConnectorName();
+
+    public String getFieldEncloserStart(final boolean isWithinQuotes);
+
+    public String getFieldEncloserEnd(final boolean isWithinQuotes);
+
 }

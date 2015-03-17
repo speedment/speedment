@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.DbmsImpl;
 import com.speedment.orm.config.model.parameters.DbmsTypeable;
+import com.speedment.orm.db.DbmsHandler;
 import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -90,4 +91,9 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
     default Schema schema(Closure<?> c) {
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewSchema);
     }
+    
+    Optional<DbmsHandler> getDbmsHandler();
+    
+    void setDbmsHandler(DbmsHandler dbmsHandler);
+    
 }

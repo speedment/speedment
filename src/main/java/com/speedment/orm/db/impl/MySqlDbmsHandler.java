@@ -19,8 +19,6 @@ package com.speedment.orm.db.impl;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.config.model.parameters.DbmsType;
-import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
@@ -33,12 +31,12 @@ import java.util.stream.Stream;
 public class MySqlDbmsHandler implements DbmsHandler {
 
     @Override
-    public DbmsType getDbmsType() {
-        return StandardDbmsType.MYSQL;
+    public Dbms getDbms() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Stream<Schema> readMetadata(Dbms dbms) {
+    public Stream<Schema> readMetadata() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

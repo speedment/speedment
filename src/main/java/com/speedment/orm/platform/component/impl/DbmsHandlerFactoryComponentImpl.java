@@ -22,24 +22,30 @@
 package com.speedment.orm.platform.component.impl;
 
 import com.speedment.orm.annotations.Api;
-import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.db.impl.MySqlDbmsHandler;
+import com.speedment.orm.platform.component.DbmsHandlerFactoryComponent;
 
 /**
  *
  * @author pemi
  */
-public class DbmsComponentImpl extends DefaultMapper<DbmsType, DbmsHandler> {
+public class DbmsHandlerFactoryComponentImpl implements DbmsHandlerFactoryComponent {
 
-    public DbmsComponentImpl() {
-        add(new MySqlDbmsHandler());
+    @Override
+    public Class<DbmsHandlerFactoryComponent> getComponentClass() {
+        return DbmsHandlerFactoryComponent.class;
     }
 
     @Api(version = 0)
     @Override
-    public DbmsHandler add(DbmsHandler dbmsHandler) {
-        return add(dbmsHandler, DbmsHandler::getDbmsType);
+    public DbmsHandler make(Dbms dbms) {
+        if (dbms.getType() == StandardDbmsType.MYSQL) {
+            return new MySqlDbmsHandler();
+        }
+        throw new UnsupportedOperationException(dbms.getType().getName() + " Not supported yet.");
     }
 
 }

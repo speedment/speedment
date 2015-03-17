@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.code.model.java.entity;
+package com.speedment.orm.code.model.java.manager;
 
+import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import static com.speedment.codegen.Formatting.*;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Field;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
  *
  * @author pemi
  */
-public class EntityManagerTranslator extends BaseEntityTranslator<Interface> {
+public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Interface> {
 
     public EntityManagerTranslator(CodeGenerator cg, Table configEntity) {
         super(cg, configEntity);

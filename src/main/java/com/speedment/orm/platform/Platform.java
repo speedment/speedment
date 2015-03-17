@@ -18,6 +18,7 @@ package com.speedment.orm.platform;
 
 import com.speedment.orm.platform.component.Component;
 import com.speedment.orm.annotations.Api;
+import com.speedment.orm.platform.component.impl.DbmsHandlerFactoryComponentImpl;
 import com.speedment.orm.platform.component.impl.DefaultMapper;
 import com.speedment.orm.platform.component.impl.ManagerComponentImpl;
 import com.speedment.orm.platform.component.impl.PrimaryKeyFactoryComponentImpl;
@@ -37,6 +38,7 @@ public final class Platform extends DefaultMapper<Class<?>, Component> {
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
         add(new PrimaryKeyFactoryComponentImpl());
+        add(new DbmsHandlerFactoryComponentImpl());
     }
 
     public static Platform get() {

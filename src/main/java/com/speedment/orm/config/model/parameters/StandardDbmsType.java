@@ -29,37 +29,73 @@ import java.util.stream.Stream;
 @Api(version = 0)
 public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
 
-    MYSQL("MySQL", "MySQL-AB JDBC Driver", 3306),
-    ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
-    MARIADB("MariaDB", "MariaDB JDBC Driver", 3305),
-    SQLSERVER("SQLServer", "SQLServer JDBC Driver", 1433),
-    DB2("DB2", "DB2 JDBC Driver", 50000, ".", "SID"),
-    POSTGRESQL("PostgreSQL", "Postgresql JDBC Driver", 5432, ".", "Database"),
-    INFORMIX("Informix", "Informix JDBC Driver", 1526, ":", "SID"),
-    MONETDB("MonetDB", "MonetDB JDBC Driver", 50000, ".", "Database");
+    MYSQL(
+            "MySQL",
+            "MySQL-AB JDBC Driver",
+            3306,
+            ".",
+            "Just a name",
+            "com.mysql.jdbc.Driver",
+            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+            "mysql",
+            "`",
+            "`"
+    ),
+    MARIADB(
+            "MariaDB",
+            "MariaDB JDBC Driver",
+            3305,
+            ".",
+            "Just a name",
+            "com.mysql.jdbc.Driver",
+            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+            "mariadb",
+            "`",
+            "`"
+    );
+//    
+//    ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
+//    SQLSERVER("SQLServer", "SQLServer JDBC Driver", 1433),
+//    DB2("DB2", "DB2 JDBC Driver", 50000, ".", "SID"),
+//    POSTGRESQL("PostgreSQL", "Postgresql JDBC Driver", 5432, ".", "Database"),
+//    INFORMIX("Informix", "Informix JDBC Driver", 1526, ":", "SID"),
+//    MONETDB("MonetDB", "MonetDB JDBC Driver", 50000, ".", "Database");
 
-    static final Map<String, StandardDbmsType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
+    private static final Map<String, StandardDbmsType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
-    private StandardDbmsType(final String value, final String driverManagerName, final int defaultPort) {
-        this(value, driverManagerName, defaultPort, ".");
-    }
-
-    private StandardDbmsType(final String name, final String driverManagerName, final int defaultPort, final String schemaTableDelimiter) {
-        this(name, driverManagerName, defaultPort, schemaTableDelimiter, "(Just a name)");
-    }
-
-    private StandardDbmsType(final String name, final String driverManagerName, final int defaultPort, final String schemaTableDelimiter, final String nameMeaning) {
+    private StandardDbmsType(
+            final String name,
+            final String driverManagerName,
+            final int defaultPort,
+            final String schemaTableDelimiter,
+            final String nameMeaning,
+            final String driverName,
+            final String defaultConnectionParameters,
+            final String jdbcConnectorName,
+            final String fieldEncloserStart,
+            final String fieldEncloserEnd
+    ) {
         this.name = name;
         this.driverManagerName = driverManagerName;
         this.defaultPort = defaultPort;
         this.schemaTableDelimiter = schemaTableDelimiter;
         this.nameMeaning = nameMeaning;
+        this.driverName = driverName;
+        this.defaultConnectionParameters = defaultConnectionParameters;
+        this.jdbcConnectorName = jdbcConnectorName;
+        this.fieldEncloserStart = fieldEncloserStart;
+        this.fieldEncloserEnd = fieldEncloserEnd;
     }
     private final String name;
     private final String driverManagerName;
     private final int defaultPort;
     private final String schemaTableDelimiter;
     private final String nameMeaning;
+    private final String driverName;
+    private final String defaultConnectionParameters;
+    private final String jdbcConnectorName;
+    private final String fieldEncloserStart;
+    private final String fieldEncloserEnd;
 
     @Override
     public String getName() {
@@ -89,6 +125,38 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
     @Override
     public boolean isSupported() {
         return true;
+    }
+
+    @Override
+    public String getDriverName() {
+        return driverName;
+    }
+
+    @Override
+    public Optional<String> getDefaultConnectorParameters() {
+        return Optional.ofNullable(defaultConnectionParameters);
+    }
+
+    @Override
+    public String getJdbcConnectorName() {
+        return jdbcConnectorName;
+    }
+
+    @Override
+    public String getFieldEncloserStart(boolean isWithinQuotes) {
+        return escapeIfQuote(fieldEncloserStart, isWithinQuotes);
+    }
+
+    @Override
+    public String getFieldEncloserEnd(boolean isWithinQuotes) {
+        return escapeIfQuote(fieldEncloserEnd, isWithinQuotes);
+    }
+
+    private String escapeIfQuote(String item, boolean isWithinQuotes) {
+        if (isWithinQuotes && "\"".equals(item)) {
+            return "\\" + item;
+        }
+        return item;
     }
 
     public static Optional<StandardDbmsType> findByIgnoreCase(String name) {

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.code.model.java.entity;
+package com.speedment.orm.code.model.java;
 
 import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
@@ -29,16 +29,14 @@ import com.speedment.codegen.lang.models.constants.DefaultType;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
-import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
-import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  * @param <T> Type of item to generate
  */
-public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table> {
+public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table> {
 
     private final CodeGenerator cg;
 
@@ -81,7 +79,7 @@ public abstract class BaseEntityTranslator<T extends ClassOrInterface<T>> extend
         GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
         GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
-    public BaseEntityTranslator(CodeGenerator cg, Table configEntity) {
+    public BaseEntityAndManagerTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);
         this.cg = cg;
     }

@@ -16,12 +16,12 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Import;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 
@@ -29,7 +29,7 @@ import com.speedment.orm.config.model.Table;
  *
  * @author pemi
  */
-public class EntityImplTranslator extends BaseEntityTranslator<Class> {
+public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> {
 
     public EntityImplTranslator(CodeGenerator cg, Table configEntity) {
         super(cg, configEntity);

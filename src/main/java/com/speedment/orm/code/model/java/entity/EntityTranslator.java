@@ -16,19 +16,19 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
-import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
 import com.speedment.orm.config.model.Table;
 
 /**
  *
  * @author pemi
  */
-public class EntityTranslator extends BaseEntityTranslator<Interface> {
+public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> {
 
     
 //    private final String INTERFACE_NAME = Formatting.shortName(INTERFACE.getType().getName()),
