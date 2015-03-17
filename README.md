@@ -1,11 +1,11 @@
 Speedment ORM - An accelerated ORM
 ==================================
-
+![Harry the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 About
 -----
 The Speedment ORM accelerates your JVM based database applications and makes programming so easy!
 
-Here is a few examples of how you could use Speedment from your code:
+Here are a few examples of how you could use Speedment from your code:
 ### Easy initialization
 ```java
 // A configuration-class is generated from the database.
@@ -63,6 +63,7 @@ HareManager.get().stream()
 ### Development Status
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product. You can not run it now but you can contribute to the code and see how it evolves over time.
 
+---
 ### Using Maven
 When ready, you can just add the following to your project's `pom.xml` to use Speedment.
 ```xml
