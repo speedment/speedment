@@ -23,12 +23,12 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public interface Mapper<K, V> {
+public interface ClassMapper<V> {
 
     V add(V item);
 
-    public V get(K key);
+    public <R extends V> R get(Class<R> clazz);
 
-    Stream<Map.Entry<K, V>> stream();
+    Stream<Map.Entry<Class<?>, V>> stream();
 
 }

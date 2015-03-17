@@ -16,8 +16,7 @@
  */
 package com.speedment.orm.platform.component.impl;
 
-import com.speedment.orm.platform.component.Component;
-import com.speedment.orm.platform.component.Mapper;
+import com.speedment.orm.platform.component.ClassMapper;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,24 +27,25 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
+ * @param <V>
  */
-public abstract class DefaultMapper<K, V> implements Mapper<K, V> {
+public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
 
     private final Consumer<V> NOTHING = (V v) -> {
     };
 
-    private final Map<K, V> map;
+    private final Map<Class<?>, V> map;
 
-    public DefaultMapper() {
+    public DefaultClassMapper() {
         this.map = new ConcurrentHashMap<>();
     }
 
-    protected <T extends V> T add(T newItem, Function<V, K> keyMapper) {
+    protected <T extends V> T add(T newItem, Function<V, Class<?>> keyMapper) {
         return add(newItem, NOTHING, NOTHING, keyMapper);
 
     }
 
-    protected <T extends V> T add(T newItem, Consumer<V> added, Consumer<V> removed, Function<V, K> keyMapper) {
+    protected <T extends V> T add(T newItem, Consumer<V> added, Consumer<V> removed, Function<V, Class<?>> keyMapper) {
         Objects.requireNonNull(newItem);
         added.accept(newItem);
 
@@ -58,14 +58,14 @@ public abstract class DefaultMapper<K, V> implements Mapper<K, V> {
         return oldItem;
     }
 
-    //@SuppressWarnings("unchecked") // Must be same type!
+    @SuppressWarnings("unchecked") // Must be same type!
     @Override
-    public V get(K clazz) {
-        return map.get(clazz);
+    public <R extends V> R get(Class<R> clazz) {
+        return (R)map.get(clazz);
     }
 
     @Override
-    public Stream<Map.Entry<K, V>> stream() {
+    public Stream<Map.Entry<Class<?>, V>> stream() {
         return map.entrySet().stream();
     }
 

@@ -80,7 +80,7 @@ public class PrimaryKeyFactoryComponentImpl implements PrimaryKeyFactoryComponen
     /**
      * @serial include
      */
-    private static class UnmodifiableArrayList<E> extends AbstractList<E> implements RandomAccess, java.io.Serializable {
+    protected static class UnmodifiableArrayList<E> extends AbstractList<E> implements RandomAccess, java.io.Serializable {
 
         private static final long serialVersionUID = -2376123511671171717L;
         private final E[] a;

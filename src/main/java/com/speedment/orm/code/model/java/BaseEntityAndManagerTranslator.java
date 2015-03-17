@@ -28,7 +28,6 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTH
 import com.speedment.codegen.lang.models.constants.DefaultType;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
-import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
 import com.speedment.orm.config.model.Table;
 
 /**

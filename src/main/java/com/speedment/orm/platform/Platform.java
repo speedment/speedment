@@ -19,7 +19,7 @@ package com.speedment.orm.platform;
 import com.speedment.orm.platform.component.Component;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.component.impl.DbmsHandlerFactoryComponentImpl;
-import com.speedment.orm.platform.component.impl.DefaultMapper;
+import com.speedment.orm.platform.component.impl.DefaultClassMapper;
 import com.speedment.orm.platform.component.impl.ManagerComponentImpl;
 import com.speedment.orm.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.orm.platform.component.impl.ProjectComponentImpl;
@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author pemi
  */
-public final class Platform extends DefaultMapper<Class<?>, Component> {
+public final class Platform extends DefaultClassMapper<Component> {
 
     private final Logger logger = LogManager.getLogger(getClass());
 
