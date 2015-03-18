@@ -61,19 +61,19 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
     @Override
     public void setName(String name) {
         this.name = Optional.ofNullable(name)
-            .filter(n -> !n.contains("."))
-            .orElseThrow(() -> new IllegalArgumentException("A name can't be null or contain '.'"));
+                .filter(n -> !n.contains("."))
+                .orElseThrow(() -> new IllegalArgumentException("A name can't be null or contain '.'"));
     }
 
     @Override
     public String toString() {
         return getInterfaceMainClass().getSimpleName()
-            + " '" + Optional.of(this)
+                + " '" + Optional.of(this)
                 .filter(e -> e.isChildInterface())
                 .map(e -> (Child<?>) e)
                 .flatMap(e -> e.getParent())
-                .map(e -> getRelativeName(e))
+                .map(e -> getRelativeName(e) + "." + getName())
                 .orElse(getName())
-            + "'";
+                + "'";
     }
 }

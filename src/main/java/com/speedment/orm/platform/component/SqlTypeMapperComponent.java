@@ -14,33 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.db;
+package com.speedment.orm.platform.component;
 
 import com.speedment.orm.config.model.Dbms;
-import com.speedment.orm.config.model.Schema;
-import com.speedment.orm.config.model.Table;
-import java.sql.ResultSet;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+import com.speedment.util.java.sql.TypeInfo;
 
 /**
  *
  * @author pemi
  */
-public interface DbmsHandler {
-
-    Dbms getDbms();
+public interface SqlTypeMapperComponent extends Component {
     
-    Stream<Schema> schemas();
-
-    <ENTITY> long readAll(Consumer<ENTITY> consumer);
-
-    <PK> ResultSet read(Table table, PK primaryKey);
-
-    <ENTITY> void insert(Table table, ENTITY entity);
-
-    <ENTITY> void update(Table table, ENTITY entity);
-
-    <ENTITY> void delete(Table table, ENTITY entity);
-
+    @Override
+    default Class<SqlTypeMapperComponent> getComponentClass() {
+        return SqlTypeMapperComponent.class;
+    }
+    
+    Class<?> map(Dbms dbms, TypeInfo typeInfo);
+    
 }

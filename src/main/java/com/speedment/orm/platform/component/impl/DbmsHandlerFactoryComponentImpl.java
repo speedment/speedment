@@ -41,11 +41,11 @@ public class DbmsHandlerFactoryComponentImpl implements DbmsHandlerFactoryCompon
 
     @Api(version = 0)
     @Override
-    public DbmsHandler make(Dbms dbms) {
+    public DbmsHandler make(final Dbms dbms) {
         if (dbms.getType() == StandardDbmsType.MYSQL) {
-            return new MySqlDbmsHandler();
+            return new MySqlDbmsHandler(dbms);
         }
-        throw new UnsupportedOperationException(dbms.getType().getName() + " Not supported yet.");
+        throw new UnsupportedOperationException(dbms.getType().getName() + " not supported yet.");
     }
 
 }

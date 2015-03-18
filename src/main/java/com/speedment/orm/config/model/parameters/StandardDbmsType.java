@@ -18,8 +18,12 @@ package com.speedment.orm.config.model.parameters;
 
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.ConfigEntity;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -39,7 +43,8 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
             "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
             "mysql",
             "`",
-            "`"
+            "`",
+            Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema")))
     ),
     MARIADB(
             "MariaDB",
@@ -51,7 +56,8 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
             "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
             "mariadb",
             "`",
-            "`"
+            "`",
+            Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema")))
     );
 //    
 //    ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
@@ -73,7 +79,8 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
             final String defaultConnectionParameters,
             final String jdbcConnectorName,
             final String fieldEncloserStart,
-            final String fieldEncloserEnd
+            final String fieldEncloserEnd,
+            final Set<String> schemaExcludSet
     ) {
         this.name = name;
         this.driverManagerName = driverManagerName;
@@ -85,6 +92,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         this.jdbcConnectorName = jdbcConnectorName;
         this.fieldEncloserStart = fieldEncloserStart;
         this.fieldEncloserEnd = fieldEncloserEnd;
+        this.schemaExcludSet = schemaExcludSet;
     }
     private final String name;
     private final String driverManagerName;
@@ -96,6 +104,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
     private final String jdbcConnectorName;
     private final String fieldEncloserStart;
     private final String fieldEncloserEnd;
+    private final Set<String> schemaExcludSet;
 
     @Override
     public String getName() {
@@ -169,5 +178,11 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
 
     public static Stream<StandardDbmsType> stream() {
         return Stream.of(values());
+    }
+
+    
+    
+    public Set<String> getSchemaExcludSet() {
+        return schemaExcludSet;
     }
 }

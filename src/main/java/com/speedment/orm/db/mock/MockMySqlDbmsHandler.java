@@ -38,7 +38,7 @@ public class MockMySqlDbmsHandler extends AbstractRelationalDbmsHandler implemen
     }
 
     @Override
-    public Stream<Schema> readMetadata() {
+    public Stream<Schema> schemas() {
 
         final Schema schema = Schema.newSchema();
         schema.setName("test_schema");

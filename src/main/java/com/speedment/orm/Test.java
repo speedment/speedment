@@ -14,8 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.orm;
+
+import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.aspects.Node;
+import com.speedment.orm.db.impl.MySqlDbmsHandler;
+import com.speedment.util.Trees;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
@@ -27,7 +33,34 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Dbms dbms = Dbms.newDbms();
+        dbms.setName("db0");
+        dbms.setIpAddress("localhost");
+        dbms.setUsername("root");
+
+        final MySqlDbmsHandler handler = new MySqlDbmsHandler(dbms);
+
+        handler.schemasPopulated().forEachOrdered(schema -> {
+
+//            System.out.println(schema);
+//
+//            List<Table> tables = schema.stream().collect(Collectors.<Table>toList());
+//
+//            for (Table table : tables) {
+//                final String s = table.toString();
+//                
+//                String rn = table.getRelativeName(schema);
+//                
+//                System.out.println("  " + s);
+//            }
+            Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+
+            Trees.traverse(schema,
+                    traverser,
+                    Trees.TraversalOrder.BREADTH_FIRST).forEachOrdered(System.out::println);
+//            System.out.println(schema.toString());
+        });
+
     }
-    
+
 }

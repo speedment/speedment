@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.parameters;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  *
@@ -24,17 +25,17 @@ import java.util.Optional;
  */
 public interface DbmsType {
 
-    public String getName();
+    String getName();
 
-    public String getDriverManagerName();
+    String getDriverManagerName();
 
-    public int getDefaultPort();
+    int getDefaultPort();
 
-    public String getSchemaTableDelimiter();
+    String getSchemaTableDelimiter();
 
-    public String getDbmsNameMeaning();
+    String getDbmsNameMeaning();
 
-    public boolean isSupported();
+    boolean isSupported();
 
     // Implementation specifics
     String getDriverName();
@@ -43,8 +44,18 @@ public interface DbmsType {
 
     String getJdbcConnectorName();
 
-    public String getFieldEncloserStart(final boolean isWithinQuotes);
+    default String getFieldEncloserStart() {
+        return getFieldEncloserStart(false);
+    }
 
-    public String getFieldEncloserEnd(final boolean isWithinQuotes);
+    default String getFieldEncloserEnd() {
+        return getFieldEncloserEnd(false);
+    }
+
+    String getFieldEncloserStart(final boolean isWithinQuotes);
+
+    String getFieldEncloserEnd(final boolean isWithinQuotes);
+
+    Set<String> getSchemaExcludSet();
 
 }

@@ -17,27 +17,19 @@
 package com.speedment.orm.db.impl;
 
 import com.speedment.orm.config.model.Dbms;
-import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.db.DbmsHandler;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public class MySqlDbmsHandler implements DbmsHandler {
+public class MySqlDbmsHandler extends AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    @Override
-    public Dbms getDbms() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Stream<Schema> readMetadata() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public MySqlDbmsHandler(final Dbms dbms) {
+        super(dbms);
     }
 
     @Override

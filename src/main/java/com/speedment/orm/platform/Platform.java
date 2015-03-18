@@ -23,6 +23,7 @@ import com.speedment.orm.platform.component.impl.DefaultClassMapper;
 import com.speedment.orm.platform.component.impl.ManagerComponentImpl;
 import com.speedment.orm.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.orm.platform.component.impl.ProjectComponentImpl;
+import com.speedment.orm.platform.component.impl.SqlTypeMapperComponentImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,6 +40,7 @@ public final class Platform extends DefaultClassMapper<Component> {
         add(new ProjectComponentImpl());
         add(new PrimaryKeyFactoryComponentImpl());
         add(new DbmsHandlerFactoryComponentImpl());
+        add(new SqlTypeMapperComponentImpl());
     }
 
     public static Platform get() {
