@@ -14,29 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.base;
 
-import com.speedment.orm.config.model.External;
+import java.util.Optional;
 
 /**
- *
+ * CodeModels must have a public constructor with no parameters so that it can
+ * be instantiated dynamically.
  * @author Emil Forslund
+ * @param <Model> The model to view.
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public interface CodeView<Model> {
+	Optional<String> render(CodeGenerator cg, Model model);
 }

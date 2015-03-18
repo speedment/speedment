@@ -14,29 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.java.views.values;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.lang.models.values.NumberValue;
+import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public class NullValueView implements CodeView<NumberValue> {
+	private final static String NULL = "null";
+	
+	@Override
+	public Optional<String> render(CodeGenerator cg, NumberValue model) {
+		return Optional.of(NULL);
+	}
 }

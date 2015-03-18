@@ -14,29 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.models.modifiers;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.interfaces.Copyable;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
+public enum Modifier implements Copyable<Modifier> {
+	PUBLIC ("public"),
+	PROTECTED ("protected"),
+	PRIVATE ("private"),
+	ABSTRACT ("abstract"),
+	FINAL ("final"),
+    STATIC ("static"),
+    STRICTFP ("strictfp"),
+	TRANSIENT ("transient"),
+	VOLATILE ("volatile"),
+	SYNCHRONIZED ("synchronized"),
+	NATIVE ("native"),
+	DEFAULT ("default");
+	
+	private final String name;
+	
+	Modifier(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
 
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+	@Override
+	public Modifier copy() {
+		return this;
+	}
 }

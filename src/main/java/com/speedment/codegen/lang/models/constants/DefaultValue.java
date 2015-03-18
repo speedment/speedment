@@ -14,29 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.models.constants;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.models.Value;
+import com.speedment.codegen.lang.models.values.NullValue;
+import com.speedment.codegen.lang.models.values.TextValue;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
+public abstract class DefaultValue {
+    private DefaultValue() {}
     
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+    public final static Value<?>
+		NULL         = new NullValue(),
+		EMPTY_STRING = string("");
+    
+    public static final Value<String> string(String text) {
+		return new TextValue(text);
+	}
 }

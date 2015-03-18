@@ -14,29 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.speedment.codegen.java.views.values;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.lang.models.values.TextValue;
+import java.util.Optional;
+import static com.speedment.codegen.Formatting.*;
+import com.speedment.codegen.base.CodeGenerator;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public class TextValueView implements CodeView<TextValue> {
+	@Override
+	public Optional<String> render(CodeGenerator cg, TextValue model) {
+		return Optional.of(H + model.getValue() + H);
+	}
 }

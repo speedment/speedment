@@ -14,29 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.java.views;
 
-import com.speedment.orm.config.model.External;
+import static com.speedment.codegen.Formatting.*;
+import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.lang.models.Class;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
+public class ClassView extends ClassOrInterfaceView<Class> {
+	@Override
+	protected String renderDeclarationType() {
+		return CLASS_STRING;
+	}
 
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+	@Override
+	public String extendsOrImplementsInterfaces() {
+		return IMPLEMENTS_STRING;
+	}
+
+	@Override
+	protected String renderSuperType(CodeGenerator cg, Class model) {
+		if (model.getSupertype().isPresent()) {
+			return EXTENDS_STRING + cg.on(model.getSupertype().get()).orElse(EMPTY) + SPACE;
+		} else {
+			return EMPTY;
+		}
+	}
 }

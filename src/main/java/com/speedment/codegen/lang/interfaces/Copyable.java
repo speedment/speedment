@@ -14,29 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
-
-import com.speedment.orm.config.model.External;
+package com.speedment.codegen.lang.interfaces;
 
 /**
  *
  * @author Emil Forslund
+ * @param <T>
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public interface Copyable<T extends Copyable<T>> {
+	public T copy();
 }

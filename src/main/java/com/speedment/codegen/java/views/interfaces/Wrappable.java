@@ -14,29 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.java.views.interfaces;
 
-import com.speedment.orm.config.model.External;
+import java.util.Collection;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public interface Wrappable {
+    default <In, C extends Collection<In>> Collection<Object> 
+		wrap(C models, Function<In, Object> wrapper) {
+		return models.stream().map(wrapper).collect(Collectors.toList());
+	}
 }

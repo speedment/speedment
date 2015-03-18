@@ -14,29 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.java.views;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.lang.models.Initalizer;
+import com.speedment.util.CodeCombiner;
+import java.util.Optional;
+import static com.speedment.codegen.Formatting.*;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
+public class InitalizerView implements CodeView<Initalizer> {
 
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
+    @Override
+    public Optional<String> render(CodeGenerator cg, Initalizer model) {
+        return Optional.of(
+            cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+            block(model.getCode().stream())
+        );
     }
+    
 }

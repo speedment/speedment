@@ -14,29 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.java;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.base.DefaultDependencyManager;
+import com.speedment.codegen.base.Installer;
+import com.speedment.codegen.base.MultiGenerator;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
+public class JavaGenerator extends MultiGenerator {
+	private final static String[] types = new String[] {
+		"void", "byte", "short", "char", "int", "long", "float", 
+		"double", "boolean"
+	};
     
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
+    public JavaGenerator() {
+        this(new JavaInstaller());
     }
+	
+	public JavaGenerator(Installer... installers) {
+		super(new DefaultDependencyManager("java.lang", types), installers);
+	}
 }

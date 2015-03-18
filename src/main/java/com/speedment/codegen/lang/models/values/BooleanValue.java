@@ -14,29 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.models.values;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.models.implementation.ValueImpl;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
+public class BooleanValue extends ValueImpl<Boolean> {
 
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+	public BooleanValue(Boolean num) {
+		super(num);
+	}
+
+	@Override
+	public BooleanValue copy() {
+		return new BooleanValue(getValue());
+	}
 }

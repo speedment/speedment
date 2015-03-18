@@ -18,6 +18,7 @@ package com.speedment.orm;
 
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.aspects.Node;
+import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerFactoryComponent;
@@ -36,10 +37,11 @@ public class Test {
      */
     public static void main(String[] args) {
         Dbms dbms = Dbms.newDbms();
+        dbms.setType(StandardDbmsType.MYSQL);
         dbms.setName("db0");
         dbms.setIpAddress("localhost");
         dbms.setUsername("root");
-
+       
         final DbmsHandler handler = Platform.get().get(DbmsHandlerFactoryComponent.class).make(dbms);
 
         handler.schemasPopulated().forEachOrdered(schema -> {

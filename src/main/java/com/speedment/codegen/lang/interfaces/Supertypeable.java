@@ -14,29 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.interfaces;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.models.Type;
+import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
+ * @param <T>
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public interface Supertypeable<T extends Supertypeable<T>> {
+	T setSupertype(Type type);
+	Optional<Type> getSupertype();
 }

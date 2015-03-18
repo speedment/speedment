@@ -56,7 +56,7 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     }
 
     @Override
-    public void setType(StandardDbmsType dbmsType) {
+    public void setType(DbmsType dbmsType) {
         this.type = dbmsType;
     }
 

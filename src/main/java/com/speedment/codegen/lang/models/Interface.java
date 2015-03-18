@@ -14,29 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.models;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.models.implementation.InterfaceImpl;
+import com.speedment.codegen.lang.models.modifiers.InterfaceModifier;
+import java.util.function.Supplier;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
+public interface Interface extends ClassOrInterface<Interface>, InterfaceModifier<Interface> {
     
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
+    enum Factory { INST;
+        private Supplier<Interface> supplier = () -> new InterfaceImpl(null);
+    }
+
+    static Interface of(String name) {
+        return Factory.INST.supplier.get().setName(name);
+    }
+    
+    static void setSupplier(Supplier<Interface> a) {
+        Factory.INST.supplier = a;
     }
 }

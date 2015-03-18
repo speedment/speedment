@@ -14,29 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.models.constants;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.implementation.JavadocTagImpl.JavadocTagConst;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
+public abstract class DefaultJavadocTag {
+    private DefaultJavadocTag() {}
     
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+    public final static JavadocTag
+		PARAM		= new JavadocTagConst("param"),
+		AUTHOR		= new JavadocTagConst("author"),
+		DEPRICATED	= new JavadocTagConst("depricated"),
+		RETURN		= new JavadocTagConst("return"),
+		SEE			= new JavadocTagConst("see"),
+		THROWS		= new JavadocTagConst("throws"),
+		SINCE		= new JavadocTagConst("since"),
+		VERSION		= new JavadocTagConst("version");
 }

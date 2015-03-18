@@ -14,29 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.config.model.parameters;
+package com.speedment.codegen.lang.controller;
 
-import com.speedment.orm.config.model.External;
+import com.speedment.codegen.lang.interfaces.Methodable;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Emil Forslund
+ * @param <T>
  */
-public interface DbmsTypeable {
-    @External
-    DbmsType getType();
-
-    void setType(DbmsType dbmsType);
-    
-    /**
-     *
-     * @param dbmsTypeName
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
-    @External
-    default void setType(String dbmsTypeName) {
-        setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
-    }
+public class FinalParameters<T extends Methodable<T>> implements Consumer<T> {
+	@Override
+	public void accept(T model) {
+		model.getMethods().forEach(m -> m.getFields().forEach(p -> p.final_()));
+	}
 }
