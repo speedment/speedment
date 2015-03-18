@@ -22,7 +22,7 @@ import static com.speedment.codegen.Formatting.nl;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.interfaces.Importable;
-import static com.speedment.util.CodeCombiner.joinIfNotEmpty;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
  *

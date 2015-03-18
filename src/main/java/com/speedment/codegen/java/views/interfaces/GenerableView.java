@@ -23,7 +23,7 @@ import static com.speedment.codegen.Formatting.SS;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.interfaces.Generable;
-import static com.speedment.util.CodeCombiner.joinIfNotEmpty;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
  *

@@ -24,7 +24,7 @@ import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.java.views.interfaces.AnnotableView;
 import com.speedment.codegen.java.views.interfaces.DocumentableView;
 import com.speedment.codegen.java.views.interfaces.NameableView;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 
 /**
  *

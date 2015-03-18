@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Import;
 import java.util.Optional;

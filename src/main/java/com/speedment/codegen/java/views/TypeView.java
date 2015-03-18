@@ -22,7 +22,7 @@ import static com.speedment.codegen.Formatting.*;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.base.DependencyManager;
 import java.util.Optional;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 import java.util.Collections;
 import java.util.stream.Collectors;
 

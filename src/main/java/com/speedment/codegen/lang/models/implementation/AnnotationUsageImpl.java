@@ -19,7 +19,7 @@ package com.speedment.codegen.lang.models.implementation;
 import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Value;
-import com.speedment.util.Copier;
+import com.speedment.codegen.util.Copier;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;

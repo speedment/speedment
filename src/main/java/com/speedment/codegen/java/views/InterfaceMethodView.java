@@ -29,7 +29,7 @@ import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.InterfaceMethod;
 import static com.speedment.codegen.lang.models.modifiers.Modifier.*;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

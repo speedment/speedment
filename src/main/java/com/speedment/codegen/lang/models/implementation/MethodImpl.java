@@ -23,7 +23,7 @@ import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.modifiers.Modifier;
-import com.speedment.util.Copier;
+import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;

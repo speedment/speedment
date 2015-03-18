@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util;
+package com.speedment.codegen.util;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
 import java.util.ArrayList;

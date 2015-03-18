@@ -18,7 +18,7 @@ package com.speedment.codegen.lang.models.values;
 
 import com.speedment.codegen.lang.models.Value;
 import com.speedment.codegen.lang.models.implementation.ValueImpl;
-import com.speedment.util.Copier;
+import com.speedment.codegen.util.Copier;
 import java.util.List;
 
 /**
