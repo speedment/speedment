@@ -18,7 +18,9 @@ package com.speedment.orm;
 
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.aspects.Node;
-import com.speedment.orm.db.impl.MySqlDbmsHandler;
+import com.speedment.orm.db.DbmsHandler;
+import com.speedment.orm.platform.Platform;
+import com.speedment.orm.platform.component.DbmsHandlerFactoryComponent;
 import com.speedment.util.Trees;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -38,21 +40,10 @@ public class Test {
         dbms.setIpAddress("localhost");
         dbms.setUsername("root");
 
-        final MySqlDbmsHandler handler = new MySqlDbmsHandler(dbms);
+        final DbmsHandler handler = Platform.get().get(DbmsHandlerFactoryComponent.class).make(dbms);
 
         handler.schemasPopulated().forEachOrdered(schema -> {
 
-//            System.out.println(schema);
-//
-//            List<Table> tables = schema.stream().collect(Collectors.<Table>toList());
-//
-//            for (Table table : tables) {
-//                final String s = table.toString();
-//                
-//                String rn = table.getRelativeName(schema);
-//                
-//                System.out.println("  " + s);
-//            }
             Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
 
             Trees.traverse(schema,

@@ -30,8 +30,10 @@ import java.util.stream.Stream;
 public interface DbmsHandler {
 
     Dbms getDbms();
-    
+
     Stream<Schema> schemas();
+
+    public Stream<Schema> schemasPopulated();
 
     <ENTITY> long readAll(Consumer<ENTITY> consumer);
 
