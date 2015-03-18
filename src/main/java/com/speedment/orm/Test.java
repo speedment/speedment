@@ -57,7 +57,7 @@ public class Test {
 
             Trees.traverse(schema,
                     traverser,
-                    Trees.TraversalOrder.BREADTH_FIRST).forEachOrdered(System.out::println);
+                    Trees.TraversalOrder.DEPTH_FIRST_PRE).forEachOrdered(System.out::println);
 //            System.out.println(schema.toString());
         });
 

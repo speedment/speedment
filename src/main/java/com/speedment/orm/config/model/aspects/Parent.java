@@ -59,7 +59,9 @@ public interface Parent<C extends Child<?>> extends Node {
             .orElse(Stream.empty())
             .map(e -> (Node) e);
         
-        return Trees.traverse(this, traverse, 
+        return Trees.traverse(
+            this,
+            traverse, 
             Trees.TraversalOrder.BREADTH_FIRST
         ).filter(t -> childClass.isAssignableFrom(
             t.getInterfaceMainClass()
