@@ -23,6 +23,7 @@ package com.speedment.orm.code.model.java;
 
 import com.speedment.orm.code.model.Translator;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.util.java.JavaLanguage;
 
@@ -46,15 +47,31 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
     }
 
     default String fullyQualifiedTypeName() {
-        return project().getPacketName() + "." + typeName(getNode());
+        return fullyQualifiedTypeName(null);
     }
 
     default String fullyQualifiedTypeName(String subPath) {
-        return project().getPacketName() + "." + subPath + "." + typeName(getNode());
+        if (subPath == null || subPath.isEmpty()) {
+            return basePackageName() + "." + typeName(getNode());
+        } else {
+            return basePackageName() + "." + subPath + "." + typeName(getNode());
+        }
     }
 
     default String typeName(Node node) {
         return JavaLanguage.javaTypeName(node.getName());
+    }
+
+    default String basePackageName() {
+        if (getNode() instanceof Project) {
+            return project().getPacketName();
+        } else {
+            return project().getPacketName() + "." + getNode().getRelativeName(project());
+        }
+    }
+    
+    default String baseDirectoryName() {
+        return basePackageName().replace(".", "/");
     }
 
 }

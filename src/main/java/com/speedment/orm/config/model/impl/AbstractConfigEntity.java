@@ -65,9 +65,16 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
     @External
     @Override
     public void setName(String name) {
-        this.name = Optional.ofNullable(name)
-                .filter(n -> !n.contains("."))
-                .orElseThrow(() -> new IllegalArgumentException("A name can't be null or contain '.'"));
+        if (name == null) {
+            throw new IllegalArgumentException("A name can't be null");
+        }
+        if (name.contains(".")) {
+            throw new IllegalArgumentException("A name can't contain a '.' character");
+        }
+        if (name.contains(" ")) {
+            throw new IllegalArgumentException("A name can't contain a space character");
+        }
+        this.name = name;
     }
 
     @Override

@@ -66,11 +66,11 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
         return getGenericConfigEntity(Column.class);
     }
 
-    default String packagePath() {
-        return project().getPacketName();
-        
-        //return getNode().getRelativeName(project());
-    }
+//    default String packagePath() {
+//        return project().getPacketName();
+//        
+//        //return getNode().getRelativeName(project());
+//    }
 
     default Stream<Column> columns() {
         return table().streamOf(Column.class);

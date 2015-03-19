@@ -66,17 +66,15 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
         }
     }
 
-    protected final ClassType 
-        ENTITY = new ClassType("", "Impl"),
-        BUILDER = new ClassType("Builder", "Impl"),
-        CONFIG = new ClassType("Config", "Impl"),
-        MANAGER = new ClassType("Manager", "Impl");
-    
-    protected final Generic 
-        GENERIC_OF_PK = Generic.of().add(typeOfPK()),
-        GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
-        GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
-        GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
+    protected final ClassType ENTITY = new ClassType("", "Impl"),
+            BUILDER = new ClassType("Builder", "Impl"),
+            CONFIG = new ClassType("Config", "Impl"),
+            MANAGER = new ClassType("Manager", "Impl");
+
+    protected final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
+            GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
+            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
+            GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
     public BaseEntityAndManagerTranslator(CodeGenerator cg, Table configEntity) {
         super(configEntity);
@@ -85,13 +83,13 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
 
     protected Type typeOfPK() {
         final long pks = primaryKeyColumns().count();
-        
+
         if (pks == 0) {
             throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
-        
+
         final Class<?> first = primaryKeyColumns().findAny().get().getColumn().getMapping();
-        
+
         if (pks == 1) {
             return Type.of(first);
         } else {
@@ -107,7 +105,7 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
 
     @Override
     public File get() {
-        final File file = new FileImpl(packagePath().replace('.', '/') + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
+        final File file = new FileImpl(baseDirectoryName() + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
         final T item = make(file);
         item.set(getJavaDoc());
         file.add(item);
@@ -121,7 +119,7 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
 
     protected Javadoc getJavaDoc() {
         return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-            .add(AUTHOR.setValue("Speedment"));
+                .add(AUTHOR.setValue("Speedment"));
     }
 
     public CodeGenerator getCodeGenerator() {
@@ -131,5 +129,10 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
     protected boolean isInImplPackage() {
         return false;
     }
+
+//    @Override
+//    public String packagePath() {
+//        return super.packagePath() + "/" + table().getRelativeName(project());
+//    }
 
 }
