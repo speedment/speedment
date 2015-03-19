@@ -19,6 +19,7 @@ package com.speedment.orm.config.model.impl.utils;
 import com.speedment.orm.config.DelegatorGroovyTest;
 import com.speedment.orm.config.model.aspects.Node;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
+import com.speedment.util.java.JavaLanguage;
 import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -36,25 +37,25 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 public class GroovyParser {
 
     private static final String NL = "\n";
-    
+
     public static String toGroovy(final Node node) {
-        return toGroovy(node, 0);
+        return "import com.speedment.orm.config.model.parameters.*" + NL + NL + toGroovy(node, 0);
     }
 
     private static String toGroovy(final Node node, final int indentLevel) {
         return CollectorUtil.of(StringBuilder::new, sb -> {
             MethodsParser.streamOfExternal(node.getClass())
-                .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
-                .forEach(m -> getterBeanPropertyNameAndValue(m, node)
-                    .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
-                );
+                    .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
+                    .forEach(m -> getterBeanPropertyNameAndValue(m, node)
+                            .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
+                    );
 
             Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
-                -> n.stream().forEach(c -> {
-                    indent(sb, indentLevel).append(c.getInterfaceMainClass().getSimpleName()).append(" {").append(NL);
-                    sb.append(toGroovy(c, indentLevel + 1));
-                    indent(sb, indentLevel).append("}").append(NL);
-                })
+                    -> n.stream().forEach(c -> {
+                        indent(sb, indentLevel).append(JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName())).append(" {").append(NL);
+                        sb.append(toGroovy(c, indentLevel + 1));
+                        indent(sb, indentLevel).append("}").append(NL);
+                    })
             );
         }, StringBuilder::toString);
     }
@@ -87,7 +88,7 @@ public class GroovyParser {
         System.out.println(node.toString());
 
     }
-    
+
     private static StringBuilder indent(final StringBuilder sb, final int indentLevel) {
         IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
         return sb;

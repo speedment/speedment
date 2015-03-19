@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.ConfigEntity;
+import com.speedment.orm.config.model.External;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.orm.config.model.aspects.Parent;
@@ -43,21 +44,25 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
 
     protected abstract void setDefaults();
 
+    @External
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @External
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    @External
     @Override
     public String getName() {
         return name;
     }
 
+    @External
     @Override
     public void setName(String name) {
         this.name = Optional.ofNullable(name)

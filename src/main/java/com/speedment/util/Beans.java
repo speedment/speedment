@@ -36,7 +36,7 @@ public class Beans {
         consumer.accept(item);
         return thizz;
     }
-    
+
     public static <P, T> T run(final T thizz, final Runnable runnable) {
         runnable.run();
         return thizz;
@@ -79,16 +79,20 @@ public class Beans {
         }
 
         final String quote;
-        if (value instanceof String) {
+        if (value instanceof String /*|| value instanceof Enum*/) {
             quote = "\"";
         } else {
             quote = "";
         }
-        
+
         if (value instanceof Class) {
             value = ((Class) value).getName() + ".class";
         }
-        
+
+        if (value instanceof Enum) {
+            value = value.getClass().getSimpleName() + "." + ((Enum) value).name();
+        }
+
         return Optional.of(beanPropertyName(m.getName()) + " = " + quote + String.valueOf(value) + quote + ";");
     }
 
