@@ -69,4 +69,25 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
                     .collect(Collectors.toList());
         }
     }
+
+    @Override
+    public Boolean initialize() {
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean resolve() {
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean start() {
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean stop() {
+        return Boolean.TRUE;
+    }
+
 }

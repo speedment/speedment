@@ -18,16 +18,10 @@ package com.speedment.orm.code.model.java;
 
 import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Generic;
-import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
-import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import com.speedment.codegen.lang.models.constants.DefaultType;
-import com.speedment.codegen.lang.models.implementation.FileImpl;
-import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.orm.config.model.Table;
 
 /**
@@ -35,9 +29,9 @@ import com.speedment.orm.config.model.Table;
  * @author pemi
  * @param <T> Type of item to generate
  */
-public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table> {
+public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
 
-    private final CodeGenerator cg;
+//    private final CodeGenerator cg;
 
     public class ClassType {
 
@@ -77,8 +71,8 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
             GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
     public BaseEntityAndManagerTranslator(CodeGenerator cg, Table configEntity) {
-        super(configEntity);
-        this.cg = cg;
+        super(cg, configEntity);
+//        this.cg = cg;
     }
 
     protected Type typeOfPK() {
@@ -100,7 +94,7 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
             }
         }
     }
-
+/*
     protected abstract String getFileName();
 
     @Override
@@ -128,7 +122,7 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
 
     protected boolean isInImplPackage() {
         return false;
-    }
+    } */
 
 //    @Override
 //    public String packagePath() {

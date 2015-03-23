@@ -18,6 +18,8 @@ package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.*;
 import com.speedment.orm.config.model.aspects.Parent;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,6 +32,7 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     private ProjectManager parent;
     private final ChildHolder children;
     private String packetName, packetLocation;
+    private Path configPath;
 
     public ProjectImpl() {
         this.children = new ChildHolder();
@@ -39,6 +42,7 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     protected void setDefaults() {
         setPacketLocation("src/main/java");
         setPacketName("com.company.speedment.orm.test");
+        setConfigPath(Paths.get("."));
     }
 
     @Override
@@ -69,10 +73,21 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     @Override
     public void setParentTo(Parent<?> parent) {
         setParentHelper(parent, ProjectManager.class)
-            .ifPresent(p -> this.parent = p);
+                .ifPresent(p -> this.parent = p);
     }
 
+    @Override
     public Optional<ProjectManager> getParent() {
         return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public Path getConfigPath() {
+        return configPath;
+    }
+
+    @Override
+    public void setConfigPath(Path configPath) {
+        this.configPath = Objects.requireNonNull(configPath);
     }
 }

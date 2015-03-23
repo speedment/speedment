@@ -25,6 +25,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
+import com.speedment.orm.core.lifecycle.Lifecyclable;
 import java.util.stream.Stream;
 
 /**
@@ -40,36 +41,38 @@ import java.util.stream.Stream;
  * @param <BUILDER> Builder type for this Manager
  */
 @Api(version = 0)
-public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
+public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Boolean> {
 
     // Entity Inspection
     PK primaryKeyFor(ENTITY entity);
 
     Object get(ENTITY entity, Column column);
 
+
     // Data source metadata
     Table getTable();
 
-    //String getTableName(); // TODO Remove.
 
     // Introspectors
-    <M extends Manager<PK, ENTITY, BUILDER>> Class<M> getManagerClass();
+    Class<? extends Manager<PK, ENTITY, BUILDER>> getManagerClass();
 
     Class<ENTITY> getEntityClass();
 
     Class<BUILDER> getBuilderClass();
 
     // Factories
-    <B extends BUILDER> B builder();
+    BUILDER builder();
 
-    <B extends BUILDER> B toBuilder(ENTITY model);
+    BUILDER toBuilder(ENTITY model);
 
+    
     // Queries
     Stream<ENTITY> stream();
 
     default long size() {
         return stream().count();
     }
+
 
     // Add and remove
     void onInsert(ENTITY entity);
@@ -78,8 +81,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> {
 
     void onDelete(ENTITY primaryKey);
 
+    
     // Persistence
-//    void load();
     ENTITY persist(ENTITY entity);
 
     ENTITY remove(ENTITY entity);

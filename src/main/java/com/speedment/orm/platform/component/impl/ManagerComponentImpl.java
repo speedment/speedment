@@ -21,35 +21,42 @@ import com.speedment.orm.core.manager.Manager;
 import com.speedment.orm.platform.component.ManagerComponent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
 public class ManagerComponentImpl implements ManagerComponent {
-    
+
     private final Map<Class<?>, Manager<?, ?, ?>> managersByEntity, managersByManager;
-    
+
     public ManagerComponentImpl() {
-        managersByEntity  = new ConcurrentHashMap<>();
+        managersByEntity = new ConcurrentHashMap<>();
         managersByManager = new ConcurrentHashMap<>();
     }
-    
+
     @Override
     public <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager) {
         managersByEntity.put(manager.getEntityClass(), manager);
         managersByManager.put(manager.getManagerClass(), manager);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass) {
         return (Manager<PK, E, B>) managersByManager.get(managerClass);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass) {
         return (Manager<PK, E, B>) managersByManager.get(entityClass);
     }
+
+    @Override
+    public Stream<Manager<?, ?, ?>> stream() {
+        return managersByManager.values().stream();
+    }
+
 }

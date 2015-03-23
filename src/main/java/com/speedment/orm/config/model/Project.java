@@ -21,6 +21,8 @@ import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.ProjectImpl;
 import groovy.lang.Closure;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -72,6 +74,10 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
 
     @External
     void setPacketLocation(String packetLocation);
+    
+    Path getConfigPath();
+    
+    void setConfigPath(Path configPath);
 
     // Groovy
     default Dbms dbms(Closure<?> c) {

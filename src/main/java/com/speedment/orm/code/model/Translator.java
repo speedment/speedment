@@ -22,7 +22,6 @@
 package com.speedment.orm.code.model;
 
 import com.speedment.orm.config.model.Column;
-import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.ForeignKey;
 import com.speedment.orm.config.model.Index;
@@ -30,9 +29,7 @@ import com.speedment.orm.config.model.PrimaryKeyColumn;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Node;
-import com.speedment.orm.config.model.aspects.Child;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -65,12 +62,6 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
     default Column column() {
         return getGenericConfigEntity(Column.class);
     }
-
-//    default String packagePath() {
-//        return project().getPacketName();
-//        
-//        //return getNode().getRelativeName(project());
-//    }
 
     default Stream<Column> columns() {
         return table().streamOf(Column.class);

@@ -43,41 +43,38 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
     @Override
     protected Class make(File file) {
         return new ClassBuilder(MANAGER.getImplName()).build()
-            .public_()
-            .setSupertype(Type.of(AbstractManager.class)
-                .add(Generic.of().add(typeOfPK()))
-                .add(Generic.of().add(ENTITY.getType()))
-                .add(Generic.of().add(BUILDER.getType()))
-            )
-            .add(MANAGER.getType())
-            
-//            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-//            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-//            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-//                .add("return " + Platform.class.getSimpleName() + 
-//                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-//                    ".class).getProject().findTableByName(getTableName());"))
-            
-            .call(i -> file.add(Import.of(ENTITY.getImplType())))
-            .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
-                .add("return new " + ENTITY.getImplName() + "();"))
-            
-            .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
-                .add(Field.of("prototype", ENTITY.getType()))
-                .add("return new " + ENTITY.getImplName() + "(prototype);"))
-            
-            .call(i -> file.add(Import.of(Type.of(Stream.class))))
-            .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-                .add("return Stream.empty();")) //TODO MUST BE FIXED!
-            
-            .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-                .add(Field.of("entity", ENTITY.getType()))
-                .add("return entity;")) //TODO MUST BE FIXED!
-            
-            .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-                .add(Field.of("entity", ENTITY.getType()))
-                .add("return entity;")) //TODO MUST BE FIXED!
-            ;
+                .public_()
+                .setSupertype(Type.of(AbstractManager.class)
+                        .add(Generic.of().add(typeOfPK()))
+                        .add(Generic.of().add(ENTITY.getType()))
+                        .add(Generic.of().add(BUILDER.getType()))
+                )
+                .add(MANAGER.getType())
+                //            .call(i -> file.add(Import.of(Type.of(Platform.class))))
+                //            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+                //            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
+                //                .add("return " + Platform.class.getSimpleName() + 
+                //                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
+                //                    ".class).getProject().findTableByName(getTableName());"))
+
+                .call(i -> file.add(Import.of(ENTITY.getImplType())))
+                .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
+                        .add("return new " + ENTITY.getImplName() + "();"))
+                .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
+                        .add(Field.of("prototype", ENTITY.getType()))
+                        .add("return new " + ENTITY.getImplName() + "(prototype);"))
+                .call(i -> file.add(Import.of(Type.of(Stream.class))))
+                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
+                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
+
+                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
+                        .add(Field.of("entity", ENTITY.getType()))
+                        .add("return entity;")) //TODO MUST BE FIXED!
+
+                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
+                        .add(Field.of("entity", ENTITY.getType()))
+                        .add("return entity;")) //TODO MUST BE FIXED!
+                ;
     }
 
     @Override
@@ -94,4 +91,9 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
     protected boolean isInImplPackage() {
         return true;
     }
+
+    public Type getImplType() {
+        return MANAGER.getImplType();
+    }
+
 }

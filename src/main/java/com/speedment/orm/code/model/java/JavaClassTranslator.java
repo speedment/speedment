@@ -64,12 +64,12 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
 
     default String basePackageName() {
         if (getNode() instanceof Project) {
-            return project().getPacketName();
+            return project().getPacketName() + "." + project().getName();
         } else {
             return project().getPacketName() + "." + getNode().getRelativeName(project());
         }
     }
-    
+
     default String baseDirectoryName() {
         return basePackageName().replace(".", "/");
     }

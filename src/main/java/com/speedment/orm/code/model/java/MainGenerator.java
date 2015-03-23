@@ -26,6 +26,7 @@ import com.speedment.orm.code.model.java.entity.EntityImplTranslator;
 import com.speedment.orm.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.orm.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.orm.code.model.java.entity.EntityTranslator;
+import com.speedment.orm.code.model.java.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Table;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class MainGenerator implements Consumer<Project> {
 
         final CodeGenerator cg = new JavaGenerator();
 
+        translators.add(new SpeedmentApplicationTranslator(cg, project));
+        
         project.traversalOf(Table.class).forEach(table -> {
             translators.add(new EntityTranslator(cg, table));
             translators.add(new EntityBuilderTranslator(cg, table));

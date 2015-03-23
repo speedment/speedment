@@ -18,13 +18,11 @@ package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.java.JavaGenerator;
-import com.speedment.codegen.java.JavaInstaller;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.java.SimpleModelTest;
 import com.speedment.orm.config.model.Table;
 import java.util.Optional;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

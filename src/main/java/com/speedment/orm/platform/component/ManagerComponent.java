@@ -18,6 +18,7 @@ package com.speedment.orm.platform.component;
 
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.Manager;
+import java.util.stream.Stream;
 
 /**
  *
@@ -29,10 +30,13 @@ public interface ManagerComponent extends Component {
     default Class<ManagerComponent> getComponentClass() {
         return ManagerComponent.class;
     }
-    
+
     <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager);
 
     <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass);
 
     <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass);
+
+    Stream<Manager<?, ?, ?>> stream();
+
 }

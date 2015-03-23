@@ -17,6 +17,7 @@
 package com.speedment.orm.config.model.impl.utils;
 
 import com.speedment.orm.config.DelegatorGroovyTest;
+import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.aspects.Node;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.util.java.JavaLanguage;
@@ -35,13 +36,13 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * @author Emil Forslund
  */
 public class GroovyParser {
-
+    
     private static final String NL = "\n";
-
+    
     public static String toGroovy(final Node node) {
         return "import com.speedment.orm.config.model.parameters.*" + NL + NL + toGroovy(node, 0);
     }
-
+    
     private static String toGroovy(final Node node, final int indentLevel) {
         return CollectorUtil.of(StringBuilder::new, sb -> {
             MethodsParser.streamOfExternal(node.getClass())
@@ -49,7 +50,7 @@ public class GroovyParser {
                     .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                             .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
                     );
-
+            
             Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
                     -> n.stream().forEach(c -> {
                         indent(sb, indentLevel).append(JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName())).append(" {").append(NL);
@@ -59,36 +60,47 @@ public class GroovyParser {
             );
         }, StringBuilder::toString);
     }
-
+    
+    public static Project projectFromGroovy(final Path path) throws IOException {
+        final Project project = Project.newProject();
+        fromGroovy(project, path);
+        return project;
+    }
+    
     public static void fromGroovy(final Node node, final Path path) throws IOException {
-
+        
         final Binding binding = new Binding();
         binding.setVariable("implementationVersion", node.getClass().getPackage().getImplementationVersion());
         binding.setVariable("specificationVersion", node.getClass().getPackage().getSpecificationVersion());
-
+        
         final CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.setScriptBaseClass(DelegatingScript.class.getName());
         configuration.setDebug(true);
         configuration.setVerbose(true);
         configuration.setRecompileGroovySource(true);
-
+        
         final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
-
+        
         final DelegatingScript script = (DelegatingScript) shell.parse(path.toFile());
 
         //final Project project = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
         script.setDelegate(node);
-
+        
         final Object value = script.run();
+        
+        if (node instanceof Project) {
+            @SuppressWarnings("unchecked")
+            final Project project = (Project)node;
+            project.setConfigPath(path);
+        }
 
-        System.out.println(value);
-
-        System.out.println(binding.getVariables());
-
-        System.out.println(node.toString());
-
+//        System.out.println(value);
+//
+//        System.out.println(binding.getVariables());
+//
+//        System.out.println(node.toString());
     }
-
+    
     private static StringBuilder indent(final StringBuilder sb, final int indentLevel) {
         IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
         return sb;
