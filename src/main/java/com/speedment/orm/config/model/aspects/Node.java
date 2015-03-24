@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public interface Node extends Nameable {
+public interface Node extends Nameable, Enableable {
     
     @SuppressWarnings("unchecked")
     default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
