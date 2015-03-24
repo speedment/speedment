@@ -24,7 +24,6 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
-import java.sql.ResultSet;
 import java.sql.RowId;
 import java.sql.SQLXML;
 import java.sql.Time;
@@ -68,7 +67,6 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
 
     @Override
     public Class<?> getJavaClass() {
-        ResultSet rs;
         return clazz;
     }
 

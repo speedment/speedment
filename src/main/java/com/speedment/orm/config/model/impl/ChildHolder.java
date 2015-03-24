@@ -101,7 +101,7 @@ public class ChildHolder {
 
         return Optional.ofNullable(children.computeIfAbsent(
             child.getInterfaceMainClass(),
-            m -> new ConcurrentHashMap<>()
+            m -> new ConcurrentSkipListMap<>()
         ).put(child.getName(), child));
     }
 

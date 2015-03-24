@@ -348,16 +348,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         Objects.requireNonNull(sql);
         Objects.requireNonNull(rsMapper);
         return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
-//        try {
-//            final Connection connection = getConnection();
-//            final Statement statement = connection.createStatement();
-//            final ResultSet rs = statement.executeQuery(sql);
-//            return StreamUtil.asStream(rs, rsMapper);
-//            // TODO: Close the connection, statement and resultset
-//        } catch (SQLException sqle) {
-//            LOGGER.error("Error executing " + sql, sqle);
-//            throw new RuntimeException(sqle);
-//        }
     }
 
 }

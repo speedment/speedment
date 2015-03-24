@@ -22,8 +22,12 @@ import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Import;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.orm.config.model.Table;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  *
@@ -39,29 +43,48 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
     protected Class make(File file) {
 
         return new ClassBuilder(ENTITY.getImplName())
-            .addColumnConsumer((cl, c) -> {
-                cl
-                .add(fieldFor(c).private_())
-                .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
-                    .public_()
-                    .add(OVERRIDE)
-                    .add("return " + variableName(c) + ";"))
-                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
-                    .public_()
-                    .add(OVERRIDE)
-                    .add(fieldFor(c))
-                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                    .add("return this;"));
-            })
-            .build()
-            .public_()
-            .add(BUILDER.getType())
-            .add(emptyConstructor())
-            .add(copyConstructor(ENTITY.getType(), CopyConstructorMode.BUILDER))
-            .add(Method.of("build", ENTITY.getType())
-                .add(OVERRIDE)
+                .addColumnConsumer((cl, c) -> {
+                    cl
+                    .add(fieldFor(c).private_())
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
+                            .public_()
+                            .add(OVERRIDE)
+                            .add("return " + variableName(c) + ";"))
+                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
+                            .public_()
+                            .add(OVERRIDE)
+                            .add(fieldFor(c))
+                            .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                            .add("return this;"));
+                })
+                .build()
                 .public_()
-                .add("return new " + ENTITY.getImplName() + "(this);"));
+                .add(BUILDER.getType())
+                .add(emptyConstructor())
+                .add(copyConstructor(ENTITY.getType(), CopyConstructorMode.BUILDER))
+                .add(Method.of("build", ENTITY.getType())
+                        .add(OVERRIDE)
+                        .public_()
+                        .add("return new " + ENTITY.getImplName() + "(this);"))
+                .add(toString(file));
+    }
+
+    protected Method toString(File file) {
+        file.add(Import.of(Type.of(StringJoiner.class)));
+        file.add(Import.of(Type.of(Objects.class)));
+        final Method m = Method.of("toString", STRING)
+                .public_()
+                .add(OVERRIDE)
+                .add("final StringJoiner sj = new StringJoiner(\", \", \"{ \", \" }\");");
+
+        columns().forEachOrdered(c -> {
+            m.add("sj.add(\"" + variableName(c) + " = \"+Objects.toString(get" + typeName(c) + "()));");
+        });
+
+        m.add("return \"" + ENTITY.getImplName() + " \"+sj.toString();");
+
+        return m;
+
     }
 
     @Override

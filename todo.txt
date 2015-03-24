@@ -35,3 +35,9 @@ Update modes:
   Triggers
   Transaction logs
 
+
+****
+toString() on Entities
+readSQL must check lastWasNull() if nullable
+
+

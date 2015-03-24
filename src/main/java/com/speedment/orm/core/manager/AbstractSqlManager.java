@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.core.manager;
 
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
@@ -23,12 +24,9 @@ import com.speedment.orm.core.Buildable;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
-import com.speedment.util.stream.StreamUtil;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +48,9 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     @Override
     public Stream<ENTITY> stream() {
         final Table table = getTable();
-        final String sql = "select * from " + table.getRelativeName(Schema.class);
+        final String columns = table.streamOf(Column.class).map(Column::getName).collect(Collectors.joining(","));
+        final String sql = "select " + columns + " from " + table.getRelativeName(Schema.class);
+        LOGGER.debug(sql);
         return streamOf(sql);
     }
 
