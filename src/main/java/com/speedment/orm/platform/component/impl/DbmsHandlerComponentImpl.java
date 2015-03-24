@@ -21,31 +21,42 @@
  */
 package com.speedment.orm.platform.component.impl;
 
-import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.db.impl.MySqlDbmsHandler;
-import com.speedment.orm.platform.component.DbmsHandlerFactoryComponent;
+import com.speedment.orm.platform.component.DbmsHandlerComponent;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
  * @author pemi
  */
-public class DbmsHandlerFactoryComponentImpl implements DbmsHandlerFactoryComponent {
+public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
-    @Override
-    public Class<DbmsHandlerFactoryComponent> getComponentClass() {
-        return DbmsHandlerFactoryComponent.class;
+    private final Map<Dbms, DbmsHandler> map;
+
+    public DbmsHandlerComponentImpl() {
+        this.map = new ConcurrentHashMap<>();
     }
 
-    @Api(version = 0)
+    @Override
+    public Class<DbmsHandlerComponent> getComponentClass() {
+        return DbmsHandlerComponent.class;
+    }
+
     @Override
     public DbmsHandler make(final Dbms dbms) {
         if (dbms.getType() == StandardDbmsType.MYSQL) {
             return new MySqlDbmsHandler(dbms);
         }
         throw new UnsupportedOperationException(dbms.getType().getName() + " not supported yet.");
+    }
+
+    @Override
+    public DbmsHandler get(Dbms dbms) {
+        return map.computeIfAbsent(dbms, d -> make(d));
     }
 
 }

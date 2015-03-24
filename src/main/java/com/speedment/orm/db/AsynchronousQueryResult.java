@@ -14,17 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.platform.component;
+package com.speedment.orm.db;
 
-import com.speedment.orm.config.model.Dbms;
-import com.speedment.orm.db.DbmsHandler;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public interface DbmsHandlerFactoryComponent extends Component {
+public interface AsynchronousQueryResult<T> extends AutoCloseable {
 
-    DbmsHandler make(Dbms dbms);
+    Stream<T> stream();
+
+    @Override
+    void close();
 
 }

@@ -18,10 +18,8 @@ package com.speedment.orm.config.model.impl;
 
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.External;
+import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.aspects.Child;
-import com.speedment.orm.config.model.aspects.Node;
-import com.speedment.orm.config.model.aspects.Parent;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -84,7 +82,7 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
                 .filter(e -> e.isChildInterface())
                 .map(e -> (Child<?>) e)
                 .flatMap(e -> e.getParent())
-                .map(e -> getRelativeName(e) + "." + getName())
+                .map(e -> getRelativeName(Project.class) /*+ "." + getName()*/)
                 .orElse(getName())
                 + "'";
     }

@@ -21,13 +21,22 @@
  */
 package com.speedment.util.stream;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  *
  * @author Emil Forslund
  */
 public class StreamUtil {
+
     public static <T> Stream<T> streamOfNullable(T element) {
         if (element == null) {
             return Stream.empty();
@@ -35,4 +44,51 @@ public class StreamUtil {
             return Stream.of(element);
         }
     }
+
+    public static <T> Stream<T> asStream(Iterator<T> iterator) {
+        return asStream(iterator, false);
+    }
+
+    public static <T> Stream<T> asStream(Iterator<T> iterator, boolean parallel) {
+        final Iterable<T> iterable = () -> iterator;
+        return StreamSupport.stream(iterable.spliterator(), parallel);
+    }
+
+    public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper) {
+        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+    }
+
+    private static class ResultSetIterator<T> implements Iterator<T> {
+
+        private final ResultSet resultSet;
+        private final Function<ResultSet, T> mapper;
+
+        public ResultSetIterator(final ResultSet resultSet, final Function<ResultSet, T> mapper) {
+            this.resultSet = Objects.requireNonNull(resultSet);
+            this.mapper = Objects.requireNonNull(mapper);
+        }
+
+        @Override
+        public boolean hasNext() {
+            try {
+                boolean hasNext = resultSet.next();
+                if (!hasNext) {
+                    // When we are ready. Close the resultSet...
+                    // Todo: We must be able to close the resultSet if a stream is not read to the end
+                    resultSet.close();
+                }
+                return hasNext;
+            } catch (SQLException sqle) {
+                return false;
+            }
+        }
+
+        @Override
+        public T next() {
+            return mapper.apply(resultSet);
+        }
+
+    }
+
 }

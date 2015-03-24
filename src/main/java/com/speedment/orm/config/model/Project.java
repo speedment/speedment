@@ -74,9 +74,9 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
 
     @External
     void setPacketLocation(String packetLocation);
-    
+
     Path getConfigPath();
-    
+
     void setConfigPath(Path configPath);
 
     // Groovy
@@ -85,11 +85,11 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
     }
 
     default Table findTableByName(String fullName) {
-        final String[] parts = fullName.split(".");
+        final String[] parts = fullName.split("\\.");
 
         if (parts.length != 3) {
             throw new IllegalArgumentException(
-                "fullName should consist of three parts separated by dots. These are dbms-name, schema-name and table-name."
+                    "fullName should consist of three parts separated by dots. These are dbms-name, schema-name and table-name."
             );
         }
 
@@ -98,10 +98,10 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
         final String tableName = parts[2];
 
         return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException("Could not find dbms: '" + dbmsName + "'."))
-            .stream().filter(s -> schemaName.equals(s.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException("Could not find schema: '" + schemaName + "'."))
-            .stream().filter(t -> tableName.equals(t.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException("Could not find table: '" + tableName + "'."));
+                .orElseThrow(() -> new IllegalArgumentException("Could not find dbms: '" + dbmsName + "'."))
+                .stream().filter(s -> schemaName.equals(s.getName())).findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Could not find schema: '" + schemaName + "'."))
+                .stream().filter(t -> tableName.equals(t.getName())).findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Could not find table: '" + tableName + "'."));
     }
 }

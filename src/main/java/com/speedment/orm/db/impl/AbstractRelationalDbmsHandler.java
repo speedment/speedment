@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.db.AsynchronousQueryResult;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.SqlTypeMapperComponent;
@@ -31,12 +32,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -52,7 +55,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private final Dbms dbms;
     private transient Map<String, Class<?>> typeMapping;
-    
+
     private static final Boolean SHOW_METADATA = false;
 
     public AbstractRelationalDbmsHandler(Dbms dbms) {
@@ -66,12 +69,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     // Todo: Use DataSoruce instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         Connection conn;
         Properties connectionProps = new Properties();
         dbms.getUsername().ifPresent(u -> connectionProps.put("user", u));
         dbms.getPassword().ifPresent(p -> connectionProps.put("password", p));
-        conn = DriverManager.getConnection(getUrl(), connectionProps);
+        try {
+            conn = DriverManager.getConnection(getUrl(), connectionProps);
+        } catch (SQLException sqle) {
+            LOGGER.error("Unable to get connection for " + dbms, sqle);
+            throw new RuntimeException(sqle);
+        }
         return conn;
     }
 
@@ -113,6 +121,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         return result;
     }
 
+    @Override
     public Stream<Schema> schemasPopulated() {
         try {
             try (final Connection connection = getConnection()) {
@@ -199,7 +208,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 //            try (final ResultSet rsTable = connection.getMetaData().getTables(schema.getCatalogName().orElse(null), schema.getSchemaName().orElse(null), null, new String[]{"TABLE"})) {
-
 
                 final ResultSetMetaData rsmd = rsTable.getMetaData();
                 int numberOfColumns = rsmd.getColumnCount();
@@ -316,6 +324,40 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected String jdbcCatalogLookupName(Schema schema) {
         return schema.getSchemaName().orElse(null);
+    }
+
+    @Override
+    public <T> Stream<T> executeQuery(final String sql, final Function<ResultSet, T> rsMapper) {
+        try (
+                final Connection connection = getConnection();
+                final Statement statement = connection.createStatement();
+                final ResultSet rs = statement.executeQuery(sql);) {
+            final Stream.Builder<T> streamBuilder = Stream.builder();
+            while (rs.next()) {
+                streamBuilder.add(rsMapper.apply(rs));
+            }
+            return streamBuilder.build();
+        } catch (SQLException sqle) {
+            LOGGER.error("Error executing " + sql, sqle);
+            throw new RuntimeException(sqle);
+        }
+    }
+
+    @Override
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, final Function<ResultSet, T> rsMapper) {
+        Objects.requireNonNull(sql);
+        Objects.requireNonNull(rsMapper);
+        return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
+//        try {
+//            final Connection connection = getConnection();
+//            final Statement statement = connection.createStatement();
+//            final ResultSet rs = statement.executeQuery(sql);
+//            return StreamUtil.asStream(rs, rsMapper);
+//            // TODO: Close the connection, statement and resultset
+//        } catch (SQLException sqle) {
+//            LOGGER.error("Error executing " + sql, sqle);
+//            throw new RuntimeException(sqle);
+//        }
     }
 
 }

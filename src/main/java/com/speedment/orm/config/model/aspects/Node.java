@@ -17,8 +17,12 @@
 package com.speedment.orm.config.model.aspects;
 
 import com.speedment.util.Trees;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -26,17 +30,17 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public interface Node extends Nameable {
-    
+
     @SuppressWarnings("unchecked")
     default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
         return Optional.of(this)
-            .filter(e -> e.isChildInterface())
-            .map(e -> (Child<?>) e)
-            .flatMap(e -> e.getParent())
-            .filter(e -> parentClass.isAssignableFrom(e.getClass()))
-            .map(e -> (P) e);
+                .filter(e -> e.isChildInterface())
+                .map(e -> (Child<?>) e)
+                .flatMap(e -> e.getParent())
+                .filter(e -> parentClass.isAssignableFrom(e.getClass()))
+                .map(e -> (P) e);
     }
-    
+
     default boolean isParentInterface() {
         return false;
     }
@@ -44,42 +48,55 @@ public interface Node extends Nameable {
     default boolean isChildInterface() {
         return false;
     }
-    
+
     default boolean isOrdinable() {
         return false;
     }
-    
+
     default Optional<? extends Child<?>> asChild() {
         return Optional.empty();
     }
-    
+
     default Optional<? extends Parent<?>> asParent() {
         return Optional.empty();
     }
-    
+
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
         return Trees.walkOptional(
-            getParent(Parent.class).get(), 
-            (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2), 
-            Trees.WalkingOrder.BACKWARD
+                getParent(Parent.class).get(),
+                (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2),
+                Trees.WalkingOrder.BACKWARD
         );
     }
-    
+
     @SuppressWarnings("unchecked")
     default <E extends Node> Optional<E> ancestor(final Class<E> clazz) {
         return ancestors()
-            .filter(p -> clazz.isAssignableFrom(p.getClass()))
-            .map(p -> (E) p)
-            .findFirst();
+                .filter(p -> clazz.isAssignableFrom(p.getClass()))
+                .map(p -> (E) p)
+                .findFirst();
     }
-    
-    default String getRelativeName(Node from) {
-        return ancestors().map(Nameable::getName).collect(joining("."));
+
+    default String getRelativeName(final Class<? extends Parent<?>> from) {
+        Objects.requireNonNull(from);
+        final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
+        final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
+        boolean add = false;
+        for (final Parent<?> parent : ancestors) {
+            if (from.isAssignableFrom(parent.getClass())) {
+                add = true;
+            }
+            if (add) {
+                sj.add(parent.getName());
+            }
+        }
+        return sj.toString() + getName();
+        //return ancestors().map(Nameable::getName).collect(joining(".", "", ".")) + getName();
     }
-    
+
     Class<?> getInterfaceMainClass();
-    
+
     default boolean is(Class<?> clazz) {
         final Class<?> first = getInterfaceMainClass();
         return clazz.isAssignableFrom(first);

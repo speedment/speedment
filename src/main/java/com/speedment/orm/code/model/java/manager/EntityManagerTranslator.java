@@ -29,8 +29,9 @@ import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.core.manager.Manager;
+import com.speedment.orm.core.manager.SqlManager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.orm.platform.component.ProjectComponent;
@@ -50,67 +51,59 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
     @Override
     protected Interface make(File file) {
         return new InterfaceBuilder(MANAGER.getName()).build()
-            .public_()
-            .add(Type.of(Manager.class).add(GENERIC_OF_PK).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
-            
-            .add(generatePrimaryKeyFor(file))
-            
-            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                .add("return " + Platform.class.getSimpleName() + 
-                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-                    ".class).getProject().findTableByName(\""+table().getRelativeName(project())+"\");"))
-                
-//            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
-//                .add("return \"" + table().getRelativeName(project()) + "\";"))
-            
-            .add(Method.of("getManagerClass", Type.of(Class.class).add(GENERIC_OF_MANAGER)).default_().add(OVERRIDE)
-                .add("return " + MANAGER.getName() + ".class;"))
-            
-            .add(Method.of("getEntityClass", Type.of(Class.class).add(GENERIC_OF_ENTITY)).default_().add(OVERRIDE)
-                .add("return " + ENTITY.getName() + ".class;"))
-            
-            .add(Method.of("getBuilderClass", Type.of(Class.class).add(GENERIC_OF_BUILDER)).default_().add(OVERRIDE)
-                .add("return " + BUILDER.getName() + ".class;"))
-            
-            .add(generateGet(file))
-            
-            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-            .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
-            .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
-                .add("return (" + MANAGER.getName() + ") " + Platform.class.getSimpleName() + 
-                    ".get().get(" + ManagerComponent.class.getSimpleName() + 
-                    ".class).manager(" + MANAGER.getName() + ".class);"))
-            ;
+                .public_()
+                .add(Type.of(SqlManager.class).add(GENERIC_OF_PK).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
+                .add(generatePrimaryKeyFor(file))
+                .call(i -> file.add(Import.of(Type.of(Platform.class))))
+                .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+                .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+                        .add("return " + Platform.class.getSimpleName()
+                                + ".get().get(" + ProjectComponent.class.getSimpleName()
+                                + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
+                //            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
+                //                .add("return \"" + table().getRelativeName(project()) + "\";"))
+
+                .add(Method.of("getManagerClass", Type.of(Class.class).add(GENERIC_OF_MANAGER)).default_().add(OVERRIDE)
+                        .add("return " + MANAGER.getName() + ".class;"))
+                .add(Method.of("getEntityClass", Type.of(Class.class).add(GENERIC_OF_ENTITY)).default_().add(OVERRIDE)
+                        .add("return " + ENTITY.getName() + ".class;"))
+                .add(Method.of("getBuilderClass", Type.of(Class.class).add(GENERIC_OF_BUILDER)).default_().add(OVERRIDE)
+                        .add("return " + BUILDER.getName() + ".class;"))
+                .add(generateGet(file))
+                .call(i -> file.add(Import.of(Type.of(Platform.class))))
+                .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
+                .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
+                        .add("return (" + MANAGER.getName() + ") " + Platform.class.getSimpleName()
+                                + ".get().get(" + ManagerComponent.class.getSimpleName()
+                                + ".class).manager(" + MANAGER.getName() + ".class);"));
     }
-    
+
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()));
-        
+                .add(Field.of("entity", ENTITY.getType()));
+
         if (primaryKeyColumns().count() == 1) {
             method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().getColumn()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
-                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+                    .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                    .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
-        
+
         return method;
     }
-    
+
     protected Method generateGet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("get", OBJECT).default_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()))
-            .add(Field.of("column", Type.of(Column.class)))
-            .add("switch (column.getName()) " + block(
-                columns().map(c -> "case \"" + variableName(c) + "\" : return entity.get" + typeName(c) + "();").collect(Collectors.joining(nl())) 
-                    + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-            ));
+                .add(Field.of("entity", ENTITY.getType()))
+                .add(Field.of("column", Type.of(Column.class)))
+                .add("switch (column.getName()) " + block(
+                                columns().map(c -> "case \"" + variableName(c) + "\" : return entity.get" + typeName(c) + "();").collect(Collectors.joining(nl()))
+                                + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+                        ));
     }
 
     @Override

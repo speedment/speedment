@@ -48,10 +48,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     Object get(ENTITY entity, Column column);
 
-
     // Data source metadata
     Table getTable();
-
 
     // Introspectors
     Class<? extends Manager<PK, ENTITY, BUILDER>> getManagerClass();
@@ -65,14 +63,16 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY model);
 
-    
+    default ENTITY toInternal(ENTITY model) {
+        return model;
+    }
+
     // Queries
     Stream<ENTITY> stream();
 
     default long size() {
         return stream().count();
     }
-
 
     // Add and remove
     void onInsert(ENTITY entity);
@@ -81,7 +81,6 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     void onDelete(ENTITY primaryKey);
 
-    
     // Persistence
     ENTITY persist(ENTITY entity);
 

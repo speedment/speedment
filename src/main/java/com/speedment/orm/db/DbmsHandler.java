@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -44,5 +45,9 @@ public interface DbmsHandler {
     <ENTITY> void update(Table table, ENTITY entity);
 
     <ENTITY> void delete(Table table, ENTITY entity);
+
+    public <T> Stream<T> executeQuery(final String sql, Function<ResultSet, T> rsMapper);
+
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, Function<ResultSet, T> rsMapper);
 
 }

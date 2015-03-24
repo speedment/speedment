@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  */
 public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
 
-    private final Consumer<V> NOTHING = (V v) -> {
+    protected final Consumer<V> NOTHING = (V v) -> {
     };
 
     private final Map<Class<?>, V> map;

@@ -66,7 +66,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
         if (getNode() instanceof Project) {
             return project().getPacketName() + "." + project().getName();
         } else {
-            return project().getPacketName() + "." + getNode().getRelativeName(project());
+            return project().getPacketName() + "." + getNode().getRelativeName(Project.class);
         }
     }
 

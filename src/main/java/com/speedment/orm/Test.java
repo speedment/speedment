@@ -21,7 +21,7 @@ import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
-import com.speedment.orm.platform.component.DbmsHandlerFactoryComponent;
+import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Trees;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -42,7 +42,7 @@ public class Test {
         dbms.setIpAddress("localhost");
         dbms.setUsername("root");
        
-        final DbmsHandler handler = Platform.get().get(DbmsHandlerFactoryComponent.class).make(dbms);
+        final DbmsHandler handler = Platform.get().get(DbmsHandlerComponent.class).make(dbms);
 
         handler.schemasPopulated().forEachOrdered(schema -> {
 
