@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -29,8 +28,9 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public interface Node extends Nameable {
 
+public interface Node extends Nameable, Enableable {
+    
     @SuppressWarnings("unchecked")
     default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
         return Optional.of(this)
