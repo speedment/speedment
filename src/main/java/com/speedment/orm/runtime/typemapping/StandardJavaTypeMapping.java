@@ -17,6 +17,7 @@
 package com.speedment.orm.runtime.typemapping;
 
 import com.speedment.orm.config.model.Dbms;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -47,7 +48,7 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
     Date(Date.class, "Date"),
     TIME(Time.class, "Time"),
     TIMESTAMP(Timestamp.class, "Timestamp"),
-    BIG_DECIMAL(Timestamp.class, "BigDecimal"),
+    BIG_DECIMAL(BigDecimal.class, "BigDecimal"),
     BLOB(Blob.class, "Blob"),
     CLOB(Clob.class, "Clob"),
     ARRAY(Array.class, "Array"),
