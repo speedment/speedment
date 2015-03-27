@@ -25,8 +25,8 @@ import com.speedment.orm.config.model.External;
 public interface Enableable {
     
     @External(type = Boolean.class)
-    void setEnabled(boolean enabled);
+    void setEnabled(Boolean enabled);
     
     @External(type = Boolean.class)
-    boolean isEnabled();
+    Boolean isEnabled();
 }

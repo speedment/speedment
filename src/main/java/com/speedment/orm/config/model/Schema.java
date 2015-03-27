@@ -68,10 +68,10 @@ public interface Schema extends ConfigEntity, Child<Dbms>, Parent<Table>,
     }
 
     @External(type = Boolean.class)
-    boolean isDefaultSchema();
+    Boolean isDefaultSchema();
 
     @External(type = Boolean.class)
-    void setDefaultSchema(boolean defaultSchema);
+    void setDefaultSchema(Boolean defaultSchema);
 
     @External(type = String.class)
     Optional<String> getCatalogName();

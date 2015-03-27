@@ -61,10 +61,10 @@ public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
     }
 
     @External(type = Boolean.class)
-    boolean isUnique();
+    Boolean isUnique();
 
     @External(type = Boolean.class)
-    void setUnique(boolean unique);
+    void setUnique(Boolean unique);
 
     default IndexColumn indexColumn(Closure<?> c) {
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewIndexColumn);
