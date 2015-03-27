@@ -237,13 +237,14 @@ public class JavaLanguage {
         final String input = unQuote(javaName.trim());
         for (int i = 0; i < input.length(); i++) {
             final char c = input.charAt(i);
+            
             if (result.length() == 0) {
-                result.append(Character.toLowerCase(c));
+                result.append(Character.toUpperCase(c));
             } else {
                 if (Character.isUpperCase(c)) {
-                    result.append(c);
+                    result.append(" ").append(c);
                 } else {
-                    result.append(" ").append(Character.toUpperCase(c));
+                    result.append(c);
                 }
 
             }
