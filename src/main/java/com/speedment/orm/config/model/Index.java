@@ -20,7 +20,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.IndexImpl;
-import com.speedment.orm.platform.Platform;
+import groovy.lang.Closure;
 import java.util.function.Supplier;
 
 /**
@@ -65,4 +65,9 @@ public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
 
     @External
     void setUnique(boolean unique);
+    
+    default IndexColumn indexColumn(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewIndexColumn);
+    }
+    
 }

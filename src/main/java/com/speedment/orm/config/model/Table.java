@@ -74,13 +74,13 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
         return e;
     }
 
-    default PrimaryKeyColumn addPrimaryKeyColumn() {
+    default PrimaryKeyColumn addNewPrimaryKeyColumn() {
         final PrimaryKeyColumn e = PrimaryKeyColumn.newPrimaryKeyColumn();
         add(e);
         return e;
     }
 
-    default ForeignKey addForeignKey() {
+    default ForeignKey addNewForeignKey() {
         final ForeignKey e = ForeignKey.newForeignKey();
         add(e);
         return e;
@@ -102,11 +102,11 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
     }
 
     default ForeignKey foreignKey(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addForeignKey);
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
     }
 
     default PrimaryKeyColumn primaryKeyColumn(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addPrimaryKeyColumn);
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewPrimaryKeyColumn);
     }
 
 }

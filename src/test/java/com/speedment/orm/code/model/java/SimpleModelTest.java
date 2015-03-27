@@ -52,7 +52,7 @@ public abstract class SimpleModelTest {
         schema = dbms.addNewSchema();
         table = schema.addNewTable();
         column = table.addNewColumn();
-        pkColumn = table.addPrimaryKeyColumn();
+        pkColumn = table.addNewPrimaryKeyColumn();
         
         project.setName("myProject");
         dbms.setName("myDbms");

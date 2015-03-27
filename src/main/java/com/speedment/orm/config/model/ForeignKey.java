@@ -20,7 +20,7 @@ import com.speedment.orm.annotations.Api;
 import com.speedment.orm.config.model.aspects.Parent;
 import com.speedment.orm.config.model.aspects.Child;
 import com.speedment.orm.config.model.impl.ForeignKeyImpl;
-import com.speedment.orm.platform.Platform;
+import groovy.lang.Closure;
 import java.util.function.Supplier;
 
 /**
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 @Api(version = 0)
 public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKeyColumn> {
 
-        enum Holder {
+    enum Holder {
 
         HOLDER;
         private Supplier<ForeignKey> provider = () -> new ForeignKeyImpl();
@@ -44,7 +44,6 @@ public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKe
         return Holder.HOLDER.provider.get();
     }
 
-    
     @Override
     default Class<ForeignKey> getInterfaceMainClass() {
         return ForeignKey.class;
@@ -60,4 +59,9 @@ public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKe
         add(e);
         return e;
     }
+
+    default ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
+        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewForeignKeyColumn);
+    }
+
 }
