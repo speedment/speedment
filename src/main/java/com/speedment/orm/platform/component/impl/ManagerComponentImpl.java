@@ -44,8 +44,8 @@ public class ManagerComponentImpl implements ManagerComponent {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass) {
-        return (Manager<PK, E, B>) managersByManager.get(managerClass);
+    public <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> M manager(Class<M> managerClass) {
+        return (M) managersByManager.get(managerClass);
     }
 
     @Override

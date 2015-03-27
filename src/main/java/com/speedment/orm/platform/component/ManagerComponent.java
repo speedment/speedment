@@ -33,7 +33,7 @@ public interface ManagerComponent extends Component {
 
     <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager);
 
-    <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> Manager<PK, E, B> manager(Class<M> managerClass);
+    <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> M manager(Class<M> managerClass);
 
     <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass);
 
