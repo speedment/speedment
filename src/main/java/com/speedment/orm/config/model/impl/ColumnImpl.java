@@ -28,6 +28,7 @@ import java.util.Optional;
  */
 public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
 
+    private Boolean nullable;
     private String alias;
     private Table parent;
     private FieldStorageType fieldStorageType;
@@ -36,6 +37,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
 
     @Override
     protected void setDefaults() {
+        setNullable(true);
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
         setMapping(String.class);
@@ -90,5 +92,15 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     @Override
     public Optional<Table> getParent() {
         return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public Boolean isNullable() {
+        return nullable;
+    }
+
+    @Override
+    public void setNullable(Boolean nullable) {
+        this.nullable = nullable;
     }
 }

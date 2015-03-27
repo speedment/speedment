@@ -58,6 +58,12 @@ public interface Column extends ConfigEntity, Ordinable, Child<Table>,
         return Table.class;
     }
 
+    @External(type = Boolean.class)
+    Boolean isNullable();
+
+    @External(type = Boolean.class)
+    void setNullable(Boolean nullable);
+    
     @External(type = String.class)
     Optional<String> getAlias();
 
