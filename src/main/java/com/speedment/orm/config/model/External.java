@@ -33,4 +33,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface External {
 
+    /**
+     * Class that holds the basic type.
+     *
+     * @return
+     */
+    Class<?> type();
 }

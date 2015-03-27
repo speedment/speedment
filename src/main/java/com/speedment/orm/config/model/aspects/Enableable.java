@@ -16,11 +16,17 @@
  */
 package com.speedment.orm.config.model.aspects;
 
+import com.speedment.orm.config.model.External;
+
 /**
  *
  * @author Emil Forslund
  */
 public interface Enableable {
+    
+    @External(type = Boolean.class)
     void setEnabled(boolean enabled);
+    
+    @External(type = Boolean.class)
     boolean isEnabled();
 }

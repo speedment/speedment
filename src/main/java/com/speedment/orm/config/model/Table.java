@@ -34,9 +34,9 @@ import java.util.function.Supplier;
  */
 @Api(version = 0)
 public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>,
-    FieldStorageTypeable,
-    ColumnCompressionTypeable,
-    StorageEngineTypeable {
+        FieldStorageTypeable,
+        ColumnCompressionTypeable,
+        StorageEngineTypeable {
 
     enum Holder {
 
@@ -86,10 +86,10 @@ public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>
         return e;
     }
 
-    @External
+    @External(type = String.class)
     Optional<String> getTableName();
 
-    @External
+    @External(type = String.class)
     void setTableName(String tableName);
 
     // Groovy

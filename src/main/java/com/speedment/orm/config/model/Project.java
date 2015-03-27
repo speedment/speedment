@@ -63,16 +63,16 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
         return e;
     }
 
-    @External
+    @External(type = String.class)
     String getPacketName();
 
-    @External
+    @External(type = String.class)
     void setPacketName(String packetName);
 
-    @External
+    @External(type = String.class)
     String getPacketLocation();
 
-    @External
+    @External(type = String.class)
     void setPacketLocation(String packetLocation);
 
     Path getConfigPath();

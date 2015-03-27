@@ -42,25 +42,23 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
 
     protected abstract void setDefaults();
 
-    @External
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
-    @External
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    @External
+    @External(type = String.class)
     @Override
     public String getName() {
         return name;
     }
 
-    @External
+    @External(type = String.class)
     @Override
     public void setName(String name) {
         if (name == null) {

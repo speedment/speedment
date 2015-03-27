@@ -21,14 +21,13 @@ import com.speedment.orm.config.model.External;
 /**
  *
  * @author pemi
- * @param <T> Setter return type.
  */
 public interface FieldStorageTypeable {
 
-    @External
+    @External(type = FieldStorageTypeable.class)
     FieldStorageType getFieldStorageType();
 
-    @External
+    @External(type = FieldStorageTypeable.class)
     void setFieldStorageType(FieldStorageType fieldStorageType);
 
 }

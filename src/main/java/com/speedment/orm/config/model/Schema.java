@@ -33,9 +33,9 @@ import java.util.function.Supplier;
  */
 @Api(version = 0)
 public interface Schema extends ConfigEntity, Child<Dbms>, Parent<Table>,
-    FieldStorageTypeable,
-    ColumnCompressionTypeable,
-    StorageEngineTypeable {
+        FieldStorageTypeable,
+        ColumnCompressionTypeable,
+        StorageEngineTypeable {
 
     enum Holder {
 
@@ -67,22 +67,22 @@ public interface Schema extends ConfigEntity, Child<Dbms>, Parent<Table>,
         return e;
     }
 
-    @External
+    @External(type = Boolean.class)
     boolean isDefaultSchema();
 
-    @External
+    @External(type = Boolean.class)
     void setDefaultSchema(boolean defaultSchema);
 
-    @External
+    @External(type = String.class)
     Optional<String> getCatalogName();
 
-    @External
+    @External(type = String.class)
     void setCatalogName(String catalogName);
 
-    @External
+    @External(type = String.class)
     Optional<String> getSchemaName();
 
-    @External
+    @External(type = String.class)
     void setSchemaName(String schemaName);
 
     // Groovy

@@ -21,14 +21,13 @@ import com.speedment.orm.config.model.External;
 /**
  *
  * @author pemi
- * @param <T> Setter return type.
  */
 public interface OrderTypeable {
 
-    @External
+    @External(type = OrderTypeable.class)
     OrderType getOrderType();
 
-    @External
+    @External(type = OrderTypeable.class)
     void setOrderType(OrderType orderType);
 
 }

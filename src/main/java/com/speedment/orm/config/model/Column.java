@@ -58,15 +58,15 @@ public interface Column extends ConfigEntity, Ordinable, Child<Table>,
         return Table.class;
     }
 
-    @External
+    @External(type = String.class)
     Optional<String> getAlias();
 
-    @External
+    @External(type = String.class)
     void setAlias(String alias);
 
-    @External
+    @External(type = Class.class)
     Class<?> getMapping();
 
-    @External
+    @External(type = Class.class)
     void setMapping(Class<?> mappedClass);
 }

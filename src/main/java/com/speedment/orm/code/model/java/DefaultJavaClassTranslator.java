@@ -35,6 +35,7 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ConfigEntity;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.ForeignKey;
+import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Index;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Schema;
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -113,9 +115,13 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
         private final String name;
         private final Map<Class<?>, List<BiConsumer<T, ? extends Node>>> map;
 
+        // Special for this case
+        private final List<BiConsumer<T, ForeignKey>> foreignKeyReferencesThisTableConsumers;
+
         public Builder(String name) {
             this.name = name;
             this.map = new HashMap<>();
+            this.foreignKeyReferencesThisTableConsumers = new ArrayList<>();
         }
 
         public Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer) {
@@ -146,10 +152,13 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
             return Beans.run(this, () -> aquireListAndAdd(ForeignKey.class, consumer));
         }
 
+        public Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
+            return Beans.run(this, () -> this.foreignKeyReferencesThisTableConsumers.add(Objects.requireNonNull(consumer)));
+        }
+
         @SuppressWarnings("unchecked")
         protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
-            aquireList(clazz)
-                    .add((BiConsumer<T, Node>) consumer);
+            aquireList(clazz).add(Objects.requireNonNull((BiConsumer<T, Node>) consumer));
         }
 
         @SuppressWarnings("unchecked")
@@ -171,6 +180,18 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
             act(i, schema());
             act(i, table());
             table().stream().forEachOrdered(c -> act(i, c));
+
+            if (Table.class.equals(getNode().getInterfaceMainClass())) {
+                schema().stream()
+                        .flatMap((Table t) -> t.streamOf(ForeignKey.class))
+                        .filter(fk -> fk.stream().filter(fkc -> fkc.getForeignTableName().equals(getNode().getName())).findFirst().isPresent())
+                        .forEachOrdered(fk -> {
+                            foreignKeyReferencesThisTableConsumers.forEach(c -> {
+                                c.accept(i, fk);
+                            });
+                        });
+            }
+
             i.add(generated());
             return i;
         }

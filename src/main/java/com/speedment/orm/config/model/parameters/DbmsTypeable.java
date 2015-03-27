@@ -23,20 +23,21 @@ import com.speedment.orm.config.model.External;
  * @author Emil Forslund
  */
 public interface DbmsTypeable {
-    @External
+
+    @External(type = DbmsType.class)
     DbmsType getType();
 
     void setType(DbmsType dbmsType);
-    
+
     /**
      *
      * @param dbmsTypeName
      * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
      * could not be found
      */
-    @External
+    @External(type = DbmsType.class)
     default void setType(String dbmsTypeName) {
         setType(StandardDbmsType.findByIgnoreCase(dbmsTypeName)
-            .orElseThrow(IllegalArgumentException::new));
+                .orElseThrow(IllegalArgumentException::new));
     }
 }

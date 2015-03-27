@@ -46,6 +46,10 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
         return typeName(getNode());
     }
 
+    default String managerTypeName() {
+        return managerTypeName(getNode());
+    }
+
     default String fullyQualifiedTypeName() {
         return fullyQualifiedTypeName(null);
     }
@@ -60,6 +64,10 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
 
     default String typeName(Node node) {
         return JavaLanguage.javaTypeName(node.getName());
+    }
+
+    default String managerTypeName(Node node) {
+        return typeName(node) + "Manager";
     }
 
     default String basePackageName() {

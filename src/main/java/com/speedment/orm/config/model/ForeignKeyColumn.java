@@ -58,16 +58,16 @@ public interface ForeignKeyColumn extends ConfigEntity, Ordinable, Child<Foreign
         return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
 
-    @External
+    @External(type = String.class)
     String getForeignColumnName();
 
-    @External
+    @External(type = String.class)
     void setForeignColumnName(String foreignColumnName);
 
-    @External
+    @External(type = String.class)
     String getForeignTableName();
 
-    @External
+    @External(type = String.class)
     void setForeignTableName(String foreignTableName);
 
     default Column getForeignColumn() {

@@ -63,37 +63,37 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
         return e;
     }
 
-    @External
+    @External(type = Class.class)
     Optional<String> getIpAddress();
 
-    @External
+    @External(type = Class.class)
     void setIpAddress(String ipAddress);
 
-    @External
+    @External(type = Integer.class)
     Optional<Integer> getPort();
 
-    @External
+    @External(type = Integer.class)
     void setPort(Integer port);
 
-    @External
+    @External(type = String.class)
     Optional<String> getUsername();
 
-    @External
+    @External(type = String.class)
     void setUsername(String name);
 
-    @External
+    @External(type = String.class)
     Optional<String> getPassword();
 
-    @External
+    @External(type = String.class)
     void setPassword(String password);
 
     // Groovy
     default Schema schema(Closure<?> c) {
         return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewSchema);
     }
-    
+
     Optional<DbmsHandler> getDbmsHandler();
-    
+
     void setDbmsHandler(DbmsHandler dbmsHandler);
-    
+
 }

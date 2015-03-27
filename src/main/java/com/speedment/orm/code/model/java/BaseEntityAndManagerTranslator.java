@@ -60,12 +60,12 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
         }
     }
 
-    protected final ClassType ENTITY = new ClassType("", "Impl"),
+    public final ClassType ENTITY = new ClassType("", "Impl"),
             BUILDER = new ClassType("Builder", "Impl"),
             CONFIG = new ClassType("Config", "Impl"),
             MANAGER = new ClassType("Manager", "Impl");
 
-    protected final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
+    public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
             GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
             GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
             GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());

@@ -19,10 +19,20 @@ package com.speedment.orm.code.model.java.entity;
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.implementation.GenericImpl;
+import com.speedment.orm.code.model.java.manager.EntityManagerTranslator;
+import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.platform.Platform;
+import com.speedment.orm.platform.component.ManagerComponent;
+import com.speedment.util.Pluralis;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  *
@@ -30,107 +40,50 @@ import com.speedment.orm.config.model.Table;
  */
 public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> {
 
-    
-//    private final String INTERFACE_NAME = Formatting.shortName(INTERFACE.getType().getName()),
-//        BEAN_NAME = INTERFACE_NAME + "Bean",
-//        BUILDER_NAME = Formatting.shortName(BUILDER.getType().getName()),
-//        PERSISTER_NAME = Formatting.shortName(PERSISTER.getType().getName()),
-//        CONFIG_NAME = Formatting.shortName(CONFIG.getType().getName());
-    
-//    private Generic genericOfSelf(Type type) {
-//        return Generic.of().setLowerBound("T").add(type.copy().add(Generic.of().setLowerBound("T")));
-//    }
-
     public EntityTranslator(CodeGenerator cg, Table configEntity) {
         super(cg, configEntity);
     }
 
-//    @Override
-//    public File get() {
-//        final File file = super.get();
-//        file.add(bean());
-//        return file;
-//    }
-
     @Override
     protected Interface make(File file) {
         return new InterfaceBuilder(ENTITY.getName())
-            .addColumnConsumer((i, c) -> {
-                i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
-            })
-            .build()
-            .public_();
-//            .add(AnnotationUsage.of(Type.of(Api.class)).put("version", new NumberValue(0)))
-//            .add(builder())
-//            .add(persister())
-//            .add(managerMethod(file))
-//            .add(builderMethod(file))
-//            .add(toBuilderMethod(file))
-//            .add(persisterMethod(file))
-//            .add(toPersisterMethod(file));
+                .addColumnConsumer((i, c) -> {
+                    i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
+                })
+                .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
+                    file.add(Import.of(Type.of(Platform.class)));
+                    file.add(Import.of(Type.of(ManagerComponent.class)));
+                    file.add(Import.of(Type.of(Objects.class)));
+
+                    final ForeignKeyColumn fkc = fk.stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have a ForeignKeyColumn"));
+                    final Column referencingColumn = fkc.getColumn();
+                    final Table referencingTable = referencingColumn.ancestor(Table.class).get();
+                    final EntityManagerTranslator emt = new EntityManagerTranslator(getCodeGenerator(), referencingTable);
+                    
+                    final Type returnType = Type.of(Stream.class).add(emt.GENERIC_OF_ENTITY);
+                    final Method method = Method.of(Pluralis.INSTANCE.pluralizeJavaIdentifier(variableName(referencingTable)) + "By" + typeName(fkc), returnType)
+                    .default_()
+                    .add("return Platform.get().get(ManagerComponent.class)")
+                    .add("        .manager(" + managerTypeName(referencingTable) + ".class)")
+                    .add("        .stream().filter(" + variableName(fkc.getForeignColumn()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fkc.getForeignColumn()) + "(), " + variableName(fkc.getForeignColumn()) + "." + GETTER_METHOD_PREFIX + typeName(fkc.getForeignColumn()) + "()));");
+                    i.add(method);
+                })
+                .build()
+                .public_();
+
     }
-//
-//    private Method managerMethod(File file) {
-//        file.add(Import.of(CONFIG.getType()));
-//        return Method.of("manager", Type.of(Manager.class).add(GENERIC_OF_ENTITY)).static_()
-//            .add("return " + CONFIG.getName() + ".INSTANCE.speedment.managerOf(" + ENTITY.getName() + ".class);");
-//    }
-//
-//    private Method builderMethod(File file) {
-//        return Method.of("builder", BUILDER.getType()).static_()
-//            .add("return manager().builder(" + BUILDER.getName() + ".class);");
-//    }
-//
-//    private Method toBuilderMethod(File file) {
-//        return Method.of("toBuilder", BUILDER.getType()).default_()
-//            .add("return manager().builderOf(" + BUILDER.getName() + ".class, this);");
-//    }
-//
-//    private Method persisterMethod(File file) {
-//        return Method.of("persister", PERSISTER.getType()).static_()
-//            .add("return manager().persister(" + PERSISTER.getName() + ".class);");
-//    }
-//
-//    private Method toPersisterMethod(File file) {
-//        return Method.of("toPersister", PERSISTER.getType()).default_()
-//            .add("return manager().persisterOf(" + PERSISTER.getName() + ".class, this);");
-//    }
 
-//    private Interface bean() {
-//        return new InterfaceBuilder(BEAN.getName())
-//            .addColumnConsumer((i, c) -> {
-//                i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), Type.of("T")).add(fieldFor(c)));
-//            })
-//            .build()
-//            .add(genericOfSelf(BEAN.getType()))
-//            .add(INTERFACE.getType());
-//    }
-//
-//    private Interface builder() {
-//        return new InterfaceBuilder(BUILDER.getName())
-//            .addColumnConsumer((i, c) -> {
-//                i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), BUILDER.getType()).add(fieldFor(c)));
-//            })
-//            .build()
-//            .add(ENTITY.getType())
-////            .add(genericOfSelf(BUILDER.getType()))
-////            .add(BEAN.getType().copy().add(Generic.of().setLowerBound("T")))
-//            .add(Type.of(Buildable.class).add(GENERIC_OF_ENTITY.copy()));
-//    }
-//
-//    private Interface persister() {
-//        return new InterfaceBuilder(PERSISTER.getName())
-//            .addColumnConsumer((i, c) -> {
-//                i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), PERSISTER.getType()).add(fieldFor(c)));
-//            })
-//            .build()
-//            .add(ENTITY.getType())
-////            .add(genericOfSelf(PERSISTER.getType()))
-////            .add(BEAN.getType().copy().add(Generic.of().setLowerBound("T")))
-//            .add(Type.of(Persistable.class)
-//                .add(GENERIC_OF_ENTITY.copy()));
-//    }
-
+    /*
+    
+     default Stream<Carrot> findCarrots() {
+     return Platform.get().get(ManagerComponent.class)
+     .manager(CarrotManager.class)
+     .stream().filter(carrot -> Objects.equals(this.getId(), carrot.getHare()));
+     }
+    
+     */
     @Override
     protected String getJavadocRepresentText() {
         return "An interface";

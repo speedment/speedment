@@ -45,7 +45,7 @@ class ConfigEntityUtil {
         final Schema currentSchema = optionalSchema.orElseThrow(() -> new IllegalStateException("There is no " + Schema.class.getSimpleName() + " associated with this " + configEntity.toString()));
         final String[] paths = name.split("\\.");
         // Just the name of the table
-        if (paths.length == 0) {
+        if (paths.length == 1) {
             return currentSchema
                     .stream()
                     .filter(c -> c.getName().equals(name))
@@ -53,7 +53,7 @@ class ConfigEntityUtil {
                     .orElseThrow(() -> new IllegalStateException("There is no " + Table.class.getSimpleName() + " in the " + currentSchema.getInterfaceMainClass().getSimpleName() + " for the " + configEntity.getInterfaceMainClass() + " named " + name));
         }
         // The name is "schema.table"
-        if (paths.length == 1) {
+        if (paths.length == 2) {
             final String otherSchemaName = paths[0];
             final String tableName = paths[1];
             final Dbms dbms = currentSchema.ancestor(Dbms.class).orElseThrow(() -> new IllegalStateException("No " + Dbms.class.getSimpleName() + " for " + currentSchema.toString()));
