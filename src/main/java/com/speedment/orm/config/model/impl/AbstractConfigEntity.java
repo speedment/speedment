@@ -43,12 +43,12 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
     protected abstract void setDefaults();
 
     @Override
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 

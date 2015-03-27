@@ -50,12 +50,12 @@ public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
     }
 
     @Override
-    public boolean isDefaultSchema() {
+    public Boolean isDefaultSchema() {
         return defaultSchema;
     }
 
     @Override
-    public void setDefaultSchema(boolean defaultSchema) {
+    public void setDefaultSchema(Boolean defaultSchema) {
         this.defaultSchema = defaultSchema;
     }
 

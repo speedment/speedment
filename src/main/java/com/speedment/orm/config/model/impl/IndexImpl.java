@@ -40,12 +40,12 @@ public class IndexImpl extends AbstractNamedConfigEntity implements Index {
     }
 
     @Override
-    public boolean isUnique() {
+    public Boolean isUnique() {
         return unique;
     }
 
     @Override
-    public void setUnique(boolean unique) {
+    public void setUnique(Boolean unique) {
         this.unique = unique;
     }
 
