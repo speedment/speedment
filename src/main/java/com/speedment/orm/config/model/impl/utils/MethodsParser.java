@@ -55,30 +55,35 @@ public final class MethodsParser {
     private static boolean isExternal(Method method) {
         return isExternal(method, method.getDeclaringClass());
     }
-
-    private static boolean isExternal(final Method method, final Class<?> clazz) {
+    
+    public static External getExternalFor(final Method method, final Class<?> clazz) {
         if (method == null || clazz == null) {
-            return false;
+            return null;
         }
-        if (method.getAnnotation(External.class) != null) {
-            return true;
+        
+        final External e = (External) method.getAnnotation(External.class);
+        if (e != null) {
+            return e;
         }
         // Also try the superClass and all the interfaces it implements
         final List<Class<?>> classCandidates = new ArrayList<>(Arrays.asList(clazz.getInterfaces()));
         final Class<?> superClass = clazz.getSuperclass();
+        
         if (superClass != null) {
             classCandidates.add(superClass);
         }
+        
         for (final Class<?> classCandidate : classCandidates) {
             try {
-                if (isExternal(classCandidate.getMethod(method.getName(), method.getParameterTypes()), classCandidate)) {
-                    return true;
-                }
-            } catch (NoSuchMethodException | SecurityException e) {
-                // ignore
-            }
+                return getExternalFor(classCandidate.getMethod(method.getName(), method.getParameterTypes()), classCandidate);
+            } catch (NoSuchMethodException | SecurityException ex) {}
         }
-        return false;
+        
+        return null;
+    }
+
+    private static boolean isExternal(final Method method, final Class<?> clazz) {
+        return getExternalFor(method, clazz) != null;
     }
 
     private static Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {

@@ -232,4 +232,23 @@ public class JavaLanguage {
         return result.toString();
     }
 
+    public static String toHumanReadable(final String javaName) {
+        final StringBuilder result = new StringBuilder();
+        final String input = unQuote(javaName.trim());
+        for (int i = 0; i < input.length(); i++) {
+            final char c = input.charAt(i);
+            
+            if (result.length() == 0) {
+                result.append(Character.toUpperCase(c));
+            } else {
+                if (Character.isUpperCase(c)) {
+                    result.append(" ").append(c);
+                } else {
+                    result.append(c);
+                }
+
+            }
+        }
+        return result.toString();
+    }
 }
