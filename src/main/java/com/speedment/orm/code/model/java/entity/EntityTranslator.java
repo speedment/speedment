@@ -26,12 +26,20 @@ import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.orm.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.ForeignKey;
 import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.util.Pluralis;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -46,44 +54,77 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 
     @Override
     protected Interface make(File file) {
-        return new InterfaceBuilder(ENTITY.getName())
+        final Map<Table, List<String>> fkStreamers = new HashMap<>();
+
+        final Interface iface = new InterfaceBuilder(ENTITY.getName())
+                // Getters
                 .addColumnConsumer((i, c) -> {
                     i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
                 })
+                // Add streamers from back pointing FK:s
                 .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
-                    file.add(Import.of(Type.of(Platform.class)));
-                    file.add(Import.of(Type.of(ManagerComponent.class)));
-                    file.add(Import.of(Type.of(Objects.class)));
-
-                    final ForeignKeyColumn fkc = fk.stream()
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have a ForeignKeyColumn"));
-                    final Column referencingColumn = fkc.getColumn();
-                    final Table referencingTable = referencingColumn.ancestor(Table.class).get();
-                    final EntityManagerTranslator emt = new EntityManagerTranslator(getCodeGenerator(), referencingTable);
-                    
-                    final Type returnType = Type.of(Stream.class).add(emt.GENERIC_OF_ENTITY);
-                    final Method method = Method.of(Pluralis.INSTANCE.pluralizeJavaIdentifier(variableName(referencingTable)) + "By" + typeName(fkc), returnType)
+                    final FkUtil fu = new FkUtil(fk);
+                    fu.imports().forEach(file::add);
+                    final String methodName = pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
+                    // Record for later use in the construction of aggregate streamers
+                    fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
+                    final Type returnType = Type.of(Stream.class).add(fu.getEmt().GENERIC_OF_ENTITY);
+                    final Method method = Method.of(methodName, returnType)
                     .default_()
                     .add("return Platform.get().get(ManagerComponent.class)")
-                    .add("        .manager(" + managerTypeName(referencingTable) + ".class)")
-                    .add("        .stream().filter(" + variableName(fkc.getForeignColumn()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fkc.getForeignColumn()) + "(), " + variableName(fkc.getForeignColumn()) + "." + GETTER_METHOD_PREFIX + typeName(fkc.getForeignColumn()) + "()));");
+                    .add("        .manager(" + managerTypeName(fu.getTable()) + ".class)")
+                    .add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
+                    i.add(method);
+                })
+                .addForeignKeyConsumer((i, fk) -> {
+                    final FkUtil fu = new FkUtil(fk);
+                    fu.imports().forEach(file::add);
+                    final Type returnType;
+                    final String getCode;
+                    if (fu.getColumn().isNullable()) {
+                        file.add(Import.of(Type.of(Optional.class)));
+                        returnType = Type.of(Optional.class).add(fu.getForeignEmt().GENERIC_OF_ENTITY);
+                        getCode = "";
+                    } else {
+                        returnType = fu.getForeignEmt().ENTITY.getType();
+                        getCode = ".get()";
+                    }
+                    final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
+                    method.add("return Platform.get().get(ManagerComponent.class)");
+                    method.add("        .manager(" + fu.getForeignEmt().MANAGER.getName() + ".class)");
+                    method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
                     i.add(method);
                 })
                 .build()
                 .public_();
 
+        // Create aggregate streaming functions, if any
+        fkStreamers.keySet().stream().forEach((referencingTable) -> {
+            final List<String> methodNames = fkStreamers.get(referencingTable);
+            if (!methodNames.isEmpty()) {
+                final Method method = Method.of(pluralis(referencingTable), Type.of(Stream.class).add(new GenericImpl(typeName(referencingTable))))
+                        .default_();
+                if (methodNames.size() == 1) {
+                    method.add("return " + methodNames.get(0) + "();");
+                } else {
+                    file.add(Import.of(Type.of(Function.class)));
+                    method.add("return Stream.of("
+                            + methodNames.stream().map(n -> n + "()").collect(Collectors.joining(", "))
+                            + ").flatMap(Function.identity()).distinct();");
+                }
+                iface.add(method);
+            }
+        });
+
+        return iface;
+
     }
 
-    /*
+    public String pluralis(Table table) {
+        return Pluralis.INSTANCE.pluralizeJavaIdentifier(variableName(table));
+    }
+
     
-     default Stream<Carrot> findCarrots() {
-     return Platform.get().get(ManagerComponent.class)
-     .manager(CarrotManager.class)
-     .stream().filter(carrot -> Objects.equals(this.getId(), carrot.getHare()));
-     }
-    
-     */
     @Override
     protected String getJavadocRepresentText() {
         return "An interface";
@@ -92,6 +133,68 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     @Override
     protected String getFileName() {
         return ENTITY.getName();
+    }
+
+    private class FkUtil {
+
+        private final ForeignKey fk;
+        private final ForeignKeyColumn fkc;
+        private final Column column;
+        private final Table table;
+        private final Column foreignColumn;
+        private final Table foreignTable;
+        private final EntityManagerTranslator emt;
+        private final EntityManagerTranslator foreignEmt;
+
+        public FkUtil(ForeignKey fk) {
+            this.fk = fk;
+            fkc = fk.stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have a ForeignKeyColumn"));
+            column = fkc.getColumn();
+            table = column.ancestor(Table.class).get();
+            foreignColumn = fkc.getForeignColumn();
+            foreignTable = fkc.getForeignTable();
+            emt = new EntityManagerTranslator(getCodeGenerator(), getTable());
+            foreignEmt = new EntityManagerTranslator(getCodeGenerator(), getForeignTable());
+        }
+
+        public Stream<Import> imports() {
+            final Stream.Builder<Type> sb = Stream.builder();
+            sb.add(Type.of(Platform.class));
+            sb.add(Type.of(ManagerComponent.class));
+            sb.add(Type.of(Objects.class));
+            sb.add(getEmt().ENTITY.getType());
+            sb.add(getEmt().MANAGER.getType());
+            sb.add(getForeignEmt().ENTITY.getType());
+            sb.add(getForeignEmt().MANAGER.getType());
+            return sb.build().map(t -> Import.of(t));
+        }
+
+        public Column getColumn() {
+            return column;
+        }
+
+        public Table getTable() {
+            return table;
+        }
+
+        public Column getForeignColumn() {
+            return foreignColumn;
+        }
+
+        public Table getForeignTable() {
+            return foreignTable;
+        }
+
+        public EntityManagerTranslator getEmt() {
+            return emt;
+        }
+
+        public EntityManagerTranslator getForeignEmt() {
+            return foreignEmt;
+        }
+
     }
 
 }
