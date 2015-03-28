@@ -63,10 +63,10 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
         return e;
     }
 
-    @External(type = Class.class)
+    @External(type = String.class)
     Optional<String> getIpAddress();
 
-    @External(type = Class.class)
+    @External(type = String.class)
     void setIpAddress(String ipAddress);
 
     @External(type = Integer.class)
