@@ -117,13 +117,11 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         });
 
         return iface;
-
     }
 
     public String pluralis(Table table) {
         return Pluralis.INSTANCE.pluralizeJavaIdentifier(variableName(table));
     }
-
     
     @Override
     protected String getJavadocRepresentText() {

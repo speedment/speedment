@@ -44,7 +44,7 @@ Optional<Hare> harry = HareManager.get().stream()
 // Different tables form a traversable graph in memory.
 Optional<Carrot> carrot = HareManager.get().stream()
     .filter(h -> "Harry".equals(h.getName()))
-    .flatMap(h -> h.findCarrots()) // Carrot is a foreign key.
+    .flatMap(h -> h.carrots()) // Carrot is a foreign key table.
     .findAny();
 ```
     
