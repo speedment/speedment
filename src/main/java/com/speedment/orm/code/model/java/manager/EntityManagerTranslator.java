@@ -75,7 +75,7 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                 .call(i -> file.add(Import.of(Type.of(Platform.class))))
                 .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
                 .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
-                        .add("return (" + MANAGER.getName() + ") " + Platform.class.getSimpleName()
+                        .add("return " + Platform.class.getSimpleName()
                                 + ".get().get(" + ManagerComponent.class.getSimpleName()
                                 + ".class).manager(" + MANAGER.getName() + ".class);"));
     }
@@ -117,7 +117,7 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                 .add("switch (column.getName()) " + block(
                                 columns()
                                 .peek(c -> file.add(Import.of(Type.of(c.getMapping()))))
-                                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getMapping().getSimpleName() + ") value);").collect(Collectors.joining(nl()))
+                                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getMapping().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                         ));
     }

@@ -27,9 +27,11 @@ import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -81,10 +83,6 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     @Override
     public ENTITY persist(ENTITY entity) {
         final Table table = getTable();
-//        final Map<String, Object> values = new LinkedHashMap<>();
-//        table.streamOf(Column.class).forEachOrdered(c -> {
-//            values.put(c.getName(), get(entity, c));
-//        });
         final StringBuilder sb = new StringBuilder();
         sb.append("insert into ").append(table.getRelativeName(Schema.class));
         sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
@@ -95,16 +93,29 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final Dbms dbms = table.ancestor(Dbms.class).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
         List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
-        Consumer<List<Long>> consumer = l -> {
+        final BUILDER builder = toBuilder(entity);
+        final Consumer<List<Long>> generatedKeyconsumer = l -> {
             if (!l.isEmpty()) {
-                int cnt=0;
-                //table.streamOf(Column.class).filter(Column::isAutoincrement).set:
+                final AtomicInteger cnt = new AtomicInteger();
+                // Just assume that they are in order
+                table.streamOf(Column.class)
+                        .filter(Column::isAutoincrement)
+                        .forEachOrdered(c -> {
+                            System.out.println("COLUMN:" + c);
+                            set(builder, c, l.get(cnt.getAndIncrement()));
+                        });
             }
         };
-        //dbmsHandler.executeUpdate(sb.toString(), values);
-        return entity;
+        try {
+            dbmsHandler.executeUpdate(sb.toString(), values, generatedKeyconsumer);
+        } catch (SQLException sqle) {
+            LOGGER.error("Unable to persist", sqle);
+            throw new RuntimeException(sqle);
+        }
+        return builder.build();
     }
 
+    @Override
     public ENTITY update(ENTITY entity) {
         final Table table = getTable();
         final Map<String, Object> values = new LinkedHashMap<>();
