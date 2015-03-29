@@ -88,58 +88,59 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
         sb.append(" values ");
         sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
-        sb.toString();
 
-        final Dbms dbms = table.ancestor(Dbms.class).get();
-        final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-        List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
-        final BUILDER builder = toBuilder(entity);
-        final Consumer<List<Long>> generatedKeyconsumer = l -> {
-            if (!l.isEmpty()) {
-                final AtomicInteger cnt = new AtomicInteger();
-                // Just assume that they are in order
-                table.streamOf(Column.class)
-                        .filter(Column::isAutoincrement)
-                        .forEachOrdered(c -> {
-                            System.out.println("COLUMN:" + c);
-                            set(builder, c, l.get(cnt.getAndIncrement()));
-                        });
-            }
+        final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
+
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> {
+            return l -> {
+                if (!l.isEmpty()) {
+                    final AtomicInteger cnt = new AtomicInteger();
+                    // Just assume that they are in order, what else is there to do?
+                    table.streamOf(Column.class)
+                            .filter(Column::isAutoincrement)
+                            .forEachOrdered(c -> {
+                                System.out.println("COLUMN:" + c);
+                                set(b, c, l.get(cnt.getAndIncrement()));
+                            });
+                }
+            };
         };
-        try {
-            dbmsHandler.executeUpdate(sb.toString(), values, generatedKeyconsumer);
-        } catch (SQLException sqle) {
-            LOGGER.error("Unable to persist", sqle);
-            throw new RuntimeException(sqle);
-        }
-        return builder.build();
+
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer).build();
     }
 
     @Override
     public ENTITY update(ENTITY entity) {
         final Table table = getTable();
-        final Map<String, Object> values = new LinkedHashMap<>();
-        table.streamOf(Column.class).forEachOrdered(c -> {
-            values.put(c.getName(), get(entity, c));
-        });
-        final Map<String, Object> pks = new LinkedHashMap<>();
-        table.streamOf(PrimaryKeyColumn.class).forEachOrdered(pk -> {
-            pks.put(pk.getName(), get(entity, pk.getColumn()));
-        });
+
         final StringBuilder sb = new StringBuilder();
         sb.append("update ").append(table.getRelativeName(Schema.class)).append(" set ");
-        sb.append(values.entrySet().stream().map(e -> e.getKey() + "=" + sqlQuote(e.getValue())).collect(joining(", ")));
+        sb.append(table.streamOf(Column.class).map(c -> c.getName() + " = ?").collect(joining(", ")));
         sb.append(" where ");
-        sb.append(pks.entrySet().stream().map(e -> e.getKey() + "=" + sqlQuote(e.getValue())).collect(joining(", ")));
+        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "("+pk.getName() + " = ?)").collect(joining(" AND ")));
         sb.toString();
 
+        final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
+        table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
+
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> l -> { // Nothing to do for updates...
+        };
+
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer).build();
+    }
+
+    private BUILDER executeUpdate(ENTITY entity, String sql, List<Object> values, final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer) {
+        final Table table = getTable();
         final Dbms dbms = table.ancestor(Dbms.class).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-
-        Consumer<List<Long>> generatedKeyHandler;
-
-        // dbmsHandler.executeUpdate(sb.toString());
-        return entity;
+        final BUILDER builder = toBuilder(entity);
+        try {
+            dbmsHandler.executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
+        } catch (SQLException sqle) {
+            LOGGER.error("Unable to persist", sqle);
+            throw new RuntimeException(sqle);
+        }
+        return builder;
     }
 
     @Override

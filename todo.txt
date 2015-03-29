@@ -42,4 +42,10 @@ readSQL must check lastWasNull() if nullable
 
 Remove all classes annotated with @Generated("Speedment") upon generation
 
+Make Column generic with java type Column<T>
 
+Kolla över alla foreach() som skall vara foreachOrdered()
+
+After persist() and update() re-read the entity because it might have been changed.
+
+Wrapp in Manager.stream() so that we may figure out predicates and short circuit them
