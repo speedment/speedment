@@ -15,17 +15,16 @@ new HelloSpeedment().start();
 ### Easy persistence
 ```java
 // A Builder-pattern can be used to create an entity.
-Hare harry = HareManager.get().builder()
+Optional<Hare> harry = HareManager.get().builder()
     .setName("Harry")
     .setColor("Gray")
-    .setAge(3);
-        
-HareManager.get().persist(harry);
+    .setAge(3)
+    .persist();
 ```
 
 ### Easy querying
 ```java
-// Large quantities of data is reduced in-memory using predicates.
+// Large quantities of data can be reduced in-memory using predicates.
 List<Hare> oldHares = HareManager.get().stream()
     .filter(h -> h.getAge() > 8)
     .collect(toList());
