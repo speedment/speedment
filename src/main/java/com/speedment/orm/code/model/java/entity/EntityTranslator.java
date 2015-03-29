@@ -92,7 +92,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                         getCode = ".get()";
                     }
                     final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
-                    method.add("return "+fu.getForeignEmt().MANAGER.getName()+".get()");
+                    method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
 //                    method.add("        .manager(" + fu.getForeignEmt().MANAGER.getName() + ".class)");
                     method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
                     i.add(method);
@@ -126,6 +126,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         iface
                 .add(builder())
                 .add(toBuilder())
+                .add(stream())
                 .add(persist())
                 .add(update())
                 .add(remove());
@@ -142,7 +143,6 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //        return Method.of("manager", MANAGER.getType()).static_()
 //                .add("return Platform.get().get(ManagerComponent.class).manager(" + MANAGER.getName() + ".class);");
 //    }
-
     private Method builder() {
         return Method.of("builder", BUILDER.getType()).static_()
                 .add("return " + MANAGER.getName() + ".get().builder();");
@@ -151,6 +151,11 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     private Method toBuilder() {
         return Method.of("toBuilder", BUILDER.getType()).default_()
                 .add("return " + MANAGER.getName() + ".get().toBuilder(this);");
+    }
+
+    private Method stream() {
+        return Method.of("stream", Type.of(Stream.class).add(new GenericImpl(ENTITY.getName()))).static_()
+                .add("return " + MANAGER.getName() + ".get().stream();");
     }
 
     private Method persist() {

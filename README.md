@@ -25,7 +25,7 @@ Optional<Hare> harry = Hare.builder()
 ### Easy querying
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
-List<Hare> oldHares = HareManager.get().stream()
+List<Hare> oldHares = Hare.stream()
     .filter(h -> h.getAge() > 8)
     .collect(toList());
 ```
@@ -33,7 +33,7 @@ List<Hare> oldHares = HareManager.get().stream()
 ### Optimised key-value cache
 ```java
 // Key-value searches are optimised in the background!
-Optional<Hare> harry = HareManager.get().stream()
+Optional<Hare> harry = Hare.stream()
     .filter(h -> "Harry".equals(h.getName()))
     .findAny();
 ```
@@ -41,7 +41,7 @@ Optional<Hare> harry = HareManager.get().stream()
 ### Entities are linked
 ```java
 // Different tables form a traversable graph in memory.
-Optional<Carrot> carrot = HareManager.get().stream()
+Optional<Carrot> carrot = Hare.stream()
     .filter(h -> "Harry".equals(h.getName()))
     .flatMap(h -> h.carrots()) // Carrot is a foreign key table.
     .findAny();
@@ -51,7 +51,7 @@ Optional<Carrot> carrot = HareManager.get().stream()
 ```java
 // Find all hares that share name with a human using multiple 
 // threads.
-HareManager.get().stream()
+Hare.stream()
     .parallel()
     .filter(h -> HumanManager.get().stream()
         .filter(n -> h.getName().equals(n.getName()))
