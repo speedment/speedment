@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.File;
@@ -71,8 +72,9 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                     final Type returnType = Type.of(Stream.class).add(fu.getEmt().GENERIC_OF_ENTITY);
                     final Method method = Method.of(methodName, returnType)
                     .default_()
-                    .add("return Platform.get().get(ManagerComponent.class)")
-                    .add("        .manager(" + managerTypeName(fu.getTable()) + ".class)")
+                    .add("return " + managerTypeName(fu.getTable()) + ".get()")
+                    //                    .add("return Platform.get().get(ManagerComponent.class)")
+                    //                    .add("        .manager(" + managerTypeName(fu.getTable()) + ".class)")
                     .add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
                     i.add(method);
                 })
@@ -90,8 +92,8 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                         getCode = ".get()";
                     }
                     final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
-                    method.add("return Platform.get().get(ManagerComponent.class)");
-                    method.add("        .manager(" + fu.getForeignEmt().MANAGER.getName() + ".class)");
+                    method.add("return "+fu.getForeignEmt().MANAGER.getName()+".get()");
+//                    method.add("        .manager(" + fu.getForeignEmt().MANAGER.getName() + ".class)");
                     method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
                     i.add(method);
                 })
@@ -116,13 +118,58 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             }
         });
 
+        // Requred for persist() et. al
+//        file.add(Import.of(Type.of(Platform.class)));
+//        file.add(Import.of(Type.of(ManagerComponent.class)));
+        file.add(Import.of(Type.of(Optional.class)));
+
+        iface
+                .add(builder())
+                .add(toBuilder())
+                .add(persist())
+                .add(update())
+                .add(remove());
+//                .add(manager());
+
         return iface;
     }
 
     public String pluralis(Table table) {
         return Pluralis.INSTANCE.pluralizeJavaIdentifier(variableName(table));
     }
-    
+
+//    private Method manager() {
+//        return Method.of("manager", MANAGER.getType()).static_()
+//                .add("return Platform.get().get(ManagerComponent.class).manager(" + MANAGER.getName() + ".class);");
+//    }
+
+    private Method builder() {
+        return Method.of("builder", BUILDER.getType()).static_()
+                .add("return " + MANAGER.getName() + ".get().builder();");
+    }
+
+    private Method toBuilder() {
+        return Method.of("toBuilder", BUILDER.getType()).default_()
+                .add("return " + MANAGER.getName() + ".get().toBuilder(this);");
+    }
+
+    private Method persist() {
+        return dbMethod("persist");
+    }
+
+    private Method update() {
+        return dbMethod("update");
+    }
+
+    private Method remove() {
+        return dbMethod("remove");
+    }
+
+    private Method dbMethod(String name) {
+        return Method.of(name, ENTITY.getOptionalType()).default_()
+                .add("return " + MANAGER.getName() + ".get()." + name + "(this);");
+    }
+
     @Override
     protected String getJavadocRepresentText() {
         return "An interface";
@@ -159,8 +206,8 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 
         public Stream<Import> imports() {
             final Stream.Builder<Type> sb = Stream.builder();
-            sb.add(Type.of(Platform.class));
-            sb.add(Type.of(ManagerComponent.class));
+//            sb.add(Type.of(Platform.class));
+//            sb.add(Type.of(ManagerComponent.class));
             sb.add(Type.of(Objects.class));
             sb.add(getEmt().ENTITY.getType());
             sb.add(getEmt().MANAGER.getType());

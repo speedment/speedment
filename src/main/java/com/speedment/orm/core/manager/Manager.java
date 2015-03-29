@@ -26,6 +26,7 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.lifecycle.Lifecyclable;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -84,7 +85,9 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     void onDelete(ENTITY primaryKey);
 
     // Persistence
-    ENTITY persist(ENTITY entity);
+    Optional<ENTITY> persist(ENTITY entity);
 
-    ENTITY remove(ENTITY entity);
+    Optional<ENTITY> update(ENTITY entity);
+
+    Optional<ENTITY> remove(ENTITY entity);
 }

@@ -31,6 +31,7 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -81,7 +82,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     @Override
-    public ENTITY persist(ENTITY entity) {
+    public Optional<ENTITY> persist(ENTITY entity) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("insert into ").append(table.getRelativeName(Schema.class));
@@ -106,19 +107,18 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
             };
         };
 
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer).build();
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
     }
 
     @Override
-    public ENTITY update(ENTITY entity) {
+    public Optional<ENTITY> update(ENTITY entity) {
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
         sb.append("update ").append(table.getRelativeName(Schema.class)).append(" set ");
         sb.append(table.streamOf(Column.class).map(c -> c.getName() + " = ?").collect(joining(", ")));
         sb.append(" where ");
-        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "("+pk.getName() + " = ?)").collect(joining(" AND ")));
-        sb.toString();
+        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
 
         final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
@@ -126,10 +126,23 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> l -> { // Nothing to do for updates...
         };
 
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer).build();
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
     }
 
-    private BUILDER executeUpdate(ENTITY entity, String sql, List<Object> values, final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer) {
+    @Override
+    public Optional<ENTITY> remove(ENTITY entity) {
+        final Table table = getTable();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("delete from ").append(table.getRelativeName(Schema.class)).append(" set ");
+        sb.append(" where ");
+        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
+        final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> l -> { // Nothing to do for updates...
+        };
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
+    }
+
+    private Optional<ENTITY> executeUpdate(ENTITY entity, String sql, List<Object> values, final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer) {
         final Table table = getTable();
         final Dbms dbms = table.ancestor(Dbms.class).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
@@ -138,28 +151,9 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
             dbmsHandler.executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
         } catch (SQLException sqle) {
             LOGGER.error("Unable to persist", sqle);
-            throw new RuntimeException(sqle);
+            return Optional.empty();
         }
-        return builder;
-    }
-
-    @Override
-    public ENTITY remove(ENTITY entity) {
-        final Table table = getTable();
-        final Map<String, Object> pks = new LinkedHashMap<>();
-        table.streamOf(PrimaryKeyColumn.class).forEachOrdered(pk -> {
-            pks.put(pk.getName(), get(entity, pk.getColumn()));
-        });
-        final StringBuilder sb = new StringBuilder();
-        sb.append("delete from ").append(table.getRelativeName(Schema.class)).append(" set ");
-        sb.append(" where ");
-        sb.append(pks.entrySet().stream().map(e -> e.getKey() + "=" + sqlQuote(e.getValue())).collect(joining(", ")));
-        sb.toString();
-
-        final Dbms dbms = table.ancestor(Dbms.class).get();
-        final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-        //dbmsHandler.executeUpdate(sb.toString());
-        return entity;
+        return Optional.of(builder.build());
     }
 
     private String sqlQuote(Object o) {

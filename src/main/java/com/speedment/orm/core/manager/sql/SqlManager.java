@@ -34,6 +34,5 @@ public interface SqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> exten
 
     void setSqlEntityMapper(Function<ResultSet, ENTITY> sqlEntityMapper);
 
-    public ENTITY update(ENTITY entity);
 
 }
