@@ -53,7 +53,7 @@ Optional<Carrot> carrot = Hare.stream()
 // threads.
 Hare.stream()
     .parallel()
-    .filter(h -> HumanManager.get().stream()
+    .filter(h -> Human.stream()
         .filter(n -> h.getName().equals(n.getName()))
         .findAny().isPresent()
     ).forEach(System.out::println);

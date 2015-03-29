@@ -28,9 +28,7 @@ import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -123,10 +121,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> l -> { // Nothing to do for updates...
-        };
-
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
+        return executeUpdate(entity, sb.toString(), values, NOTHING);
     }
 
     @Override
@@ -137,9 +132,8 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append(" where ");
         sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> l -> { // Nothing to do for updates...
-        };
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
+        
+        return executeUpdate(entity, sb.toString(), values, NOTHING);
     }
 
     private Optional<ENTITY> executeUpdate(ENTITY entity, String sql, List<Object> values, final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer) {
@@ -165,5 +159,8 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         }
         return "'" + o.toString() + "'";
     }
+
+    private final Function<BUILDER, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
+    };
 
 }
