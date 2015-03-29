@@ -14,8 +14,8 @@ new HelloSpeedment().start();
 
 ### Easy persistence
 ```java
-// A Builder-pattern can be used to create an entity.
-Optional<Hare> harry = HareManager.get().builder()
+// A Builder-pattern can be used to create an entity in a database.
+Optional<Hare> harry = Hare.builder()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3)
