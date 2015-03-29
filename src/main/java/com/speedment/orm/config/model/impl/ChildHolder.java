@@ -40,18 +40,18 @@ public class ChildHolder {
     private final Map<Class<?>, Map<String, Child<?>>> children;
     private final Map<Class<?>, AtomicInteger> ordinalNumbers;
     private final Map<Class<?>, AtomicInteger> nameNumbers;
-    
-    private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> 
-        Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
-    
+
+    private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b)
+            -> Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
+
     public ChildHolder() {
-        this (CLASS_COMPARATOR);
+        this(CLASS_COMPARATOR);
     }
-    
+
     public ChildHolder(Comparator<Class<?>> comparator) {
-        children       = new ConcurrentSkipListMap<>(comparator);
+        children = new ConcurrentSkipListMap<>(comparator);
         ordinalNumbers = new ConcurrentHashMap<>();
-        nameNumbers    = new ConcurrentHashMap<>();
+        nameNumbers = new ConcurrentHashMap<>();
     }
 
     public long size() {
@@ -70,38 +70,38 @@ public class ChildHolder {
     public Optional<Child<?>> put(Parent<?> parent, Child<?> child) {
         child.getParent().ifPresent(c -> {
             throw new IllegalStateException(
-                "It is illegal to add a child that already has a parent. child="
-                + child + ", parent=" + child.getParent().get()
+                    "It is illegal to add a child that already has a parent. child="
+                    + child + ", parent=" + child.getParent().get()
             );
         });
 
         child.setParentTo(parent);
 
         Optional.of(child)
-            .filter(c -> c.isOrdinable())
-            .map(c -> (Ordinable) c)
-            .filter(o -> o.getOrdinalPosition() != Ordinable.UNSET)
-            .ifPresent(o -> {
-                o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
-                        child.getInterfaceMainClass(),
-                        m -> new AtomicInteger(Ordinable.ORDINAL_FIRST)
-                    ).getAndIncrement());
-            });
-        
+                .filter(c -> c.isOrdinable())
+                .map(c -> (Ordinable) c)
+                .filter(o -> o.getOrdinalPosition() != Ordinable.UNSET)
+                .ifPresent(o -> {
+                    o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
+                                    child.getInterfaceMainClass(),
+                                    m -> new AtomicInteger(Ordinable.ORDINAL_FIRST)
+                            ).getAndIncrement());
+                });
+
         Optional.of(child)
-            .filter(c -> !c.hasName())
-            .ifPresent(c -> c.setName(
-                JavaLanguage.toUnderscoreSeparated(
-                    c.getInterfaceMainClass().getSimpleName()) + "_" + 
-                    nameNumbers.computeIfAbsent(
-                        child.getInterfaceMainClass(), 
-                        m -> new AtomicInteger(Nameable.NAMEABLE_FIRST)
-                    ).getAndIncrement()
-            ));
+                .filter(c -> !c.hasName())
+                .ifPresent(c -> c.setName(
+                                JavaLanguage.toUnderscoreSeparated(
+                                        c.getInterfaceMainClass().getSimpleName()) + "_"
+                                + nameNumbers.computeIfAbsent(
+                                        child.getInterfaceMainClass(),
+                                        m -> new AtomicInteger(Nameable.NAMEABLE_FIRST)
+                                ).getAndIncrement()
+                        ));
 
         return Optional.ofNullable(children.computeIfAbsent(
-            child.getInterfaceMainClass(),
-            m -> new ConcurrentSkipListMap<>()
+                child.getInterfaceMainClass(),
+                m -> new ConcurrentSkipListMap<>()
         ).put(child.getName(), child));
     }
 
@@ -109,32 +109,32 @@ public class ChildHolder {
         if (child.getParent().filter(p -> p == parent).isPresent()) {
             child.setParentTo(null);
         }
-        
+
         return Optional.ofNullable(children.get(child.getClass()))
-            .map(m -> m.remove(child.getName()));
+                .map(m -> m.remove(child.getName()));
     }
 
     public boolean contains(Child<?> child) {
         return ensureMap(child.getInterfaceMainClass())
-            .containsKey(child.getName());
+                .containsKey(child.getName());
     }
 
     public Stream<Child<?>> stream() {
         return Stream.of(children.values())
-            .flatMap(i -> i.stream())
-            .flatMap(i -> i.values().stream());
+                .flatMap(i -> i.stream())
+                .flatMap(i -> i.values().stream());
     }
 
     @SuppressWarnings("unchecked")
     public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
         return children.getOrDefault(clazz, Collections.emptyMap())
-            .values().stream().map(c -> (C) c);
+                .values().stream().map(c -> (C) c);
     }
 
     private Map<String, Child<?>> ensureMap(Class<?> childClass) {
         return children.getOrDefault(
-            childClass,
-            Collections.emptyMap()
+                childClass,
+                new ConcurrentSkipListMap<>()
         );
     }
 }

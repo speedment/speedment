@@ -39,9 +39,9 @@ public class TableImpl extends AbstractNamedConfigEntity implements Table {
 
     private static int valueOfClass(Class<?> clazz) {
         if (Column.class.equals(clazz)) return 0;
-        if (Index.class.equals(clazz)) return 1;
-        if (ForeignKey.class.equals(clazz)) return 2;
-        if (PrimaryKeyColumn.class.equals(clazz)) return 3;
+        if (PrimaryKeyColumn.class.equals(clazz)) return 1;
+        if (Index.class.equals(clazz)) return 2;
+        if (ForeignKey.class.equals(clazz)) return 3;
         return 4;
     }
     
