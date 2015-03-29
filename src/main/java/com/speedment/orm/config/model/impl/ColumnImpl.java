@@ -28,7 +28,8 @@ import java.util.Optional;
  */
 public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
 
-    private Boolean nullable;
+    private boolean nullable;
+    private boolean autoincrement;
     private String alias;
     private Table parent;
     private FieldStorageType fieldStorageType;
@@ -38,6 +39,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     @Override
     protected void setDefaults() {
         setNullable(true);
+        setAutoincrement(false);
         setFieldStorageType(FieldStorageType.defaultFor(this));
         setColumnCompressionType(ColumnCompressionType.defaultFor(this));
         setMapping(String.class);
@@ -86,7 +88,7 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     @Override
     public void setParentTo(Parent<?> parent) {
         setParentHelper(parent, Table.class)
-            .ifPresent(p -> this.parent = p);
+                .ifPresent(p -> this.parent = p);
     }
 
     @Override
@@ -102,5 +104,15 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     @Override
     public void setNullable(Boolean nullable) {
         this.nullable = nullable;
+    }
+
+    @Override
+    public Boolean isAutoincrement() {
+        return autoincrement;
+    }
+
+    @Override
+    public void setAutoincrement(Boolean autoincrement) {
+        this.autoincrement = autoincrement;
     }
 }

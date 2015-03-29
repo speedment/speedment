@@ -28,10 +28,11 @@ import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
+import static com.speedment.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.core.manager.SqlManager;
+import com.speedment.orm.core.manager.sql.SqlManager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.orm.platform.component.ProjectComponent;
@@ -70,6 +71,7 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                 .add(Method.of("getBuilderClass", Type.of(Class.class).add(GENERIC_OF_BUILDER)).default_().add(OVERRIDE)
                         .add("return " + BUILDER.getName() + ".class;"))
                 .add(generateGet(file))
+                .add(generateSet(file))
                 .call(i -> file.add(Import.of(Type.of(Platform.class))))
                 .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
                 .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
@@ -101,7 +103,21 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                 .add(Field.of("entity", ENTITY.getType()))
                 .add(Field.of("column", Type.of(Column.class)))
                 .add("switch (column.getName()) " + block(
-                                columns().map(c -> "case \"" + variableName(c) + "\" : return entity.get" + typeName(c) + "();").collect(Collectors.joining(nl()))
+                                columns().map(c -> "case \"" + c.getName() + "\" : return entity." + GETTER_METHOD_PREFIX + typeName(c) + "();").collect(Collectors.joining(nl()))
+                                + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+                        ));
+    }
+
+    protected Method generateSet(File file) {
+        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        return Method.of("set", VOID).default_().add(OVERRIDE)
+                .add(Field.of("entity", BUILDER.getType()))
+                .add(Field.of("column", Type.of(Column.class)))
+                .add(Field.of("value", Type.of(Object.class)))
+                .add("switch (column.getName()) " + block(
+                                columns()
+                                .peek(c -> file.add(Import.of(Type.of(c.getMapping()))))
+                                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getMapping().getSimpleName() + ") value);").collect(Collectors.joining(nl()))
                                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                         ));
     }

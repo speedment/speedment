@@ -29,7 +29,7 @@ import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.core.manager.AbstractSqlManager;
+import com.speedment.orm.core.manager.sql.AbstractSqlManager;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.JavaTypeMapperComponent;
 import com.speedment.orm.runtime.typemapping.JavaTypeMapping;
@@ -78,13 +78,13 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
 //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
 //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
 
-                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-                        .add(Field.of("entity", ENTITY.getType()))
-                        .add("return entity;")) //TODO MUST BE FIXED!
+//                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
+//                        .add(Field.of("entity", ENTITY.getType()))
+//                        .add("return entity;")) //TODO MUST BE FIXED!
 
-                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-                        .add(Field.of("entity", ENTITY.getType()))
-                        .add("return entity;")) //TODO MUST BE FIXED!
+//                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
+//                        .add(Field.of("entity", ENTITY.getType()))
+//                        .add("return entity;")) //TODO MUST BE FIXED!
                 .add(defaultReadEntity(file));
     }
 

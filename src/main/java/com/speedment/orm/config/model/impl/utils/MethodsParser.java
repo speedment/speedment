@@ -61,7 +61,7 @@ public final class MethodsParser {
             return null;
         }
         
-        final External e = (External) method.getAnnotation(External.class);
+        final External e = method.getAnnotation(External.class);
         if (e != null) {
             return e;
         }

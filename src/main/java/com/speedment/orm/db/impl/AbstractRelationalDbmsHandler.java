@@ -21,6 +21,8 @@ import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.parameters.DbmsType;
+import com.speedment.orm.core.manager.sql.SqlStatement;
+import com.speedment.orm.core.manager.sql.SqlUpdateStatement;
 import com.speedment.orm.db.AsynchronousQueryResult;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
@@ -29,16 +31,20 @@ import com.speedment.util.java.sql.TypeInfo;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -338,7 +344,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
             return streamBuilder.build();
         } catch (SQLException sqle) {
-            LOGGER.error("Error executing " + sql, sqle);
+            LOGGER.error("Error querying " + sql, sqle);
             throw new RuntimeException(sqle);
         }
     }
@@ -348,6 +354,113 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         Objects.requireNonNull(sql);
         Objects.requireNonNull(rsMapper);
         return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
+    }
+
+//    @Override
+//    public int executeUpdate(final String sql) {
+//        try (
+//                final Connection connection = getConnection();
+//                final Statement statement = connection.createStatement();) {
+//            int result = statement.executeUpdate(sql);
+//            return result;
+//        } catch (SQLException sqle) {
+//            LOGGER.error("Error updating " + sql, sqle);
+//            throw new RuntimeException(sqle);
+//        }
+//    }
+    @Override
+    public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+        executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
+    }
+
+    @Override
+    public void executeUpdate(final String sql, final List<?> values, Consumer<List<Long>> generatedKeysConsumer) throws SQLException {
+        final List<SqlUpdateStatement> sqlStatementList = new ArrayList<>();
+        final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
+        sqlStatementList.add(sqlUpdateStatement);
+        executeUpdate(sqlStatementList);
+    }
+
+    private void executeUpdate(final List<SqlUpdateStatement> sqlStatementList) throws SQLException {
+
+        int retryCount = 5;
+        boolean transactionCompleted = false;
+
+        do {
+            SqlStatement lastSqlStatement = null;
+            Connection conn = null;
+            try {
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                for (final SqlUpdateStatement sqlStatement : sqlStatementList) {
+                    try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
+
+                        int i = 1;
+                        for (Object o : sqlStatement.getValues()) {
+                            ps.setObject(i++, o);
+                        }
+
+                        ps.executeUpdate();
+
+                        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                            while (generatedKeys.next()) {
+                                final Object genKey = generatedKeys.getObject(1);
+                                if (!"oracle.sql.ROWID".equals(genKey.getClass()
+                                        .getName())) {
+                                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                                } else {
+                                    // Handle ROWID, make result = map<,String>
+                                    // instead...
+                                }
+                            }
+                        }
+
+                    }
+                }
+                conn.commit();
+                conn.close();
+                conn = null;
+                transactionCompleted = true;
+            } catch (SQLException sqlEx) {
+                LOGGER.error("SqlStatementList: " + sqlStatementList);
+                LOGGER.error("SQL: " + lastSqlStatement);
+                LOGGER.error(sqlEx.getMessage(), sqlEx);
+                String sqlState = sqlEx.getSQLState();
+
+                if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
+                    retryCount--;
+                } else {
+                    retryCount = 0;
+                    throw sqlEx; // Finally will be executed...
+                }
+            } finally {
+
+                if (!transactionCompleted) {
+                    try {
+                        // If we got here, and conn is not null, the
+                        // transaction should be rolled back, as not
+                        // all work has been done
+                        try {
+                            conn.rollback();
+                        } finally {
+                            conn.close();
+                        }
+                    } catch (SQLException sqlEx) {
+                        //
+                        // If we got an exception here, something
+                        // pretty serious is going on, so we better
+                        // pass it up the stack, rather than just
+                        // logging it. . .
+                        LOGGER.error("Rollback error! connection:" + sqlEx.getMessage(), sqlEx);
+                        throw sqlEx;
+                    }
+                }
+            }
+        } while (!transactionCompleted && (retryCount > 0));
+
+        if (transactionCompleted) {
+            sqlStatementList.forEach(SqlUpdateStatement::acceptGeneratedKeys);
+        }
     }
 
 }

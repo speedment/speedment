@@ -20,6 +20,8 @@ import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -49,5 +51,9 @@ public interface DbmsHandler {
     public <T> Stream<T> executeQuery(final String sql, Function<ResultSet, T> rsMapper);
 
     public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, Function<ResultSet, T> rsMapper);
+
+    public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
+
+    public void executeUpdate(final String sql, final List<?> values, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
 
 }

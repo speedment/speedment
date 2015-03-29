@@ -14,23 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.core.manager;
+package com.speedment.orm.core.manager.sql;
 
-import com.speedment.orm.core.Buildable;
 import java.sql.ResultSet;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
- * @param <PK> PrimaryKey type for this SqlManager
- * @param <ENTITY> Entity type for this SqlManager
- * @param <BUILDER> Builder type for this SqlManager
  */
-public interface SqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Manager<PK, ENTITY, BUILDER> {
+public class SqlSelectStatement extends SqlStatement {
 
-    Function<ResultSet, ENTITY> getSqlEntityMapper();
+    private final Consumer<ResultSet> resultSetConsumer;
 
-    void setSqlEntityMapper(Function<ResultSet, ENTITY> sqlEntityMapper);
+    public SqlSelectStatement(final String sql, final List<?> values, final Consumer<ResultSet> resultSetConsumer) {
+        super(sql, values);
+        this.resultSetConsumer = Objects.requireNonNull(resultSetConsumer);
+    }
+
+    public Consumer<ResultSet> getResultSetConsumer() {
+        return resultSetConsumer;
+    }
 
 }

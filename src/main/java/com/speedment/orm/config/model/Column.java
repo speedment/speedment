@@ -64,6 +64,12 @@ public interface Column extends ConfigEntity, Ordinable, Child<Table>,
     @External(type = Boolean.class)
     void setNullable(Boolean nullable);
     
+    @External(type = Boolean.class)
+    Boolean isAutoincrement();
+
+    @External(type = Boolean.class)
+    void setAutoincrement(Boolean nullable);
+    
     @External(type = String.class)
     Optional<String> getAlias();
 

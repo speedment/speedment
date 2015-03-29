@@ -48,6 +48,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     Object get(ENTITY entity, Column column);
 
+    void set(BUILDER builder, Column column, Object value);
+
     // Data source metadata
     Table getTable();
 
@@ -61,10 +63,10 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     // Factories
     BUILDER builder();
 
-    BUILDER toBuilder(ENTITY model);
+    BUILDER toBuilder(ENTITY entity);
 
-    default ENTITY toInternal(ENTITY model) {
-        return model;
+    default ENTITY toInternal(ENTITY entity) {
+        return entity;
     }
 
     // Queries

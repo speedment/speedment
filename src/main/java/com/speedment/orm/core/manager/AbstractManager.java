@@ -17,11 +17,15 @@
 package com.speedment.orm.core.manager;
 
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.Schema;
+import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
