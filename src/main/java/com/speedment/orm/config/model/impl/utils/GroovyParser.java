@@ -26,6 +26,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -78,6 +79,7 @@ public class GroovyParser {
         configuration.setDebug(true);
         configuration.setVerbose(true);
         configuration.setRecompileGroovySource(true);
+        configuration.setSourceEncoding(StandardCharsets.UTF_8.toString());
         
         final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
         

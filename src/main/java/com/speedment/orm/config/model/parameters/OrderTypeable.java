@@ -24,10 +24,10 @@ import com.speedment.orm.config.model.External;
  */
 public interface OrderTypeable {
 
-    @External(type = OrderTypeable.class)
+    @External(type = OrderType.class)
     OrderType getOrderType();
 
-    @External(type = OrderTypeable.class)
+    @External(type = OrderType.class)
     void setOrderType(OrderType orderType);
 
 }
