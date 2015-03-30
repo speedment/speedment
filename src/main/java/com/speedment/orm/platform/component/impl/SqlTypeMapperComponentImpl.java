@@ -27,49 +27,69 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
 
     private static final Map<String, Class<?>> JAVA_TYPE_MAP = new HashMap<>();
+    private static final Class<?> DEFAULT_MAPPING = String.class;
+
+    private static void put(String key, Class<?> clazz) {
+        JAVA_TYPE_MAP.put(normalize(key), clazz);
+    }
 
     static {
-        JAVA_TYPE_MAP.put("CHAR", String.class);
-        JAVA_TYPE_MAP.put("VARCHAR", String.class);
-        JAVA_TYPE_MAP.put("LONGVARCHAR", String.class);
-        JAVA_TYPE_MAP.put("LONGVARCHAR", String.class);
-        JAVA_TYPE_MAP.put("NUMERIC", BigDecimal.class);
-        JAVA_TYPE_MAP.put("DECIMAL", BigDecimal.class);
-//        JAVA_TYPE_MAP.put("BIT", BIT_MAPPING);
-        JAVA_TYPE_MAP.put("TINYINT", Byte.class);
-        JAVA_TYPE_MAP.put("SMALLINT", Short.class);
-        JAVA_TYPE_MAP.put("INTEGER", Integer.class);
-        JAVA_TYPE_MAP.put("BIGINT", Long.class);
-        JAVA_TYPE_MAP.put("REAL", Float.class);
-        JAVA_TYPE_MAP.put("FLOAT", Double.class);
-        JAVA_TYPE_MAP.put("DOUBLE", Double.class);
+        put("CHAR", String.class);
+        put("VARCHAR", String.class);
+        put("LONGVARCHAR", String.class);
+        put("LONGVARCHAR", String.class);
+        put("NUMERIC", BigDecimal.class);
+        put("DECIMAL", BigDecimal.class);
+        put("BIT", Integer.class); ///
+        put("TINYINT", Byte.class);
+        put("SMALLINT", Short.class);
+        put("INTEGER", Integer.class);
+        put("BIGINT", Long.class);
+        put("REAL", Float.class);
+        put("FLOAT", Double.class);
+        put("DOUBLE", Double.class);
 //        JAVA_TYPE_MAP.put("BINARY", BYTE_ARRAY_MAPPING);
 //        JAVA_TYPE_MAP.put("VARBINARY", BYTE_ARRAY_MAPPING);
         //JAVA_TYPE_MAP.put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
-        JAVA_TYPE_MAP.put("DATE", Date.class);
-        JAVA_TYPE_MAP.put("TIME", Time.class);
-        JAVA_TYPE_MAP.put("TIMESTAMP", Timestamp.class);
-        JAVA_TYPE_MAP.put("CLOB", Clob.class);
-        JAVA_TYPE_MAP.put("BLOB", Blob.class);
+        put("DATE", Date.class);
+        put("TIME", Time.class);
+        put("TIMESTAMP", Timestamp.class);
+        put("CLOB", Clob.class);
+        put("BLOB", Blob.class);
 //        JAVA_TYPE_MAP.put("ARRAY", ARRAY_MAPPING);
-        JAVA_TYPE_MAP.put("BOOLEAN", Boolean.class);
+        put("BOOLEAN", Boolean.class);
 
         //MySQL Specific mappings
-        JAVA_TYPE_MAP.put("YEAR", Integer.class);
+        put("YEAR", Integer.class);
 
         //PostgreSQL specific mappings
-        JAVA_TYPE_MAP.put("UUID", UUID.class);
-
+        put("UUID", UUID.class);
     }
 
     @Override
     public Class<?> map(Dbms dbms, TypeInfo typeInfo) {
-        return JAVA_TYPE_MAP.getOrDefault(typeInfo.javaSqlTypeName(), String.class);
+        final Optional<String> key = typeInfo.javaSqlTypeName();
+        if (key.isPresent()) {
+            return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), String.class);
+        }
+        return DEFAULT_MAPPING;
+    }
+
+    private static Optional<String> normalize(Optional<String> string) {
+        if (string.isPresent()) {
+            Optional.of(normalize(string.get()));
+        }
+        return Optional.empty();
+    }
+
+    private static String normalize(String string) {
+        return string.toUpperCase();
     }
 
 }

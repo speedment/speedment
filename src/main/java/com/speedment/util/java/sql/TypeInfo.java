@@ -81,7 +81,6 @@ public class TypeInfo {
 //    public Optional<Integer> typeIntegerFrom() {
 //        return Optional.ofNullable(JAVA_SQL_TYPE_STRING_TO_INT_MAP.get(sqlTypeName));
 //    }
-
     public String getSqlTypeName() {
         return sqlTypeName;
     }
@@ -116,6 +115,17 @@ public class TypeInfo {
 
     public boolean isUnsigned() {
         return unsigned;
+    }
+
+    @Override
+    public String toString() {
+        return getSqlTypeName()
+                + " " + (isUnsigned() ? "UNSIGNED" : "")
+                + " " + getPrecision()
+                + " " + getDecimals()
+                + " " + (isNullable() ? "NULL" : "")
+                + " " + (isNoNulls() ? "NOT NULL" : "")
+                + " (" + getJavaSqlTypeInt() + ")";
     }
 
 }
