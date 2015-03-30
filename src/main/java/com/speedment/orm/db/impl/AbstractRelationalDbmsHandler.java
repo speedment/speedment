@@ -84,7 +84,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     // Todo: Use DataSoruce instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
     public Connection getConnection() {
         Connection conn;
-        Properties connectionProps = new Properties();
+        final Properties connectionProps = new Properties();
         dbms.getUsername().ifPresent(u -> connectionProps.put("user", u));
         dbms.getPassword().ifPresent(p -> connectionProps.put("password", p));
         try {
@@ -106,7 +106,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     public String getUrl() {
         final DbmsType dbmsType = getDbms().getType();
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         result.append("jdbc:");
         result.append(dbmsType.getJdbcConnectorName());
         result.append("://");
@@ -142,14 +142,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 schemas.forEach(schema -> {
                     final List<Table> tables = tables(connection, schema).collect(toList());
                     tables.forEach(table -> {
-                        final List<Column> columns = columns(connection, schema, table).collect(toList());
-                        columns.forEach(table::add);
-                        final List<PrimaryKeyColumn> primaryKeycolumns = primaryKeyColumns(connection, schema, table).collect(toList());
-                        primaryKeycolumns.forEach(table::add);
-                        final List<Index> indexes = indexes(connection, schema, table).collect(toList());
-                        indexes.forEach(table::add);
-                        final List<ForeignKey> foreignKeys = foreignKeys(connection, schema, table).collect(toList());
-                        foreignKeys.forEach(table::add);
+                        
+                        columns(connection, schema, table).forEachOrdered(table::add);
+                        primaryKeyColumns(connection, schema, table).forEachOrdered(table::add);
+                        indexes(connection, schema, table).forEachOrdered(table::add);
+                        foreignKeys(connection, schema, table).forEachOrdered(table::add);
+                        
                         schema.add(table);
                     });
                 });
@@ -210,9 +208,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
             }
 
-//            for (final Schema schema : schemas) {
-//                tables(connection, schema).forEach(schema::add);
-//            }
         } catch (SQLException sqle) {
             throw new RuntimeException(sqle);
         }
@@ -261,26 +256,18 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final Column column = Column.newColumn();
             column.setName(rs.getString("COLUMN_NAME"));
             column.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
-            //final int dataType = rs.getInt("DATA_TYPE");
 
             boolean nullable = (rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls);
             column.setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
-            Class<?> mapping = typeMapping.get(classMappingString);
+            final Class<?> mapping = typeMapping.get(classMappingString);
             if (mapping != null) {
                 column.setMapping(mapping);
             } else {
                 LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
             }
 
-//
-//            try {
-//                final Class<?> classMapping = Class.forName(classMappingString);
-//                column.setMapping(classMapping);
-//            } catch (ClassNotFoundException cnfe) {
-//                LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
-//            }
             try {
                 column.setAutoincrement(rs.getBoolean("IS_AUTOINCREMENT"));
             } catch (final SQLException sqle) {
@@ -391,7 +378,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     }
                 }
             }
-
         } catch (SQLException sqle) {
             throw new RuntimeException(sqle);
         }
