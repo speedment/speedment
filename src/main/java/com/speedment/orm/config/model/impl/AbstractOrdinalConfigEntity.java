@@ -26,10 +26,10 @@ import com.speedment.orm.config.model.aspects.Ordinable;
  * @author pemi
  */
 public abstract class AbstractOrdinalConfigEntity extends AbstractConfigEntity
-    implements Ordinable, Comparable<Ordinable> {
+        implements Ordinable, Comparable<Ordinable> {
 
     private int ordinalPosition;
-    
+
     public AbstractOrdinalConfigEntity() {
         super(null);
         ordinalPosition = Ordinable.UNSET;

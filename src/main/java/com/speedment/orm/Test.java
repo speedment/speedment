@@ -16,13 +16,18 @@
  */
 package com.speedment.orm;
 
+import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
+import com.speedment.orm.config.model.Table;
 import com.speedment.orm.config.model.aspects.Node;
 import com.speedment.orm.config.model.parameters.StandardDbmsType;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Trees;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -36,12 +41,46 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        final Table table = Table.newTable();
+
+        Column c1 = Column.newColumn();
+        c1.setName("Ett");
+        c1.setOrdinalPosition(1);
+        Column c2 = Column.newColumn();
+        c2.setName("Två");
+        c2.setOrdinalPosition(2);
+        Column c3 = Column.newColumn();
+        c3.setName("Tre");
+        c3.setOrdinalPosition(3);
+        Column c4 = Column.newColumn();
+        c4.setName("Fyra");
+        c4.setOrdinalPosition(4);
+
+        table.add(c4);
+        table.add(c1);
+        table.add(c3);
+        table.add(c2);
+        
+//        final List columns = Arrays.asList(c3, c1, c4, c2);
+//        
+//        Collections.sort(columns);
+//        columns.forEach(System.out::println);
+//        Collections.shuffle(columns);
+//        Collections.sort(columns);
+//        columns.forEach(System.out::println);
+
+        System.out.println("Olle");
+        table.streamOf(Column.class).forEachOrdered(System.out::println);
+
+        System.exit(0);
+
         Dbms dbms = Dbms.newDbms();
         dbms.setType(StandardDbmsType.MYSQL);
         dbms.setName("db0");
         dbms.setIpAddress("localhost");
         dbms.setUsername("root");
-       
+
         final DbmsHandler handler = Platform.get().get(DbmsHandlerComponent.class).make(dbms);
 
         handler.schemasPopulated().forEachOrdered(schema -> {
@@ -51,9 +90,9 @@ public class Test {
             Trees.traverse(schema,
                     traverser,
                     Trees.TraversalOrder.DEPTH_FIRST_PRE).forEachOrdered(System.out::println);
-//            System.out.println(schema.toString());
+
         });
-        
+
     }
 
 }

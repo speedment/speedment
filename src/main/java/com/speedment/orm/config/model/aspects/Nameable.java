@@ -36,8 +36,8 @@ public interface Nameable {
 
     default boolean hasName() {
         return Optional
-            .ofNullable(getName())
-            .filter(n -> !n.isEmpty())
-            .isPresent();
+                .ofNullable(getName())
+                .filter(n -> !n.isEmpty())
+                .isPresent();
     }
 }

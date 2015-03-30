@@ -80,7 +80,7 @@ public class ChildHolder {
         Optional.of(child)
                 .filter(c -> c.isOrdinable())
                 .map(c -> (Ordinable) c)
-                .filter(o -> o.getOrdinalPosition() != Ordinable.UNSET)
+                .filter(o -> o.getOrdinalPosition() == Ordinable.UNSET)
                 .ifPresent(o -> {
                     o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
                                     child.getInterfaceMainClass(),
@@ -122,19 +122,19 @@ public class ChildHolder {
     public Stream<Child<?>> stream() {
         return Stream.of(children.values())
                 .flatMap(i -> i.stream())
-                .flatMap(i -> i.values().stream());
+                .flatMap(i -> i.values().stream().sorted());
     }
 
     @SuppressWarnings("unchecked")
     public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
         return children.getOrDefault(clazz, Collections.emptyMap())
-                .values().stream().map(c -> (C) c);
+                .values().stream().map(c -> (C) c).sorted();
     }
 
     private Map<String, Child<?>> ensureMap(Class<?> childClass) {
         return children.getOrDefault(
                 childClass,
-                new ConcurrentSkipListMap<>()
+                new ConcurrentHashMap<>()
         );
     }
 }
