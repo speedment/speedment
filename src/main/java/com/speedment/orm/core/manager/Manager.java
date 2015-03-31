@@ -66,6 +66,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY entity);
 
+    String toJson(ENTITY entity);
+    
     default ENTITY toInternal(ENTITY entity) {
         return entity;
     }

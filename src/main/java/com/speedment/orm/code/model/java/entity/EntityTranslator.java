@@ -16,7 +16,6 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
-import com.speedment.codegen.Formatting;
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.File;
@@ -24,14 +23,13 @@ import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
+import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.orm.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ForeignKey;
 import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Table;
-import com.speedment.orm.platform.Platform;
-import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.util.Pluralis;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,6 +124,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         iface
                 .add(builder())
                 .add(toBuilder())
+                .add(toJson())
                 .add(stream())
                 .add(persist())
                 .add(update())
@@ -151,6 +150,11 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     private Method toBuilder() {
         return Method.of("toBuilder", BUILDER.getType()).default_()
                 .add("return " + MANAGER.getName() + ".get().toBuilder(this);");
+    }
+    
+    private Method toJson() {
+        return Method.of("toJson", STRING).default_()
+                .add("return " + MANAGER.getName() + ".get().toJson(this);");
     }
 
     private Method stream() {
