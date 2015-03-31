@@ -58,7 +58,15 @@ Hare.stream()
         .findAny().isPresent()
     ).forEach(System.out::println);
 ```
-    
+   
+### Convert to JSON
+```java
+// List all hares in JSON format
+Hare.stream()
+    .map(Hare::toJson)
+    .forEach(System.out::println);
+```
+ 
 ### Development Status
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product. You can not run it now but you can contribute to the code and see how it evolves over time.
 
