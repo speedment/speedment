@@ -48,7 +48,7 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
     @Override
     protected Class make(File file) {
         final Method onInit = Method.of("onInit", VOID)
-                .public_()
+                .protected_()
                 .add(OVERRIDE)
                 .add("loadAndSetProject();");
 
