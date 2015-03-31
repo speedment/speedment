@@ -73,7 +73,6 @@ public class Test {
         System.out.println("Olle");
         table.streamOf(Column.class).forEachOrdered(System.out::println);
 
-        System.exit(0);
 
         Dbms dbms = Dbms.newDbms();
         dbms.setType(StandardDbmsType.MYSQL);
