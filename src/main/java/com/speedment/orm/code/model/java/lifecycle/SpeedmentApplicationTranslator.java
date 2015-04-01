@@ -31,6 +31,7 @@ import com.speedment.orm.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.util.Paths;
 
 /**
  *
@@ -65,8 +66,8 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
                 .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
                 .add(Constructor.of()
                         .public_()
-                        .add("setConfigDirectoryName(\"" + project().getConfigPath().getParent() + "\");")
-                        .add("setConfigFileName(\"" + project().getConfigPath().getFileName() + "\");")
+                        .add("setConfigDirectoryName(\"" + Paths.toString(project().getConfigPath().getParent()) + "\");")
+                        .add("setConfigFileName(\"" + Paths.toString(project().getConfigPath().getFileName()) + "\");")
                 )
                 .add(onInit);
     }
