@@ -18,18 +18,22 @@ package com.speedment.orm.code.model.java.entity;
 
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
+import static com.speedment.codegen.lang.models.constants.DefaultType.LIST;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
+import com.speedment.codegen.lang.models.values.ReferenceValue;
 import com.speedment.orm.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.ForeignKey;
 import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.core.entity.Entity;
 import com.speedment.util.Pluralis;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,6 +126,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         file.add(Import.of(Type.of(Optional.class)));
 
         iface
+                .add(entityAnnotation(file))
                 .add(builder())
                 .add(toBuilder())
                 .add(toJson())
@@ -142,6 +147,23 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //        return Method.of("manager", MANAGER.getType()).static_()
 //                .add("return Platform.get().get(ManagerComponent.class).manager(" + MANAGER.getName() + ".class);");
 //    }
+    private AnnotationUsage entityAnnotation(File file) {
+        final AnnotationUsage result = AnnotationUsage.of(Type.of(Entity.class));
+        result.put("managerType", new ReferenceValue(MANAGER.getName() + ".class"));
+        result.put("builderType", new ReferenceValue(BUILDER.getName() + ".class"));
+        if (primaryKeyColumns().count() > 1) {
+            result.put("primaryKeyType", new ReferenceValue("List.class"));
+            file.add(Import.of(LIST));
+        } else {
+            primaryKeyColumns().map(pkc -> {
+                final Class<?> mapping = pkc.getColumn().getMapping();
+                file.add(Import.of(Type.of(mapping)));
+                return new ReferenceValue(mapping.getSimpleName() + ".class");
+            }).forEach(pk -> result.put("primaryKeyType", pk));
+        }
+        return result;
+    }
+
     private Method builder() {
         return Method.of("builder", BUILDER.getType()).static_()
                 .add("return " + MANAGER.getName() + ".get().builder();");
@@ -151,14 +173,16 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         return Method.of("toBuilder", BUILDER.getType()).default_()
                 .add("return " + MANAGER.getName() + ".get().toBuilder(this);");
     }
-    
+
     private Method toJson() {
         return Method.of("toJson", STRING).default_()
                 .add("return " + MANAGER.getName() + ".get().toJson(this);");
+
     }
 
     private Method stream() {
-        return Method.of("stream", Type.of(Stream.class).add(new GenericImpl(ENTITY.getName()))).static_()
+        return Method.of("stream", Type.of(Stream.class
+        ).add(new GenericImpl(ENTITY.getName()))).static_()
                 .add("return " + MANAGER.getName() + ".get().stream();");
     }
 
@@ -187,6 +211,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     @Override
     protected String getFileName() {
         return ENTITY.getName();
+
     }
 
     private class FkUtil {
