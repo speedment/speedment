@@ -32,6 +32,7 @@ import com.speedment.orm.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.orm.config.model.Project;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.util.Paths;
 
 /**
  *
@@ -81,5 +82,4 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
     protected String getFileName() {
         return className;
     }
-
 }
