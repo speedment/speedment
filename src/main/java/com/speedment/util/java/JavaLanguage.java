@@ -165,7 +165,7 @@ public class JavaLanguage {
     public static String javaNameFromExternal(final String externalName) {
         String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
 
-        result = Stream.of(result.split("[^A-Za-z0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
+        result = Stream.of(result.replaceAll("([A-Z]+)", "_$1").split("[^A-Za-z0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
 
 //        int underscoreIndex;
 //        for (String replacement : REPLACEMENT_STRING_SET) {
