@@ -51,6 +51,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     void set(BUILDER builder, Column column, Object value);
 
+    Object find(ENTITY entity, Column column);
+    
     // Data source metadata
     Table getTable();
 

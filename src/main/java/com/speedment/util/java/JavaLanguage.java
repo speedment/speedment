@@ -16,6 +16,7 @@
  */
 package com.speedment.util.java;
 
+import static com.speedment.codegen.Formatting.ucfirst;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -126,9 +128,9 @@ public class JavaLanguage {
     public final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toUnmodifiableSet());
 
     public final static Set<String> JAVA_USED_WORDS = Stream.of(
-        JAVA_LITERAL_WORDS, 
-        JAVA_RESERVED_WORDS, 
-        JAVA_BUILT_IN_CLASS_WORDS
+            JAVA_LITERAL_WORDS,
+            JAVA_RESERVED_WORDS,
+            JAVA_BUILT_IN_CLASS_WORDS
     ).flatMap(s -> s.stream()).collect(toUnmodifiableSet());
 
     private static final Set<String> REPLACEMENT_STRING_SET = unmodifiableSetOf("_", "-", "+", " ");
@@ -142,15 +144,18 @@ public class JavaLanguage {
     }
 
     private static String javaName(final String externalName, Function<Character, Character> mutator) {
+
+        final StringBuilder sb = new StringBuilder(javaNameFromExternal(externalName));
+
         int startIndex = 0;
         for (int i = 0; i < externalName.length(); i++) {
-            if (Character.isAlphabetic(externalName.charAt(i))) {
+            if (Character.isAlphabetic(sb.charAt(i))) {
                 // Skip over any non alphabetic characers like "_"
                 startIndex = i;
                 break;
             }
         }
-        final StringBuilder sb = new StringBuilder(javaNameFromExternal(externalName));
+
         if (sb.length() > startIndex) {
             sb.replace(startIndex, startIndex + 1, String.valueOf(mutator.apply(sb.charAt(startIndex))));
         }
@@ -159,14 +164,17 @@ public class JavaLanguage {
 
     public static String javaNameFromExternal(final String externalName) {
         String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
-        int underscoreIndex;
-        for (String replacement : REPLACEMENT_STRING_SET) {
-            while ((underscoreIndex = result.indexOf(replacement)) != -1) {
-                String c = result.charAt(underscoreIndex + 1) + "";
-                c = c.toUpperCase();
-                result = result.substring(0, underscoreIndex) + c + result.substring(underscoreIndex + 2, result.length());
-            }
-        }
+
+        result = Stream.of(result.split("[^A-Za-z0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
+
+//        int underscoreIndex;
+//        for (String replacement : REPLACEMENT_STRING_SET) {
+//            while ((underscoreIndex = result.indexOf(replacement)) != -1) {
+//                String c = result.charAt(underscoreIndex + 1) + "";
+//                c = c.toUpperCase();
+//                result = result.substring(0, underscoreIndex) + c + result.substring(underscoreIndex + 2, result.length());
+//            }
+//        }
         if (Character.isDigit(result.charAt(0))) {
             // First character is a digit... Add two underscores...
             // This is just an emergency workaround required for informix which names its indexes to numerical...
@@ -233,22 +241,11 @@ public class JavaLanguage {
     }
 
     public static String toHumanReadable(final String javaName) {
-        final StringBuilder result = new StringBuilder();
-        final String input = unQuote(javaName.trim());
-        for (int i = 0; i < input.length(); i++) {
-            final char c = input.charAt(i);
-            
-            if (result.length() == 0) {
-                result.append(Character.toUpperCase(c));
-            } else {
-                if (Character.isUpperCase(c)) {
-                    result.append(" ").append(c);
-                } else {
-                    result.append(c);
-                }
-
-            }
-        }
-        return result.toString();
+        return Stream.of(unQuote(javaName.trim())
+                .replaceAll("([A-Z]+)", "_$1")
+                .split("[^A-Za-z0-9]"))
+                .map(String::trim).filter(s -> !s.isEmpty())
+                .map(String::toLowerCase)
+                .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
     }
 }

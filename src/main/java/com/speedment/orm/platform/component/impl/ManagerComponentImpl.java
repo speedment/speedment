@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.platform.component.impl;
 
+import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.Manager;
 import com.speedment.orm.platform.component.ManagerComponent;
@@ -30,16 +31,19 @@ import java.util.stream.Stream;
 public class ManagerComponentImpl implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?, ?, ?>> managersByEntity, managersByManager;
+    private final Map<Table, Manager<?, ?, ?>> tableMap;
 
     public ManagerComponentImpl() {
         managersByEntity = new ConcurrentHashMap<>();
         managersByManager = new ConcurrentHashMap<>();
+        tableMap = new ConcurrentHashMap<>();
     }
 
     @Override
     public <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager) {
         managersByEntity.put(manager.getEntityClass(), manager);
         managersByManager.put(manager.getManagerClass(), manager);
+        tableMap.put(manager.getTable(), manager);
     }
 
     @Override
@@ -57,6 +61,12 @@ public class ManagerComponentImpl implements ManagerComponent {
     @Override
     public Stream<Manager<?, ?, ?>> stream() {
         return managersByManager.values().stream();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <PK, E, B extends Buildable<E>> Manager<PK, E, B> findByTable(Table table) {
+        return (Manager<PK, E, B>) tableMap.get(table);
     }
 
 }

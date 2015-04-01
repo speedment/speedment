@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.platform.component;
 
+import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.Manager;
 import java.util.stream.Stream;
@@ -38,5 +39,7 @@ public interface ManagerComponent extends Component {
     <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass);
 
     Stream<Manager<?, ?, ?>> stream();
+    
+    <PK, E, B extends Buildable<E>> Manager<PK, E, B> findByTable(Table table);
 
 }

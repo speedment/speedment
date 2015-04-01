@@ -52,3 +52,5 @@ Wrapp in Manager.stream() so that we may figure out predicates and short circuit
 
 GoogleAnalytics (from com.speedment.core.util.analytics)
 
+Test case: Generate on Windows, compile on Linux and vice versa
+

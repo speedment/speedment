@@ -17,10 +17,16 @@
 package com.speedment.orm.core.manager;
 
 import com.speedment.orm.config.model.Column;
+import com.speedment.orm.config.model.ForeignKey;
+import com.speedment.orm.config.model.ForeignKeyColumn;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
+import com.speedment.orm.platform.Platform;
+import com.speedment.orm.platform.component.ManagerComponent;
+import com.speedment.util.java.JavaLanguage;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -72,19 +78,48 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
+    public Optional<Object> find(ENTITY entity, Column column) {
+        return getTable()
+                .streamOf(ForeignKey.class)
+                .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
+                .map(oFkc -> {
+                    Table fkTable = oFkc.getForeignTable();
+                    Column fkColumn = oFkc.getForeignColumn();
+
+                    @SuppressWarnings("raw")
+                    final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
+
+                    Object key = get(entity, column);
+
+                    return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
+                }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
+    }
+
+    @Override
     public String toJson(ENTITY entity) {
         return "{ " + getTable().streamOf(Column.class).map(c -> {
             final StringBuilder sb = new StringBuilder();
-            sb.append("\"").append(c.getName()).append("\" : ");
-            Object val = get(entity, c);
-            if (val == null) {
-                sb.append("null");
-            } else if (val instanceof Number) {
-                sb.append(val.toString());
-            } else if (val instanceof Boolean) {
-                sb.append(val.toString());
+            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
+
+            final Optional<ForeignKeyColumn> oFkc = getTable().streamOf(ForeignKey.class).flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(c))).findAny();
+            if (oFkc.isPresent()) {
+                final Table fkTable = oFkc.get().getForeignTable();
+                final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
+
+                final Optional<Object> oFkObject = find(entity, c);
+
+                sb.append(oFkObject.map(fkManager::toJson).orElse("null"));
             } else {
-                sb.append("\"").append(val.toString()).append("\"");
+                Object val = get(entity, c);
+                if (val == null) {
+                    sb.append("null");
+                } else if (val instanceof Number) {
+                    sb.append(val.toString());
+                } else if (val instanceof Boolean) {
+                    sb.append(val.toString());
+                } else {
+                    sb.append("\"").append(val.toString()).append("\"");
+                }
             }
             return sb.toString();
         }).collect(Collectors.joining(", ")) + " }";
