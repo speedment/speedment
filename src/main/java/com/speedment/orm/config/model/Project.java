@@ -75,7 +75,7 @@ public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManage
     @External(type = String.class)
     void setPacketLocation(String packetLocation);
 
-    Path getConfigPath();
+    Optional<Path> getConfigPath();
 
     void setConfigPath(Path configPath);
 

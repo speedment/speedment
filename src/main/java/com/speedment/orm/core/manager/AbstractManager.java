@@ -17,15 +17,12 @@
 package com.speedment.orm.core.manager;
 
 import com.speedment.orm.config.model.Column;
-import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -72,6 +69,25 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
                     .map(c -> get(entity, c))
                     .collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public String toJson(ENTITY entity) {
+        return "{ " + getTable().streamOf(Column.class).map(c -> {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("\"").append(c.getName()).append("\" : ");
+            Object val = get(entity, c);
+            if (val == null) {
+                sb.append("null");
+            } else if (val instanceof Number) {
+                sb.append(val.toString());
+            } else if (val instanceof Boolean) {
+                sb.append(val.toString());
+            } else {
+                sb.append("\"").append(val.toString()).append("\"");
+            }
+            return sb.toString();
+        }).collect(Collectors.joining(", ")) + " }";
     }
 
     @Override

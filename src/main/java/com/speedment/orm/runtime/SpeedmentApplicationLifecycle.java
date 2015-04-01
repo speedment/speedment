@@ -26,9 +26,8 @@ import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.orm.platform.component.ProjectComponent;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 
@@ -39,13 +38,12 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
 
-    private String configFileName;
-    private String configDirectoryName;
+    private ApplicationMetadata speedmentApplicationMetadata;
+    private Path configPath;
 
     public SpeedmentApplicationLifecycle() {
         super();
-        configFileName = "speedment.groovy";
-        configDirectoryName = "";
+        configPath = null;
     }
 
     @Override
@@ -70,8 +68,15 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     protected void loadAndSetProject() {
         try {
-            final Project p = GroovyParser.projectFromGroovy(getPath());
-            Platform.get().get(ProjectComponent.class).setProject(p);
+            final Optional<Path> oPath = getConfigPath();
+            if (oPath.isPresent()) {
+                final Project p = GroovyParser.projectFromGroovy(oPath.get());
+                Platform.get().get(ProjectComponent.class).setProject(p);
+            } else {
+                final Project p = GroovyParser.projectFromGroovy(getSpeedmentApplicationMetadata().getMetadata());
+                Platform.get().get(ProjectComponent.class).setProject(p);
+            }
+
         } catch (IOException ioe) {
             throw new RuntimeException("Failed to read config file", ioe);
         }
@@ -81,34 +86,47 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         Platform.get().get(ManagerComponent.class).put(manager);
     }
 
-    protected Path getPath() {
-        return Paths.get(getConfigDirectoryName(), getConfigFileName());
+    public T setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
+        this.speedmentApplicationMetadata = speedmentApplicationMetadata;
+        return thizz();
+    }
+
+    protected ApplicationMetadata getSpeedmentApplicationMetadata() {
+        return speedmentApplicationMetadata;
+    }
+
+    public T setConfigPath(Path configPath) {
+        this.configPath = configPath;
+        return thizz();
+    }
+
+    protected Optional<Path> getConfigPath() {
+        return Optional.ofNullable(configPath);
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", path=" + getPath().toString();
+        return super.toString() + ", path=" + getConfigPath().toString();
     }
 
-    /// Bean methods
-    public String getConfigFileName() {
-        return configFileName;
-    }
-
-    public T setConfigFileName(String configFileName) {
-        this.configFileName = Objects.requireNonNull(configFileName);
-        return thizz();
-    }
-
-    public String getConfigDirectoryName() {
-        return configDirectoryName;
-    }
-
-    public T setConfigDirectoryName(String configDirectoryName) {
-        this.configDirectoryName = Objects.requireNonNull(configDirectoryName);
-        return thizz();
-    }
-
+//    /// Bean methods
+//    public String getConfigFileName() {
+//        return configFileName;
+//    }
+//
+//    public T setConfigFileName(String configFileName) {
+//        this.configFileName = Objects.requireNonNull(configFileName);
+//        return thizz();
+//    }
+//
+//    public String getConfigDirectoryName() {
+//        return configDirectoryName;
+//    }
+//
+//    public T setConfigDirectoryName(String configDirectoryName) {
+//        this.configDirectoryName = Objects.requireNonNull(configDirectoryName);
+//        return thizz();
+//    }
     // Utilities
     protected void forEachManagerInSeparateThread(Consumer<Manager<?, ?, ?>> managerConsumer) {
         final ManagerComponent mc = Platform.get().get(ManagerComponent.class);

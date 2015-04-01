@@ -25,11 +25,15 @@ import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
@@ -37,13 +41,21 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  * @author Emil Forslund
  */
 public class GroovyParser {
-    
+
     private static final String NL = "\n";
-    
+
     public static String toGroovy(final Node node) {
         return "import com.speedment.orm.config.model.parameters.*" + NL + NL + toGroovy(node, 0);
     }
-    
+
+    public static Stream<String> toGroovyLines(final Node node) {
+        final Stream.Builder<String> sb = Stream.builder();
+        sb.add("import com.speedment.orm.config.model.parameters.*");
+        sb.add("");
+        toGroovyLines(sb, node, 0);
+        return sb.build();
+    }
+
     private static String toGroovy(final Node node, final int indentLevel) {
         return CollectorUtil.of(StringBuilder::new, sb -> {
             MethodsParser.streamOfExternal(node.getClass())
@@ -51,7 +63,7 @@ public class GroovyParser {
                     .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                             .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
                     );
-            
+
             Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
                     -> n.stream().forEach(c -> {
                         indent(sb, indentLevel).append(JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName())).append(" {").append(NL);
@@ -61,48 +73,93 @@ public class GroovyParser {
             );
         }, StringBuilder::toString);
     }
-    
+
+    private static Stream.Builder<String> toGroovyLines(final Stream.Builder<String> sb, final Node node, final int indentLevel) {
+
+        MethodsParser.streamOfExternal(node.getClass())
+                .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
+                .forEach(m -> getterBeanPropertyNameAndValue(m, node)
+                        .ifPresent(t -> sb.add(indent(indentLevel) + t))
+                );
+
+        Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
+                -> n.stream().forEach(c -> {
+                    sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName()) + " {");
+                    toGroovyLines(sb, c, indentLevel + 1);
+                    sb.add(indent(indentLevel) + "}");
+                })
+        );
+        return sb;
+    }
+
     public static Project projectFromGroovy(final Path path) throws IOException {
         final Project project = Project.newProject();
         fromGroovy(project, path);
         return project;
     }
-    
-    public static void fromGroovy(final Node node, final Path path) throws IOException {
-        
+
+    public static Project projectFromGroovy(final String groovyFile) throws IOException {
+        final Project project = Project.newProject();
+        fromGroovy(project, groovyFile);
+        return project;
+    }
+
+    private static void fromGroovy(final Node node, final FunctionThrowsException<GroovyShell, DelegatingScript> scriptMapper) throws IOException {
+
         final Binding binding = new Binding();
         binding.setVariable("implementationVersion", node.getClass().getPackage().getImplementationVersion());
         binding.setVariable("specificationVersion", node.getClass().getPackage().getSpecificationVersion());
-        
+
         final CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.setScriptBaseClass(DelegatingScript.class.getName());
         configuration.setDebug(true);
         configuration.setVerbose(true);
         configuration.setRecompileGroovySource(true);
         configuration.setSourceEncoding(StandardCharsets.UTF_8.toString());
-        
+
         final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
-        
-        final DelegatingScript script = (DelegatingScript) shell.parse(path.toFile());
+
+        final DelegatingScript script = scriptMapper.apply(shell);
+//
+//        final DelegatingScript scripts = (DelegatingScript) shell.parse(path.toFile());
 
         //final Project project = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
         script.setDelegate(node);
-        
+
         final Object value = script.run();
-        
+
+    }
+
+    public static void fromGroovy(final Node node, final Path path) throws IOException {
+        final File file = path.toFile();
+        fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(file));
         if (node instanceof Project) {
             @SuppressWarnings("unchecked")
-            final Project project = (Project)node;
+            final Project project = (Project) node;
             project.setConfigPath(path);
         }
-
-//        System.out.println(value);
-//
-//        System.out.println(binding.getVariables());
-//
-//        System.out.println(node.toString());
     }
-    
+
+    public static void fromGroovy(final Node node, final String script) throws IOException {
+        fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(script));
+        if (node instanceof Project) {
+            @SuppressWarnings("unchecked")
+            final Project project = (Project) node;
+            project.setConfigPath(null);
+        }
+    }
+
+    @FunctionalInterface
+    interface FunctionThrowsException<T, R> {
+
+        R apply(T t) throws CompilationFailedException, IOException;
+    }
+
+    private static String indent(final int indentLevel) {
+        final StringBuilder sb = new StringBuilder();
+        return indent(sb, indentLevel).toString();
+    }
+
     private static StringBuilder indent(final StringBuilder sb, final int indentLevel) {
         IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
         return sb;

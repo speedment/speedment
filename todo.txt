@@ -49,3 +49,6 @@ Kolla över alla foreach() som skall vara foreachOrdered()
 After persist() and update() re-read the entity because it might have been changed.
 
 Wrapp in Manager.stream() so that we may figure out predicates and short circuit them
+
+GoogleAnalytics (from com.speedment.core.util.analytics)
+

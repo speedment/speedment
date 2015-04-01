@@ -20,66 +20,59 @@ import com.speedment.codegen.base.CodeGenerator;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.codegen.lang.models.implementation.GenericImpl;
+import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.orm.code.model.java.DefaultJavaClassTranslator;
-import static com.speedment.orm.code.model.java.lifecycle.SpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.orm.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.orm.config.model.Project;
-import com.speedment.orm.config.model.Table;
-import com.speedment.orm.runtime.SpeedmentApplicationLifecycle;
-import com.speedment.util.Paths;
+import com.speedment.orm.config.model.impl.utils.GroovyParser;
+import com.speedment.orm.runtime.ApplicationMetadata;
 
 /**
  *
  * @author pemi
  */
-public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
+public class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
-    private final String className = typeName(project()) + "Application";
+    public static final String METADATA = "Metadata";
 
-    public SpeedmentApplicationTranslator(CodeGenerator cg, Project configEntity) {
+    private final String className = typeName(project()) + "Application" + METADATA;
+
+    public SpeedmentApplicationMetadataTranslator(CodeGenerator cg, Project configEntity) {
         super(cg, configEntity);
     }
 
     @Override
     protected Class make(File file) {
-        final Method onInit = Method.of("onInit", VOID)
-                .protected_()
+        final Method getMetadata = Method.of("getMetadata", STRING)
+                .public_()
                 .add(OVERRIDE)
-                .add("loadAndSetProject();");
+                .add("return ");
 
-        project().traversalOf(Table.class).forEachOrdered(t -> {
-            EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
-            final Type managerType = entityManagerImplTranslator.getImplType();
-            file.add(Import.of(managerType));
-            onInit.add("put(new " + managerType.getName() + "());");
+        GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
+            getMetadata.add("        \"" + l.replace("\"", "\\\"") + "\\n\"+");
         });
-
-        onInit.add("super.onInit();");
+        getMetadata.add("\"\";");  // Hack...
 
         //final Path path = project().getConfigPath();
         return Class.of(className)
                 .public_()
-                .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
+                .add(Type.of(ApplicationMetadata.class))
                 .add(Constructor.of()
                         .public_()
-                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
                 )
-                .add(onInit);
+                .add(getMetadata);
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A Speedment Application Lifecycle";
+        return "A Speedment Application Metadata";
     }
 
     @Override
     protected String getFileName() {
         return className;
     }
+
 }
