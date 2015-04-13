@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Emil Forslund
  */
 public class Formatting {
