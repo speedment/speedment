@@ -25,9 +25,8 @@ import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Trees;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -42,6 +41,16 @@ public class Test {
      */
     public static void main(String[] args) {
 
+        
+        Optional<String> a = Optional.empty();
+        
+       
+        
+        
+//         Collection
+//        
+//        ThreadLocal t = new ThreadLocal();
+//        
         final Table table = Table.newTable();
 
         Column c1 = Column.newColumn();
