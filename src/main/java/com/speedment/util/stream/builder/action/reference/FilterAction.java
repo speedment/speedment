@@ -14,14 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action.reference;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public enum StreamType {
+public class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    public FilterAction(Predicate<? super T> predicate) {
+        super((Stream<T> t) -> t.filter(predicate), Stream.class);
+    }
 
 }

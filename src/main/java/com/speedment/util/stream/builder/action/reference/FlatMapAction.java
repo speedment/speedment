@@ -14,14 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action.reference;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public enum StreamType {
+public class FlatMapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    public FlatMapAction(Function<? super T, ? extends Stream<? extends R>> mapper) {
+        super((Stream<T> t) -> t.flatMap(mapper), Stream.class);
+    }
 
 }

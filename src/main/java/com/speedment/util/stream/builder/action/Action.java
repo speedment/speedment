@@ -53,4 +53,14 @@ public class Action<T extends BaseStream<?, T>, R extends BaseStream<?, R>> impl
         return true;
     }
 
+    @Override
+    public String toString() {
+        final String className = getClass().getSimpleName();
+        final int index = className.lastIndexOf(Action.class.getSimpleName());
+        if (index > 0) {
+            return className.substring(0, index);
+        }
+        return className;
+    }
+
 }

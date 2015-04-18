@@ -16,23 +16,22 @@
  */
 package com.speedment.util.stream.builder;
 
-import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
-import java.util.IntSummaryStatistics;
+import java.util.LongSummaryStatistics;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-import java.util.function.IntPredicate;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.ObjIntConsumer;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongConsumer;
+import java.util.function.LongFunction;
+import java.util.function.LongPredicate;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongToIntFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.ObjLongConsumer;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -43,115 +42,115 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implements IntStream {
+public class LongStreamBuilder extends BaseStreamBuilder<LongStreamBuilder> implements LongStream {
 
-    public IntStreamBuilder(final BasePipeline<?> pipeline, final StreamTerminator streamTerminator) {
+    public LongStreamBuilder(final BasePipeline<?> pipeline, final StreamTerminator streamTerminator) {
         super(pipeline, streamTerminator);
     }
 
     @Override
-    public IntStream filter(IntPredicate predicate) {
+    public LongStream filter(LongPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream map(IntUnaryOperator mapper) {
+    public LongStream map(LongUnaryOperator mapper) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
+    public <U> Stream<U> mapToObj(LongFunction<? extends U> mapper) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public LongStream mapToLong(IntToLongFunction mapper) {
+    public IntStream mapToInt(LongToIntFunction mapper) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
+    public DoubleStream mapToDouble(LongToDoubleFunction mapper) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream flatMap(IntFunction<? extends IntStream> mapper) {
+    public LongStream flatMap(LongFunction<? extends LongStream> mapper) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream distinct() {
+    public LongStream distinct() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream sorted() {
+    public LongStream sorted() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream peek(IntConsumer action) {
+    public LongStream peek(LongConsumer action) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream limit(long maxSize) {
+    public LongStream limit(long maxSize) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IntStream skip(long n) {
+    public LongStream skip(long n) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void forEach(IntConsumer action) {
+    public void forEach(LongConsumer action) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void forEachOrdered(IntConsumer action) {
+    public void forEachOrdered(LongConsumer action) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int[] toArray() {
+    public long[] toArray() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int reduce(int identity, IntBinaryOperator op) {
+    public long reduce(long identity, LongBinaryOperator op) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OptionalInt reduce(IntBinaryOperator op) {
+    public OptionalLong reduce(LongBinaryOperator op) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
+    public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int sum() {
+    public long sum() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OptionalInt min() {
+    public OptionalLong min() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OptionalInt max() {
+    public OptionalLong max() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public long count() {
-        return streamTerminator.count((IntPipeline) pipeline);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -160,37 +159,32 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
     }
 
     @Override
-    public IntSummaryStatistics summaryStatistics() {
+    public LongSummaryStatistics summaryStatistics() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean anyMatch(IntPredicate predicate) {
+    public boolean anyMatch(LongPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean allMatch(IntPredicate predicate) {
+    public boolean allMatch(LongPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean noneMatch(IntPredicate predicate) {
+    public boolean noneMatch(LongPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OptionalInt findFirst() {
+    public OptionalLong findFirst() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OptionalInt findAny() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public LongStream asLongStream() {
+    public OptionalLong findAny() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -200,19 +194,18 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
     }
 
     @Override
-    public Stream<Integer> boxed() {
+    public Stream<Long> boxed() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PrimitiveIterator.OfInt iterator() {
+    public PrimitiveIterator.OfLong iterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Spliterator.OfInt spliterator() {
+    public Spliterator.OfLong spliterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
 }

@@ -14,14 +14,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.pipeline;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public enum StreamType {
+public interface Pipeline extends Iterable<Action<?, ?>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    Action<?, ?> getFirst();
+
+    Action<?, ?> getLast();
+
+    Action<?, ?> removeFirst();
+
+    Action<?, ?> removeLast();
+
+    void addFirst(Action<?, ?> e);
+
+    void addLast(Action<?, ?> e);
+
+    int size();
+
+    boolean add(Action<?, ?> e);
+
+    void clear();
+
+    Action<?, ?> get(int index);
+
+    void add(int index, Action<?, ?> element);
+
+    Action<?, ?> remove(int index);
+
+    boolean isEmpty();
+
+    Stream<Action<?, ?>> stream();
 
 }

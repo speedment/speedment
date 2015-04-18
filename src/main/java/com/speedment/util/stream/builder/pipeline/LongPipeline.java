@@ -14,14 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.pipeline;
+
+import java.util.stream.LongStream;
 
 /**
  *
  * @author pemi
  */
-public enum StreamType {
+public interface LongPipeline extends Pipeline {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    LongStream getAsLongStream();
 
 }

@@ -14,14 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action;
+
+import com.speedment.util.stream.builder.action.TerminatingAction;
 
 /**
  *
  * @author pemi
  */
-public enum StreamType {
+public enum StandardTerminatingAction implements TerminatingAction {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    FOR_EACH_ORDERED, FOR_EACH,
+    TO_ARRAY, TO_ARRAY_GENERATOR,
+    REDUCE_IDENTITY_ACCUMULATOR, REDUCE_ACCUMULATOR, REDUCE_IDENTITY_ACCUMULATOR_COMBINER,
+    COLLECT_SUPPLIER_ACCUMULATOR_COMBINER, COLLECT_COLLECTOR,
+    MIN, MAX,
+    COUNT,
+    ANY_MATCH, ALL_MATCH, NONE_MATCH,
+    FIND_FIRST, FIND_ANY,
+    ITERATOR, SPLITERATOR,
+    IS_PARALLEL;
 
 }

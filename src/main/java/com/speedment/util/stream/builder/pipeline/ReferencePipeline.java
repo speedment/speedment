@@ -14,14 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.pipeline;
+
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <E> The type element that the last BaseStream holds
+ *
  */
-public enum StreamType {
+public interface ReferencePipeline<E> extends Pipeline {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    Stream<E> getAsReferenceStream();
 
 }

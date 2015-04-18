@@ -14,14 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action.reference;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public enum StreamType {
+public class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    public SortedAction() {
+        super((Stream<T> t) -> t.sorted(), Stream.class);
+    }
+
+    public SortedAction(Comparator<? super T> comparator) {
+        super((Stream<T> t) -> t.sorted(comparator), Stream.class);
+    }
+
+    @Override
+    public boolean isCountModifying() {
+        return false;
+    }
 
 }

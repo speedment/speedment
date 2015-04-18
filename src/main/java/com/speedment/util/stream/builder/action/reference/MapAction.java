@@ -14,14 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action.reference;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public enum StreamType {
+public class MapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    public MapAction(Function<? super T, ? extends R> mapper) {
+        super((Stream<T> t) -> t.map(mapper), Stream.class);
+    }
 
 }

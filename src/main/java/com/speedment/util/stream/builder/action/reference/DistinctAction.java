@@ -14,14 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.action.reference;
+
+import com.speedment.util.stream.builder.action.Action;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T>
  */
-public enum StreamType {
+public class DistinctAction<T> extends Action<Stream<T>, Stream<T>> {
 
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    public DistinctAction() {
+        super((Stream<T> t) -> t.distinct(), Stream.class);
+    }
 
 }
