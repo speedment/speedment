@@ -20,6 +20,7 @@ import com.speedment.orm.platform.component.Component;
 import com.speedment.orm.annotations.Api;
 import com.speedment.orm.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.orm.platform.component.impl.DefaultClassMapper;
+import com.speedment.orm.platform.component.impl.EntityManagerImpl;
 import com.speedment.orm.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.orm.platform.component.impl.ManagerComponentImpl;
 import com.speedment.orm.platform.component.impl.PrimaryKeyFactoryComponentImpl;
@@ -43,6 +44,7 @@ public final class Platform extends DefaultClassMapper<Component> {
         add(new DbmsHandlerComponentImpl());
         add(new SqlTypeMapperComponentImpl());
         add(new JavaTypeMapperComponentImpl());
+        add(new EntityManagerImpl());
     }
 
     public static Platform get() {

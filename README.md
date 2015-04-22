@@ -14,13 +14,27 @@ new HelloSpeedment().start();
 
 ### Easy persistence
 ```java
-// A Builder-pattern can be used to create an entity in a database.
+// A Builder-pattern can be used to create an entity in a database
+// using the "Active Record Pattern"
 Optional<Hare> harry = Hare.builder()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3)
     .persist();
 ```
+
+if you want to use JPA-like persistence instead you can do that too like this:
+
+```java
+// A JPA-like way of persisting an Entity
+Hare harry = Hare.builder()
+    .setName("Harry")
+    .setColor("Gray")
+    .setAge(3);
+
+EntityManager.get().persist(harry);
+```
+
 
 ### Easy querying
 ```java
