@@ -32,7 +32,7 @@ Hare harry = Hare.builder()
     .setColor("Gray")
     .setAge(3);
 
-EntityManager.get().persist(harry);
+Optional<Hare> dbHare = EntityManager.get().persist(harry);
 ```
 
 
