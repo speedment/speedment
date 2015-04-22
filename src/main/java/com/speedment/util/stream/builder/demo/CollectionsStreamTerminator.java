@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder;
+package com.speedment.util.stream.builder.demo;
 
+import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.ReferencePipeline;

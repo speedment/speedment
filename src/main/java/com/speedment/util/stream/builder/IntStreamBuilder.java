@@ -16,6 +16,8 @@
  */
 package com.speedment.util.stream.builder;
 
+
+import com.speedment.util.stream.builder.action.integer.FilterAction;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
@@ -51,7 +53,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
 
     @Override
     public IntStream filter(IntPredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new FilterAction(predicate));
     }
 
     @Override
@@ -213,6 +215,5 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
     public Spliterator.OfInt spliterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
 }

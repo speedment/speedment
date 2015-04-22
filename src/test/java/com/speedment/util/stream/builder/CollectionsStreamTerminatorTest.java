@@ -21,6 +21,7 @@
  */
 package com.speedment.util.stream.builder;
 
+import com.speedment.util.stream.builder.demo.CollectionsStreamTerminator;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
