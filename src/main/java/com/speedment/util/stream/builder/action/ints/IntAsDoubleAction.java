@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder.action.doubles;
+package com.speedment.util.stream.builder.action.ints;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP_TO_SAME;
-import java.util.function.DoubleUnaryOperator;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.AS;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleMapAction extends Action<DoubleStream, DoubleStream> {
+public class IntAsDoubleAction extends Action<IntStream, DoubleStream> {
 
-    public DoubleMapAction(DoubleUnaryOperator mapper) {
-        super(s -> s.map(mapper), DoubleStream.class, MAP_TO_SAME);
+    public IntAsDoubleAction() {
+        super(s -> s.asDoubleStream(), DoubleStream.class, AS);
     }
 
 }

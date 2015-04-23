@@ -43,6 +43,12 @@ public enum StandardBasicAction implements BasicAction {
             Statement.of(PRESERVE, SIZE),
             Statement.of(PRESERVE, STREAM_TYPE)
     ),
+    MAP_TO_SAME(
+            Statement.of(PRESERVE, ORDER),
+            Statement.of(PRESERVE, SIZE),
+            Statement.of(PRESERVE, TYPE),
+            Statement.of(PRESERVE, STREAM_TYPE)
+    ),
     MAP_TO(
             Statement.of(PRESERVE, ORDER),
             Statement.of(PRESERVE, SIZE)
@@ -63,6 +69,16 @@ public enum StandardBasicAction implements BasicAction {
             Statement.of(PRESERVE, TYPE),
             Statement.of(PRESERVE, STREAM_TYPE),
             Statement.of(SET, com.speedment.util.stream.builder.action.Property.SORTED)
+    ),
+    BOXED(
+            Statement.of(PRESERVE, ORDER),
+            Statement.of(PRESERVE, SIZE),
+            Statement.of(SET, STREAM_TYPE)
+    ),
+    AS(
+            Statement.of(PRESERVE, ORDER),
+            Statement.of(PRESERVE, SIZE),
+            Statement.of(SET, STREAM_TYPE)
     );
 
     private final Statement[] statements;

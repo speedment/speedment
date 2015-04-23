@@ -16,6 +16,7 @@
  */
 package com.speedment.util.stream.builder;
 
+import com.speedment.util.stream.builder.action.doubles.DoubleBoxedAction;
 import com.speedment.util.stream.builder.action.doubles.DoubleDistinctAction;
 import com.speedment.util.stream.builder.action.doubles.DoubleFilterAction;
 import com.speedment.util.stream.builder.action.doubles.DoubleFlatMapAction;
@@ -113,6 +114,11 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, 
     @Override
     public DoubleStream skip(long n) {
         return append(new DoubleSkipAction(n));
+    }
+
+    @Override
+    public Stream<Double> boxed() {
+        return new ReferenceStreamBuilder<Double>(pipeline, streamTerminator).append(new DoubleBoxedAction());
     }
 
     /**
@@ -317,18 +323,6 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, 
     @Override
     public OptionalDouble findAny() {
         return streamTerminator.findAny(pipeline());
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
-     *
-     */
-    @Override
-    public Stream<Double> boxed() {
-        return streamTerminator.boxed(pipeline());
     }
 
     /**

@@ -16,8 +16,20 @@
  */
 package com.speedment.util.stream.builder;
 
+import com.speedment.util.stream.builder.action.ints.IntAsDoubleAction;
+import com.speedment.util.stream.builder.action.ints.IntAsLongAction;
+import com.speedment.util.stream.builder.action.ints.IntBoxedAction;
 import com.speedment.util.stream.builder.action.ints.IntDistinctAction;
 import com.speedment.util.stream.builder.action.ints.IntFilterAction;
+import com.speedment.util.stream.builder.action.ints.IntFlatMapAction;
+import com.speedment.util.stream.builder.action.ints.IntLimitAction;
+import com.speedment.util.stream.builder.action.ints.IntMapAction;
+import com.speedment.util.stream.builder.action.ints.IntMapToDoubleAction;
+import com.speedment.util.stream.builder.action.ints.IntMapToLongAction;
+import com.speedment.util.stream.builder.action.ints.IntMapToObjAction;
+import com.speedment.util.stream.builder.action.ints.IntPeekAction;
+import com.speedment.util.stream.builder.action.ints.IntSkipAction;
+import com.speedment.util.stream.builder.action.ints.IntSortedAction;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
@@ -58,27 +70,27 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
 
     @Override
     public IntStream map(IntUnaryOperator mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntMapAction(mapper));
     }
 
     @Override
     public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new IntMapToObjAction(mapper));
     }
 
     @Override
     public LongStream mapToLong(IntToLongFunction mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new LongStreamBuilder(pipeline, streamTerminator).append(new IntMapToLongAction(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new IntMapToDoubleAction(mapper));
     }
 
     @Override
     public IntStream flatMap(IntFunction<? extends IntStream> mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntFlatMapAction(mapper));
     }
 
     @Override
@@ -88,22 +100,37 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
 
     @Override
     public IntStream sorted() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntSortedAction());
     }
 
     @Override
     public IntStream peek(IntConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntPeekAction(action));
     }
 
     @Override
     public IntStream limit(long maxSize) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntLimitAction(maxSize));
     }
 
     @Override
     public IntStream skip(long n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntSkipAction(n));
+    }
+
+    @Override
+    public LongStream asLongStream() {
+        return new LongStreamBuilder(pipeline, streamTerminator).append(new IntAsLongAction());
+    }
+
+    @Override
+    public DoubleStream asDoubleStream() {
+        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new IntAsDoubleAction());
+    }
+
+    @Override
+    public Stream<Integer> boxed() {
+        return new ReferenceStreamBuilder<Integer>(pipeline, streamTerminator).append(new IntBoxedAction());
     }
 
     /**
@@ -115,7 +142,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public void forEach(IntConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        streamTerminator.forEach(pipeline(), action);
     }
 
     /**
@@ -127,7 +154,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public void forEachOrdered(IntConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        streamTerminator.forEachOrdered(pipeline(), action);
     }
 
     /**
@@ -139,7 +166,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public int[] toArray() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.toArray(pipeline());
     }
 
     /**
@@ -151,7 +178,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.reduce(pipeline(), identity, op);
     }
 
     /**
@@ -163,7 +190,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.reduce(pipeline(), op);
     }
 
     /**
@@ -175,7 +202,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.collect(pipeline(), supplier, accumulator, combiner);
     }
 
     /**
@@ -187,7 +214,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public int sum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.sum(pipeline());
     }
 
     /**
@@ -199,7 +226,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalInt min() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.min(pipeline());
     }
 
     /**
@@ -211,7 +238,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalInt max() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.max(pipeline());
     }
 
     /**
@@ -223,7 +250,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public long count() {
-        return streamTerminator.count((IntPipeline) pipeline);
+        return streamTerminator.count(pipeline());
     }
 
     /**
@@ -235,7 +262,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalDouble average() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.average(pipeline());
     }
 
     /**
@@ -247,7 +274,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public IntSummaryStatistics summaryStatistics() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.summaryStatistics(pipeline());
     }
 
     /**
@@ -259,7 +286,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public boolean anyMatch(IntPredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.anyMatch(pipeline(), predicate);
     }
 
     /**
@@ -271,7 +298,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public boolean allMatch(IntPredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.allMatch(pipeline(), predicate);
     }
 
     /**
@@ -283,7 +310,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public boolean noneMatch(IntPredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.noneMatch(pipeline(), predicate);
     }
 
     /**
@@ -295,7 +322,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalInt findFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.findFirst(pipeline());
     }
 
     /**
@@ -307,43 +334,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public OptionalInt findAny() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
-     *
-     */
-    @Override
-    public LongStream asLongStream() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
-     *
-     */
-    @Override
-    public DoubleStream asDoubleStream() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
-     *
-     */
-    @Override
-    public Stream<Integer> boxed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.findAny(pipeline());
     }
 
     /**
@@ -355,7 +346,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public PrimitiveIterator.OfInt iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.iterator(pipeline());
     }
 
     /**
@@ -367,7 +358,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
      */
     @Override
     public Spliterator.OfInt spliterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.spliterator(pipeline());
     }
 
 }
