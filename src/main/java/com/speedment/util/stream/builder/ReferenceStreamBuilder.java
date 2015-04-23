@@ -32,6 +32,7 @@ import com.speedment.util.stream.builder.action.reference.MapToLongAction;
 import com.speedment.util.stream.builder.action.reference.PeekAction;
 import com.speedment.util.stream.builder.action.reference.SkipAction;
 import com.speedment.util.stream.builder.action.reference.SortedAction;
+import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.pipeline.ReferencePipeline;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -58,7 +59,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class ReferenceStreamBuilder<T> extends BaseStreamBuilder<ReferenceStreamBuilder<T>> implements Stream<T> {
+public class ReferenceStreamBuilder<T> extends BaseStreamBuilder<ReferenceStreamBuilder<T>, ReferencePipeline<T>> implements Stream<T> {
 
     public ReferenceStreamBuilder(BasePipeline<?> pipeline, final StreamTerminator streamTerminator) {
         super(pipeline, streamTerminator);
@@ -141,99 +142,232 @@ public class ReferenceStreamBuilder<T> extends BaseStreamBuilder<ReferenceStream
     }
 
     // Terminal operations
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEach(Consumer<? super T> action) {
-        streamTerminator.forEach((ReferencePipeline<T>) pipeline, action);
+        streamTerminator.forEach(pipeline(), action);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEachOrdered(Consumer<? super T> action) {
-        streamTerminator.forEachOrdered((ReferencePipeline<T>) pipeline, action);
+        streamTerminator.forEachOrdered(pipeline(), action);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Object[] toArray() {
-        return streamTerminator.toArray((ReferencePipeline<T>) pipeline);
+        return streamTerminator.toArray(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
-        return streamTerminator.toArray((ReferencePipeline<T>) pipeline, generator);
+        return streamTerminator.toArray(pipeline(), generator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public T reduce(T identity, BinaryOperator<T> accumulator) {
-        return streamTerminator.reduce((ReferencePipeline<T>) pipeline, identity, accumulator);
+        return streamTerminator.reduce(pipeline(), identity, accumulator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        return streamTerminator.reduce((ReferencePipeline<T>) pipeline, accumulator);
+        return streamTerminator.reduce(pipeline(), accumulator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
-        return streamTerminator.reduce((ReferencePipeline<T>) pipeline, identity, accumulator, combiner);
+        return streamTerminator.reduce(pipeline(), identity, accumulator, combiner);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
-        return streamTerminator.collect((ReferencePipeline<T>) pipeline, supplier, accumulator, combiner);
+        return streamTerminator.collect(pipeline(), supplier, accumulator, combiner);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
-        return streamTerminator.collect((ReferencePipeline<T>) pipeline, collector);
+        return streamTerminator.collect(pipeline(), collector);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Optional<T> min(Comparator<? super T> comparator) {
-        return streamTerminator.min((ReferencePipeline<T>) pipeline, comparator);
+        return streamTerminator.min(pipeline(), comparator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Optional<T> max(Comparator<? super T> comparator) {
-        return streamTerminator.max((ReferencePipeline<T>) pipeline, comparator);
+        return streamTerminator.max(pipeline(), comparator);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public long count() {
-        return streamTerminator.count((ReferencePipeline<T>) pipeline);
+        return streamTerminator.count(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
-        return streamTerminator.anyMatch((ReferencePipeline<T>) pipeline, predicate);
+        return streamTerminator.anyMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
-        return streamTerminator.allMatch((ReferencePipeline<T>) pipeline, predicate);
+        return streamTerminator.allMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
-        return streamTerminator.noneMatch((ReferencePipeline<T>) pipeline, predicate);
+        return streamTerminator.noneMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Optional<T> findFirst() {
-        return streamTerminator.findFirst((ReferencePipeline<T>) pipeline);
+        return streamTerminator.findFirst(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Optional<T> findAny() {
-        return streamTerminator.findAny((ReferencePipeline<T>) pipeline);
+        return streamTerminator.findAny(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Iterator<T> iterator() {
-        return streamTerminator.iterator((ReferencePipeline<T>) pipeline);
+        return streamTerminator.iterator(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Spliterator<T> spliterator() {
-        return streamTerminator.spliterator((ReferencePipeline<T>) pipeline);
+        return streamTerminator.spliterator(pipeline());
     }
 
 }

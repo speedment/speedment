@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP_TO;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
 public class MapToIntAction<T> extends Action<Stream<T>, IntStream> {
 
     public MapToIntAction(ToIntFunction<? super T> mapper) {
-        super((Stream<T> t) -> t.mapToInt(mapper), IntStream.class);
+        super((Stream<T> t) -> t.mapToInt(mapper), IntStream.class, MAP_TO);
     }
 
 }

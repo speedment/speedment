@@ -54,3 +54,13 @@ GoogleAnalytics (from com.speedment.core.util.analytics)
 
 Test case: Generate on Windows, compile on Linux and vice versa
 
+Introduce ability to Tables (Entities) to implement custom interfaces. List of classes in the groovy file
+
+REST interface with just READ with http://api.somehost.com/v1.1.1/com.company.project.db0.schema0.User?filter={"name"="Olle","born"=1966}&sort("name"="ASC", country="DESC")&skip=12&limit=24,fields={"name","age"}    ALLOW AND() OR etc...   Include all Java8 stream components... Support gzip()
+http://api.somehost.com/com.company.project.db0.schema0.User/primarykey
+See http://docs.telerik.com/platform/backend-services/development/rest-api/querying/filtering
+http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+
+
+
+

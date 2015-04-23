@@ -14,23 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder.action.reference;
-
-import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
-import java.util.function.Function;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
+package com.speedment.util.stream.builder.action;
 
 /**
  *
  * @author pemi
- * @param <T>
  */
-public class FlatMapToDoubleAction<T> extends Action<Stream<T>, DoubleStream> {
+public enum Property implements ActionProperty {
 
-    public FlatMapToDoubleAction(Function<? super T, ? extends DoubleStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToDouble(mapper), DoubleStream.class, FLAT_MAP_TO);
-    }
-
+    ORDER,
+    SIZE,
+    TYPE,
+    STREAM_TYPE,
+    DISTINCT,
+    SORTED,
+    /**
+     * Is this a finite stream.
+     */
+    FINITE,
+    /**
+     * Does this action have a side effect (like peek() might).
+     */
+    SIDE_EFFECT;
 }

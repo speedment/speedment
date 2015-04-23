@@ -14,23 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder.action.reference;
+package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
-import java.util.function.Function;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.FILTER;
+import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
- * @param <T>
  */
-public class FlatMapToDoubleAction<T> extends Action<Stream<T>, DoubleStream> {
+public class DoubleFilterAction extends Action<DoubleStream, DoubleStream> {
 
-    public FlatMapToDoubleAction(Function<? super T, ? extends DoubleStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToDouble(mapper), DoubleStream.class, FLAT_MAP_TO);
+    public DoubleFilterAction(DoublePredicate predicate) {
+        super((DoubleStream t) -> t.filter(predicate), DoubleStream.class, FILTER);
     }
 
 }

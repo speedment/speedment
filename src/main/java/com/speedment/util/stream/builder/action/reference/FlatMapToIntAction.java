@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
 public class FlatMapToIntAction<T> extends Action<Stream<T>, IntStream> {
 
     public FlatMapToIntAction(Function<? super T, ? extends IntStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToInt(mapper), IntStream.class);
+        super((Stream<T> t) -> t.flatMapToInt(mapper), IntStream.class,  FLAT_MAP_TO);
     }
 
 }

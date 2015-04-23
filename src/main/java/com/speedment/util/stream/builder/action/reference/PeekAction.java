@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.PEEK;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
 public class PeekAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public PeekAction(Consumer<? super T> action) {
-        super((Stream<T> t) -> t.peek(action), Stream.class);
+        super((Stream<T> t) -> t.peek(action), Stream.class, PEEK);
     }
 
 }

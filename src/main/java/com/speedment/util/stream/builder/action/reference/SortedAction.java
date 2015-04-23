@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.SORTED;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
@@ -28,16 +29,11 @@ import java.util.stream.Stream;
 public class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public SortedAction() {
-        super((Stream<T> t) -> t.sorted(), Stream.class);
+        super((Stream<T> t) -> t.sorted(), Stream.class, SORTED);
     }
 
     public SortedAction(Comparator<? super T> comparator) {
-        super((Stream<T> t) -> t.sorted(comparator), Stream.class);
-    }
-
-    @Override
-    public boolean isCountModifying() {
-        return false;
+        super((Stream<T> t) -> t.sorted(comparator), Stream.class, SORTED);
     }
 
 }

@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
 import java.util.stream.Stream;
 
 /**
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 public class DistinctAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public DistinctAction() {
-        super((Stream<T> t) -> t.distinct(), Stream.class);
+        super((Stream<T> t) -> t.distinct(), Stream.class, DISTINCT);
     }
 
 }

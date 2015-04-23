@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.FILTER;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
 public class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public FilterAction(Predicate<? super T> predicate) {
-        super((Stream<T> t) -> t.filter(predicate), Stream.class);
+        super((Stream<T> t) -> t.filter(predicate), Stream.class, FILTER);
     }
 
 }

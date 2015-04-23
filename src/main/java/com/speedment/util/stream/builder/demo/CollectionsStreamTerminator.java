@@ -17,11 +17,15 @@
 package com.speedment.util.stream.builder.demo;
 
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
+import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.Property.SIZE;
+import static com.speedment.util.stream.builder.action.Verb.PRESERVE;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
 import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -31,31 +35,29 @@ import java.util.stream.Stream;
  */
 public class CollectionsStreamTerminator<E> implements StreamTerminator {
 
+    private static final Predicate<Action> CHECK_RETAIN_SIZE = a -> a.is(PRESERVE, SIZE);
+
     private final Collection<E> collection;
 
     public CollectionsStreamTerminator(Collection<E> Collection) {
         this.collection = Collection;
     }
 
-
     @Override
     public <T> long count(ReferencePipeline<T> pipeline) {
-            if (pipeline.stream().allMatch(a -> !a.isCountModifying())) {
+        if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
             return collection.size();
         }
         return StreamTerminator.super.count(pipeline);
     }
 
-    
     @Override
     public <T> long count(IntPipeline pipeline) {
-        // Todo: Check pipeline first
-        if (pipeline.stream().allMatch(a -> !a.isCountModifying())) {
+        if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
             return collection.size();
         }
         return StreamTerminator.super.count(pipeline);
     }
-
 
     public Stream<E> stream() {
         return new ReferenceStreamBuilder<>(new BasePipeline(collection::stream), this);

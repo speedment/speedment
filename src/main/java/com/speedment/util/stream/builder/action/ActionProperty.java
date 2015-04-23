@@ -20,7 +20,7 @@ package com.speedment.util.stream.builder.action;
  *
  * @author pemi
  */
-public interface TerminatingAction {
+public interface ActionProperty {
 
     
 }

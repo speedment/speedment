@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.LIMIT;
 import java.util.stream.Stream;
 
 /**
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 public class LimitAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public LimitAction(long maxSize) {
-        super((Stream<T> t) -> t.limit(maxSize), Stream.class);
+        super((Stream<T> t) -> t.limit(maxSize), Stream.class, LIMIT);
     }
 
 }

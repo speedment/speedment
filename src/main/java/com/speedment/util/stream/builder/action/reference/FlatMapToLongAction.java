@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
 import java.util.function.Function;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
 public class FlatMapToLongAction<T> extends Action<Stream<T>, LongStream> {
 
     public FlatMapToLongAction(Function<? super T, ? extends LongStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToLong(mapper), LongStream.class);
+        super((Stream<T> t) -> t.flatMapToLong(mapper), LongStream.class,  FLAT_MAP_TO);
     }
 
 }

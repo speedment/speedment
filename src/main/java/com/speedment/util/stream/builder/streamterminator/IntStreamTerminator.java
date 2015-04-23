@@ -29,6 +29,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  *
@@ -104,6 +105,10 @@ public interface IntStreamTerminator extends BaseStreamTerminator {
 
     default OptionalInt findAny(IntPipeline pipeline) {
         return pipeline.getAsIntStream().findAny();
+    }
+
+    default Stream<Integer> boxed(IntPipeline pipeline) {
+        return pipeline.getAsIntStream().boxed();
     }
 
     default PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {

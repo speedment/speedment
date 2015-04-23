@@ -16,8 +16,8 @@
  */
 package com.speedment.util.stream.builder;
 
-
-import com.speedment.util.stream.builder.action.integer.FilterAction;
+import com.speedment.util.stream.builder.action.ints.IntDistinctAction;
+import com.speedment.util.stream.builder.action.ints.IntFilterAction;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implements IntStream {
+public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPipeline> implements IntStream {
 
     public IntStreamBuilder(final BasePipeline<?> pipeline, final StreamTerminator streamTerminator) {
         super(pipeline, streamTerminator);
@@ -53,7 +53,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
 
     @Override
     public IntStream filter(IntPredicate predicate) {
-        return append(new FilterAction(predicate));
+        return append(new IntFilterAction(predicate));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
 
     @Override
     public IntStream distinct() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new IntDistinctAction());
     }
 
     @Override
@@ -106,111 +106,265 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder> implem
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEach(IntConsumer action) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEachOrdered(IntConsumer action) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public int[] toArray() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public int sum() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalInt min() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalInt max() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public long count() {
         return streamTerminator.count((IntPipeline) pipeline);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble average() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public IntSummaryStatistics summaryStatistics() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean anyMatch(IntPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean allMatch(IntPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean noneMatch(IntPredicate predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalInt findFirst() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalInt findAny() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public LongStream asLongStream() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public DoubleStream asDoubleStream() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Stream<Integer> boxed() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public PrimitiveIterator.OfInt iterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Spliterator.OfInt spliterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

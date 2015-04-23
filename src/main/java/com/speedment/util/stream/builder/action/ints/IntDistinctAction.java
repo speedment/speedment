@@ -14,21 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.stream.builder.action.integer;
+package com.speedment.util.stream.builder.action.ints;
 
 import com.speedment.util.stream.builder.action.Action;
-import java.util.function.IntPredicate;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
 import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
- * @param <T>
  */
-public class FilterAction<T> extends Action<IntStream, IntStream> {
+public class IntDistinctAction extends Action<IntStream, IntStream> {
 
-    public FilterAction(IntPredicate predicate) {
-        super((IntStream t) -> t.filter(predicate), IntStream.class);
+    public IntDistinctAction() {
+        super((IntStream t) -> t.distinct(), IntStream.class, DISTINCT);
     }
 
 }

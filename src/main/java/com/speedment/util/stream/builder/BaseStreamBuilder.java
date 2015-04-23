@@ -25,7 +25,7 @@ import com.speedment.util.stream.builder.action.Action;
  * @author pemi
  * @param <T> The type of the super class
  */
-public class BaseStreamBuilder<T extends BaseStreamBuilder<T>> {
+public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
 
     protected final BasePipeline<?> pipeline;
     protected final StreamTerminator streamTerminator;
@@ -40,7 +40,6 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T>> {
         return (T) this;
     }
 
-    
     public T sequential() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -48,7 +47,6 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T>> {
     public T parallel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
     public boolean isParallel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -65,6 +63,10 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T>> {
     public void close() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    protected P pipeline() {
+        P result = (P) pipeline;
+        return result;
+    }
+
 }

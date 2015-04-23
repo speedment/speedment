@@ -16,7 +16,10 @@
  */
 package com.speedment.util.stream.builder;
 
+import com.speedment.util.stream.builder.action.doubles.DoubleDistinctAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleFilterAction;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
+import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
 import java.util.DoubleSummaryStatistics;
 import java.util.OptionalDouble;
@@ -41,7 +44,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder> implements DoubleStream {
+public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, DoublePipeline> implements DoubleStream {
 
     public DoubleStreamBuilder(final BasePipeline<?> pipeline, final StreamTerminator streamTerminator) {
         super(pipeline, streamTerminator);
@@ -49,7 +52,7 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder> 
 
     @Override
     public DoubleStream filter(DoublePredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleFilterAction(predicate));
     }
 
     @Override
@@ -79,7 +82,7 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder> 
 
     @Override
     public DoubleStream distinct() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleDistinctAction());
     }
 
     @Override
@@ -102,104 +105,244 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder> 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEach(DoubleConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        streamTerminator.forEach(pipeline(), action);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public void forEachOrdered(DoubleConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        streamTerminator.forEachOrdered(pipeline(), action);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public double[] toArray() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.toArray(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public double reduce(double identity, DoubleBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.reduce(pipeline(), identity, op);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.reduce(pipeline(), op);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjDoubleConsumer<R> accumulator, BiConsumer<R, R> combiner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.collect(pipeline(), supplier, accumulator, combiner);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public double sum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.sum(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble min() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.min(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble max() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.max(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public long count() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.count(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble average() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.average(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.summaryStatistics(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.anyMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean allMatch(DoublePredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.allMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.noneMatch(pipeline(), predicate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble findFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.findFirst(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public OptionalDouble findAny() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.findAny(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Stream<Double> boxed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.boxed(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public PrimitiveIterator.OfDouble iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.iterator(pipeline());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     *
+     */
     @Override
     public Spliterator.OfDouble spliterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return streamTerminator.spliterator(pipeline());
     }
 
 }

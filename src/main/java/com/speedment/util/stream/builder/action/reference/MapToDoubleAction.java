@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP_TO;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
 public class MapToDoubleAction<T> extends Action<Stream<T>, DoubleStream> {
 
     public MapToDoubleAction(ToDoubleFunction<? super T> mapper) {
-        super((Stream<T> t) -> t.mapToDouble(mapper), DoubleStream.class);
+        super((Stream<T> t) -> t.mapToDouble(mapper), DoubleStream.class, MAP_TO);
     }
 
 }

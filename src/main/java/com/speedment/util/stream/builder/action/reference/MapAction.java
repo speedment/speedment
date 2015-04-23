@@ -17,6 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
 public class MapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 
     public MapAction(Function<? super T, ? extends R> mapper) {
-        super((Stream<T> t) -> t.map(mapper), Stream.class);
+        super((Stream<T> t) -> t.map(mapper), Stream.class, MAP);
     }
 
 }

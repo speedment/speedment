@@ -17,8 +17,8 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP_TO;
 import java.util.function.ToLongFunction;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class MapToLongAction<T> extends Action<Stream<T>, LongStream> {
 
     public MapToLongAction(ToLongFunction<? super T> mapper) {
-        super((Stream<T> t) -> t.mapToLong(mapper), LongStream.class);
+        super((Stream<T> t) -> t.mapToLong(mapper), LongStream.class, MAP_TO);
     }
 
 }

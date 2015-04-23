@@ -17,9 +17,7 @@
 package com.speedment.util.stream.builder.streamterminator;
 
 import com.speedment.util.stream.builder.pipeline.DoublePipeline;
-import com.speedment.util.stream.builder.pipeline.ReferencePipeline;
 import java.util.DoubleSummaryStatistics;
-import java.util.Iterator;
 import java.util.OptionalDouble;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
@@ -29,7 +27,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoublePredicate;
 import java.util.function.ObjDoubleConsumer;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  *
@@ -106,7 +104,11 @@ public interface DoubleStreamTerminator extends BaseStreamTerminator {
     default OptionalDouble findAny(DoublePipeline pipeline) {
         return pipeline.getAsDoubleStream().findAny();
     }
-
+    
+    default Stream<Double> boxed(DoublePipeline pipeline) {
+        return pipeline.getAsDoubleStream().boxed();
+    }
+    
     default PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
         return pipeline.getAsDoubleStream().iterator();
     }

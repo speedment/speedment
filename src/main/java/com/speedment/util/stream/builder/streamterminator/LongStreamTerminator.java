@@ -29,6 +29,7 @@ import java.util.function.LongConsumer;
 import java.util.function.LongPredicate;
 import java.util.function.ObjLongConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  *
@@ -104,6 +105,10 @@ public interface LongStreamTerminator extends BaseStreamTerminator {
 
     default OptionalLong findAny(LongPipeline pipeline) {
         return pipeline.getAsLongStream().findAny();
+    }
+
+    default Stream<Long> boxed(LongPipeline pipeline) {
+        return pipeline.getAsLongStream().boxed();
     }
 
     default PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {
