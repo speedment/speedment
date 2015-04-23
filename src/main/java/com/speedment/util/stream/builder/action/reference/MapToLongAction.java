@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class MapToLongAction<T> extends Action<Stream<T>, LongStream> {
 
     public MapToLongAction(ToLongFunction<? super T> mapper) {
-        super((Stream<T> t) -> t.mapToLong(mapper), LongStream.class, MAP_TO);
+        super(s -> s.mapToLong(mapper), LongStream.class, MAP_TO);
     }
 
 }

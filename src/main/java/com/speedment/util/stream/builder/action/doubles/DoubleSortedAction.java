@@ -17,17 +17,17 @@
 package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.SORTED;
 import java.util.stream.DoubleStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleDistinctAction extends Action<DoubleStream, DoubleStream> {
+public class DoubleSortedAction extends Action<DoubleStream, DoubleStream> {
 
-    public DoubleDistinctAction() {
-        super(s -> s.distinct(), DoubleStream.class, DISTINCT);
+    public DoubleSortedAction() {
+        super(s -> s.sorted(), DoubleStream.class, SORTED);
     }
 
 }

@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class FlatMapToLongAction<T> extends Action<Stream<T>, LongStream> {
 
     public FlatMapToLongAction(Function<? super T, ? extends LongStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToLong(mapper), LongStream.class,  FLAT_MAP_TO);
+        super(s -> s.flatMapToLong(mapper), LongStream.class, FLAT_MAP_TO);
     }
 
 }

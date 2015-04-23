@@ -27,7 +27,7 @@ import java.util.stream.LongStream;
 public class LongDistinctAction extends Action<LongStream, LongStream> {
 
     public LongDistinctAction() {
-        super((LongStream t) -> t.distinct(), LongStream.class, DISTINCT);
+        super(s -> s.distinct(), LongStream.class, DISTINCT);
     }
 
 }

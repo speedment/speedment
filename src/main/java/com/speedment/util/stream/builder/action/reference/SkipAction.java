@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class SkipAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public SkipAction(long n) {
-        super((Stream<T> t) -> t.skip(n), Stream.class, SKIP);
+        super(s -> s.skip(n), Stream.class, SKIP);
     }
 
 }

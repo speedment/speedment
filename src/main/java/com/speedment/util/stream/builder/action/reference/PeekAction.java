@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class PeekAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public PeekAction(Consumer<? super T> action) {
-        super((Stream<T> t) -> t.peek(action), Stream.class, PEEK);
+        super(s -> s.peek(action), Stream.class, PEEK);
     }
 
 }

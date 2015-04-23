@@ -18,6 +18,15 @@ package com.speedment.util.stream.builder;
 
 import com.speedment.util.stream.builder.action.doubles.DoubleDistinctAction;
 import com.speedment.util.stream.builder.action.doubles.DoubleFilterAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleFlatMapAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleLimitAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleMapAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleMapToIntAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleMapToLongAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleMapToObjAction;
+import com.speedment.util.stream.builder.action.doubles.DoublePeekAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleSkipAction;
+import com.speedment.util.stream.builder.action.doubles.DoubleSortedAction;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
@@ -57,27 +66,28 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, 
 
     @Override
     public DoubleStream map(DoubleUnaryOperator mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleMapAction(mapper));
     }
 
     @Override
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new DoubleMapToObjAction(mapper));
     }
 
     @Override
     public IntStream mapToInt(DoubleToIntFunction mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new IntStreamBuilder(pipeline, streamTerminator).append(new DoubleMapToIntAction(mapper));
     }
 
     @Override
     public LongStream mapToLong(DoubleToLongFunction mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new LongStreamBuilder(pipeline, streamTerminator).append(new DoubleMapToLongAction(mapper));
     }
 
     @Override
     public DoubleStream flatMap(DoubleFunction<? extends DoubleStream> mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleFlatMapAction(mapper));
+        //return new DoubleStreamBuilder(pipeline, streamTerminator).append(new DoubleFlatMapAction(mapper));
     }
 
     @Override
@@ -87,22 +97,22 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, 
 
     @Override
     public DoubleStream sorted() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleSortedAction());
     }
 
     @Override
     public DoubleStream peek(DoubleConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoublePeekAction(action));
     }
 
     @Override
     public DoubleStream limit(long maxSize) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleLimitAction(maxSize));
     }
 
     @Override
     public DoubleStream skip(long n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return append(new DoubleSkipAction(n));
     }
 
     /**

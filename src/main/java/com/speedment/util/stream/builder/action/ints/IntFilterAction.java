@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 public class IntFilterAction extends Action<IntStream, IntStream> {
 
     public IntFilterAction(IntPredicate predicate) {
-        super((IntStream t) -> t.filter(predicate), IntStream.class, FILTER);
+        super(s -> s.filter(predicate), IntStream.class, FILTER);
     }
 
 }

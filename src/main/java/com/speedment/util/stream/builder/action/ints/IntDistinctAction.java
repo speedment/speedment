@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
 public class IntDistinctAction extends Action<IntStream, IntStream> {
 
     public IntDistinctAction() {
-        super((IntStream t) -> t.distinct(), IntStream.class, DISTINCT);
+        super(s -> s.distinct(), IntStream.class, DISTINCT);
     }
 
 }

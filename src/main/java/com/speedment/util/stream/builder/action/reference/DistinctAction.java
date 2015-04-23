@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class DistinctAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public DistinctAction() {
-        super((Stream<T> t) -> t.distinct(), Stream.class, DISTINCT);
+        super(s -> s.distinct(), Stream.class, DISTINCT);
     }
 
 }

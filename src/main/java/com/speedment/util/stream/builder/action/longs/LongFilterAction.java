@@ -28,7 +28,7 @@ import java.util.stream.LongStream;
 public class LongFilterAction extends Action<LongStream, LongStream> {
 
     public LongFilterAction(LongPredicate predicate) {
-        super((LongStream t) -> t.filter(predicate), LongStream.class, FILTER);
+        super(s -> s.filter(predicate), LongStream.class, FILTER);
     }
 
 }

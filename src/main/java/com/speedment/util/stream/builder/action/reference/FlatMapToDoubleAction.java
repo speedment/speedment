@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class FlatMapToDoubleAction<T> extends Action<Stream<T>, DoubleStream> {
 
     public FlatMapToDoubleAction(Function<? super T, ? extends DoubleStream> mapper) {
-        super((Stream<T> t) -> t.flatMapToDouble(mapper), DoubleStream.class, FLAT_MAP_TO);
+        super(s -> s.flatMapToDouble(mapper), DoubleStream.class, FLAT_MAP_TO);
     }
 
 }

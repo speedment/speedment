@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public FilterAction(Predicate<? super T> predicate) {
-        super((Stream<T> t) -> t.filter(predicate), Stream.class, FILTER);
+        super(s -> s.filter(predicate), Stream.class, FILTER);
     }
 
 }

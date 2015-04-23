@@ -17,17 +17,17 @@
 package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.LIMIT;
 import java.util.stream.DoubleStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleDistinctAction extends Action<DoubleStream, DoubleStream> {
+public class DoubleLimitAction extends Action<DoubleStream, DoubleStream> {
 
-    public DoubleDistinctAction() {
-        super(s -> s.distinct(), DoubleStream.class, DISTINCT);
+    public DoubleLimitAction(long maxSize) {
+        super(s -> s.limit(maxSize), DoubleStream.class, LIMIT);
     }
 
 }

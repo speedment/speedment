@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class MapToIntAction<T> extends Action<Stream<T>, IntStream> {
 
     public MapToIntAction(ToIntFunction<? super T> mapper) {
-        super((Stream<T> t) -> t.mapToInt(mapper), IntStream.class, MAP_TO);
+        super(s -> s.mapToInt(mapper), IntStream.class, MAP_TO);
     }
 
 }

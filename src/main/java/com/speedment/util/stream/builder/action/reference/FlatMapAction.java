@@ -17,7 +17,7 @@
 package com.speedment.util.stream.builder.action.reference;
 
 import com.speedment.util.stream.builder.action.Action;
-import com.speedment.util.stream.builder.action.StandardBasicAction;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.FLAT_MAP;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -25,11 +25,12 @@ import java.util.stream.Stream;
  *
  * @author pemi
  * @param <T>
+ * @param <R>
  */
 public class FlatMapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 
     public FlatMapAction(Function<? super T, ? extends Stream<? extends R>> mapper) {
-        super((Stream<T> t) -> t.flatMap(mapper), Stream.class, StandardBasicAction.FLAT_MAP);
+        super(s -> s.flatMap(mapper), Stream.class, FLAT_MAP);
     }
 
 }

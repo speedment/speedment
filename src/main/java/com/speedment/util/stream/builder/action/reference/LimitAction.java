@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class LimitAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public LimitAction(long maxSize) {
-        super((Stream<T> t) -> t.limit(maxSize), Stream.class, LIMIT);
+        super(s -> s.limit(maxSize), Stream.class, LIMIT);
     }
 
 }

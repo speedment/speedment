@@ -28,7 +28,7 @@ import java.util.stream.DoubleStream;
 public class DoubleFilterAction extends Action<DoubleStream, DoubleStream> {
 
     public DoubleFilterAction(DoublePredicate predicate) {
-        super((DoubleStream t) -> t.filter(predicate), DoubleStream.class, FILTER);
+        super(s -> s.filter(predicate), DoubleStream.class, FILTER);
     }
 
 }

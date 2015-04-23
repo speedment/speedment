@@ -17,17 +17,18 @@
 package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
+import com.speedment.util.stream.builder.action.StandardBasicAction;
+import java.util.function.DoubleFunction;
 import java.util.stream.DoubleStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleDistinctAction extends Action<DoubleStream, DoubleStream> {
+public class DoubleFlatMapAction extends Action<DoubleStream, DoubleStream> {
 
-    public DoubleDistinctAction() {
-        super(s -> s.distinct(), DoubleStream.class, DISTINCT);
+    public DoubleFlatMapAction(DoubleFunction<? extends DoubleStream> mapper) {
+        super(s -> s.flatMap(mapper), DoubleStream.class, StandardBasicAction.FLAT_MAP);
     }
 
 }

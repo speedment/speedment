@@ -29,11 +29,11 @@ import java.util.stream.Stream;
 public class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public SortedAction() {
-        super((Stream<T> t) -> t.sorted(), Stream.class, SORTED);
+        super(s -> s.sorted(), Stream.class, SORTED);
     }
 
     public SortedAction(Comparator<? super T> comparator) {
-        super((Stream<T> t) -> t.sorted(comparator), Stream.class, SORTED);
+        super(s -> s.sorted(comparator), Stream.class, SORTED);
     }
 
 }

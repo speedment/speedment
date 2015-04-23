@@ -17,17 +17,18 @@
 package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP;
+import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleDistinctAction extends Action<DoubleStream, DoubleStream> {
+public class DoubleMapAction extends Action<DoubleStream, DoubleStream> {
 
-    public DoubleDistinctAction() {
-        super(s -> s.distinct(), DoubleStream.class, DISTINCT);
+    public DoubleMapAction(DoubleUnaryOperator mapper) {
+        super(s -> s.map(mapper), DoubleStream.class, MAP);
     }
 
 }

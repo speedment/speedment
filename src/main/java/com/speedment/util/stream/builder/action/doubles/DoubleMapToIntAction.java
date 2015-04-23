@@ -17,17 +17,19 @@
 package com.speedment.util.stream.builder.action.doubles;
 
 import com.speedment.util.stream.builder.action.Action;
-import static com.speedment.util.stream.builder.action.StandardBasicAction.DISTINCT;
+import static com.speedment.util.stream.builder.action.StandardBasicAction.MAP_TO;
+import java.util.function.DoubleToIntFunction;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
  */
-public class DoubleDistinctAction extends Action<DoubleStream, DoubleStream> {
+public class DoubleMapToIntAction extends Action<DoubleStream, IntStream> {
 
-    public DoubleDistinctAction() {
-        super(s -> s.distinct(), DoubleStream.class, DISTINCT);
+    public DoubleMapToIntAction(DoubleToIntFunction mapper) {
+        super(s -> s.mapToInt(mapper), IntStream.class, MAP_TO);
     }
 
 }
