@@ -28,12 +28,18 @@ Ability to map to own POJO:s. Annotated with JPA (@Column(name = "ID")) or BEAN 
  // JSR-303 annotations can be generated, optionally @NotNull. @Size(max=400)  ...   @Id @Column(name = "ID", unique = true, nullable = false, precision = 7) @Override  public Integer getId() { return this.id; }
 
 
-Update modes:
+Update modes (Change Data Capture (CDC))
   Read once
   Poll
   Timestamp inspection
-  Triggers
-  Transaction logs
+  Triggers ((http://www.jumpmind.com/products/symmetricds/features USING TRIGGERS...))
+  Transaction logs (http://en.wikipedia.org/wiki/Change_data_capture) 
+     MYSQL: https://github.com/shyiko/mysql-binlog-connector-java
+     Oracle: https://github.com/linkedin/databus
+http://www.davidlitchfield.com/oracle_forensics_part_1._dissecting_the_redo_logs.pdf, https://www.google.se/url?sa=t&rct=j&q=&esrc=s&source=web&cd=5&cad=rja&uact=8&sqi=2&ved=0CDwQFjAE&url=http%3A%2F%2Fwww.juliandyke.com%2FPresentations%2FRedoInternals.ppt&ei=Rgk6Vc6IIMebsgG3pICABA&usg=AFQjCNHTG96vpRUPMw8ZXW1qd4f-2Zkx2g&sig2=g4QBd7LDg3hv8adQElZZtg&bvm=bv.91427555,d.bGg
+
+
+  BW http://blog.confluent.io/2015/04/23/bottled-water-real-time-integration-of-postgresql-and-kafka/
 
 
 ****
@@ -56,11 +62,16 @@ Test case: Generate on Windows, compile on Linux and vice versa
 
 Introduce ability to Tables (Entities) to implement custom interfaces. List of classes in the groovy file
 
-REST interface with just READ with http://api.somehost.com/v1.1.1/com.company.project.db0.schema0.User?filter={"name"="Olle","born"=1966}&sort("name"="ASC", country="DESC")&skip=12&limit=24,fields={"name","age"}    ALLOW AND() OR etc...   Include all Java8 stream components... Support gzip()
+REST interface with just READ with https://api.somehost.com/v1/com.company.project.db0.schema0.User?filter=[{"col":"name", "op":"==", "val":"John"}, {"col":"born", "op":">=", "val":"1976"}]&sort=[{"name":"ASC"}, {"country":"DESC"}]&skip=12&limit=24&fields=["name","age"]&apiKey=xxxxxxxxxxx  ALLOW AND() OR etc...   Include all Java8 stream components... Support gzip()
 http://api.somehost.com/com.company.project.db0.schema0.User/primarykey
 See http://docs.telerik.com/platform/backend-services/development/rest-api/querying/filtering
 http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
 
+Introduce a Stream for each table with the updated items? Or event listener?
+
+If there are no Managers and we call HareManager.get() then we shall provide an Exception that points to the problem, Not only an NPE
+
+When generating setters we could also generate seters for foreign key objects like  image.setUser(user.getId()) -> image.setUser(user)
 
 
 

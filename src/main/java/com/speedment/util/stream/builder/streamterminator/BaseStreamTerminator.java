@@ -16,11 +16,23 @@
  */
 package com.speedment.util.stream.builder.streamterminator;
 
+import com.speedment.util.stream.builder.pipeline.Pipeline;
+
 /**
  *
  * @author pemi
  */
 public interface BaseStreamTerminator {
 
+    default <T extends Pipeline> T optimize(T initialPipeline) {
+        System.out.println("default optimize(" + initialPipeline + ")");
+        return initialPipeline;
+    }
 
+//    default <T extends Pipeline> long count(T pipeline, Function<T, Long> defaultHandler) {
+//        return defaultHandler.apply(pipeline);
+//    }
+//    default <T extends Pipeline, P> boolean anyMatch(T pipeline, BiFunction<T, P, Boolean> defaultHandler, P predicate) {
+//        return defaultHandler.apply(pipeline, predicate);
+//    }
 }

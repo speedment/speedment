@@ -28,8 +28,15 @@ import java.util.stream.Stream;
  */
 public class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
 
+    private final Predicate<? super T> predicate;
+
     public FilterAction(Predicate<? super T> predicate) {
         super(s -> s.filter(predicate), Stream.class, FILTER);
+        this.predicate = predicate;
+    }
+
+    public Predicate<? super T> getPredicate() {
+        return predicate;
     }
 
 }

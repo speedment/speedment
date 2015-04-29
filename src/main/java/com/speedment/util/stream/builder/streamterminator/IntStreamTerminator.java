@@ -16,7 +16,6 @@
  */
 package com.speedment.util.stream.builder.streamterminator;
 
-import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
 import java.util.IntSummaryStatistics;
 import java.util.OptionalDouble;
@@ -38,85 +37,85 @@ import java.util.stream.Stream;
 public interface IntStreamTerminator extends BaseStreamTerminator {
 
     default <T> void forEach(IntPipeline pipeline, IntConsumer action) {
-        pipeline.getAsIntStream().forEach(action);
+        optimize(pipeline).getAsIntStream().forEach(action);
     }
 
     default void forEachOrdered(IntPipeline pipeline, IntConsumer action) {
-        pipeline.getAsIntStream().forEachOrdered(action);
+        optimize(pipeline).getAsIntStream().forEachOrdered(action);
     }
 
     default int[] toArray(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().toArray();
+        return optimize(pipeline).getAsIntStream().toArray();
     }
 
     default int reduce(IntPipeline pipeline, int identity, IntBinaryOperator op) {
-        return pipeline.getAsIntStream().reduce(identity, op);
+        return optimize(pipeline).getAsIntStream().reduce(identity, op);
     }
 
     default OptionalInt reduce(IntPipeline pipeline, IntBinaryOperator op) {
-        return pipeline.getAsIntStream().reduce(op);
+        return optimize(pipeline).getAsIntStream().reduce(op);
     }
 
     default <R> R collect(IntPipeline pipeline, Supplier<R> supplier,
             ObjIntConsumer<R> accumulator,
             BiConsumer<R, R> combiner) {
-        return pipeline.getAsIntStream().collect(supplier, accumulator, combiner);
+        return optimize(pipeline).getAsIntStream().collect(supplier, accumulator, combiner);
     }
 
     default int sum(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().sum();
+        return optimize(pipeline).getAsIntStream().sum();
     }
 
     default OptionalInt min(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().min();
+        return optimize(pipeline).getAsIntStream().min();
     }
 
     default OptionalInt max(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().max();
+        return optimize(pipeline).getAsIntStream().max();
     }
 
     default <T> long count(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().count();
+        return optimize(pipeline).getAsIntStream().count();
     }
 
     default OptionalDouble average(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().average();
+        return optimize(pipeline).getAsIntStream().average();
     }
 
     default IntSummaryStatistics summaryStatistics(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().summaryStatistics();
+        return optimize(pipeline).getAsIntStream().summaryStatistics();
     }
 
     default boolean anyMatch(IntPipeline pipeline, IntPredicate predicate) {
-        return pipeline.getAsIntStream().anyMatch(predicate);
+        return optimize(pipeline).getAsIntStream().anyMatch(predicate);
     }
 
     default boolean allMatch(IntPipeline pipeline, IntPredicate predicate) {
-        return pipeline.getAsIntStream().allMatch(predicate);
+        return optimize(pipeline).getAsIntStream().allMatch(predicate);
     }
 
     default boolean noneMatch(IntPipeline pipeline, IntPredicate predicate) {
-        return pipeline.getAsIntStream().noneMatch(predicate);
+        return optimize(pipeline).getAsIntStream().noneMatch(predicate);
     }
 
     default OptionalInt findFirst(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().findFirst();
+        return optimize(pipeline).getAsIntStream().findFirst();
     }
 
     default OptionalInt findAny(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().findAny();
+        return optimize(pipeline).getAsIntStream().findAny();
     }
 
     default Stream<Integer> boxed(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().boxed();
+        return optimize(pipeline).getAsIntStream().boxed();
     }
 
     default PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().iterator();
+        return optimize(pipeline).getAsIntStream().iterator();
     }
 
     default Spliterator.OfInt spliterator(IntPipeline pipeline) {
-        return pipeline.getAsIntStream().spliterator();
+        return optimize(pipeline).getAsIntStream().spliterator();
     }
 
 }

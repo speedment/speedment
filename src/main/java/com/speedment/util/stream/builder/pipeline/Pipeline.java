@@ -17,6 +17,9 @@
 package com.speedment.util.stream.builder.pipeline;
 
 import com.speedment.util.stream.builder.action.Action;
+import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 
 /**
@@ -52,5 +55,9 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
     boolean isEmpty();
 
     Stream<Action<?, ?>> stream();
+
+    Supplier<BaseStream<?, ?>> getInitialSupplier();
+
+    void setInitialSupplier(Supplier<BaseStream<?, ?>> initialSupplier);
 
 }

@@ -19,6 +19,7 @@ package com.speedment.util.stream.builder.pipeline;
 import com.speedment.util.stream.builder.action.Action;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
@@ -36,15 +37,14 @@ import java.util.stream.Stream;
 public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipeline, LongPipeline, DoublePipeline {
 
     private final LinkedList<Action<?, ?>> list;
-    private final Supplier<BaseStream<?, ?>> initialSupplier;
+    private Supplier<BaseStream<?, ?>> initialSupplier;
 
-    public BasePipeline(BasePipeline<E> parent) {
-        list = parent.list;
-        initialSupplier = parent.initialSupplier;
-    }
-
+//    public BasePipeline(BasePipeline<E> parent) {
+//        list = parent.list;
+//        initialSupplier = parent.initialSupplier;
+//    }
     public BasePipeline(Supplier<BaseStream<?, ?>> initialSupplier) {
-        this.initialSupplier = initialSupplier;
+        this.initialSupplier = Objects.requireNonNull(initialSupplier);
         this.list = new LinkedList<>();
     }
 
@@ -77,8 +77,8 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
     }
 
     private BaseStream<E, ?> getStream() {
-        BaseStream<?, ?> result = initialSupplier.get();
-        System.out.println("Applying " + toString());
+        BaseStream<?, ?> result = getInitialSupplier().get();
+        //System.out.println("Applying " + toString());
         for (Action<?, ?> action : this) {
             result = cast(result, action);
         }
@@ -92,50 +92,62 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
     }
 
     // Delegators
+    @Override
     public Action<?, ?> getFirst() {
         return list.getFirst();
     }
 
+    @Override
     public Action<?, ?> getLast() {
         return list.getLast();
     }
 
+    @Override
     public Action<?, ?> removeFirst() {
         return list.removeFirst();
     }
 
+    @Override
     public Action<?, ?> removeLast() {
         return list.removeLast();
     }
 
+    @Override
     public void addFirst(Action<?, ?> e) {
         list.addFirst(e);
     }
 
+    @Override
     public void addLast(Action<?, ?> e) {
         list.addLast(e);
     }
 
+    @Override
     public int size() {
         return list.size();
     }
 
+    @Override
     public boolean add(Action<?, ?> e) {
         return list.add(e);
     }
 
+    @Override
     public void clear() {
         list.clear();
     }
 
+    @Override
     public Action<?, ?> get(int index) {
         return list.get(index);
     }
 
+    @Override
     public void add(int index, Action<?, ?> element) {
         list.add(index, element);
     }
 
+    @Override
     public Action<?, ?> remove(int index) {
         return list.remove(index);
     }
@@ -145,6 +157,7 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
         return list.iterator();
     }
 
+    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
@@ -154,8 +167,19 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
         return list.toString();
     }
 
+    @Override
     public Stream<Action<?, ?>> stream() {
         return list.stream();
+    }
+
+    @Override
+    public Supplier<BaseStream<?, ?>> getInitialSupplier() {
+        return initialSupplier;
+    }
+
+    @Override
+    public void setInitialSupplier(Supplier<BaseStream<?, ?>> initialSupplier) {
+        this.initialSupplier = Objects.requireNonNull(initialSupplier);
     }
 
 }

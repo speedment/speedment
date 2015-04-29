@@ -16,7 +16,6 @@
  */
 package com.speedment.util.stream.builder.streamterminator;
 
-import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.pipeline.LongPipeline;
 import java.util.LongSummaryStatistics;
 import java.util.OptionalDouble;
@@ -38,85 +37,85 @@ import java.util.stream.Stream;
 public interface LongStreamTerminator extends BaseStreamTerminator {
 
     default <T> void forEach(LongPipeline pipeline, LongConsumer action) {
-        pipeline.getAsLongStream().forEach(action);
+        optimize(pipeline).getAsLongStream().forEach(action);
     }
 
     default void forEachOrdered(LongPipeline pipeline, LongConsumer action) {
-        pipeline.getAsLongStream().forEachOrdered(action);
+        optimize(pipeline).getAsLongStream().forEachOrdered(action);
     }
 
     default long[] toArray(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().toArray();
+        return optimize(pipeline).getAsLongStream().toArray();
     }
 
     default long reduce(LongPipeline pipeline, long identity, LongBinaryOperator op) {
-        return pipeline.getAsLongStream().reduce(identity, op);
+        return optimize(pipeline).getAsLongStream().reduce(identity, op);
     }
 
     default OptionalLong reduce(LongPipeline pipeline, LongBinaryOperator op) {
-        return pipeline.getAsLongStream().reduce(op);
+        return optimize(pipeline).getAsLongStream().reduce(op);
     }
 
     default <R> R collect(LongPipeline pipeline, Supplier<R> supplier,
             ObjLongConsumer<R> accumulator,
             BiConsumer<R, R> combiner) {
-        return pipeline.getAsLongStream().collect(supplier, accumulator, combiner);
+        return optimize(pipeline).getAsLongStream().collect(supplier, accumulator, combiner);
     }
 
     default long sum(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().sum();
+        return optimize(pipeline).getAsLongStream().sum();
     }
 
     default OptionalLong min(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().min();
+        return optimize(pipeline).getAsLongStream().min();
     }
 
     default OptionalLong max(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().max();
+        return optimize(pipeline).getAsLongStream().max();
     }
 
     default long count(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().count();
+        return optimize(pipeline).getAsLongStream().count();
     }
 
     default OptionalDouble average(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().average();
+        return optimize(pipeline).getAsLongStream().average();
     }
 
     default LongSummaryStatistics summaryStatistics(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().summaryStatistics();
+        return optimize(pipeline).getAsLongStream().summaryStatistics();
     }
 
     default boolean anyMatch(LongPipeline pipeline, LongPredicate predicate) {
-        return pipeline.getAsLongStream().anyMatch(predicate);
+        return optimize(pipeline).getAsLongStream().anyMatch(predicate);
     }
 
     default boolean allMatch(LongPipeline pipeline, LongPredicate predicate) {
-        return pipeline.getAsLongStream().allMatch(predicate);
+        return optimize(pipeline).getAsLongStream().allMatch(predicate);
     }
 
     default boolean noneMatch(LongPipeline pipeline, LongPredicate predicate) {
-        return pipeline.getAsLongStream().noneMatch(predicate);
+        return optimize(pipeline).getAsLongStream().noneMatch(predicate);
     }
 
     default OptionalLong findFirst(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().findFirst();
+        return optimize(pipeline).getAsLongStream().findFirst();
     }
 
     default OptionalLong findAny(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().findAny();
+        return optimize(pipeline).getAsLongStream().findAny();
     }
 
     default Stream<Long> boxed(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().boxed();
+        return optimize(pipeline).getAsLongStream().boxed();
     }
 
     default PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().iterator();
+        return optimize(pipeline).getAsLongStream().iterator();
     }
 
     default Spliterator.OfLong spliterator(LongPipeline pipeline) {
-        return pipeline.getAsLongStream().spliterator();
+        return optimize(pipeline).getAsLongStream().spliterator();
     }
 
 }

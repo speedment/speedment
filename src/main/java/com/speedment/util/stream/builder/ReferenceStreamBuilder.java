@@ -32,7 +32,6 @@ import com.speedment.util.stream.builder.action.reference.MapToLongAction;
 import com.speedment.util.stream.builder.action.reference.PeekAction;
 import com.speedment.util.stream.builder.action.reference.SkipAction;
 import com.speedment.util.stream.builder.action.reference.SortedAction;
-import com.speedment.util.stream.builder.pipeline.DoublePipeline;
 import com.speedment.util.stream.builder.pipeline.ReferencePipeline;
 import java.util.Comparator;
 import java.util.Iterator;

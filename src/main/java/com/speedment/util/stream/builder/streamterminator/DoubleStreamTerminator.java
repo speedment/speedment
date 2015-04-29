@@ -36,85 +36,91 @@ import java.util.stream.Stream;
 public interface DoubleStreamTerminator extends BaseStreamTerminator {
 
     default <T> void forEach(DoublePipeline pipeline, DoubleConsumer action) {
-        pipeline.getAsDoubleStream().forEach(action);
+        optimize(pipeline).getAsDoubleStream().forEach(action);
     }
 
     default void forEachOrdered(DoublePipeline pipeline, DoubleConsumer action) {
-        pipeline.getAsDoubleStream().forEachOrdered(action);
+        optimize(pipeline).getAsDoubleStream().forEachOrdered(action);
     }
 
     default double[] toArray(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().toArray();
+        return optimize(pipeline).getAsDoubleStream().toArray();
     }
 
     default double reduce(DoublePipeline pipeline, double identity, DoubleBinaryOperator op) {
-        return pipeline.getAsDoubleStream().reduce(identity, op);
+        return optimize(pipeline).getAsDoubleStream().reduce(identity, op);
     }
 
     default OptionalDouble reduce(DoublePipeline pipeline, DoubleBinaryOperator op) {
-        return pipeline.getAsDoubleStream().reduce(op);
+        return optimize(pipeline).getAsDoubleStream().reduce(op);
     }
 
     default <R> R collect(DoublePipeline pipeline, Supplier<R> supplier,
             ObjDoubleConsumer<R> accumulator,
             BiConsumer<R, R> combiner) {
-        return pipeline.getAsDoubleStream().collect(supplier, accumulator, combiner);
+        return optimize(pipeline).getAsDoubleStream().collect(supplier, accumulator, combiner);
     }
 
     default double sum(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().sum();
+        return optimize(pipeline).getAsDoubleStream().sum();
     }
 
     default OptionalDouble min(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().min();
+        return optimize(pipeline).getAsDoubleStream().min();
     }
 
     default OptionalDouble max(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().max();
+        return optimize(pipeline).getAsDoubleStream().max();
     }
 
     default long count(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().count();
+        return optimize(pipeline).getAsDoubleStream().count();
     }
 
     default OptionalDouble average(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().average();
+        return optimize(pipeline).getAsDoubleStream().average();
     }
 
     default DoubleSummaryStatistics summaryStatistics(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().summaryStatistics();
+        return optimize(pipeline).getAsDoubleStream().summaryStatistics();
     }
 
+//    default boolean anyMatch(DoublePipeline pipeline, DoublePredicate predicate) {
+//        return anyMatch(pipeline, (pip, pre) -> pip.getAsDoubleStream().anyMatch(pre), predicate);
+//        //    return optimize(pipeline).getAsReferenceStream().anyMatch(predicate);
+//    }
+//
+    
     default boolean anyMatch(DoublePipeline pipeline, DoublePredicate predicate) {
-        return pipeline.getAsDoubleStream().anyMatch(predicate);
+        return optimize(pipeline).getAsDoubleStream().anyMatch(predicate);
     }
 
     default boolean allMatch(DoublePipeline pipeline, DoublePredicate predicate) {
-        return pipeline.getAsDoubleStream().allMatch(predicate);
+        return optimize(pipeline).getAsDoubleStream().allMatch(predicate);
     }
 
     default boolean noneMatch(DoublePipeline pipeline, DoublePredicate predicate) {
-        return pipeline.getAsDoubleStream().noneMatch(predicate);
+        return optimize(pipeline).getAsDoubleStream().noneMatch(predicate);
     }
 
     default OptionalDouble findFirst(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().findFirst();
+        return optimize(pipeline).getAsDoubleStream().findFirst();
     }
 
     default OptionalDouble findAny(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().findAny();
+        return optimize(pipeline).getAsDoubleStream().findAny();
     }
-    
+
     default Stream<Double> boxed(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().boxed();
+        return optimize(pipeline).getAsDoubleStream().boxed();
     }
-    
+
     default PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().iterator();
+        return optimize(pipeline).getAsDoubleStream().iterator();
     }
 
     default Spliterator.OfDouble spliterator(DoublePipeline pipeline) {
-        return pipeline.getAsDoubleStream().spliterator();
+        return optimize(pipeline).getAsDoubleStream().spliterator();
     }
 
 }
