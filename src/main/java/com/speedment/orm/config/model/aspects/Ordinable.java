@@ -21,13 +21,13 @@ package com.speedment.orm.config.model.aspects;
  * @author pemi
  */
 public interface Ordinable extends Node {
-    
+
     final int ORDINAL_FIRST = 1, UNSET = -1;
 
     int getOrdinalPosition();
 
     void setOrdinalPosition(int ordinalPosition);
-    
+
     @Override
     default boolean isOrdinable() {
         return true;
@@ -35,8 +35,8 @@ public interface Ordinable extends Node {
 
     default int compareToHelper(Ordinable that) {
         return Integer.compare(
-            this.getOrdinalPosition(), 
-            that.getOrdinalPosition()
+                this.getOrdinalPosition(),
+                that.getOrdinalPosition()
         );
     }
 }

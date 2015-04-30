@@ -8,7 +8,10 @@ import static com.speedment.orm.field.FieldUtil.findColumn;
  *
  * @author pemi
  */
-public class HareField {
+public final class HareField {
+
+    private HareField() {
+    }
 
     // TODO: Use Supplier<Column> to escape from static misery
     public static final StringReferenceField<Hare> NAME = new StringReferenceField<>(() -> findColumn(Hare.class, "name"), Hare::getName);

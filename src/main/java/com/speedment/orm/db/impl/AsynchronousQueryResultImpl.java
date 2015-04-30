@@ -22,6 +22,7 @@
 package com.speedment.orm.db.impl;
 
 import com.speedment.orm.db.AsynchronousQueryResult;
+import com.speedment.orm.exception.SpeedmentException;
 import com.speedment.util.stream.StreamUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -64,7 +65,7 @@ public class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T
             rs = statement.executeQuery(sql);
         } catch (SQLException sqle) {
             LOGGER.error("Error executing " + sql, sqle);
-            throw new RuntimeException(sqle);
+            throw new SpeedmentException(sqle);
         }
         return StreamUtil.asStream(rs, rsMapper);
     }

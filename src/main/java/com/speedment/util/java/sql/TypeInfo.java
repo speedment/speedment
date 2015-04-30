@@ -16,6 +16,7 @@
  */
 package com.speedment.util.java.sql;
 
+import com.speedment.orm.exception.SpeedmentException;
 import java.lang.reflect.Field;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -69,7 +70,7 @@ public class TypeInfo {
                 JAVA_SQL_TYPE_INT_TO_STRING_MAP.put(value, name);
 //                JAVA_SQL_TYPE_STRING_TO_INT_MAP.put(name, value);
             } catch (final IllegalAccessException e) {
-                throw new RuntimeException(e);
+                throw new SpeedmentException(e);
             }
         }
     }

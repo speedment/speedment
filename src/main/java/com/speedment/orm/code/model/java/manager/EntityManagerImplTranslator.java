@@ -30,6 +30,7 @@ import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.manager.sql.AbstractSqlManager;
+import com.speedment.orm.exception.SpeedmentException;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.JavaTypeMapperComponent;
 import com.speedment.orm.runtime.typemapping.JavaTypeMapping;
@@ -74,24 +75,23 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
                         .add(Field.of("prototype", ENTITY.getType()))
                         .add("return new " + ENTITY.getImplName() + "(prototype);"))
                 .call(i -> file.add(Import.of(Type.of(Stream.class))))
-                
-//                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-//                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
+                //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
+                //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
 
-//                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-//                        .add(Field.of("entity", ENTITY.getType()))
-//                        .add("return entity;")) //TODO MUST BE FIXED!
+                //                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
+                //                        .add(Field.of("entity", ENTITY.getType()))
+                //                        .add("return entity;")) //TODO MUST BE FIXED!
 
-//                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-//                        .add(Field.of("entity", ENTITY.getType()))
-//                        .add("return entity;")) //TODO MUST BE FIXED!
+                //                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
+                //                        .add(Field.of("entity", ENTITY.getType()))
+                //                        .add("return entity;")) //TODO MUST BE FIXED!
                 .add(defaultReadEntity(file));
     }
 
     private Method defaultReadEntity(File file) {
 
         file.add(Import.of(Type.of(SQLException.class)));
-        file.add(Import.of(Type.of(RuntimeException.class)));
+        file.add(Import.of(Type.of(SpeedmentException.class)));
 
         final Method method = Method.of("defaultReadEntity", ENTITY.getType())
                 .protected_()
@@ -118,7 +118,7 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
         method
                 .add("try " + block(streamBuilder.build()))
                 .add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
-                                "throw new " + RuntimeException.class.getSimpleName() + "(sqle);"
+                                "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
                         ))
                 .add("return builder;");
 

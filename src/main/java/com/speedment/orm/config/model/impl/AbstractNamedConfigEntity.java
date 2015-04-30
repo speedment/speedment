@@ -26,7 +26,7 @@ import com.speedment.orm.config.model.aspects.Nameable;
  * @author pemi
  */
 public abstract class AbstractNamedConfigEntity extends AbstractConfigEntity
-    implements Comparable<Nameable> {
+        implements Comparable<Nameable> {
 
     public AbstractNamedConfigEntity() {
         super(null);

@@ -21,6 +21,7 @@ import com.speedment.orm.config.model.impl.utils.GroovyParser;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.lifecycle.AbstractLifecycle;
 import com.speedment.orm.core.manager.Manager;
+import com.speedment.orm.exception.SpeedmentException;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.orm.platform.component.ProjectComponent;
@@ -78,7 +79,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             }
 
         } catch (IOException ioe) {
-            throw new RuntimeException("Failed to read config file", ioe);
+            throw new SpeedmentException("Failed to read config file", ioe);
         }
     }
 
