@@ -39,6 +39,7 @@ public class ImportView implements Transform<Import, String> {
 				IMPORT_STRING +
 				cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
 				model.getType().getName() +
+                model.getStaticMember().map(str -> DOT + str).orElse(EMPTY) +
 				SC
 			).filter(x -> {
 				cg.getDependencyMgr().load(model.getType().getName());

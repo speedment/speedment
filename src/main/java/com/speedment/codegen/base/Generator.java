@@ -61,6 +61,25 @@ public interface Generator {
      * @return A stream of meta objects.
      */
     <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to);
+    
+    /**
+     * Renders the specified model into a stream of code models. This is used
+     * internally to provide the other interface methods.
+     * 
+     * If the specified transform is not installed, an empty stream will be
+     * returned.
+     *
+     * @param <A> The input type.
+     * @param <B> The expected output type.
+     * @param from The model to generate.
+     * @param to The model type to transform to.
+     * @param transform The specified transform to use.
+     * @return A stream of meta objects.
+     */
+    default <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to, Class<? extends Transform<A, B>> transform) {
+        return metaOn(from, to)
+            .filter(meta -> transform.equals(meta.getTransform().getClass()));
+    }
 
     /**
      * Renders the specified model into a stream of code models. This is used
@@ -98,6 +117,26 @@ public interface Generator {
      */
     default <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to) {
         return models.stream().map(model -> metaOn(model, to)).flatMap(m -> m);
+    }
+    
+    /**
+     * Renders all the specified models into a stream of code models. This is
+     * used internally to provide the other interface methods. This will only
+     * return results from the specified transform.
+     * 
+     * If the specified transform is not installed, an empty stream will be
+     * returned.
+     * 
+     * @param <A> The input type.
+     * @param <B> The expected output type.
+     * @param models The models to generate.
+     * @param to The expected result type.
+     * @param transform The specific transform to use.
+     * @return A stream of meta objects.
+     */
+    default <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to, Class<? extends Transform<A, B>> transform) {
+        return metaOn(models, to)
+            .filter(meta -> transform.equals(meta.getTransform().getClass()));
     }
 
     /**

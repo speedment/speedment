@@ -17,6 +17,7 @@
 package com.speedment.codegen.lang.interfaces;
 
 import com.speedment.codegen.lang.models.Field;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,6 +30,12 @@ public interface HasFields<T extends HasFields<T>> {
     @SuppressWarnings("unchecked")
     default T add(final Field field) {
         getFields().add(field);
+        return (T) this;
+    }
+    
+    @SuppressWarnings("unchecked")
+    default T addAllFields(final Collection<? extends Field> fields) {
+        getFields().addAll(fields);
         return (T) this;
     }
     

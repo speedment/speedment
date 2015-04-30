@@ -290,6 +290,10 @@ public class Formatting {
 		}
 		return result;
 	}
+    
+    public static String classToJavaFileName(String longName) {
+        return longName.replace('.', '/') + ".java";
+	}
 
     private static String nl = "\n",
             dnl = "\n\n",

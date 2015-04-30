@@ -107,7 +107,7 @@ public class DefaultGenerator implements Generator {
             );
         }
 
-        return factories.stream().flatMap(factory ->
+        return factories.stream().flatMap(factory -> 
             BridgeTransform.create(factory, from.getClass(), to)
             .map(t -> (Transform<A, B>) t)
             .map(t -> transform(t, from, factory))

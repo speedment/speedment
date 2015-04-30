@@ -14,22 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.base;
-
-import java.util.Optional;
+package com.speedment.orm.code.model.java.transform;
 
 /**
- * Transforms must have a public constructor with no parameters so that it can
- * be instantiated dynamically.
- * 
- * @author Emil Forslund
- * @param <F> The model to generate from.
- * @param <T> The resulting model.
+ *
+ * @author pemi
  */
-public interface Transform<F, T> {
-    Optional<T> transform(Generator gen, F model);
-    
-    default boolean is(Class<? extends Transform<?, ?>> transformer) {
-        return transformer.isAssignableFrom(getClass());
+public class TableToFieldType extends TableToType {
+
+    @Override
+    protected String nameSuffix() {
+        return "Field";
     }
+    
 }

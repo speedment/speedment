@@ -20,23 +20,29 @@ import com.speedment.codegen.lang.interfaces.Copyable;
 import com.speedment.codegen.lang.interfaces.HasType;
 import com.speedment.codegen.lang.models.implementation.ImportImpl;
 import com.speedment.codegen.lang.models.modifiers.ImportModifier;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface Import extends Copyable<Import>, HasType<Import>, 
-    ImportModifier<Import> {
+public interface Import extends Copyable<Import>, HasType<Import>, ImportModifier<Import> {
 
-    enum Factory { INST;
+    Optional<String> getStaticMember();
+
+    Import setStaticMember(String member);
+
+    enum Factory {
+
+        INST;
         private Supplier<Import> prototype = () -> new ImportImpl(null);
     }
 
     static Import of(Type type) {
         return Factory.INST.prototype.get().set(type);
     }
-    
+
     static void setSupplier(Supplier<Import> a) {
         Factory.INST.prototype = a;
     }

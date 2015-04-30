@@ -109,4 +109,9 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
             return bridges.stream().flatMap(i -> i);
         }
     }
+
+    @Override
+    public boolean is(Class<? extends Transform<?, ?>> transformer) {
+        return steps.stream().anyMatch(t -> t.is(transformer));
+    }
 }

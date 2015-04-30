@@ -18,7 +18,9 @@ package com.speedment.orm.code.model.java;
 
 import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Meta;
 import com.speedment.codegen.java.JavaGenerator;
+import com.speedment.codegen.java.JavaTransformFactory;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.Translator;
 import com.speedment.orm.code.model.java.entity.EntityBuilderTranslator;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,25 +58,28 @@ public class MainGenerator implements Consumer<Project> {
     public void accept(Project project) {
         final List<Translator<?, File>> translators = new ArrayList<>();
 
-        final Generator cg = new JavaGenerator();
+        final Generator gen = new JavaGenerator(
+            //new JavaTransformFactory(), 
+            new SpeedmentTransformFactory()
+        );
 
-        translators.add(new SpeedmentApplicationTranslator(cg, project));
-        translators.add(new SpeedmentApplicationMetadataTranslator(cg, project));
+        translators.add(new SpeedmentApplicationTranslator(gen, project));
+        translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
         
         project.traversalOf(Table.class).forEach(table -> {
-            translators.add(new EntityTranslator(cg, table));
-            translators.add(new EntityBuilderTranslator(cg, table));
-            translators.add(new EntityImplTranslator(cg, table));
-            translators.add(new EntityManagerTranslator(cg, table));
-            translators.add(new EntityManagerImplTranslator(cg, table));
+            translators.add(new EntityTranslator(gen, table));
+            translators.add(new EntityBuilderTranslator(gen, table));
+            translators.add(new EntityImplTranslator(gen, table));
+            translators.add(new EntityManagerTranslator(gen, table));
+            translators.add(new EntityManagerImplTranslator(gen, table));
         });
 
         Formatting.tab("    ");
-        cg.metaOn(translators.stream()
+        gen.metaOn(translators.stream()
             .map(t -> t.get())
             .collect(Collectors.toList()))
             .forEach(c -> {
-
+                
                 final String fname = project.getPacketLocation()
                 + "/"
                 + c.getModel().getName();
@@ -93,6 +99,18 @@ public class MainGenerator implements Consumer<Project> {
                 System.out.println(content);
                 System.out.println("*** END   File:" + fname);
             });
+        
+        System.out.println("df");
+        
+        List<Table> tables = project
+            .traversalOf(Table.class)
+            .collect(toList());
+        
+        gen.metaOn(tables).forEach(meta -> {
+            writeToFile(project, meta);
+        });
+        
+        
 //        
 //        
 //        translators.forEach(t -> {
@@ -103,6 +121,27 @@ public class MainGenerator implements Consumer<Project> {
 //            System.out.println("*** END   File:" + file.getName());
 //        });
 
+    }
+    
+    private static void writeToFile(Project project, Meta<Table, String> c) {
+        final String fname = project.getPacketLocation()
+        + "/"
+        + c.getModel().getName();
+        final String content = c.getResult();
+        final Path path = Paths.get(fname);
+        path.getParent().toFile().mkdirs();
+
+        try {
+            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException ex) {
+            LOGGER.error("Failed to create file " + fname, ex);
+        }
+
+        LOGGER.info("done");
+
+        System.out.println("*** BEGIN File:" + fname);
+        System.out.println(content);
+        System.out.println("*** END   File:" + fname);
     }
 
 }

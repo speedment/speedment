@@ -142,6 +142,10 @@ public class JavaLanguage {
     public static String javaVariableName(final String externalName) {
         return javaName(externalName, Character::toLowerCase);
     }
+    
+    public static String javaStaticFieldName(final String externalName) {
+        return javaName(toUnderscoreSeparated(externalName).toUpperCase(), Character::toUpperCase);
+    }
 
     private static String javaName(final String externalName, Function<Character, Character> mutator) {
 
