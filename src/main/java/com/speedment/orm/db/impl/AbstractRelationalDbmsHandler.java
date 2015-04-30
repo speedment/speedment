@@ -31,6 +31,7 @@ import com.speedment.orm.core.manager.sql.SqlStatement;
 import com.speedment.orm.core.manager.sql.SqlUpdateStatement;
 import com.speedment.orm.db.AsynchronousQueryResult;
 import com.speedment.orm.db.DbmsHandler;
+import com.speedment.orm.exception.SpeedmentException;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.SqlTypeMapperComponent;
 import com.speedment.util.java.sql.TypeInfo;
@@ -90,18 +91,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try {
             conn = DriverManager.getConnection(getUrl(), connectionProps);
         } catch (SQLException sqle) {
-            LOGGER.error("Unable to get connection for " + dbms, sqle);
-            throw new RuntimeException(sqle);
+            final String msg = "Unable to get connection for " + dbms;
+            LOGGER.error(msg, sqle);
+            throw new SpeedmentException(msg, sqle);
         }
         return conn;
-    }
-
-    public void init() {
-//        try {
-////            databaseMetaData = getConnection().getMetaData();
-//        } catch (SQLException sqle) {
-//            LOGGER.fatal("Unable to load database metadata for " + dbms.getName(), sqle);
-//        }
     }
 
     public String getUrl() {
@@ -114,9 +108,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         getDbms().getPort().ifPresent(p -> result.append(":").append(p));
         result.append("/");
 
-//        if (getDefaultSchemaName() != null) {
-//            result.append(getDefaultSchemaName());
-//        }
         dbmsType.getDefaultConnectorParameters().ifPresent(d -> result.append("?").append(d));
 
         return result.toString();
@@ -142,12 +133,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 schemas.forEach(schema -> {
                     final List<Table> tables = tables(connection, schema).collect(toList());
                     tables.forEach(table -> {
-                        
+
                         columns(connection, schema, table).forEachOrdered(table::add);
                         primaryKeyColumns(connection, schema, table).forEachOrdered(table::add);
                         indexes(connection, schema, table).forEachOrdered(table::add);
                         foreignKeys(connection, schema, table).forEachOrdered(table::add);
-                        
+
                         schema.add(table);
                     });
                 });
@@ -209,7 +200,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
 
         } catch (SQLException sqle) {
-            throw new RuntimeException(sqle);
+            throw new SpeedmentException(sqle);
         }
         return schemas.stream();
     }
@@ -243,21 +234,21 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
             }
         } catch (SQLException sqle) {
-            throw new RuntimeException(sqle);
+            throw new SpeedmentException(sqle);
         }
         return tables.stream();
     }
 
     protected Stream<Column> columns(final Connection connection, Schema schema, Table table) {
-        final SqlSupplier<ResultSet> supplier = () -> {
-            return connection.getMetaData().getColumns(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), null);
-        };
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getColumns(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), null);
+
         final SqlFunction<ResultSet, Column> mapper = rs -> {
             final Column column = Column.newColumn();
             column.setName(rs.getString("COLUMN_NAME"));
             column.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
-            boolean nullable = (rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls);
+            boolean nullable = rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls;
             column.setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
@@ -279,9 +270,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected Stream<PrimaryKeyColumn> primaryKeyColumns(final Connection connection, Schema schema, Table table) {
-        final SqlSupplier<ResultSet> supplier = () -> {
-            return connection.getMetaData().getPrimaryKeys(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName());
-        };
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getPrimaryKeys(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName());
+
         final SqlFunction<ResultSet, PrimaryKeyColumn> mapper = rs -> {
             final PrimaryKeyColumn primaryKeyColumn = PrimaryKeyColumn.newPrimaryKeyColumn();
             primaryKeyColumn.setName(rs.getString("COLUMN_NAME"));
@@ -293,9 +284,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected Stream<Index> indexes(final Connection connection, Schema schema, Table table) {
         final Map<String, Index> indexes = new HashMap<>(); // Use map instead of Set because Index equality is difficult...
-        final SqlSupplier<ResultSet> supplier = () -> {
-            return connection.getMetaData().getIndexInfo(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), false, false);
-        };
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getIndexInfo(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), false, false);
+
         final SqlFunction<ResultSet, Index> mapper = rs -> {
             final String indexName = rs.getString("INDEX_NAME");
             final boolean notUnique = rs.getBoolean("NON_UNIQUE");
@@ -379,7 +370,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
             }
         } catch (SQLException sqle) {
-            throw new RuntimeException(sqle);
+            throw new SpeedmentException(sqle);
         }
         return childs.stream();
     }
@@ -405,7 +396,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             return streamBuilder.build();
         } catch (SQLException sqle) {
             LOGGER.error("Error querying " + sql, sqle);
-            throw new RuntimeException(sqle);
+            throw new SpeedmentException(sqle);
         }
     }
 
@@ -416,18 +407,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
     }
 
-//    @Override
-//    public int executeUpdate(final String sql) {
-//        try (
-//                final Connection connection = getConnection();
-//                final Statement statement = connection.createStatement();) {
-//            int result = statement.executeUpdate(sql);
-//            return result;
-//        } catch (SQLException sqle) {
-//            LOGGER.error("Error updating " + sql, sqle);
-//            throw new RuntimeException(sqle);
-//        }
-//    }
     @Override
     public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
@@ -523,13 +502,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
     }
 
-    <T> Supplier<T> wrapSupplierInRuntimeException(final SqlSupplier<T> innerSupplier) {
+    <T> Supplier<T> wrapSupplierInSpeedmentException(final SqlSupplier<T> innerSupplier) {
 
         return () -> {
             try {
                 return innerSupplier.get();
             } catch (SQLException sqle) {
-                throw new RuntimeException(sqle);
+                throw new SpeedmentException(sqle);
             }
         };
 
