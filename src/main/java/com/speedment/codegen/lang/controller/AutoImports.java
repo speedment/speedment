@@ -18,15 +18,16 @@ package com.speedment.codegen.lang.controller;
 
 import static com.speedment.codegen.Formatting.DOT;
 import com.speedment.codegen.base.DependencyManager;
-import com.speedment.codegen.lang.interfaces.Annotable;
-import com.speedment.codegen.lang.interfaces.Classable;
-import com.speedment.codegen.lang.interfaces.Constructable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Interfaceable;
-import com.speedment.codegen.lang.interfaces.Methodable;
-import com.speedment.codegen.lang.interfaces.Supertypeable;
-import com.speedment.codegen.lang.interfaces.Typeable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
+import com.speedment.codegen.lang.interfaces.HasClasses;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
+import com.speedment.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasImplements;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.interfaces.HasSupertype;
+import com.speedment.codegen.lang.interfaces.HasType;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.implementation.ImportImpl;
@@ -59,67 +60,78 @@ public class AutoImports implements Consumer<File> {
 	}
 	
 	private void findTypesIn(Object o, Map<String, Type> types) {
-		if (Supertypeable.class.isAssignableFrom(o.getClass())) {
-			((Supertypeable<?>) o).getSupertype().ifPresent(t -> addType(t, types));
+		if (HasSupertype.class.isAssignableFrom(o.getClass())) {
+			((HasSupertype<?>) o).getSupertype().ifPresent(t -> addType(t, types));
 		}
 		
-		if (Annotable.class.isAssignableFrom(o.getClass())) {
-			((Annotable<?>) o).getAnnotations().forEach(a -> {
+		if (HasAnnotationUsage.class.isAssignableFrom(o.getClass())) {
+			((HasAnnotationUsage<?>) o).getAnnotations().forEach(a -> {
 				addType(a.getType(), types);
 			});
 		}
 		
-		if (Classable.class.isAssignableFrom(o.getClass())) {
-			((Classable<?>) o).getClasses().forEach(c -> {
+		if (HasClasses.class.isAssignableFrom(o.getClass())) {
+			((HasClasses<?>) o).getClasses().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (Constructable.class.isAssignableFrom(o.getClass())) {
-			((Constructable<?>) o).getConstructors().forEach(c -> {
+		if (HasConstructors.class.isAssignableFrom(o.getClass())) {
+			((HasConstructors<?>) o).getConstructors().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (Fieldable.class.isAssignableFrom(o.getClass())) {
-			((Fieldable<?>) o).getFields().forEach(f -> {
+		if (HasFields.class.isAssignableFrom(o.getClass())) {
+			((HasFields<?>) o).getFields().forEach(f -> {
 				addType(f.getType(), types);
 				findTypesIn(f, types);
 			});
 		}
 		
-		if (Generable.class.isAssignableFrom(o.getClass())) {
-			((Generable<?>) o).getGenerics().forEach(g -> {
+		if (HasGenerics.class.isAssignableFrom(o.getClass())) {
+			((HasGenerics<?>) o).getGenerics().forEach(g -> {
 				g.getUpperBounds().forEach(ub -> {
 					addType(ub, types);
 				});
 			});
 		}
 		
-		if (Interfaceable.class.isAssignableFrom(o.getClass())) {
-			((Interfaceable<?>) o).getInterfaces().forEach(i -> {
+		if (HasImplements.class.isAssignableFrom(o.getClass())) {
+			((HasImplements<?>) o).getInterfaces().forEach(i -> {
 				addType(i, types);
 			});
 		}
 		
-		if (Methodable.class.isAssignableFrom(o.getClass())) {
-			((Methodable<?>) o).getMethods().forEach(m -> {
+		if (HasMethods.class.isAssignableFrom(o.getClass())) {
+			((HasMethods<?>) o).getMethods().forEach(m -> {
 				addType(m.getType(), types);
 				findTypesIn(m, types);
 			});
 		}
+        
+        if (HasThrows.class.isAssignableFrom(o.getClass())) {
+			((HasThrows<?>) o).getExceptions().forEach(e -> {
+				addType(e, types);
+			});
+		}
 		
-		if (Typeable.class.isAssignableFrom(o.getClass())) {
-			addType(((Typeable<?>) o).getType(), types);
+		if (HasType.class.isAssignableFrom(o.getClass())) {
+			addType(((HasType<?>) o).getType(), types);
 		}
 	}
 	
 	private void addType(Type type, Map<String, Type> types) {
 		final String name = type.getName();
+
 		if (name.contains(DOT)) {
 			if (!mgr.isIgnored(name)) {
 				types.put(name, type);
 			}
 		}
+        
+        if (!type.getGenerics().isEmpty()) {
+            findTypesIn(type, types);
+        }
 	}
 }

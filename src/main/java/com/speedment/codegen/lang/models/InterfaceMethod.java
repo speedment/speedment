@@ -16,14 +16,15 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
-import com.speedment.codegen.lang.interfaces.Codeable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
+import com.speedment.codegen.lang.interfaces.HasCode;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Nameable;
-import com.speedment.codegen.lang.interfaces.Typeable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasType;
 import com.speedment.codegen.lang.models.implementation.InterfaceMethodImpl;
 import com.speedment.codegen.lang.models.modifiers.InterfaceMethodModifier;
 
@@ -31,10 +32,11 @@ import com.speedment.codegen.lang.models.modifiers.InterfaceMethodModifier;
  *
  * @author Emil Forslund
  */
-public interface InterfaceMethod extends Nameable<InterfaceMethod>, 
-    Typeable<InterfaceMethod>, Generable<InterfaceMethod>, 
-    Fieldable<InterfaceMethod>, Documentable<InterfaceMethod>, 
-    Annotable<InterfaceMethod>, Codeable<InterfaceMethod>, 
+public interface InterfaceMethod extends HasName<InterfaceMethod>, 
+    HasThrows<InterfaceMethod>,
+    HasType<InterfaceMethod>, HasGenerics<InterfaceMethod>, 
+    HasFields<InterfaceMethod>, HasJavadoc<InterfaceMethod>, 
+    HasAnnotationUsage<InterfaceMethod>, HasCode<InterfaceMethod>, 
     InterfaceMethodModifier<InterfaceMethod>, Copyable<InterfaceMethod> {
 
     static InterfaceMethod of(Method wrapped) {

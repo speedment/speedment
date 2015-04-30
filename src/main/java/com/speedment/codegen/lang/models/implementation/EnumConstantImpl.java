@@ -18,7 +18,7 @@ package com.speedment.codegen.lang.models.implementation;
 
 import com.speedment.codegen.lang.models.EnumConstant;
 import com.speedment.codegen.lang.models.Value;
-import com.speedment.codegen.util.Copier;
+import com.speedment.util.Copier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import com.speedment.codegen.lang.interfaces.Methodable;
+import com.speedment.codegen.lang.interfaces.HasMethods;
 import java.util.function.Consumer;
 
 /**
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @param <T>
  */
-public class FinalParameters<T extends Methodable<T>> implements Consumer<T> {
+public class FinalParameters<T extends HasMethods<T>> implements Consumer<T> {
 	@Override
 	public void accept(T model) {
 		model.getMethods().forEach(m -> m.getFields().forEach(p -> p.final_()));

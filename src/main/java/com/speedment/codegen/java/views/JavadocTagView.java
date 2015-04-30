@@ -17,8 +17,8 @@
 package com.speedment.codegen.java.views;
 
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.JavadocTag;
 import java.util.Optional;
 
@@ -26,10 +26,10 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class JavadocTagView implements CodeView<JavadocTag> {
+public class JavadocTagView implements Transform<JavadocTag, String> {
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, JavadocTag model) {
+	public Optional<String> transform(Generator cg, JavadocTag model) {
 		return Optional.of(
 			AT + model.getName() + 
 			ifelse(model.getValue(), s -> SPACE + s, EMPTY) + SPACE +

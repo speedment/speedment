@@ -16,15 +16,15 @@
  */
 package com.speedment.codegen.lang.models.modifiers;
 
-import com.speedment.codegen.lang.interfaces.Modifiable;
+import com.speedment.codegen.lang.interfaces.HasModifiers;
 import static com.speedment.codegen.lang.models.modifiers.Modifier.*;
 
 /**
  *
  * @author Emil Forslund
  */
-interface Keyword {
-    interface public_<T extends public_<T>> extends Modifiable<T> {
+public interface Keyword {
+    interface public_<T extends public_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T public_() {
             getModifiers().add(PUBLIC);
@@ -32,7 +32,7 @@ interface Keyword {
         }
     }
     
-    interface protected_<T extends protected_<T>> extends Modifiable<T> {
+    interface protected_<T extends protected_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T protected_() {
             getModifiers().add(PROTECTED);
@@ -40,7 +40,7 @@ interface Keyword {
         }
     }
     
-    interface private_<T extends private_<T>> extends Modifiable<T> {
+    interface private_<T extends private_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T private_() {
             getModifiers().add(PRIVATE);
@@ -48,7 +48,7 @@ interface Keyword {
         }
     }
     
-    interface static_<T extends static_<T>> extends Modifiable<T> {
+    interface static_<T extends static_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T static_() {
             getModifiers().add(STATIC);
@@ -56,7 +56,7 @@ interface Keyword {
         }
     }
     
-    interface final_<T extends final_<T>> extends Modifiable<T> {
+    interface final_<T extends final_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T final_() {
             getModifiers().add(FINAL);
@@ -64,7 +64,7 @@ interface Keyword {
         }
     }
     
-    interface abstract_<T extends abstract_<T>> extends Modifiable<T> {
+    interface abstract_<T extends abstract_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T abstract_() {
             getModifiers().add(ABSTRACT);
@@ -72,7 +72,7 @@ interface Keyword {
         }
     }
     
-    interface strictfp_<T extends strictfp_<T>> extends Modifiable<T> {
+    interface strictfp_<T extends strictfp_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T strictfp_() {
             getModifiers().add(STRICTFP);
@@ -80,7 +80,7 @@ interface Keyword {
         }
     }
     
-    interface synchronized_<T extends synchronized_<T>> extends Modifiable<T> {
+    interface synchronized_<T extends synchronized_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T synchronized_() {
             getModifiers().add(SYNCHRONIZED);
@@ -88,7 +88,7 @@ interface Keyword {
         }
     }
     
-    interface transient_<T extends transient_<T>> extends Modifiable<T> {
+    interface transient_<T extends transient_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T transient_() {
             getModifiers().add(TRANSIENT);
@@ -96,7 +96,7 @@ interface Keyword {
         }
     }
     
-    interface volatile_<T extends volatile_<T>> extends Modifiable<T> {
+    interface volatile_<T extends volatile_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T volatile_() {
             getModifiers().add(VOLATILE);
@@ -104,7 +104,7 @@ interface Keyword {
         }
     }
     
-    interface native_<T extends native_<T>> extends Modifiable<T> {
+    interface native_<T extends native_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T native_() {
             getModifiers().add(NATIVE);
@@ -112,7 +112,7 @@ interface Keyword {
         }
     }
 	
-    interface default_<T extends default_<T>> extends Modifiable<T> {
+    interface default_<T extends default_<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T default_() {
             getModifiers().add(DEFAULT);

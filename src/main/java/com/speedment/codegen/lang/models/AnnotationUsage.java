@@ -17,8 +17,8 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Typeable;
-import com.speedment.codegen.lang.interfaces.Valuable;
+import com.speedment.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.lang.interfaces.HasValue;
 import com.speedment.codegen.lang.models.implementation.AnnotationUsageImpl;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  * @author Emil Forslund
  */
 public interface AnnotationUsage extends Copyable<AnnotationUsage>, 
-    Typeable<AnnotationUsage>, Valuable<AnnotationUsage> {
+    HasType<AnnotationUsage>, HasValue<AnnotationUsage> {
     
     AnnotationUsage put(String key, Value<?> val);
     List<Map.Entry<String, Value<?>>> getValues();

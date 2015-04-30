@@ -17,7 +17,7 @@
 package com.speedment.orm.code.model.java;
 
 import com.speedment.codegen.Formatting;
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.Translator;
@@ -55,7 +55,7 @@ public class MainGenerator implements Consumer<Project> {
     public void accept(Project project) {
         final List<Translator<?, File>> translators = new ArrayList<>();
 
-        final CodeGenerator cg = new JavaGenerator();
+        final Generator cg = new JavaGenerator();
 
         translators.add(new SpeedmentApplicationTranslator(cg, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(cg, project));
@@ -69,7 +69,7 @@ public class MainGenerator implements Consumer<Project> {
         });
 
         Formatting.tab("    ");
-        cg.codeOn(translators.stream()
+        cg.metaOn(translators.stream()
             .map(t -> t.get())
             .collect(Collectors.toList()))
             .forEach(c -> {
@@ -77,7 +77,7 @@ public class MainGenerator implements Consumer<Project> {
                 final String fname = project.getPacketLocation()
                 + "/"
                 + c.getModel().getName();
-                final String content = c.getText();
+                final String content = c.getResult();
                 final Path path = Paths.get(fname);
                 path.getParent().toFile().mkdirs();
 

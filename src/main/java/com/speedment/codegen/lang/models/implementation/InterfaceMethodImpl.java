@@ -34,7 +34,8 @@ import java.util.Set;
  * @author Emil Forslund
  */
 public class InterfaceMethodImpl implements InterfaceMethod {
-	private final Method m;
+	
+    private final Method m;
 	
 	public InterfaceMethodImpl(Method wrapped) {
 		this.m = wrapped;
@@ -96,6 +97,11 @@ public class InterfaceMethodImpl implements InterfaceMethod {
     public InterfaceMethod set(Javadoc doc) {
         m.set(doc);
         return this;
+    }
+    
+    @Override
+    public Set<Type> getExceptions() {
+        return m.getExceptions();
     }
     
     @Override

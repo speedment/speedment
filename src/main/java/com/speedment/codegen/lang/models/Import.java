@@ -17,7 +17,7 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Typeable;
+import com.speedment.codegen.lang.interfaces.HasType;
 import com.speedment.codegen.lang.models.implementation.ImportImpl;
 import com.speedment.codegen.lang.models.modifiers.ImportModifier;
 import java.util.function.Supplier;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Import extends Copyable<Import>, Typeable<Import>, 
+public interface Import extends Copyable<Import>, HasType<Import>, 
     ImportModifier<Import> {
 
     enum Factory { INST;

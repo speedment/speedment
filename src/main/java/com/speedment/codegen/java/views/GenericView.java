@@ -16,24 +16,24 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Generic;
 import java.util.Optional;
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.util.CodeCombiner;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.util.CodeCombiner;
 
 /**
  *
  * @author Emil Forslund
  */
-public class GenericView implements CodeView<Generic> {
+public class GenericView implements Transform<Generic, String> {
 	private final static String 
 			EXTENDS_STRING = " extends ", 
 			SUPER_STRING = " super ";
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, Generic model) {
+	public Optional<String> transform(Generator cg, Generic model) {
 		if (!model.getLowerBound().isPresent() 
 		&&   model.getUpperBounds().isEmpty()) {
 			return Optional.empty();

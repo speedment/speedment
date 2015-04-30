@@ -17,11 +17,11 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Callable;
-import com.speedment.codegen.lang.interfaces.Classable;
+import com.speedment.codegen.lang.interfaces.HasClasses;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Importable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasImports;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import java.util.function.Supplier;
 
@@ -29,7 +29,8 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface File extends Copyable<File>, Nameable<File>, Documentable<File>, Importable<File>, Classable<File>, Callable<File> {
+public interface File extends Copyable<File>, HasName<File>, 
+    HasJavadoc<File>, HasImports<File>, HasClasses<File>, Callable<File> {
 
     enum Factory { INST;
         private Supplier<File> prototype = () -> new FileImpl(null);

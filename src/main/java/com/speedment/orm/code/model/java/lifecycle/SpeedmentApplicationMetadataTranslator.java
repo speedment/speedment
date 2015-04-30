@@ -16,7 +16,7 @@
  */
 package com.speedment.orm.code.model.java.lifecycle;
 
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.File;
@@ -39,7 +39,7 @@ public class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTran
 
     private final String className = typeName(project()) + "Application" + METADATA;
 
-    public SpeedmentApplicationMetadataTranslator(CodeGenerator cg, Project configEntity) {
+    public SpeedmentApplicationMetadataTranslator(Generator cg, Project configEntity) {
         super(cg, configEntity);
     }
 

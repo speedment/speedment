@@ -18,7 +18,7 @@ package com.speedment.orm.code.model.java.manager;
 
 import static com.speedment.codegen.Formatting.block;
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
@@ -44,7 +44,7 @@ import java.util.stream.Stream;
  */
 public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<Class> {
 
-    public EntityManagerImplTranslator(CodeGenerator cg, Table configEntity) {
+    public EntityManagerImplTranslator(Generator cg, Table configEntity) {
         super(cg, configEntity);
     }
 

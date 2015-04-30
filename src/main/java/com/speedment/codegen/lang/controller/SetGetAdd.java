@@ -74,7 +74,7 @@ public class SetGetAdd implements Consumer<Class> {
 	
 	@Override
 	public void accept(Class model) {
-		model.getFields().stream().forEach(f -> {
+		model.getFields().forEach(f -> {
 			f.private_();
 			
 			if (isCollection(f.getType())) {

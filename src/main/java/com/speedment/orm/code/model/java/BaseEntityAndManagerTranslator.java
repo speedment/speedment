@@ -17,7 +17,7 @@
 package com.speedment.orm.code.model.java;
 
 import com.speedment.codegen.Formatting;
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Type;
@@ -79,7 +79,7 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
             GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
             GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
-    public BaseEntityAndManagerTranslator(CodeGenerator cg, Table configEntity) {
+    public BaseEntityAndManagerTranslator(Generator cg, Table configEntity) {
         super(cg, configEntity);
 //        this.cg = cg;
     }

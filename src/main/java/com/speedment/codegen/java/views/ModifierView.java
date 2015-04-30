@@ -16,8 +16,8 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.modifiers.Modifier;
 import java.util.Optional;
 
@@ -25,10 +25,10 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class ModifierView implements CodeView<Modifier> {
+public class ModifierView implements Transform<Modifier, String> {
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, Modifier model) {
+	public Optional<String> transform(Generator cg, Modifier model) {
 		return Optional.of(model.getName());
 	}
 	

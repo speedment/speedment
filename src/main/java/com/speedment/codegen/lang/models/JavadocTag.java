@@ -18,7 +18,7 @@ package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Callable;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.implementation.JavadocTagImpl;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface JavadocTag extends Copyable<JavadocTag>, Nameable<JavadocTag>, 
+public interface JavadocTag extends Copyable<JavadocTag>, HasName<JavadocTag>, 
     Callable<JavadocTag> {
     
     JavadocTag setValue(String value);

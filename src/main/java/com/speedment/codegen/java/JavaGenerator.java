@@ -17,24 +17,24 @@
 package com.speedment.codegen.java;
 
 import com.speedment.codegen.base.DefaultDependencyManager;
-import com.speedment.codegen.base.Installer;
-import com.speedment.codegen.base.MultiGenerator;
+import com.speedment.codegen.base.TransformFactory;
+import com.speedment.codegen.base.DefaultGenerator;
 
 /**
  *
  * @author Emil Forslund
  */
-public class JavaGenerator extends MultiGenerator {
+public class JavaGenerator extends DefaultGenerator {
 	private final static String[] types = new String[] {
 		"void", "byte", "short", "char", "int", "long", "float", 
 		"double", "boolean"
 	};
     
     public JavaGenerator() {
-        this(new JavaInstaller());
+        this(new JavaTransformFactory());
     }
 	
-	public JavaGenerator(Installer... installers) {
+	public JavaGenerator(TransformFactory... installers) {
 		super(new DefaultDependencyManager("java.lang", types), installers);
 	}
 }

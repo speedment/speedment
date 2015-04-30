@@ -16,18 +16,18 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Callable;
-import com.speedment.codegen.lang.interfaces.Classable;
+import com.speedment.codegen.lang.interfaces.HasClasses;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Initalizable;
-import com.speedment.codegen.lang.interfaces.Interfaceable;
-import com.speedment.codegen.lang.interfaces.Methodable;
-import com.speedment.codegen.lang.interfaces.Modifiable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasInitalizers;
+import com.speedment.codegen.lang.interfaces.HasImplements;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.interfaces.HasModifiers;
+import com.speedment.codegen.lang.interfaces.HasName;
 
 /**
  *
@@ -35,6 +35,6 @@ import com.speedment.codegen.lang.interfaces.Nameable;
  * @param <T>
  */
 public interface ClassOrInterface<T extends ClassOrInterface<T>> extends 
-    Copyable<T>, Callable<T>, Nameable<T>, Documentable<T>, Generable<T>,
-    Interfaceable<T>, Classable<T>, Methodable<T>, Fieldable<T>, 
-    Annotable<T>, Modifiable<T>, Initalizable<T> {}
+    Copyable<T>, Callable<T>, HasName<T>, HasJavadoc<T>, HasGenerics<T>,
+    HasImplements<T>, HasClasses<T>, HasMethods<T>, HasFields<T>, 
+    HasAnnotationUsage<T>, HasModifiers<T>, HasInitalizers<T> {}

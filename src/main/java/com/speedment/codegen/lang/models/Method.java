@@ -16,15 +16,16 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Callable;
-import com.speedment.codegen.lang.interfaces.Codeable;
+import com.speedment.codegen.lang.interfaces.HasCode;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Nameable;
-import com.speedment.codegen.lang.interfaces.Typeable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasType;
 import com.speedment.codegen.lang.models.implementation.MethodImpl;
 import com.speedment.codegen.lang.models.modifiers.MethodModifier;
 import java.util.function.Supplier;
@@ -33,9 +34,9 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Method extends Nameable<Method>, Typeable<Method>, 
-    Generable<Method>, Fieldable<Method>, Documentable<Method>, Annotable<Method>, 
-    Codeable<Method>, Callable<Method>, MethodModifier<Method>, Copyable<Method> {
+public interface Method extends HasName<Method>, HasType<Method>, HasThrows<Method>,
+    HasGenerics<Method>, HasFields<Method>, HasJavadoc<Method>, HasAnnotationUsage<Method>, 
+    HasCode<Method>, Callable<Method>, MethodModifier<Method>, Copyable<Method> {
 
     enum Factory { INST;
         private Supplier<Method> supplier = () -> new MethodImpl(null, null);

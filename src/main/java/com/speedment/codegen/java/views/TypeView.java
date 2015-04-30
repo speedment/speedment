@@ -16,13 +16,13 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.DependencyManager;
+import com.speedment.codegen.base.Transform;
 import java.util.Optional;
-import com.speedment.codegen.util.CodeCombiner;
+import com.speedment.util.CodeCombiner;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  */
-public class TypeView implements CodeView<Type> {
-	private Optional<String> renderName(CodeGenerator cg, Type model, String name) {
+public class TypeView implements Transform<Type, String> {
+	private Optional<String> renderName(Generator cg, Type model, String name) {
 		return Optional.of(
 			name + cg.onEach(model.getGenerics()).collect(
 				CodeCombiner.joinIfNotEmpty(
@@ -51,7 +51,7 @@ public class TypeView implements CodeView<Type> {
 	}
 	
 	@Override
-	public Optional<String> render(CodeGenerator cg, Type model) {
+	public Optional<String> transform(Generator cg, Type model) {
 		final DependencyManager mgr = cg.getDependencyMgr();
 
 		if (mgr.isLoaded(model.getName())) {

@@ -19,14 +19,27 @@ package com.speedment.codegen;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
- * 
+ *
  * @author Emil Forslund
  */
 public class Formatting {
+    
+    /**
+     * Returns a string consisting of the specified blocks concatenated
+     * and separated by the specified separator.
+     * 
+     * @param separator The separator.
+     * @param blocks All the blocks.
+     * @return The concatenated string.
+     */
+    public static String separate(String separator, String... blocks) {
+        return Stream.of(blocks)
+            .collect(joining(separator));
+    }
 
     /**
      * Returns the specified text but with the first character lowercase.
@@ -104,7 +117,7 @@ public class Formatting {
      */
     public static String block(String row, String... rows) {
         return block(
-			Arrays.stream(rows).collect(Collectors.joining(
+			Arrays.stream(rows).collect(joining(
 				nl(), row + nl(), EMPTY)
 			)
 		);
@@ -117,7 +130,7 @@ public class Formatting {
      * @return The text with a '{\n' before and a '\n}' afterwards.
      */
     public static String block(Stream<String> rows) {
-        return block(rows.collect(Collectors.joining(nl())));
+        return block(rows.collect(joining(nl())));
     }
 
     /**
@@ -305,5 +318,6 @@ public class Formatting {
 			AND = "&",
 			STAR = "*",
 			SLASH = "/",
-			H = "\"";
+			H = "\"",
+            DOLLAR = "$";
 }

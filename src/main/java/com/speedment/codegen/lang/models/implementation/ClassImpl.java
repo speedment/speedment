@@ -19,7 +19,7 @@ package com.speedment.codegen.lang.models.implementation;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Type;
-import com.speedment.codegen.util.Copier;
+import com.speedment.util.Copier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

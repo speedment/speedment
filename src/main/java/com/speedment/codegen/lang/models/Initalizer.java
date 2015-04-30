@@ -17,7 +17,7 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Callable;
-import com.speedment.codegen.lang.interfaces.Codeable;
+import com.speedment.codegen.lang.interfaces.HasCode;
 import com.speedment.codegen.lang.interfaces.Copyable;
 import com.speedment.codegen.lang.models.implementation.InitalizerImpl;
 import com.speedment.codegen.lang.models.modifiers.InitalizerModifier;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * @author Emil Forslund
  */
 public interface Initalizer extends Copyable<Initalizer>, Callable<Initalizer>, 
-Codeable<Initalizer>, InitalizerModifier<Initalizer> {
+HasCode<Initalizer>, InitalizerModifier<Initalizer> {
     
     enum Factory { INST;
         private Supplier<Initalizer> supplier = () -> new InitalizerImpl();

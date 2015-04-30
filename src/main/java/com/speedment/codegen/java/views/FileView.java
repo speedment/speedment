@@ -17,12 +17,12 @@
 package com.speedment.codegen.java.views;
 
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.DependencyManager;
-import com.speedment.codegen.java.views.interfaces.ClassableView;
-import com.speedment.codegen.java.views.interfaces.DocumentableView;
-import com.speedment.codegen.java.views.interfaces.ImportableView;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.java.views.interfaces.HasClassesView;
+import com.speedment.codegen.java.views.interfaces.HasJavadocView;
+import com.speedment.codegen.java.views.interfaces.HasImportsView;
 import com.speedment.codegen.lang.models.File;
 import java.util.Optional;
 
@@ -30,8 +30,8 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class FileView implements CodeView<File>, DocumentableView<File>, 
-    ClassableView<File>, ImportableView<File> {
+public class FileView implements Transform<File, String>, HasJavadocView<File>, 
+    HasClassesView<File>, HasImportsView<File> {
     
 	private final static String PACKAGE_STRING = "package ";
 	
@@ -48,7 +48,7 @@ public class FileView implements CodeView<File>, DocumentableView<File>,
 	}
 	
 	@Override
-	public Optional<String> render(CodeGenerator cg, File model) {
+	public Optional<String> transform(Generator cg, File model) {
 		final DependencyManager mgr = cg.getDependencyMgr();
 		final Optional<String> className = fileToClassName(model.getName());
 		Optional<String> packageName = packageName(className.orElse(EMPTY));

@@ -16,12 +16,12 @@
  */
 package com.speedment.codegen.lang.models.implementation;
 
-import com.speedment.codegen.java.views.interfaces.DocumentableView;
+import com.speedment.codegen.java.views.interfaces.HasJavadocView;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Javadoc;
-import com.speedment.codegen.util.Copier;
+import com.speedment.util.Copier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

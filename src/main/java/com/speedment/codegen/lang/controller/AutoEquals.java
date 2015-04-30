@@ -16,16 +16,16 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Methodable;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasMethods;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.lang.models.constants.DefaultType.*;
 import java.util.function.Consumer;
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.lang.interfaces.Importable;
-import com.speedment.codegen.lang.interfaces.Nameable;
-import com.speedment.codegen.lang.interfaces.Supertypeable;
+import com.speedment.codegen.lang.interfaces.HasImports;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasSupertype;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
@@ -41,14 +41,14 @@ import java.util.stream.Collectors;
  * @author Emil Forslund
  * @param <T>
  */
-public class AutoEquals<T extends Fieldable<T>&Methodable<T>&Nameable<T>> implements Consumer<T> {
+public class AutoEquals<T extends HasFields<T>&HasMethods<T>&HasName<T>> implements Consumer<T> {
 
-    private final Importable<?> importer;
+    private final HasImports<?> importer;
     private final static String 
         EQUALS = "equals",
         HASHCODE = "hashCode";
 
-    public AutoEquals(Importable<?> importer) {
+    public AutoEquals(HasImports<?> importer) {
         this.importer = importer;
     }
     
@@ -75,8 +75,8 @@ public class AutoEquals<T extends Fieldable<T>&Methodable<T>&Nameable<T>> implem
                 .add("return Optional.ofNullable(other)")
                 
                 .call(m -> {
-                    if (Supertypeable.class.isAssignableFrom(t.getClass())) {
-                        final Optional<Type> supertype = ((Supertypeable<?>) t).getSupertype();
+                    if (HasSupertype.class.isAssignableFrom(t.getClass())) {
+                        final Optional<Type> supertype = ((HasSupertype<?>) t).getSupertype();
                         if (supertype.isPresent()) {
                             m.add(tab() + ".filter(o -> super.equals(o))");
                         }

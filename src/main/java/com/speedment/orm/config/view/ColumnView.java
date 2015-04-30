@@ -17,8 +17,8 @@
 package com.speedment.orm.config.view;
 
 import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.impl.utils.MethodsParser;
 import java.util.Optional;
@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  */
-public class ColumnView /*implements CodeView<Column>*/ {
+public class ColumnView /*implements Transform<Column, String>*/ {
 
 //	@Override
-//	public Optional<String> render(CodeGenerator cg, Column model) {
+//	public Optional<String> render(Generator cg, Column model) {
 //		return Optional.of("column " + block(
 //            MethodsParser.streamOfExternal(Column.class)
 //                .map(m -> m.getName() + " = " + "\"" + "\"")

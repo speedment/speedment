@@ -17,7 +17,7 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.implementation.EnumConstantImpl;
 import java.util.List;
 import java.util.function.Supplier;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface EnumConstant extends Copyable<EnumConstant>, Nameable<EnumConstant> {
+public interface EnumConstant extends Copyable<EnumConstant>, HasName<EnumConstant> {
     
     default EnumConstant add(Value<?> value) {
         getValues().add(value);

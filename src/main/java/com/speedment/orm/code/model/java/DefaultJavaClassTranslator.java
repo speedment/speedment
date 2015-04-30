@@ -16,7 +16,7 @@
  */
 package com.speedment.orm.code.model.java;
 
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.ClassOrInterface;
@@ -65,9 +65,9 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
             + "Any changes made to this Class or Interface will be overwritten.";
 
     private final C configEntity;
-    private final CodeGenerator codeGenerator;
+    private final Generator codeGenerator;
 
-    public DefaultJavaClassTranslator(CodeGenerator codeGenerator, C configEntity) {
+    public DefaultJavaClassTranslator(Generator codeGenerator, C configEntity) {
         this.configEntity = configEntity;
         this.codeGenerator = codeGenerator;
     }
@@ -102,7 +102,7 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
                 .add(AUTHOR.setValue("Speedment"));
     }
 
-    public CodeGenerator getCodeGenerator() {
+    public Generator getCodeGenerator() {
         return codeGenerator;
     }
 

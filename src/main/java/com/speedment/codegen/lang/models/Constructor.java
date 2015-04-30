@@ -16,12 +16,13 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Callable;
-import com.speedment.codegen.lang.interfaces.Codeable;
+import com.speedment.codegen.lang.interfaces.HasCode;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.lang.interfaces.HasFields;
 import com.speedment.codegen.lang.models.implementation.ConstructorImpl;
 import com.speedment.codegen.lang.models.modifiers.ConstructorModifier;
 import java.util.function.Supplier;
@@ -31,8 +32,8 @@ import java.util.function.Supplier;
  * @author Emil Forslund
  */
 public interface Constructor extends Copyable<Constructor>, Callable<Constructor>, 
-    Documentable<Constructor>, Annotable<Constructor>, Fieldable<Constructor>, 
-    Codeable<Constructor>, ConstructorModifier<Constructor> {
+    HasThrows<Constructor>, HasJavadoc<Constructor>, HasAnnotationUsage<Constructor>, 
+    HasFields<Constructor>, HasCode<Constructor>, ConstructorModifier<Constructor> {
 
     enum Factory { INST;
         private Supplier<Constructor> supplier = () -> new ConstructorImpl();

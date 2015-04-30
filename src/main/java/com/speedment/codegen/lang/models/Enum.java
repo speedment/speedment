@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Constructable;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
 import com.speedment.codegen.lang.models.implementation.EnumImpl;
 import com.speedment.codegen.lang.models.modifiers.EnumModifier;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * @author Emil Forslund
  */
 public interface Enum extends ClassOrInterface<Enum>, EnumModifier<Enum>, 
-    Constructable<Enum> {
+    HasConstructors<Enum> {
 
     default Enum add(EnumConstant constant) {
 		getConstants().add(constant);

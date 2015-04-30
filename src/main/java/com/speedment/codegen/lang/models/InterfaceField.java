@@ -16,12 +16,12 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Nameable;
-import com.speedment.codegen.lang.interfaces.Typeable;
-import com.speedment.codegen.lang.interfaces.Valuable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.lang.interfaces.HasValue;
 import com.speedment.codegen.lang.models.implementation.InterfaceFieldImpl;
 import com.speedment.codegen.lang.models.modifiers.InterfaceFieldModifier;
 
@@ -29,10 +29,10 @@ import com.speedment.codegen.lang.models.modifiers.InterfaceFieldModifier;
  *
  * @author Emil Forslund
  */
-public interface InterfaceField extends Nameable<InterfaceField>, 
-    Typeable<InterfaceField>, InterfaceFieldModifier<InterfaceField>, 
-    Documentable<InterfaceField>, Valuable<InterfaceField>, 
-    Annotable<InterfaceField>, Copyable<InterfaceField> {
+public interface InterfaceField extends HasName<InterfaceField>, 
+    HasType<InterfaceField>, InterfaceFieldModifier<InterfaceField>, 
+    HasJavadoc<InterfaceField>, HasValue<InterfaceField>, 
+    HasAnnotationUsage<InterfaceField>, Copyable<InterfaceField> {
 
     static InterfaceField of(Field wrapped) {
         return new InterfaceFieldImpl(wrapped);
