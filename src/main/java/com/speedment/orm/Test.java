@@ -25,7 +25,6 @@ import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Trees;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;

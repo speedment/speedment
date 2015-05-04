@@ -20,7 +20,6 @@ import com.speedment.codegen.Formatting;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Meta;
 import com.speedment.codegen.java.JavaGenerator;
-import com.speedment.codegen.java.JavaTransformFactory;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.orm.code.model.Translator;
 import com.speedment.orm.code.model.java.entity.EntityBuilderTranslator;
@@ -59,7 +58,6 @@ public class MainGenerator implements Consumer<Project> {
         final List<Translator<?, File>> translators = new ArrayList<>();
 
         final Generator gen = new JavaGenerator(
-            //new JavaTransformFactory(), 
             new SpeedmentTransformFactory()
         );
 
