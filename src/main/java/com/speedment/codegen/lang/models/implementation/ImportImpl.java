@@ -30,38 +30,38 @@ import java.util.Set;
  * @author Emil Forslund
  */
 public class ImportImpl implements Import {
-
-    private Type type;
+	
+	private Type type;
     private String staticMember;
-    private final Set<Modifier> modifiers;
+	private final Set<Modifier> modifiers;
 
-    public ImportImpl(Type type) {
-        this.type = type;
+	public ImportImpl(Type type) {
+		this.type = type;
         this.staticMember = null;
-        this.modifiers = EnumSet.noneOf(Modifier.class);
-    }
+		this.modifiers = EnumSet.noneOf(Modifier.class);
+	}
+	
+	protected ImportImpl(Import prototype) {
+		type = Copier.copy(prototype.getType());
+		modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+	}
 
-    protected ImportImpl(Import prototype) {
-        type = Copier.copy(prototype.getType());
-        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-    }
+	@Override
+	public Import set(Type type) {
+		this.type = type;
+		return this;
+	}
 
-    @Override
-    public Import set(Type type) {
-        this.type = type;
-        return this;
-    }
+	@Override
+	public Type getType() {
+		return type;
+	}
 
-    @Override
-    public Type getType() {
-        return type;
-    }
-
-    @Override
-    public Set<Modifier> getModifiers() {
-        return this.modifiers;
-    }
-
+	@Override
+	public Set<Modifier> getModifiers() {
+		return this.modifiers;
+	}
+    
     @Override
     public Optional<String> getStaticMember() {
         return Optional.ofNullable(staticMember);
@@ -73,10 +73,10 @@ public class ImportImpl implements Import {
         return this;
     }
 
-    @Override
-    public ImportImpl copy() {
-        return new ImportImpl(this);
-    }
+	@Override
+	public ImportImpl copy() {
+		return new ImportImpl(this);
+	}
 
     @Override
     public int hashCode() {
@@ -90,10 +90,10 @@ public class ImportImpl implements Import {
     @Override
     public boolean equals(Object obj) {
         return Optional.ofNullable(obj)
-                .filter(o -> Import.class.isAssignableFrom(o.getClass()))
-                .map(o -> (Import) o)
-                .filter(o -> Objects.equals(getType(), o.getType()))
-                .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-                .isPresent();
+            .filter(o -> Import.class.isAssignableFrom(o.getClass()))
+            .map(o -> (Import) o)
+            .filter(o -> Objects.equals(getType(), o.getType()))
+            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
+            .isPresent();
     }
 }
