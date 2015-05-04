@@ -29,27 +29,30 @@ import java.util.stream.Stream;
  */
 public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY> {
 
-    public static enum Type {
-
-        AND, OR
-    }
+    public static enum Type { AND, OR }
 
     private final List<Predicate<? super ENTITY>> predicates;
     private final Type type;
 
-    private CombinedBasePredicate(Type type, BasePredicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
+    private CombinedBasePredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
         this.predicates = new ArrayList<>();
         this.predicates.add(first);
         this.predicates.addAll(Arrays.asList(predicates));
         this.type = type;
     }
 
-    public CombinedBasePredicate<ENTITY> add(Predicate<? super ENTITY> predicate) {
-        predicates.add(predicate);
+    protected CombinedBasePredicate<ENTITY> add(Predicate<? super ENTITY> predicate) {
+        if (getClass().isAssignableFrom(predicate.getClass())) {
+            final CombinedBasePredicate<ENTITY> cbp = getClass().cast(predicate);
+            cbp.stream().forEachOrdered(this::add);
+        } else {
+            predicates.add(predicate);
+        }
+
         return this;
     }
 
-    public CombinedBasePredicate<ENTITY> remove(Predicate<? super ENTITY> predicate) {
+    protected CombinedBasePredicate<ENTITY> remove(Predicate<? super ENTITY> predicate) {
         predicates.remove(predicate);
         return this;
     }
@@ -68,7 +71,7 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
 
     public static class AndCombinedBasePredicate<ENTITY> extends CombinedBasePredicate<ENTITY> {
 
-        public AndCombinedBasePredicate(BasePredicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
+        public AndCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
             super(Type.AND, first, predicates);
         }
 
@@ -90,7 +93,7 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
 
     public static class OrCombinedBasePredicate<ENTITY> extends CombinedBasePredicate<ENTITY> {
 
-        public OrCombinedBasePredicate(BasePredicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
+        public OrCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
             super(Type.OR, first, predicates);
         }
 
