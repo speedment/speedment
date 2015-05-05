@@ -16,7 +16,6 @@
  */
 package com.speedment.orm.core.manager.sql;
 
-import static com.speedment.orm.code.model.java.DefaultJavaClassTranslator.CopyConstructorMode.BUILDER;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.PrimaryKeyColumn;
@@ -34,9 +33,6 @@ import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Cast;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
-import static java.lang.reflect.Array.set;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -48,11 +44,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import static java.util.stream.Collector.Characteristics.values;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
-import static javax.swing.text.html.parser.DTDConstants.ENTITY;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
