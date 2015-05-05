@@ -18,7 +18,6 @@ package com.speedment.orm.field.longs;
 
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -28,16 +27,16 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Long> {
+public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<ENTITY, Long> {
 
-    private final LongField field;
+    private final LongField<ENTITY> field;
     private final long value;
     private final StandardBinaryOperator binaryOperator;
 
     public LongBinaryPredicateBuilder(
-        LongField field,
-        long value,
-        StandardBinaryOperator binaryOperator
+        final LongField<ENTITY> field,
+        final long value,
+        final StandardBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -54,7 +53,7 @@ public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> im
     }
 
     @Override
-    public LongField getField() {
+    public LongField<ENTITY> getField() {
         return field;
     }
 

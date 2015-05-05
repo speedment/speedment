@@ -14,15 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.function;
+package com.speedment.orm.db.impl;
+
+import java.sql.SQLException;
+import java.util.function.Supplier;
 
 /**
  *
  * @author pemi
+ * @param <T> Supplied type
  */
-@Deprecated
 @FunctionalInterface
-public interface UnaryPredicate {
+public interface SqlSupplier<T> {
 
-    <C extends Comparable<C>> boolean eval(C first);
+    abstract T get() throws SQLException;
+    
+    public static <T> SqlSupplier<T> wrap(Supplier<T> inner) { return inner::get; }
+
 }

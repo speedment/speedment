@@ -16,14 +16,9 @@
  */
 package com.speedment.orm.field.test;
 
-import com.speedment.orm.field.test.HareField;
-import com.speedment.orm.function.*;
-import com.speedment.orm.field.test.HareManager;
-import com.speedment.orm.field.test.Hare;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.orm.function.Predicates.eq;
 // import static com.speedment.orm.function.Predicates.greterThan;
 
 /**

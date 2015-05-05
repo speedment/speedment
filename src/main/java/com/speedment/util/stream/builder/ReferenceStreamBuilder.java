@@ -66,7 +66,7 @@ public class ReferenceStreamBuilder<T> extends BaseStreamBuilder<ReferenceStream
 
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
-        return append(new FilterAction(predicate));
+        return append(new FilterAction<>(predicate));
     }
 
     @Override
@@ -112,32 +112,32 @@ public class ReferenceStreamBuilder<T> extends BaseStreamBuilder<ReferenceStream
 
     @Override
     public Stream<T> distinct() {
-        return append(new DistinctAction());
+        return append(new DistinctAction<>());
     }
 
     @Override
     public Stream<T> sorted() {
-        return append(new SortedAction());
+        return append(new SortedAction<>());
     }
 
     @Override
     public Stream<T> sorted(Comparator<? super T> comparator) {
-        return append(new SortedAction(comparator));
+        return append(new SortedAction<>(comparator));
     }
 
     @Override
     public Stream<T> peek(Consumer<? super T> action) {
-        return append(new PeekAction(action));
+        return append(new PeekAction<>(action));
     }
 
     @Override
     public Stream<T> limit(long maxSize) {
-        return append(new LimitAction(maxSize));
+        return append(new LimitAction<>(maxSize));
     }
 
     @Override
     public Stream<T> skip(long n) {
-        return append(new SkipAction(n));
+        return append(new SkipAction<>(n));
     }
 
     // Terminal operations

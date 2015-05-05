@@ -19,54 +19,77 @@ package com.speedment.util.stream.builder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.util.stream.builder.action.Action;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author pemi
  * @param <T> The type of the super class
+ * @param <P> Pipeline type
  */
 public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
 
     protected final BasePipeline<?> pipeline;
     protected final StreamTerminator streamTerminator;
+    private final List<Runnable> closeHandlers;
+    private boolean parallel;
+    private boolean ordered;
 
     public BaseStreamBuilder(BasePipeline<?> pipeline, StreamTerminator streamTerminator) {
         this.pipeline = pipeline;
         this.streamTerminator = streamTerminator;
+        this.closeHandlers = new ArrayList<>();
+        this.ordered = true;
     }
 
-    protected T append(Action newAction) {
+    protected T append(Action<?, ?> newAction) {
         pipeline.add(newAction);
-        return (T) this;
+        return thizz();
     }
 
     public T sequential() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        parallel = false;
+        return thizz();
     }
 
     public T parallel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        parallel = true;
+        return thizz();
     }
 
     public boolean isParallel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return parallel;
     }
 
     public T unordered() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ordered = false;
+        return thizz();
     }
 
     public T onClose(Runnable closeHandler) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        closeHandlers.add(closeHandler);
+        return thizz();
     }
 
     public void close() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        closeHandlers.forEach(Runnable::run);
+    }
+
+    public boolean isOrdered() {
+        return ordered;
     }
 
     protected P pipeline() {
-        P result = (P) pipeline;
+        @SuppressWarnings("unchecked")
+        final P result = (P) pipeline;
         return result;
+    }
+
+    private T thizz() {
+        @SuppressWarnings("unchecked")
+        T thizz = (T) this;
+        return thizz;
     }
 
 }

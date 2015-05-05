@@ -29,6 +29,7 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
+@SuppressWarnings("rawtypes")
 public abstract class UnaryPredicateBuilderView implements Transform<UnaryPredicateBuilder, String> {
 
     private String render(StandardUnaryOperator op) {

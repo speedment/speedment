@@ -26,6 +26,7 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
+@SuppressWarnings("rawtypes")
 public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuilder, String> {
 
     protected String render(StandardBinaryOperator op) {

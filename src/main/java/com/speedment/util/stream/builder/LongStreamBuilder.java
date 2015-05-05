@@ -75,7 +75,7 @@ public class LongStreamBuilder extends BaseStreamBuilder<LongStreamBuilder, Long
 
     @Override
     public <U> Stream<U> mapToObj(LongFunction<? extends U> mapper) {
-        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new LongMapToObjAction(mapper));
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new LongMapToObjAction<>(mapper));
     }
 
     @Override

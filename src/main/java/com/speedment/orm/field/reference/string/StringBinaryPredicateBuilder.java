@@ -16,10 +16,8 @@
  */
 package com.speedment.orm.field.reference.string;
 
-import com.speedment.orm.field.reference.*;
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.StandardBinaryOperator;
 import com.speedment.orm.field.StandardStringBinaryOperator;
 import java.util.Objects;
 
@@ -29,16 +27,16 @@ import java.util.Objects;
  * @param <ENTITY> Entity type
  *
  */
-public class StringBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<String> {
+public class StringBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<ENTITY, String> {
 
-    private final ReferenceField<ENTITY, String> field;
+    private final StringReferenceField<ENTITY> field;
     private final String value;
     private final StandardStringBinaryOperator binaryOperator;
 
     public StringBinaryPredicateBuilder(
-        ReferenceField<ENTITY, String> field,
-        String value,
-        StandardStringBinaryOperator binaryOperator
+        final StringReferenceField<ENTITY> field,
+        final String value,
+        final StandardStringBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -55,7 +53,7 @@ public class StringBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
     }
 
     @Override
-    public ReferenceField<ENTITY, String> getField() {
+    public StringReferenceField<ENTITY> getField() {
         return field;
     }
 

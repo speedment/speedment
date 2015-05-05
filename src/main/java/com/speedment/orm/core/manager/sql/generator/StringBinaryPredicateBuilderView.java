@@ -26,27 +26,29 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
+@SuppressWarnings("rawtypes")
 public class StringBinaryPredicateBuilderView implements Transform<StringBinaryPredicateBuilder, String> {
 
-	protected String render(StandardStringBinaryOperator op) {
-		switch (op) {
+    protected String render(StandardStringBinaryOperator op) {
+        switch (op) {
 //			case CONTAINS :              return "";
 //			case ENDS_WITH :             return "";
 //			case EQUAL_IGNORE_CASE :	 return "";
 //			case NOT_EQUAL_IGNORE_CASE : return "";
 //			case STARTS_WITH :           return "";
-			default : throw new UnsupportedOperationException(
-				"Unknown enum constant " + op.name() + "."
-			);
-		}
-	}
-	
-	@Override
-	public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
-        return Optional.of("("+
-            model.getField().getColumn().getName() + 
-            render(model.getOperator())+
-            ")"
+            default:
+                throw new UnsupportedOperationException(
+                    "Unknown enum constant " + op.name() + "."
+                );
+        }
+    }
+
+    @Override
+    public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
+        return Optional.of("("
+            + model.getField().getColumn().getName()
+            + render(model.getOperator())
+            + ")"
         );
-	}
+    }
 }

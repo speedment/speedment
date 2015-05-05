@@ -19,6 +19,7 @@ package com.speedment.orm.db;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
+import com.speedment.orm.db.impl.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -48,9 +49,9 @@ public interface DbmsHandler {
 
     <ENTITY> void delete(Table table, ENTITY entity);
 
-    public <T> Stream<T> executeQuery(final String sql, Function<ResultSet, T> rsMapper);
+    public <T> Stream<T> executeQuery(final String sql, SqlFunction<ResultSet, T> rsMapper);
     
-    public <T> Stream<T> executeQuery(final String sql, List<?> values, Function<ResultSet, T> rsMapper);
+    public <T> Stream<T> executeQuery(final String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper);
 
     public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, Function<ResultSet, T> rsMapper);
 

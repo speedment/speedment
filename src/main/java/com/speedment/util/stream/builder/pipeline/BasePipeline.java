@@ -48,29 +48,35 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
         this.list = new LinkedList<>();
     }
 
+    @SuppressWarnings("rawtypes")
     public Class<? extends BaseStream> getLastStreamClass() {
         return getLast().resultStreamClass();
     }
 
+    @SuppressWarnings("unchecked")
     public <E, S extends BaseStream<E, S>> BaseStream<E, S> getAsBaseStream() {
         return (BaseStream<E, S>) getStream();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Stream<E> getAsReferenceStream() {
         return (Stream<E>) getStream();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IntStream getAsIntStream() {
         return (IntStream) getStream();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public LongStream getAsLongStream() {
         return (LongStream) getStream();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DoubleStream getAsDoubleStream() {
         return (DoubleStream) getStream();
@@ -83,10 +89,13 @@ public class BasePipeline<E> implements Pipeline, ReferencePipeline<E>, IntPipel
             result = cast(result, action);
         }
 
-        return (BaseStream<E, ?>) result;
+        @SuppressWarnings("unchecked")
+        final BaseStream<E, ?> castedResult = (BaseStream<E, ?>) result;
+        return castedResult;
     }
 
     private <In extends BaseStream<?, ?>, Out extends BaseStream<?, Out>> Out cast(In in, Action<?, ?> action) {
+        @SuppressWarnings("unchecked")
         final Function<In, Out> mapper = (Function<In, Out>) action.get();
         return mapper.apply(in);
     }

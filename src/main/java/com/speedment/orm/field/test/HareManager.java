@@ -87,6 +87,7 @@ public class HareManager implements Manager<String, Hare, Buildable<Hare>> {
         ages.computeIfAbsent(hare.getAge(), k -> new HashMap<>()).put(pk, hare);
     }
 
+    @Override
     public Stream<Hare> stream() {
         StreamTerminator streamTerminator = new StreamTerminator() {
 
@@ -95,17 +96,21 @@ public class HareManager implements Manager<String, Hare, Buildable<Hare>> {
                 if (!initialPipeline.isEmpty()) {
                     Action<?, ?> firstAction = initialPipeline.getFirst();
                     if (firstAction instanceof FilterAction) {
+                        @SuppressWarnings("unchecked")
                         final FilterAction<Hare> filterAction = (FilterAction<Hare>) firstAction;
                         final Predicate<? super Hare> predicate = filterAction.getPredicate();
                         if (predicate instanceof PredicateBuilder) {
 
+                            @SuppressWarnings("rawtypes")
                             final PredicateBuilder predicateBuilder = (PredicateBuilder) predicate;
+                            @SuppressWarnings("unchecked")
                             final Field<Hare> field = predicateBuilder.getField();
-                            final Column column = field.getColumn();
+                            //final Column column = field.getColumn();
 
                             if (field.equals(HareField.NAME)) {
 
                                 final Operator operator = predicateBuilder.getOperator();
+                                @SuppressWarnings("rawtypes")
                                 final Optional<BinaryPredicateBuilder> oPredicateBuilder = Cast.cast(predicateBuilder, BinaryPredicateBuilder.class);
 
                                 if (oPredicateBuilder.isPresent() && operator == StandardBinaryOperator.EQUAL) {
@@ -175,7 +180,9 @@ public class HareManager implements Manager<String, Hare, Buildable<Hare>> {
 
         };
 
-        return new ReferenceStreamBuilder<>(new BasePipeline(() -> names.values().stream()), streamTerminator);
+        final Stream<Hare> result = new ReferenceStreamBuilder<>(new BasePipeline<>(() -> names.values().stream()), streamTerminator);
+
+        return result;
     }
 
     private Method findApplyMethod(Function<?, ?> function) {

@@ -17,7 +17,6 @@
 package com.speedment.orm.field.doubles;
 
 import com.speedment.orm.field.BasePredicate;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardUnaryOperator;
 import com.speedment.orm.field.UnaryPredicateBuilder;
 import java.util.Objects;
@@ -28,26 +27,26 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class DoubleUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder {
+public class DoubleUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder<ENTITY> {
 
-    private final DoubleField field;
+    private final DoubleField<ENTITY> field;
     private final StandardUnaryOperator unaryOperator;
 
     public DoubleUnaryPredicateBuilder(
-            DoubleField field,
-            StandardUnaryOperator unaryOperator
+        final DoubleField<ENTITY> field,
+        final StandardUnaryOperator unaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.unaryOperator = Objects.requireNonNull(unaryOperator);
     }
 
     @Override
-    public boolean test(ENTITY t) {
+    public boolean test(final ENTITY t) {
         return unaryOperator.getComparator().test(getField().getFrom(t));
     }
 
     @Override
-    public DoubleField getField() {
+    public DoubleField<ENTITY> getField() {
         return field;
     }
 

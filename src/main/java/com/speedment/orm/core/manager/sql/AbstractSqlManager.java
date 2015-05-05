@@ -26,6 +26,7 @@ import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.AbstractManager;
 import com.speedment.orm.core.manager.sql.generator.SQLGenerator;
 import com.speedment.orm.db.DbmsHandler;
+import com.speedment.orm.db.impl.SqlFunction;
 import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.platform.Platform;
@@ -60,9 +61,9 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractSqlManager.class);
 
-    private Function<ResultSet, ENTITY> sqlEntityMapper;
+    private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
 
-    private final Generator generator;
+    private final Generator generator; // Todo: Static?
 
     public AbstractSqlManager() {
         this.generator = new SQLGenerator();
@@ -70,7 +71,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     @Override
     public Stream<ENTITY> stream() {
-        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator(this);
+        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator<>(this);
         return new ReferenceStreamBuilder<>(new BasePipeline<>(this::streamOfAll), terminator);
     }
 
@@ -82,13 +83,14 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         return streamOf(sql, Collections.emptyList());
     }
 
-    public Stream<ENTITY> streamOf(final List<PredicateBuilder> predicateBuilders) {
+    public Stream<ENTITY> streamOf(final List<PredicateBuilder<?>> predicateBuilders) {
         if (predicateBuilders.isEmpty()) {
             return streamOfAll();
         }
         final String whereString = generator.onEach(predicateBuilders)
             .collect(joining(" AND "));
 
+        @SuppressWarnings("rawtypes")
         final List<Object> values = predicateBuilders.stream()
             .map(pb -> Cast.cast(pb, BinaryPredicateBuilder.class))
             .filter(Optional::isPresent)
@@ -100,39 +102,37 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     public Stream<ENTITY> streamOf(final String sql, final List<Object> values) {
+        return streamOf(sql, values, sqlEntityMapper);
+    }
+
+    public <T> Stream<T> streamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
         final Table table = getTable();
-        final Dbms dbms = table.ancestor(Dbms.class
-        ).get();
+        final Dbms dbms = table.ancestor(Dbms.class).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-
-        return dbmsHandler.executeQuery(sql, values, getSqlEntityMapper());
+        System.out.println(sql + " <- " + values);
+        return dbmsHandler.executeQuery(sql, values, rsMapper);
     }
 
-    private String
-        sqlColumnList() {
-        return getTable().streamOf(Column.class
-        ).map(Column::getName).collect(Collectors.joining(","));
+    public String sqlColumnList() {
+        return getTable().streamOf(Column.class).map(Column::getName).collect(Collectors.joining(","));
     }
 
-    private String
-        sqlTableReference() {
-        return getTable().getRelativeName(Schema.class
-        );
+    public String sqlTableReference() {
+        return getTable().getRelativeName(Schema.class);
     }
 
     private String sqlSelect(String suffix) {
         final String sql = "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
-        System.out.println(sql);
         return sql;
     }
 
     @Override
-    public Function<ResultSet, ENTITY> getSqlEntityMapper() {
+    public SqlFunction<ResultSet, ENTITY> getSqlEntityMapper() {
         return sqlEntityMapper;
     }
 
     @Override
-    public void setSqlEntityMapper(Function<ResultSet, ENTITY> sqlEntityMapper) {
+    public void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper) {
         this.sqlEntityMapper = sqlEntityMapper;
     }
 

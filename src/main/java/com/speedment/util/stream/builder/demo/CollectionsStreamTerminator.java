@@ -22,9 +22,11 @@ import static com.speedment.util.stream.builder.action.Property.SIZE;
 import static com.speedment.util.stream.builder.action.Verb.PRESERVE;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import com.speedment.util.stream.builder.pipeline.IntPipeline;
+import com.speedment.util.stream.builder.pipeline.Pipeline;
 import com.speedment.util.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.util.stream.builder.streamterminator.StreamTerminator;
 import java.util.Collection;
+import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -35,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class CollectionsStreamTerminator<E> implements StreamTerminator {
 
-    private static final Predicate<Action> CHECK_RETAIN_SIZE = a -> a.is(PRESERVE, SIZE);
+    private static final Predicate<Action<?, ?>> CHECK_RETAIN_SIZE = a -> a.is(PRESERVE, SIZE);
 
     private final Collection<E> collection;
 
@@ -45,22 +47,23 @@ public class CollectionsStreamTerminator<E> implements StreamTerminator {
 
     @Override
     public <T> long count(ReferencePipeline<T> pipeline) {
-        if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            return collection.size();
-        }
-        return StreamTerminator.super.count(pipeline);
+        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
 
     @Override
     public <T> long count(IntPipeline pipeline) {
+        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
+    }
+
+    public long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
             return collection.size();
         }
-        return StreamTerminator.super.count(pipeline);
+        return fallbackSupplier.getAsLong();
     }
 
     public Stream<E> stream() {
-        return new ReferenceStreamBuilder<>(new BasePipeline(collection::stream), this);
+        return new ReferenceStreamBuilder<>(new BasePipeline<>(collection::stream), this);
     }
 
     public static <E> Stream<E> streamOf(Collection<E> Collection) {

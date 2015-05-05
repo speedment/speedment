@@ -18,7 +18,6 @@ package com.speedment.orm.field.ints;
 
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -28,16 +27,16 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Integer> {
+public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<ENTITY, Integer> {
 
-    private final IntField field;
+    private final IntField<ENTITY> field;
     private final int value;
     private final StandardBinaryOperator binaryOperator;
 
     public IntBinaryPredicateBuilder(
-        IntField field,
-        int value,
-        StandardBinaryOperator binaryOperator
+        final IntField<ENTITY> field,
+        final int value,
+        final StandardBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -54,7 +53,7 @@ public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
     }
 
     @Override
-    public IntField getField() {
+    public IntField<ENTITY> getField() {
         return field;
     }
 

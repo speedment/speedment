@@ -18,7 +18,6 @@ package com.speedment.orm.field.reference;
 
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Comparator;
 import java.util.Objects;
@@ -29,7 +28,7 @@ import java.util.Objects;
  * @param <ENTITY> Entity type
  * @param <V> Value type
  */
-public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<V> {
+public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<ENTITY, V> {
 
     private final ReferenceField<ENTITY, V> field;
     private final V value;
@@ -37,10 +36,10 @@ public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> ex
     private final Comparator<V> entityComparator;
 
     public ReferenceBinaryPredicateBuilder(
-        ReferenceField<ENTITY, V> field,
-        V value,
-        StandardBinaryOperator binaryOperator,
-        Comparator<V> entityComparator
+        final ReferenceField<ENTITY, V> field,
+        final V value,
+        final StandardBinaryOperator binaryOperator,
+        final Comparator<V> entityComparator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -49,19 +48,19 @@ public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> ex
     }
 
     public ReferenceBinaryPredicateBuilder(
-        ReferenceField<ENTITY, V> field,
-        V value,
-        StandardBinaryOperator binaryOperator
+        final ReferenceField<ENTITY, V> field,
+        final V value,
+        final StandardBinaryOperator binaryOperator
     ) {
         this(field, value, binaryOperator, Comparator.naturalOrder());
     }
 
     @Override
-    public boolean test(ENTITY entity) {
+    public boolean test(final ENTITY entity) {
         return test(Objects.compare(field.getFrom(entity), getValue(), entityComparator));
     }
 
-    public boolean test(int compare) {
+    public boolean test(final int compare) {
         return binaryOperator.getComparator().test(compare);
     }
 

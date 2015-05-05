@@ -72,7 +72,7 @@ public class DoubleStreamBuilder extends BaseStreamBuilder<DoubleStreamBuilder, 
 
     @Override
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
-        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new DoubleMapToObjAction(mapper));
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new DoubleMapToObjAction<>(mapper));
     }
 
     @Override

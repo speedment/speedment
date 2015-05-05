@@ -27,14 +27,14 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Double> {
+public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<ENTITY, Double> {
 
-    private final DoubleField field;
+    private final DoubleField<ENTITY> field;
     private final double value;
     private final StandardBinaryOperator binaryOperator;
 
     public DoubleBinaryPredicateBuilder(
-        DoubleField field,
+        DoubleField<ENTITY> field,
         double value,
         StandardBinaryOperator binaryOperator
     ) {
@@ -53,7 +53,7 @@ public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
     }
 
     @Override
-    public DoubleField getField() {
+    public DoubleField<ENTITY> getField() {
         return field;
     }
 

@@ -19,9 +19,10 @@ package com.speedment.orm.field;
 /**
  *
  * @author pemi
+ * @param <ENTITY>
  * @param <V>
  */
-public interface BinaryPredicateBuilder<V> extends PredicateBuilder {
+public interface BinaryPredicateBuilder<ENTITY, V> extends PredicateBuilder<ENTITY> {
     
     V getValueAsObject();
     

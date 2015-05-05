@@ -19,8 +19,9 @@ package com.speedment.orm.field;
 /**
  *
  * @author pemi
+ * @param <ENTITY>
  */
-public interface UnaryPredicateBuilder extends PredicateBuilder {
+public interface UnaryPredicateBuilder<ENTITY> extends PredicateBuilder<ENTITY> {
 
     @Override
     public StandardUnaryOperator getOperator();

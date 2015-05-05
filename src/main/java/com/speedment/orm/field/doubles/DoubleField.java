@@ -22,7 +22,6 @@ import com.speedment.orm.field.StandardBinaryOperator;
 import com.speedment.orm.field.StandardUnaryOperator;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
 
 /**
  *

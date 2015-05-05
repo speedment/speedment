@@ -75,7 +75,7 @@ public class IntStreamBuilder extends BaseStreamBuilder<IntStreamBuilder, IntPip
 
     @Override
     public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
-        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new IntMapToObjAction(mapper));
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new IntMapToObjAction<>(mapper));
     }
 
     @Override

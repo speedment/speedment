@@ -28,14 +28,14 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class LongUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder {
+public class LongUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder<ENTITY> {
 
-    private final LongField field;
+    private final LongField<ENTITY> field;
     private final StandardUnaryOperator unaryOperator;
 
     public LongUnaryPredicateBuilder(
-            LongField field,
-            StandardUnaryOperator unaryOperator
+        final LongField<ENTITY> field,
+        final StandardUnaryOperator unaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.unaryOperator = Objects.requireNonNull(unaryOperator);
@@ -47,7 +47,7 @@ public class LongUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
     }
 
     @Override
-    public LongField getField() {
+    public LongField<ENTITY> getField() {
         return field;
     }
 

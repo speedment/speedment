@@ -46,14 +46,17 @@ public class EntityManagerImpl implements EntityManager {
 
     private static <ENTITY, BUILDER extends Buildable<ENTITY>> Manager<?, ENTITY, BUILDER> managerOf(ENTITY entity) {
         final ManagerComponent managerComponent = Platform.get().get(ManagerComponent.class);
+        @SuppressWarnings("rawtypes")
         final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
         if (manager.isPresent()) {
+            @SuppressWarnings("unchecked")
             final Manager<?, ENTITY, BUILDER> result = (Manager<?, ENTITY, BUILDER>) manager.get();
             return result;
         }
         throw new IllegalStateException("There is no registered Manager for the class " + entity.getClass().getName());
     }
 
+    @SuppressWarnings("rawtypes")
     private static Optional<Manager> managerOf(Class<?> entityInterface, ManagerComponent managerComponent) {
         final Manager manager = managerComponent.managerOf(entityInterface);
         if (manager != null) {

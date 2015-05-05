@@ -86,7 +86,7 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
                     Table fkTable = oFkc.getForeignTable();
                     Column fkColumn = oFkc.getForeignColumn();
 
-                    @SuppressWarnings("raw")
+                    @SuppressWarnings("rawtypes")
                     final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
 
                     Object key = get(entity, column);
@@ -104,6 +104,7 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
             final Optional<ForeignKeyColumn> oFkc = getTable().streamOf(ForeignKey.class).flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(c))).findAny();
             if (oFkc.isPresent()) {
                 final Table fkTable = oFkc.get().getForeignTable();
+                @SuppressWarnings("rawtypes")
                 final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
 
                 final Optional<Object> oFkObject = find(entity, c);

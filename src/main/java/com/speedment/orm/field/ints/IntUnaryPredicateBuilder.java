@@ -27,14 +27,14 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class IntUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder {
+public class IntUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder<ENTITY> {
 
-    private final IntField field;
+    private final IntField<ENTITY> field;
     private final StandardUnaryOperator unaryOperator;
 
     public IntUnaryPredicateBuilder(
-        IntField field,
-        StandardUnaryOperator unaryOperator
+        final IntField<ENTITY> field,
+        final StandardUnaryOperator unaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.unaryOperator = Objects.requireNonNull(unaryOperator);
@@ -46,7 +46,7 @@ public class IntUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> impl
     }
 
     @Override
-    public IntField getField() {
+    public IntField<ENTITY> getField() {
         return field;
     }
 

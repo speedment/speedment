@@ -384,7 +384,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> Stream<T> executeQuery(final String sql, final List<?> values, final Function<ResultSet, T> rsMapper) {
+    public <T> Stream<T> executeQuery(final String sql, final List<?> values, final SqlFunction<ResultSet, T> rsMapper) {
         try (final Connection connection = getConnection(); final PreparedStatement ps = connection.prepareStatement(sql)) {
             int i = 1;
             for (final Object o : values) {
@@ -405,7 +405,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> Stream<T> executeQuery(final String sql, final Function<ResultSet, T> rsMapper) {
+    public <T> Stream<T> executeQuery(final String sql, final SqlFunction<ResultSet, T> rsMapper) {
         return executeQuery(sql, Collections.emptyList(), rsMapper);
 //        try (final Connection connection = getConnection();
 //            final Statement statement = connection.createStatement();
@@ -536,20 +536,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 throw new SpeedmentException(sqle);
             }
         };
-
-    }
-
-    @FunctionalInterface
-    protected interface SqlSupplier<T> {
-
-        T get() throws SQLException;
-
-    }
-
-    @FunctionalInterface
-    protected interface SqlFunction<T, R> {
-
-        R apply(T t) throws SQLException;
 
     }
 

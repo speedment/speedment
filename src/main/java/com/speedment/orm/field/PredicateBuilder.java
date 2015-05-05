@@ -19,10 +19,11 @@ package com.speedment.orm.field;
 /**
  *
  * @author pemi
+ * @param <ENTITY> Entity type
  */
-public interface PredicateBuilder {
+public interface PredicateBuilder<ENTITY> {
 
-    Field getField();
+    Field<ENTITY> getField();
 
     Operator getOperator();
 
