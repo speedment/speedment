@@ -19,14 +19,14 @@ package com.speedment.orm.core.manager.sql.generator;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.orm.field.StandardBinaryOperator;
-import com.speedment.orm.field.reference.BinaryPredicateBuilder;
+import com.speedment.orm.field.reference.ReferenceBinaryPredicateBuilder;
 import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
-public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuilder, String> {
+public class BinaryPredicateBuilderView implements Transform<ReferenceBinaryPredicateBuilder, String> {
 
 	private String render(StandardBinaryOperator op) {
 		switch (op) {
@@ -43,7 +43,7 @@ public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuil
 	}
 	
 	@Override
-	public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
+	public Optional<String> transform(Generator gen, ReferenceBinaryPredicateBuilder model) {
 		return Optional.of(
 			model.getField().getColumn().getName() + 
 			render(model.getOperator()) + 

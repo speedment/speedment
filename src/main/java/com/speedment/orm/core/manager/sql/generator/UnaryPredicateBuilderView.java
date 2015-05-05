@@ -21,30 +21,34 @@ import com.speedment.codegen.base.Transform;
 import com.speedment.orm.field.StandardUnaryOperator;
 import static com.speedment.orm.field.StandardUnaryOperator.IS_NOT_NULL;
 import static com.speedment.orm.field.StandardUnaryOperator.IS_NULL;
-import com.speedment.orm.field.reference.UnaryPredicateBuilder;
+import com.speedment.orm.field.reference.ReferenceUnaryPredicateBuilder;
+
 import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
-public class UnaryPredicateBuilderView implements Transform<UnaryPredicateBuilder, String> {
+public class UnaryPredicateBuilderView implements Transform<ReferenceUnaryPredicateBuilder, String> {
 
-	private String render(StandardUnaryOperator op) {
-		switch (op) {
-			case IS_NOT_NULL : return " <> NULL";
-			case IS_NULL : return " == NULL";
-			default : throw new UnsupportedOperationException(
-				"Unknown enum constant " + op.name() + "."
-			);
-		}
-	}
-	
-	@Override
-	public Optional<String> transform(Generator gen, UnaryPredicateBuilder model) {
-		return Optional.of(
-			model.getField().getColumn().getName() + 
-			render(model.getOperator())
-		);
-	}
+    private String render(StandardUnaryOperator op) {
+        switch (op) {
+            case IS_NOT_NULL:
+                return " <> NULL";
+            case IS_NULL:
+                return " == NULL";
+            default:
+                throw new UnsupportedOperationException(
+                    "Unknown enum constant " + op.name() + "."
+                );
+        }
+    }
+
+    @Override
+    public Optional<String> transform(Generator gen, ReferenceUnaryPredicateBuilder model) {
+        return Optional.of(
+            model.getField().getColumn().getName()
+            + render(model.getOperator())
+        );
+    }
 }
