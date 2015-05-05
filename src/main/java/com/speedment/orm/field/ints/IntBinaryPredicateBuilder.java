@@ -59,7 +59,7 @@ public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardBinaryOperator getOperator() {
         return binaryOperator;
     }
 

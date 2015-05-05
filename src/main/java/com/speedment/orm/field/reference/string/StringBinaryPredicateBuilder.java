@@ -19,7 +19,7 @@ package com.speedment.orm.field.reference.string;
 import com.speedment.orm.field.reference.*;
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
+import com.speedment.orm.field.StandardBinaryOperator;
 import com.speedment.orm.field.StandardStringBinaryOperator;
 import java.util.Objects;
 
@@ -64,7 +64,7 @@ public class StringBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardStringBinaryOperator getOperator() {
         return binaryOperator;
     }
 

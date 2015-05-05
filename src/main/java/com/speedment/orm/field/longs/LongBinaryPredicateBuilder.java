@@ -59,7 +59,7 @@ public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> im
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardBinaryOperator getOperator() {
         return binaryOperator;
     }
 

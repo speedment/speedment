@@ -23,7 +23,7 @@ import java.util.function.BiPredicate;
  *
  * @author pemi
  */
-public enum StandardStringBinaryOperator implements Operator {
+public enum StandardStringBinaryOperator implements BinaryOperator {
 
     STARTS_WITH(String::startsWith),
     ENDS_WITH(String::endsWith),

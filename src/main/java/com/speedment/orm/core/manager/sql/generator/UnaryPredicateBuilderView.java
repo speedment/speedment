@@ -21,7 +21,7 @@ import com.speedment.codegen.base.Transform;
 import com.speedment.orm.field.StandardUnaryOperator;
 import static com.speedment.orm.field.StandardUnaryOperator.IS_NOT_NULL;
 import static com.speedment.orm.field.StandardUnaryOperator.IS_NULL;
-import com.speedment.orm.field.reference.ReferenceUnaryPredicateBuilder;
+import com.speedment.orm.field.UnaryPredicateBuilder;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class UnaryPredicateBuilderView implements Transform<ReferenceUnaryPredicateBuilder, String> {
+public abstract class UnaryPredicateBuilderView implements Transform<UnaryPredicateBuilder, String> {
 
     private String render(StandardUnaryOperator op) {
         switch (op) {
@@ -45,7 +45,7 @@ public class UnaryPredicateBuilderView implements Transform<ReferenceUnaryPredic
     }
 
     @Override
-    public Optional<String> transform(Generator gen, ReferenceUnaryPredicateBuilder model) {
+    public Optional<String> transform(Generator gen, UnaryPredicateBuilder model) {
         return Optional.of(
             model.getField().getColumn().getName()
             + render(model.getOperator())

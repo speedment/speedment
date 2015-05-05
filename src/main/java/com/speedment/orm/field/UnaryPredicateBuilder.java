@@ -6,4 +6,7 @@ package com.speedment.orm.field;
  */
 public interface UnaryPredicateBuilder extends PredicateBuilder {
 
+    @Override
+    public StandardUnaryOperator getOperator();
+    
 }

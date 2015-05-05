@@ -52,7 +52,7 @@ public class DoubleUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> i
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardUnaryOperator getOperator() {
         return unaryOperator;
     }
 

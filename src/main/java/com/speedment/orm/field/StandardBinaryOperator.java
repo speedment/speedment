@@ -23,7 +23,7 @@ import java.util.function.IntPredicate;
  *
  * @author pemi
  */
-public enum StandardBinaryOperator implements Operator {
+public enum StandardBinaryOperator implements BinaryOperator {
 
     EQUAL(i -> i == 0),
     NOT_EQUAL(i -> i != 0),

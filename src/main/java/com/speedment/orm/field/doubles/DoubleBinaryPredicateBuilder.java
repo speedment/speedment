@@ -18,7 +18,6 @@ package com.speedment.orm.field.doubles;
 
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -59,7 +58,7 @@ public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardBinaryOperator getOperator() {
         return binaryOperator;
     }
 

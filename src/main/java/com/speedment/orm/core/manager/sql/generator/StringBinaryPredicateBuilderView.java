@@ -18,25 +18,24 @@ package com.speedment.orm.core.manager.sql.generator;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.StandardBinaryOperator;
+import com.speedment.orm.field.StandardStringBinaryOperator;
+import com.speedment.orm.field.reference.string.StringBinaryPredicateBuilder;
 import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
- * @param <T>
  */
-public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuilder, String> {
+public class StringBinaryPredicateBuilderView implements Transform<StringBinaryPredicateBuilder, String> {
 
-	protected String render(StandardBinaryOperator op) {
+	protected String render(StandardStringBinaryOperator op) {
 		switch (op) {
-			case EQUAL :			return " == ";
-			case GREATER_OR_EQUAL : return " >= ";
-			case GREATER_THAN :		return " > ";
-			case LESS_OR_EQUAL :	return " <= ";
-			case LESS_THAN :		return " < ";
-			case NOT_EQUAL :		return " <> ";
+//			case CONTAINS :              return "";
+//			case ENDS_WITH :             return "";
+//			case EQUAL_IGNORE_CASE :	 return "";
+//			case NOT_EQUAL_IGNORE_CASE : return "";
+//			case STARTS_WITH :           return "";
 			default : throw new UnsupportedOperationException(
 				"Unknown enum constant " + op.name() + "."
 			);
@@ -44,13 +43,10 @@ public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuil
 	}
 	
 	@Override
-	public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
-		if (model.getOperator() instanceof StandardBinaryOperator) {
-			return Optional.of(
-				model.getField().getColumn().getName() + 
-				render((StandardBinaryOperator) model.getOperator()) + 
-				"?"
-			);
-		} else return Optional.empty();
+	public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
+        return Optional.of(
+            model.getField().getColumn().getName() + 
+            render(model.getOperator())
+        );
 	}
 }
