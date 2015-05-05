@@ -75,7 +75,7 @@ public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> ex
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardBinaryOperator getOperator() {
         return binaryOperator;
     }
 
