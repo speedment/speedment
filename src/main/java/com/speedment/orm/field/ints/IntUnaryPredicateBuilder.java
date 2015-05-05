@@ -34,8 +34,8 @@ public class IntUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> impl
     private final StandardUnaryOperator unaryOperator;
 
     public IntUnaryPredicateBuilder(
-            IntField field,
-            StandardUnaryOperator unaryOperator
+        IntField field,
+        StandardUnaryOperator unaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.unaryOperator = Objects.requireNonNull(unaryOperator);
@@ -52,7 +52,7 @@ public class IntUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> impl
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardUnaryOperator getOperator() {
         return unaryOperator;
     }
 
