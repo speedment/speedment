@@ -25,32 +25,40 @@ import java.util.Optional;
 /**
  *
  * @author Emil Forslund
- * @param <T>
  */
 public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuilder, String> {
 
-	protected String render(StandardBinaryOperator op) {
-		switch (op) {
-			case EQUAL :			return " == ";
-			case GREATER_OR_EQUAL : return " >= ";
-			case GREATER_THAN :		return " > ";
-			case LESS_OR_EQUAL :	return " <= ";
-			case LESS_THAN :		return " < ";
-			case NOT_EQUAL :		return " <> ";
-			default : throw new UnsupportedOperationException(
-				"Unknown enum constant " + op.name() + "."
-			);
-		}
-	}
-	
-	@Override
-	public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
-		if (model.getOperator() instanceof StandardBinaryOperator) {
-			return Optional.of(
-				model.getField().getColumn().getName() + 
-				render((StandardBinaryOperator) model.getOperator()) + 
-				"?"
-			);
-		} else return Optional.empty();
-	}
+    protected String render(StandardBinaryOperator op) {
+        switch (op) {
+            case EQUAL:
+                return " = ";
+            case GREATER_OR_EQUAL:
+                return " >= ";
+            case GREATER_THAN:
+                return " > ";
+            case LESS_OR_EQUAL:
+                return " <= ";
+            case LESS_THAN:
+                return " < ";
+            case NOT_EQUAL:
+                return " <> ";
+            default:
+                throw new UnsupportedOperationException(
+                    "Unknown enum constant " + op.name() + "."
+                );
+        }
+    }
+
+    @Override
+    public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
+        if (model.getOperator() instanceof StandardBinaryOperator) {
+            return Optional.of("("
+                + model.getField().getColumn().getName()
+                + render((StandardBinaryOperator) model.getOperator())
+                + "?)"
+            );
+        } else {
+            return Optional.empty();
+        }
+    }
 }

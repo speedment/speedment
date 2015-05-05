@@ -18,7 +18,6 @@ package com.speedment.orm.core.manager.sql.generator;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.orm.field.StandardBinaryOperator;
 import com.speedment.orm.field.StandardStringBinaryOperator;
 import com.speedment.orm.field.reference.string.StringBinaryPredicateBuilder;
 import java.util.Optional;
@@ -44,9 +43,10 @@ public class StringBinaryPredicateBuilderView implements Transform<StringBinaryP
 	
 	@Override
 	public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
-        return Optional.of(
+        return Optional.of("("+
             model.getField().getColumn().getName() + 
-            render(model.getOperator())
+            render(model.getOperator())+
+            ")"
         );
 	}
 }

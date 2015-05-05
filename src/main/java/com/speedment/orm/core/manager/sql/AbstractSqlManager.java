@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.core.manager.sql;
 
+import com.speedment.codegen.base.Generator;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.PrimaryKeyColumn;
@@ -23,11 +24,10 @@ import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.AbstractManager;
+import com.speedment.orm.core.manager.sql.generator.SQLGenerator;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.PredicateBuilder;
-import com.speedment.orm.field.UnaryPredicateBuilder;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
 import com.speedment.util.Cast;
@@ -35,17 +35,15 @@ import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,11 +62,10 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     private Function<ResultSet, ENTITY> sqlEntityMapper;
 
-    private Map<Operator, BiFunction<Column, Object, String>> binaryParserMap;
-    private Map<Operator, Function<Column, String>> unaryParserMap;
+    private final Generator generator;
 
     public AbstractSqlManager() {
-
+        this.generator = new SQLGenerator();
     }
 
     @Override
@@ -89,21 +86,17 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         if (predicateBuilders.isEmpty()) {
             return streamOfAll();
         }
-        final StringBuilder sb = new StringBuilder();
-        final List<Object> values = new ArrayList<>();
-        for (PredicateBuilder pb : predicateBuilders) {
-            final Optional<BinaryPredicateBuilder> oBinaryPredicateBuilder = Cast.cast(pb, BinaryPredicateBuilder.class);
-            oBinaryPredicateBuilder.ifPresent(b -> {
-                Object value = b.getValueAsObject();
-                values.add(value);
-                sb.append(binaryParserMap.get(b.getOperator()).apply(b.getField().getColumn(), value));
-            });
-            final Optional<UnaryPredicateBuilder> oUnaryPredicateBuilder = Cast.cast(pb, UnaryPredicateBuilder.class);
-            oUnaryPredicateBuilder.ifPresent(u -> {
-                sb.append(unaryParserMap.get(u.getOperator()).apply(u.getField().getColumn()));
-            });
-        }
-        return streamOf(sqlSelect("where " + sb.toString()), values);
+        final String whereString = generator.onEach(predicateBuilders)
+            .collect(joining(" AND "));
+
+        final List<Object> values = predicateBuilders.stream()
+            .map(pb -> Cast.cast(pb, BinaryPredicateBuilder.class))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(BinaryPredicateBuilder::getValueAsObject)
+            .collect(toList());
+
+        return streamOf(sqlSelect(" where " + whereString), values);
     }
 
     public Stream<ENTITY> streamOf(final String sql, final List<Object> values) {
@@ -128,7 +121,9 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     private String sqlSelect(String suffix) {
-        return "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
+        final String sql = "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
+        System.out.println(sql);
+        return sql;
     }
 
     @Override
