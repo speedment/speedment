@@ -17,8 +17,8 @@
 package com.speedment.orm.field.ints;
 
 import com.speedment.orm.field.BasePredicate;
+import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.Operator;
-import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -28,16 +28,16 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder {
+public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Integer> {
 
     private final IntField field;
     private final int value;
     private final StandardBinaryOperator binaryOperator;
 
     public IntBinaryPredicateBuilder(
-            IntField field,
-            int value,
-            StandardBinaryOperator binaryOperator
+        IntField field,
+        int value,
+        StandardBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -46,7 +46,7 @@ public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
 
     @Override
     public boolean test(ENTITY entity) {
-        return test(Integer.compare(field.getFrom(entity), value));
+        return test(Integer.compare(field.getFrom(entity), getValue()));
     }
 
     public boolean test(int compare) {
@@ -61,6 +61,15 @@ public class IntBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
     @Override
     public Operator getOperator() {
         return binaryOperator;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    @Override
+    public Integer getValueAsObject() {
+        return getValue();
     }
 
 }

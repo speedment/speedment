@@ -17,8 +17,8 @@
 package com.speedment.orm.field.longs;
 
 import com.speedment.orm.field.BasePredicate;
+import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.Operator;
-import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -28,16 +28,16 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder {
+public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Long> {
 
     private final LongField field;
     private final long value;
     private final StandardBinaryOperator binaryOperator;
 
     public LongBinaryPredicateBuilder(
-            LongField field,
-            long value,
-            StandardBinaryOperator binaryOperator
+        LongField field,
+        long value,
+        StandardBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -46,7 +46,7 @@ public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> im
 
     @Override
     public boolean test(ENTITY entity) {
-        return test(Long.compare(field.getFrom(entity), value));
+        return test(Long.compare(field.getFrom(entity), getValue()));
     }
 
     public boolean test(int compare) {
@@ -61,6 +61,15 @@ public class LongBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> im
     @Override
     public Operator getOperator() {
         return binaryOperator;
+    }
+
+    public long getValue() {
+        return value;
+    }
+
+    @Override
+    public Long getValueAsObject() {
+        return getValue();
     }
 
 }

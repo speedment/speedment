@@ -39,11 +39,11 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
         this.getter = Objects.requireNonNull(getter);
     }
 
-    public UnaryPredicateBuilder<ENTITY, V> isNull() {
+    public ReferenceUnaryPredicateBuilder<ENTITY, V> isNull() {
         return newUnary(StandardUnaryOperator.IS_NULL);
     }
 
-    public UnaryPredicateBuilder<ENTITY, V> isNotNull() {
+    public ReferenceUnaryPredicateBuilder<ENTITY, V> isNotNull() {
         return newUnary(StandardUnaryOperator.IS_NOT_NULL);
     }
 
@@ -61,8 +61,8 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
         return columnSupplier.get();
     }
 
-    public UnaryPredicateBuilder<ENTITY, V> newUnary(StandardUnaryOperator unaryOperator) {
-        return new UnaryPredicateBuilder<>(this, unaryOperator);
+    public ReferenceUnaryPredicateBuilder<ENTITY, V> newUnary(StandardUnaryOperator unaryOperator) {
+        return new ReferenceUnaryPredicateBuilder<>(this, unaryOperator);
     }
 
 }

@@ -18,8 +18,8 @@ package com.speedment.orm.field.doubles;
 
 import com.speedment.orm.field.BasePredicate;
 import com.speedment.orm.field.Operator;
-import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.field.StandardUnaryOperator;
+import com.speedment.orm.field.UnaryPredicateBuilder;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class DoubleUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder {
+public class DoubleUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder {
 
     private final DoubleField field;
     private final StandardUnaryOperator unaryOperator;

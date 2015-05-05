@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 /**
  *
  * @author pemi
+ * @param <T> Type
  */
 public abstract class BasePredicate<T> implements Predicate<T> {
 

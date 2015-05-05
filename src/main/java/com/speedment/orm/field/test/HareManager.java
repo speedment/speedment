@@ -20,11 +20,11 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.Manager;
+import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.Field;
 import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.field.StandardBinaryOperator;
-import com.speedment.orm.field.reference.BinaryPredicateBuilder;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.ManagerComponent;
 import com.speedment.util.Cast;
@@ -109,7 +109,7 @@ public class HareManager implements Manager<String, Hare, Buildable<Hare>> {
                                 final Optional<BinaryPredicateBuilder> oPredicateBuilder = Cast.cast(predicateBuilder, BinaryPredicateBuilder.class);
 
                                 if (oPredicateBuilder.isPresent() && operator == StandardBinaryOperator.EQUAL) {
-                                    final String name = (String) oPredicateBuilder.get().getValue();
+                                    final String name = (String) oPredicateBuilder.get().getValueAsObject();
                                     initialPipeline.removeFirst();
                                     initialPipeline.setInitialSupplier(() -> Stream.of(names.get(name)));
                                 }

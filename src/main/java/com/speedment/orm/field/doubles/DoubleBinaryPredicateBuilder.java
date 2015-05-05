@@ -17,8 +17,8 @@
 package com.speedment.orm.field.doubles;
 
 import com.speedment.orm.field.BasePredicate;
+import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.Operator;
-import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.field.StandardBinaryOperator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -28,16 +28,16 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, PredicateBuilder {
+public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, BinaryPredicateBuilder<Double> {
 
     private final DoubleField field;
     private final double value;
     private final StandardBinaryOperator binaryOperator;
 
     public DoubleBinaryPredicateBuilder(
-            DoubleField field,
-            double value,
-            StandardBinaryOperator binaryOperator
+        DoubleField field,
+        double value,
+        StandardBinaryOperator binaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
         this.value = value;
@@ -46,7 +46,7 @@ public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
 
     @Override
     public boolean test(ENTITY entity) {
-        return test(Double.compare(field.getFrom(entity), value));
+        return test(Double.compare(field.getFrom(entity), getValue()));
     }
 
     public boolean test(int compare) {
@@ -63,4 +63,12 @@ public class DoubleBinaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> 
         return binaryOperator;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    @Override
+    public Double getValueAsObject() {
+        return getValue();
+    }
 }

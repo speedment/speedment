@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.core.manager.sql;
 
+import static com.speedment.orm.code.model.java.DefaultJavaClassTranslator.CopyConstructorMode.BUILDER;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.PrimaryKeyColumn;
@@ -24,18 +25,34 @@ import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.AbstractManager;
 import com.speedment.orm.db.DbmsHandler;
+import com.speedment.orm.field.BinaryPredicateBuilder;
+import com.speedment.orm.field.Operator;
+import com.speedment.orm.field.PredicateBuilder;
+import com.speedment.orm.field.UnaryPredicateBuilder;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
+import com.speedment.util.Cast;
+import com.speedment.util.stream.builder.ReferenceStreamBuilder;
+import com.speedment.util.stream.builder.pipeline.BasePipeline;
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import static java.lang.reflect.Array.set;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import static java.util.stream.Collector.Characteristics.values;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static javax.swing.text.html.parser.DTDConstants.ENTITY;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,20 +70,71 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     private Function<ResultSet, ENTITY> sqlEntityMapper;
 
-    @Override
-    public Stream<ENTITY> stream() {
-        final Table table = getTable();
-        final String columns = table.streamOf(Column.class).map(Column::getName).collect(Collectors.joining(","));
-        final String sql = "select " + columns + " from " + table.getRelativeName(Schema.class);
-        LOGGER.debug(sql);
-        return streamOf(sql);
+    private Map<Operator, BiFunction<Column, Object, String>> binaryParserMap;
+    private Map<Operator, Function<Column, String>> unaryParserMap;
+
+    public AbstractSqlManager() {
+
     }
 
-    protected Stream<ENTITY> streamOf(final String sql) {
+    @Override
+    public Stream<ENTITY> stream() {
+        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator(this);
+        return new ReferenceStreamBuilder<>(new BasePipeline<>(this::streamOfAll), terminator);
+    }
+
+    public Stream<ENTITY> streamOfAll() {
+        return streamOf(sqlSelect(""));
+    }
+
+    public Stream<ENTITY> streamOf(final String sql) {
+        return streamOf(sql, Collections.emptyList());
+    }
+
+    public Stream<ENTITY> streamOf(final List<PredicateBuilder> predicateBuilders) {
+        if (predicateBuilders.isEmpty()) {
+            return streamOfAll();
+        }
+        final StringBuilder sb = new StringBuilder();
+        final List<Object> values = new ArrayList<>();
+        for (PredicateBuilder pb : predicateBuilders) {
+            final Optional<BinaryPredicateBuilder> oBinaryPredicateBuilder = Cast.cast(pb, BinaryPredicateBuilder.class);
+            oBinaryPredicateBuilder.ifPresent(b -> {
+                Object value = b.getValueAsObject();
+                values.add(value);
+                sb.append(binaryParserMap.get(b.getOperator()).apply(b.getField().getColumn(), value));
+            });
+            final Optional<UnaryPredicateBuilder> oUnaryPredicateBuilder = Cast.cast(pb, UnaryPredicateBuilder.class);
+            oUnaryPredicateBuilder.ifPresent(u -> {
+                sb.append(unaryParserMap.get(u.getOperator()).apply(u.getField().getColumn()));
+            });
+        }
+        return streamOf(sqlSelect("where " + sb.toString()), values);
+    }
+
+    public Stream<ENTITY> streamOf(final String sql, final List<Object> values) {
         final Table table = getTable();
-        final Dbms dbms = table.ancestor(Dbms.class).get();
+        final Dbms dbms = table.ancestor(Dbms.class
+        ).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-        return dbmsHandler.executeQuery(sql, getSqlEntityMapper());
+
+        return dbmsHandler.executeQuery(sql, values, getSqlEntityMapper());
+    }
+
+    private String
+        sqlColumnList() {
+        return getTable().streamOf(Column.class
+        ).map(Column::getName).collect(Collectors.joining(","));
+    }
+
+    private String
+        sqlTableReference() {
+        return getTable().getRelativeName(Schema.class
+        );
+    }
+
+    private String sqlSelect(String suffix) {
+        return "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
     }
 
     @Override
@@ -83,10 +151,17 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     public Optional<ENTITY> persist(ENTITY entity) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb.append("insert into ").append(table.getRelativeName(Schema.class));
-        sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
-        sb.append(" values ");
-        sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
+        sb
+            .append("insert into ").append(table.getRelativeName(Schema.class
+                ));
+        sb.append(
+            "(").append(table.streamOf(Column.class
+                ).map(Column::getName).collect(joining(", "))).append(")");
+        sb.append(
+            " values ");
+        sb.append(
+            "(").append(table.streamOf(Column.class
+                ).map(c -> "?").collect(joining(", "))).append(")");
 
         final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
 
@@ -96,11 +171,11 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
                     table.streamOf(Column.class)
-                            .filter(Column::isAutoincrement)
-                            .forEachOrdered(c -> {
-                                System.out.println("COLUMN:" + c);
-                                set(b, c, l.get(cnt.getAndIncrement()));
-                            });
+                        .filter(Column::isAutoincrement)
+                        .forEachOrdered(c -> {
+                            System.out.println("COLUMN:" + c);
+                            set(b, c, l.get(cnt.getAndIncrement()));
+                        });
                 }
             };
         };
@@ -132,7 +207,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append(" where ");
         sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
-        
+
         return executeUpdate(entity, sb.toString(), values, NOTHING);
     }
 

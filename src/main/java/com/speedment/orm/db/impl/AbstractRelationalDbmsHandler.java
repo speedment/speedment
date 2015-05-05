@@ -241,7 +241,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected Stream<Column> columns(final Connection connection, Schema schema, Table table) {
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getColumns(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), null);
+            -> connection.getMetaData().getColumns(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), null);
 
         final SqlFunction<ResultSet, Column> mapper = rs -> {
             final Column column = Column.newColumn();
@@ -271,7 +271,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected Stream<PrimaryKeyColumn> primaryKeyColumns(final Connection connection, Schema schema, Table table) {
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getPrimaryKeys(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName());
+            -> connection.getMetaData().getPrimaryKeys(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName());
 
         final SqlFunction<ResultSet, PrimaryKeyColumn> mapper = rs -> {
             final PrimaryKeyColumn primaryKeyColumn = PrimaryKeyColumn.newPrimaryKeyColumn();
@@ -285,7 +285,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected Stream<Index> indexes(final Connection connection, Schema schema, Table table) {
         final Map<String, Index> indexes = new HashMap<>(); // Use map instead of Set because Index equality is difficult...
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getIndexInfo(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), false, false);
+            -> connection.getMetaData().getIndexInfo(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), false, false);
 
         final SqlFunction<ResultSet, Index> mapper = rs -> {
             final String indexName = rs.getString("INDEX_NAME");
@@ -384,11 +384,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> Stream<T> executeQuery(final String sql, final Function<ResultSet, T> rsMapper) {
-        try (
-                final Connection connection = getConnection();
-                final Statement statement = connection.createStatement();
-                final ResultSet rs = statement.executeQuery(sql);) {
+    public <T> Stream<T> executeQuery(final String sql, final List<?> values, final Function<ResultSet, T> rsMapper) {
+        try (final Connection connection = getConnection(); final PreparedStatement ps = connection.prepareStatement(sql)) {
+            int i = 1;
+            for (final Object o : values) {
+                ps.setObject(i++, o);
+            }
+            final ResultSet rs = ps.executeQuery();
+
+            // Todo: Make a transparent stream with closeHandler added.
             final Stream.Builder<T> streamBuilder = Stream.builder();
             while (rs.next()) {
                 streamBuilder.add(rsMapper.apply(rs));
@@ -401,7 +405,27 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, final Function<ResultSet, T> rsMapper) {
+    public <T> Stream<T> executeQuery(final String sql, final Function<ResultSet, T> rsMapper) {
+        return executeQuery(sql, Collections.emptyList(), rsMapper);
+//        try (final Connection connection = getConnection();
+//            final Statement statement = connection.createStatement();
+//            final ResultSet rs = statement.executeQuery(sql)) {
+//            final Stream.Builder<T> streamBuilder = Stream.builder();
+//            while (rs.next()) {
+//                streamBuilder.add(rsMapper.apply(rs));
+//            }
+//            return streamBuilder.build();
+//        } catch (SQLException sqle) {
+//            LOGGER.error("Error querying " + sql, sqle);
+//            throw new SpeedmentException(sqle);
+//        }
+    }
+
+    @Override
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(
+        final String sql,
+        final Function<ResultSet, T> rsMapper
+    ) {
         Objects.requireNonNull(sql);
         Objects.requireNonNull(rsMapper);
         return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
@@ -413,7 +437,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void executeUpdate(final String sql, final List<?> values, Consumer<List<Long>> generatedKeysConsumer) throws SQLException {
+    public void executeUpdate(final String sql,
+        final List<?> values, Consumer<List<Long>> generatedKeysConsumer) throws SQLException {
         final List<SqlUpdateStatement> sqlStatementList = new ArrayList<>();
         final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
         sqlStatementList.add(sqlUpdateStatement);
@@ -445,7 +470,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             while (generatedKeys.next()) {
                                 final Object genKey = generatedKeys.getObject(1);
                                 if (!"oracle.sql.ROWID".equals(genKey.getClass()
-                                        .getName())) {
+                                    .getName())) {
                                     sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                                 } else {
                                     // Handle ROWID, make result = map<,String>

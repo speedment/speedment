@@ -49,6 +49,8 @@ public interface DbmsHandler {
     <ENTITY> void delete(Table table, ENTITY entity);
 
     public <T> Stream<T> executeQuery(final String sql, Function<ResultSet, T> rsMapper);
+    
+    public <T> Stream<T> executeQuery(final String sql, List<?> values, Function<ResultSet, T> rsMapper);
 
     public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, Function<ResultSet, T> rsMapper);
 

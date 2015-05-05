@@ -33,32 +33,32 @@ public class ComparableReferenceField<ENTITY, V extends Comparable<V>> extends R
         super(columnSupplier, getter);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> equal(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> equal(V value) {
         return newBinary(value, StandardBinaryOperator.EQUAL);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> notEqual(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> notEqual(V value) {
         return newBinary(value, StandardBinaryOperator.NOT_EQUAL);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> lessThan(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> lessThan(V value) {
         return newBinary(value, StandardBinaryOperator.LESS_THAN);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> lessOrEqual(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> lessOrEqual(V value) {
         return newBinary(value, StandardBinaryOperator.LESS_OR_EQUAL);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> greaterThan(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> greaterThan(V value) {
         return newBinary(value, StandardBinaryOperator.GREATER_THAN);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> greaterOrEqual(V value) {
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> greaterOrEqual(V value) {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
 
-    public BinaryPredicateBuilder<ENTITY, V> newBinary(V value, StandardBinaryOperator binaryOperator) {
-        return new BinaryPredicateBuilder<>(this, value, binaryOperator);
+    public ReferenceBinaryPredicateBuilder<ENTITY, V> newBinary(V value, StandardBinaryOperator binaryOperator) {
+        return new ReferenceBinaryPredicateBuilder<>(this, value, binaryOperator);
     }
 
 }
