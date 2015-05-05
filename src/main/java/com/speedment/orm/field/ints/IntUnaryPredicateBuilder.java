@@ -17,7 +17,6 @@
 package com.speedment.orm.field.ints;
 
 import com.speedment.orm.field.BasePredicate;
-import com.speedment.orm.field.Operator;
 import com.speedment.orm.field.StandardUnaryOperator;
 import com.speedment.orm.field.UnaryPredicateBuilder;
 import java.util.Objects;
