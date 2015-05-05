@@ -53,7 +53,7 @@ public class UnaryPredicateBuilder<ENTITY, V> extends BasePredicate<ENTITY> impl
     }
 
     @Override
-    public Operator getOperator() {
+    public StandardUnaryOperator getOperator() {
         return unaryOperator;
     }
 
