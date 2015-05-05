@@ -39,6 +39,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
@@ -104,8 +105,8 @@ public class MainGenerator implements Consumer<Project> {
             .traversalOf(Table.class)
             .collect(toList());
         
-        gen.metaOn(tables).forEach(meta -> {
-            writeToFile(project, meta);
+        gen.metaOn(tables, File.class).forEach(meta -> {
+            writeToFile(project, gen, meta);
         });
         
         
@@ -121,25 +122,52 @@ public class MainGenerator implements Consumer<Project> {
 
     }
     
-    private static void writeToFile(Project project, Meta<Table, String> c) {
-        final String fname = project.getPacketLocation()
-        + "/"
-        + c.getModel().getName();
-        final String content = c.getResult();
-        final Path path = Paths.get(fname);
-        path.getParent().toFile().mkdirs();
-
-        try {
-            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException ex) {
-            LOGGER.error("Failed to create file " + fname, ex);
+    private static void writeToFile(Project project, Generator gen, Meta<Table, File> c) {
+        final Optional<String> content = gen.on(c.getResult());
+        
+        if (content.isPresent()) {
+            final String fname = 
+                project.getPacketLocation() + 
+                "/" + c.getResult().getName();
+            
+            final Path path = Paths.get(fname);
+            path.getParent().toFile().mkdirs();
+            
+            try {
+                Files.write(path, 
+                    content.get().getBytes(StandardCharsets.UTF_8)
+                );
+            } catch (IOException ex) {
+                LOGGER.error("Failed to create file " + fname, ex);
+            }
+            
+            LOGGER.info("done");
+            
+            System.out.println("*** BEGIN File:" + fname);
+            System.out.println(content);
+            System.out.println("*** END   File:" + fname);
+        } else {
+            throw new IllegalArgumentException("Input file could not be generated.");
         }
-
-        LOGGER.info("done");
-
-        System.out.println("*** BEGIN File:" + fname);
-        System.out.println(content);
-        System.out.println("*** END   File:" + fname);
+        
+//        final String fname = project.getPacketLocation()
+//        + "/"
+//        + c.getModel().getName();
+//        final String content = c.getResult();
+//        final Path path = Paths.get(fname);
+//        path.getParent().toFile().mkdirs();
+//
+//        try {
+//            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+//        } catch (IOException ex) {
+//            LOGGER.error("Failed to create file " + fname, ex);
+//        }
+//
+//        LOGGER.info("done");
+//
+//        System.out.println("*** BEGIN File:" + fname);
+//        System.out.println(content);
+//        System.out.println("*** END   File:" + fname);
     }
 
 }

@@ -136,7 +136,7 @@ public interface Generator {
      */
     default <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to, Class<? extends Transform<A, B>> transform) {
         return metaOn(models, to)
-            .filter(meta -> transform.equals(meta.getTransform().getClass()));
+            .filter(meta -> meta.getTransform().is(transform));
     }
 
     /**

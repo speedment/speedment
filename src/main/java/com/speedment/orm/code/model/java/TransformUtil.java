@@ -61,6 +61,6 @@ public final class TransformUtil {
     }
     
     public static void importType(Generator gen, Import toImport) {
-        gen.getRenderStack().fromBottom(File.class).findAny().get().add(toImport);
+        gen.getRenderStack().fromBottom(ImportDelegator.class).findAny().get().add(toImport);
     }
 }

@@ -144,7 +144,7 @@ public class JavaLanguage {
     }
     
     public static String javaStaticFieldName(final String externalName) {
-        return javaName(toUnderscoreSeparated(externalName).toUpperCase(), Character::toUpperCase);
+        return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
     }
 
     private static String javaName(final String externalName, Function<Character, Character> mutator) {

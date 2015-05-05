@@ -14,26 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.orm.code.model.java.transform;
+package com.speedment.orm.code.model.java;
 
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.base.Meta;
-import com.speedment.codegen.base.Transform;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.orm.code.model.java.ImportDelegator;
+import com.speedment.codegen.lang.models.Import;
 import com.speedment.orm.config.model.Table;
-import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
  */
-public class TableToEntityFieldFile implements Transform<Table, File> {
+public class ImportDelegator {
+    
+    private final Table table;
+    private Consumer<Import> adder;
 
-    @Override
-    public Optional<File> transform(Generator gen, Table model) {
-        final ImportDelegator delegator = new ImportDelegator(model);
-        return gen.metaOn(delegator, File.class).findAny().map(Meta::getResult);
+    public ImportDelegator(Table table) {
+        this.table = table;
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public void setImportAdder(Consumer<Import> adder) {
+        this.adder = adder;
     }
     
+    public void add(Import imp) {
+        adder.accept(requireNonNull(imp, "Import adder has not been set."));
+    }
 }

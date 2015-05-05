@@ -28,9 +28,11 @@ import static com.speedment.orm.code.model.java.TransformUtil.importType;
 import static com.speedment.orm.code.model.java.TransformUtil.typeUsing;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.field.FieldUtil;
+import com.speedment.orm.field.reference.ComparableReferenceField;
 import com.speedment.orm.field.reference.ReferenceField;
 import com.speedment.orm.field.reference.string.StringReferenceField;
 import static com.speedment.util.java.JavaLanguage.javaStaticFieldName;
+import static com.speedment.util.java.JavaLanguage.javaTypeName;
 import java.util.Optional;
 
 /**
@@ -47,13 +49,20 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
         final String shortEntityName = shortName(entityType.getName());
         
         importType(gen, Import.of(entityType));
-        importType(gen, Import.of(Type.of(FieldUtil.class)).setStaticMember("findColumn"));
+        importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
 
         return Optional.of(
             Field.of(javaStaticFieldName(column.getName()), refType)
             .public_().final_().static_()
             .set(new ReferenceValue(
-                "new " + refType.getName() + "<>(() -> findColumn(" + shortEntityName + ".class, \"" + column.getName() + "\"), " + shortEntityName + "::getName);"
+                "new " + shortName(refType.getName()) + 
+                "<>(() -> findColumn(" + 
+                        shortEntityName + ".class, \"" + 
+                        column.getName() + 
+                    "\"), " + 
+                    shortEntityName + "::get" + 
+                    javaTypeName(column.getName()) + 
+                ")"
             ))
         );
     }
@@ -64,10 +73,18 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
 
         final Type fieldType;
         if (String.class.equals(mapping)) {
-            fieldType = Type.of(StringReferenceField.class);
+            fieldType = Type.of(StringReferenceField.class)
+                .add(Generic.of().add(entityType));
+        } else if (Comparable.class.isAssignableFrom(mapping)) {
+            fieldType = Type.of(ComparableReferenceField.class)
+                .add(Generic.of().add(entityType))
+                .add(Generic.of().add(Type.of(mapping)));
         } else {
-            fieldType = Type.of(ReferenceField.class);
+            fieldType = Type.of(ReferenceField.class)
+                .add(Generic.of().add(entityType))
+                .add(Generic.of().add(Type.of(mapping)));
         }
-        return fieldType.add(Generic.of().add(entityType));
+        
+        return fieldType;
     }
 }

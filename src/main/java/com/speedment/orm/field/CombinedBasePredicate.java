@@ -36,15 +36,15 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
 
     private CombinedBasePredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY>... predicates) {
         this.predicates = new ArrayList<>();
-        this.predicates.add(first);
-        this.predicates.addAll(Arrays.asList(predicates));
+        add(first);
+        Stream.of(predicates).forEachOrdered(this::add);
         this.type = type;
     }
 
     protected CombinedBasePredicate<ENTITY> add(Predicate<? super ENTITY> predicate) {
-        if (getClass().isAssignableFrom(predicate.getClass())) {
+        if (getClass().equals(predicate.getClass())) {
             final CombinedBasePredicate<ENTITY> cbp = getClass().cast(predicate);
-            cbp.stream().forEachOrdered(this::add);
+            cbp.stream().forEachOrdered(predicates::add);
         } else {
             predicates.add(predicate);
         }

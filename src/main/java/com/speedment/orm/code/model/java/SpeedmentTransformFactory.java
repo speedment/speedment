@@ -22,9 +22,10 @@ import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.orm.code.model.java.transform.ColumnToEntityFieldMember;
 import com.speedment.orm.code.model.java.transform.TableToBuilderType;
-import com.speedment.orm.code.model.java.transform.TableToEntityFieldFile;
+import com.speedment.orm.code.model.java.transform.ImportDelegatorToEntityFieldFile;
 import com.speedment.orm.code.model.java.transform.TableToEntityType;
 import com.speedment.orm.code.model.java.transform.TableToFieldType;
+import com.speedment.orm.code.model.java.transform.TableToEntityFieldFile;
 import com.speedment.orm.code.model.java.transform.TableToManagerType;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
@@ -43,6 +44,7 @@ public class SpeedmentTransformFactory extends JavaTransformFactory {
         install(Table.class, Type.class, TableToManagerType.class);
         install(Column.class, Field.class, ColumnToEntityFieldMember.class);
         install(Table.class, File.class, TableToEntityFieldFile.class);
+        install(ImportDelegator.class, File.class, ImportDelegatorToEntityFieldFile.class);
     }
     
 }
