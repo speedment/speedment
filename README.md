@@ -23,7 +23,7 @@ Optional<Hare> dbHarry = Hare.builder()
     .persist();
 ```
 
-if you want to use JPA-like persistence instead, you can do that too like this:
+The `.persist()` above is just a convenience deligator short-cut for the following:
 
 ```java
 // A JPA-like way of persisting an Entity
@@ -36,7 +36,7 @@ Optional<Hare> dbHarry = EntityManager.get().persist(harry);
 ```
 
 
-### Easy querying
+### Easy querying using standard Java 8 predicates
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
 List<Hare> oldHares = Hare.stream()
@@ -44,11 +44,11 @@ List<Hare> oldHares = Hare.stream()
     .collect(toList());
 ```
 
-### Optimised key-value cache
+### Optimised predicate short-circuit
 ```java
-// Key-value searches are optimised in the background!
+// Searches are optimised in the background!
 Optional<Hare> harry = Hare.stream()
-    .filter(h -> "Harry".equals(h.getName()))
+    .filter(NAME.equal("Harry").and(AGE.lessThan(5)))
     .findAny();
 ```
     
@@ -56,8 +56,8 @@ Optional<Hare> harry = Hare.stream()
 ```java
 // Different tables form a traversable graph in memory.
 Optional<Carrot> carrot = Hare.stream()
-    .filter(h -> "Harry".equals(h.getName()))
-    .flatMap(h -> h.carrots()) // Carrot is a foreign key table.
+    .filter(NAME.equal("Harry"))
+    .flatMap(Hare::carrots) // Carrot is a foreign key table.
     .findAny();
 ```
     
