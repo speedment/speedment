@@ -20,6 +20,7 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.Manager;
+import com.speedment.orm.core.manager.metaresult.MetaResult;
 import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.Field;
 import com.speedment.orm.field.Operator;
@@ -38,6 +39,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -262,6 +264,21 @@ public class HareManager implements Manager<String, Hare, Buildable<Hare>> {
 
     @Override
     public void onDelete(Hare primaryKey) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Optional<Hare> persist(Hare entity, Consumer<MetaResult<Hare>> listener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Optional<Hare> update(Hare entity, Consumer<MetaResult<Hare>> listener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Optional<Hare> remove(Hare entity, Consumer<MetaResult<Hare>> listener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

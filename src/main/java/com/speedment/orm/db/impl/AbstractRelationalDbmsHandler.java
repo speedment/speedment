@@ -437,8 +437,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void executeUpdate(final String sql,
-        final List<?> values, Consumer<List<Long>> generatedKeysConsumer) throws SQLException {
+    public void executeUpdate(
+        final String sql,
+        final List<?> values,
+        final Consumer<List<Long>> generatedKeysConsumer
+    ) throws SQLException {
         final List<SqlUpdateStatement> sqlStatementList = new ArrayList<>();
         final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
         sqlStatementList.add(sqlUpdateStatement);

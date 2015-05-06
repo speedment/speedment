@@ -24,6 +24,8 @@ import com.speedment.orm.config.model.Schema;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.AbstractManager;
+import com.speedment.orm.core.manager.metaresult.MetaResult;
+import com.speedment.orm.core.manager.metaresult.SqlMetaResult;
 import com.speedment.orm.core.manager.sql.generator.SQLGenerator;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.db.impl.SqlFunction;
@@ -138,19 +140,17 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     @Override
     public Optional<ENTITY> persist(ENTITY entity) {
+        return persist(entity, null);
+    }
+
+    @Override
+    public Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb
-            .append("insert into ").append(table.getRelativeName(Schema.class
-                ));
-        sb.append(
-            "(").append(table.streamOf(Column.class
-                ).map(Column::getName).collect(joining(", "))).append(")");
-        sb.append(
-            " values ");
-        sb.append(
-            "(").append(table.streamOf(Column.class
-                ).map(c -> "?").collect(joining(", "))).append(")");
+        sb.append("insert into ").append(table.getRelativeName(Schema.class));
+        sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
+        sb.append(" values ");
+        sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
 
         final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
 
@@ -169,11 +169,16 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
             };
         };
 
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer);
+        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
     }
 
     @Override
     public Optional<ENTITY> update(ENTITY entity) {
+        return update(entity, null);
+    }
+
+    @Override
+    public Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
@@ -185,11 +190,16 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
-        return executeUpdate(entity, sb.toString(), values, NOTHING);
+        return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
     }
 
     @Override
     public Optional<ENTITY> remove(ENTITY entity) {
+        return remove(entity, null);
+    }
+
+    @Override
+    public Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("delete from ").append(table.getRelativeName(Schema.class)).append(" set ");
@@ -197,21 +207,49 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
 
-        return executeUpdate(entity, sb.toString(), values, NOTHING);
+        return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
     }
 
-    private Optional<ENTITY> executeUpdate(ENTITY entity, String sql, List<Object> values, final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer) {
+    private Optional<ENTITY> executeUpdate(
+        final ENTITY entity,
+        final String sql,
+        final List<Object> values,
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer,
+        final Consumer<MetaResult<ENTITY>> listener
+    ) {
+        ENTITY newEntity;
+        SqlMetaResult<ENTITY> meta = null;
+        if (listener != null) {
+            meta = new SqlMetaResult<ENTITY>().setQuery(sql).setParameters(values);
+        }
+        try {
+            newEntity = executeUpdate(entity, sql, values, generatedKeyconsumer);
+        } catch (SQLException sqle) {
+            LOGGER.error("Unable to persist", sqle);
+            if (meta != null) {
+                meta.setThrowable(sqle);
+            }
+            return Optional.empty();
+        } finally {
+            if (listener != null) {
+                listener.accept(meta);
+            }
+        }
+        return Optional.of(newEntity);
+    }
+
+    private ENTITY executeUpdate(
+        final ENTITY entity,
+        final String sql,
+        final List<Object> values,
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer
+    ) throws SQLException {
         final Table table = getTable();
         final Dbms dbms = table.ancestor(Dbms.class).get();
         final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
         final BUILDER builder = toBuilder(entity);
-        try {
-            dbmsHandler.executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
-        } catch (SQLException sqle) {
-            LOGGER.error("Unable to persist", sqle);
-            return Optional.empty();
-        }
-        return Optional.of(builder.build());
+        dbmsHandler.executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
+        return builder.build();
     }
 
     private String sqlQuote(Object o) {

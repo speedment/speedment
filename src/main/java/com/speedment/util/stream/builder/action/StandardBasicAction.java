@@ -84,6 +84,7 @@ public enum StandardBasicAction implements BasicAction {
     SORTED(
             Statement.of(PRESERVE, TYPE),
             Statement.of(PRESERVE, STREAM_TYPE),
+            Statement.of(PRESERVE, SIZE),
             Statement.of(SET, com.speedment.util.stream.builder.action.Property.SORTED)
     ),
     BOXED(

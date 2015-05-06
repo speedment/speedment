@@ -52,6 +52,7 @@ public final class OptionalMeta<T, M> {
      * Instead, use {@link #isPresent()}.
      *
      * @param <T> Type of the non-existent value
+     * @param <M> Type of meta data
      * @return an empty {@code OptionalMeta}
      */
     public static <T, M> OptionalMeta<T, M> empty() {

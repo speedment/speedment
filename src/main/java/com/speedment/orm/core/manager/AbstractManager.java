@@ -72,30 +72,32 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
             return get(entity, columns.get(0));
         } else {
             return columns.stream()
-                    .map(c -> get(entity, c))
-                    .collect(Collectors.toList());
+                .map(c -> get(entity, c))
+                .collect(Collectors.toList());
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<Object> find(ENTITY entity, Column column) {
         return getTable()
-                .streamOf(ForeignKey.class)
-                .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
-                .map(oFkc -> {
-                    Table fkTable = oFkc.getForeignTable();
-                    Column fkColumn = oFkc.getForeignColumn();
+            .streamOf(ForeignKey.class)
+            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
+            .map(oFkc -> {
+                Table fkTable = oFkc.getForeignTable();
+                Column fkColumn = oFkc.getForeignColumn();
 
-                    @SuppressWarnings("rawtypes")
-                    final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
+                @SuppressWarnings("rawtypes")
+                final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
 
-                    Object key = get(entity, column);
+                Object key = get(entity, column);
 
-                    return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
-                }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
+                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
+            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public String toJson(ENTITY entity) {
         return "{ " + getTable().streamOf(Column.class).map(c -> {
             final StringBuilder sb = new StringBuilder();

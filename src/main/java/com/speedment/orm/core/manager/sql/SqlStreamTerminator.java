@@ -77,21 +77,22 @@ public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> 
         return initialPipeline;
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private List<PredicateBuilder<?>> andPredicateBuilders(FilterAction<ENTITY> action) {
         final List<PredicateBuilder<?>> andPredicateBuilders = new ArrayList<>();
         final Predicate<? super ENTITY> predicate = action.getPredicate();
-        @SuppressWarnings("rawtypes")
+
         final Optional<PredicateBuilder> oPredicateBuilder = Cast.cast(predicate, PredicateBuilder.class);
         if (oPredicateBuilder.isPresent()) {
             andPredicateBuilders.add(oPredicateBuilder.get()); // Just a top level predicate builder
         } else {
-            @SuppressWarnings("rawtypes")
+
             final Optional<AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AndCombinedBasePredicate.class);
             if (oAndCombinedBasePredicate.isPresent()) {
-                @SuppressWarnings("unchecked")
+
                 final AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
                 andCombinedBasePredicate.stream()
-                    .map(p -> (Cast.cast(p, PredicateBuilder.class)))
+                    .map(p -> Cast.cast(p, PredicateBuilder.class))
                     .filter(p -> p.isPresent())
                     .map(Optional::get)
                     .forEachOrdered(andPredicateBuilders::add);

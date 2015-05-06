@@ -26,7 +26,9 @@ import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.lifecycle.Lifecyclable;
+import com.speedment.orm.core.manager.metaresult.MetaResult;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -52,7 +54,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     void set(BUILDER builder, Column column, Object value);
 
     Object find(ENTITY entity, Column column);
-    
+
     // Data source metadata
     Table getTable();
 
@@ -69,7 +71,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     BUILDER toBuilder(ENTITY entity);
 
     String toJson(ENTITY entity);
-    
+
     default ENTITY toInternal(ENTITY entity) {
         return entity;
     }
@@ -94,4 +96,10 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     Optional<ENTITY> update(ENTITY entity);
 
     Optional<ENTITY> remove(ENTITY entity);
+
+    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+
+    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+
+    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
 }
