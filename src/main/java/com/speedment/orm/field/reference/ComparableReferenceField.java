@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * @param <ENTITY>
  * @param <V>
  */
-public class ComparableReferenceField<ENTITY, V extends Comparable<V>> extends ReferenceField<ENTITY, V> {
+public class ComparableReferenceField<ENTITY, V extends Comparable<? super V>> extends ReferenceField<ENTITY, V> {
 
     public ComparableReferenceField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter) {
         super(columnSupplier, getter);

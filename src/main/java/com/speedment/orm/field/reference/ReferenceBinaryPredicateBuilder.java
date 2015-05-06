@@ -28,7 +28,7 @@ import java.util.Objects;
  * @param <ENTITY> Entity type
  * @param <V> Value type
  */
-public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<V>> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<ENTITY, V> {
+public class ReferenceBinaryPredicateBuilder<ENTITY, V extends Comparable<? super V>> extends BasePredicate<ENTITY> implements BinaryPredicateBuilder<ENTITY, V> {
 
     private final ReferenceField<ENTITY, V> field;
     private final V value;
