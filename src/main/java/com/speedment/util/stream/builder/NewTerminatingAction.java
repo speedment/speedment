@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public abstract class NewTerminatingAction<T> implements Function<LinkedList<Action<?, ?>>, T> {
     
-    private LinkedList<Action<?, ?>> actions;
+    private final LinkedList<Action<?, ?>> actions;
 
     public NewTerminatingAction(LinkedList<Action<?, ?>> actions) {
         this.actions = actions;

@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.code.model.java.entity;
 
+import com.speedment.codegen.Formatting;
 import com.speedment.orm.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.AnnotationUsage;
@@ -38,6 +39,7 @@ import com.speedment.orm.config.model.Table;
 import com.speedment.orm.core.entity.Entity;
 import com.speedment.orm.core.manager.metaresult.MetaResult;
 import com.speedment.util.Pluralis;
+import com.speedment.util.java.JavaLanguage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +73,9 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
                 final FkUtil fu = new FkUtil(fk);
-                fu.imports().forEach(file::add);
+                final Type fieldClassType = Type.of(Formatting.packageName(fu.getEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getTable()) + "Field");
+                file.add(Import.of(fieldClassType));
+                fu.imports().forEachOrdered(file::add);
                 final String methodName = pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
                 // Record for later use in the construction of aggregate streamers
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
@@ -79,14 +83,15 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 final Method method = Method.of(methodName, returnType)
                 .default_()
                 .add("return " + managerTypeName(fu.getTable()) + ".get()")
-                //                    .add("return Platform.get().get(ManagerComponent.class)")
-                //                    .add("        .manager(" + managerTypeName(fu.getTable()) + ".class)")
-                .add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
+                //.add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
+                .add("        .stream().filter(" + typeName(fu.getTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
                 i.add(method);
             })
             .addForeignKeyConsumer((i, fk) -> {
                 final FkUtil fu = new FkUtil(fk);
-                fu.imports().forEach(file::add);
+                final Type fieldClassType = Type.of(Formatting.packageName(fu.getForeignEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getForeignTable()) + "Field");
+                file.add(Import.of(fieldClassType));
+                fu.imports().forEachOrdered(file::add);
                 final Type returnType;
                 final String getCode;
                 if (fu.getColumn().isNullable()) {
@@ -99,8 +104,8 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 }
                 final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
                 method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
-//                    method.add("        .manager(" + fu.getForeignEmt().MANAGER.getName() + ".class)");
-                method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
+                //method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
+                method.add("        .stream().filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "())).findAny()" + getCode + ";");
                 i.add(method);
             })
             .build()
@@ -204,7 +209,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     private Method remove() {
         return dbMethod("remove");
     }
-    
+
     private Method persistWithListener() {
         return dbMethodWithListener("persist");
     }

@@ -132,228 +132,285 @@ public class LongStreamBuilder extends BaseStreamBuilder<LongStreamBuilder, Long
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public void forEach(LongConsumer action) {
-        streamTerminator.forEach(pipeline(), action);
+        try {
+            streamTerminator.forEach(pipeline(), action);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public void forEachOrdered(LongConsumer action) {
-        streamTerminator.forEachOrdered(pipeline(), action);
+        try {
+            streamTerminator.forEachOrdered(pipeline(), action);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public long[] toArray() {
-        return streamTerminator.toArray(pipeline());
+        try {
+            return streamTerminator.toArray(pipeline());
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public long reduce(long identity, LongBinaryOperator op) {
-        return streamTerminator.reduce(pipeline(), identity, op);
+        try {
+            return streamTerminator.reduce(pipeline(), identity, op);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalLong reduce(LongBinaryOperator op) {
-        return streamTerminator.reduce(pipeline(), op);
+        return finallyClose(streamTerminator.reduce(pipeline(), op));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
-        return streamTerminator.collect(pipeline(), supplier, accumulator, combiner);
+        return finallyClose(streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public long sum() {
-        return streamTerminator.sum(pipeline());
+        try {
+            return streamTerminator.sum(pipeline());
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalLong min() {
-        return streamTerminator.min(pipeline());
+        return finallyClose(streamTerminator.min(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalLong max() {
-        return streamTerminator.max(pipeline());
+        return finallyClose(streamTerminator.max(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public long count() {
-        return streamTerminator.count(pipeline());
+        try {
+            return streamTerminator.count(pipeline());
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalDouble average() {
-        return streamTerminator.average(pipeline());
+        return finallyClose(streamTerminator.average(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public LongSummaryStatistics summaryStatistics() {
-        return streamTerminator.summaryStatistics(pipeline());
+        return finallyClose(streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public boolean anyMatch(LongPredicate predicate) {
-        return streamTerminator.anyMatch(pipeline(), predicate);
+        try {
+            return streamTerminator.anyMatch(pipeline(), predicate);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public boolean allMatch(LongPredicate predicate) {
-        return streamTerminator.allMatch(pipeline(), predicate);
+        try {
+            return streamTerminator.allMatch(pipeline(), predicate);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public boolean noneMatch(LongPredicate predicate) {
-        return streamTerminator.noneMatch(pipeline(), predicate);
+        try {
+            return streamTerminator.noneMatch(pipeline(), predicate);
+        } finally {
+            close();
+        }
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalLong findFirst() {
-        return streamTerminator.findFirst(pipeline());
+        return finallyClose(streamTerminator.findFirst(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
      */
     @Override
     public OptionalLong findAny() {
-        return streamTerminator.findAny(pipeline());
+        return finallyClose(streamTerminator.findAny(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
+     * @return iterator
      */
     @Override
     public PrimitiveIterator.OfLong iterator() {
-        return streamTerminator.iterator(pipeline());
+        return finallyClose(streamTerminator.iterator(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * N.B. This method may short-circuit operations in the Stream pipeline and
+     * closes the stream automatically when a terminating action is performed.
      *
+     * @return spliterator
      */
     @Override
     public Spliterator.OfLong spliterator() {
-        return streamTerminator.spliterator(pipeline());
+        return finallyClose(streamTerminator.spliterator(pipeline()));
     }
 
 }

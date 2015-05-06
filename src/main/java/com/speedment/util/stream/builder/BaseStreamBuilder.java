@@ -35,6 +35,7 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
     private final List<Runnable> closeHandlers;
     private boolean parallel;
     private boolean ordered;
+    private boolean closed;
 
     public BaseStreamBuilder(BasePipeline<?> pipeline, StreamTerminator streamTerminator) {
         this.pipeline = pipeline;
@@ -45,17 +46,17 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
 
     protected T append(Action<?, ?> newAction) {
         pipeline.add(newAction);
-        return thizz();
+        return self();
     }
 
     public T sequential() {
         parallel = false;
-        return thizz();
+        return self();
     }
 
     public T parallel() {
         parallel = true;
-        return thizz();
+        return self();
     }
 
     public boolean isParallel() {
@@ -64,16 +65,19 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
 
     public T unordered() {
         ordered = false;
-        return thizz();
+        return self();
     }
 
     public T onClose(Runnable closeHandler) {
         closeHandlers.add(closeHandler);
-        return thizz();
+        return self();
     }
 
     public void close() {
-        closeHandlers.forEach(Runnable::run);
+        if (!closed) {
+            closeHandlers.forEach(Runnable::run);
+            closed = true;
+        }
     }
 
     public boolean isOrdered() {
@@ -86,10 +90,18 @@ public class BaseStreamBuilder<T extends BaseStreamBuilder<T, P>, P> {
         return result;
     }
 
-    private T thizz() {
+    private T self() {
         @SuppressWarnings("unchecked")
-        T thizz = (T) this;
+        final T thizz = (T) this;
         return thizz;
+    }
+
+    protected <T> T finallyClose(T t) {
+        try {
+            return t;
+        } finally {
+            close();
+        }
     }
 
 }
