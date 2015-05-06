@@ -23,10 +23,10 @@ Optional<Hare> dbHarry = Hare.builder()
     .persist();
 ```
 
-The `.persist()` above is just a convenience deligator short-cut for the following:
+The `.persist()` method above is just a convenience deligator short-cut for the following:
 
 ```java
-// A JPA-like way of persisting an Entity
+// The EntityManager is still responsible for persistence
 Hare harry = Hare.builder()
     .setName("Harry")
     .setColor("Gray")
