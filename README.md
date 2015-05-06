@@ -81,6 +81,27 @@ Hare.stream()
     .forEach(System.out::println);
 ```
  
+### Full access to transaction metadata
+```java
+// If an SQL storage engine is used, you may
+// want to obtain the actual transaction metadata.
+Optional<Hare> harry = Hare.builder()
+    .setName("Harry")
+    .setColor("Gray")
+    .setAge(3)
+    .persist(meta -> {
+        meta.getSqlMetaResult().ifPresent(sql -> {
+            System.out.println("sql = " + sql.getQuery());
+            System.out.println("params = " + sql.getParameters());
+            System.out.println("thowable = " + sql.getThrowable()
+                .map(t -> t.getMessage())
+                .orElse("nothing thrown :-) ")
+            );
+        });
+    });
+```
+ 
+
 ### Development Status
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product. You can not run it now but you can contribute to the code and see how it evolves over time.
 
