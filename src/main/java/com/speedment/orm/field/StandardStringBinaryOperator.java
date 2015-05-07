@@ -28,7 +28,7 @@ public enum StandardStringBinaryOperator implements BinaryOperator {
     STARTS_WITH(String::startsWith),
     ENDS_WITH(String::endsWith),
     CONTAINS(String::contains),
-    EQUAL_IGNORE_CASE(String::equals),
+    EQUAL_IGNORE_CASE(String::equalsIgnoreCase),
     NOT_EQUAL_IGNORE_CASE((s0, s1) -> !s0.equalsIgnoreCase(s1));
 
     private final BiPredicate<String, String> biPredicate;

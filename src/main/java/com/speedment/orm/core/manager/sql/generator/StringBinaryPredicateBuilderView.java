@@ -29,13 +29,18 @@ import java.util.Optional;
 @SuppressWarnings("rawtypes")
 public class StringBinaryPredicateBuilderView implements Transform<StringBinaryPredicateBuilder, String> {
 
-    protected String render(StandardStringBinaryOperator op) {
+    protected String render(StandardStringBinaryOperator op, String columnName) {
         switch (op) {
-//			case CONTAINS :              return "";
-//			case ENDS_WITH :             return "";
-//			case EQUAL_IGNORE_CASE :	 return "";
-//			case NOT_EQUAL_IGNORE_CASE : return "";
-//			case STARTS_WITH :           return "";
+            case CONTAINS:
+                return columnName + " LIKE BINARY CONCAT('%', ? ,'%')";
+            case ENDS_WITH:
+                return columnName + " LIKE BINARY CONCAT('%', ?)";
+            case EQUAL_IGNORE_CASE:
+                return "UPPER("+columnName+") = UPPER(?)";
+            case NOT_EQUAL_IGNORE_CASE:
+                return "UPPER("+columnName+") <> UPPER(?)";
+            case STARTS_WITH:
+                return columnName + " LIKE BINARY CONCAT(? ,'%')";
             default:
                 throw new UnsupportedOperationException(
                     "Unknown enum constant " + op.name() + "."
@@ -46,8 +51,7 @@ public class StringBinaryPredicateBuilderView implements Transform<StringBinaryP
     @Override
     public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
         return Optional.of("("
-            + model.getField().getColumn().getName()
-            + render(model.getOperator())
+            + render(model.getOperator(), model.getField().getColumn().getName())
             + ")"
         );
     }
