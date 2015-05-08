@@ -25,10 +25,11 @@ import com.speedment.orm.db.AsynchronousQueryResult;
 import com.speedment.orm.exception.SpeedmentException;
 import com.speedment.util.stream.StreamUtil;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Objects;
+import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -44,46 +45,118 @@ public class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T
 
     private static final Logger LOGGER = LogManager.getLogger(AsynchronousQueryResultImpl.class);
 
-    private final String sql;
-    private final Function<ResultSet, T> rsMapper;
+    private String sql;
+    private List<?> values;
+    private Function<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
     private Connection connection;
-    private Statement statement;
+    private PreparedStatement ps;
     private ResultSet rs;
+    private State state;
 
-    public AsynchronousQueryResultImpl(final String sql, final Function<ResultSet, T> rsMapper, Supplier<Connection> connectionSupplier) {
-        this.sql = Objects.requireNonNull(sql);
-        this.rsMapper = Objects.requireNonNull(rsMapper);
-        this.connectionSupplier = Objects.requireNonNull(connectionSupplier);
+    public enum State {
+
+        INIT, ESTABLISH, OPEN, CLOSED;
+    }
+
+    public AsynchronousQueryResultImpl(
+        final String sql,
+        final List<?> values,
+        final Function<ResultSet, T> rsMapper,
+        Supplier<Connection> connectionSupplier
+    ) {
+        this.sql = sql;
+        this.values = values;
+        this.rsMapper = rsMapper;
+        this.connectionSupplier = requireNonNull(connectionSupplier);
+        this.state = State.INIT;
+        debug();
     }
 
     @Override
     public Stream<T> stream() {
+        setState(State.ESTABLISH);
         try {
             connection = connectionSupplier.get();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(sql);
+            ps = connection.prepareStatement(getSql());
+            int i = 1;
+            for (final Object o : getValues()) {
+                ps.setObject(i++, o);
+            }
+            rs = ps.executeQuery();
         } catch (SQLException sqle) {
-            LOGGER.error("Error executing " + sql, sqle);
+            LOGGER.error("Error executing " + getSql(), sqle);
             throw new SpeedmentException(sqle);
         }
-        return StreamUtil.asStream(rs, rsMapper);
+        setState(State.OPEN);
+        return StreamUtil.asStream(rs, getRsMapper());
     }
 
     @Override
     public void close() {
         closeSilently(rs);
-        closeSilently(statement);
+        closeSilently(ps);
         closeSilently(connection);
+        setState(State.CLOSED);
     }
 
     protected void closeSilently(final AutoCloseable closeable) {
         try {
-            closeable.close();
+            if (closeable != null) {
+                closeable.close();
+            }
         } catch (Exception e) {
             LOGGER.error("Error closing " + closeable, e);
             // Just log the error. No re-throw
         }
+    }
+
+    @Override
+    public String toString() {
+        return getState() + " \"" + getSql() + "\" <- " + getValues();
+    }
+
+    @Override
+    public String getSql() {
+        return sql;
+    }
+
+    @Override
+    public void setSql(String sql) {
+        this.sql = requireNonNull(sql);
+    }
+
+    @Override
+    public List<?> getValues() {
+        return values;
+    }
+
+    @Override
+    public void setValues(List<?> values) {
+        this.values = requireNonNull(values);
+    }
+
+    @Override
+    public Function<ResultSet, T> getRsMapper() {
+        return rsMapper;
+    }
+
+    @Override
+    public void setRsMapper(Function<ResultSet, T> rsMapper) {
+        this.rsMapper = requireNonNull(rsMapper);
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    protected void setState(State state) {
+        this.state = state;
+        debug();
+    }
+
+    private void debug() {
+        // LOGGER.debug(this);
     }
 
 }

@@ -16,6 +16,9 @@
  */
 package com.speedment.orm.db;
 
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -29,5 +32,17 @@ public interface AsynchronousQueryResult<T> extends AutoCloseable {
 
     @Override
     void close();
+
+    String getSql();
+
+    void setSql(String sql);
+
+    List<?> getValues();
+
+    void setValues(List<?> values);
+
+    Function<ResultSet, T> getRsMapper();
+
+    void setRsMapper(Function<ResultSet, T> rsMapper);
 
 }

@@ -16,6 +16,7 @@
  */
 package com.speedment.orm.db.impl;
 
+import com.speedment.orm.exception.SpeedmentException;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.function.Function;
@@ -33,6 +34,16 @@ public interface SqlFunction<T, R> {
 
     static <T, R> SqlFunction<T, R> wrap(Function<T, R> inner) {
         return inner::apply;
+    }
+
+    default Function<T, R> unWrap() {
+        return t -> {
+            try {
+                return this.apply(t);
+            } catch (SQLException sqle) {
+                throw new SpeedmentException(sqle);
+            }
+        };
     }
 
     default <V> SqlFunction<V, R> compose(SqlFunction<? super V, ? extends T> before) {

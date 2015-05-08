@@ -16,7 +16,11 @@
  */
 package com.speedment.orm.core.manager.sql;
 
+import com.speedment.codegen.base.Generator;
 import com.speedment.orm.core.Buildable;
+import com.speedment.orm.core.manager.sql.generator.SQLGenerator;
+import com.speedment.orm.db.AsynchronousQueryResult;
+import com.speedment.orm.field.BinaryPredicateBuilder;
 import com.speedment.orm.field.CombinedBasePredicate.AndCombinedBasePredicate;
 import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.util.Cast;
@@ -36,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -48,11 +53,13 @@ import static java.util.stream.Collectors.toList;
 public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements StreamTerminator {
 
     private final AbstractSqlManager<PK, ENTITY, BUILDER> manager;
-    //private final Table table;
+    private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
+    private final Generator generator; // Todo: Static?
 
-    public SqlStreamTerminator(/*Table table*/AbstractSqlManager<PK, ENTITY, BUILDER> manager) {
+    public SqlStreamTerminator(AbstractSqlManager<PK, ENTITY, BUILDER> manager, final AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
         this.manager = manager;
-        //this.table = table;
+        this.asynchronousQueryResult = asynchronousQueryResult;
+        this.generator = new SQLGenerator();
     }
 
     @Override
@@ -72,9 +79,30 @@ public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> 
         }
 
         if (!andPredicateBuilders.isEmpty()) {
-            initialPipeline.setInitialSupplier(() -> manager.streamOf(andPredicateBuilders));
+            modifySource(andPredicateBuilders, asynchronousQueryResult);
         }
         return initialPipeline;
+    }
+
+    public void modifySource(final List<PredicateBuilder<?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+
+        if (predicateBuilders.isEmpty()) {
+            // Nothing to do...
+            return;
+        }
+        final String sql = manager.sqlSelect(" where " + generator.onEach(predicateBuilders)
+            .collect(joining(" AND ")));
+
+        @SuppressWarnings("rawtypes")
+        final List<Object> values = predicateBuilders.stream()
+            .map(pb -> Cast.cast(pb, BinaryPredicateBuilder.class))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(BinaryPredicateBuilder::getValueAsObject)
+            .collect(toList());
+
+        qr.setSql(sql);
+        qr.setValues(values);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -133,7 +161,7 @@ public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> 
     private long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
             final String sql = "select count(*) from " + manager.sqlTableReference();
-            return manager.streamOf(sql, Collections.emptyList(), rs -> rs.getLong(1)).findAny().get();
+            return manager.synchronousStreamOf(sql, Collections.emptyList(), rs -> rs.getLong(1)).findAny().get();
         }
         return fallbackSupplier.getAsLong();
     }

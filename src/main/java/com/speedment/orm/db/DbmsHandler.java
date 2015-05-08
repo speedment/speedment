@@ -53,7 +53,7 @@ public interface DbmsHandler {
     
     public <T> Stream<T> executeQuery(final String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper);
 
-    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, Function<ResultSet, T> rsMapper);
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql,  List<?> values, Function<ResultSet, T> rsMapper);
 
     public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
 

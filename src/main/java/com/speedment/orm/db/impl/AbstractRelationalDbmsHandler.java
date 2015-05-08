@@ -407,28 +407,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     @Override
     public <T> Stream<T> executeQuery(final String sql, final SqlFunction<ResultSet, T> rsMapper) {
         return executeQuery(sql, Collections.emptyList(), rsMapper);
-//        try (final Connection connection = getConnection();
-//            final Statement statement = connection.createStatement();
-//            final ResultSet rs = statement.executeQuery(sql)) {
-//            final Stream.Builder<T> streamBuilder = Stream.builder();
-//            while (rs.next()) {
-//                streamBuilder.add(rsMapper.apply(rs));
-//            }
-//            return streamBuilder.build();
-//        } catch (SQLException sqle) {
-//            LOGGER.error("Error querying " + sql, sqle);
-//            throw new SpeedmentException(sqle);
-//        }
     }
 
     @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
         final String sql,
+        final List<?> values,
         final Function<ResultSet, T> rsMapper
     ) {
-        Objects.requireNonNull(sql);
-        Objects.requireNonNull(rsMapper);
-        return new AsynchronousQueryResultImpl<>(sql, rsMapper, () -> getConnection());
+        return new AsynchronousQueryResultImpl<>(
+            Objects.requireNonNull(sql),
+            Objects.requireNonNull(values),
+            Objects.requireNonNull(rsMapper),
+            () -> getConnection());
     }
 
     @Override

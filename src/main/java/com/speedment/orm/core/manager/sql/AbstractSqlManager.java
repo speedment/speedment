@@ -16,7 +16,6 @@
  */
 package com.speedment.orm.core.manager.sql;
 
-import com.speedment.codegen.base.Generator;
 import com.speedment.orm.config.model.Column;
 import com.speedment.orm.config.model.Dbms;
 import com.speedment.orm.config.model.PrimaryKeyColumn;
@@ -26,14 +25,11 @@ import com.speedment.orm.core.Buildable;
 import com.speedment.orm.core.manager.AbstractManager;
 import com.speedment.orm.core.manager.metaresult.MetaResult;
 import com.speedment.orm.core.manager.metaresult.SqlMetaResult;
-import com.speedment.orm.core.manager.sql.generator.SQLGenerator;
+import com.speedment.orm.db.AsynchronousQueryResult;
 import com.speedment.orm.db.DbmsHandler;
 import com.speedment.orm.db.impl.SqlFunction;
-import com.speedment.orm.field.BinaryPredicateBuilder;
-import com.speedment.orm.field.PredicateBuilder;
 import com.speedment.orm.platform.Platform;
 import com.speedment.orm.platform.component.DbmsHandlerComponent;
-import com.speedment.util.Cast;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import java.sql.ResultSet;
@@ -44,9 +40,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,54 +62,19 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
 
-    private final Generator generator; // Todo: Static?
-
-    public AbstractSqlManager() {
-        this.generator = new SQLGenerator();
-    }
-
     @Override
     public Stream<ENTITY> stream() {
-        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator<>(this);
-        return new ReferenceStreamBuilder<>(new BasePipeline<>(this::streamOfAll), terminator);
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap());
+        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult);
+        final Supplier<BaseStream<?, ?>> initialSupplier = () -> asynchronousQueryResult.stream();
+        final Stream<ENTITY> result = new ReferenceStreamBuilder<>(new BasePipeline<>(initialSupplier), terminator);
+        result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
+        return result;
     }
 
-    public Stream<ENTITY> streamOfAll() {
-        return streamOf(sqlSelect(""));
-    }
-
-    public Stream<ENTITY> streamOf(final String sql) {
-        return streamOf(sql, Collections.emptyList());
-    }
-
-    public Stream<ENTITY> streamOf(final List<PredicateBuilder<?>> predicateBuilders) {
-        if (predicateBuilders.isEmpty()) {
-            return streamOfAll();
-        }
-        final String whereString = generator.onEach(predicateBuilders)
-            .collect(joining(" AND "));
-
-        @SuppressWarnings("rawtypes")
-        final List<Object> values = predicateBuilders.stream()
-            .map(pb -> Cast.cast(pb, BinaryPredicateBuilder.class))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(BinaryPredicateBuilder::getValueAsObject)
-            .collect(toList());
-
-        return streamOf(sqlSelect(" where " + whereString), values);
-    }
-
-    public Stream<ENTITY> streamOf(final String sql, final List<Object> values) {
-        return streamOf(sql, values, sqlEntityMapper);
-    }
-
-    public <T> Stream<T> streamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
-        final Table table = getTable();
-        final Dbms dbms = table.ancestor(Dbms.class).get();
-        final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-        System.out.println(sql + " <- " + values);
-        return dbmsHandler.executeQuery(sql, values, rsMapper);
+    public <T> Stream<T> synchronousStreamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
+        LOGGER.debug(sql + " <- " + values);
+        return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
     public String sqlColumnList() {
@@ -123,7 +85,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         return getTable().getRelativeName(Schema.class);
     }
 
-    private String sqlSelect(String suffix) {
+    public String sqlSelect(String suffix) {
         final String sql = "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
         return sql;
     }
@@ -264,5 +226,11 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     private final Function<BUILDER, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
     };
+
+    protected DbmsHandler dbmsHandler() {
+        final Table table = getTable();
+        final Dbms dbms = table.ancestor(Dbms.class).get();
+        return Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+    }
 
 }
