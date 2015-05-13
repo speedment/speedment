@@ -1,4 +1,4 @@
-Speedment - An accelerated database framework
+Speedment - An accelerated JVM-to-database framework
 ==================================
 ![Spire the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 About
@@ -118,3 +118,14 @@ When ready, you can just add the following to your project's `pom.xml` to use Sp
 You must also add a JDBC dependency for the database you are using.
 
 N.B. Speedment is not yet on Maven Central Repository so you can't use it in your pom yet unless you manually build and install it.
+
+
+### License
+
+Speedment is available under the Apache 2 License.
+
+### Copyright
+
+Copyright (c) 2008-2015, Speedment, Inc. All Rights Reserved.
+
+Visit [www.speedment.com](http://www.speedment.com/) for more info.
