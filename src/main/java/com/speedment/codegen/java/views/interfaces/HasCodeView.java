@@ -16,8 +16,8 @@
  */
 package com.speedment.codegen.java.views.interfaces;
 
-import static com.speedment.codegen.Formatting.block;
-import static com.speedment.codegen.Formatting.nl;
+import static com.speedment.codegen.util.Formatting.block;
+import static com.speedment.codegen.util.Formatting.nl;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasCode;

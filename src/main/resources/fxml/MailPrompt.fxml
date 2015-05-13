@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="540.0" spacing="20.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="labelHeader" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Welcome to the community!" textFill="#3f6291">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label maxWidth="1.7976931348623157E308" text="Please enter your email adress:" />
+      <TextField fx:id="fieldMail" promptText="Email">
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+      </TextField>
+      <Label fx:id="labelLicense" maxWidth="1.7976931348623157E308" text="Speedment ORM is licensed under the Apache 2 license." />
+      <Button fx:id="buttonOkey" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, got it!">
+         <padding>
+            <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+         </padding>
+      </Button>
+   </children>
+   <padding>
+      <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
+   </padding>
+</VBox>

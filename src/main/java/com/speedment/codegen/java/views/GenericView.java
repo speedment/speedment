@@ -18,10 +18,10 @@ package com.speedment.codegen.java.views;
 
 import com.speedment.codegen.lang.models.Generic;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 
 /**
  *

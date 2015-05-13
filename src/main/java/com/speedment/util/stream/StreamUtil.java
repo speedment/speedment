@@ -21,7 +21,7 @@
  */
 package com.speedment.util.stream;
 
-import com.speedment.orm.exception.SpeedmentException;
+import com.speedment.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;

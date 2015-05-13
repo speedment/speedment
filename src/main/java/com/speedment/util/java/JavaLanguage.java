@@ -16,7 +16,7 @@
  */
 package com.speedment.util.java;
 
-import static com.speedment.codegen.Formatting.ucfirst;
+import static com.speedment.codegen.util.Formatting.ucfirst;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;

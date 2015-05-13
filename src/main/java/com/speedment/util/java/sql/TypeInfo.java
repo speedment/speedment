@@ -16,7 +16,7 @@
  */
 package com.speedment.util.java.sql;
 
-import com.speedment.orm.exception.SpeedmentException;
+import com.speedment.core.exception.SpeedmentException;
 import java.lang.reflect.Field;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;

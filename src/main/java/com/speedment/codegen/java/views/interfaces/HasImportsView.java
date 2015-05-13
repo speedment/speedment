@@ -16,13 +16,13 @@
  */
 package com.speedment.codegen.java.views.interfaces;
 
-import static com.speedment.codegen.Formatting.EMPTY;
-import static com.speedment.codegen.Formatting.dnl;
-import static com.speedment.codegen.Formatting.nl;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.dnl;
+import static com.speedment.codegen.util.Formatting.nl;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasImports;
-import static com.speedment.util.CodeCombiner.joinIfNotEmpty;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
  *

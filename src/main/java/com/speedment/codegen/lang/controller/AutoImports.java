@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import static com.speedment.codegen.Formatting.DOT;
+import static com.speedment.codegen.util.Formatting.DOT;
 import com.speedment.codegen.base.DependencyManager;
 import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.HasClasses;

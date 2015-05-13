@@ -18,13 +18,13 @@ package com.speedment.codegen.java.views;
 
 import com.speedment.codegen.lang.models.Annotation;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.java.views.interfaces.HasAnnotationUsageView;
 import com.speedment.codegen.java.views.interfaces.HasJavadocView;
 import com.speedment.codegen.java.views.interfaces.HasNameView;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 
 /**
  *

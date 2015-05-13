@@ -16,20 +16,20 @@
  */
 package com.speedment.codegen.java.views;
 
-import static com.speedment.codegen.Formatting.COMMA_SPACE;
-import static com.speedment.codegen.Formatting.EMPTY;
-import static com.speedment.codegen.Formatting.PE;
-import static com.speedment.codegen.Formatting.PS;
-import static com.speedment.codegen.Formatting.SC;
-import static com.speedment.codegen.Formatting.SPACE;
-import static com.speedment.codegen.Formatting.block;
-import static com.speedment.codegen.Formatting.ifelse;
-import static com.speedment.codegen.Formatting.nl;
+import static com.speedment.codegen.util.Formatting.COMMA_SPACE;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.PE;
+import static com.speedment.codegen.util.Formatting.PS;
+import static com.speedment.codegen.util.Formatting.SC;
+import static com.speedment.codegen.util.Formatting.SPACE;
+import static com.speedment.codegen.util.Formatting.block;
+import static com.speedment.codegen.util.Formatting.ifelse;
+import static com.speedment.codegen.util.Formatting.nl;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.InterfaceMethod;
 import static com.speedment.codegen.lang.models.modifiers.Modifier.*;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

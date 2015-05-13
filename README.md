@@ -1,9 +1,9 @@
-Speedment ORM - An accelerated ORM
+Speedment - An accelerated database framework
 ==================================
-![Harry the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
+![Spire the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 About
 -----
-The Speedment ORM accelerates your JVM based database applications and makes programming so easy!
+The Speedment accelerates your JVM based database applications and makes programming so easy!
 
 Here are a few examples of how you could use Speedment from your code:
 ### Easy initialization
@@ -111,9 +111,10 @@ When ready, you can just add the following to your project's `pom.xml` to use Sp
 ```xml
 <dependency>
     <groupId>com.speedment</groupId>
-    <artifactId>orm</artifactId>
-    <version>0.0.1</version>
+    <artifactId>speedment</artifactId>
+    <version>${speedment.version}</version>
 </dependency>
 ```
+You must also add a JDBC dependency for the database you are using.
 
 N.B. Speedment is not yet on Maven Central Repository so you can't use it in your pom yet unless you manually build and install it.

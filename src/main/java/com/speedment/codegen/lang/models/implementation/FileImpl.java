@@ -21,7 +21,7 @@ import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Javadoc;
-import com.speedment.util.Copier;
+import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:id="tableSettings" hgap="8.0" style="-fx-background-color: #e0e0e0; -fx-background-radius: 4;" vgap="8.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ComboBox fx:id="targetFolder" editable="true" prefHeight="25.0" prefWidth="208.0" promptText="Package folder..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label text="Target folder:" GridPane.rowIndex="1" />
+      <Label text="If file exists:" GridPane.rowIndex="3" />
+      <Label text="File name:" GridPane.rowIndex="2" />
+      <TextField fx:id="targetName" promptText="File name..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <children>
+            <RadioButton fx:id="ifFileExistsIgnore" mnemonicParsing="false" selected="true" text="Ignore">
+               <toggleGroup>
+                  <ToggleGroup fx:id="ifFileExists" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="ifFileExistsOverwrite" mnemonicParsing="false" text="Overwrite" toggleGroup="$ifFileExists" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </HBox>
+      <Label fx:id="headerText" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Example text" textAlignment="CENTER" GridPane.columnSpan="2">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <effect>
+      <DropShadow blurType="TWO_PASS_BOX" color="#00000080" height="16.0" offsetY="1.0" radius="7.5" width="16.0" />
+   </effect>
+</GridPane>

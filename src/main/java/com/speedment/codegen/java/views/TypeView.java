@@ -17,12 +17,12 @@
 package com.speedment.codegen.java.views;
 
 import com.speedment.codegen.lang.models.Type;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.DependencyManager;
 import com.speedment.codegen.base.Transform;
 import java.util.Optional;
-import com.speedment.util.CodeCombiner;
+import com.speedment.codegen.util.CodeCombiner;
 import java.util.Collections;
 import java.util.stream.Collectors;
 

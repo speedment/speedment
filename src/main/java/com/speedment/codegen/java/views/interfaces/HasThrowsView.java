@@ -16,12 +16,12 @@
  */
 package com.speedment.codegen.java.views.interfaces;
 
-import static com.speedment.codegen.Formatting.COMMA_SPACE;
-import static com.speedment.codegen.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.COMMA_SPACE;
+import static com.speedment.codegen.util.Formatting.EMPTY;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasThrows;
-import static com.speedment.util.CodeCombiner.joinIfNotEmpty;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
  *

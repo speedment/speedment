@@ -22,7 +22,7 @@ import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.lang.models.constants.DefaultType.*;
 import java.util.function.Consumer;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.lang.interfaces.HasImports;
 import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.interfaces.HasSupertype;

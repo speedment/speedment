@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.lang.interfaces.HasClasses;
 import com.speedment.codegen.lang.interfaces.HasConstructors;
 import com.speedment.codegen.lang.interfaces.HasJavadoc;

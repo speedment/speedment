@@ -16,8 +16,8 @@
  */
 package com.speedment.codegen.java.views.interfaces;
 
-import static com.speedment.codegen.Formatting.EMPTY;
-import static com.speedment.codegen.Formatting.SPACE;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.SPACE;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasType;

@@ -20,15 +20,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.speedment</groupId>
-    <artifactId>orm</artifactId>
-    <version>0.0.1-rc1-SNAPSHOT</version>
+    <artifactId>speedment</artifactId>
+    <version>0.4.1-rc1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <mainClass>com.speedment.orm.gui.MainApp</mainClass>
     </properties>
-    <name>Speedment ORM</name>
+    <name>Speedment</name>
     
     <licenses>
         <license>
@@ -37,6 +38,34 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    
+    
+    <scm>
+        <connection>scm:git:git://github.com/speedment/speedment.git</connection>
+        <developerConnection>scm:git:git@github.com:speedment/speedment.git</developerConnection>
+        <url>https://github.com/speedment/speedment/</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>permin</id>
+            <name>Per Ake Minborg</name>
+            <email>minborg@speedment.com</email>
+        </developer>
+        <developer>
+            <id>emifor</id>
+            <name>Emil Forslund</name>
+            <email>emil@speedment.com</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/speedment/speedment/issues</url>
+    </issueManagement>
+    <organization>
+        <name>Speedment, Inc.</name>
+        <url>http://www.speedment.com/</url>
+    </organization>
     
     
     <build>
@@ -90,6 +119,50 @@
                 <version>2.6.0-01</version>
                 <extensions>true</extensions>
             </plugin>-->
+            
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${java.home}/../bin/javafxpackager</executable>
+                            <arguments>
+                                <argument>-createjar</argument>
+                                <argument>-nocss2bin</argument>
+                                <argument>-appclass</argument>
+                                <argument>${mainClass}</argument>
+                                <argument>-srcdir</argument>
+                                <argument>${project.build.directory}/classes</argument>
+                                <argument>-outdir</argument>
+                                <argument>${project.build.directory}</argument>
+                                <argument>-outfile</argument>
+                                <argument>${project.build.finalName}.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>exec</goal>                            
+                        </goals>
+                        <configuration>
+                            <executable>${java.home}/bin/java</executable>
+                            <commandlineArgs>${runfx.args}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>  
+            </plugin>
+            
+            
         </plugins>
     </build>
             
@@ -173,11 +246,11 @@
         
         
         <!-- GNU LICENSE, NOT INCLUDED IN THE PRODUCT! -->
-        <dependency>
+<!--        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
-        </dependency>
+        </dependency>-->
         
         <!-- LICENSE INFORMATION
         OpenHFT, Chronicle Map
@@ -197,6 +270,35 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.10</version>
         </dependency>-->
+        
+        
+        		
+        <!-- LICENSE INFORMATION
+        Silk 1.3
+        Creative Commons 2.5
+        http://creativecommons.org/licenses/by/2.5/
+        2015-03-31
+        emifo
+        -->
+        <dependency>
+            <groupId>com.famfamfam</groupId>
+            <artifactId>silk</artifactId>
+            <version>1.3</version>
+        </dependency>
+		
+        <!-- LICENSE INFORMATION
+        ControlFX 8.20.8
+        BSD 3-clause license
+        http://opensource.org/licenses/BSD-3-Clause
+        2015-03-31
+        emifo
+        -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.20.8</version>
+        </dependency>
+        
         
     </dependencies>
     

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.25" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+      <VBox alignment="TOP_CENTER" prefHeight="510.0" prefWidth="72.0" SplitPane.resizableWithParent="false">
+         <children>
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="58.0" prefWidth="253.0" text="Speedment ORM" textAlignment="CENTER" textFill="#4164a1">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="4.0" right="4.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="56.0" prefWidth="253.0" spacing="8.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Open project" />
+                  <Button mnemonicParsing="false" text="Save" />
+                  <Button mnemonicParsing="false" text="Save as..." />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </HBox>
+            <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="253.0" vgap="8.0" VBox.vgrow="NEVER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="89.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.0" minWidth="10.0" prefWidth="164.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Project name:" />
+                  <Label text="Location:" GridPane.rowIndex="1" />
+                  <Label text="Author:" GridPane.rowIndex="2" />
+                  <Label layoutX="18.0" layoutY="51.0" text="Company:" GridPane.rowIndex="3" />
+                  <TextField promptText="Project name..." GridPane.columnIndex="1" />
+                  <TextField promptText="Directory..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField promptText="Author name..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField promptText="Company name..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </GridPane>
+            <Button defaultButton="true" mnemonicParsing="false" text="Add new DBMS!">
+               <padding>
+                  <Insets bottom="16.0" left="24.0" right="24.0" top="16.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </Button>
+            <Pane maxHeight="1.7976931348623157E308" prefHeight="153.0" prefWidth="253.0" VBox.vgrow="ALWAYS" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </VBox.margin>
+            </ImageView>
+         </children>
+      </VBox>
+      <StackPane fx:id="rightPanel" layoutX="51.0" layoutY="99.0" style="-fx-background-color: #ccc;">
+         <children>
+            <TabPane>
+               <tabs>
+                  <Tab closable="false" text="DBMS A">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308">
+                           <children>
+                              <FlowPane hgap="8.0" prefHeight="129.0" prefWidth="303.0" style="-fx-background-color: #d0d0d0;" vgap="8.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <GridPane hgap="8.0" prefHeight="122.0" prefWidth="521.0" style="-fx-background-color: #eee; -fx-background-radius: 4;" vgap="8.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="91.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="152.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="109.0" minWidth="10.0" prefWidth="66.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="154.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Database name:" GridPane.halignment="RIGHT" />
+                                          <Label text="Database type:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                          <Label text="Host:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                                          <Label text="Username:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                                          <Label text="Password:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                          <TextField promptText="Username..." GridPane.columnIndex="3" />
+                                          <PasswordField promptText="Password..." GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <Button defaultButton="true" mnemonicParsing="false" text="Connect to DBMS" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                                          <TextField promptText="Database name..." GridPane.columnIndex="1" />
+                                          <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                             <children>
+                                                <TextField promptText="Ip-address" />
+                                                <TextField prefHeight="25.0" prefWidth="100.0" promptText="Port" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <effect>
+                                          <DropShadow blurType="TWO_PASS_BOX" color="#00000080" height="16.0" offsetY="1.0" radius="7.5" width="16.0" />
+                                       </effect>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </FlowPane>
+                              <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                                <tabs>
+                                  <Tab text="Schema 1">
+                                       <content>
+                                          <VBox>
+                                             <children>
+                                                <TitledPane animated="false" collapsible="false" layoutX="10.0" layoutY="146.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="General settings for Schema 1" VBox.vgrow="ALWAYS">
+                                                   <content>
+                                                      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                   </content>
+                                                </TitledPane>
+                                              <TitledPane text="Table 1">
+                                                   <content>
+                                                      <TableView prefHeight="200.0" prefWidth="200.0">
+                                                        <columns>
+                                                          <TableColumn editable="false" prefWidth="197.0" text="Column name" />
+                                                            <TableColumn prefWidth="109.0" text="Custom name" />
+                                                            <TableColumn prefWidth="60.0" text="Include" />
+                                                          <TableColumn prefWidth="140.0" text="Java type" />
+                                                            <TableColumn minWidth="0.0" prefWidth="168.0" text="Java type" />
+                                                            <TableColumn prefWidth="98.0" text="Column 5" />
+                                                            <TableColumn editable="false" prefWidth="197.0" text="Column name" />
+                                                        </columns>
+                                                      </TableView>
+                                                   </content>
+                                              </TitledPane>
+                                              <TitledPane text="Table 2">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                </content>
+                                              </TitledPane>
+                                              <TitledPane text="Table 3">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                </content>
+                                              </TitledPane>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                  </Tab>
+                                  <Tab text="Schema 2">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <VBox fx:id="panelConnect" alignment="CENTER" fillWidth="false" layoutX="51.0" layoutY="99.0" maxHeight="245.0" maxWidth="270.0" prefHeight="245.0" prefWidth="270.0" spacing="10.0" style="-fx-background-color: #f3f3f3;" visible="false" StackPane.alignment="CENTER">
+               <effect>
+                  <DropShadow blurType="TWO_PASS_BOX" color="#00000080" height="16.0" offsetY="2.0" radius="7.5" width="16.0" />
+               </effect>
+               <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="341.0" text="Connect to your DBMS" textAlignment="CENTER" textFill="#4164a1">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <ChoiceBox fx:id="fieldDatabaseType" prefHeight="25.0" prefWidth="352.0" />
+                  <HBox spacing="16.0">
+                     <children>
+                        <TextField fx:id="fieldHost" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="168.0" promptText="Host" />
+                        <TextField fx:id="fieldPort" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="54.0" promptText="Port" />
+                     </children>
+                  </HBox>
+                  <TextField fx:id="fieldUsername" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="314.0" promptText="Username" />
+                  <PasswordField fx:id="fieldPassword" prefHeight="25.0" prefWidth="300.0" promptText="Password" />
+                  <TextField fx:id="fieldDatabaseName" prefHeight="25.0" prefWidth="405.0" promptText="Database Name" />
+                  <Button fx:id="buttonConnect" defaultButton="true" mnemonicParsing="false" text="Connect!">
+                     <padding>
+                        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                     </padding>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </VBox>
+         </children>
+      </StackPane>
+  </items>
+</SplitPane>
