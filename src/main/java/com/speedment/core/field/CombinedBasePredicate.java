@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY> {
 
     public static enum Type {
-
         AND, OR
     }
 
@@ -44,7 +43,7 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
         add(Objects.requireNonNull(second));
     }
 
-    protected CombinedBasePredicate<ENTITY> add(Predicate<? super ENTITY> predicate) {
+    protected final <R extends CombinedBasePredicate<ENTITY>> R add(Predicate<? super ENTITY> predicate) {
         if (getClass().equals(predicate.getClass())) {
             @SuppressWarnings("unchecked")
             final CombinedBasePredicate<ENTITY> cbp = getClass().cast(predicate);
@@ -53,7 +52,9 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
             predicates.add(predicate);
         }
 
-        return this;
+		@SuppressWarnings("unchecked")
+		final R self = (R) this;
+        return self;
     }
 
     protected CombinedBasePredicate<ENTITY> remove(Predicate<? super ENTITY> predicate) {
@@ -72,6 +73,12 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
     public Type getType() {
         return type;
     }
+	
+	@Override
+	public abstract AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other);
+	
+	@Override
+	public abstract OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other);
 
     public static class AndCombinedBasePredicate<ENTITY> extends CombinedBasePredicate<ENTITY> {
 
@@ -85,12 +92,12 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
         }
 
         @Override
-        public Predicate<ENTITY> and(Predicate<? super ENTITY> other) {
+        public AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other) {
             return add(other);
         }
 
         @Override
-        public Predicate<ENTITY> or(Predicate<? super ENTITY> other) {
+        public OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other) {
             return new OrCombinedBasePredicate<>(this, other);
         }
     }
@@ -107,12 +114,12 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
         }
 
         @Override
-        public Predicate<ENTITY> and(Predicate<? super ENTITY> other) {
+        public AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other) {
             return new AndCombinedBasePredicate<>(this, other);
         }
 
         @Override
-        public Predicate<ENTITY> or(Predicate<? super ENTITY> other) {
+        public OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other) {
             return add(other);
         }
     }
