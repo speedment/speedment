@@ -16,7 +16,6 @@
  */
 package com.speedment.core.config.model.impl.utils;
 
-import com.speedment.core.config.DelegatorGroovyTest;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
@@ -119,7 +118,8 @@ public class GroovyParser {
         configuration.setRecompileGroovySource(true);
         configuration.setSourceEncoding(StandardCharsets.UTF_8.toString());
 
-        final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
+        //final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
+        final GroovyShell shell = new GroovyShell(GroovyParser.class.getClassLoader(), binding, configuration);
 
         final DelegatingScript script = scriptMapper.apply(shell);
 //
