@@ -99,7 +99,6 @@ public class MainGenerator implements Consumer<Project> {
                 System.out.println("*** END   File:" + fname);
             });
         
-        System.out.println("df");
         
         List<Table> tables = project
             .traversalOf(Table.class)

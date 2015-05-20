@@ -25,7 +25,7 @@ import com.speedment.util.stream.builder.pipeline.Pipeline;
 public interface BaseStreamTerminator {
 
     default <T extends Pipeline> T optimize(T initialPipeline) {
-        System.out.println("default optimize(" + initialPipeline + ")");
+        //System.out.println("default optimize(" + initialPipeline + ")");
         return initialPipeline;
     }
 
