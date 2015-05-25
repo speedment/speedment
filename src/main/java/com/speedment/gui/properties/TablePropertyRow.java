@@ -25,7 +25,7 @@ import javafx.scene.layout.HBox;
  * FXML Controller class
  *
  * @author Emil Forslund
- * @param <V>
+ * @param <V> The type of the value column
  */
 public class TablePropertyRow<V> extends HBox {
 	

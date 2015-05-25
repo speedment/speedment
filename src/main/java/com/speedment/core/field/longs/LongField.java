@@ -26,7 +26,7 @@ import java.util.function.ToLongFunction;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> The entity type
  */
 public class LongField<ENTITY> implements Field<ENTITY> {
 

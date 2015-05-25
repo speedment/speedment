@@ -23,7 +23,7 @@ import java.util.Optional;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  */
 public class SqlMetaResult<ENTITY> extends AbstractMetaResult<ENTITY, SqlMetaResult<ENTITY>> {
 

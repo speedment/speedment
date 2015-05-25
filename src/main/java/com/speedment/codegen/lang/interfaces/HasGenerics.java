@@ -22,7 +22,7 @@ import java.util.List;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasGenerics<T extends HasGenerics<T>> {
     

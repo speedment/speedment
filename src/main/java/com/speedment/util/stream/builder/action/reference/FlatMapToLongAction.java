@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> the input type of the stream elements
  */
 public class FlatMapToLongAction<T> extends Action<Stream<T>, LongStream> {
 

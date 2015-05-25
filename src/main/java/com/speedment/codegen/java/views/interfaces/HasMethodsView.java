@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasMethodsView<M extends HasMethods<M>> extends Transform<M, String>, Wrappable {
     

@@ -27,7 +27,7 @@ import com.speedment.codegen.lang.interfaces.HasValue;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasValueView<M extends HasValue<M>> extends Transform<M, String> {
     

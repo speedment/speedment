@@ -21,7 +21,6 @@ import com.speedment.core.config.model.External;
 /**
  *
  * @author pemi
- * @param <T> Setter return type.
  */
 public interface ColumnCompressionTypeable {
 

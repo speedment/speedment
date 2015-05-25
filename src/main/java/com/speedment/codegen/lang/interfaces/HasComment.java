@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasComment<T extends HasComment<T>> {
 	Optional<String> getComment();

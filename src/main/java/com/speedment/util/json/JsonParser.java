@@ -25,8 +25,7 @@ import java.util.function.Function;
 /**
  *
  * @author Emil Forslund
- * @param <ENTITY>
- * @param <FIELD>
+ * @param <ENTITY> Entity type
  */
 public final class JsonParser<ENTITY> {
 

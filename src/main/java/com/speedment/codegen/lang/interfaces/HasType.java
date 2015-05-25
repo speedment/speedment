@@ -21,7 +21,7 @@ import com.speedment.codegen.lang.models.Type;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasType<T extends HasType<T>> {
     T set(final Type type);

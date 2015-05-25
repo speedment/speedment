@@ -21,7 +21,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.public_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface AnnotationModifier<T extends AnnotationModifier<T>> 
 extends public_<T> {}

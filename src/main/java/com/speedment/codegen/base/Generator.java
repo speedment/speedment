@@ -85,7 +85,7 @@ public interface Generator {
      * Renders the specified model into a stream of code models. This is used
      * internally to provide the other interface methods.
      *
-     * @param <M>
+     * @param <M> the model type
      * @param model The model to generate.
      * @return A stream of meta objects.
      */
@@ -163,7 +163,7 @@ public interface Generator {
     /**
      * Renders all the specified models into a stream of strings.
      *
-     * @param <M>
+     * @param <M> the model type.
      * @param models The models to generate.
      * @return A stream of meta objects.
      */

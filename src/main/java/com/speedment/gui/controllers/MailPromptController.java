@@ -60,8 +60,8 @@ public class MailPromptController implements Initializable {
     /**
      * Initializes the controller class.
      *
-     * @param url
-     * @param rb
+     * @param url the URL to use
+     * @param rb the ResourceBundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

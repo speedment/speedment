@@ -32,7 +32,7 @@ import com.speedment.codegen.lang.interfaces.HasName;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface ClassOrInterface<T extends ClassOrInterface<T>> extends 
     Copyable<T>, Callable<T>, HasName<T>, HasJavadoc<T>, HasGenerics<T>,

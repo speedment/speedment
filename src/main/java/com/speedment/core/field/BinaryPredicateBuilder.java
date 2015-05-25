@@ -19,8 +19,8 @@ package com.speedment.core.field;
 /**
  *
  * @author pemi
- * @param <ENTITY>
- * @param <V>
+ * @param <ENTITY> The entity type
+ * @param <V> the value type
  */
 public interface BinaryPredicateBuilder<ENTITY, V> extends PredicateBuilder<ENTITY> {
     

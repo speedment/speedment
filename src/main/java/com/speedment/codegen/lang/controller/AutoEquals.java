@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public class AutoEquals<T extends HasFields<T>&HasMethods<T>&HasName<T>> implements Consumer<T> {
 

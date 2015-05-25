@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements 
     Transform<M, String>, HasNameView<M>, HasModifiersView<M>, HasJavadocView<M>, 

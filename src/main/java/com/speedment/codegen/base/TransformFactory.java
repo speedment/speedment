@@ -73,8 +73,8 @@ public interface TransformFactory {
 	
 	/**
 	 * Instantiates the specified class and returns it.
-	 * @param <T>
-	 * @param clazz
+	 * @param <T> the return type
+	 * @param clazz a class of the intended return type
 	 * @return the instance.
 	 */
 	static <T> T create(Class<T> clazz) {

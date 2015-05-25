@@ -26,10 +26,10 @@ import com.speedment.core.db.DbmsHandler;
 public interface DbmsHandlerComponent extends Component {
 
     /**
-     * Creates a new DbmsHandler for the given Dbms.
+     * Creates and returns a new DbmsHandler for the given Dbms.
      *
-     * @param dbms
-     * @return
+     * @param dbms the dbms to use
+     * @return a new DbmsHandler for the given dbms
      */
     DbmsHandler make(Dbms dbms);
 
@@ -37,8 +37,8 @@ public interface DbmsHandlerComponent extends Component {
      * Gets the DbmsHandler for the given Dbms. If no DbmsHandler can be found,
      * a new DbmsHandler is created using the make() method.
      *
-     * @param dbms
-     * @return
+     * @param dbms dbms the dbms to use
+     * @return the DbmsHandler for the given dbms
      */
     DbmsHandler get(Dbms dbms);
 

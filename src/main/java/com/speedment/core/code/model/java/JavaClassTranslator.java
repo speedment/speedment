@@ -30,7 +30,7 @@ import com.speedment.util.java.JavaLanguage;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> The Node type
  */
 public interface JavaClassTranslator<T extends Node> extends Translator<T, File> {
 

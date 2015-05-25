@@ -39,7 +39,7 @@ import org.apache.logging.log4j.Logger;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> The type that the ResultSet shall be mapped to
  */
 public class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 

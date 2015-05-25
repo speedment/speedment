@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> the type
  */
 public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implements Lifecyclable<T> {
 
@@ -46,7 +46,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
     }
 
     @SuppressWarnings("unchecked")
-    protected T thizz() {
+    protected T self() {
         return (T) this;
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         preInit.run();
         onInit();
         state = State.INIITIALIZED;
-        return thizz();
+        return self();
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         preResolve.run();
         onResolve();
         state = State.RESOLVED;
-        return thizz();
+        return self();
     }
 
     @Override
@@ -86,7 +86,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         preStart.run();
         onStart();
         state = State.STARTED;
-        return thizz();
+        return self();
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         onStop();
         postStop.run();
         state = State.STOPPED;
-        return thizz();
+        return self();
     }
 
     public boolean isInitialized() {
@@ -126,27 +126,27 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
 
     public T setPreInitialize(Runnable preInit) {
         this.preInit = Objects.requireNonNull(preInit);
-        return thizz();
+        return self();
     }
 
     public T setPreResolve(Runnable preResolve) {
         this.preResolve = Objects.requireNonNull(preResolve);
-        return thizz();
+        return self();
     }
 
     public T setPreStart(Runnable preStart) {
         this.preStart = Objects.requireNonNull(preStart);
-        return thizz();
+        return self();
     }
 
     public T setPreStop(Runnable preStop) {
         this.preStop = Objects.requireNonNull(preStop);
-        return thizz();
+        return self();
     }
 
     public T setPostStop(Runnable postStop) {
         this.postStop = Objects.requireNonNull(postStop);
-        return thizz();
+        return self();
     }
 
 }

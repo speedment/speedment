@@ -73,5 +73,7 @@ If there are no Managers and we call HareManager.get() then we shall provide an 
 
 When generating setters we could also generate seters for foreign key objects like  image.setUser(user.getId()) -> image.setUser(user)
 
+Columns that are NULL shall map to Optional<MAPPED CLASS>
+
 
 

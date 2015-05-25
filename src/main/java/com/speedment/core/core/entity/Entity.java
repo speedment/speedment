@@ -31,12 +31,25 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Entity {
+
     /**
-     * Class that holds the basic type.
+     * Class that holds the manager type.
      *
-     * @return
+     * @return the manager class type
      */
     Class<?> managerType();
+
+    /**
+     * Class that holds the builder type.
+     *
+     * @return the builder class type
+     */
     Class<?> builderType();
+
+    /**
+     * Class that holds the primary key type.
+     *
+     * @return the primary key class type
+     */
     Class<?> primaryKeyType();
 }

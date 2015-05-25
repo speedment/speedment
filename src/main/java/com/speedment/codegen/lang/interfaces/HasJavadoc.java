@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasJavadoc<T extends HasJavadoc<T>> {
     T set(final Javadoc doc);

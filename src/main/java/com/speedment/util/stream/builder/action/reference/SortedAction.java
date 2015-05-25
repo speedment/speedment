@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> the type of the stream elements
  */
 public class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 

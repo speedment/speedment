@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> The type of the Lifecycle
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
 
@@ -89,7 +89,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     public T setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
         this.speedmentApplicationMetadata = speedmentApplicationMetadata;
-        return thizz();
+        return self();
     }
 
     protected ApplicationMetadata getSpeedmentApplicationMetadata() {
@@ -98,7 +98,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     public T setConfigPath(Path configPath) {
         this.configPath = configPath;
-        return thizz();
+        return self();
     }
 
     protected Optional<Path> getConfigPath() {

@@ -27,7 +27,7 @@ import javafx.util.StringConverter;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The Enum type of the value column
  */
 public class TableEnumProperty<T extends Enum<T>> extends TableProperty<T> {
 	

@@ -35,7 +35,7 @@ import java.util.function.Consumer;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 	private final static String 

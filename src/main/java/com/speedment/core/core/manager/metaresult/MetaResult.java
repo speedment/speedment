@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  */
 public interface MetaResult<ENTITY> {
 

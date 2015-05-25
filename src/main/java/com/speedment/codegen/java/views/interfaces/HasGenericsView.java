@@ -28,7 +28,7 @@ import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasGenericsView<M extends HasGenerics<M>> extends Transform<M, String> {
     default String renderGenerics(Generator cg, M model) {

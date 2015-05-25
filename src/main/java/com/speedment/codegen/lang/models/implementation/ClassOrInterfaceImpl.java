@@ -36,7 +36,7 @@ import java.util.Set;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>> 
     implements ClassOrInterface<T> {

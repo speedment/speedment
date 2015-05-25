@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasInitalizersView<M extends HasInitalizers<M>> extends Transform<M, String> {
     default String renderInitalizers(Generator cg, M model) {

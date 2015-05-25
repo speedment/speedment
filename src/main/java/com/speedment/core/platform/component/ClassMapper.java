@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
+ * @param <V> The base type
  */
 public interface ClassMapper<V> {
 

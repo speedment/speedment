@@ -26,7 +26,7 @@ import java.util.function.ToDoubleFunction;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  */
 public class DoubleField<ENTITY> implements Field<ENTITY> {
 

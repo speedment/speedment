@@ -26,7 +26,7 @@ import com.speedment.codegen.util.CodeCombiner;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasModifiersView<M extends HasModifiers<M>> extends Transform<M, String> {
     

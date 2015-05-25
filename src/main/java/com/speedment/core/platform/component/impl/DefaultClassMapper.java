@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <V>
+ * @param <V> the base type
  */
 public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
 
@@ -68,9 +68,9 @@ public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
      *   ProjectComponent
      *   SqlTypeMapperComponent
      * 
-     * @param <R>
-     * @param clazz
-     * @return 
+     * @param <R> The intended return type
+     * @param clazz The class of the intended return type
+     * @return The currently mapped instance
      */
     @SuppressWarnings("unchecked") // Must be same type!
     @Override

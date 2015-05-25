@@ -36,7 +36,7 @@ public @interface External {
     /**
      * Class that holds the basic type.
      *
-     * @return
+     * @return the basic type
      */
     Class<?> type();
 }

@@ -19,7 +19,7 @@ package com.speedment.codegen.lang.interfaces;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface Copyable<T extends Copyable<T>> {
 	public T copy();

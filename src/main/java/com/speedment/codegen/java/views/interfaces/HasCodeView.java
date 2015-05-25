@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasCodeView<M extends HasCode<M>> extends Transform<M, String> {
 

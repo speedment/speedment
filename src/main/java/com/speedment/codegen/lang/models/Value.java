@@ -21,7 +21,7 @@ import com.speedment.codegen.lang.interfaces.Copyable;
 /**
  *
  * @author Emil Forslund
- * @param <V>
+ * @param <V> the value type
  */
 public interface Value<V> extends Copyable<Value<V>> {
     

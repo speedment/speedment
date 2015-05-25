@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <U>
+ * @param <U> the type of the object stream elements
  */
 public class DoubleMapToObjAction<U> extends Action<DoubleStream, Stream<U>> {
 

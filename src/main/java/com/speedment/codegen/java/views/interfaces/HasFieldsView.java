@@ -25,7 +25,7 @@ import com.speedment.codegen.util.CodeCombiner;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasFieldsView<M extends HasFields<M>> 
 extends Transform<M, String> {

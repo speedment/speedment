@@ -21,7 +21,7 @@ import com.speedment.core.config.model.Column;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> The entity type
  */
 public interface Field<ENTITY> {
 

@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <T>
- * @param <R>
+ * @param <T> the input type of the stream elements
+ * @param <R> the resulting type of the stream elements
  */
 public class FlatMapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 

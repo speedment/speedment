@@ -51,8 +51,8 @@ public class JavaTypeMapperComponentImpl implements JavaTypeMapperComponent {
      * mapping for the given DbmsType is present, that mapping is selected over
      * the general mapping for any DbmsType.
      *
-     * @param dbmsType
-     * @param javaClass
+     * @param dbmsType the Dbms type
+     * @param javaClass the java class to map
      * @return the mapping
      */
     @Override

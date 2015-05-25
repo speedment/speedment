@@ -19,7 +19,7 @@ package com.speedment.core.field;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> The entity type
  */
 public interface UnaryPredicateBuilder<ENTITY> extends PredicateBuilder<ENTITY> {
 

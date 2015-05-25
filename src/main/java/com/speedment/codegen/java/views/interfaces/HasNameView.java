@@ -23,7 +23,7 @@ import com.speedment.codegen.lang.interfaces.HasName;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasNameView<M extends HasName<M>> extends Transform<M, String> {
     

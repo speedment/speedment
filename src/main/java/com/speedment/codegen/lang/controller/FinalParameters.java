@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public class FinalParameters<T extends HasMethods<T>> implements Consumer<T> {
 	@Override

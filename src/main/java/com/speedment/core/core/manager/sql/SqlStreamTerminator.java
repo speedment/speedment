@@ -46,9 +46,9 @@ import static java.util.stream.Collectors.toList;
 /**
  *
  * @author pemi
- * @param <PK>
- * @param <ENTITY>
- * @param <BUILDER>
+ * @param <PK> the primary key type
+ * @param <ENTITY> the entity type
+ * @param <BUILDER> the builder type
  */
 public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements StreamTerminator {
 

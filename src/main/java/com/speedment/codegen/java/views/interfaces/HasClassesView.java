@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasClassesView<M extends HasClasses<M>> extends Transform<M, String> {
     default String renderClasses(Generator cg, M model) {

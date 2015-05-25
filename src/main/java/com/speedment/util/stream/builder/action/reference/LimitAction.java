@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> the type of the stream elements
  */
 public class LimitAction<T> extends Action<Stream<T>, Stream<T>> {
 

@@ -21,6 +21,6 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.final_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface InterfaceFieldModifier<T extends InterfaceFieldModifier<T>> extends final_<T> {}

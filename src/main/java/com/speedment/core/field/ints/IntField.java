@@ -26,7 +26,7 @@ import java.util.function.ToIntFunction;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> The entity field
  */
 public class IntField<ENTITY> implements Field<ENTITY> {
 

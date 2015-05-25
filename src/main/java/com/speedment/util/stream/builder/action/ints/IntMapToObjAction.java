@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <U>
+ * @param <U> the output type of the stream elements
  */
 public class IntMapToObjAction<U> extends Action<IntStream, Stream<U>> {
 

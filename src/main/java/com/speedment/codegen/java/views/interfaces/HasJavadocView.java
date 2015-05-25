@@ -25,7 +25,7 @@ import com.speedment.codegen.lang.interfaces.HasJavadoc;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasJavadocView<M extends HasJavadoc<M>> extends Transform<M, String> {
     default String renderJavadoc(Generator cg, M model) {

@@ -27,7 +27,7 @@ import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasImportsView<M extends HasImports<M>> extends Transform<M, String> {
     default String renderImports(Generator cg, M model) {

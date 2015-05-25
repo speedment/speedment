@@ -26,7 +26,7 @@ import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasThrowsView<M extends HasThrows<M>> 
 extends Transform<M, String> {

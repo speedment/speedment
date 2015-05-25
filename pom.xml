@@ -19,6 +19,16 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
+    <!-- For OSSRH on SonaType -->
+    <!-- -->
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+    <!-- -->
+    
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
     <version>0.4.1-rc1-SNAPSHOT</version>
@@ -66,6 +76,23 @@
         <name>Speedment, Inc.</name>
         <url>http://www.speedment.com/</url>
     </organization>
+    
+    <distributionManagement>
+        <!-- For OSSRH on SonaType -->
+        <!-- -->
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus snapshot repository</name>			  		
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Nexus release staging repository</name>		
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     
     
     <build>
@@ -161,7 +188,62 @@
                     </execution>
                 </executions>  
             </plugin>
-            
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+<!--                <configuration>
+                    <includes>
+                        <include>
+                            **/list/*.java
+                        </include>
+                        <include>
+                            **/struct/Struct.java
+                        </include>
+                    </includes> 
+                </configuration>-->
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+<!--                <configuration>
+                    <excludePackageNames>net.sf.jsqlparser.parser</excludePackageNames>
+                </configuration>-->
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>            
             
         </plugins>
     </build>
@@ -246,7 +328,7 @@
         
         
         <!-- GNU LICENSE, NOT INCLUDED IN THE PRODUCT! -->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>

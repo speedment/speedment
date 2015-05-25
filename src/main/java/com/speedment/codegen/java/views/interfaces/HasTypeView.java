@@ -25,7 +25,7 @@ import com.speedment.codegen.lang.interfaces.HasType;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasTypeView<M extends HasType<M>> extends Transform<M, String> {
     

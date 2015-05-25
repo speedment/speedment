@@ -22,6 +22,7 @@ import java.util.Set;
 /**
  *
  * @author Emil Forslund
+ * @param <T> The extending type
  */
 public interface HasThrows<T extends HasThrows<T>> {
     

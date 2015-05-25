@@ -24,8 +24,8 @@ import java.util.function.Supplier;
 /**
  *
  * @author pemi
- * @param <ENTITY>
- * @param <V>
+ * @param <ENTITY> The entity type
+ * @param <V> The value type
  */
 public class ComparableReferenceField<ENTITY, V extends Comparable<? super V>> extends ReferenceField<ENTITY, V> {
 

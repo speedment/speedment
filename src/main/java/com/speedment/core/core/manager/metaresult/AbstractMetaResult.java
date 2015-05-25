@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  * @param <T> Type
  */
 public class AbstractMetaResult<ENTITY, T extends AbstractMetaResult<ENTITY, T>> implements MetaResult<ENTITY> {

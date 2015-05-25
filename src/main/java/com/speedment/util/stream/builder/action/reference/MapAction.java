@@ -24,7 +24,8 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <T>
+ * @param <T> the input type of the stream elements
+ * @param <R> the output type of the stream elements
  */
 public class MapAction<T, R> extends Action<Stream<T>, Stream<R>> {
 

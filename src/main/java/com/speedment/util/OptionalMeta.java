@@ -46,7 +46,7 @@ public final class OptionalMeta<T, M> {
      * Returns an empty {@code OptionalMeta} instance. No value is present for
      * this OptionalMeta.
      *
-     * @apiNote Though it may be tempting to do so, avoid testing if an object
+     * N.B. Though it may be tempting to do so, avoid testing if an object
      * is empty by comparing with {@code ==} against instances returned by
      * {@code Option.empty()}. There is no guarantee that it is a singleton.
      * Instead, use {@link #isPresent()}.
@@ -94,6 +94,7 @@ public final class OptionalMeta<T, M> {
      * @param <T> the class of the value
      * @param <M> the class of the meta data
      * @param value the value to be present, which must be non-null
+     * @param metaData the meta data
      * @return an {@code OptionalMeta} with the value present
      * @throws NullPointerException if value is null
      */
@@ -225,7 +226,7 @@ public final class OptionalMeta<T, M> {
      * the result is non-null, return an {@code OptionalMeta} describing the
      * result. Otherwise return an empty {@code OptionalMeta}.
      *
-     * @apiNote This method supports post-processing on optional values, without
+     * N.B. This method supports post-processing on optional values, without
      * the need to explicitly check for a return status. For example, the
      * following code traverses a stream of file names, selects one that has not
      * yet been processed, and then opens that file, returning an
@@ -313,7 +314,7 @@ public final class OptionalMeta<T, M> {
      * Return the contained value, if present, otherwise throw an exception to
      * be created by the provided supplier.
      *
-     * @apiNote A method reference to the exception constructor with an empty
+     * N.B. A method reference to the exception constructor with an empty
      * argument list can be used as the supplier. For example,
      * {@code IllegalStateException::new}
      *

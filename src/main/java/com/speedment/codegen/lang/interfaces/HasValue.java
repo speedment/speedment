@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasValue<T extends HasValue<T>> {
 	T set(final Value<?> val);

@@ -28,7 +28,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.volatile_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface FieldModifier<T extends FieldModifier<T>> 
 extends public_<T>, protected_<T>, private_<T>, static_<T>, final_<T>, 

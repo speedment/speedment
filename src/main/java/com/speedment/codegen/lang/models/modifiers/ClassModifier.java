@@ -27,7 +27,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.strictfp_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface ClassModifier<T extends ClassModifier<T>> extends public_<T>, 
 protected_<T>, private_<T>, abstract_<T>, static_<T>, final_<T>, strictfp_<T> {}

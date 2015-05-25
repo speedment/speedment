@@ -24,7 +24,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.static_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface EnumModifier<T extends EnumModifier<T>> 
 extends public_<T>, protected_<T>, private_<T>, static_<T> {}

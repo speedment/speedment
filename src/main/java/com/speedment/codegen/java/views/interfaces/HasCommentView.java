@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasCommentView<M extends HasComment<M>> extends Transform<M, String> {
     

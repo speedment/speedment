@@ -22,7 +22,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.static_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface InterfaceMethodModifier<T extends InterfaceMethodModifier<T>> 
 extends static_<T>, default_<T> {}

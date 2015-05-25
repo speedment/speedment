@@ -19,7 +19,8 @@ package com.speedment.codegen.base;
 /**
  *
  * @author Emil Forslund
- * @param <A>
+ * @param <A> the model type
+ * @param <B> the result type
  */
 public interface Meta<A, B> {
     

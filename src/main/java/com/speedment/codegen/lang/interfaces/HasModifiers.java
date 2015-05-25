@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface HasModifiers<T extends HasModifiers<T>> {
 	Set<Modifier> getModifiers();

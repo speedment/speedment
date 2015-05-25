@@ -31,7 +31,7 @@ public interface DbmsTypeable {
 
     /**
      *
-     * @param dbmsTypeName
+     * @param dbmsTypeName the type name of the dbms
      * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
      * could not be found
      */

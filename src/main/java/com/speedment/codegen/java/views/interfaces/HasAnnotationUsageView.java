@@ -26,7 +26,7 @@ import com.speedment.codegen.util.CodeCombiner;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends Transform<M, String> {
     default String renderAnnotations(Generator cg, M model) {
