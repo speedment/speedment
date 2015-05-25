@@ -27,10 +27,16 @@ import com.speedment.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.core.code.model.java.TransformUtil.importType;
 import static com.speedment.core.code.model.java.TransformUtil.typeUsing;
 import com.speedment.core.config.model.Column;
+import com.speedment.core.config.model.ForeignKey;
+import com.speedment.core.config.model.ForeignKeyColumn;
+import com.speedment.core.config.model.Table;
 import com.speedment.core.field.FieldUtil;
 import com.speedment.core.field.reference.ComparableReferenceField;
+import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
 import com.speedment.core.field.reference.ReferenceField;
+import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceField;
+import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
 import static com.speedment.util.java.JavaLanguage.javaStaticFieldName;
 import static com.speedment.util.java.JavaLanguage.javaTypeName;
 import java.util.Optional;
@@ -62,6 +68,14 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
                     "\"), " + 
                     shortEntityName + "::get" + 
                     javaTypeName(column.getName()) + 
+						
+					getForeignKey(gen, column)
+						.map(fkc -> {
+							return ", " + 
+								shortEntityName + "::find" + 
+								javaTypeName(column.getName());
+							
+						}).orElse("") +
                 ")"
             ))
         );
@@ -71,20 +85,56 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
         final Class<?> mapping = column.getMapping();
         final Type entityType = typeUsing(gen, column, TableToEntityType.class);
 
-        final Type fieldType;
-        if (String.class.equals(mapping)) {
-            fieldType = Type.of(StringReferenceField.class)
-                .add(Generic.of().add(entityType));
-        } else if (Comparable.class.isAssignableFrom(mapping)) {
-            fieldType = Type.of(ComparableReferenceField.class)
-                .add(Generic.of().add(entityType))
-                .add(Generic.of().add(Type.of(mapping)));
-        } else {
-            fieldType = Type.of(ReferenceField.class)
-                .add(Generic.of().add(entityType))
-                .add(Generic.of().add(Type.of(mapping)));
-        }
-        
-        return fieldType;
+		return getForeignKey(gen, column)
+			// If this is a foreign key.
+			.map(fkc -> {
+				final Type t;
+				
+				final Type fkType = typeUsing(gen, fkc.getForeignColumn(), TableToEntityType.class);
+				importType(gen, Import.of(fkType));
+				
+				if (String.class.equals(mapping)) {
+					t = Type.of(StringReferenceForeignKeyField.class)
+						.add(Generic.of().add(entityType))
+						.add(Generic.of().add(fkType));
+				} else if (Comparable.class.isAssignableFrom(mapping)) {
+					t = Type.of(ComparableReferenceForeignKeyField.class)
+						.add(Generic.of().add(entityType))
+						.add(Generic.of().add(Type.of(mapping)))
+						.add(Generic.of().add(fkType));
+				} else {
+					t = Type.of(ReferenceForeignKeyField.class)
+						.add(Generic.of().add(entityType))
+						.add(Generic.of().add(Type.of(mapping)))
+						.add(Generic.of().add(fkType));
+				}
+				
+				return t;
+				
+			// If it is not a foreign key
+			}).orElseGet(() -> {
+				if (String.class.equals(mapping)) {
+					return Type.of(StringReferenceField.class)
+						.add(Generic.of().add(entityType));
+				} else if (Comparable.class.isAssignableFrom(mapping)) {
+					return Type.of(ComparableReferenceField.class)
+						.add(Generic.of().add(entityType))
+						.add(Generic.of().add(Type.of(mapping)));
+				} else {
+					return Type.of(ReferenceField.class)
+						.add(Generic.of().add(entityType))
+						.add(Generic.of().add(Type.of(mapping)));
+				}
+			});
     }
+	
+	private Optional<ForeignKeyColumn> getForeignKey(Generator gen, Column column) {
+		return gen.getRenderStack().fromBottom(Table.class).findFirst()
+			.flatMap(t -> 
+				t.streamOf(ForeignKey.class)
+					.flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
+					.filter(fkc -> fkc.getColumn().equals(column))
+					.findFirst()
+			);
+	}
 }

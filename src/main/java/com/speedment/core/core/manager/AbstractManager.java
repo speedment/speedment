@@ -24,6 +24,7 @@ import com.speedment.core.core.Buildable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.util.java.JavaLanguage;
+import com.speedment.util.json.Json;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -103,27 +104,17 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
             final StringBuilder sb = new StringBuilder();
             sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
 
-            final Optional<ForeignKeyColumn> oFkc = getTable().streamOf(ForeignKey.class).flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(c))).findAny();
-            if (oFkc.isPresent()) {
-                final Table fkTable = oFkc.get().getForeignTable();
-                @SuppressWarnings("rawtypes")
-                final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
-
-                final Optional<Object> oFkObject = find(entity, c);
-
-                sb.append(oFkObject.map(fkManager::toJson).orElse("null"));
-            } else {
-                Object val = get(entity, c);
-                if (val == null) {
-                    sb.append("null");
-                } else if (val instanceof Number) {
-                    sb.append(val.toString());
-                } else if (val instanceof Boolean) {
-                    sb.append(val.toString());
-                } else {
-                    sb.append("\"").append(val.toString()).append("\"");
-                }
-            }
+			Object val = get(entity, c);
+			if (val == null) {
+				sb.append("null");
+			} else if (val instanceof Number) {
+				sb.append(val.toString());
+			} else if (val instanceof Boolean) {
+				sb.append(val.toString());
+			} else {
+				sb.append("\"").append(val.toString()).append("\"");
+			}
+			
             return sb.toString();
         }).collect(Collectors.joining(", ")) + " }";
     }

@@ -27,6 +27,7 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.core.lifecycle.Lifecyclable;
 import com.speedment.core.core.manager.metaresult.MetaResult;
+import com.speedment.util.json.Json;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -71,7 +72,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     BUILDER toBuilder(ENTITY entity);
 
     String toJson(ENTITY entity);
-
+	
     default ENTITY toInternal(ENTITY entity) {
         return entity;
     }

@@ -23,7 +23,6 @@ import com.speedment.core.config.model.impl.TableImpl;
 import com.speedment.core.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.core.config.model.parameters.FieldStorageTypeable;
 import com.speedment.core.config.model.parameters.StorageEngineTypeable;
-import com.speedment.core.platform.Platform;
 import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;

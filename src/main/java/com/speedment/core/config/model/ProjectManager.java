@@ -19,8 +19,6 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.impl.ProjectManagerImpl;
-import com.speedment.core.platform.component.Component;
-import com.speedment.core.platform.Platform;
 import java.util.function.Supplier;
 
 /**
