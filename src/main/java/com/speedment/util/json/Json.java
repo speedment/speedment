@@ -138,7 +138,7 @@ public final class Json<ENTITY> {
 			"}";
 	}
 	
-	private static String jsonField(Field field) {
+	private static <ENTITY> String jsonField(Field<ENTITY> field) {
 		return javaVariableName(field.getColumn().getName());
 	}
 	
