@@ -33,8 +33,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * A Manager is responsible for abstracting away an Entity source from the
- * application. Entity sources can be RDBMSes, files or other data sources.
+ * A Manager is responsible for abstracting away an Entity source build the
+ application. Entity sources can be RDBMSes, files or other data sources.
  *
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
@@ -71,6 +71,10 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY entity);
 
+	default Json<ENTITY> toJson() {
+		return Json.allFrom(this);
+	}
+	
     String toJson(ENTITY entity);
 	
     default ENTITY toInternal(ENTITY entity) {

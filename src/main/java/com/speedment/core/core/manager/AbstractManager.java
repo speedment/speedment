@@ -100,23 +100,24 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     @Override
     @SuppressWarnings("unchecked")
     public String toJson(ENTITY entity) {
-        return "{ " + getTable().streamOf(Column.class).map(c -> {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
-
-			Object val = get(entity, c);
-			if (val == null) {
-				sb.append("null");
-			} else if (val instanceof Number) {
-				sb.append(val.toString());
-			} else if (val instanceof Boolean) {
-				sb.append(val.toString());
-			} else {
-				sb.append("\"").append(val.toString()).append("\"");
-			}
-			
-            return sb.toString();
-        }).collect(Collectors.joining(", ")) + " }";
+		return Json.allFrom(this).build(entity);
+//        return "{ " + getTable().streamOf(Column.class).map(c -> {
+//            final StringBuilder sb = new StringBuilder();
+//            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
+//
+//			Object val = get(entity, c);
+//			if (val == null) {
+//				sb.append("null");
+//			} else if (val instanceof Number) {
+//				sb.append(val.toString());
+//			} else if (val instanceof Boolean) {
+//				sb.append(val.toString());
+//			} else {
+//				sb.append("\"").append(val.toString()).append("\"");
+//			}
+//			
+//            return sb.toString();
+//        }).collect(Collectors.joining(", ")) + " }";
     }
 
     @Override
@@ -138,5 +139,4 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     public Boolean stop() {
         return Boolean.TRUE;
     }
-
 }

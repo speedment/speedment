@@ -16,6 +16,10 @@
  */
 package com.speedment.util.json;
 
+import com.speedment.core.config.model.Column;
+import com.speedment.core.core.Buildable;
+import com.speedment.core.core.manager.Manager;
+import com.speedment.core.field.Field;
 import com.speedment.core.field.doubles.DoubleField;
 import com.speedment.core.field.ints.IntField;
 import com.speedment.core.field.longs.LongField;
@@ -23,13 +27,16 @@ import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
 import com.speedment.core.field.reference.ReferenceField;
 import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
-import java.util.ArrayList;
-import java.util.List;
+import static com.speedment.util.java.JavaLanguage.javaVariableName;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *
@@ -38,70 +45,121 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Json<ENTITY> {
 
-	private final List<Function<ENTITY, String>> getters;
+	private final Map<String, Function<ENTITY, String>> getters;
 		
 	public Json() {
-		this.getters = new ArrayList<>();
+		this.getters = new ConcurrentHashMap<>();
 	}
 	
+	// Fields
 	public <T> Json<ENTITY> put(ReferenceField<ENTITY, T> field) {
-		return put(field.getColumn().getName(), field::getFrom);
+		return put(jsonField(field), field::getFrom);
 	}
 	
 	public Json<ENTITY> put(IntField<ENTITY> field) {
-		return put(field.getColumn().getName(), field::getFrom);
+		return put(jsonField(field), field::getFrom);
 	}
 	
 	public Json<ENTITY> put(LongField<ENTITY> field) {
-		return put(field.getColumn().getName(), field::getFrom);
+		return put(jsonField(field), field::getFrom);
 	}
 	
 	public Json<ENTITY> put(DoubleField<ENTITY> field) {
-		return put(field.getColumn().getName(), field::getFrom);
+		return put(jsonField(field), field::getFrom);
 	}
 	
+	// Foreign key fields.
 	public <T, FK_ENTITY> Json<ENTITY> put(ReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, Json<FK_ENTITY> builder) {
-		return put(field.getColumn().getName(), field::findFrom, builder);
+		return put(jsonField(field), field::findFrom, builder);
 	}
 	
 	public <T extends Comparable<? super T>, FK_ENTITY> Json<ENTITY> put(ComparableReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, Json<FK_ENTITY> builder) {
-		return put(field.getColumn().getName(), field::findFrom, builder);
+		return put(jsonField(field), field::findFrom, builder);
 	}
 	
 	public <FK_ENTITY> Json<ENTITY> put(StringReferenceForeignKeyField<ENTITY, FK_ENTITY> field, Json<FK_ENTITY> builder) {
-		return put(field.getColumn().getName(), field::findFrom, builder);
+		return put(jsonField(field), field::findFrom, builder);
+	}
+	
+	// Label-and-getter pairs
+	public <T> Json<ENTITY> put(String label, Function<ENTITY, T> getter) {
+		getters.put(label, e -> "\"" + label + "\":\"" + jsonValue(Optional.ofNullable(getter.apply(e)).map(Object::toString).orElse("")) + "\"");
+		return this;
+	}
+	
+	public <T> Json<ENTITY> putDouble(String label, ToDoubleFunction<ENTITY> getter) {
+		getters.put(label, e -> "\"" + label + "\":" + getter.applyAsDouble(e));
+		return this;
+	}
+	
+	public <T> Json<ENTITY> putInt(String label, ToIntFunction<ENTITY> getter) {
+		getters.put(label, e -> "\"" + label + "\":" + getter.applyAsInt(e));
+		return this;
+	}
+	
+	public <T> Json<ENTITY> putLong(String label, ToLongFunction<ENTITY> getter) {
+		getters.put(label, e -> "\"" + label + "\":" + getter.applyAsLong(e));
+		return this;
+	}
+	
+	// Label-and-getter with custom formatter
+	public <FK_ENTITY> Json<ENTITY> put(String label, Function<ENTITY, FK_ENTITY> getter, Json<FK_ENTITY> builder) {
+		getters.put(label, e -> "\"" + label + "\":" + builder.build(getter.apply(e)));
+		return this;
 	}
 
-	public <T> Json<ENTITY> put(String label, Function<ENTITY, T> getter) {
-		getters.add(e -> "\"" + label + "\":\"" + getter.apply(e) + "\"");
+	// Label-and-streamer with custom formatter.
+	public <FK_ENTITY> Json<ENTITY> putAll(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, Json<FK_ENTITY> builder) {
+		getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(e).map(builder::build).collect(joining(",")) + "]");
 		return this;
 	}
 	
-	public <T> Json<ENTITY> put(String label, ToDoubleFunction<ENTITY> getter) {
-		getters.add(e -> "\"" + label + "\":" + getter.applyAsDouble(e));
+	public <FK_ENTITY> Json<ENTITY> putAll(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> formatter) {
+		getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(e).map(formatter).collect(joining(",")) + "]");
 		return this;
 	}
 	
-	public <T> Json<ENTITY> put(String label, ToIntFunction<ENTITY> getter) {
-		getters.add(e -> "\"" + label + "\":" + getter.applyAsInt(e));
+	// Removers by label
+	public Json<ENTITY> remove(String label) {
+		getters.remove(label);
 		return this;
 	}
 	
-	public <T> Json<ENTITY> put(String label, ToLongFunction<ENTITY> getter) {
-		getters.add(e -> "\"" + label + "\":" + getter.applyAsLong(e));
+	public <T> Json<ENTITY> remove(ReferenceField<ENTITY, T> field) {
+		getters.remove(jsonField(field));
 		return this;
 	}
 	
-	public <FK_ENTITY> Json<ENTITY> put(String label, Function<ENTITY, FK_ENTITY> getter, Json<FK_ENTITY> builder) {
-		getters.add(e -> "\"" + label + "\":" + builder.from(getter.apply(e)));
-		return this;
-	}
-	
-	public String from(ENTITY entity) {
+	public String build(ENTITY entity) {
 		return "{" + 
-			getters.stream()
+			getters.values().stream()
 				.map(g -> g.apply(entity))
 				.collect(joining(",")) + 
 			"}";
+	}
+	
+	private static String jsonField(Field field) {
+		return javaVariableName(field.getColumn().getName());
+	}
+	
+	private static String jsonValue(String in) {
+		return in.replace("\"", "\\\"");
+	}
+	
+	public static <PK, ENTITY, BUILDER extends Buildable<ENTITY>, MANAGER extends Manager<PK, ENTITY, BUILDER>> Json<ENTITY> allFrom(MANAGER manager) {
+		
+		final Json<ENTITY> json = new Json<>();
+		
+		manager.getTable()
+			.streamOf(Column.class)
+			.forEachOrdered(c -> {
+				
+			json.put(
+				javaVariableName(c.getName()),
+				(ENTITY entity) -> manager.get(entity, c)
+			);
+		});
+		
+		return json;
 	}
 }
