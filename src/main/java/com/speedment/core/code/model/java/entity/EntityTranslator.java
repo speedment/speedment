@@ -40,6 +40,7 @@ import com.speedment.core.core.entity.Entity;
 import com.speedment.core.core.manager.metaresult.MetaResult;
 import com.speedment.util.Pluralis;
 import com.speedment.util.java.JavaLanguage;
+import com.speedment.util.json.Json;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +140,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             .add(builder())
             .add(toBuilder())
             .add(toJson())
+			.add(toJsonExtended())
             .add(stream())
             .add(persist())
             .add(update())
@@ -189,7 +191,13 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
     private Method toJson() {
         return Method.of("toJson", STRING).default_()
             .add("return " + MANAGER.getName() + ".get().toJson(this);");
-
+    }
+	
+	private Method toJsonExtended() {
+        return Method.of("toJson", STRING).default_()
+			.add(Field.of("json", Type.of(Json.class)
+				.add(Generic.of().add(ENTITY.getType()))))
+            .add("return json.from(this);");
     }
 
     private Method stream() {
