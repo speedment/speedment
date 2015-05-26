@@ -143,10 +143,13 @@ public final class Json<ENTITY> {
 	}
 	
 	private static String jsonValue(Object in) {
+		final String value;
 		if (in instanceof Optional<?>) {
-			
+			value = String.valueOf(((Optional<?>) in).get());
+		} else {
+			value = String.valueOf(in);
 		}
-		return in.replace("\"", "\\\"");
+		return value.replace("\"", "\\\"");
 	}
 	
 	public static <PK, ENTITY, BUILDER extends Buildable<ENTITY>, MANAGER extends Manager<PK, ENTITY, BUILDER>> Json<ENTITY> allFrom(MANAGER manager) {
