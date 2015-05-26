@@ -11,13 +11,9 @@ public class FocusPoint {
 
     public static final FocusPoint CORE = new FocusPoint(title.orElse("speedment"));
     public static final FocusPoint CORE_WITH_VERSION = new FocusPoint(version.orElse("?.?.?"), CORE);
-
-    public static final FocusPoint PROJECT_MANAGER = new FocusPoint("ProjectManager", CORE_WITH_VERSION);
-    public static final FocusPoint PROJECT_MANAGER_INITIATED = new FocusPoint("Initiated", PROJECT_MANAGER);
-    public static final FocusPoint PROJECT = new FocusPoint("Project", CORE_WITH_VERSION);
+	public static final FocusPoint GUI_STARTED = new FocusPoint("GuiStarted", CORE_WITH_VERSION);
+	public static final FocusPoint APP_STARTED = new FocusPoint("AppStarted", CORE_WITH_VERSION);
     public static final FocusPoint GENERATE = new FocusPoint("Generate", CORE_WITH_VERSION);
-    public static final FocusPoint GENERATE_GUI_STARTED = new FocusPoint("GuiStarted", GENERATE);
-    public static final FocusPoint GENERATE_CODE_GENERATED = new FocusPoint("CodeGenerated", GENERATE);
 
     private final String name;
     private final FocusPoint parentFocusPoint;

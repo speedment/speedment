@@ -33,8 +33,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -153,46 +151,6 @@ public class ProjectPromptController implements Initializable {
                     Trees.TraversalOrder.DEPTH_FIRST_PRE
             ).forEachOrdered(System.out::println);
 
-//
-//            Schema schema = Schema.newSchema();
-//            schema.setName("SiSP");
-//            dbms.add(schema);
-//
-//            Table tableA = Table.newTable();
-//            tableA.setName("User");
-//            schema.add(tableA);
-//
-//            Column columnA1 = Column.newColumn();
-//            columnA1.setName("id");
-//            tableA.add(columnA1);
-//
-//            Column columnA2 = Column.newColumn();
-//            columnA2.setName("firstname");
-//            tableA.add(columnA2);
-//
-//            Column columnA3 = Column.newColumn();
-//            columnA3.setName("lastname");
-//            tableA.add(columnA3);
-//
-//            Table tableB = Table.newTable();
-//            tableB.setName("Topic");
-//            schema.add(tableB);
-//
-//            Column columnB1 = Column.newColumn();
-//            columnB1.setName("id");
-//            tableB.add(columnB1);
-//
-//            Column columnB2 = Column.newColumn();
-//            columnB2.setName("header");
-//            tableB.add(columnB2);
-//
-//            Column columnB3 = Column.newColumn();
-//            columnB3.setName("content");
-//            tableB.add(columnB3);
-//
-//            Column columnB4 = Column.newColumn();
-//            columnB4.setName("uploaded");
-//            tableB.add(columnB4);
             SceneController.showIn(stage, project);
             Settings.inst().set("hide_open_option", false);
         });

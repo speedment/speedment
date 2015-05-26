@@ -16,20 +16,13 @@
  */
 package com.speedment.gui;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * Singleton.
@@ -39,9 +32,6 @@ import java.util.stream.Collectors;
 public final class Settings {
 
 	private final static File SETTINGS_FILE = new File("settings.properties");
-	private final static String SYNC_URL = "http://stat.speedment.com/frontend?version=0.0.1-rc-snapshot&email=";
-	private final static boolean SYNC = true;
-
 	private final Properties props;
 	
 	private Settings() {
@@ -64,8 +54,6 @@ public final class Settings {
 				"Could not find file '" + filename() + "'."
 			);
 		}
-		
-		syncToServer();
 	}
 	
 	public boolean has(String key) {
@@ -92,19 +80,7 @@ public final class Settings {
 	public Integer get(String key, Integer defaultValue) {
 		return Integer.parseInt(props.getProperty(key, Integer.toString(defaultValue)));
 	}
-	
-	private String encode() {
-		return props.entrySet().stream()
-			.map(e -> {
-				try {
-					return URLEncoder.encode(e.getKey().toString(), "UTF-8") + "=" + 
-						   URLEncoder.encode(e.getValue().toString(), "UTF-8");
-				} catch (UnsupportedEncodingException ex) {
-					throw new RuntimeException("Encoding 'UTF-8' is not supported.");
-				}
-			}).collect(Collectors.joining("&"));
-	}
-	
+
 	private void storeChanges() {
 		try (final OutputStream out = new FileOutputStream(SETTINGS_FILE, false)) {
 			props.store(out, "Speedment ORM Settings");
@@ -113,30 +89,8 @@ public final class Settings {
 				"Could not save file '" + filename() + "'."
 			);
 		}
-		
-		syncToServer();
 	}
-	
-	private void syncToServer() {
-		if (SYNC) {
-			try {
-				final URL syncUrl = new URL(SYNC_URL + URLEncoder.encode(get("mail", "no-mail-specified"), "UTF-8"));
-				final HttpURLConnection con = (HttpURLConnection) syncUrl.openConnection();
-				con.setRequestMethod("POST");
-				con.setDoOutput(true);
-				
-				try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-					wr.writeBytes(encode());
-					wr.flush();
-				}
-			} catch (IOException ex) {
-//				throw new RuntimeException(
-//					"Could not sync to url '" + SYNC_URL + "'.", ex
-//				);
-			}
-		}
-	}
-	
+
 	private static String filename() {
 		return SETTINGS_FILE.getAbsolutePath();
 	}

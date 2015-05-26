@@ -31,6 +31,8 @@ import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadata
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Table;
+import com.speedment.util.analytics.AnalyticsUtil;
+import static com.speedment.util.analytics.FocusPoint.GENERATE;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,6 +58,8 @@ public class MainGenerator implements Consumer<Project> {
 
     @Override
     public void accept(Project project) {
+		AnalyticsUtil.notify(GENERATE);
+		
         final List<Translator<?, File>> translators = new ArrayList<>();
 
         final Generator gen = new JavaGenerator(

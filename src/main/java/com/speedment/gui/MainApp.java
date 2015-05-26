@@ -19,6 +19,8 @@ package com.speedment.gui;
 import com.speedment.gui.controllers.MailPromptController;
 import com.speedment.gui.controllers.ProjectPromptController;
 import com.speedment.gui.icons.Icons;
+import com.speedment.util.analytics.AnalyticsUtil;
+import static com.speedment.util.analytics.FocusPoint.GUI_STARTED;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -35,6 +37,8 @@ public class MainApp extends Application {
         app = this;
         
         stage.getIcons().add(Icons.SPEEDMENT_LOGO.load());
+		
+		AnalyticsUtil.notify(GUI_STARTED);
 
         if (Settings.inst().has("user_mail")) {
             ProjectPromptController.showIn(stage);
