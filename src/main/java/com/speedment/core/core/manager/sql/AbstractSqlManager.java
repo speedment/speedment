@@ -30,6 +30,8 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
+import com.speedment.util.stream.OptionalUtil;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
 import java.sql.ResultSet;
@@ -113,8 +115,8 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
         sb.append(" values ");
         sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
-
-        final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
+        
+        final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
 
         final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> {
             return l -> {
@@ -149,7 +151,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append(" where ");
         sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
 
-        final List<Object> values = table.streamOf(Column.class).map(c -> get(entity, c)).collect(Collectors.toList());
+        final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
         return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
