@@ -148,6 +148,28 @@
             </plugin>-->
             
             
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                                                <manifestEntries>
+                            <Trusted-Library>true</Trusted-Library>
+                            <Implementation-Vendor>Speedment, Inc.</Implementation-Vendor>
+                            <Implementation-URL>https://github.com/speedment/speedment</Implementation-URL>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>-->
+
+            
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -173,6 +195,17 @@
                                 <argument>${project.build.directory}</argument>
                                 <argument>-outfile</argument>
                                 <argument>${project.build.finalName}.jar</argument>
+                                <argument>-manifestAttrs</argument>
+                                <argument>
+                                    Implementation-Title=Speedment,
+                                    Implementation-Version=${project.version},
+                                    Implementation-Vendor=Speedment Inc.,
+                                    Implementation-Vendor-Id=${project.groupId},
+                                    Implementation-URL=https://github.com/speedment/speedment,
+                                    Built-By=${user.name},
+                                    Build-Jdk=${java.version},
+                                    Created-By=Apache Maven ${maven.version}
+                                </argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -193,7 +226,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.4</version>
-<!--                <configuration>
+                <!--                <configuration>
                     <includes>
                         <include>
                             **/list/*.java
@@ -217,7 +250,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
-<!--                <configuration>
+                <!--                <configuration>
                     <excludePackageNames>net.sf.jsqlparser.parser</excludePackageNames>
                 </configuration>-->
                 <executions>
@@ -230,7 +263,7 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>

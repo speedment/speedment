@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.util.analytics;
 
 public class JGoogleAnalyticsTracker {
@@ -37,10 +53,10 @@ public class JGoogleAnalyticsTracker {
     }
 
     /**
-     * Track the focusPoint in the application synchronously. <br/>
-     * <red><b>Please be cognizant while using this method. Since, it would have
+     * Track the focusPoint in the application synchronously.
+     * <b>Please be cognizant while using this method. Since, it would have
      * a performance hit on the actual application. Use it unless it's really
-     * needed</b></red>
+     * needed</b>
      *
      * @param focusPoint Focus point of the application like application load,
      * application module load, user actions, error events etc.
@@ -51,7 +67,7 @@ public class JGoogleAnalyticsTracker {
     }
 
     /**
-     * Track the focusPoint in the application asynchronously. <br/>
+     * Track the focusPoint in the application asynchronously.
      *
      * @param focusPoint Focus point of the application like application load,
      * application module load, user actions, error events etc.
