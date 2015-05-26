@@ -130,9 +130,9 @@ public final class Settings {
 					wr.flush();
 				}
 			} catch (IOException ex) {
-				throw new RuntimeException(
-					"Could not sync to url '" + SYNC_URL + "'.", ex
-				);
+//				throw new RuntimeException(
+//					"Could not sync to url '" + SYNC_URL + "'.", ex
+//				);
 			}
 		}
 	}

@@ -31,6 +31,7 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTH
 import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.values.TextValue;
+import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.Dbms;
@@ -242,15 +243,29 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
             columns().forEachOrdered(c -> {
                 switch (mode) {
                     case FIELD: {
-                        constructor.add("this." + variableName(c) + " = " + variableName() + ".get" + typeName(c) + "();");
+                        constructor.add("this." + variableName(c) + " = " + variableName() + "." + GETTER_METHOD_PREFIX + typeName(c) + "();");
                         break;
                     }
-                    case SETTER: {
-                        constructor.add(SETTER_METHOD_PREFIX + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
-                        break;
-                    }
-                    case BUILDER: {
-                        constructor.add(BUILDER_METHOD_PREFIX + typeName(c) + "(" + variableName() + ".get" + typeName(c) + "());");
+                    case SETTER : case BUILDER : {
+						final String setterPrefix = (mode == SETTER) ? 
+							SETTER_METHOD_PREFIX : BUILDER_METHOD_PREFIX;
+						
+						if (c.isNullable()) {
+							constructor.add(
+								variableName() + "." + 
+								GETTER_METHOD_PREFIX + typeName(c) + 
+								"().ifPresent(this::" + 
+								setterPrefix + typeName(c) + 
+								");"
+							);
+						} else {
+							constructor.add(
+								setterPrefix + typeName(c) + 
+								"(" + variableName() + 
+								".get" + typeName(c) + 
+								"());"
+							);
+						}
                         break;
                     }
                 }

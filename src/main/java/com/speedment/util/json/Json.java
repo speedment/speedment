@@ -83,7 +83,7 @@ public final class Json<ENTITY> {
 	
 	// Label-and-getter pairs
 	public <T> Json<ENTITY> put(String label, Function<ENTITY, T> getter) {
-		getters.put(label, e -> "\"" + label + "\":\"" + jsonValue(Optional.ofNullable(getter.apply(e)).map(Object::toString).orElse("")) + "\"");
+		getters.put(label, e -> "\"" + label + "\":\"" + jsonValue(getter.apply(e)) + "\"");
 		return this;
 	}
 	
@@ -142,7 +142,10 @@ public final class Json<ENTITY> {
 		return javaVariableName(field.getColumn().getName());
 	}
 	
-	private static String jsonValue(String in) {
+	private static String jsonValue(Object in) {
+		if (in instanceof Optional<?>) {
+			
+		}
 		return in.replace("\"", "\\\"");
 	}
 	

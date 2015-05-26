@@ -22,8 +22,10 @@ import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Import;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.core.config.model.Table;
 import java.util.Objects;
@@ -44,14 +46,25 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
 
         return new ClassBuilder(ENTITY.getImplName())
                 .addColumnConsumer((cl, c) -> {
+					
+					final Type retType;
+					final String getter;
+					if (c.isNullable()) {
+						retType = OPTIONAL.add(Generic.of().add(Type.of(c.getMapping())));
+						getter = "Optional.ofNullable(" + variableName(c) + ")";
+					} else {
+						retType = Type.of(c.getMapping());
+						getter = variableName(c);
+					}
+					
                     cl
                     .add(fieldFor(c).private_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping()))
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), retType)
                             .public_()
                             .add(OVERRIDE)
-                            .add("return " + variableName(c) + ";"))
+                            .add("return " + getter + ";"))
                     .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
-                            .public_()
+                            .public_().final_()
                             .add(OVERRIDE)
                             .add(fieldFor(c))
                             .add("this." + variableName(c) + " = " + variableName(c) + ";")
@@ -78,7 +91,13 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
                 .add("final StringJoiner sj = new StringJoiner(\", \", \"{ \", \" }\");");
 
         columns().forEachOrdered(c -> {
-            m.add("sj.add(\"" + variableName(c) + " = \"+Objects.toString(get" + typeName(c) + "()));");
+			final String getter;
+			if (c.isNullable()) {
+				getter = "get" + typeName(c) + "()" + ".orElse(null)";
+			} else {
+				getter = "get" + typeName(c) + "()";
+			}
+            m.add("sj.add(\"" + variableName(c) + " = \"+Objects.toString(" + getter + "));");
         });
 
         m.add("return \"" + ENTITY.getImplName() + " \"+sj.toString();");

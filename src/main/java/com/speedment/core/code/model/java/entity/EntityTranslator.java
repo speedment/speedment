@@ -69,7 +69,17 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         final Interface iface = new InterfaceBuilder(ENTITY.getName())
             // Getters
             .addColumnConsumer((i, c) -> {
-                i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), Type.of(c.getMapping())));
+				final Type retType;
+				if (c.isNullable()) {
+					retType = Type.of(Optional.class).add(
+						Generic.of().add(
+							Type.of(c.getMapping())
+						)
+					);
+				} else {
+					retType = Type.of(c.getMapping());
+				}
+                i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), retType));
             })
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {

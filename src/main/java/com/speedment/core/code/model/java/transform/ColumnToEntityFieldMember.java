@@ -57,6 +57,13 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
         importType(gen, Import.of(entityType));
         importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
 
+		final String getter;
+		if (column.isNullable()) {
+			getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
+		} else {
+			getter = shortEntityName + "::get" + javaTypeName(column.getName());
+		}
+		
         return Optional.of(
             Field.of(javaStaticFieldName(column.getName()), refType)
             .public_().final_().static_()
@@ -66,8 +73,7 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
                         shortEntityName + ".class, \"" + 
                         column.getName() + 
                     "\"), " + 
-                    shortEntityName + "::get" + 
-                    javaTypeName(column.getName()) + 
+                    getter + 
 						
 					getForeignKey(gen, column)
 						.map(fkc -> {
