@@ -11,7 +11,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="8.0" style="-fx-background-color: #e0e0e0;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment GUI" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -19,8 +19,9 @@
             <DropShadow height="16.0" offsetY="1.0" radius="7.5" width="16.0" />
          </effect>
       </Label>
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 1.0" />
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment GUI and Speedment ORM are available under the Apache 2 license." wrapText="true" />
+      <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 1.0" />
+      <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license." wrapText="true" />
+	  <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />
       <HBox alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">

@@ -18,14 +18,16 @@ package com.speedment.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
+import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 
 /**
@@ -33,42 +35,60 @@ import javafx.stage.Stage;
  *
  * @author Emil Forslund
  */
-public class AboutController/* implements Initializable*/ {
+public class AboutController implements Initializable {
 	
-//	@FXML private Button close;
-//	
-//	private final Popup popup;
-//	
-//	public AboutController(Popup popup) {
-//		this.popup = popup;
-//	}
-//
-//	/**
-//	 * Initializes the controller class.
-//	 * @param url
-//	 * @param rb
-//	 */
-//	@Override
-//	public void initialize(URL url, ResourceBundle rb) {
-//		close.setOnAction(ev -> popup.hide());
-//	}
-//	
-//	public static void showIn(Stage stage) {
-//		final FXMLLoader loader = new FXMLLoader(AboutController.class.getResource("/fxml/About.fxml"));
-//        
-//		
-//		
-//		final AboutController control = new AboutController(stage);
-//        loader.setController(control);
-//
-//        try {
-//            final VBox root = (VBox) loader.load();
-//            final Scene scene = new Scene(root);
-//
-//            stage.setTitle("Please enter your email");
-//            stage.setScene(scene);
-//        } catch (IOException ex) {
-//            throw new RuntimeException(ex);
-//        }
-//	}
+	@FXML private Button close;
+	@FXML private Label title;
+	@FXML private Label version;
+	@FXML private Label license;
+	@FXML private Label external;
+	private final Stage popup;
+	
+	public AboutController(Stage popup) {
+		this.popup = popup;
+	}
+
+	/**
+	 * Initializes the controller class.
+	 * @param url The url
+	 * @param rb The resource bundle.
+	 */
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		close.setOnAction(ev -> popup.close());
+		version.setText(
+			Optional.ofNullable(AboutController.class.getPackage().getImplementationVersion())
+				.orElse("Unknown version")
+		);
+		external.setText(
+			"It includes software licensed as follows:\n\n" +
+			"Apache 2:\n" +
+			"groovy-all (2.4.0), log4j-api (2.1), log4j-core (2.1).\n" +
+			"\n" +
+			"Creative Commons 2.5:\n" +
+			"silk (1.3)\n" +
+			"\n" +
+			"BSD 3-clause license\n" +
+			"controlsfx (8.20.8)"
+		);
+	}
+	
+	public static void showIn(Stage stage) {
+		final FXMLLoader loader = new FXMLLoader(AboutController.class.getResource("/fxml/About.fxml"));
+		final Stage dialog = new Stage();
+		final AboutController control = new AboutController(dialog);
+        loader.setController(control);
+
+        try {
+            final VBox root = (VBox) loader.load();
+            final Scene scene = new Scene(root);
+			dialog.setTitle("About Speedment");
+			dialog.initModality(APPLICATION_MODAL);
+			dialog.initOwner(stage);
+			dialog.setScene(scene);
+			dialog.show();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+	}
 }
