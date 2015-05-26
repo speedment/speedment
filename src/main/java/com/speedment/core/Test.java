@@ -40,6 +40,9 @@ public class Test {
      */
     public static void main(String[] args) {
 
+       
+        Object o = "Apa";
+        String s = (String)o;
         
         Optional<String> a = Optional.empty();
         
