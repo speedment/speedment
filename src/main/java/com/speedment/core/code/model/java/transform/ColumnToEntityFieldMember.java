@@ -57,11 +57,24 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
         importType(gen, Import.of(entityType));
         importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
 
-		final String getter;
+		final String getter, finder;
 		if (column.isNullable()) {
 			getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
+            finder = getForeignKey(gen, column)
+                .map(fkc -> {
+                    return ", fk -> fk.find" + 
+                        javaTypeName(column.getName()) + 
+                        "().orElse(null)";
+                }).orElse("");
 		} else {
 			getter = shortEntityName + "::get" + javaTypeName(column.getName());
+            finder = getForeignKey(gen, column)
+                .map(fkc -> {
+                    return ", " + 
+                        shortEntityName + "::find" + 
+                        javaTypeName(column.getName());
+
+                }).orElse("");
 		}
 		
         return Optional.of(
@@ -73,15 +86,8 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
                         shortEntityName + ".class, \"" + 
                         column.getName() + 
                     "\"), " + 
-                    getter + 
-						
-					getForeignKey(gen, column)
-						.map(fkc -> {
-							return ", " + 
-								shortEntityName + "::find" + 
-								javaTypeName(column.getName());
-							
-						}).orElse("") +
+                    getter +
+					finder +
                 ")"
             ))
         );

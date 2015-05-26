@@ -31,6 +31,7 @@ import static com.speedment.codegen.lang.models.constants.DefaultType.LIST;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.codegen.lang.models.values.ReferenceValue;
+import static com.speedment.codegen.util.Formatting.indent;
 import com.speedment.core.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
@@ -38,6 +39,7 @@ import com.speedment.core.config.model.ForeignKeyColumn;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.core.entity.Entity;
 import com.speedment.core.core.manager.metaresult.MetaResult;
+import com.speedment.core.exception.SpeedmentException;
 import com.speedment.util.Pluralis;
 import com.speedment.util.java.JavaLanguage;
 import com.speedment.util.json.Json;
@@ -99,24 +101,63 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 i.add(method);
             })
             .addForeignKeyConsumer((i, fk) -> {
+                
+//                default Optional<Hare> findRival() {
+//                    return getRival()
+//                        .flatMap(hare -> HareManager.get().stream()
+//                            .filter(HareField.ID.equal(hare))
+//                            .findAny()
+//                        );
+//                }
+                
+                
+                
+//                default Hare findOwner() {
+//                    return HareManager.get().stream()
+//                        .filter(HareField.ID.equal(getOwner()))
+//                        .findAny().orElseThrow(() -> new SpeedmentException(
+//                            "Foreign key constraint error. Owner is set to " + getOwner()
+//                        ));
+//                }
+                
+                
                 final FkUtil fu = new FkUtil(fk);
                 final Type fieldClassType = Type.of(Formatting.packageName(fu.getForeignEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getForeignTable()) + "Field");
                 file.add(Import.of(fieldClassType));
                 fu.imports().forEachOrdered(file::add);
+                
                 final Type returnType;
-                final String getCode;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(Type.of(Optional.class)));
                     returnType = Type.of(Optional.class).add(fu.getForeignEmt().GENERIC_OF_ENTITY);
-                    getCode = "";
+                    
                 } else {
                     returnType = fu.getForeignEmt().ENTITY.getType();
-                    getCode = ".get()";
                 }
+                
                 final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
-                method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
-                //method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
-                method.add("        .stream().filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "())).findAny()" + getCode + ";");
+                if (fu.getColumn().isNullable()) {
+                    final String varName = variableName(fu.getForeignTable());
+                    method.add("return get" + typeName(fu.getColumn()) + "()")
+                        .add(indent(
+                            ".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
+                                ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n" +
+                                ".findAny()"
+                            ) + "\n);"
+                        ));
+                } else {
+                    file.add(Import.of(Type.of(SpeedmentException.class)));
+                    method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
+                        ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(get" + typeName(fu.getColumn()) + "()))\n" +
+                        ".findAny().orElseThrow(() -> new SpeedmentException(\n" + indent(
+                            "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
+                        ) + "));\n"
+                    ));
+                }
+
+//                method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
+//                //method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
+//                method.add("        .stream().filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "())).findAny()" + getCode + ";");
                 i.add(method);
             })
             .build()
