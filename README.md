@@ -8,6 +8,17 @@ Speedment accelerates your development speed and makes programming so easy and f
 When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is standard Java 8 and works 
 out of the box!
 
+Documentation
+-------------
+You can read about [the API here](https://github.com/speedment/speedment-orm/wiki/Speedment-API)!
+
+Tutorials
+---------
+* Tutorial 1 - [Get started with the GUI](https://github.com/speedment/speedment-orm/wiki/Speedment-GUI)
+* Tutorial 2 - [Build a Social Network](https://github.com/speedment/speedment-orm/wiki/Speedment-GUI)
+
+Examples
+--------
 Here are a few examples of how you could use Speedment from your code:
 
 ### Easy querying using standard Java 8 predicates
