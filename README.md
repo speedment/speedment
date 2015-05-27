@@ -1,4 +1,4 @@
-Wrap your database into Java 8
+Wrap your database into Java 8!
 ==========================================
 ![Spire the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 About
