@@ -21,6 +21,12 @@ Examples
 --------
 Here are a few examples of how you could use Speedment from your code:
 
+### Easy initialization
+```java
+// A configuration-class is generated from the database.
+new HelloSpeedment().start();
+```
+
 ### Easy querying using standard Java 8 predicates
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
@@ -108,12 +114,6 @@ Optional<Hare> harry = Hare.builder()
             );
         });
     });
-```
-
-### Easy initialization
-```java
-// A configuration-class is generated from the database.
-new HelloSpeedment().start();
 ```
 
 ### Database centric
