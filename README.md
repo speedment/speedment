@@ -1,5 +1,7 @@
 Speedment ORM - An accelerated ORM
 ==================================
+
+[![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![Harry the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 About
 -----
