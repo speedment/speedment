@@ -1,4 +1,4 @@
-Speedment - Wrap your database into Java 8
+Wrap your database into Java 8!
 ==========================================
 ![Spire the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
 
@@ -11,7 +11,24 @@ Speedment accelerates your development speed and makes programming so easy and f
 When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is standard Java 8 and works 
 out of the box!
 
+Documentation
+-------------
+You can read about [the API here](https://github.com/speedment/speedment-orm/wiki/Speedment-API)!
+
+Tutorials
+---------
+* [Tutorial 1 - Get started with the GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI)
+* [Tutorial 2 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
+
+Examples
+--------
 Here are a few examples of how you could use Speedment from your code:
+
+### Easy initialization
+```java
+// A configuration-class is generated from the database.
+new HelloSpeedment().start();
+```
 
 ### Easy querying using standard Java 8 predicates
 ```java
@@ -100,12 +117,6 @@ Optional<Hare> harry = Hare.builder()
             );
         });
     });
-```
-
-### Easy initialization
-```java
-// A configuration-class is generated from the database.
-new HelloSpeedment().start();
 ```
 
 ### Database centric

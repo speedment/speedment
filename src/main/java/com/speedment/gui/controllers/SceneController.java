@@ -82,48 +82,27 @@ import static javafx.util.Duration.millis;
  */
 public class SceneController implements Initializable {
 
-    @FXML
-    private Button buttonNew;
-    @FXML
-    private Button buttonOpen;
-    @FXML
-    private Button buttonGenerate;
-    @FXML
-    private ImageView logo;
-    @FXML
-    private TreeView<Child<?>> treeHierarchy;
-    @FXML
-    private TableView<String> tableProjectSettings;
-    @FXML
-    private VBox propertiesContainer;
-    @FXML
-    private TextArea output;
-    @FXML
-    private Menu menuFile;
-    @FXML
-    private MenuItem mbNew;
-    @FXML
-    private MenuItem mbOpen;
-    @FXML
-    private MenuItem mbSave;
-    @FXML
-    private MenuItem mbSaveAs;
-    @FXML
-    private MenuItem mbQuit;
-    @FXML
-    private Menu menuEdit;
-    @FXML
-    private MenuItem mbGenerate;
-    @FXML
-    private Menu menuHelp;
-    @FXML
-    private MenuItem mbGitHub;
-    @FXML
-    private MenuItem mbAbout;
-    @FXML
-    private StackPane arrowContainer;
-    @FXML
-    private Label arrow;
+    @FXML private Button buttonNew;
+    @FXML private Button buttonOpen;
+    @FXML private Button buttonGenerate;
+    @FXML private ImageView logo;
+    @FXML private TreeView<Child<?>> treeHierarchy;
+    @FXML private TableView<String> tableProjectSettings;
+    @FXML private VBox propertiesContainer;
+    @FXML private TextArea output;
+    @FXML private Menu menuFile;
+    @FXML private MenuItem mbNew;
+    @FXML private MenuItem mbOpen;
+    @FXML private MenuItem mbSave;
+    @FXML private MenuItem mbSaveAs;
+    @FXML private MenuItem mbQuit;
+    @FXML private Menu menuEdit;
+    @FXML private MenuItem mbGenerate;
+    @FXML private Menu menuHelp;
+    @FXML private MenuItem mbGitHub;
+    @FXML private MenuItem mbAbout;
+    @FXML private StackPane arrowContainer;
+    @FXML private Label arrow;
 
     private File savedFile;
     private final Stage stage;
@@ -237,6 +216,11 @@ public class SceneController implements Initializable {
 
         buttonGenerate.setOnAction(generate);
         mbGenerate.setOnAction(generate);
+		
+		// About
+		mbAbout.setOnAction(ev -> {
+			AboutController.showIn(stage);
+		});
 
         // Quit application
         mbQuit.setOnAction(ev -> {
