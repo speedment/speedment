@@ -18,17 +18,18 @@ package com.speedment.core.core.manager;
 
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.java.JavaLanguage;
 import com.speedment.util.json.Json;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -42,27 +43,39 @@ import java.util.stream.Collectors;
 public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements Manager<PK, ENTITY, BUILDER> {
 
     private final Map<List<Column>, IndexHolder<Object, PK, ENTITY>> indexes;
+    final Set<Consumer<ENTITY>> insertListeners, updateListeners, deleteListeners;
 
     public AbstractManager() {
         indexes = new ConcurrentHashMap<>();
+        insertListeners = new CopyOnWriteArraySet<>();
+        updateListeners = new CopyOnWriteArraySet<>();
+        deleteListeners = new CopyOnWriteArraySet<>();
     }
 
-    @Override
-    public void onInsert(ENTITY entity) {
+    protected void insertEvent(ENTITY entity) {
+        insertToIndexes(entity);
+        insertListeners.stream().forEachOrdered(c -> c.accept(entity));
+    }
+
+    private void insertToIndexes(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().put(makeKey(e.getKey(), entity), entity);
         });
     }
 
-    @Override
-    public void onUpdate(ENTITY entity) {
+    protected void updateEvent(ENTITY entity) {
         //TODO Make atomic.
-        onDelete(entity);
-        onInsert(entity);
+        deleteFromIndexes(entity);
+        insertToIndexes(entity);
+        updateListeners.stream().forEachOrdered(c -> c.accept(entity));
     }
 
-    @Override
-    public void onDelete(ENTITY entity) {
+    protected void deleteEvent(ENTITY entity) {
+        deleteFromIndexes(entity);
+        deleteListeners.stream().forEachOrdered(c -> c.accept(entity));
+    }
+
+    private void deleteFromIndexes(ENTITY entity) {
         indexes.entrySet().stream().forEach(e -> {
             e.getValue().remove(makeKey(e.getKey(), entity));
         });
@@ -100,7 +113,7 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     @Override
     @SuppressWarnings("unchecked")
     public String toJson(ENTITY entity) {
-		return Json.allFrom(this).build(entity);
+        return Json.allFrom(this).build(entity);
 //        return "{ " + getTable().streamOf(Column.class).map(c -> {
 //            final StringBuilder sb = new StringBuilder();
 //            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");

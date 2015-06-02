@@ -89,11 +89,11 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     }
 
     // Add and remove
-    void onInsert(ENTITY entity);
+    void onInsert(Consumer<ENTITY> listener);
 
-    void onUpdate(ENTITY entity);
+    void onUpdate(Consumer<ENTITY> listener);
 
-    void onDelete(ENTITY primaryKey);
+    void onDelete(Consumer<ENTITY> listener);
 
     // Persistence
     Optional<ENTITY> persist(ENTITY entity);
