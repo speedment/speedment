@@ -359,13 +359,19 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
         
-        
-        <!-- GNU LICENSE, NOT INCLUDED IN THE PRODUCT! -->
-        <!--        <dependency>
+        <!--
+        MySQL Connector:5.1.34
+        GPL 2 with FOSS exception
+        http://www.gnu.org/licenses/gpl-2.0.html
+        https://www.mysql.com/about/legal/licensing/foss-exception/
+        2015-06-02
+        emifor
+        -->
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
-        </dependency>-->
+        </dependency>
         
         <!-- LICENSE INFORMATION
         OpenHFT, Chronicle Map
