@@ -18,9 +18,8 @@ package com.speedment.gui.util;
 
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
+import com.speedment.gui.controllers.AlertController;
 import com.speedment.gui.controllers.SceneController;
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
 import java.io.File;
 import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -30,8 +29,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -58,7 +55,6 @@ public final class ProjectUtil {
                         final Project p = Project.newProject();
                         GroovyParser.fromGroovy(p, file.toPath());
                         biConsumer.accept(file, p);
-                        return;
                     } catch (Exception e) {
                         e.printStackTrace();
                         showAlert(stage, e.getMessage());
@@ -118,7 +114,8 @@ public final class ProjectUtil {
     }
 
     public static void showAlert(Stage stage, String message) {
-        final Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-        alert.showAndWait();
+//        final Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+//        alert.showAndWait();
+        AlertController.showAlert(stage, "Error!", message);
     }
 }

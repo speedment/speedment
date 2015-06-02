@@ -51,9 +51,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -209,8 +207,7 @@ public class SceneController implements Initializable {
                 printLines("Generation completed!");
             } catch (Exception e) {
                 e.printStackTrace();
-                final Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-                alert.showAndWait();
+                AlertController.showAlert(stage, "Error!", e.getMessage());
             }
         };
 
