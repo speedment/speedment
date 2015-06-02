@@ -51,41 +51,41 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
     @Override
     protected Class make(File file) {
         return new ClassBuilder(MANAGER.getImplName()).build()
+            .public_()
+            .setSupertype(Type.of(AbstractSqlManager.class)
+                .add(Generic.of().add(typeOfPK()))
+                .add(Generic.of().add(ENTITY.getType()))
+                .add(Generic.of().add(BUILDER.getType()))
+            )
+            .add(MANAGER.getType())
+            //            .call(i -> file.add(Import.of(Type.of(Platform.class))))
+            //            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+            //            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
+            //                .add("return " + Platform.class.getSimpleName() + 
+            //                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
+            //                    ".class).getProject().findTableByName(getTableName());"))
+
+            .call(i -> file.add(Import.of(ENTITY.getImplType())))
+            .add(Constructor.of()
                 .public_()
-                .setSupertype(Type.of(AbstractSqlManager.class)
-                        .add(Generic.of().add(typeOfPK()))
-                        .add(Generic.of().add(ENTITY.getType()))
-                        .add(Generic.of().add(BUILDER.getType()))
-                )
-                .add(MANAGER.getType())
-                //            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-                //            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-                //            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-                //                .add("return " + Platform.class.getSimpleName() + 
-                //                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-                //                    ".class).getProject().findTableByName(getTableName());"))
+                .add("setSqlEntityMapper(this::defaultReadEntity);"))
+            .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
+                .add("return new " + ENTITY.getImplName() + "();"))
+            .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
+                .add(Field.of("prototype", ENTITY.getType()))
+                .add("return new " + ENTITY.getImplName() + "(prototype);"))
+            .call(i -> file.add(Import.of(Type.of(Stream.class))))
+            //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
+            //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
 
-                .call(i -> file.add(Import.of(ENTITY.getImplType())))
-                .add(Constructor.of()
-                        .public_()
-                        .add("setSqlEntityMapper(this::defaultReadEntity);"))
-                .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
-                        .add("return new " + ENTITY.getImplName() + "();"))
-                .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
-                        .add(Field.of("prototype", ENTITY.getType()))
-                        .add("return new " + ENTITY.getImplName() + "(prototype);"))
-                .call(i -> file.add(Import.of(Type.of(Stream.class))))
-                //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-                //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
+            //                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
+            //                        .add(Field.of("entity", ENTITY.getType()))
+            //                        .add("return entity;")) //TODO MUST BE FIXED!
 
-                //                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-                //                        .add(Field.of("entity", ENTITY.getType()))
-                //                        .add("return entity;")) //TODO MUST BE FIXED!
-
-                //                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-                //                        .add(Field.of("entity", ENTITY.getType()))
-                //                        .add("return entity;")) //TODO MUST BE FIXED!
-                .add(defaultReadEntity(file));
+            //                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
+            //                        .add(Field.of("entity", ENTITY.getType()))
+            //                        .add("return entity;")) //TODO MUST BE FIXED!
+            .add(defaultReadEntity(file));
     }
 
     private Method defaultReadEntity(File file) {
@@ -94,9 +94,9 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
         file.add(Import.of(Type.of(SpeedmentException.class)));
 
         final Method method = Method.of("defaultReadEntity", ENTITY.getType())
-                .protected_()
-                .add(Field.of("resultSet", Type.of(ResultSet.class)))
-                .add("final " + BUILDER.getName() + " builder = builder();");
+            .protected_()
+            .add(Field.of("resultSet", Type.of(ResultSet.class)))
+            .add("final " + BUILDER.getName() + " builder = builder();");
 
         final JavaTypeMapperComponent mapperComponent = Platform.get().get(JavaTypeMapperComponent.class);
         final Stream.Builder<String> streamBuilder = Stream.builder();
@@ -105,22 +105,33 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
 
             final JavaTypeMapping mapping = mapperComponent.apply(dbms().getType(), c.getMapping());
             final StringBuilder sb = new StringBuilder()
-                    .append("builder.set")
-                    .append(typeName(c))
-                    .append("(resultSet.")
+                .append("builder.set")
+                .append(typeName(c))
+                .append("(");
+            if (c.isNullable()) {
+                sb
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
-                    .append("(\"").append(c.getName()).append("\"));");
+                    .append("(resultSet, ")
+                    .append("\"").append(c.getName()).append("\")");
+            } else {
+                sb
+                    .append("resultSet.")
+                    .append("get")
+                    .append(mapping.getResultSetMethodName(dbms()))
+                    .append("(\"").append(c.getName()).append("\")");
+            }
+            sb.append(");");
             streamBuilder.add(sb.toString());
 
         });
 
         method
-                .add("try " + block(streamBuilder.build()))
-                .add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
-                                "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
-                        ))
-                .add("return builder;");
+            .add("try " + block(streamBuilder.build()))
+            .add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
+                    "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
+                ))
+            .add("return builder;");
 
         return method;
     }

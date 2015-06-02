@@ -30,12 +30,23 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
-import com.speedment.util.stream.OptionalUtil;
 import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.NClob;
+import java.sql.Ref;
 import java.sql.ResultSet;
+import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -115,7 +126,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
         sb.append(" values ");
         sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
-        
+
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
 
         final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> {
@@ -233,6 +244,101 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final Table table = getTable();
         final Dbms dbms = table.ancestor(Dbms.class).get();
         return Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+    }
+
+    // Null safe RS getters, must have the same name as ResultSet getters
+    protected Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getObject(columnName));
+    }
+
+    protected Boolean getBoolean(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBoolean(columnName));
+    }
+
+    protected Byte getByte(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getByte(columnName));
+    }
+
+    protected Short getShort(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getShort(columnName));
+    }
+
+    protected Integer getInt(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getInt(columnName));
+    }
+
+    protected Long getLong(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getLong(columnName));
+    }
+
+    protected Float getFloat(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getFloat(columnName));
+    }
+
+    protected Double getDouble(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDouble(columnName));
+    }
+
+    protected String getString(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getString(columnName));
+    }
+
+    protected Date getDate(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDate(columnName));
+    }
+
+    protected Time getTime(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTime(columnName));
+    }
+
+    protected Timestamp getTimestamp(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTimestamp(columnName));
+    }
+
+    protected BigDecimal getBigDecimal(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(columnName));
+    }
+
+    protected Blob getBlob(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBlob(columnName));
+    }
+
+    protected Clob getClob(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getClob(columnName));
+    }
+
+    protected Array getArray(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getArray(columnName));
+    }
+
+    protected Ref getRef(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRef(columnName));
+    }
+
+    protected URL getURL(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getURL(columnName));
+    }
+
+    protected RowId getRowId(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRowId(columnName));
+    }
+
+    protected NClob getNClob(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getNClob(columnName));
+    }
+
+    protected SQLXML getSQLXML(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
+    }
+
+    private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
+        final T result = mapper.apply(rs);
+        if (rs.wasNull()) {
+            return null;
+        } else {
+            return result;
+        }
+
     }
 
 }

@@ -36,6 +36,10 @@ import java.sql.Timestamp;
  */
 public enum StandardJavaTypeMapping implements JavaTypeMapping {
 
+    
+    // If you add a mapping X here, make sure that AbstractSqlManager has a
+    // corresponding method getX(ResultSet, String)
+    
     OBJECT(Object.class, "Object"),
     BOOLEAN(Boolean.class, "Boolean"),
     BYTE(Byte.class, "Byte"),
@@ -75,5 +79,5 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
     public String getResultSetMethodName(Dbms dbms) {
         return resultSetMethodName;
     }
-
+        
 }
