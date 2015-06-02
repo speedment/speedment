@@ -39,4 +39,6 @@ public @interface External {
      * @return the basic type
      */
     Class<?> type();
+    
+    boolean isVisibleInGui() default true;
 }

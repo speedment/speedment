@@ -134,6 +134,21 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
+    public void onInsert(Consumer<ENTITY> listener) {
+        insertListeners.add(listener);
+    }
+
+    @Override
+    public void onUpdate(Consumer<ENTITY> listener) {
+        updateListeners.add(listener);
+    }
+
+    @Override
+    public void onDelete(Consumer<ENTITY> listener) {
+        deleteListeners.add(listener);
+    }
+
+    @Override
     public Boolean initialize() {
         return Boolean.TRUE;
     }
