@@ -42,7 +42,7 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     @Override
     protected void setDefaults() {
         setPacketLocation("src/main/java");
-        setPacketName("com.company.speedment.orm.test");
+        setPacketName("com.company.speedment.test");
         //setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
         setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
     }

@@ -21,6 +21,7 @@ import com.speedment.core.annotations.Api;
 /**
  *
  * @author pemi
+ * @param <T> The type that can be built
  */
 @Api(version = 0)
 public interface Buildable<T> {
