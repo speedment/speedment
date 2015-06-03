@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
@@ -37,31 +38,34 @@ import javafx.stage.Stage;
  * @author pemi
  */
 public final class ProjectUtil {
+    
+    private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
+        file != null &&
+        file.exists() && 
+        file.isFile() && 
+        file.canRead() && 
+        file.getName().toLowerCase().endsWith(".groovy");
 
-    private ProjectUtil() {
-    }
+    private ProjectUtil() {}
 
     public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, BiConsumer<File, Project> biConsumer) {
         return ev -> {
-            System.out.println("Load project");
             final FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Groovy File");
+            fileChooser.setTitle("Open .groovy File");
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
             File file = fileChooser.showOpenDialog(stage);
 
-            if (file != null) {
-                if (file.exists() && file.isFile() && file.canRead() && file.getName().toLowerCase().endsWith(".groovy")) {
-                    try {
-                        final Project p = Project.newProject();
-                        GroovyParser.fromGroovy(p, file.toPath());
-                        biConsumer.accept(file, p);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        showAlert(stage, e.getMessage());
-                    }
-                } else {
-                    showAlert(stage, "Could not read .groovy file:\n" + file.toString());
+            if (OPEN_FILE_CONDITIONS.test(file)) {
+                try {
+                    final Project p = Project.newProject();
+                    GroovyParser.fromGroovy(p, file.toPath());
+                    biConsumer.accept(file, p);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(stage, e.getMessage());
                 }
+            } else {
+                showAlert(stage, "Could not read .groovy file:\n" + file.toString());
             }
         };
     }

@@ -24,6 +24,7 @@ import com.speedment.gui.MainApp;
 import static com.speedment.gui.MainApp.showWebsite;
 import com.speedment.gui.icons.Icons;
 import com.speedment.gui.icons.SilkIcons;
+import com.speedment.gui.log.GUIAppender;
 import com.speedment.gui.properties.TableProperty;
 import com.speedment.gui.properties.TablePropertyManager;
 import com.speedment.gui.properties.TablePropertyRow;
@@ -34,7 +35,6 @@ import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,6 +72,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static javafx.util.Duration.ZERO;
 import static javafx.util.Duration.millis;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * FXML Controller class
@@ -79,6 +81,9 @@ import static javafx.util.Duration.millis;
  * @author Emil Forslund
  */
 public class SceneController implements Initializable {
+    
+    private final static Logger LOGGER = LogManager.getLogger(SceneController.class);
+    private final static String GITHUB_URL = "https://github.com/speedment/speedment";
 
     @FXML private Button buttonNew;
     @FXML private Button buttonOpen;
@@ -122,8 +127,9 @@ public class SceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.propertyMgr = new TablePropertyManager(treeHierarchy);
 
+        // Show LOGGER output in the output area.
+        GUIAppender.setup(output.textProperty());
         populateTree(project);
-
         animateArrow();
 
         mbNew.setGraphic(Icons.NEW_PROJECT.view());
@@ -141,7 +147,7 @@ public class SceneController implements Initializable {
 
         // New project.
         final EventHandler<ActionEvent> newProject = ev -> {
-            printLines("Creating new project.");
+            LOGGER.info("Creating new project.");
             final Stage newStage = new Stage();
             ProjectPromptController.showIn(newStage);
         };
@@ -174,7 +180,7 @@ public class SceneController implements Initializable {
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
             project = p;
-            printLines("Opened config file: " + savedFile);
+            LOGGER.info("Opened config file: " + savedFile);
         });
 
         buttonOpen.setOnAction(openProject);
@@ -183,31 +189,30 @@ public class SceneController implements Initializable {
         // Save application
         mbSave.setOnAction(createSaveProjectHandler(this, f -> {
             savedFile = f;
-            printLines("Saved config file: " + savedFile);
+            LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Save application as
         mbSaveAs.setOnAction(createSaveAsProjectHandler(this, f -> {
             savedFile = f;
-            printLines("Saved config file: " + savedFile);
+            LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Help
-        mbGitHub.setOnAction(ev -> showWebsite("https://github.com/speedment/speedment"));
-        logo.setOnMousePressed(ev -> showWebsite("https://github.com/speedment/speedment"));
+        mbGitHub.setOnAction(ev -> showWebsite(GITHUB_URL));
+        logo.setOnMousePressed(ev -> showWebsite(GITHUB_URL));
 
         // Generate code
         final EventHandler<ActionEvent> generate = ev -> {
-            printLines("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
-            printLines("Target directory is " + project.getPacketLocation());
+            LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
+            LOGGER.info("Target directory is " + project.getPacketLocation());
 
             try {
                 final MainGenerator instance = new MainGenerator();
                 instance.accept(project);
-                printLines("Generation completed!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                AlertController.showAlert(stage, "Error!", e.getMessage());
+                LOGGER.info("Generation completed!");
+            } catch (Exception ex) {
+                LOGGER.error("Error! Failed to generate code.", ex);
             }
         };
 
@@ -237,20 +242,8 @@ public class SceneController implements Initializable {
         return savedFile;
     }
 
-    public void printLines(String... row) {
-        output.appendText(Stream.of(row)
-                .map(s -> Instant.now() + ": " + s)
-                .collect(Collectors.joining("\n")) + "\n");
-    }
-
     private void populateTree(Project project) {
         final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
-
-            System.out.println("Selection changed to: "
-                    + l.getList().stream()
-                    .map(i -> i.getValue().getName())
-                    .collect(Collectors.joining(", ", "(", ")"))
-            );
 
             populatePropertyTable(
                     propertyMgr.propertiesFor(
@@ -286,7 +279,12 @@ public class SceneController implements Initializable {
         final Icons icon = Icons.forNodeType(node.getInterfaceMainClass());
 
         if (icon == null) {
-            throw new RuntimeException("Unknown node type '" + node.getInterfaceMainClass().getName() + "'.");
+            
+            LOGGER.error("Internal error.", new RuntimeException(
+                "Unknown node type '" + node.getInterfaceMainClass().getName() + "'."
+            ));
+            
+            return Icons.QUESTION.view();
         } else {
             return icon.view();
         }
