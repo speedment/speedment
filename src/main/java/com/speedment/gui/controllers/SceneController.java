@@ -193,8 +193,8 @@ public class SceneController implements Initializable {
         }));
 
         // Help
-        mbGitHub.setOnAction(ev -> showWebsite("https://github.com/speedment/speedment-orm"));
-        logo.setOnMousePressed(ev -> showWebsite("https://github.com/speedment/speedment-orm"));
+        mbGitHub.setOnAction(ev -> showWebsite("https://github.com/speedment/speedment"));
+        logo.setOnMousePressed(ev -> showWebsite("https://github.com/speedment/speedment"));
 
         // Generate code
         final EventHandler<ActionEvent> generate = ev -> {
