@@ -255,6 +255,14 @@ public class SceneController implements Initializable {
         mbQuit.setOnAction(ev -> {
             stage.close();
         });
+        
+        ActionChoiceController.showActionChoice(arrowContainer, 
+            // onGenerate
+            () -> generate.handle(null), 
+            
+            // onConfigure
+            () -> {}
+        );
     }
 
     public Stage getStage() {

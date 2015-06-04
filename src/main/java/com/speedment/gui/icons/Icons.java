@@ -30,7 +30,6 @@ import com.speedment.core.config.model.Table;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -39,6 +38,11 @@ import javafx.scene.image.ImageView;
  * @author Emil Forslund
  */
 public enum Icons {
+    
+    BIG_GENERATE ("images/icon-generate.png"),
+    BIG_CONFIGURE ("images/icon-configure.png"),
+    BIG_GENERATE_HOVER ("images/icon-generate-hover.png"),
+    BIG_CONFIGURE_HOVER ("images/icon-configure-hover.png"),
 	NEW_PROJECT ("pics/newProject.png"),
 	NEW_PROJECT_24 ("pics/newProject24.png"),
 	OPEN_PROJECT ("pics/openProject.png"),

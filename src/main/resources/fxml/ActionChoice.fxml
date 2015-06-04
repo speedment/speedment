@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: rgba(0,0,0,0.6);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" fillHeight="false" spacing="48.0">
+         <children>
+            <VBox fillWidth="false">
+               <children>
+                  <ImageView fx:id="imgGenerate" fitHeight="334.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icon-generate.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <Label fx:id="labelGenerate" alignment="CENTER" prefWidth="320.0" text="Generate code!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                     <effect>
+                        <DropShadow blurType="TWO_PASS_BOX" height="32.0" radius="15.5" width="32.0" />
+                     </effect>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox fillWidth="false" layoutX="490.0" layoutY="180.0">
+               <children>
+                  <ImageView fx:id="imgOptions" fitHeight="334.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icon-configure.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <Label fx:id="labelOptions" alignment="CENTER" prefWidth="320.0" text="Advanced options" textFill="WHITE">
+                     <effect>
+                        <DropShadow blurType="TWO_PASS_BOX" height="32.0" radius="15.5" width="32.0" />
+                     </effect>
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</StackPane>
