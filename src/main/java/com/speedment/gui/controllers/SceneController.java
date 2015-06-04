@@ -24,7 +24,6 @@ import com.speedment.gui.MainApp;
 import static com.speedment.gui.MainApp.showWebsite;
 import com.speedment.gui.icons.Icons;
 import com.speedment.gui.icons.SilkIcons;
-import com.speedment.gui.log.GUIAppender;
 import com.speedment.gui.properties.TableProperty;
 import com.speedment.gui.properties.TablePropertyManager;
 import com.speedment.gui.properties.TablePropertyRow;
@@ -35,6 +34,10 @@ import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,7 +131,7 @@ public class SceneController implements Initializable {
         this.propertyMgr = new TablePropertyManager(treeHierarchy);
 
         // Show LOGGER output in the output area.
-        GUIAppender.setup(output.textProperty());
+        //GUIAppender.setup(SceneController.class, output.textProperty());
         populateTree(project);
         animateArrow();
 
@@ -147,7 +150,8 @@ public class SceneController implements Initializable {
 
         // New project.
         final EventHandler<ActionEvent> newProject = ev -> {
-            LOGGER.info("Creating new project.");
+            //LOGGER.info("Creating new project.");
+            writeToLog("Creating new project.");
             final Stage newStage = new Stage();
             ProjectPromptController.showIn(newStage);
         };
@@ -180,7 +184,8 @@ public class SceneController implements Initializable {
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
             project = p;
-            LOGGER.info("Opened config file: " + savedFile);
+            writeToLog("Opened config file: " + savedFile);
+            //LOGGER.info("Opened config file: " + savedFile);
         });
 
         buttonOpen.setOnAction(openProject);
@@ -189,13 +194,15 @@ public class SceneController implements Initializable {
         // Save application
         mbSave.setOnAction(createSaveProjectHandler(this, f -> {
             savedFile = f;
-            LOGGER.info("Saved config file: " + savedFile);
+            writeToLog("Saved config file: " + savedFile);
+            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Save application as
         mbSaveAs.setOnAction(createSaveAsProjectHandler(this, f -> {
             savedFile = f;
-            LOGGER.info("Saved config file: " + savedFile);
+            writeToLog("Saved config file: " + savedFile);
+            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Help
@@ -204,15 +211,30 @@ public class SceneController implements Initializable {
 
         // Generate code
         final EventHandler<ActionEvent> generate = ev -> {
-            LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
-            LOGGER.info("Target directory is " + project.getPacketLocation());
+            final Instant started = Instant.now();
+            writeToLog("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
+            writeToLog("Target directory is " + project.getPacketLocation());
+            
+            //LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
+            //LOGGER.info("Target directory is " + project.getPacketLocation());
 
             try {
                 final MainGenerator instance = new MainGenerator();
                 instance.accept(project);
-                LOGGER.info("Generation completed!");
+                writeToLog("Generation completed!\n");
+                
+                final Instant finished = Instant.now();
+                final DateTimeFormatter format = DateTimeFormatter.RFC_1123_DATE_TIME;
+                writeToLog(".------------: Generation completed! :------------.");
+                writeToLog(" Total time: " + Duration.between(started, finished));
+                writeToLog(" Finished at: " + format.format(finished));
+                writeToLog(" Files generated: " + instance.getFilesCreated());
+                writeToLog("'-------------------------------------------------'");
+                
+                //LOGGER.info("Generation completed!");
             } catch (Exception ex) {
-                LOGGER.error("Error! Failed to generate code.", ex);
+                writeToLog("Error! Failed to generate code.", ex);
+                //LOGGER.error("Error! Failed to generate code.", ex);
             }
         };
 
@@ -362,5 +384,16 @@ public class SceneController implements Initializable {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+    
+    private void writeToLog(String msg) {
+        output.textProperty().setValue(output.textProperty().getValue() + msg + "\n");
+        LOGGER.info(msg);
+    }
+    
+    private void writeToLog(String msg, Throwable thrw) {
+        output.textProperty().setValue(output.textProperty().getValue() + msg + "\n");
+        output.textProperty().setValue(output.textProperty().getValue() + thrw.toString() + "\n");
+        LOGGER.error(msg, thrw);
     }
 }

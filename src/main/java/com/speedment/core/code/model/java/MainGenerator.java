@@ -55,10 +55,12 @@ import org.apache.logging.log4j.Logger;
 public class MainGenerator implements Consumer<Project> {
 
     private final static Logger LOGGER = LogManager.getLogger(MainGenerator.class);
+    private int fileCounter = 0;
 
     @Override
     public void accept(Project project) {
 		AnalyticsUtil.notify(GENERATE);
+        fileCounter = 0;
 		
         final List<Translator<?, File>> translators = new ArrayList<>();
 
@@ -92,6 +94,7 @@ public class MainGenerator implements Consumer<Project> {
 
                 try {
                     Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                    fileCounter++;
                 } catch (IOException ex) {
                     LOGGER.error("Failed to create file " + fname, ex);
                 }
@@ -110,6 +113,7 @@ public class MainGenerator implements Consumer<Project> {
         
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
+            fileCounter++;
         });
         
         
@@ -123,6 +127,10 @@ public class MainGenerator implements Consumer<Project> {
 //            System.out.println("*** END   File:" + file.getName());
 //        });
 
+    }
+    
+    public int getFilesCreated() {
+        return fileCounter;
     }
     
     private static void writeToFile(Project project, Generator gen, Meta<Table, File> c) {

@@ -20,13 +20,14 @@ import javafx.beans.value.WritableStringValue;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Filter;
-import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.message.Message;
 
 /**
@@ -41,7 +42,7 @@ public final class GUIAppender extends AbstractAppender {
     private final WritableStringValue output;
     
     private GUIAppender(WritableStringValue output) {
-        super (APPENDER_NAME, new AcceptAllFilter(), (Layout) null);
+        super (APPENDER_NAME, new AcceptAllFilter(), PatternLayout.createDefaultLayout());
         this.output = output;
     }
 
@@ -54,10 +55,18 @@ public final class GUIAppender extends AbstractAppender {
         output.setValue(output.get() + line + "\n");
     }
     
-    public static void setup(WritableStringValue output) {
-        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+    public static void setup(Class<?> owner, WritableStringValue output) {
+        
+        final LoggerContext ctx = (LoggerContext) LogManager.getContext(
+            owner.getClassLoader(), true
+        );
+        
         final Configuration config = ctx.getConfiguration();
-        config.addAppender(new GUIAppender(output));
+        final Appender appender = new GUIAppender(output);
+        config.addAppender(appender);
+        appender.start();
+        
+        ctx.updateLoggers();
     }
     
     private static class AcceptAllFilter implements Filter {
@@ -90,16 +99,6 @@ public final class GUIAppender extends AbstractAppender {
         }
 
         @Override
-        public Result filter(LogEvent le) {
-            return Result.ACCEPT;
-        }
-
-        @Override
-        public State getState() {
-            return State.STARTED;
-        }
-
-        @Override
         public void start() {
             state = State.STARTED;
         }
@@ -118,6 +117,15 @@ public final class GUIAppender extends AbstractAppender {
         public boolean isStopped() {
             return state != State.STARTED;
         }
-        
+
+        @Override
+        public Result filter(LogEvent le) {
+            return Result.ACCEPT;
+        }
+
+        @Override
+        public State getState() {
+            return state;
+        }
     }
 }
