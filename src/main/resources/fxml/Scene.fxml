@@ -93,11 +93,6 @@
                                 <content>
                                     <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Output">
                                        <content>
-                                          <TextArea fx:id="output" editable="false" layoutY="-34.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
-                                             <font>
-                                                <Font name="Monospaced Regular" size="12.0" />
-                                             </font>
-                                          </TextArea>
                                        </content>
                                     </TitledPane>
                                 </content>

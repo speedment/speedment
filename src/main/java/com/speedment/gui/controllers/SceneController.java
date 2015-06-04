@@ -36,8 +36,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.Period;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.UnsupportedTemporalTypeException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,7 +63,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -72,6 +74,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import static javafx.util.Duration.ZERO;
 import static javafx.util.Duration.millis;
@@ -95,7 +98,7 @@ public class SceneController implements Initializable {
     @FXML private TreeView<Child<?>> treeHierarchy;
     @FXML private TableView<String> tableProjectSettings;
     @FXML private VBox propertiesContainer;
-    @FXML private TextArea output;
+    @FXML private WebView output;
     @FXML private Menu menuFile;
     @FXML private MenuItem mbNew;
     @FXML private MenuItem mbOpen;
@@ -211,6 +214,7 @@ public class SceneController implements Initializable {
 
         // Generate code
         final EventHandler<ActionEvent> generate = ev -> {
+            outputBuffer.delete(0, outputBuffer.length());
             final Instant started = Instant.now();
             writeToLog("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
             writeToLog("Target directory is " + project.getPacketLocation());
@@ -218,23 +222,24 @@ public class SceneController implements Initializable {
             //LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
             //LOGGER.info("Target directory is " + project.getPacketLocation());
 
+            final MainGenerator instance = new MainGenerator();
+            
             try {
-                final MainGenerator instance = new MainGenerator();
                 instance.accept(project);
-                writeToLog("Generation completed!\n");
-                
-                final Instant finished = Instant.now();
-                final DateTimeFormatter format = DateTimeFormatter.RFC_1123_DATE_TIME;
-                writeToLog(".------------: Generation completed! :------------.");
-                writeToLog(" Total time: " + Duration.between(started, finished));
-                writeToLog(" Finished at: " + format.format(finished));
-                writeToLog(" Files generated: " + instance.getFilesCreated());
-                writeToLog("'-------------------------------------------------'");
-                
-                //LOGGER.info("Generation completed!");
+                writeGenerationStatus(
+                    started, 
+                    Instant.now(), 
+                    instance.getFilesCreated(), 
+                    true
+                );
             } catch (Exception ex) {
-                writeToLog("Error! Failed to generate code.", ex);
-                //LOGGER.error("Error! Failed to generate code.", ex);
+                writeGenerationStatus(
+                    started, 
+                    Instant.now(), 
+                    instance.getFilesCreated(), 
+                    false
+                );
+                LOGGER.error("Error! Failed to generate code.", ex);
             }
         };
 
@@ -385,15 +390,42 @@ public class SceneController implements Initializable {
             throw new RuntimeException(ex);
         }
     }
+
+    private final StringBuilder outputBuffer = new StringBuilder();
     
     private void writeToLog(String msg) {
-        output.textProperty().setValue(output.textProperty().getValue() + msg + "\n");
+        outputBuffer.append("<p style=\"font-family:Courier,monospace;font-size:12px;margin:0px;padding:0px;\">").append(msg).append("</p>");
+        output.getEngine().loadContent(outputBuffer.toString());
         LOGGER.info(msg);
     }
     
-    private void writeToLog(String msg, Throwable thrw) {
-        output.textProperty().setValue(output.textProperty().getValue() + msg + "\n");
-        output.textProperty().setValue(output.textProperty().getValue() + thrw.toString() + "\n");
-        LOGGER.error(msg, thrw);
+    private void writeGenerationStatus(Instant started, Instant finished, int filesCreated, boolean succeeded) {
+        
+        final LocalDateTime ldt = LocalDateTime.ofInstant(finished, ZoneId.systemDefault());
+        final DateTimeFormatter format = DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.systemDefault());
+        final String status = succeeded ? ": Generation completed! :" : "-: Generation failed! :--";
+        final String color = succeeded ? "lightgreen" : "lightpink";
+        
+        final Duration dur = Duration.between(started, finished);
+        final long durSecs = dur.getSeconds();
+        final long durMils = dur.multipliedBy(1000).getSeconds() % 1000;
+        String strMils = Long.toString(durMils);
+        switch (strMils.length()) {
+            case 1 : strMils = "00" + strMils; break;
+            case 2 : strMils = "0" + strMils; break;
+        }
+        
+        try {
+            writeToLog("<pre style=\"background:" + color + ";\">" + 
+                ".------------" + status + "------------." + "\n" +
+                " Total time: " + durSecs + "." + strMils + "s\n" +
+                " Finished at: " + format.format(finished) + "\n" +
+                " Files generated: " + filesCreated + "\n" +
+                "'-------------------------------------------------'</pre>"
+            );
+        } catch (UnsupportedTemporalTypeException ex) {
+            LOGGER.error("Could not parse time correctly.", ex);
+            writeToLog("<span style=\"background:lightpink;\">Time parsing failed unexpectedly.</span>");
+        }
     }
 }
