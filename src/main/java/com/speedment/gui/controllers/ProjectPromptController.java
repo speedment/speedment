@@ -52,28 +52,17 @@ import javafx.stage.Stage;
  */
 public class ProjectPromptController implements Initializable {
     
-    @FXML
-    private Button buttonOpen;
-    @FXML
-    private TextField fieldHost;
-    @FXML
-    private TextField fieldPort;
-    @FXML
-    private ChoiceBox<String> fieldType;
-    @FXML
-    private TextField fieldName;
-    @FXML
-    private TextField fieldSchema;
-    @FXML
-    private TextField fieldUser;
-    @FXML
-    private PasswordField fieldPass;
-    @FXML
-    private Button buttonConnect;
-    @FXML
-    private HBox container;
-    @FXML
-    private StackPane openContainer;
+    @FXML private Button buttonOpen;
+    @FXML private TextField fieldHost;
+    @FXML private TextField fieldPort;
+    @FXML private ChoiceBox<String> fieldType;
+    @FXML private TextField fieldName;
+    @FXML private TextField fieldSchema;
+    @FXML private TextField fieldUser;
+    @FXML private PasswordField fieldPass;
+    @FXML private Button buttonConnect;
+    @FXML private HBox container;
+    @FXML private StackPane openContainer;
     
     private final Stage stage;
     
@@ -93,13 +82,16 @@ public class ProjectPromptController implements Initializable {
         if (Settings.inst().get("hide_open_option", true)) {
             container.getChildren().remove(openContainer);
         }
-        
+
         fieldType.setItems(
                 Stream.of(StandardDbmsType.values())
                 .map(s -> s.getName())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList))
         );
         
+        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
+        fieldPort.setText(Settings.inst().get("last_known_port", ""));
+
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
             if (!observable.getValue().isEmpty()) {
                 final StandardDbmsType item = StandardDbmsType.valueOf(next.toUpperCase());
@@ -126,12 +118,15 @@ public class ProjectPromptController implements Initializable {
         fieldSchema.textProperty().addListener((ov, o, n) -> toggleConnectButton());
         fieldUser.textProperty().addListener((ov, o, n) -> toggleConnectButton());
         
+        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", ""));
+        fieldHost.setText(Settings.inst().get("last_known_host", "127.0.0.1"));
+        fieldUser.setText(Settings.inst().get("last_known_user", "root"));
+        fieldName.setText(Settings.inst().get("last_known_name", "db0"));
+        
         buttonConnect.setOnAction(ev -> {
             
             Project project = Project.newProject();
-            project.setName("project_1");
-
-            
+  
             Dbms dbms = Dbms.newDbms();
             dbms.setIpAddress(fieldHost.getText());
             dbms.setPort(Integer.parseInt(fieldPort.getText()));
@@ -141,9 +136,19 @@ public class ProjectPromptController implements Initializable {
             dbms.setType(fieldType.getSelectionModel().getSelectedItem());
             project.add(dbms);
             
-            final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-            dh.schemasPopulated().filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName())).forEachOrdered(dbms::add);
+            project.setName(fieldSchema.getText());
+            Settings.inst().set("last_known_schema", fieldSchema.getText());
+            Settings.inst().set("last_known_dbtype", fieldType.getSelectionModel().getSelectedItem());
+            Settings.inst().set("last_known_host", fieldHost.getText());
+            Settings.inst().set("last_known_user", fieldUser.getText());
+            Settings.inst().set("last_known_name", fieldName.getText());
+            Settings.inst().set("last_known_port", fieldPort.getText());
             
+            final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+            dh.schemasPopulated()
+                .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
+                .forEachOrdered(dbms::add);
+
             Trees.traverse((Child) project, c -> c.asParent()
                     .map(p -> p.stream())
                     .orElse(Stream.empty())
