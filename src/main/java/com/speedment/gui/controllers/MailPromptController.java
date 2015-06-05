@@ -18,6 +18,7 @@ package com.speedment.gui.controllers;
 
 import com.speedment.gui.MainApp;
 import com.speedment.gui.Settings;
+import static com.speedment.gui.controllers.AlertController.showAlert;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -71,7 +72,15 @@ public class MailPromptController implements Initializable {
 
         buttonOkey.setOnAction(ev -> {
             ProjectPromptController.showIn(stage);
-            Settings.inst().set("user_mail", fieldMail.getText());
+            
+            try {
+                Settings.inst().set("user_mail", fieldMail.getText());
+            } catch (RuntimeException ex) {
+                showAlert(stage, "Error!", 
+                    "Could not store the settings in the properties file."
+                );
+                throw ex;
+            }
         });
     }
 
