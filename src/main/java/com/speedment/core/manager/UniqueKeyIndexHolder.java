@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager;
+package com.speedment.core.manager;
 
 import static com.speedment.util.stream.StreamUtil.streamOfNullable;
 import java.util.Map;

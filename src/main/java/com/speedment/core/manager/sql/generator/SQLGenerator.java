@@ -14,19 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager.metaresult;
+package com.speedment.core.manager.sql.generator;
 
-import java.util.Optional;
+import com.speedment.codegen.base.DefaultGenerator;
 
 /**
  *
- * @author pemi
- * @param <ENTITY> the entity type
+ * @author Emil Forslund
  */
-public interface MetaResult<ENTITY> {
+public class SQLGenerator extends DefaultGenerator {
 
-    default Optional<SqlMetaResult<ENTITY>> getSqlMetaResult() {
-        return Optional.empty();
-    }
-
+	public SQLGenerator() {
+		super (new SQLTransformFactory());
+	}
 }

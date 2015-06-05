@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.lifecycle;
+package com.speedment.core.lifecycle;
 
 import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.APP_STARTED;

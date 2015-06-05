@@ -17,7 +17,7 @@
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.core.Buildable;
-import com.speedment.core.core.manager.Manager;
+import com.speedment.core.manager.Manager;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.EntityManager;
 import com.speedment.core.platform.component.ManagerComponent;

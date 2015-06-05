@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager.sql;
+package com.speedment.core.manager.sql;
 
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Dbms;
@@ -22,9 +22,9 @@ import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
-import com.speedment.core.core.manager.AbstractManager;
-import com.speedment.core.core.manager.metaresult.MetaResult;
-import com.speedment.core.core.manager.metaresult.SqlMetaResult;
+import com.speedment.core.manager.AbstractManager;
+import com.speedment.core.manager.metaresult.MetaResult;
+import com.speedment.core.manager.metaresult.SqlMetaResult;
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;

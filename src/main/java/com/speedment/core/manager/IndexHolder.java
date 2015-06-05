@@ -14,33 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager.metaresult;
+package com.speedment.core.manager;
 
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
- * @param <ENTITY> the entity type
- * @param <T> Type
+ * @author Emil Forslund
+ * @param <KEY> Key type used for this IndexHolder
+ * @param <PK> Primary Key type for this Manager
+ * @param <ENTITY> Entity type for this Manager
  */
-public class AbstractMetaResult<ENTITY, T extends AbstractMetaResult<ENTITY, T>> implements MetaResult<ENTITY> {
+public interface IndexHolder<KEY, PK, ENTITY> {
 
-    private Throwable throwable;
+    Stream<ENTITY> stream();
 
-    public Optional<Throwable> getThrowable() {
-        return Optional.ofNullable(throwable);
-    }
+    Stream<ENTITY> stream(KEY key);
 
-    public T setThrowable(Throwable throwable) {
-        this.throwable = throwable;
-        return self();
-    }
+    void put(KEY key, ENTITY entity);
 
-    @SuppressWarnings("unchecked")
-    private T self() {
-        return (T) this;
-    }
-
-
+    void remove(KEY key);
 }

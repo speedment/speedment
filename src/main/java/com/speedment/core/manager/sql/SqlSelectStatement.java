@@ -14,17 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager.sql.generator;
+package com.speedment.core.manager.sql;
 
-import com.speedment.codegen.base.DefaultGenerator;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  *
- * @author Emil Forslund
+ * @author pemi
  */
-public class SQLGenerator extends DefaultGenerator {
+public class SqlSelectStatement extends SqlStatement {
 
-	public SQLGenerator() {
-		super (new SQLTransformFactory());
-	}
+    private final Consumer<ResultSet> resultSetConsumer;
+
+    public SqlSelectStatement(final String sql, final List<?> values, final Consumer<ResultSet> resultSetConsumer) {
+        super(sql, values);
+        this.resultSetConsumer = Objects.requireNonNull(resultSetConsumer);
+    }
+
+    public Consumer<ResultSet> getResultSetConsumer() {
+        return resultSetConsumer;
+    }
+
 }

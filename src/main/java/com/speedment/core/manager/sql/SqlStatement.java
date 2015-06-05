@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.manager.sql;
+package com.speedment.core.manager.sql;
 
 import java.util.ArrayList;
 import java.util.List;

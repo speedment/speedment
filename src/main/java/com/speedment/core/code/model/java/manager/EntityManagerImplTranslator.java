@@ -29,7 +29,7 @@ import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.manager.sql.AbstractSqlManager;
+import com.speedment.core.manager.sql.AbstractSqlManager;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;

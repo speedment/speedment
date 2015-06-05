@@ -18,7 +18,7 @@ package com.speedment.core.platform;
 
 import com.speedment.core.platform.component.Component;
 import com.speedment.core.config.model.Project;
-import com.speedment.core.core.manager.Manager;
+import com.speedment.core.manager.Manager;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;

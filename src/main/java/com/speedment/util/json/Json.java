@@ -18,7 +18,7 @@ package com.speedment.util.json;
 
 import com.speedment.core.config.model.Column;
 import com.speedment.core.core.Buildable;
-import com.speedment.core.core.manager.Manager;
+import com.speedment.core.manager.Manager;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.doubles.DoubleField;
 import com.speedment.core.field.ints.IntField;

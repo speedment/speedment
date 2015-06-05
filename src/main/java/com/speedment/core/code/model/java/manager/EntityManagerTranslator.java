@@ -32,7 +32,7 @@ import static com.speedment.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.manager.sql.SqlManager;
+import com.speedment.core.manager.sql.SqlManager;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
