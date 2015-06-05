@@ -24,10 +24,13 @@ package com.speedment.gui.properties;
 import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.impl.utils.MethodsParser;
+import static com.speedment.core.config.model.impl.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.util.java.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Comparator;
+import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -53,9 +56,10 @@ public class TablePropertyManager {
     public Stream<TableProperty<?>> propertiesFor(List<Child<?>> nodes) {
 
         return nodes.stream().flatMap(node -> {
-            System.out.println(node);
             return MethodsParser.streamOfExternal(node.getClass())
+                    .filter(METHOD_IS_VISIBLE_IN_GUI)
                     .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
+                    //.sorted(comparing(Method::getName))
                     .map(m -> {
                         final String javaName;
                         if (m.getName().startsWith("is")) {
@@ -122,8 +126,9 @@ public class TablePropertyManager {
                             throw new UnsupportedOperationException("Found method '" + m + "' in '" + node.getClass() + "' marked as @External of unsupported type " + type.getName());
                         }
                     });
-        }).map(tp -> (TableProperty<?>) tp).distinct();
-
+        }).map(tp -> (TableProperty<?>) tp)
+          .distinct()
+          .sorted();
     }
     
     private <V> Function<Child<?>, V> findGetter(Class<?> nodeClass, String javaName, boolean optional, Class<?> innerType) {
@@ -217,7 +222,6 @@ public class TablePropertyManager {
         final TableProperty<V> property = initiator.apply(label, option);
 
         property.valueProperty().addListener((ob, o, newValue) -> {
-            System.out.println("Value changed in setting to: " + newValue);
             tree.getSelectionModel().getSelectedItems().stream()
                     .map(i -> i.getValue())
                     .forEachOrdered(c -> updater.accept(c, newValue));

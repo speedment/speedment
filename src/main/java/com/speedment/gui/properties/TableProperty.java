@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.beans.property.Property;
@@ -28,7 +29,7 @@ import javafx.scene.Node;
  * @author Emil Forslund
  * @param <V> The type of the value column.
  */
-public abstract class TableProperty<V> {
+public abstract class TableProperty<V> implements Comparable<TableProperty<V>> {
 	
 	private final StringProperty name;
 	
@@ -42,6 +43,15 @@ public abstract class TableProperty<V> {
 
 	public abstract Property<V> valueProperty();
 	public abstract Node getValueGraphic();
+
+    @Override
+    public int compareTo(TableProperty<V> that) {
+        return Optional.ofNullable(that)
+            .map(TableProperty::nameProperty)
+            .map(StringProperty::getValue)
+            .map(name.getValue()::compareTo)
+            .orElse(0);
+    }
 
 	@Override
 	public int hashCode() {

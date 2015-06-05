@@ -267,11 +267,11 @@ public class SceneController implements Initializable {
         final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
 
             populatePropertyTable(
-                    propertyMgr.propertiesFor(
-                            l.getList().stream()
-                            .map(i -> i.getValue())
-                            .collect(Collectors.toList())
-                    )
+                propertyMgr.propertiesFor(
+                    l.getList().stream()
+                    .map(i -> i.getValue())
+                    .collect(Collectors.toList())
+                )
             );
         };
 
@@ -316,8 +316,8 @@ public class SceneController implements Initializable {
         branch.setExpanded(true);
 
         node.asParent().ifPresent(p -> {
-            p.stream().map(c -> branch(c)).forEach(
-                    c -> branch.getChildren().add(c)
+            p.stream().map(c -> branch(c)).forEachOrdered(
+                c -> branch.getChildren().add(c)
             );
         });
 
@@ -327,7 +327,8 @@ public class SceneController implements Initializable {
     private void populatePropertyTable(Stream<TableProperty<?>> properties) {
         propertiesContainer.getChildren().clear();
 
-        properties.collect(Collectors.toSet()).forEach(p -> {
+        properties.forEachOrdered(p -> {
+        //properties.collect(Collectors.toSet()).forEach(p -> {
             final HBox row = new TablePropertyRow<>(p);
             propertiesContainer.getChildren().add(row);
         });

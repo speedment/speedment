@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -35,10 +36,11 @@ public final class MethodsParser {
     
     private MethodsParser() {}
 
-    private static final Predicate<Method> 
+    public static final Predicate<Method> 
         METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers()),
         METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is")),
-        METHOD_IS_EXTERNAL = MethodsParser::isExternal;
+        METHOD_IS_EXTERNAL = MethodsParser::isExternal,
+        METHOD_IS_VISIBLE_IN_GUI = MethodsParser::isVisibleInGUI;
 
     public static Stream<Method> streamOfExternal(Class<?> clazz) {
         return getMethods(clazz,
@@ -84,6 +86,16 @@ public final class MethodsParser {
 
     private static boolean isExternal(final Method method, final Class<?> clazz) {
         return getExternalFor(method, clazz) != null;
+    }
+    
+    private static boolean isVisibleInGUI(Method method) {
+        return isVisibleInGUI(method, method.getDeclaringClass());
+    }
+    
+    private static boolean isVisibleInGUI(final Method method, final Class<?> clazz) {
+        return Optional.ofNullable(getExternalFor(method, clazz))
+            .filter(External::isVisibleInGui)
+            .isPresent();
     }
 
     private static Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {
