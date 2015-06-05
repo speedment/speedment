@@ -31,6 +31,7 @@ import com.speedment.gui.util.FadeAnimation;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
+import static com.speedment.gui.util.ProjectUtil.getDefaultLocation;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +41,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -163,27 +163,9 @@ public class SceneController implements Initializable {
         mbNew.setOnAction(newProject);
 
         // Open project.
-//        final EventHandler<ActionEvent> openProject = ev -> {
-//            System.out.println("Load project");
-//            final FileChooser fileChooser = new FileChooser();
-//            fileChooser.setTitle("Open Groovy File");
-//            fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
-//            File file = fileChooser.showOpenDialog(stage);
-//
-//            try {
-//                final Project p = Project.newProject();
-//                GroovyParser.fromGroovy(p, file.toPath());
-//                treeHierarchy.setRoot(branch(p));
-//                project = p;
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                final Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-//                alert.showAndWait();
-//            }
-//
-//        };
-        final EventHandler<ActionEvent> openProject = createOpenProjectHandler(stage, (f, p) -> {
+        final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
+            stage, getDefaultLocation(savedFile), (f, p) -> {
+                
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
             project = p;
@@ -275,6 +257,10 @@ public class SceneController implements Initializable {
 
     public File getLastSaved() {
         return savedFile;
+    }
+    
+    public void setLastSaved(File savedFile) {
+        this.savedFile = savedFile;
     }
 
     private void populateTree(Project project) {

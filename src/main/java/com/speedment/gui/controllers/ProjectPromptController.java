@@ -27,6 +27,7 @@ import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import static com.speedment.gui.controllers.AlertController.showAlert;
+import static com.speedment.gui.util.ProjectUtil.getDefaultLocation;
 import com.speedment.util.Trees;
 import java.io.IOException;
 import java.net.URL;
@@ -45,6 +46,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * FXML Controller class
@@ -52,6 +55,8 @@ import javafx.stage.Stage;
  * @author Emil Forslund
  */
 public class ProjectPromptController implements Initializable {
+    
+    private final static Logger LOGGER = LogManager.getLogger(ProjectPromptController.class);
     
     @FXML private Button buttonOpen;
     @FXML private TextField fieldHost;
@@ -79,101 +84,105 @@ public class ProjectPromptController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        if (Settings.inst().get("hide_open_option", true)) {
-            container.getChildren().remove(openContainer);
+        try {
+            if (Settings.inst().get("hide_open_option", true)) {
+                container.getChildren().remove(openContainer);
+            }
+
+            fieldType.setItems(
+                    Stream.of(StandardDbmsType.values())
+                    .map(s -> s.getName())
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList))
+            );
+
+            fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
+            fieldPort.setText(Settings.inst().get("last_known_port", ""));
+
+            fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
+                if (!observable.getValue().isEmpty()) {
+                    final StandardDbmsType item = StandardDbmsType.valueOf(next.toUpperCase());
+
+                    if (fieldHost.textProperty().getValue().isEmpty()) {
+                        fieldHost.textProperty().setValue("127.0.0.1");
+                    }
+
+                    if (fieldUser.textProperty().getValue().isEmpty()) {
+                        fieldUser.textProperty().setValue("root");
+                    }
+                    if (fieldName.textProperty().getValue().isEmpty()) {
+                        fieldName.textProperty().setValue("db0");
+                    }
+
+                    fieldPort.textProperty().setValue("" + item.getDefaultPort());
+                }
+            });
+
+            fieldHost.textProperty().addListener((ov, o, n) -> toggleConnectButton());
+            fieldPort.textProperty().addListener((ov, o, n) -> toggleConnectButton());
+            fieldType.selectionModelProperty().addListener((ov, o, n) -> toggleConnectButton());
+            fieldName.textProperty().addListener((ov, o, n) -> toggleConnectButton());
+            fieldSchema.textProperty().addListener((ov, o, n) -> toggleConnectButton());
+            fieldUser.textProperty().addListener((ov, o, n) -> toggleConnectButton());
+
+            fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", ""));
+            fieldHost.setText(Settings.inst().get("last_known_host", "127.0.0.1"));
+            fieldUser.setText(Settings.inst().get("last_known_user", "root"));
+            fieldName.setText(Settings.inst().get("last_known_name", "db0"));
+
+            buttonConnect.setOnAction(ev -> {
+
+                Project project = Project.newProject();
+
+                Dbms dbms = Dbms.newDbms();
+                dbms.setIpAddress(fieldHost.getText());
+                dbms.setPort(Integer.parseInt(fieldPort.getText()));
+                dbms.setName(fieldName.getText());
+                dbms.setUsername(fieldUser.getText());
+                dbms.setPassword(fieldPass.getText());
+                dbms.setType(fieldType.getSelectionModel().getSelectedItem());
+                project.add(dbms);
+
+                project.setName(fieldSchema.getText());
+                Settings.inst().set("last_known_schema", fieldSchema.getText());
+                Settings.inst().set("last_known_dbtype", fieldType.getSelectionModel().getSelectedItem());
+                Settings.inst().set("last_known_host", fieldHost.getText());
+                Settings.inst().set("last_known_user", fieldUser.getText());
+                Settings.inst().set("last_known_name", fieldName.getText());
+                Settings.inst().set("last_known_port", fieldPort.getText());
+
+                try {
+                    final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+                    dh.schemasPopulated()
+                        .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
+                        .forEachOrdered(dbms::add);
+
+                    Trees.traverse((Child) project, c -> c.asParent()
+                            .map(p -> p.stream())
+                            .orElse(Stream.empty())
+                            .map(n -> (Child<?>) n),
+                            Trees.TraversalOrder.DEPTH_FIRST_PRE
+                    ).forEachOrdered(System.out::println);
+
+                    SceneController.showIn(stage, project);
+                    Settings.inst().set("hide_open_option", false);
+                } catch (Exception ex) {
+                    showAlert(stage, "Error!", 
+                        "Could not connect to the database. Make sure the " +
+                        "information provided is correct and that the database " +
+                        "server is running."
+                    );
+                    throw ex;
+                }
+            });
+
+            buttonOpen.setOnAction(createOpenProjectHandler(stage, getDefaultLocation(null), (f,p) -> {
+                // Todo: set saved file;
+                SceneController.showIn(stage, p);
+            }));
+        } catch (Exception exxx) {
+            exxx.printStackTrace();
+            throw exxx;
         }
-
-        fieldType.setItems(
-                Stream.of(StandardDbmsType.values())
-                .map(s -> s.getName())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList))
-        );
-        
-        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
-        fieldPort.setText(Settings.inst().get("last_known_port", ""));
-
-        fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
-            if (!observable.getValue().isEmpty()) {
-                final StandardDbmsType item = StandardDbmsType.valueOf(next.toUpperCase());
-                
-                if (fieldHost.textProperty().getValue().isEmpty()) {
-                    fieldHost.textProperty().setValue("127.0.0.1");
-                }
-                
-                if (fieldUser.textProperty().getValue().isEmpty()) {
-                    fieldUser.textProperty().setValue("root");
-                }
-                if (fieldName.textProperty().getValue().isEmpty()) {
-                    fieldName.textProperty().setValue("db0");
-                }
-                
-                fieldPort.textProperty().setValue("" + item.getDefaultPort());
-            }
-        });
-        
-        fieldHost.textProperty().addListener((ov, o, n) -> toggleConnectButton());
-        fieldPort.textProperty().addListener((ov, o, n) -> toggleConnectButton());
-        fieldType.selectionModelProperty().addListener((ov, o, n) -> toggleConnectButton());
-        fieldName.textProperty().addListener((ov, o, n) -> toggleConnectButton());
-        fieldSchema.textProperty().addListener((ov, o, n) -> toggleConnectButton());
-        fieldUser.textProperty().addListener((ov, o, n) -> toggleConnectButton());
-        
-        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", ""));
-        fieldHost.setText(Settings.inst().get("last_known_host", "127.0.0.1"));
-        fieldUser.setText(Settings.inst().get("last_known_user", "root"));
-        fieldName.setText(Settings.inst().get("last_known_name", "db0"));
-        
-        buttonConnect.setOnAction(ev -> {
-            
-            Project project = Project.newProject();
-  
-            Dbms dbms = Dbms.newDbms();
-            dbms.setIpAddress(fieldHost.getText());
-            dbms.setPort(Integer.parseInt(fieldPort.getText()));
-            dbms.setName(fieldName.getText());
-            dbms.setUsername(fieldUser.getText());
-            dbms.setPassword(fieldPass.getText());
-            dbms.setType(fieldType.getSelectionModel().getSelectedItem());
-            project.add(dbms);
-            
-            project.setName(fieldSchema.getText());
-            Settings.inst().set("last_known_schema", fieldSchema.getText());
-            Settings.inst().set("last_known_dbtype", fieldType.getSelectionModel().getSelectedItem());
-            Settings.inst().set("last_known_host", fieldHost.getText());
-            Settings.inst().set("last_known_user", fieldUser.getText());
-            Settings.inst().set("last_known_name", fieldName.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
-            
-            try {
-                final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-                dh.schemasPopulated()
-                    .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
-                    .forEachOrdered(dbms::add);
-
-                Trees.traverse((Child) project, c -> c.asParent()
-                        .map(p -> p.stream())
-                        .orElse(Stream.empty())
-                        .map(n -> (Child<?>) n),
-                        Trees.TraversalOrder.DEPTH_FIRST_PRE
-                ).forEachOrdered(System.out::println);
-
-                SceneController.showIn(stage, project);
-                Settings.inst().set("hide_open_option", false);
-            } catch (Exception ex) {
-                showAlert(stage, "Error!", 
-                    "Could not connect to the database. Make sure the " +
-                    "information provided is correct and that the database " +
-                    "server is running."
-                );
-                throw ex;
-            }
-        });
-        
-        buttonOpen.setOnAction(createOpenProjectHandler(stage, (f,p) -> {
-            // Todo: set saved file;
-            SceneController.showIn(stage, p);
-        }));
     }
     
     private void toggleConnectButton() {
@@ -201,6 +210,7 @@ public class ProjectPromptController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
+            LOGGER.error(ex);
             throw new RuntimeException(ex);
         }
     }

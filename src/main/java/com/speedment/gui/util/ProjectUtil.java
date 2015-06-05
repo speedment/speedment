@@ -18,6 +18,7 @@ package com.speedment.gui.util;
 
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
+import com.speedment.gui.Settings;
 import com.speedment.gui.controllers.AlertController;
 import com.speedment.gui.controllers.SceneController;
 import java.io.File;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -32,12 +34,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author pemi
  */
 public final class ProjectUtil {
+    
+    private final static Logger LOGGER = LogManager.getLogger(ProjectUtil.class);
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
@@ -48,24 +54,26 @@ public final class ProjectUtil {
 
     private ProjectUtil() {}
 
-    public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, BiConsumer<File, Project> biConsumer) {
+    public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, Optional<File> defaultLocation, BiConsumer<File, Project> biConsumer) {
         return ev -> {
             final FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open .groovy File");
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
-            File file = fileChooser.showOpenDialog(stage);
-
-            if (OPEN_FILE_CONDITIONS.test(file)) {
-                try {
-                    final Project p = Project.newProject();
-                    GroovyParser.fromGroovy(p, file.toPath());
-                    biConsumer.accept(file, p);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(stage, e.getMessage());
+            defaultLocation.ifPresent(fileChooser::setInitialDirectory);
+            final File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                if (OPEN_FILE_CONDITIONS.test(file)) {
+                    try {
+                        final Project p = Project.newProject();
+                        GroovyParser.fromGroovy(p, file.toPath());
+                        biConsumer.accept(file, p);
+                    } catch (Exception e) {
+                        LOGGER.error(e);
+                        showAlert(stage, e.getMessage());
+                    }
+                } else {
+                    showAlert(stage, "Could not read .groovy file:\n" + file.toString());
                 }
-            } else {
-                showAlert(stage, "Could not read .groovy file:\n" + file.toString());
             }
         };
     }
@@ -85,22 +93,22 @@ public final class ProjectUtil {
     }
 
     private static boolean showSaveDialog(SceneController controller, Consumer<File> fileConsumer) {
-        System.out.println("Save project");
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Groovy File");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+        getDefaultLocation(controller.getLastSaved())
+            .ifPresent(fileChooser::setInitialDirectory);
+        
         File file = fileChooser.showSaveDialog(controller.getStage());
-        System.out.println("fileChooser: " + file);
 
         if (file != null) {
-            saveGroovyFile(controller, file, fileConsumer);
-            return true;
+            return saveGroovyFile(controller, file, fileConsumer);
         }
 
         return false;
     }
 
-    private static void saveGroovyFile(SceneController controller, File target, Consumer<File> fileConsumer) {
+    private static boolean saveGroovyFile(SceneController controller, File target, Consumer<File> fileConsumer) {
         final Path parent = target.toPath().getParent();
 
         try {
@@ -112,14 +120,29 @@ public final class ProjectUtil {
             Files.write(target.toPath(), groovy.getBytes(UTF_8));
             fileConsumer.accept(target);
 
+            Settings.inst().set("project_location", parent.toFile().getAbsolutePath());
+            controller.setLastSaved(target);
+            
+            return true;
         } catch (IOException ex) {
             showAlert(controller.getStage(), ex.getMessage());
+        }
+        
+        return false;
+    }
+    
+    public static Optional<File> getDefaultLocation(File savedFile) {
+        if (savedFile == null) {
+            return Optional.ofNullable(Settings.inst().get("project_location"))
+                .map(File::new)
+                .filter(File::exists)
+                .filter(File::isDirectory);
+        } else {
+            return Optional.of(savedFile.getParentFile());
         }
     }
 
     public static void showAlert(Stage stage, String message) {
-//        final Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-//        alert.showAndWait();
         AlertController.showAlert(stage, "Error!", message);
     }
 }
