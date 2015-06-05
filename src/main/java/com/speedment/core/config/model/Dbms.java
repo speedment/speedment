@@ -81,10 +81,10 @@ public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent
     @External(type = String.class)
     void setUsername(String name);
 
-    @External(type = String.class)
+    @External(type = String.class, isSecret = true)
     Optional<String> getPassword();
 
-    @External(type = String.class)
+    @External(type = String.class, isSecret = true)
     void setPassword(String password);
 
     // Groovy

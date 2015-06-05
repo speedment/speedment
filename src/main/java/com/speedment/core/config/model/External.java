@@ -39,6 +39,19 @@ public @interface External {
      * @return the basic type
      */
     Class<?> type();
-    
+
+    /**
+     * Returns if this @External shall be visible in the GUI.
+     *
+     * @return if this @External shall be visible in the GUI
+     */
     boolean isVisibleInGui() default true;
+
+    /**
+     * Returns if this @External is secrete (eg a password). Externals with this
+     * property set will be stored in a separate file.
+     *
+     * @return if this @External is secrete (eg a password)
+     */
+    boolean isSecret() default false;
 }
