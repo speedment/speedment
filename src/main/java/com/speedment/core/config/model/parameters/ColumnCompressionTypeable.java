@@ -24,10 +24,10 @@ import com.speedment.core.config.model.External;
  */
 public interface ColumnCompressionTypeable {
 
-    @External(type = ColumnCompressionType.class)
+    @External(type = ColumnCompressionType.class, isVisibleInGui = false)
     ColumnCompressionType getColumnCompressionType();
 
-    @External(type = ColumnCompressionType.class)
+    @External(type = ColumnCompressionType.class, isVisibleInGui = false)
     void setColumnCompressionType(ColumnCompressionType fieldStorageType);
 
 }

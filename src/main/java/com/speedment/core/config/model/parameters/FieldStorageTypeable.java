@@ -24,10 +24,10 @@ import com.speedment.core.config.model.External;
  */
 public interface FieldStorageTypeable {
 
-    @External(type = FieldStorageType.class)
+    @External(type = FieldStorageType.class, isVisibleInGui = false)
     FieldStorageType getFieldStorageType();
 
-    @External(type = FieldStorageType.class)
+    @External(type = FieldStorageType.class, isVisibleInGui = false)
     void setFieldStorageType(FieldStorageType fieldStorageType);
 
 }

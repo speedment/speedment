@@ -29,10 +29,10 @@ import com.speedment.core.config.model.External;
  */
 public interface StorageEngineTypeable {
 
-    @External(type = StorageEngineType.class)
+    @External(type = StorageEngineType.class, isVisibleInGui = false)
     StorageEngineType getStorageEngineType();
 
-    @External(type = StorageEngineType.class)
+    @External(type = StorageEngineType.class, isVisibleInGui = false)
     void setStorageEngineType(StorageEngineType storageEngineType);
 
 }
