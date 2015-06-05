@@ -26,6 +26,7 @@ import com.speedment.gui.Settings;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
+import static com.speedment.gui.controllers.AlertController.showAlert;
 import com.speedment.util.Trees;
 import java.io.IOException;
 import java.net.URL;
@@ -144,20 +145,29 @@ public class ProjectPromptController implements Initializable {
             Settings.inst().set("last_known_name", fieldName.getText());
             Settings.inst().set("last_known_port", fieldPort.getText());
             
-            final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-            dh.schemasPopulated()
-                .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
-                .forEachOrdered(dbms::add);
+            try {
+                final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+                dh.schemasPopulated()
+                    .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
+                    .forEachOrdered(dbms::add);
 
-            Trees.traverse((Child) project, c -> c.asParent()
-                    .map(p -> p.stream())
-                    .orElse(Stream.empty())
-                    .map(n -> (Child<?>) n),
-                    Trees.TraversalOrder.DEPTH_FIRST_PRE
-            ).forEachOrdered(System.out::println);
+                Trees.traverse((Child) project, c -> c.asParent()
+                        .map(p -> p.stream())
+                        .orElse(Stream.empty())
+                        .map(n -> (Child<?>) n),
+                        Trees.TraversalOrder.DEPTH_FIRST_PRE
+                ).forEachOrdered(System.out::println);
 
-            SceneController.showIn(stage, project);
-            Settings.inst().set("hide_open_option", false);
+                SceneController.showIn(stage, project);
+                Settings.inst().set("hide_open_option", false);
+            } catch (Exception ex) {
+                showAlert(stage, "Error!", 
+                    "Could not connect to the database. Make sure the " +
+                    "information provided is correct and that the database " +
+                    "server is running."
+                );
+                throw ex;
+            }
         });
         
         buttonOpen.setOnAction(createOpenProjectHandler(stage, (f,p) -> {

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<VBox alignment="TOP_RIGHT" spacing="16.0" style="-fx-background-color: #ddd;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_RIGHT" spacing="16.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="title" maxWidth="1.7976931348623157E308" text="Error!" textFill="#5d6e9a">
          <font>
