@@ -16,7 +16,6 @@
  */
 package com.speedment.gui.properties;
 
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.beans.property.Property;

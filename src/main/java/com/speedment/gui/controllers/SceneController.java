@@ -22,12 +22,15 @@ import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.gui.MainApp;
 import static com.speedment.gui.MainApp.showWebsite;
+import com.speedment.gui.controllers.NotificationController.Notification;
+import static com.speedment.gui.controllers.NotificationController.showNotification;
 import com.speedment.gui.icons.Icons;
 import com.speedment.gui.icons.SilkIcons;
 import com.speedment.gui.properties.TableProperty;
 import com.speedment.gui.properties.TablePropertyManager;
 import com.speedment.gui.properties.TablePropertyRow;
 import com.speedment.gui.util.FadeAnimation;
+import static com.speedment.gui.util.FadeAnimation.fadeIn;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
@@ -136,7 +139,7 @@ public class SceneController implements Initializable {
         // Show LOGGER output in the output area.
         //GUIAppender.setup(SceneController.class, output.textProperty());
         populateTree(project);
-        animateArrow();
+        arrow.setOpacity(0);
 
         mbNew.setGraphic(Icons.NEW_PROJECT.view());
         mbOpen.setGraphic(Icons.OPEN_PROJECT.view());
@@ -214,6 +217,12 @@ public class SceneController implements Initializable {
                     instance.getFilesCreated(), 
                     true
                 );
+                
+                showNotification(
+                    arrowContainer, 
+                    "The code generation succeeded!", 
+                    Notification.SUCCESS
+                );
             } catch (Exception ex) {
                 writeGenerationStatus(
                     started, 
@@ -223,6 +232,8 @@ public class SceneController implements Initializable {
                 );
                 LOGGER.error("Error! Failed to generate code.", ex);
             }
+            
+            removeArrow();
         };
 
         buttonGenerate.setOnAction(generate);
@@ -240,10 +251,10 @@ public class SceneController implements Initializable {
         
         ActionChoiceController.showActionChoice(arrowContainer, 
             // onGenerate
-            () -> generate.handle(null), 
+            () -> generate.handle(null),
             
             // onConfigure
-            () -> {}
+            () -> animateArrow()
         );
     }
 
@@ -335,36 +346,44 @@ public class SceneController implements Initializable {
     }
 
     private void animateArrow() {
-        final DropShadow glow = new DropShadow();
-        glow.setBlurType(BlurType.TWO_PASS_BOX);
-        glow.setColor(Color.rgb(0, 255, 255, 1.0));
-        glow.setWidth(20);
-        glow.setHeight(20);
-        glow.setRadius(0.0);
-        arrow.setEffect(glow);
+        if (arrowContainer.getChildren().contains(arrow)) {
+            fadeIn(arrow);
 
-        final KeyFrame kf0 = new KeyFrame(ZERO,
-                new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
-                new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
-                new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
-        );
+            final DropShadow glow = new DropShadow();
+            glow.setBlurType(BlurType.TWO_PASS_BOX);
+            glow.setColor(Color.rgb(0, 255, 255, 1.0));
+            glow.setWidth(20);
+            glow.setHeight(20);
+            glow.setRadius(0.0);
+            arrow.setEffect(glow);
 
-        final KeyFrame kf1 = new KeyFrame(millis(400),
-				new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
-                new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
-                new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
-        );
+            final KeyFrame kf0 = new KeyFrame(ZERO,
+                    new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
+                    new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
+                    new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
+            );
 
-        final Timeline tl = new Timeline(kf0, kf1);
-        tl.setAutoReverse(true);
-        tl.setCycleCount(INDEFINITE);
-        tl.play();
+            final KeyFrame kf1 = new KeyFrame(millis(400),
+                    new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
+                    new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
+                    new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
+            );
 
-        final EventHandler<MouseEvent> over = ev -> {
+            final Timeline tl = new Timeline(kf0, kf1);
+            tl.setAutoReverse(true);
+            tl.setCycleCount(INDEFINITE);
+            tl.play();
+
+            final EventHandler<MouseEvent> over = ev -> removeArrow();
+
+            arrow.setOnMouseEntered(over);
+        }
+    }
+    
+    private void removeArrow() {
+        if (arrowContainer.getChildren().contains(arrow)) {
             FadeAnimation.fadeOut(arrow, e -> arrowContainer.getChildren().remove(arrow));
-        };
-
-        arrow.setOnMouseEntered(over);
+        }
     }
 
     public static void showIn(Stage stage, Project project) {
