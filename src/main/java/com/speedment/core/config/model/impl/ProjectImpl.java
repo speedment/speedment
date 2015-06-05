@@ -32,7 +32,7 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
 
     private ProjectManager parent;
     private final ChildHolder children;
-    private String packetName, packetLocation;
+    private String packageName, packageLocation;
     private Path configPath;
 
     public ProjectImpl() {
@@ -41,30 +41,30 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
 
     @Override
     protected void setDefaults() {
-        setPacketLocation("src/main/java");
-        setPacketName("com.company.speedment.test");
+        setPackageLocation("src/main/java");
+        setPackageName("com.company.speedment.test");
         //setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
         setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
     }
 
     @Override
-    public String getPacketName() {
-        return packetName;
+    public String getPackageName() {
+        return packageName;
     }
 
     @Override
-    public void setPacketName(String packetName) {
-        this.packetName = Objects.requireNonNull(packetName);
+    public void setPackageName(String packetName) {
+        this.packageName = Objects.requireNonNull(packetName).toLowerCase();
     }
 
     @Override
-    public String getPacketLocation() {
-        return packetLocation;
+    public String getPackageLocation() {
+        return packageLocation;
     }
 
     @Override
-    public void setPacketLocation(String packetLocation) {
-        this.packetLocation = Objects.requireNonNull(packetLocation);
+    public void setPackageLocation(String packetLocation) {
+        this.packageLocation = Objects.requireNonNull(packetLocation);
     }
 
     @Override

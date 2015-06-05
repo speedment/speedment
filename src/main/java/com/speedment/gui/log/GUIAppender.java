@@ -123,9 +123,9 @@ public final class GUIAppender extends AbstractAppender {
             return Result.ACCEPT;
         }
 
-        @Override
-        public State getState() {
-            return state;
-        }
+//        @Override
+//        public State getState() {
+//            return state;
+//        }
     }
 }

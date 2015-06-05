@@ -48,6 +48,7 @@ import static java.util.stream.Collectors.toList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 /**
  *
  * @author pemi
@@ -85,7 +86,7 @@ public class MainGenerator implements Consumer<Project> {
             .collect(Collectors.toList()))
             .forEach(c -> {
                 
-                final String fname = project.getPacketLocation()
+                final String fname = project.getPackageLocation()
                 + "/"
                 + c.getModel().getName();
                 final String content = c.getResult();
@@ -138,7 +139,7 @@ public class MainGenerator implements Consumer<Project> {
         
         if (content.isPresent()) {
             final String fname = 
-                project.getPacketLocation() + 
+                project.getPackageLocation() + 
                 "/" + c.getResult().getName();
             
             final Path path = Paths.get(fname);

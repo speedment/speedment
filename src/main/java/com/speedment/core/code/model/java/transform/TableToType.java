@@ -41,7 +41,7 @@ public abstract class TableToType implements Transform<Table, Type> {
         
         return Optional.of(
             Type.of(
-                project.getPacketName() + DOT + 
+                project.getPackageName() + DOT + 
                 table.getRelativeName(Project.class) + DOT +
                 namePrefix() + 
                 javaTypeName(table.getName()) + 

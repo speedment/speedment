@@ -216,8 +216,8 @@ public class SceneController implements Initializable {
         final EventHandler<ActionEvent> generate = ev -> {
             outputBuffer.delete(0, outputBuffer.length());
             final Instant started = Instant.now();
-            writeToLog("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
-            writeToLog("Target directory is " + project.getPacketLocation());
+            writeToLog("Generating classes " + project.getPackageName() + "." + project.getName() + ".*");
+            writeToLog("Target directory is " + project.getPackageLocation());
             
             //LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
             //LOGGER.info("Target directory is " + project.getPacketLocation());
