@@ -27,7 +27,7 @@ Here are a few examples of how you could use Speedment from your code:
 ### Easy initialization
 ```java
 // A configuration-class is generated from the database.
-new HelloSpeedment().configureDbmsPassword("MyReallySecretPassword").start();
+new HelloSpeedment().configureDbmsPassword("myPwd729").start();
 ```
 Because Speedment cares about your passwords, secret stuff are never stored elsewhere and thus needs to be set manually.
 
