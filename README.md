@@ -120,13 +120,10 @@ Optional<Hare> harry = Hare.builder()
 ```
 
 ### Database centric
-Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of
-configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
+Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
 ### Code generation
-Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Perfect if you
-have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated
-using an intuitive GUI or programatically using your own code.
+Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Perfect if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI)! or programatically using your own code.
 
 ### Development Status
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product.
