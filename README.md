@@ -13,7 +13,7 @@ out of the box!
 
 Documentation
 -------------
-You can read about [the API here](https://github.com/speedment/speedment-orm/wiki/Speedment-API)!
+You can read about [the API here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
 
 Tutorials
 ---------
@@ -27,7 +27,9 @@ Here are a few examples of how you could use Speedment from your code:
 ### Easy initialization
 ```java
 // A configuration-class is generated from the database.
-new HelloSpeedment().start();
+// Because Speedment cares about your passwords, secret stuff
+// are never stored elsewhere and thus needs to be set manually.
+new HelloSpeedment().configureDbmsPassword("MyReallySecretPassword").start();
 ```
 
 ### Easy querying using standard Java 8 predicates
@@ -79,17 +81,6 @@ Optional<Carrot> carrot = Hare.stream()
     .findAny();
 ```
     
-### Easy multi-threading
-```java
-// Find all hares that share name with a human using multiple 
-// threads.
-Hare.stream()
-    .parallel()
-    .filter(h -> Human.stream()
-        .filter(n -> h.getName().equals(n.getName()))
-        .findAny().isPresent()
-    ).forEach(System.out::println);
-```
    
 ### Convert to JSON
 ```java
@@ -99,34 +90,16 @@ Hare.stream()
     .forEach(System.out::println);
 ```
  
-### Full access to transaction metadata
-```java
-// If an SQL storage engine is used, you may
-// want to obtain the actual transaction metadata.
-Optional<Hare> harry = Hare.builder()
-    .setName("Harry")
-    .setColor("Gray")
-    .setAge(3)
-    .persist(meta -> {
-        meta.getSqlMetaResult().ifPresent(sql -> {
-            System.out.println("sql = " + sql.getQuery());
-            System.out.println("params = " + sql.getParameters());
-            System.out.println("thowable = " + sql.getThrowable()
-                .map(t -> t.getMessage())
-                .orElse("nothing thrown :-) ")
-            );
-        });
-    });
-```
 
 ### Database centric
 Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
 ### Code generation
-Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Perfect if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI) or programatically using your own code.
+Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI) or programatically using your own code.
 
 ### Development Status
-Speedment is still very early and we are currently moving in large blocks from the existing closed source product.
+Speedment is still very early and we are currently moving in large blocks from the existing closed source product. 
+We will be adding new cool stuff like transactions, caching and support for more database types in coming releases.
 
 ---
 ### Using Maven

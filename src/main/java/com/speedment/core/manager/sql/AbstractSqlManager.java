@@ -86,7 +86,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     public <T> Stream<T> synchronousStreamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
-        LOGGER.debug(sql + " <- " + values);
+        //LOGGER.debug(sql + " <- " + values);
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
