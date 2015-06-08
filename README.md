@@ -122,8 +122,7 @@ License
 Speedment is available under the Apache 2 License.
 
 
-Copyright
----------
+#### Copyright
 
 Copyright (c) 2008-2015, Speedment, Inc. All Rights Reserved.
 
