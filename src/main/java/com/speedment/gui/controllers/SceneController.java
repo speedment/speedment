@@ -34,7 +34,6 @@ import static com.speedment.gui.util.FadeAnimation.fadeIn;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
-import static com.speedment.gui.util.ProjectUtil.getDefaultLocation;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +43,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -121,9 +121,14 @@ public class SceneController implements Initializable {
     private Project project;
     private TablePropertyManager propertyMgr;
 
-    public SceneController(Stage stage, Project project) {
-        this.stage = stage;
-        this.project = project;
+    private SceneController(Stage stage, Project project) {
+        this (stage, project, null);
+    }
+    
+    private SceneController(Stage stage, Project project, File savedFile) {
+        this.stage     = stage;
+        this.project   = project;
+        this.savedFile = savedFile;
     }
 
     /**
@@ -136,8 +141,6 @@ public class SceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.propertyMgr = new TablePropertyManager(treeHierarchy);
 
-        // Show LOGGER output in the output area.
-        //GUIAppender.setup(SceneController.class, output.textProperty());
         populateTree(project);
         arrow.setOpacity(0);
 
@@ -156,7 +159,6 @@ public class SceneController implements Initializable {
 
         // New project.
         final EventHandler<ActionEvent> newProject = ev -> {
-            //LOGGER.info("Creating new project.");
             writeToLog("Creating new project.");
             final Stage newStage = new Stage();
             ProjectPromptController.showIn(newStage);
@@ -167,13 +169,12 @@ public class SceneController implements Initializable {
 
         // Open project.
         final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
-            stage, getDefaultLocation(savedFile), (f, p) -> {
+            stage, (f, p) -> {
                 
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
             project = p;
             writeToLog("Opened config file: " + savedFile);
-            //LOGGER.info("Opened config file: " + savedFile);
         });
 
         buttonOpen.setOnAction(openProject);
@@ -183,14 +184,12 @@ public class SceneController implements Initializable {
         mbSave.setOnAction(createSaveProjectHandler(this, f -> {
             savedFile = f;
             writeToLog("Saved config file: " + savedFile);
-            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Save application as
         mbSaveAs.setOnAction(createSaveAsProjectHandler(this, f -> {
             savedFile = f;
             writeToLog("Saved config file: " + savedFile);
-            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Help
@@ -203,9 +202,6 @@ public class SceneController implements Initializable {
             final Instant started = Instant.now();
             writeToLog("Generating classes " + project.getPackageName() + "." + project.getName() + ".*");
             writeToLog("Target directory is " + project.getPackageLocation());
-            
-            //LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
-            //LOGGER.info("Target directory is " + project.getPacketLocation());
 
             final MainGenerator instance = new MainGenerator();
             
@@ -270,8 +266,9 @@ public class SceneController implements Initializable {
         return savedFile;
     }
     
-    public void setLastSaved(File savedFile) {
+    public SceneController setLastSaved(File savedFile) {
         this.savedFile = savedFile;
+        return this;
     }
 
     private void populateTree(Project project) {
@@ -339,7 +336,6 @@ public class SceneController implements Initializable {
         propertiesContainer.getChildren().clear();
 
         properties.forEachOrdered(p -> {
-        //properties.collect(Collectors.toSet()).forEach(p -> {
             final HBox row = new TablePropertyRow<>(p);
             propertiesContainer.getChildren().add(row);
         });
@@ -358,15 +354,15 @@ public class SceneController implements Initializable {
             arrow.setEffect(glow);
 
             final KeyFrame kf0 = new KeyFrame(ZERO,
-                    new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
-                    new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
-                    new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
+                new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
+                new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
+                new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
             );
 
             final KeyFrame kf1 = new KeyFrame(millis(400),
-                    new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
-                    new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
-                    new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
+                new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
+                new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
+                new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
             );
 
             final Timeline tl = new Timeline(kf0, kf1);
@@ -382,11 +378,15 @@ public class SceneController implements Initializable {
     
     private void removeArrow() {
         if (arrowContainer.getChildren().contains(arrow)) {
-            FadeAnimation.fadeOut(arrow, e -> arrowContainer.getChildren().remove(arrow));
+            if (arrow.getOpacity() > 0) {
+                FadeAnimation.fadeOut(arrow, e -> arrowContainer.getChildren().remove(arrow));
+            } else {
+                arrowContainer.getChildren().remove(arrow);
+            }
         }
     }
-
-    public static void showIn(Stage stage, Project project) {
+    
+    public static SceneController showIn(Stage stage, Project project) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/Scene.fxml"));
         final SceneController control = new SceneController(stage, project);
         loader.setController(control);
@@ -403,6 +403,14 @@ public class SceneController implements Initializable {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        
+        return control;
+    }
+
+    public static SceneController showIn(Stage stage, Project project, File savedFile) {
+        return Optional.ofNullable(showIn(stage, project))
+            .map(sc -> sc.setLastSaved(savedFile))
+            .orElse(null);
     }
 
     private final StringBuilder outputBuffer = new StringBuilder();

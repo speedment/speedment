@@ -175,9 +175,9 @@ public class ProjectPromptController implements Initializable {
                 }
             });
 
-            buttonOpen.setOnAction(createOpenProjectHandler(stage, getDefaultLocation(null), (f,p) -> {
+            buttonOpen.setOnAction(createOpenProjectHandler(stage, (f, p) -> {
                 // Todo: set saved file;
-                SceneController.showIn(stage, p);
+                SceneController.showIn(stage, p, f);
             }));
         } catch (Exception exxx) {
             exxx.printStackTrace();

@@ -40,14 +40,10 @@ import javafx.stage.Stage;
  */
 public class MailPromptController implements Initializable {
 
-    @FXML
-    private Label labelHeader;
-    @FXML
-    private TextField fieldMail;
-    @FXML
-    private Label labelLicense;
-    @FXML
-    private Button buttonOkey;
+    @FXML private Label labelHeader;
+    @FXML private TextField fieldMail;
+    @FXML private Label labelLicense;
+    @FXML private Button buttonOkey;
 
     private final Predicate<String> isInvalidMail
             = s -> !s.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");

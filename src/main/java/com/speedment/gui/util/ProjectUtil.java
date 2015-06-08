@@ -51,15 +51,25 @@ public final class ProjectUtil {
         file.isFile() && 
         file.canRead() && 
         file.getName().toLowerCase().endsWith(".groovy");
+    
+    private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file ->
+        file != null &&
+        file.exists() && 
+        file.isDirectory();
 
     private ProjectUtil() {}
 
-    public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, Optional<File> defaultLocation, BiConsumer<File, Project> biConsumer) {
+    public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, BiConsumer<File, Project> biConsumer) {
         return ev -> {
             final FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open .groovy File");
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
-            defaultLocation.ifPresent(fileChooser::setInitialDirectory);
+            
+            Optional.ofNullable(Settings.inst().get("project_location"))
+                .map(File::new)
+                .filter(OPEN_DIRECTORY_CONDITIONS)
+                .ifPresent(fileChooser::setInitialDirectory);
+            
             final File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
                 if (OPEN_FILE_CONDITIONS.test(file)) {
@@ -100,8 +110,11 @@ public final class ProjectUtil {
             .ifPresent(fileChooser::setInitialDirectory);
         
         File file = fileChooser.showSaveDialog(controller.getStage());
-
         if (file != null) {
+            if (!file.getName().endsWith(".groovy")) {
+                file = new File(file.getAbsolutePath() + ".groovy");
+            }
+            
             return saveGroovyFile(controller, file, fileConsumer);
         }
 
