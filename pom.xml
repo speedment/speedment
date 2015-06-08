@@ -108,6 +108,10 @@
                     </properties>
                     <excludes>
                         <exclude>**/README</exclude>
+                        <exclude>README.md</exclude>
+                        <exclude>LICENSE</exclude>
+                        <exclude>DISCLAIMER</exclude>
+                        <exclude>THIRD_PARTY_LICENSES</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
                     </excludes>
@@ -338,12 +342,6 @@
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-map</artifactId>
             <version>2.1.3</version>
-        </dependency>-->
-        
-        <!--        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.10</version>
         </dependency>-->
         
         
