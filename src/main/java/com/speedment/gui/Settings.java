@@ -40,7 +40,7 @@ public final class Settings {
 
 	private final static File SETTINGS_FILE = new File("settings.properties");
 	private final static Optional<String> VERSION = Optional.ofNullable(Settings.class.getPackage().getImplementationVersion());
-	private final static String SYNC_URL = "http://stat.speedment.com/frontend?version=" + VERSION + "&email=";
+	private final static String SYNC_URL = "http://stat.speedment.com/frontend?version=1&coreFullVersion=" + VERSION + "&email=";
 	private final static boolean SYNC = true;
 
 	private final Properties props;
