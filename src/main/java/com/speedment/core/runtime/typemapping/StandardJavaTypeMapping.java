@@ -18,6 +18,7 @@ package com.speedment.core.runtime.typemapping;
 
 import com.speedment.core.config.model.Dbms;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -29,6 +30,10 @@ import java.sql.RowId;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  *
@@ -36,39 +41,67 @@ import java.sql.Timestamp;
  */
 public enum StandardJavaTypeMapping implements JavaTypeMapping {
 
-    
     // If you add a mapping X here, make sure that AbstractSqlManager has a
     // corresponding method getX(ResultSet, String)
-    
-    OBJECT(Object.class, "Object"),
-    BOOLEAN(Boolean.class, "Boolean"),
-    BYTE(Byte.class, "Byte"),
-    SHORT(Short.class, "Short"),
-    INTEGER(Integer.class, "Int"),
-    LONG(Long.class, "Long"),
-    FLOAT(Float.class, "Float"),
-    DOUBLE(Double.class, "Double"),
-    STRING(String.class, "String"),
-    Date(Date.class, "Date"),
-    TIME(Time.class, "Time"),
-    TIMESTAMP(Timestamp.class, "Timestamp"),
-    BIG_DECIMAL(BigDecimal.class, "BigDecimal"),
-    BLOB(Blob.class, "Blob"),
-    CLOB(Clob.class, "Clob"),
-    ARRAY(Array.class, "Array"),
-    REF(Ref.class, "Ref"),
-    URL(URL.class, "URL"),
-    ROW_ID(RowId.class, "RowId"),
-    N_CLOB(NClob.class, "NClob"),
-    SQLXML(SQLXML.class, "SQLXML");
+    OBJECT(Object.class, "Object", s -> (Object) s),
+    BOOLEAN(Boolean.class, "Boolean", Boolean::parseBoolean),
+    BYTE(Byte.class, "Byte", Byte::parseByte),
+    SHORT(Short.class, "Short", Short::parseShort),
+    INTEGER(Integer.class, "Int", Integer::parseInt),
+    LONG(Long.class, "Long", Long::parseLong),
+    FLOAT(Float.class, "Float", Float::parseFloat),
+    DOUBLE(Double.class, "Double", Double::parseDouble),
+    STRING(String.class, "String", Function.identity()),
+    DATE(Date.class, "Date", Date::valueOf),
+    TIME(Time.class, "Time", Time::valueOf),
+    TIMESTAMP(Timestamp.class, "Timestamp", Timestamp::valueOf),
+    BIG_DECIMAL(BigDecimal.class, "BigDecimal", s -> new BigDecimal(s)),
+    BLOB(Blob.class, "Blob", s -> unableToMap(Blob.class)),
+    CLOB(Clob.class, "Clob", s -> unableToMap(Clob.class)),
+    ARRAY(Array.class, "Array", s -> unableToMap(Array.class)),
+    REF(Ref.class, "Ref", s -> unableToMap(Ref.class)),
+    URL(URL.class, "URL", s -> {
+        try {
+            return new URL(s);
+        } catch (MalformedURLException mfe) {
+            throw new RuntimeException(mfe);
+        }
+    }),
+    ROW_ID(RowId.class, "RowId", s -> unableToMap(RowId.class)),
+    N_CLOB(NClob.class, "NClob", s -> unableToMap(NClob.class)),
+    SQLXML(SQLXML.class, "SQLXML", s -> unableToMap(SQLXML.class));
 
-    private StandardJavaTypeMapping(Class<?> clazz, String resultSetMethodName) {
-        this.clazz = clazz;
-        this.resultSetMethodName = resultSetMethodName;
+    private static final Map<Class<?>, Function<String, ?>> parsers = new HashMap<>();
+
+    static {
+        for (StandardJavaTypeMapping mapping : values()) {
+            parsers.put(mapping.clazz, mapping.stringMapper);
+        }
+    }
+
+    private static <T> T unableToMap(Class<T> clazz) {
+        throw new IllegalArgumentException("Unable to parse a string and make it " + clazz.toString());
+    }
+
+    private <T> StandardJavaTypeMapping(Class<T> clazz, String resultSetMethodName, Function<String, T> stringMapper) {
+        this.clazz = Objects.requireNonNull(clazz);
+        this.resultSetMethodName = Objects.requireNonNull(resultSetMethodName);
+        this.stringMapper = Objects.requireNonNull(stringMapper);
     }
 
     private final Class<?> clazz;
     private final String resultSetMethodName;
+    private final Function<String, ?> stringMapper;
+
+//    private <T> void put(Class<T> clazz, Function<String, T> mapper) {
+//        parsers.put(clazz, mapper);
+//    }
+
+    public static <T> T parse(Class<T> type, String inputValue) {
+        @SuppressWarnings("unchecked")
+        final Function<String, T> mapper = (Function<String, T>) parsers.getOrDefault(type, s -> unableToMap(type));
+        return mapper.apply(inputValue);
+    }
 
     @Override
     public Class<?> getJavaClass() {
@@ -79,5 +112,5 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
     public String getResultSetMethodName(Dbms dbms) {
         return resultSetMethodName;
     }
-        
+
 }
