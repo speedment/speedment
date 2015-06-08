@@ -17,6 +17,7 @@
 package com.speedment.core.runtime.typemapping;
 
 import com.speedment.core.config.model.Dbms;
+import com.speedment.core.exception.SpeedmentException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +44,7 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
 
     // If you add a mapping X here, make sure that AbstractSqlManager has a
     // corresponding method getX(ResultSet, String)
+    
     OBJECT(Object.class, "Object", s -> (Object) s),
     BOOLEAN(Boolean.class, "Boolean", Boolean::parseBoolean),
     BYTE(Byte.class, "Byte", Byte::parseByte),
@@ -64,7 +66,7 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
         try {
             return new URL(s);
         } catch (MalformedURLException mfe) {
-            throw new RuntimeException(mfe);
+            throw new SpeedmentException(mfe);
         }
     }),
     ROW_ID(RowId.class, "RowId", s -> unableToMap(RowId.class)),

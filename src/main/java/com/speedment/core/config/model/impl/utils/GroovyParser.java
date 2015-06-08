@@ -20,7 +20,6 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.util.java.JavaLanguage;
-import com.speedment.util.stream.CollectorUtil;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
@@ -42,44 +41,22 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 public class GroovyParser {
 
     private static final Package IMPORT_PACKAGE = com.speedment.core.config.model.parameters.FieldStorageType.class.getPackage();
-    private static final String NL = "\n";
 
     public static String toGroovy(final Node node) {
-//        return IMPORT_PACKAGE.getName() + ".*" + NL + NL + toGroovy(node, 0);
-//        //return "import com.speedment.orm.config.model.parameters.*" + NL + NL + toGroovy(node, 0);
         return toGroovyLines(node).collect(joining("\n"));
     }
 
     public static Stream<String> toGroovyLines(final Node node) {
         final Stream.Builder<String> sb = Stream.builder();
         sb.add("import " + IMPORT_PACKAGE.getName() + ".*");
-        //sb.add("import com.speedment.orm.config.model.parameters.*");
         sb.add("");
         toGroovyLines(sb, node, 0);
         return sb.build();
     }
 
-//    private static String toGroovy(final Node node, final int indentLevel) {
-//        return CollectorUtil.of(StringBuilder::new, sb -> {
-//            MethodsParser.streamOfExternal(node.getClass())
-//                .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
-//                .forEach(m -> getterBeanPropertyNameAndValue(m, node)
-//                    .ifPresent(t -> indent(sb, indentLevel).append(t).append(NL))
-//                );
-//
-//            Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
-//                -> n.stream().forEach(c -> {
-//                    indent(sb, indentLevel).append(JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName())).append(" {").append(NL);
-//                    sb.append(toGroovy(c, indentLevel + 1));
-//                    indent(sb, indentLevel).append("}").append(NL);
-//                })
-//            );
-//        }, StringBuilder::toString);
-//    }
-
     private static Stream.Builder<String> toGroovyLines(final Stream.Builder<String> sb, final Node node, final int indentLevel) {
 
-        MethodsParser.streamOfExternal(node.getClass())
+        MethodsParser.streamOfExternalNoneSecretGetters(node.getClass())
             .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
             .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                 .ifPresent(t -> sb.add(indent(indentLevel) + t))

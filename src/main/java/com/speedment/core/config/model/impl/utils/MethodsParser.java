@@ -39,13 +39,24 @@ public final class MethodsParser {
     public static final Predicate<Method> 
         METHOD_IS_PUBLIC = (m) -> Modifier.isPublic(m.getModifiers()),
         METHOD_IS_GETTER = (m) -> m.getParameterCount() == 0 && (m.getName().startsWith("get") || m.getName().startsWith("is")),
+        METHOD_IS_SETTER = (m) -> m.getParameterCount() == 1 && (m.getName().startsWith("set")),
         METHOD_IS_EXTERNAL = MethodsParser::isExternal,
+        METHOD_IS_EXTERNAL_AND_NONE_SECRET = MethodsParser::isExternalAndNoneSecret,
+        METHOD_IS_EXTERNAL_AND_SECRET = MethodsParser::isExternalAndSecret,
         METHOD_IS_VISIBLE_IN_GUI = MethodsParser::isVisibleInGUI;
 
-    public static Stream<Method> streamOfExternal(Class<?> clazz) {
+    public static Stream<Method> streamOfExternalNoneSecretGetters(Class<?> clazz) {
         return getMethods(clazz,
             METHOD_IS_PUBLIC
             .and(METHOD_IS_GETTER)
+            .and(METHOD_IS_EXTERNAL_AND_NONE_SECRET)
+        ).stream();
+    }
+    
+    public static Stream<Method> streamOfExternalSetters(Class<?> clazz) {
+        return getMethods(clazz,
+            METHOD_IS_PUBLIC
+            .and(METHOD_IS_SETTER)
             .and(METHOD_IS_EXTERNAL)
         ).stream();
     }
@@ -98,6 +109,26 @@ public final class MethodsParser {
             .isPresent();
     }
 
+    private static boolean isExternalAndNoneSecret(Method method) {
+        return isExternalAndNoneSecret(method, method.getDeclaringClass());
+    }
+    
+    private static boolean isExternalAndNoneSecret(final Method method, final Class<?> clazz) {
+        return Optional.ofNullable(getExternalFor(method, clazz))
+            .filter(e-> !e.isSecret())
+            .isPresent();
+    }
+    
+    private static boolean isExternalAndSecret(Method method) {
+        return isExternalAndSecret(method, method.getDeclaringClass());
+    }
+    
+    private static boolean isExternalAndSecret(final Method method, final Class<?> clazz) {
+        return Optional.ofNullable(getExternalFor(method, clazz))
+            .filter(External::isSecret)
+            .isPresent();
+    }
+    
     private static Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {
         if (clazz == Object.class) {
             return methods;

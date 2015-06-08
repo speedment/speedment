@@ -95,7 +95,7 @@ public class Test {
 
         handler.schemasPopulated().forEachOrdered(schema -> {
 
-            Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+            final Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
 
             Trees.traverse(schema,
                     traverser,

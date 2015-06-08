@@ -16,8 +16,11 @@
  */
 package com.speedment.core.runtime;
 
+import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.Project;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
+import com.speedment.core.config.model.impl.utils.MethodsParser;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.lifecycle.AbstractLifecycle;
 import com.speedment.core.manager.Manager;
@@ -25,12 +28,20 @@ import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
+import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import static com.speedment.util.Beans.beanPropertyName;
+import com.speedment.util.Trees;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -39,12 +50,43 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
 
+    private String dbmsPassword;
+    private final Map<String, String> dbmsPasswords;
     private ApplicationMetadata speedmentApplicationMetadata;
     private Path configPath;
 
     public SpeedmentApplicationLifecycle() {
         super();
         configPath = null;
+        dbmsPasswords = new ConcurrentHashMap<>();
+    }
+
+    /**
+     * Configures a password for all dbmses in this project. The password will
+     * then be applied after the configuration has been read and after the
+     * System properties has been applied but before
+     * configureDbmsPassword(dbmsName, password) is called.
+     *
+     * @param password the password to use for all dbms:es in this project.
+     * @return this instance
+     */
+    public T configureDbmsPassword(final String password) {
+        dbmsPassword = password;
+        return self();
+    }
+
+    /**
+     * Configures a password for the named dbms. The password will then be
+     * applied after the configuration has been read and after the System
+     * properties has been applied.
+     *
+     * @param dbmsName the name of the dbms
+     * @param password the password to use for the named dbms.
+     * @return this instance
+     */
+    public T configureDbmsPassword(final String dbmsName, final String password) {
+        dbmsPasswords.put(dbmsName, password);
+        return self();
     }
 
     @Override
@@ -70,13 +112,46 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void loadAndSetProject() {
         try {
             final Optional<Path> oPath = getConfigPath();
+            final Project project;
             if (oPath.isPresent()) {
-                final Project p = GroovyParser.projectFromGroovy(oPath.get());
-                Platform.get().get(ProjectComponent.class).setProject(p);
+                project = GroovyParser.projectFromGroovy(oPath.get());
             } else {
-                final Project p = GroovyParser.projectFromGroovy(getSpeedmentApplicationMetadata().getMetadata());
-                Platform.get().get(ProjectComponent.class).setProject(p);
+                project = GroovyParser.projectFromGroovy(getSpeedmentApplicationMetadata().getMetadata());
             }
+
+            // Apply overridden values from the system properties (if any)
+            final Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+            Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
+                .forEach((Node node) -> {
+                    final Class<?> clazz = node.getClass();
+                    MethodsParser.streamOfExternalSetters(clazz).forEach(
+                        method -> {
+                            final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
+                            Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
+                                final External external = MethodsParser.getExternalFor(method, clazz);
+                                final Class<?> targetJavaType = external.type();
+                                final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
+                                try {
+                                    method.invoke(node, val);
+                                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                                    throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
+                                }
+                            });
+                        }
+                    );
+                });
+
+            // Apply overidden passwords (if any) for all dbms:es
+            Optional.ofNullable(dbmsPassword).ifPresent(pwd -> {
+                project.stream().forEach(dbms -> dbms.setPassword(pwd));
+            });
+
+            // Apply overidden passwords (if any) for any named dbms
+            project.stream().forEach(dbms -> {
+                Optional.ofNullable(dbmsPasswords.get(dbms.getName())).ifPresent(pwd -> dbms.setPassword(pwd));
+            });
+
+            Platform.get().get(ProjectComponent.class).setProject(project);
 
         } catch (IOException ioe) {
             throw new SpeedmentException("Failed to read config file", ioe);

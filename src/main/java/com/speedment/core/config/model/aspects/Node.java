@@ -28,17 +28,16 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-
 public interface Node extends Nameable, Enableable {
-    
+
     @SuppressWarnings("unchecked")
     default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
         return Optional.of(this)
-                .filter(e -> e.isChildInterface())
-                .map(e -> (Child<?>) e)
-                .flatMap(e -> e.getParent())
-                .filter(e -> parentClass.isAssignableFrom(e.getClass()))
-                .map(e -> (P) e);
+            .filter(e -> e.isChildInterface())
+            .map(e -> (Child<?>) e)
+            .flatMap(e -> e.getParent())
+            .filter(e -> parentClass.isAssignableFrom(e.getClass()))
+            .map(e -> (P) e);
     }
 
     default boolean isParentInterface() {
@@ -63,19 +62,19 @@ public interface Node extends Nameable, Enableable {
 
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
-        return Trees.walkOptional(
-                getParent(Parent.class).get(),
-                (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2),
-                Trees.WalkingOrder.BACKWARD
-        );
+        return getParent(Parent.class).map(parent -> Trees.walkOptional(
+            parent,
+            (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2),
+            Trees.WalkingOrder.BACKWARD
+        )).orElse(Stream.empty());
     }
 
     @SuppressWarnings("unchecked")
     default <E extends Node> Optional<E> ancestor(final Class<E> clazz) {
         return ancestors()
-                .filter(p -> clazz.isAssignableFrom(p.getClass()))
-                .map(p -> (E) p)
-                .findFirst();
+            .filter(p -> clazz.isAssignableFrom(p.getClass()))
+            .map(p -> (E) p)
+            .findFirst();
     }
 
     default String getRelativeName(final Class<? extends Parent<?>> from) {

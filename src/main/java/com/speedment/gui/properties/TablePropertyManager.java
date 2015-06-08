@@ -56,7 +56,7 @@ public class TablePropertyManager {
     public Stream<TableProperty<?>> propertiesFor(List<Child<?>> nodes) {
 
         return nodes.stream().flatMap(node -> {
-            return MethodsParser.streamOfExternal(node.getClass())
+            return MethodsParser.streamOfExternalNoneSecretGetters(node.getClass())
                     .filter(METHOD_IS_VISIBLE_IN_GUI)
                     .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
                     //.sorted(comparing(Method::getName))

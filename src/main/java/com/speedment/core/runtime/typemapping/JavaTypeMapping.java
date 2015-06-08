@@ -27,5 +27,5 @@ public interface JavaTypeMapping {
     Class<?> getJavaClass();
     
     String getResultSetMethodName(Dbms dbms);
-    
+        
 }
