@@ -40,7 +40,7 @@ public final class Settings {
 
 	private final static File SETTINGS_FILE = new File("settings.properties");
 	private final static Optional<String> VERSION = Optional.ofNullable(Settings.class.getPackage().getImplementationVersion());
-	private final static String SYNC_URL = "http://stat.speedment.com/frontend?version=1&coreFullVersion=" + VERSION + "&email=";
+	private final static String SYNC_URL = "http://stat.speedment.com/frontend?version=1&coreFullVersion=" + VERSION.orElse("unknown") + "&email=";
 	private final static boolean SYNC = true;
 
 	private final Properties props;
@@ -121,15 +121,16 @@ public final class Settings {
 	private void syncToServer() {
 		if (SYNC) {
 			try {
-				final URL syncUrl = new URL(SYNC_URL + URLEncoder.encode(get("mail", "no-mail-specified"), "UTF-8"));
+				final URL syncUrl = new URL(SYNC_URL + URLEncoder.encode(get("user_mail", "no-mail-specified"), "UTF-8"));
 				final HttpURLConnection con = (HttpURLConnection) syncUrl.openConnection();
-				con.setRequestMethod("GET");
 				con.setDoOutput(true);
 				
 				try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
 					wr.writeBytes(encode());
 					wr.flush();
 				}
+                
+                con.getResponseCode();
 			} catch (IOException ex) {}
 		}
 	}
