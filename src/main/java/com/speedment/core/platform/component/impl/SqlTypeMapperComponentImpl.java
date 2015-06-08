@@ -22,7 +22,9 @@ import com.speedment.util.java.sql.TypeInfo;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -55,9 +57,9 @@ public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
 //        JAVA_TYPE_MAP.put("BINARY", BYTE_ARRAY_MAPPING);
 //        JAVA_TYPE_MAP.put("VARBINARY", BYTE_ARRAY_MAPPING);
         //JAVA_TYPE_MAP.put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
-        put("DATE", LocalDateTime.class);
-        put("TIME", LocalDateTime.class);
-        put("TIMESTAMP", LocalDateTime.class);
+        put("DATE", Date.class);
+        put("TIME", Time.class);
+        put("TIMESTAMP", Timestamp.class);
         put("CLOB", Clob.class);
         put("BLOB", Blob.class);
 //        JAVA_TYPE_MAP.put("ARRAY", ARRAY_MAPPING);
@@ -79,7 +81,15 @@ public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
         return DEFAULT_MAPPING;
     }
 
+    private static Optional<String> normalize(Optional<String> string) {
+        if (string.isPresent()) {
+            Optional.of(normalize(string.get()));
+        }
+        return Optional.empty();
+    }
+
     private static String normalize(String string) {
         return string.toUpperCase();
     }
+
 }

@@ -38,11 +38,11 @@ public class JavaTypeMapperComponentImpl implements JavaTypeMapperComponent {
         });
     }
 
-    public final JavaTypeMapping put(JavaTypeMapping item) {
+    public JavaTypeMapping put(JavaTypeMapping item) {
         return map.put(item.getJavaClass(), item);
     }
 
-    public final JavaTypeMapping put(DbmsType dbmsType, JavaTypeMapping item) {
+    public JavaTypeMapping put(DbmsType dbmsType, JavaTypeMapping item) {
         return dbmsTypeMap.computeIfAbsent(dbmsType, k -> new ConcurrentHashMap<>()).put(item.getJavaClass(), item);
     }
 
@@ -58,10 +58,8 @@ public class JavaTypeMapperComponentImpl implements JavaTypeMapperComponent {
     @Override
     public JavaTypeMapping apply(DbmsType dbmsType, Class<?> javaClass) {
         return Optional.ofNullable(
-            dbmsTypeMap.getOrDefault(dbmsType, map).get(javaClass))
-            .orElseThrow(() -> new NullPointerException(
-                "The " + JavaTypeMapperComponent.class.getSimpleName() + 
-                " does not have a mapping for " + dbmsType + ", " + javaClass
-            ));
+                dbmsTypeMap.getOrDefault(dbmsType, map).get(javaClass))
+                .orElseThrow(() -> new NullPointerException("The "+JavaTypeMapperComponent.class.getSimpleName()+" does not have a mapping for " + dbmsType + ", " + javaClass));
     }
+
 }

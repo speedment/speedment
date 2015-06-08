@@ -47,7 +47,6 @@ import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -294,10 +293,6 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
     protected Timestamp getTimestamp(final ResultSet resultSet, final String columnName) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getTimestamp(columnName));
-    }
-    
-    protected LocalDateTime getLocalDateTime(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTimestamp(columnName).toLocalDateTime());
     }
 
     protected BigDecimal getBigDecimal(final ResultSet resultSet, final String columnName) throws SQLException {

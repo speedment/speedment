@@ -145,8 +145,7 @@ public final class Json<ENTITY> {
 	private static String jsonValue(Object in) {
 		final String value;
 		if (in instanceof Optional<?>) {
-            final Optional<?> o = (Optional<?>) in;
-			value = o.map(String::valueOf).orElse("null");
+			value = String.valueOf(((Optional<?>) in).get());
 		} else {
 			value = String.valueOf(in);
 		}
