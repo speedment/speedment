@@ -16,6 +16,7 @@
  */
 package com.speedment.util.stream;
 
+import com.speedment.util.json.Json;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -46,8 +47,12 @@ public class CollectorUtil {
     private final static Logger LOGGER = LogManager.getLogger(CollectorUtil.class);
     private static final String NULL_TEXT = " must not be null";
     
-    public static <T> Collector<T, ?, String> toJson(Class<T> entityType) {
+    public static <T> Collector<T, ?, String> toJson() {
         return new Parser<>(CollectorUtil::toJson, l -> "[" + l.stream().collect(joining(", ")) + "]");
+    }
+    
+    public static <T> Collector<T, ?, String> toJson(Json<T> formatter) {
+        return new Parser<>(formatter::build, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
     
     @SuppressWarnings("unchecked")
@@ -69,7 +74,7 @@ public class CollectorUtil {
             return null;
         }
     }
-
+    
     private static class Parser<T> implements Collector<T, List<String>, String> {
 
         private final Function<T, String> converter;

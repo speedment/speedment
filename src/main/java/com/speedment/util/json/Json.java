@@ -28,9 +28,9 @@ import com.speedment.core.field.reference.ReferenceField;
 import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
 import static com.speedment.util.java.JavaLanguage.javaVariableName;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
@@ -48,7 +48,7 @@ public final class Json<ENTITY> {
 	private final Map<String, Function<ENTITY, String>> getters;
 		
 	public Json() {
-		this.getters = new ConcurrentHashMap<>();
+		this.getters = new LinkedHashMap<>();
 	}
 	
 	// Fields
