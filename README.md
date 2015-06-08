@@ -106,14 +106,31 @@ We will be adding new cool stuff like transactions, caching and support for more
 
 Using Maven
 -----------
-To use Speedment, just add the following lines to your project's `pom.xml` file.
+To use Speedment, just add the following lines (between the ... marker lines) to your project's `pom.xml` file.
 ```xml
-<dependency>
-    <groupId>com.speedment</groupId>
-    <artifactId>speedment</artifactId>
-    <version>${speedment.version}</version>
-</dependency>
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>${speedment.version}</version>
+        </plugin>
+        ...
+    </plugins>
+</build>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>${speedment.version}</version>
+    </dependency>
+    ...
+</dependencies>
 ```
+
+Make sure that you use the latest ${speedment.version} available.
 
 
 License
