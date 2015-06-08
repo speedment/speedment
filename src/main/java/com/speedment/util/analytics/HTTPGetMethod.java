@@ -24,7 +24,7 @@ public class HTTPGetMethod {
 
     private static final String GET_METHOD_NAME = "GET";
 
-    private static final String SUCCESS_MESSAGE = "JGoogleAnalytics: Tracking Successful!";
+    //private static final String SUCCESS_MESSAGE = "JGoogleAnalytics: Tracking Successful!";
 
     private LoggingAdapter loggingAdapter = null;
 
@@ -64,7 +64,7 @@ public class HTTPGetMethod {
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 logError("JGoogleAnalytics: Error tracking, url=" + urlString);
             } else {
-                logMessage(SUCCESS_MESSAGE);
+                //logMessage(SUCCESS_MESSAGE);
             }
         } catch (Exception e) {
             logError(e.getMessage());

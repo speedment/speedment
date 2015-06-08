@@ -16,8 +16,6 @@
  */
 package com.speedment.core.lifecycle;
 
-import com.speedment.util.analytics.AnalyticsUtil;
-import static com.speedment.util.analytics.FocusPoint.APP_STARTED;
 import java.util.Objects;
 
 /**
@@ -75,9 +73,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
     }
 
     @Override
-    public T start() {
-        AnalyticsUtil.notify(APP_STARTED);
-		
+    public T start() {		
 		if (getState() == State.INIT) {
             // Automatically call init() for conveniency
             initialize();

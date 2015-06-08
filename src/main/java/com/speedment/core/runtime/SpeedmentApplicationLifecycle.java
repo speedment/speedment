@@ -16,6 +16,7 @@
  */
 package com.speedment.core.runtime;
 
+import com.speedment.core.code.model.java.MainGenerator;
 import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
@@ -31,6 +32,8 @@ import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
 import static com.speedment.util.Beans.beanPropertyName;
 import com.speedment.util.Trees;
+import com.speedment.util.analytics.AnalyticsUtil;
+import static com.speedment.util.analytics.FocusPoint.APP_STARTED;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -42,6 +45,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -49,6 +54,8 @@ import java.util.stream.Stream;
  * @param <T> The type of the Lifecycle
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
+
+    private final static Logger LOGGER = LogManager.getLogger(SpeedmentApplicationLifecycle.class);
 
     private String dbmsPassword;
     private final Map<String, String> dbmsPasswords;
@@ -181,6 +188,15 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     @Override
+    public T start() {
+        AnalyticsUtil.notify(APP_STARTED);
+        Package package_ = SpeedmentApplicationLifecycle.class.getPackage();
+        LOGGER.info(package_.getImplementationTitle() + " " + package_.getImplementationVersion() + " started.");
+        LOGGER.warn("This is a technology preview version that is NOT INTEDNED FOR PRODUCTION USE!");
+        return super.start();
+    }
+
+    @Override
     public String toString() {
         return super.toString() + ", path=" + getConfigPath().toString();
     }
@@ -206,7 +222,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     // Utilities
     protected void forEachManagerInSeparateThread(Consumer<Manager<?, ?, ?>> managerConsumer) {
         final ManagerComponent mc = Platform.get().get(ManagerComponent.class);
-        final List<Thread> threads = mc.stream().map(mgr -> new Thread(() -> managerConsumer.accept(mgr))).collect(toList());
+        final List<Thread> threads = mc.stream().map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName())).collect(toList());
         threads.forEach(t -> t.start());
         threads.forEach(t -> {
             try {
