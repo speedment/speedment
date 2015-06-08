@@ -34,7 +34,6 @@ import static com.speedment.gui.util.FadeAnimation.fadeIn;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
-import static com.speedment.gui.util.ProjectUtil.getDefaultLocation;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +43,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -121,9 +121,14 @@ public class SceneController implements Initializable {
     private Project project;
     private TablePropertyManager propertyMgr;
 
-    public SceneController(Stage stage, Project project) {
-        this.stage = stage;
-        this.project = project;
+    private SceneController(Stage stage, Project project) {
+        this (stage, project, null);
+    }
+    
+    private SceneController(Stage stage, Project project, File savedFile) {
+        this.stage     = stage;
+        this.project   = project;
+        this.savedFile = savedFile;
     }
 
     /**
@@ -164,7 +169,7 @@ public class SceneController implements Initializable {
 
         // Open project.
         final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
-            stage, getDefaultLocation(savedFile), (f, p) -> {
+            stage, (f, p) -> {
                 
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
@@ -261,8 +266,9 @@ public class SceneController implements Initializable {
         return savedFile;
     }
     
-    public void setLastSaved(File savedFile) {
+    public SceneController setLastSaved(File savedFile) {
         this.savedFile = savedFile;
+        return this;
     }
 
     private void populateTree(Project project) {
@@ -379,8 +385,8 @@ public class SceneController implements Initializable {
             }
         }
     }
-
-    public static void showIn(Stage stage, Project project) {
+    
+    public static SceneController showIn(Stage stage, Project project) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/Scene.fxml"));
         final SceneController control = new SceneController(stage, project);
         loader.setController(control);
@@ -397,6 +403,14 @@ public class SceneController implements Initializable {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        
+        return control;
+    }
+
+    public static SceneController showIn(Stage stage, Project project, File savedFile) {
+        return Optional.ofNullable(showIn(stage, project))
+            .map(sc -> sc.setLastSaved(savedFile))
+            .orElse(null);
     }
 
     private final StringBuilder outputBuffer = new StringBuilder();
