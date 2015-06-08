@@ -67,9 +67,7 @@ public class AboutController implements Initializable {
 			"\n" +
 			"Creative Commons 2.5:\n" +
 			"silk (1.3)\n" +
-			"\n" +
-			"BSD 3-clause license\n" +
-			"controlsfx (8.20.8)"
+			"\n" 
 		);
 	}
 	
