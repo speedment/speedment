@@ -90,18 +90,22 @@ Hare.stream()
 ```
  
 
-### Database centric
+Database centric
+----------------
 Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
-### Code generation
+Code generation
+---------------
 Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI) or programatically using your own code.
 
-### Development Status
+Development Status
+------------------
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product. 
 We will be adding new cool stuff like transactions, caching and support for more database types in coming releases.
 
----
-### Using Maven
+
+Using Maven
+-----------
 To use Speedment, just add the following lines to your project's `pom.xml` file.
 ```xml
 <dependency>
@@ -110,15 +114,16 @@ To use Speedment, just add the following lines to your project's `pom.xml` file.
     <version>${speedment.version}</version>
 </dependency>
 ```
-Remember that you must also add a JDBC dependency that matches the database(s) you are using.
 
 
-### License
+License
+-------
 
 Speedment is available under the Apache 2 License.
 
 
-### Copyright
+Copyright
+---------
 
 Copyright (c) 2008-2015, Speedment, Inc. All Rights Reserved.
 
