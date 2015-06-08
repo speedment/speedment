@@ -36,6 +36,7 @@ import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.runtime.typemapping.JavaTypeMapping;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -87,6 +88,29 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
             //                        .add("return entity;")) //TODO MUST BE FIXED!
             .add(defaultReadEntity(file));
     }
+    
+    private static enum Primitive {
+        BYTE("byte"), SHORT("short"), INT("int"), LONG("long"), FLOAT("float"),
+        DOUBLE("double"), BOOLEAN("boolean");
+        
+        private final String javaName;
+        
+        private Primitive(String javaName) {
+            this.javaName = javaName;
+        }
+        
+        public String getJavaName() {
+            return javaName;
+        }
+        
+        public static boolean isPrimitive(String typeName) {
+            return nameStream().anyMatch(typeName::equalsIgnoreCase);
+        }
+        
+        public static Stream<String> nameStream() {
+            return Stream.of(values()).map(Primitive::getJavaName);
+        }
+    }
 
     private Method defaultReadEntity(File file) {
 
@@ -108,18 +132,24 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
                 .append("builder.set")
                 .append(typeName(c))
                 .append("(");
-            if (c.isNullable()) {
-                sb
-                    .append("get")
-                    .append(mapping.getResultSetMethodName(dbms()))
-                    .append("(resultSet, ")
-                    .append("\"").append(c.getName()).append("\")");
-            } else {
+            
+            final String getterName = "get" + mapping.getResultSetMethodName(dbms());
+
+            if (Stream.of(ResultSet.class.getMethods())
+                .map(java.lang.reflect.Method::getName)
+                .anyMatch(getterName::equals)
+            &&  !c.isNullable()) {
                 sb
                     .append("resultSet.")
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
                     .append("(\"").append(c.getName()).append("\")");
+            } else {
+                sb
+                    .append("get")
+                    .append(mapping.getResultSetMethodName(dbms()))
+                    .append("(resultSet, ")
+                    .append("\"").append(c.getName()).append("\")");
             }
             sb.append(");");
             streamBuilder.add(sb.toString());
