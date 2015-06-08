@@ -136,8 +136,6 @@ public class SceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.propertyMgr = new TablePropertyManager(treeHierarchy);
 
-        // Show LOGGER output in the output area.
-        //GUIAppender.setup(SceneController.class, output.textProperty());
         populateTree(project);
         arrow.setOpacity(0);
 
@@ -156,7 +154,6 @@ public class SceneController implements Initializable {
 
         // New project.
         final EventHandler<ActionEvent> newProject = ev -> {
-            //LOGGER.info("Creating new project.");
             writeToLog("Creating new project.");
             final Stage newStage = new Stage();
             ProjectPromptController.showIn(newStage);
@@ -173,7 +170,6 @@ public class SceneController implements Initializable {
             treeHierarchy.setRoot(branch(p));
             project = p;
             writeToLog("Opened config file: " + savedFile);
-            //LOGGER.info("Opened config file: " + savedFile);
         });
 
         buttonOpen.setOnAction(openProject);
@@ -183,14 +179,12 @@ public class SceneController implements Initializable {
         mbSave.setOnAction(createSaveProjectHandler(this, f -> {
             savedFile = f;
             writeToLog("Saved config file: " + savedFile);
-            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Save application as
         mbSaveAs.setOnAction(createSaveAsProjectHandler(this, f -> {
             savedFile = f;
             writeToLog("Saved config file: " + savedFile);
-            //LOGGER.info("Saved config file: " + savedFile);
         }));
 
         // Help
@@ -203,9 +197,6 @@ public class SceneController implements Initializable {
             final Instant started = Instant.now();
             writeToLog("Generating classes " + project.getPackageName() + "." + project.getName() + ".*");
             writeToLog("Target directory is " + project.getPackageLocation());
-            
-            //LOGGER.info("Generating classes " + project.getPacketName() + "." + project.getName() + ".*");
-            //LOGGER.info("Target directory is " + project.getPacketLocation());
 
             final MainGenerator instance = new MainGenerator();
             
@@ -339,7 +330,6 @@ public class SceneController implements Initializable {
         propertiesContainer.getChildren().clear();
 
         properties.forEachOrdered(p -> {
-        //properties.collect(Collectors.toSet()).forEach(p -> {
             final HBox row = new TablePropertyRow<>(p);
             propertiesContainer.getChildren().add(row);
         });
@@ -358,15 +348,15 @@ public class SceneController implements Initializable {
             arrow.setEffect(glow);
 
             final KeyFrame kf0 = new KeyFrame(ZERO,
-                    new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
-                    new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
-                    new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
+                new KeyValue(arrow.translateXProperty(), 145, EASE_BOTH),
+                new KeyValue(arrow.translateYProperty(), -15, EASE_BOTH),
+                new KeyValue(glow.radiusProperty(), 32, EASE_BOTH)
             );
 
             final KeyFrame kf1 = new KeyFrame(millis(400),
-                    new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
-                    new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
-                    new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
+                new KeyValue(arrow.translateXProperty(), 135, EASE_BOTH),
+                new KeyValue(arrow.translateYProperty(), 5, EASE_BOTH),
+                new KeyValue(glow.radiusProperty(), 0, EASE_BOTH)
             );
 
             final Timeline tl = new Timeline(kf0, kf1);
@@ -382,7 +372,11 @@ public class SceneController implements Initializable {
     
     private void removeArrow() {
         if (arrowContainer.getChildren().contains(arrow)) {
-            FadeAnimation.fadeOut(arrow, e -> arrowContainer.getChildren().remove(arrow));
+            if (arrow.getOpacity() > 0) {
+                FadeAnimation.fadeOut(arrow, e -> arrowContainer.getChildren().remove(arrow));
+            } else {
+                arrowContainer.getChildren().remove(arrow);
+            }
         }
     }
 
