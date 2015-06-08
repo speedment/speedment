@@ -110,8 +110,11 @@ public final class ProjectUtil {
             .ifPresent(fileChooser::setInitialDirectory);
         
         File file = fileChooser.showSaveDialog(controller.getStage());
-
         if (file != null) {
+            if (!file.getName().endsWith(".groovy")) {
+                file = new File(file.getAbsolutePath() + ".groovy");
+            }
+            
             return saveGroovyFile(controller, file, fileConsumer);
         }
 
