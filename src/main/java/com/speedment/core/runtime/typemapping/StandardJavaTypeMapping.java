@@ -24,13 +24,11 @@ import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
-import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.RowId;
 import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,10 +52,8 @@ public enum StandardJavaTypeMapping implements JavaTypeMapping {
     FLOAT(Float.class, "Float", Float::parseFloat),
     DOUBLE(Double.class, "Double", Double::parseDouble),
     STRING(String.class, "String", Function.identity()),
-    DATE(Date.class, "Date", Date::valueOf),
-    TIME(Time.class, "Time", Time::valueOf),
-    TIMESTAMP(Timestamp.class, "Timestamp", Timestamp::valueOf),
-    BIG_DECIMAL(BigDecimal.class, "BigDecimal", s -> new BigDecimal(s)),
+    DATE(LocalDateTime.class, "LocalDateTime", LocalDateTime::parse),
+    BIG_DECIMAL(BigDecimal.class, "BigDecimal", BigDecimal::new),
     BLOB(Blob.class, "Blob", s -> unableToMap(Blob.class)),
     CLOB(Clob.class, "Clob", s -> unableToMap(Clob.class)),
     ARRAY(Array.class, "Array", s -> unableToMap(Array.class)),
