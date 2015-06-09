@@ -133,6 +133,12 @@ To use Speedment, just add the following lines (between the ... marker lines) to
 Make sure that you use the latest ${speedment.version} available.
 
 
+Requirements
+------------
+
+Speedment *will only work for Java 8 or later*. Make sure your IDE is using Java 8 as the default Java platform.
+Currently, Speedment only supports MySQL and MariaDB but support for more database types will come soon.
+
 License
 -------
 
