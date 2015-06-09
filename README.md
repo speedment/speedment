@@ -12,7 +12,7 @@ out of the box!
 
 Documentation
 -------------
-You can read a quick start about [the API here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
+You can read the [the API quick start here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
 
 Tutorials
 ---------
