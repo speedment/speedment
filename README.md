@@ -17,7 +17,8 @@ You can read a quick start about [the API here](https://github.com/speedment/spe
 Tutorials
 ---------
 * [Tutorial 1 - Get started with the GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI)
-* [Tutorial 2 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
+* [Tutorial 2 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
+* [Tutorial 3 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
 
 Examples
 --------
@@ -132,10 +133,16 @@ To use Speedment, just add the following lines (between the ... marker lines) to
 Make sure that you use the latest ${speedment.version} available.
 
 
+Requirements
+------------
+
+Speedment *will only work for Java 8 or later*. Make sure your IDE is using Java 8 as the default Java platform.
+Currently, Speedment only supports MySQL and MariaDB but support for more database types will come soon.
+
 License
 -------
 
-Speedment is available under the Apache 2 License.
+Speedment is available under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0).
 
 
 #### Copyright
