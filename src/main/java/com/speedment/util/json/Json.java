@@ -147,12 +147,22 @@ public final class Json<ENTITY> {
         
 		if (in instanceof Optional<?>) {
             final Optional<?> o = (Optional<?>) in;
-			value = o.map(v -> "\"" + String.valueOf(v) + "\"").orElse("null");
+            return o.map(Json::jsonValue).orElse("null");
 		} else {
             if (in == null) {
                 value = "null";
             } else {
-                value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
+                if (in instanceof Byte
+                ||  in instanceof Short
+                ||  in instanceof Integer
+                ||  in instanceof Long
+                ||  in instanceof Boolean
+                ||  in instanceof Float
+                ||  in instanceof Double) {
+                    value = String.valueOf(in);
+                } else {
+                    value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
+                }
             }
 		}
         
