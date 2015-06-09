@@ -27,7 +27,6 @@ import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import static com.speedment.gui.controllers.AlertController.showAlert;
-import static com.speedment.gui.util.ProjectUtil.getDefaultLocation;
 import com.speedment.util.Trees;
 import java.io.IOException;
 import java.net.URL;

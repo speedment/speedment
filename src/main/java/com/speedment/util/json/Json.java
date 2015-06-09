@@ -83,7 +83,7 @@ public final class Json<ENTITY> {
 	
 	// Label-and-getter pairs
 	public <T> Json<ENTITY> put(String label, Function<ENTITY, T> getter) {
-		getters.put(label, e -> "\"" + label + "\":\"" + jsonValue(getter.apply(e)) + "\"");
+		getters.put(label, e -> "\"" + label + "\":" + jsonValue(getter.apply(e)));
 		return this;
 	}
 	
@@ -144,13 +144,19 @@ public final class Json<ENTITY> {
 	
 	private static String jsonValue(Object in) {
 		final String value;
+        
 		if (in instanceof Optional<?>) {
             final Optional<?> o = (Optional<?>) in;
-			value = o.map(String::valueOf).orElse("null");
+			value = o.map(v -> "\"" + String.valueOf(v) + "\"").orElse("null");
 		} else {
-			value = String.valueOf(in);
+            if (in == null) {
+                value = "null";
+            } else {
+                value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
+            }
 		}
-		return value.replace("\"", "\\\"");
+        
+        return value;
 	}
 	
 	public static <PK, ENTITY, BUILDER extends Buildable<ENTITY>, MANAGER extends Manager<PK, ENTITY, BUILDER>> Json<ENTITY> allFrom(MANAGER manager) {
