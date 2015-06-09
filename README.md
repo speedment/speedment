@@ -101,7 +101,7 @@ Speedment inspects your database and can automatically generate code that reflec
 Development Status
 ------------------
 Speedment is still very early and we are currently moving in large blocks from the existing closed source product. 
-We will be adding new cool stuff like transactions, caching and support for more database types in coming releases.
+We will be adding new cool stuff like transactions, caching and support for more database types in coming releases. We will also add JavaDocs that are missing in the current release.
 
 
 Using Maven
