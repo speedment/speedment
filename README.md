@@ -3,14 +3,12 @@ Wrap your database into Java 8!
 
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<div style="float: right">
-  <img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x205.png" alt="Spire the Hare" title="Spire"/>
-</div>
-
-Speedment accelerates your development speed and makes programming so easy and fun!
+<p>
+<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x205.png" alt="Spire the Hare" title="Spire" align="right" /><span>Speedment accelerates your development speed and makes programming so easy and fun!</span>
 
 When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is *standard Java 8* and works 
 out of the box!
+</p>
 
 Documentation
 -------------
