@@ -53,12 +53,12 @@ Optional<Hare> dbHarry = Hare.builder()
 The `.persist()` method above is just a convenience delegator short-cut for the following:
 
 ```java
-// The EntityManager is still responsible for persistence
 Hare harry = Hare.builder()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3);
 
+// The EntityManager is still responsible for persistence
 Optional<Hare> dbHarry = EntityManager.get().persist(harry);
 ```
 
