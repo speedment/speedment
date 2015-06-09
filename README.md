@@ -136,7 +136,7 @@ Make sure that you use the latest ${speedment.version} available.
 License
 -------
 
-Speedment is available under the Apache 2 License.
+Speedment is available under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0).
 
 
 #### Copyright
