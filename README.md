@@ -1,6 +1,6 @@
 Wrap your database into Java 8!
 ==========================================
-![Spire the Hare](http://www.speedment.com/images/Speedhare_240x205.png)
+![Spire the Hare](https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x205.png)
 
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -8,12 +8,12 @@ About
 -----
 Speedment accelerates your development speed and makes programming so easy and fun!
 
-When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is standard Java 8 and works 
+When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is *standard Java 8* and works 
 out of the box!
 
 Documentation
 -------------
-You can read about [the API here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
+You can read a quick start about [the API here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
 
 Tutorials
 ---------
@@ -24,14 +24,7 @@ Examples
 --------
 Here are a few examples of how you could use Speedment from your code:
 
-### Easy initialization
-```java
-// A configuration-class is generated from the database.
-new HelloSpeedment().configureDbmsPassword("myPwd729").start();
-```
-Because Speedment cares about your passwords, secret stuff are never stored elsewhere and thus needs to be set manually.
-
-### Easy querying using standard Java 8 predicates
+###### Easy querying using standard Java 8 predicates
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
 List<Hare> oldHares = Hare.stream()
@@ -39,15 +32,15 @@ List<Hare> oldHares = Hare.stream()
     .collect(toList());
 ```
 
-### Optimised predicate short-circuit
+###### Optimised predicate short-circuit
 ```java
-// Searches are optimised in the background!
+// Searches are optimized in the background!
 Optional<Hare> harry = Hare.stream()
     .filter(NAME.equal("Harry").and(AGE.lessThan(5)))
     .findAny();
 ```
 
-### Easy persistence
+###### Easy persistence
 ```java
 // A Builder-pattern can be used to create an entity in a database
 // using the "Active Record Pattern"
@@ -58,7 +51,7 @@ Optional<Hare> dbHarry = Hare.builder()
     .persist();
 ```
 
-The `.persist()` method above is just a convenience deligator short-cut for the following:
+The `.persist()` method above is just a convenience delegator short-cut for the following:
 
 ```java
 // The EntityManager is still responsible for persistence
@@ -71,7 +64,7 @@ Optional<Hare> dbHarry = EntityManager.get().persist(harry);
 ```
 
     
-### Entities are linked
+###### Entities are linked
 ```java
 // Different tables form a traversable graph in memory. No need for joins!
 Optional<Carrot> carrot = Hare.stream()
@@ -81,12 +74,19 @@ Optional<Carrot> carrot = Hare.stream()
 ```
     
    
-### Convert to JSON
+###### Convert to JSON
 ```java
 // List all hares in JSON format
 Hare.stream()
     .map(Hare::toJson)
     .forEach(System.out::println);
+```
+
+
+###### Easy initialization
+```java
+// A configuration-class is generated from the database.
+new HareApplication().start();
 ```
  
 
