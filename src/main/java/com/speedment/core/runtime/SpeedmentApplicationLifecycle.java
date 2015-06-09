@@ -16,7 +16,6 @@
  */
 package com.speedment.core.runtime;
 
-import com.speedment.core.code.model.java.MainGenerator;
 import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
@@ -77,7 +76,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param password the password to use for all dbms:es in this project.
      * @return this instance
      */
-    public T configureDbmsPassword(final String password) {
+    public T withPassword(final String password) {
         dbmsPassword = password;
         return self();
     }
@@ -91,7 +90,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param password the password to use for the named dbms.
      * @return this instance
      */
-    public T configureDbmsPassword(final String dbmsName, final String password) {
+    public T withPassword(final String dbmsName, final String password) {
         dbmsPasswords.put(dbmsName, password);
         return self();
     }
