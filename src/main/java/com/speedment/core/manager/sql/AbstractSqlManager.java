@@ -30,6 +30,8 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
+import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.util.LongUtil;
 import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
@@ -129,16 +131,17 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
 
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = b -> {
+        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
                     table.streamOf(Column.class)
                         .filter(Column::isAutoincrement)
-                        .forEachOrdered(c -> {
-                            System.out.println("COLUMN:" + c);
-                            set(b, c, l.get(cnt.getAndIncrement()));
+                        .forEachOrdered(column -> {
+                            // Cast from Long to the column target type
+                            final Object val = StandardJavaTypeMapping.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
+                            set(builder, column, val);
                         });
                 }
             };
