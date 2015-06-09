@@ -6,7 +6,7 @@ Wrap your database into Java 8!
 <p>
 <img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x205.png" alt="Spire the Hare" title="Spire" align="right" /><span>Speedment accelerates your development speed and makes programming so easy and fun!</span>
 
-When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is *standard Java 8* and works 
+When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is <strong>standard Java 8</strong> and works 
 out of the box!
 </p>
 
