@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 
 /**
  *
@@ -45,6 +45,15 @@ public class DefaultDependencyManager implements DependencyManager {
 		ignorePackages = new HashSet<>();
 		ignorePackages.add(ignoredPackage);
 	}
+    
+    /**
+	 * Initalises the DependencyManager.
+	 * @param ignoredPackages Packages that should be ignored.
+	 */
+	public DefaultDependencyManager(String[] ignoredPackages) {
+		ignorePackages = Arrays.stream(ignoredPackages)
+			.collect(Collectors.toSet());
+	}
 	
 	/**
 	 * Initalises the DependencyManager.
@@ -52,8 +61,7 @@ public class DefaultDependencyManager implements DependencyManager {
 	 * @param ignoredPackages More packages that should be on the ignore list.
 	 */
 	public DefaultDependencyManager(String ignoredPackage, String... ignoredPackages) {
-		ignorePackages = Arrays.stream(ignoredPackages)
-			.collect(Collectors.toSet());
+		this (ignoredPackages);
 		ignorePackages.add(ignoredPackage);
 	}
 

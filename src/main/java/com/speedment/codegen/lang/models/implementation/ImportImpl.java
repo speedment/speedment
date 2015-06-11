@@ -32,10 +32,12 @@ import java.util.Set;
 public class ImportImpl implements Import {
 	
 	private Type type;
+    private String staticMember;
 	private final Set<Modifier> modifiers;
 
 	public ImportImpl(Type type) {
 		this.type = type;
+        this.staticMember = null;
 		this.modifiers = EnumSet.noneOf(Modifier.class);
 	}
 	
@@ -59,6 +61,17 @@ public class ImportImpl implements Import {
 	public Set<Modifier> getModifiers() {
 		return this.modifiers;
 	}
+    
+    @Override
+    public Optional<String> getStaticMember() {
+        return Optional.ofNullable(staticMember);
+    }
+
+    @Override
+    public Import setStaticMember(String member) {
+        staticMember = member;
+        return this;
+    }
 
 	@Override
 	public ImportImpl copy() {

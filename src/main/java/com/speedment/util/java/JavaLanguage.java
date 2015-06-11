@@ -16,7 +16,7 @@
  */
 package com.speedment.util.java;
 
-import static com.speedment.codegen.Formatting.ucfirst;
+import static com.speedment.codegen.util.Formatting.ucfirst;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
@@ -141,6 +141,10 @@ public class JavaLanguage {
 
     public static String javaVariableName(final String externalName) {
         return javaName(externalName, Character::toLowerCase);
+    }
+    
+    public static String javaStaticFieldName(final String externalName) {
+        return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
     }
 
     private static String javaName(final String externalName, Function<Character, Character> mutator) {

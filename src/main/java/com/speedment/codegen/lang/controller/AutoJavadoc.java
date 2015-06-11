@@ -16,13 +16,13 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.lang.interfaces.Classable;
-import com.speedment.codegen.lang.interfaces.Constructable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Methodable;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.lang.interfaces.HasClasses;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasMethods;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.JavadocTag;
@@ -35,9 +35,9 @@ import java.util.function.Consumer;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
-public class AutoJavadoc<T extends Documentable<?>> implements Consumer<T> {
+public class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 	private final static String 
 			DEFAULT_TEXT = "Write some documentation here.",
 			DEFAULT_NAME = "Your Name";
@@ -47,13 +47,13 @@ public class AutoJavadoc<T extends Documentable<?>> implements Consumer<T> {
 		createJavadoc(model);
     }
 	
-	private static <T extends Documentable<?>> T createJavadoc(T model) {
+	private static <T extends HasJavadoc<?>> T createJavadoc(T model) {
 		final Javadoc doc = model.getJavadoc().orElse(Javadoc.of(DEFAULT_TEXT));
 		model.set(doc);
 
-		if (model instanceof Generable) {
+		if (model instanceof HasGenerics) {
             // Add @param for each type variable.
-			((Generable<?>) model).getGenerics().forEach(g -> 
+			((HasGenerics<?>) model).getGenerics().forEach(g -> 
 				g.getLowerBound().ifPresent(t -> addTag(doc, 
 					PARAM.setValue(SS + t + SE)
 				))
@@ -65,33 +65,35 @@ public class AutoJavadoc<T extends Documentable<?>> implements Consumer<T> {
 			doc.add(AUTHOR.setValue(DEFAULT_NAME));
 		} else {
 			// Add @param for each parameter.
-			if (model instanceof Fieldable) {
-				((Fieldable<?>) model).getFields().forEach(f -> 
+			if (model instanceof HasFields) {
+				((HasFields<?>) model).getFields().forEach(f -> 
 					addTag(doc, PARAM.setValue(f.getName()))
 				);
 			}
 		}
 
 		if (model instanceof Method) {
-            // Add @return to methods.
-			addTag(doc, RETURN);
+            if (!"void".equals(((Method) model).getType().getName())) {
+                // Add @return to methods.
+                addTag(doc, RETURN);
+            }
 		}
 		
-		if (model instanceof Constructable) {
+		if (model instanceof HasConstructors) {
             // Generate javadoc for each constructor.
-			((Constructable<?>) model).getConstructors()
+			((HasConstructors<?>) model).getConstructors()
 				.forEach(m -> createJavadoc(m));
 		}
 
-		if (model instanceof Methodable) {
+		if (model instanceof HasMethods) {
             // Generate javadoc for each method.
-			((Methodable<?>) model).getMethods()
+			((HasMethods<?>) model).getMethods()
 				.forEach(m -> createJavadoc(m));
 		}
         
-        if (model instanceof Classable) {
+        if (model instanceof HasClasses) {
             // Generate javadoc for each subclass.
-            ((Classable<?>) model).getClasses()
+            ((HasClasses<?>) model).getClasses()
                 .forEach(m -> createJavadoc(m));
         }
 		

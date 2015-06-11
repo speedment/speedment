@@ -16,8 +16,8 @@
  */
 package com.speedment.codegen.java.views.values;
 
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.values.BooleanValue;
 import java.util.Optional;
 
@@ -25,9 +25,10 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class BooleanValueView implements CodeView<BooleanValue> {
+public class BooleanValueView implements Transform<BooleanValue, String> {
+    
 	@Override
-	public Optional<String> render(CodeGenerator cg, BooleanValue model) {
+	public Optional<String> transform(Generator cg, BooleanValue model) {
 		return Optional.of(model.getValue().toString());
 	}
 }

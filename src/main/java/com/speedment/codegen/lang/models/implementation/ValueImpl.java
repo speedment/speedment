@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  *
  * @author Emil Forslund
- * @param <V>
+ * @param <V> The extending type
  */
 public abstract class ValueImpl<V> implements Value<V> {
 	private V value;

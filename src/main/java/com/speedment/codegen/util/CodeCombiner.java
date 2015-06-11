@@ -16,7 +16,7 @@
  */
 package com.speedment.codegen.util;
 
-import static com.speedment.codegen.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.EMPTY;
 import java.util.stream.Collector;
 import java.util.Collections;
 import java.util.Optional;

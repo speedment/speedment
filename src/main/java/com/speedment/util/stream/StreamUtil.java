@@ -21,6 +21,7 @@
  */
 package com.speedment.util.stream;
 
+import com.speedment.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -72,15 +73,9 @@ public class StreamUtil {
         @Override
         public boolean hasNext() {
             try {
-                boolean hasNext = resultSet.next();
-                if (!hasNext) {
-                    // When we are ready. Close the resultSet...
-                    // Todo: We must be able to close the resultSet if a stream is not read to the end
-                    resultSet.close();
-                }
-                return hasNext;
+                return resultSet.next();
             } catch (SQLException sqle) {
-                return false;
+                throw new SpeedmentException("Error iterating over a ResultSet", sqle);
             }
         }
 

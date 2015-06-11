@@ -20,6 +20,7 @@ import com.speedment.codegen.lang.models.AnnotationUsage;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.modifiers.Modifier;
 import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ConstructorImpl implements Constructor {
 	private final List<Field> params;
 	private final List<String> code;
 	private final Set<Modifier> modifiers;
+    private final Set<Type> exceptions;
 	
 	public ConstructorImpl() {
 		javadoc		= null;
@@ -48,6 +50,7 @@ public class ConstructorImpl implements Constructor {
 		params		= new ArrayList<>();
 		code		= new ArrayList<>();
 		modifiers	= new HashSet<>();
+        exceptions  = new HashSet<>();
 	}
 	
 	protected ConstructorImpl(final Constructor prototype) {
@@ -56,6 +59,7 @@ public class ConstructorImpl implements Constructor {
 		params		= Copier.copy(prototype.getFields());
 		code		= Copier.copy(prototype.getCode(), c -> c);
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        exceptions  = Copier.copy(prototype.getExceptions());
 	}
 
 	@Override
@@ -90,6 +94,11 @@ public class ConstructorImpl implements Constructor {
 	}
     
     @Override
+    public Set<Type> getExceptions() {
+        return exceptions;
+    }
+    
+    @Override
 	public ConstructorImpl copy() {
 		return new ConstructorImpl(this);
 	}
@@ -116,6 +125,7 @@ public class ConstructorImpl implements Constructor {
             .filter(o -> Objects.equals(getFields(), o.getFields()))
             .filter(o -> Objects.equals(getCode(), o.getCode()))
             .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
+            .filter(o -> Objects.equals(getExceptions(), o.getExceptions()))
             .isPresent();
     }
 }

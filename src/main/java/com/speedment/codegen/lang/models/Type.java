@@ -16,10 +16,10 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Generable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.implementation.TypeImpl;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Type extends Copyable<Type>, Nameable<Type>, Generable<Type>, Annotable<Type> {
+public interface Type extends Copyable<Type>, HasName<Type>, HasGenerics<Type>, HasAnnotationUsage<Type> {
     Type setJavaImpl(java.lang.Class<?> javaImpl);
     Optional<java.lang.Class<?>> getJavaImpl();
     Type setArrayDimension(int arrayDimension);

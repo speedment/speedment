@@ -16,17 +16,17 @@
  */
 package com.speedment.codegen.java.views;
 
-import static com.speedment.codegen.Formatting.COMMA_SPACE;
-import static com.speedment.codegen.Formatting.EMPTY;
-import static com.speedment.codegen.Formatting.PE;
-import static com.speedment.codegen.Formatting.PS;
-import static com.speedment.codegen.Formatting.SC;
-import static com.speedment.codegen.Formatting.SPACE;
-import static com.speedment.codegen.Formatting.block;
-import static com.speedment.codegen.Formatting.ifelse;
-import static com.speedment.codegen.Formatting.nl;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
+import static com.speedment.codegen.util.Formatting.COMMA_SPACE;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import static com.speedment.codegen.util.Formatting.PE;
+import static com.speedment.codegen.util.Formatting.PS;
+import static com.speedment.codegen.util.Formatting.SC;
+import static com.speedment.codegen.util.Formatting.SPACE;
+import static com.speedment.codegen.util.Formatting.block;
+import static com.speedment.codegen.util.Formatting.ifelse;
+import static com.speedment.codegen.util.Formatting.nl;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.InterfaceMethod;
 import static com.speedment.codegen.lang.models.modifiers.Modifier.*;
 import com.speedment.codegen.util.CodeCombiner;
@@ -37,9 +37,12 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  */
-public class InterfaceMethodView implements CodeView<InterfaceMethod> {
+public class InterfaceMethodView implements Transform<InterfaceMethod, String> {
+    
+    private final static String THROWS = " throws ";
+    
 	@Override
-	public Optional<String> render(CodeGenerator cg, InterfaceMethod model) {
+	public Optional<String> transform(Generator cg, InterfaceMethod model) {
 		return Optional.of(ifelse(cg.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
             
             cg.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
@@ -53,6 +56,8 @@ public class InterfaceMethodView implements CodeView<InterfaceMethod> {
 			cg.onEach(model.getFields()).collect(
 				Collectors.joining(COMMA_SPACE, PS, PE)
 			) +
+            
+            cg.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, EMPTY)) +
 					
 			// Append body only if it is either default or static.
 			(model.getModifiers().contains(DEFAULT) 

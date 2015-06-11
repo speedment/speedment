@@ -17,29 +17,29 @@
 package com.speedment.codegen.java.views;
 
 import com.speedment.codegen.util.CodeCombiner;
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Import;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Type;
-import java.util.List;
 
 /**
  *
  * @author Emil Forslund
  */
-public class ImportView implements CodeView<Import> {
+public class ImportView implements Transform<Import, String> {
 	private final static String IMPORT_STRING = "import ";
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, Import model) {
+	public Optional<String> transform(Generator cg, Import model) {
 		if (shouldImport(cg, model.getType())) {
 			return Optional.of(
 				IMPORT_STRING +
 				cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
 				model.getType().getName() +
+                model.getStaticMember().map(str -> DOT + str).orElse(EMPTY) +
 				SC
 			).filter(x -> {
 				cg.getDependencyMgr().load(model.getType().getName());
@@ -48,21 +48,14 @@ public class ImportView implements CodeView<Import> {
 		} else return Optional.empty();
 	}
 	
-	private boolean shouldImport(CodeGenerator cg, Type type) {
-		final List<Object> stack = cg.getRenderStack();
-		if (stack.size() >= 2) {
-			final Object parent = stack.get(0);
-			if (parent instanceof File) {
-				final Optional<String> name = fileToClassName(((File) parent).getName());
-				if (name.isPresent()) {
-					final Optional<String> pack = packageName(name.get());
-					return !(pack.isPresent() && type.getName().startsWith(pack.get() + DOT));
-				}
-			} else {
-				throw new UnsupportedOperationException("Import is at the wrong location in the model hierarchy.");
-			}
-		}
-		
-		return false;
+	private boolean shouldImport(Generator cg, Type type) {
+        return cg.getRenderStack().fromBottom(File.class)
+            .map(f -> fileToClassName(f.getName()))
+            .filter(f -> f.isPresent())
+            .map(f -> f.get())
+            .filter(n -> {
+                final Optional<String> pack = packageName(n);
+                return !(pack.isPresent() && type.getName().startsWith(pack.get() + DOT));
+            }).findAny().isPresent();
 	}
 }

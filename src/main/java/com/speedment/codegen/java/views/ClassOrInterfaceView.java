@@ -16,23 +16,22 @@
  */
 package com.speedment.codegen.java.views;
 
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.base.CodeView;
-import com.speedment.codegen.java.views.interfaces.AnnotableView;
-import com.speedment.codegen.java.views.interfaces.ClassableView;
-import com.speedment.codegen.java.views.interfaces.DocumentableView;
-import com.speedment.codegen.java.views.interfaces.GenerableView;
-import com.speedment.codegen.java.views.interfaces.InitalizableView;
-import com.speedment.codegen.java.views.interfaces.InterfaceableView;
-import com.speedment.codegen.java.views.interfaces.MethodableView;
-import com.speedment.codegen.java.views.interfaces.ModifiableView;
-import com.speedment.codegen.java.views.interfaces.NameableView;
-import com.speedment.codegen.lang.interfaces.Constructable;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.java.views.interfaces.HasAnnotationUsageView;
+import com.speedment.codegen.java.views.interfaces.HasClassesView;
+import com.speedment.codegen.java.views.interfaces.HasFieldsView;
+import com.speedment.codegen.java.views.interfaces.HasJavadocView;
+import com.speedment.codegen.java.views.interfaces.HasGenericsView;
+import com.speedment.codegen.java.views.interfaces.HasInitalizersView;
+import com.speedment.codegen.java.views.interfaces.HasImplementsView;
+import com.speedment.codegen.java.views.interfaces.HasMethodsView;
+import com.speedment.codegen.java.views.interfaces.HasModifiersView;
+import com.speedment.codegen.java.views.interfaces.HasNameView;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.Field;
 import java.util.Optional;
-import static com.speedment.codegen.util.CodeCombiner.*;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,12 +41,12 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
- * @param <M>
+ * @param <M> The extending type
  */
 public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements 
-    CodeView<M>, NameableView<M>, ModifiableView<M>, DocumentableView<M>, 
-    GenerableView<M>, InterfaceableView<M>, InitalizableView<M>, MethodableView<M>,
-    ClassableView<M>, AnnotableView<M> {
+    Transform<M, String>, HasNameView<M>, HasModifiersView<M>, HasJavadocView<M>, 
+    HasGenericsView<M>, HasImplementsView<M>, HasInitalizersView<M>, HasMethodsView<M>,
+    HasClassesView<M>, HasAnnotationUsageView<M>, HasFieldsView<M> {
     
 	protected final static String
 		CLASS_STRING = "class ",
@@ -56,50 +55,50 @@ public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implem
 		IMPLEMENTS_STRING = "implements ",
 		EXTENDS_STRING = "extends ";
 
-	protected String onBeforeFields(CodeGenerator cg, M model) {
+	protected String onBeforeFields(Generator cg, M model) {
 		return EMPTY;
 	}
 	
 	protected Object wrapField(Field field) {return field;}
 
-	protected String onAfterFields(CodeGenerator cg, M model) {
-		if (model instanceof Constructable) {
-			return cg.onEach(
-				((Constructable<?>) model).getConstructors()
-			).collect(Collectors.joining(dnl()));
-		} else {
-			return EMPTY;
-		}
-	}
-	
     @Override
 	public <In, C extends Collection<In>> Collection<Object> 
 		wrap(C models, Function<In, Object> wrapper) {
 		return models.stream().map(wrapper).collect(Collectors.toList());
 	}
+
+    @Override
+    public String fieldSeparator() {
+        return nl();
+    }
+
+    @Override
+    public String fieldSuffix() {
+        return SC;
+    }
 	
     protected abstract String renderDeclarationType();
-	protected abstract String renderSuperType(CodeGenerator cg, M model);
-
+	protected abstract String renderSupertype(Generator cg, M model);
+    protected abstract String renderConstructors(Generator cg, M model);
+    
 	@Override
-	public Optional<String> render(CodeGenerator cg, M model) {
-		return Optional.of(
-			renderJavadoc(cg, model) +
+	public Optional<String> transform(Generator cg, M model) {
+		return Optional.of(renderJavadoc(cg, model) +
             renderAnnotations(cg, model) +
 			renderModifiers(cg, model) +
             renderDeclarationType() + 
             renderName(cg, model) + 
             renderGenerics(cg, model) +
-            renderSuperType(cg, model) +
+            renderSupertype(cg, model) +
 			renderInterfaces(cg, model) +
                 
             // Code
-			block(nl() + separate(
-                // Fields
+            block(nl() + separate(
 				onBeforeFields(cg, model), // Enums have constants here.
-				cg.onEach(wrap(model.getFields(), f -> wrapField(f)))
-					.collect(joinIfNotEmpty(scnl(), EMPTY, SC)),
-				onAfterFields(cg, model),
+//				cg.onEach(wrap(model.getFields(), f -> wrapField(f)))
+//					.collect(joinIfNotEmpty(scnl(), EMPTY, SC)),
+                renderFields(cg, model),
+				renderConstructors(cg, model),
                 renderInitalizers(cg, model),
 				renderMethods(cg, model),
 				renderClasses(cg, model)

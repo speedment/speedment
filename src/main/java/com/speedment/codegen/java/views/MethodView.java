@@ -16,11 +16,11 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.util.CodeCombiner;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,10 +28,12 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  */
-public class MethodView implements CodeView<Method> {
+public class MethodView implements Transform<Method, String> {
+    
+    private final static String THROWS = "throws ";
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, Method model) {
+	public Optional<String> transform(Generator cg, Method model) {
 		return Optional.of(
 			ifelse(cg.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
 			cg.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
@@ -41,7 +43,9 @@ public class MethodView implements CodeView<Method> {
 			model.getName() +
 			cg.onEach(model.getFields()).collect(
 				Collectors.joining(COMMA_SPACE, PS, PE)
-			) + SPACE + block(
+			) + SPACE + 
+            cg.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
+            block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())
 				)

@@ -1,4 +1,5 @@
 /target/
+/.sonar
 /nb-configuration.xml
+/sonar-project.properties
 *~
-

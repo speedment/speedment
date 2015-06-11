@@ -16,19 +16,20 @@
  */
 package com.speedment.codegen.java.views.values;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.values.EnumValue;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 
 /**
  *
  * @author Emil Forslund
  */
-public class EnumValueView implements CodeView<EnumValue> {
+public class EnumValueView implements Transform<EnumValue, String> {
+    
 	@Override
-	public Optional<String> render(CodeGenerator cg, EnumValue model) {
+	public Optional<String> transform(Generator cg, EnumValue model) {
 		return Optional.of(
 			cg.on(model.getType()).orElse(EMPTY) + DOT +
 			model.getValue()

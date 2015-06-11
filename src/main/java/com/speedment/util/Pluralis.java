@@ -71,7 +71,7 @@ public enum Pluralis {
     /**
      * Returns a plural version in normalized form of the given word.
      *
-     * @param word
+     * @param word the given singularis word
      * @return a plural version in normalized form of the given word
      */
     public String pluralize(String word) {
@@ -96,10 +96,10 @@ public enum Pluralis {
     }
 
     /**
-     * Returns a textual representation of an ordinal. 1 -> 1st, 2 -> 2nd, 101
-     * -> 101st, 111 -> 111th
+     * Returns a textual representation of an ordinal. 1 = 1st, 2 = 2nd, 101
+     * = 101st, 111 = 111th
      *
-     * @param number
+     * @param number the ordinal number
      * @return a textual representation of an ordinal
      */
     public String ordinalize(final int number) {
@@ -122,7 +122,7 @@ public enum Pluralis {
     /**
      * Returns if the provided word is considered as an uncountable.
      *
-     * @param word
+     * @param word to check
      * @return if the provided word is considered as an uncountable
      */
     public boolean isUncountable(String word) {

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  * @author Emil Forslund
  */
 public interface Wrappable {
+    
     default <In, C extends Collection<In>> Collection<Object> 
 		wrap(C models, Function<In, Object> wrapper) {
 		return models.stream().map(wrapper).collect(Collectors.toList());

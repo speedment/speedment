@@ -26,6 +26,7 @@ import com.speedment.codegen.lang.models.modifiers.Modifier;
 import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +46,7 @@ public class MethodImpl implements Method {
 	private final List<Field> params;
 	private final List<String> code;
 	private final Set<Modifier> modifiers;
+    private final Set<Type> exceptions;
 	
 	public MethodImpl(String name, Type type) {
 		this.name			= name;
@@ -55,6 +57,7 @@ public class MethodImpl implements Method {
 		this.params			= new ArrayList<>();
 		this.code			= new ArrayList<>();
 		this.modifiers		= EnumSet.noneOf(Modifier.class);
+        this.exceptions     = new HashSet<>();
 	}
 	
 	protected MethodImpl(final Method prototype) {
@@ -66,6 +69,7 @@ public class MethodImpl implements Method {
 		params		= Copier.copy(prototype.getFields());
 		code		= Copier.copy(prototype.getCode(), s -> s);
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        exceptions  = Copier.copy(prototype.getExceptions());
 	}
 
 	@Override
@@ -127,6 +131,11 @@ public class MethodImpl implements Method {
 	}
     
     @Override
+    public Set<Type> getExceptions() {
+        return exceptions;
+    }
+    
+    @Override
 	public MethodImpl copy() {
 		return new MethodImpl(this);
 	}
@@ -142,6 +151,7 @@ public class MethodImpl implements Method {
         hash = 19 * hash + Objects.hashCode(this.params);
         hash = 19 * hash + Objects.hashCode(this.code);
         hash = 19 * hash + Objects.hashCode(this.modifiers);
+        hash = 19 * hash + Objects.hashCode(this.exceptions);
         return hash;
     }
 
@@ -159,6 +169,7 @@ public class MethodImpl implements Method {
             .filter(o -> Objects.equals(getFields(), o.getFields()))
             .filter(o -> Objects.equals(getCode(), o.getCode()))
             .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
+            .filter(o -> Objects.equals(getExceptions(), o.getExceptions()))
             .isPresent();
     }
 }

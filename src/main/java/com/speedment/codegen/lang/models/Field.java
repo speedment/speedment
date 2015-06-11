@@ -16,13 +16,13 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Callable;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Nameable;
-import com.speedment.codegen.lang.interfaces.Typeable;
-import com.speedment.codegen.lang.interfaces.Valuable;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.lang.interfaces.HasValue;
 import com.speedment.codegen.lang.models.implementation.FieldImpl;
 import com.speedment.codegen.lang.models.modifiers.FieldModifier;
 import java.util.function.Supplier;
@@ -31,8 +31,8 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Field extends Copyable<Field>, Callable<Field>, Nameable<Field>, 
-    Typeable<Field>, Documentable<Field>, Valuable<Field>, Annotable<Field>, 
+public interface Field extends Copyable<Field>, Callable<Field>, HasName<Field>, 
+    HasType<Field>, HasJavadoc<Field>, HasValue<Field>, HasAnnotationUsage<Field>, 
     FieldModifier<Field> {
 
     enum Factory { INST;

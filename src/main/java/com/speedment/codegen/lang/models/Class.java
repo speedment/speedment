@@ -16,14 +16,14 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Constructable;
-import com.speedment.codegen.lang.interfaces.Supertypeable;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
+import com.speedment.codegen.lang.interfaces.HasSupertype;
 import com.speedment.codegen.lang.models.implementation.ClassImpl;
 import com.speedment.codegen.lang.models.modifiers.ClassModifier;
 import java.util.function.Supplier;
 
-public interface Class extends ClassOrInterface<Class>, Constructable<Class>, 
-    Supertypeable<Class>, ClassModifier<Class> {
+public interface Class extends ClassOrInterface<Class>, HasConstructors<Class>, 
+    HasSupertype<Class>, ClassModifier<Class> {
 
     enum Factory { INST;
         private Supplier<Class> supplier = () -> new ClassImpl(null);

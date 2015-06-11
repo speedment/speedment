@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+
+    Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License"); You may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+
+-->
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="arrowContainer" prefHeight="555.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <center>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="38.0" prefWidth="905.0" spacing="16.0" style="-fx-background-color: #eee;">
+                     <children>
+                        <Button fx:id="buttonNew" alignment="CENTER" mnemonicParsing="false" text="New" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets left="16.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="buttonOpen" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Open" textAlignment="CENTER">
+                           <padding>
+                              <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
+                           </padding></Button>
+                        <Button fx:id="buttonGenerate" alignment="CENTER" defaultButton="true" layoutX="50.0" layoutY="10.0" mnemonicParsing="false" text="Generate" textAlignment="CENTER">
+                           <padding>
+                              <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
+                           </padding></Button>
+                        <Pane maxWidth="1.7976931348623157E308" prefHeight="200.0" HBox.hgrow="ALWAYS" />
+                        <ImageView fx:id="logo" fitHeight="48.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/logo.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="16.0" />
+                           </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                  </HBox>
+                  <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <items>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+                           <items>
+                              <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" text="Node hierarchy">
+                                <content>
+                                    <TreeView fx:id="treeHierarchy" layoutX="58.0" layoutY="66.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" collapsible="false" maxWidth="1.7976931348623157E308" minHeight="48.0" text="Project settings" SplitPane.resizableWithParent="false">
+                                <content>
+                                    <TableView fx:id="tableProjectSettings" editable="true" layoutX="10.0" layoutY="-20.0" prefHeight="200.0" prefWidth="200.0">
+                                      <columns>
+                                        <TableColumn editable="false" prefWidth="117.0" text="Property" />
+                                        <TableColumn prefWidth="102.0" text="Value" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                </content>
+                              </TitledPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.7" layoutX="216.0" layoutY="105.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                          <items>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefViewportHeight="342.0" prefViewportWidth="631.0">
+                                 <content>
+                                    <VBox fx:id="propertiesContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="12.0">
+                                       <padding>
+                                          <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="216.0" layoutY="-19.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                                <content>
+                                    <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Output">
+                                       <content>
+                                          <javafx.scene.web.WebView fx:id="output" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                                          
+                                          </javafx.scene.web.WebView>
+                                       </content>
+                                    </TitledPane>
+                                </content>
+                              </ScrollPane>
+                          </items>
+                        </SplitPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </VBox>
+         </center>
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem fx:id="mbNew" mnemonicParsing="false" text="New project...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mbOpen" mnemonicParsing="false" text="Open...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mbSave" mnemonicParsing="false" text="Save">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="mbSaveAs" mnemonicParsing="false" text="Save as...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mbQuit" mnemonicParsing="false" text="Quit">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                  </items>
+                </Menu>
+                  <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
+                     <items>
+                        <MenuItem fx:id="mbGenerate" mnemonicParsing="false" text="Generate">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="G" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                     </items>
+                  </Menu>
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />
+                        <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+      </BorderPane>
+      <Label fx:id="arrow" rotate="290.0" text="➙" textFill="#48adffb2" translateX="80.0" translateY="5.0" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font size="150.0" />
+         </font>
+         <effect>
+            <DropShadow color="AQUA" height="20.0" radius="9.5" width="20.0" />
+         </effect>
+         <padding>
+            <Insets right="64.0" />
+         </padding>
+      </Label>
+   </children>
+</StackPane>

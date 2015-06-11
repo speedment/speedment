@@ -16,10 +16,10 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import com.speedment.codegen.Formatting;
+import com.speedment.codegen.util.Formatting;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Method;
-import static com.speedment.codegen.Formatting.*;
+import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OPTIONAL;
@@ -74,7 +74,7 @@ public class SetGetAdd implements Consumer<Class> {
 	
 	@Override
 	public void accept(Class model) {
-		model.getFields().stream().forEach(f -> {
+		model.getFields().forEach(f -> {
 			f.private_();
 			
 			if (isCollection(f.getType())) {

@@ -16,12 +16,12 @@
  */
 package com.speedment.codegen.lang.models;
 
-import com.speedment.codegen.lang.interfaces.Annotable;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
 import com.speedment.codegen.lang.interfaces.Copyable;
-import com.speedment.codegen.lang.interfaces.Importable;
-import com.speedment.codegen.lang.interfaces.Documentable;
-import com.speedment.codegen.lang.interfaces.Fieldable;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import com.speedment.codegen.lang.interfaces.HasImports;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.implementation.AnnotationImpl;
 import com.speedment.codegen.lang.models.modifiers.AnnotationModifier;
 import java.util.function.Supplier;
@@ -30,9 +30,9 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Annotation extends Copyable<Annotation>, Nameable<Annotation>, 
-    Documentable<Annotation>, Fieldable<Annotation>, Importable<Annotation>, 
-    AnnotationModifier<Annotation>, Annotable<Annotation> {
+public interface Annotation extends Copyable<Annotation>, HasName<Annotation>, 
+    HasJavadoc<Annotation>, HasFields<Annotation>, HasImports<Annotation>, 
+    AnnotationModifier<Annotation>, HasAnnotationUsage<Annotation> {
     
     enum Factory { INST;
         private Supplier<Annotation> supplier = () -> new AnnotationImpl(null);

@@ -16,29 +16,29 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Annotation;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.java.views.interfaces.AnnotableView;
-import com.speedment.codegen.java.views.interfaces.DocumentableView;
-import com.speedment.codegen.java.views.interfaces.NameableView;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.java.views.interfaces.HasAnnotationUsageView;
+import com.speedment.codegen.java.views.interfaces.HasJavadocView;
+import com.speedment.codegen.java.views.interfaces.HasNameView;
 import com.speedment.codegen.util.CodeCombiner;
 
 /**
  *
  * @author Emil Forslund
  */
-public class AnnotationView implements CodeView<Annotation>, 
-    DocumentableView<Annotation>, AnnotableView<Annotation>, NameableView<Annotation> {
+public class AnnotationView implements Transform<Annotation, String>, 
+    HasJavadocView<Annotation>, HasAnnotationUsageView<Annotation>, HasNameView<Annotation> {
 	
     private final static String 
 		INTERFACE_STRING = "@interface ",
 		DEFAULT_STRING = " default ";
 	
 	@Override
-	public Optional<String> render(CodeGenerator cg, Annotation model) {
+	public Optional<String> transform(Generator cg, Annotation model) {
 		return Optional.of(
 			renderAnnotations(cg, model) +
 			renderAnnotations(cg, model) +

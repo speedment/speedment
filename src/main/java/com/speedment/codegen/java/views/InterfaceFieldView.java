@@ -16,9 +16,9 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.InterfaceField;
 import static com.speedment.codegen.lang.models.modifiers.Modifier.FINAL;
 import java.util.Optional;
@@ -27,9 +27,10 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public class InterfaceFieldView implements CodeView<InterfaceField> {
+public class InterfaceFieldView implements Transform<InterfaceField, String> {
+    
 	@Override
-	public Optional<String> render(CodeGenerator cg, InterfaceField model) {
+	public Optional<String> transform(Generator cg, InterfaceField model) {
 		return Optional.of(
 			cg.on(model.getJavadoc()).orElse(EMPTY) +	
 			(model.getModifiers().contains(FINAL) ?

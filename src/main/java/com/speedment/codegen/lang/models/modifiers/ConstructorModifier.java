@@ -23,7 +23,7 @@ import com.speedment.codegen.lang.models.modifiers.Keyword.public_;
 /**
  *
  * @author Emil Forslund
- * @param <T>
+ * @param <T> The extending type
  */
 public interface ConstructorModifier<T extends ConstructorModifier<T>> 
 extends public_<T>, protected_<T>, private_<T> {}

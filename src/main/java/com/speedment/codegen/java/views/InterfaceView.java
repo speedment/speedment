@@ -16,8 +16,9 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.Formatting;
-import com.speedment.codegen.base.CodeGenerator;
+import com.speedment.codegen.util.Formatting;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
@@ -40,7 +41,7 @@ public class InterfaceView extends ClassOrInterfaceView<Interface> {
 	}
 
 	@Override
-	protected String renderSuperType(CodeGenerator cg, Interface model) {
+	protected String renderSupertype(Generator cg, Interface model) {
 		return Formatting.EMPTY;
 	}
 
@@ -52,5 +53,10 @@ public class InterfaceView extends ClassOrInterfaceView<Interface> {
     @Override
     public Object wrapMethod(Method method) {
         return new InterfaceMethodImpl(method);
+    }
+
+    @Override
+    protected String renderConstructors(Generator cg, Interface model) {
+        return EMPTY;
     }
 }

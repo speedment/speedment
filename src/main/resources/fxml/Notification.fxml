@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="container" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="256.0" style="-fx-background-color: #99ff99; -fx-background-radius: 8 0 0 8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="closeButton" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0 4 0 4;" text="×">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="message" maxWidth="1.7976931348623157E308" text="This is a notification message." wrapText="true" />
+   </children>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" />
+   </padding>
+   <effect>
+      <DropShadow blurType="TWO_PASS_BOX" height="16.0" offsetX="1.0" offsetY="1.0" radius="7.5" width="16.0" />
+   </effect>
+</VBox>

@@ -17,25 +17,25 @@
 package com.speedment.codegen.java.views;
 
 import com.speedment.codegen.util.CodeCombiner;
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.lang.models.Javadoc;
 import java.util.Optional;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public class JavadocView implements CodeView<Javadoc> {
+public class JavadocView implements Transform<Javadoc, String> {
 	private final static String
 		JAVADOC_DELIMITER = nl() + SPACE + STAR + SPACE,
 		JAVADOC_PREFIX = SLASH + STAR + STAR + nl() + SPACE + STAR + SPACE,
 		JAVADOC_SUFFIX = nl() + SPACE + STAR + SLASH;
 	
 	@Override
-	public Optional<String> render(CodeGenerator cg, Javadoc model) {
+	public Optional<String> transform(Generator cg, Javadoc model) {
 		return CodeCombiner.ifEmpty(
             Stream.of(
                 model.getRows().stream(),
@@ -50,7 +50,7 @@ public class JavadocView implements CodeView<Javadoc> {
 		);
 	}
 
-    private static Stream<String> renderParams(CodeGenerator cg, Javadoc model) {
+    private static Stream<String> renderParams(Generator cg, Javadoc model) {
         final Stream<String> stream = cg.onEach(model.getTags());
         
         if (model.getTags().isEmpty()) {

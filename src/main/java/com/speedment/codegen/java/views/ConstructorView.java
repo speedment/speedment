@@ -16,13 +16,12 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.base.CodeView;
 import com.speedment.codegen.util.CodeCombiner;
-import static com.speedment.codegen.Formatting.*;
-import com.speedment.codegen.base.CodeGenerator;
-import com.speedment.codegen.lang.interfaces.Nameable;
+import static com.speedment.codegen.util.Formatting.*;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.Constructor;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,17 +29,22 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  */
-public class ConstructorView implements CodeView<Constructor> {
+public class ConstructorView implements Transform<Constructor, String> {
+    
+    private final static String THROWS = "throws ";
 
 	@Override
-	public Optional<String> render(CodeGenerator cg, Constructor model) {
+	public Optional<String> transform(Generator cg, Constructor model) {
 		return Optional.of(
 			ifelse(cg.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
 			cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
-			renderName(cg).get() +
+			renderName(cg, model)
+                .orElseThrow(() -> new UnsupportedOperationException("Could not find a nameable parent of constructor.")) +
 			cg.onEach(model.getFields()).collect(
 				Collectors.joining(COMMA_SPACE, PS, PE)
-			) + SPACE + block(
+			) + SPACE + 
+            cg.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
+            block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())
 				)
@@ -48,14 +52,13 @@ public class ConstructorView implements CodeView<Constructor> {
 		);
 	}
 	
-	private static Optional<String> renderName(CodeGenerator cg) {
-		final List<Object> stack = cg.getRenderStack();
-		if (stack.size() >= 2) {
-			final Object parent = stack.get(stack.size() - 2);
-			if (parent instanceof Nameable<?>) {
-				return Optional.of(shortName(((Nameable) parent).getName()));
-			}
-		}
-		return Optional.empty();
+	private static Optional<String> renderName(Generator cg, Constructor model) {
+		Optional<String> result = cg.getRenderStack()
+            .fromTop(HasName.class)
+            .filter(n -> model != n)
+            .map(n -> shortName(n.getName()))
+            .findFirst();
+        
+        return result;
 	}
 }

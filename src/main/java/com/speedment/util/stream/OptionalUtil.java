@@ -30,4 +30,12 @@ public final class OptionalUtil {
     public static <T> Stream<T> from(Optional<T> optional) {
         return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
     }
+    
+    public static Object unwrap(Object optional) {
+        if (optional instanceof Optional<?>) {
+            return ((Optional<?>) optional).orElse(null);
+        } else {
+            return optional;
+        }
+    }
 }
