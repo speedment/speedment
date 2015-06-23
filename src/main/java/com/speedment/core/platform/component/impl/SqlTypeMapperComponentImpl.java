@@ -46,7 +46,7 @@ public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
         put("LONGVARCHAR", String.class);
         put("NUMERIC", BigDecimal.class);
         put("DECIMAL", BigDecimal.class);
-        put("BIT", Integer.class); ///
+        put("BIT", Boolean.class);
         put("TINYINT", Byte.class);
         put("SMALLINT", Short.class);
         put("INTEGER", Integer.class);
