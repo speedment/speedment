@@ -30,7 +30,6 @@ import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
 import com.speedment.codegen.lang.models.constants.DefaultJavadocTag;
-import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.values.TextValue;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import com.speedment.core.code.model.java.ImportDelegator;

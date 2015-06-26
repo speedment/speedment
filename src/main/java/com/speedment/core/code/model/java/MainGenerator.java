@@ -82,14 +82,14 @@ public class MainGenerator implements Consumer<Project> {
 
         Formatting.tab("    ");
         gen.metaOn(translators.stream()
-            .map(t -> t.get())
+            .map(Translator::get)
             .collect(Collectors.toList()))
-            .forEach(c -> {
+            .forEach(meta -> {
                 
                 final String fname = project.getPackageLocation()
                 + "/"
-                + c.getModel().getName();
-                final String content = c.getResult();
+                + meta.getModel().getName();
+                final String content = meta.getResult();
                 final Path path = Paths.get(fname);
                 path.getParent().toFile().mkdirs();
 
