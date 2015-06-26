@@ -116,18 +116,6 @@ public class MainGenerator implements Consumer<Project> {
             writeToFile(project, gen, meta);
             fileCounter++;
         });
-        
-        
-//        
-//        
-//        translators.forEach(t -> {
-//            File file = t.get();
-//            final Optional<String> code = cg.on(file);
-//            System.out.println("*** BEGIN File:" + file.getName());
-//            System.out.println(code.get());
-//            System.out.println("*** END   File:" + file.getName());
-//        });
-
     }
     
     public int getFilesCreated() {
@@ -161,25 +149,6 @@ public class MainGenerator implements Consumer<Project> {
         } else {
             throw new IllegalArgumentException("Input file could not be generated.");
         }
-        
-//        final String fname = project.getPacketLocation()
-//        + "/"
-//        + c.getModel().getName();
-//        final String content = c.getResult();
-//        final Path path = Paths.get(fname);
-//        path.getParent().toFile().mkdirs();
-//
-//        try {
-//            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-//        } catch (IOException ex) {
-//            LOGGER.error("Failed to create file " + fname, ex);
-//        }
-//
-//        LOGGER.info("done");
-//
-//        System.out.println("*** BEGIN File:" + fname);
-//        System.out.println(content);
-//        System.out.println("*** END   File:" + fname);
     }
 
 }
