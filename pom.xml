@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mainClass>com.speedment.orm.gui.MainApp</mainClass>
+        <mainClass>com.speedment.gui.MainApp</mainClass>
     </properties>
     <name>Speedment</name>
     
@@ -48,13 +48,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
-    
+
     <scm>
         <connection>scm:git:git://github.com/speedment/speedment.git</connection>
         <developerConnection>scm:git:git@github.com:speedment/speedment.git</developerConnection>
         <url>https://github.com/speedment/speedment/</url>
     </scm>
+    
     <developers>
         <developer>
             <id>permin</id>
@@ -72,6 +72,7 @@
         <system>Github</system>
         <url>https://github.com/speedment/speedment/issues</url>
     </issueManagement>
+    
     <organization>
         <name>Speedment, Inc.</name>
         <url>http://www.speedment.com/</url>
@@ -188,7 +189,7 @@
                             <commandlineArgs>${runfx.args}</commandlineArgs>
                         </configuration>
                     </execution>
-                </executions>  
+                </executions> 
             </plugin>
 
             <plugin>
