@@ -49,48 +49,50 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
 
     @Override
     public Optional<Field> transform(Generator gen, Column column) {
-        final Type refType = getReferenceFieldType(gen, column);
+        if (column.isEnabled()) {
+            final Type refType = getReferenceFieldType(gen, column);
 
-        final Type entityType = typeUsing(gen, column, TableToEntityType.class);
-        final String shortEntityName = shortName(entityType.getName());
-        
-        importType(gen, Import.of(entityType));
-        importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
+            final Type entityType = typeUsing(gen, column, TableToEntityType.class);
+            final String shortEntityName = shortName(entityType.getName());
 
-		final String getter, finder;
-		if (column.isNullable()) {
-			getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
-            finder = getForeignKey(gen, column)
-                .map(fkc -> {
-                    return ", fk -> fk.find" + 
-                        javaTypeName(column.getName()) + 
-                        "().orElse(null)";
-                }).orElse("");
-		} else {
-			getter = shortEntityName + "::get" + javaTypeName(column.getName());
-            finder = getForeignKey(gen, column)
-                .map(fkc -> {
-                    return ", " + 
-                        shortEntityName + "::find" + 
-                        javaTypeName(column.getName());
+            importType(gen, Import.of(entityType));
+            importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
 
-                }).orElse("");
-		}
-		
-        return Optional.of(
-            Field.of(javaStaticFieldName(column.getName()), refType)
-            .public_().final_().static_()
-            .set(new ReferenceValue(
-                "new " + shortName(refType.getName()) + 
-                "<>(() -> findColumn(" + 
-                        shortEntityName + ".class, \"" + 
-                        column.getName() + 
-                    "\"), " + 
-                    getter +
-					finder +
-                ")"
-            ))
-        );
+            final String getter, finder;
+            if (column.isNullable()) {
+                getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
+                finder = getForeignKey(gen, column)
+                    .map(fkc -> {
+                        return ", fk -> fk.find" + 
+                            javaTypeName(column.getName()) + 
+                            "().orElse(null)";
+                    }).orElse("");
+            } else {
+                getter = shortEntityName + "::get" + javaTypeName(column.getName());
+                finder = getForeignKey(gen, column)
+                    .map(fkc -> {
+                        return ", " + 
+                            shortEntityName + "::find" + 
+                            javaTypeName(column.getName());
+
+                    }).orElse("");
+            }
+
+            return Optional.of(
+                Field.of(javaStaticFieldName(column.getName()), refType)
+                .public_().final_().static_()
+                .set(new ReferenceValue(
+                    "new " + shortName(refType.getName()) + 
+                    "<>(() -> findColumn(" + 
+                            shortEntityName + ".class, \"" + 
+                            column.getName() + 
+                        "\"), " + 
+                        getter +
+                        finder +
+                    ")"
+                ))
+            );
+        } else return Optional.empty();
     }
 
     private Type getReferenceFieldType(Generator gen, Column column) {
@@ -141,10 +143,14 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
     }
 	
 	private Optional<ForeignKeyColumn> getForeignKey(Generator gen, Column column) {
-		return gen.getRenderStack().fromBottom(Table.class).findFirst()
+		return gen.getRenderStack().fromBottom(Table.class)
+            .filter(Table::isEnabled)
+            .findFirst()
 			.flatMap(t -> 
 				t.streamOf(ForeignKey.class)
+                    .filter(ForeignKey::isEnabled)
 					.flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
+                    .filter(ForeignKeyColumn::isEnabled)
 					.filter(fkc -> fkc.getColumn().equals(column))
 					.findFirst()
 			);

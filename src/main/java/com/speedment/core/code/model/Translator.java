@@ -64,19 +64,19 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
     }
 
     default Stream<Column> columns() {
-        return table().streamOf(Column.class);
+        return table().streamOf(Column.class).filter(Column::isEnabled);
     }
 
     default Stream<Index> indexes() {
-        return table().streamOf(Index.class);
+        return table().streamOf(Index.class).filter(Index::isEnabled);
     }
-    
+
     default Stream<ForeignKey> foreignKeys() {
-        return table().streamOf(ForeignKey.class);
+        return table().streamOf(ForeignKey.class).filter(ForeignKey::isEnabled);
     }
-    
+
     default Stream<PrimaryKeyColumn> primaryKeyColumns() {
-        return table().streamOf(PrimaryKeyColumn.class);
+        return table().streamOf(PrimaryKeyColumn.class).filter(PrimaryKeyColumn::isEnabled);
     }
 
     default <E extends Node> E getGenericConfigEntity(Class<E> clazz) {
@@ -85,12 +85,12 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
             final E result = (E) getNode();
             return result;
         }
-        
+
         return getNode().ancestor(clazz)
             .orElseThrow(() -> new IllegalStateException(
-                getNode() + " is not a " + clazz.getSimpleName() + 
-                " and does not have a parent that is a " + clazz.getSimpleName()
-            ));
+                    getNode() + " is not a " + clazz.getSimpleName()
+                    + " and does not have a parent that is a " + clazz.getSimpleName()
+                ));
     }
 
     default <T> T with(T initial, Consumer<T> consumer) {

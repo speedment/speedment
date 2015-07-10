@@ -49,7 +49,11 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
     public Optional<File> transform(Generator gen, ImportDelegator model) {
         final Type fieldType = typeUsing(gen, model.getTable(), TableToFieldType.class);
 
-        final List<Column> cols = model.getTable().streamOf(Column.class).collect(toList());
+        final List<Column> cols = model.getTable()
+            .streamOf(Column.class)
+            .filter(Column::isEnabled)
+            .collect(toList());
+        
         final File file = File.of(
             classToJavaFileName(
                 typeUsing(gen, model.getTable(), TableToFieldType.class).getName()

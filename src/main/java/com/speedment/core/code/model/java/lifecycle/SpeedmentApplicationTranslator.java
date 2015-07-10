@@ -49,28 +49,31 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
     @Override
     protected Class make(File file) {
         final Method onInit = Method.of("onInit", VOID)
-                .protected_()
-                .add(OVERRIDE)
-                .add("loadAndSetProject();");
+            .protected_()
+            .add(OVERRIDE)
+            .add("loadAndSetProject();");
 
-        project().traversalOf(Table.class).forEachOrdered(t -> {
-            EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
-            final Type managerType = entityManagerImplTranslator.getImplType();
-            file.add(Import.of(managerType));
-            onInit.add("put(new " + managerType.getName() + "());");
-        });
+        project().traversalOf(Table.class)
+            .filter(Table::isEnabled)
+            .forEachOrdered(t -> {
+
+                EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
+                final Type managerType = entityManagerImplTranslator.getImplType();
+                file.add(Import.of(managerType));
+                onInit.add("put(new " + managerType.getName() + "());");
+            });
 
         onInit.add("super.onInit();");
 
         //final Path path = project().getConfigPath();
         return Class.of(className)
+            .public_()
+            .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
+            .add(Constructor.of()
                 .public_()
-                .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
-                .add(Constructor.of()
-                        .public_()
-                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
-                )
-                .add(onInit);
+                .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
+            )
+            .add(onInit);
     }
 
     @Override
