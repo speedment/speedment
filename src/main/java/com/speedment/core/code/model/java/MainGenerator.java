@@ -48,7 +48,6 @@ import static java.util.stream.Collectors.toList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 /**
  *
  * @author pemi
@@ -60,9 +59,9 @@ public class MainGenerator implements Consumer<Project> {
 
     @Override
     public void accept(Project project) {
-		AnalyticsUtil.notify(GENERATE);
+        AnalyticsUtil.notify(GENERATE);
         fileCounter = 0;
-		
+
         final List<Translator<?, File>> translators = new ArrayList<>();
 
         final Generator gen = new JavaGenerator(
@@ -71,21 +70,23 @@ public class MainGenerator implements Consumer<Project> {
 
         translators.add(new SpeedmentApplicationTranslator(gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
-        
-        project.traverseOver(Table.class).forEach(table -> {
-            translators.add(new EntityTranslator(gen, table));
-            translators.add(new EntityBuilderTranslator(gen, table));
-            translators.add(new EntityImplTranslator(gen, table));
-            translators.add(new EntityManagerTranslator(gen, table));
-            translators.add(new EntityManagerImplTranslator(gen, table));
-        });
+
+        project.traverseOver(Table.class)
+            .filter(Table::isEnabled)
+            .forEach(table -> {
+                translators.add(new EntityTranslator(gen, table));
+                translators.add(new EntityBuilderTranslator(gen, table));
+                translators.add(new EntityImplTranslator(gen, table));
+                translators.add(new EntityManagerTranslator(gen, table));
+                translators.add(new EntityManagerImplTranslator(gen, table));
+            });
 
         Formatting.tab("    ");
         gen.metaOn(translators.stream()
             .map(Translator::get)
             .collect(Collectors.toList()))
             .forEach(meta -> {
-                
+
                 final String fname = project.getPackageLocation()
                 + "/"
                 + meta.getModel().getName();
@@ -106,43 +107,43 @@ public class MainGenerator implements Consumer<Project> {
                 System.out.println(content);
                 System.out.println("*** END   File:" + fname);
             });
-        
-        
+
         List<Table> tables = project
             .traverseOver(Table.class)
+            .filter(Table::isEnabled)
             .collect(toList());
-        
+
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
             fileCounter++;
         });
     }
-    
+
     public int getFilesCreated() {
         return fileCounter;
     }
-    
+
     private static void writeToFile(Project project, Generator gen, Meta<Table, File> c) {
         final Optional<String> content = gen.on(c.getResult());
-        
+
         if (content.isPresent()) {
-            final String fname = 
-                project.getPackageLocation() + 
-                "/" + c.getResult().getName();
-            
+            final String fname
+                = project.getPackageLocation()
+                + "/" + c.getResult().getName();
+
             final Path path = Paths.get(fname);
             path.getParent().toFile().mkdirs();
-            
+
             try {
-                Files.write(path, 
+                Files.write(path,
                     content.get().getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException ex) {
                 LOGGER.error("Failed to create file " + fname, ex);
             }
-            
+
             LOGGER.info("done");
-            
+
             System.out.println("*** BEGIN File:" + fname);
             System.out.println(content);
             System.out.println("*** END   File:" + fname);

@@ -71,16 +71,16 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         final Interface iface = new InterfaceBuilder(ENTITY.getName())
             // Getters
             .addColumnConsumer((i, c) -> {
-				final Type retType;
-				if (c.isNullable()) {
-					retType = Type.of(Optional.class).add(
-						Generic.of().add(
-							Type.of(c.getMapping())
-						)
-					);
-				} else {
-					retType = Type.of(c.getMapping());
-				}
+                final Type retType;
+                if (c.isNullable()) {
+                    retType = Type.of(Optional.class).add(
+                        Generic.of().add(
+                            Type.of(c.getMapping())
+                        )
+                    );
+                } else {
+                    retType = Type.of(c.getMapping());
+                }
                 i.add(Method.of(GETTER_METHOD_PREFIX + typeName(c), retType));
             })
             // Add streamers from back pointing FK:s
@@ -101,7 +101,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 i.add(method);
             })
             .addForeignKeyConsumer((i, fk) -> {
-                
+
 //                default Optional<Hare> findRival() {
 //                    return getRival()
 //                        .flatMap(hare -> HareManager.get().stream()
@@ -109,9 +109,6 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //                            .findAny()
 //                        );
 //                }
-                
-                
-                
 //                default Hare findOwner() {
 //                    return HareManager.get().stream()
 //                        .filter(HareField.ID.equal(getOwner()))
@@ -119,40 +116,38 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //                            "Foreign key constraint error. Owner is set to " + getOwner()
 //                        ));
 //                }
-                
-                
                 final FkUtil fu = new FkUtil(fk);
                 final Type fieldClassType = Type.of(Formatting.packageName(fu.getForeignEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getForeignTable()) + "Field");
                 file.add(Import.of(fieldClassType));
                 fu.imports().forEachOrdered(file::add);
-                
+
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(Type.of(Optional.class)));
                     returnType = Type.of(Optional.class).add(fu.getForeignEmt().GENERIC_OF_ENTITY);
-                    
+
                 } else {
                     returnType = fu.getForeignEmt().ENTITY.getType();
                 }
-                
+
                 final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).default_();
                 if (fu.getColumn().isNullable()) {
                     final String varName = variableName(fu.getForeignTable());
                     method.add("return get" + typeName(fu.getColumn()) + "()")
-                        .add(indent(
+                    .add(indent(
                             ".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
-                                ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n" +
-                                ".findAny()"
+                                ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n"
+                                + ".findAny()"
                             ) + "\n);"
                         ));
                 } else {
                     file.add(Import.of(Type.of(SpeedmentException.class)));
                     method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
-                        ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(get" + typeName(fu.getColumn()) + "()))\n" +
-                        ".findAny().orElseThrow(() -> new SpeedmentException(\n" + indent(
-                            "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
-                        ) + "));\n"
-                    ));
+                            ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(get" + typeName(fu.getColumn()) + "()))\n"
+                            + ".findAny().orElseThrow(() -> new SpeedmentException(\n" + indent(
+                                "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
+                            ) + "));\n"
+                        ));
                 }
 
 //                method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
@@ -191,7 +186,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             .add(builder())
             .add(toBuilder())
             .add(toJson())
-			.add(toJsonExtended())
+            .add(toJsonExtended())
             .add(stream())
             .add(persist())
             .add(update())
@@ -243,11 +238,11 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         return Method.of("toJson", STRING).default_()
             .add("return " + MANAGER.getName() + ".get().toJson(this);");
     }
-	
-	private Method toJsonExtended() {
+
+    private Method toJsonExtended() {
         return Method.of("toJson", STRING).default_()
-			.add(Field.of("json", Type.of(Json.class)
-				.add(Generic.of().add(ENTITY.getType()))))
+            .add(Field.of("json", Type.of(Json.class)
+                    .add(Generic.of().add(ENTITY.getType()))))
             .add("return json.build(this);");
     }
 
@@ -317,8 +312,9 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
         public FkUtil(ForeignKey fk) {
             this.fk = fk;
             fkc = fk.stream()
+                .filter(ForeignKeyColumn::isEnabled)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have a ForeignKeyColumn"));
+                .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have an enabled ForeignKeyColumn"));
             column = fkc.getColumn();
             table = column.ancestor(Table.class).get();
             foreignColumn = fkc.getForeignColumn();
