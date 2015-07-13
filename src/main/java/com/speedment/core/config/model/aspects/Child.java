@@ -16,12 +16,12 @@
  */
 package com.speedment.core.config.model.aspects;
 
-import com.speedment.core.config.model.Table;
 import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
+ * @param <P> Parent type
  */
 public interface Child<P extends Parent<?>> extends Node {
 

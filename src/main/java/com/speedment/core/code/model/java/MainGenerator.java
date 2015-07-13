@@ -72,7 +72,7 @@ public class MainGenerator implements Consumer<Project> {
         translators.add(new SpeedmentApplicationTranslator(gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
         
-        project.traversalOf(Table.class).forEach(table -> {
+        project.traverseOver(Table.class).forEach(table -> {
             translators.add(new EntityTranslator(gen, table));
             translators.add(new EntityBuilderTranslator(gen, table));
             translators.add(new EntityImplTranslator(gen, table));
@@ -109,7 +109,7 @@ public class MainGenerator implements Consumer<Project> {
         
         
         List<Table> tables = project
-            .traversalOf(Table.class)
+            .traverseOver(Table.class)
             .collect(toList());
         
         gen.metaOn(tables, File.class).forEach(meta -> {

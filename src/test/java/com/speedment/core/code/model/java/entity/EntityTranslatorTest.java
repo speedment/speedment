@@ -38,7 +38,7 @@ public class EntityTranslatorTest extends SimpleModelTest {
         
         final Generator cg = new JavaGenerator();
         
-        final Table table2 = project.traversalOf(Table.class)
+        final Table table2 = project.traverseOver(Table.class)
                 .filter(e -> TABLE_NAME.equals(e.getName()))
                 .findAny().get();
         

@@ -53,7 +53,7 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
                 .add(OVERRIDE)
                 .add("loadAndSetProject();");
 
-        project().traversalOf(Table.class).forEachOrdered(t -> {
+        project().traverseOver(Table.class).forEachOrdered(t -> {
             EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
             final Type managerType = entityManagerImplTranslator.getImplType();
             file.add(Import.of(managerType));
