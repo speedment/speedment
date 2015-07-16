@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 
 /**
  * A Manager is responsible for abstracting away an Entity source build the
- application. Entity sources can be RDBMSes, files or other data sources.
+ * application. Entity sources can be RDBMSes, files or other data sources.
  *
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
