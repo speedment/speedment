@@ -17,6 +17,7 @@
 package com.speedment.util.json;
 
 import com.speedment.core.config.model.Column;
+import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.field.Field;
@@ -27,6 +28,8 @@ import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
 import com.speedment.core.field.reference.ReferenceField;
 import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
+import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.component.ManagerComponent;
 import static com.speedment.util.java.JavaLanguage.javaVariableName;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -169,11 +172,17 @@ public final class JsonFormatter<ENTITY> {
         return value;
 	}
 	
-	public static <PK, ENTITY, BUILDER extends Buildable<ENTITY>, MANAGER extends Manager<PK, ENTITY, BUILDER>> JsonFormatter<ENTITY> allFrom(MANAGER manager) {
+	public static <PK, ENTITY, BUILDER extends Buildable<ENTITY>> JsonFormatter<ENTITY> allFrom(Class<ENTITY> entityType) {
 		
 		final JsonFormatter<ENTITY> json = new JsonFormatter<>();
+        
+        final Manager<PK, ENTITY, BUILDER> manager = Platform.get()
+            .get(ManagerComponent.class)
+            .managerOf(entityType);
+        
+        final Table table = manager.getTable();
 		
-		manager.getTable()
+		table
 			.streamOf(Column.class)
 			.forEachOrdered(c -> {
 				

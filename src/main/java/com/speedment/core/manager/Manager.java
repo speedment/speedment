@@ -72,10 +72,12 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     BUILDER toBuilder(ENTITY entity);
 
 	default JsonFormatter<ENTITY> toJson() {
-		return JsonFormatter.allFrom(this);
+		return JsonFormatter.allFrom(getEntityClass());
 	}
 	
-    String toJson(ENTITY entity);
+    default String toJson(ENTITY entity) {
+        return toJson().apply(entity);
+    }
 	
     default ENTITY toInternal(ENTITY entity) {
         return entity;
