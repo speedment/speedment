@@ -241,15 +241,9 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 
     private Method toJsonExtended() {
         return Method.of("toJson", STRING).default_()
-<<<<<<< HEAD
-            .add(Field.of("json", Type.of(Json.class)
-                    .add(Generic.of().add(ENTITY.getType()))))
-            .add("return json.build(this);");
-=======
 			.add(Field.of("json", Type.of(JsonFormatter.class)
 				.add(Generic.of().add(ENTITY.getType()))))
             .add("return json.apply(this);");
->>>>>>> origin/master
     }
 
     private Method stream() {
