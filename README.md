@@ -153,4 +153,4 @@ Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
 
-<img src="http://speedment.com:8081/Beacon?site=GitHub&path=main" alt="beacon" title="beacon" align="right" />
+<img src="http://speedment.com:8081/Beacon?site=GitHub&path=main" alt="beacon" title="beacon" align="right" data-canonical-src="http://speedment.com:8081/Beacon?site=GitHub&path=main" />
