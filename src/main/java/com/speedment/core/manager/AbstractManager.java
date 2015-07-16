@@ -22,7 +22,7 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.json.Json;
+import com.speedment.util.json.JsonFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -113,7 +113,7 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     @Override
     @SuppressWarnings("unchecked")
     public String toJson(ENTITY entity) {
-        return Json.allFrom(this).build(entity);
+        return JsonFormatter.allFrom(this).apply(entity);
 //        return "{ " + getTable().streamOf(Column.class).map(c -> {
 //            final StringBuilder sb = new StringBuilder();
 //            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");

@@ -27,7 +27,7 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.util.json.Json;
+import com.speedment.util.json.JsonFormatter;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -71,8 +71,8 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY entity);
 
-	default Json<ENTITY> toJson() {
-		return Json.allFrom(this);
+	default JsonFormatter<ENTITY> toJson() {
+		return JsonFormatter.allFrom(this);
 	}
 	
     String toJson(ENTITY entity);

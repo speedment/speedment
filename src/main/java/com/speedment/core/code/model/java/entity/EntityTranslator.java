@@ -42,7 +42,7 @@ import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.util.Pluralis;
 import com.speedment.util.java.JavaLanguage;
-import com.speedment.util.json.Json;
+import com.speedment.util.json.JsonFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -241,9 +241,15 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 
     private Method toJsonExtended() {
         return Method.of("toJson", STRING).default_()
+<<<<<<< HEAD
             .add(Field.of("json", Type.of(Json.class)
                     .add(Generic.of().add(ENTITY.getType()))))
             .add("return json.build(this);");
+=======
+			.add(Field.of("json", Type.of(JsonFormatter.class)
+				.add(Generic.of().add(ENTITY.getType()))))
+            .add("return json.apply(this);");
+>>>>>>> origin/master
     }
 
     private Method stream() {
