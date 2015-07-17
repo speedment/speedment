@@ -34,6 +34,7 @@ import static com.speedment.gui.util.FadeAnimation.fadeIn;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
+import com.speedment.stat.Statistics;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -252,6 +253,9 @@ public class SceneController implements Initializable {
             // onConfigure
             () -> animateArrow()
         );
+        
+        // Send statistics.
+        Statistics.onGuiStarted();
     }
 
     public Stage getStage() {

@@ -31,6 +31,7 @@ import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadata
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Table;
+import com.speedment.stat.Statistics;
 import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.GENERATE;
 import java.io.IOException;
@@ -60,6 +61,8 @@ public class MainGenerator implements Consumer<Project> {
     @Override
     public void accept(Project project) {
         AnalyticsUtil.notify(GENERATE);
+        Statistics.onGenerate();
+        
         fileCounter = 0;
 
         final List<Translator<?, File>> translators = new ArrayList<>();

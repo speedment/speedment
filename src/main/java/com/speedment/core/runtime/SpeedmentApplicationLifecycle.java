@@ -31,6 +31,7 @@ import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.stat.Statistics;
 import static com.speedment.util.Beans.beanPropertyName;
 import com.speedment.util.Trees;
 import com.speedment.util.analytics.AnalyticsUtil;
@@ -332,6 +333,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     @Override
     public T start() {
         AnalyticsUtil.notify(APP_STARTED);
+        Statistics.onNodeStarted();
+        
         Package package_ = SpeedmentApplicationLifecycle.class.getPackage();
         LOGGER.info(
             Optional.ofNullable(package_.getImplementationTitle()).orElse("speedment") + " " +

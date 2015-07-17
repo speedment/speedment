@@ -86,7 +86,7 @@ Hare.stream()
 ###### Easy initialization
 ```java
 // A configuration-class is generated from the database.
-new HareApplication().start();
+new HareApplication().withPassword("myPwd729").start();
 ```
  
 

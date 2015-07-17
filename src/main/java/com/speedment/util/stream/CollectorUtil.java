@@ -16,7 +16,7 @@
  */
 package com.speedment.util.stream;
 
-import com.speedment.util.json.Json;
+import com.speedment.util.json.JsonFormatter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ public class CollectorUtil {
         return new Parser<>(CollectorUtil::toJson, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
     
-    public static <T> Collector<T, ?, String> toJson(Json<T> formatter) {
-        return new Parser<>(formatter::build, l -> "[" + l.stream().collect(joining(", ")) + "]");
+    public static <T> Collector<T, ?, String> toJson(JsonFormatter<T> formatter) {
+        return new Parser<>(formatter::apply, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
     
     @SuppressWarnings("unchecked")

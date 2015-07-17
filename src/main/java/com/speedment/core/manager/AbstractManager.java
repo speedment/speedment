@@ -22,7 +22,6 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.json.Json;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -108,29 +107,6 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
 
                 return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
             }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public String toJson(ENTITY entity) {
-        return Json.allFrom(this).build(entity);
-//        return "{ " + getTable().streamOf(Column.class).map(c -> {
-//            final StringBuilder sb = new StringBuilder();
-//            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
-//
-//			Object val = get(entity, c);
-//			if (val == null) {
-//				sb.append("null");
-//			} else if (val instanceof Number) {
-//				sb.append(val.toString());
-//			} else if (val instanceof Boolean) {
-//				sb.append(val.toString());
-//			} else {
-//				sb.append("\"").append(val.toString()).append("\"");
-//			}
-//			
-//            return sb.toString();
-//        }).collect(Collectors.joining(", ")) + " }";
     }
 
     @Override
