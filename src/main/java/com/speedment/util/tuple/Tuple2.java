@@ -21,8 +21,8 @@ import java.util.Objects;
 /**
  *
  * @author pemi
- * @param <T0>
- * @param <T1>
+ * @param <T0> Type of 0:th argument
+ * @param <T1> Type of 1:st argument
  */
 public class Tuple2<T0, T1> extends BasicTuple<Tuple2<T0, T1>> {
 

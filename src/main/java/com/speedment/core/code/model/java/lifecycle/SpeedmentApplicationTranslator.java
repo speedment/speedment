@@ -32,7 +32,6 @@ import com.speedment.core.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.runtime.SpeedmentApplicationLifecycle;
-import com.speedment.util.Paths;
 
 /**
  *

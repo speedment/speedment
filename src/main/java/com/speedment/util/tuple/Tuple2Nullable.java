@@ -21,8 +21,8 @@ import java.util.Optional;
 /**
  *
  * @author pemi
- * @param <T0>
- * @param <T1>
+ * @param <T0> Type of 0:th argument
+ * @param <T1> Type of 1:st argument
  */
 public class Tuple2Nullable<T0, T1> extends BasicTupleNullable<Tuple2Nullable<T0, T1>> {
 

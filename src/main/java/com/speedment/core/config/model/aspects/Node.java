@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -77,7 +78,11 @@ public interface Node extends Nameable, Enableable {
             .findFirst();
     }
 
-    default String getRelativeName(final Class<? extends Parent<?>> from) {
+    default <T extends Parent<?>> String getRelativeName(final Class<T> from) {
+        return getRelativeName(from, Function.identity());
+    }
+
+    default <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> childMapper) {
         Objects.requireNonNull(from);
         final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
         final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
@@ -87,10 +92,10 @@ public interface Node extends Nameable, Enableable {
                 add = true;
             }
             if (add) {
-                sj.add(parent.getName());
+                sj.add(childMapper.apply(parent.getName()));
             }
         }
-        return sj.toString() + getName();
+        return sj.toString() + childMapper.apply(getName());
         //return ancestors().map(Nameable::getName).collect(joining(".", "", ".")) + getName();
     }
 

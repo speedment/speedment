@@ -333,7 +333,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public T start() {
         AnalyticsUtil.notify(APP_STARTED);
         Package package_ = SpeedmentApplicationLifecycle.class.getPackage();
-        LOGGER.info(package_.getImplementationTitle() + " " + package_.getImplementationVersion() + " started.");
+        LOGGER.info(
+            Optional.ofNullable(package_.getImplementationTitle()).orElse("speedment") + " " +
+            Optional.ofNullable(package_.getImplementationVersion()).orElse("{unknown version}") +
+            " started.");
         LOGGER.warn("This is a technology preview version that is NOT INTEDNED FOR PRODUCTION USE!");
         return super.start();
     }

@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
+ * @param <E> The Enum type
  */
 public interface EnumHelper<E extends Enum<E>> {
     String getName();
