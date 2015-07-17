@@ -44,7 +44,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -342,7 +341,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             + " (" + SpeedmentVersion.getImplementationVersion() + ")"
             + " by " + SpeedmentVersion.getImplementationVendor() + " started."
         );
-        LOGGER.warn("This is a technology preview version that is NOT INTEDNED FOR PRODUCTION USE!");
+        LOGGER.warn("This is a BETA version that is NOT INTEDNED FOR PRODUCTION USE!");
         return super.start();
     }
 
