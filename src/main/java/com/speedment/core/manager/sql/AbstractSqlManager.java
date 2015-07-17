@@ -21,7 +21,6 @@ import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.core.Buildable;
 import com.speedment.core.manager.AbstractManager;
@@ -219,7 +218,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         try {
             newEntity = executeUpdate(entity, sql, values, generatedKeyconsumer);
         } catch (SQLException sqle) {
-            LOGGER.error("Unable to persist", sqle);
+            //LOGGER.error("Unable to persist", sqle);
             if (meta != null) {
                 meta.setThrowable(sqle);
             }
