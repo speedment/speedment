@@ -38,6 +38,7 @@ import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.APP_STARTED;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuple3;
+import com.speedment.util.version.SpeedmentVersion;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -334,12 +335,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public T start() {
         AnalyticsUtil.notify(APP_STARTED);
         Statistics.onNodeStarted();
-        
+
         Package package_ = SpeedmentApplicationLifecycle.class.getPackage();
         LOGGER.info(
-            Optional.ofNullable(package_.getImplementationTitle()).orElse("speedment") + " " +
-            Optional.ofNullable(package_.getImplementationVersion()).orElse("{unknown version}") +
-            " started.");
+            SpeedmentVersion.getImplementationTitle()
+            + " (" + SpeedmentVersion.getImplementationVersion() + ")"
+            + " by " + SpeedmentVersion.getImplementationVendor() + " started."
+        );
         LOGGER.warn("This is a technology preview version that is NOT INTEDNED FOR PRODUCTION USE!");
         return super.start();
     }

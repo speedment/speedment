@@ -17,6 +17,7 @@
 package com.speedment.stat;
 
 import com.speedment.gui.Settings;
+import com.speedment.util.version.SpeedmentVersion;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
@@ -34,13 +34,13 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public class Statistics {
-    
+
     private final static String PING_URL = "http://speedment.com:8081/Beacon";
-    private final static Optional<String> VERSION = Optional.ofNullable(Settings.class.getPackage().getImplementationVersion());
+    private final static String VERSION = SpeedmentVersion.getImplementationVersion();
     private final static Settings SETTINGS = Settings.inst();
-    
+
     public static void onGuiStarted() {
-        notifyEvent("gui-started", 
+        notifyEvent("gui-started",
             new Param("mail", SETTINGS.get("user_mail", "no-mail-specified"))
         );
     }
@@ -48,7 +48,7 @@ public class Statistics {
     public static void onGenerate() {
         notifyEvent("generate");
     }
-    
+
     public static void onNodeStarted() {
         notifyEvent("node-started");
     }
@@ -56,7 +56,7 @@ public class Statistics {
     private static void notifyEvent(String event, Param... params) {
         final Param[] all = Arrays.copyOf(params, params.length + 3);
         all[all.length - 3] = new Param("project-key", Hash.md5(System.getProperty("user.dir")));
-        all[all.length - 2] = new Param("version", VERSION.orElse("unknown"));
+        all[all.length - 2] = new Param("version", VERSION);
         all[all.length - 1] = new Param("event", event);
         sendPostRequest(all);
     }
@@ -82,13 +82,13 @@ public class Statistics {
             }
         }).start();
     }
-    
+
     private static URL createRequestURL(Param... params) {
         try {
-            return new URL(PING_URL + "?" +
-                Stream.of(params)
-                    .map(Param::encode)
-                    .collect(joining("&"))
+            return new URL(PING_URL + "?"
+                + Stream.of(params)
+                .map(Param::encode)
+                .collect(joining("&"))
             );
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
@@ -96,26 +96,26 @@ public class Statistics {
     }
 
     private static class Param {
-        
+
         private final String key, value;
-        
+
         public Param(String key, String value) {
-            this.key   = key;
+            this.key = key;
             this.value = value;
         }
-        
+
         public String getKey() {
             return key;
         }
-        
+
         public String getValue() {
             return value;
         }
-        
+
         public String encode() {
             try {
-                return URLEncoder.encode(getKey(), "UTF-8") + "=" + 
-                       URLEncoder.encode(getValue(), "UTF-8");
+                return URLEncoder.encode(getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(getValue(), "UTF-8");
             } catch (UnsupportedEncodingException ex) {
                 throw new RuntimeException("Encoding 'UTF-8' is not supported.");
             }
