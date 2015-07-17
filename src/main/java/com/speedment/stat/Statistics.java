@@ -48,6 +48,10 @@ public class Statistics {
     public static void onGenerate() {
         notifyEvent("generate");
     }
+    
+    public static void onNodeStarted() {
+        notifyEvent("node-started");
+    }
 
     private static void notifyEvent(String event, Param... params) {
         final Param[] all = Arrays.copyOf(params, params.length + 3);
@@ -73,7 +77,9 @@ public class Statistics {
                 }
 
                 con.getResponseCode();
-            } catch (IOException ex) {}
+            } catch (IOException ex) {
+                // Silent.
+            }
         }).start();
     }
     
