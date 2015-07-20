@@ -21,6 +21,7 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.ColumnCompressionType;
 import com.speedment.core.config.model.parameters.FieldStorageType;
+import com.speedment.util.Cast;
 import java.util.Optional;
 
 /**
@@ -87,9 +88,8 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Table.class)
-                .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Table.class);
     }
 
     @Override

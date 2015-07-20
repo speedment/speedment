@@ -20,6 +20,7 @@ import com.speedment.core.config.model.Index;
 import com.speedment.core.config.model.IndexColumn;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.OrderType;
+import com.speedment.util.Cast;
 import java.util.Optional;
 
 /**
@@ -47,9 +48,8 @@ public class IndexColumnImpl extends AbstractOrdinalConfigEntity implements Inde
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Index.class)
-            .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Index.class);
     }
 
     @Override

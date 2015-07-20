@@ -75,7 +75,7 @@ public class ChildHolder {
             );
         });
 
-        child.setParentTo(parent);
+        child.setParent(parent);
 
         Optional.of(child)
                 .filter(c -> c.isOrdinable())
@@ -107,7 +107,7 @@ public class ChildHolder {
 
     public Optional<Child<?>> remove(Parent<?> parent, Child<?> child) {
         if (child.getParent().filter(p -> p == parent).isPresent()) {
-            child.setParentTo(null);
+            child.setParent(null);
         }
 
         return Optional.ofNullable(children.get(child.getClass()))

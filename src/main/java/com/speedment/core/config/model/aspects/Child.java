@@ -27,17 +27,7 @@ public interface Child<P extends Parent<?>> extends Node {
 
     Optional<P> getParent();
     
-    void setParentTo(Parent<?> parent);
-    
-    default void setParent(P parent) {
-        setParentTo(parent);
-    }
-
-    default <C> Optional<C> setParentHelper(Parent<?> parent, Class<C> ifClass) {
-        return Optional.ofNullable(parent)
-            .filter(p -> p.is(ifClass))
-            .map(t -> ifClass.cast(t));
-    }
+    void setParent(Parent<?> parent);
     
     Class<P> getParentInterfaceMainClass();
     

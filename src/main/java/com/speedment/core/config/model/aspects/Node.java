@@ -26,19 +26,23 @@ import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * The base interface for all nodes in the database model. Nodes can be anything
+ * from an index to an entire schema. If a node can have children it should
+ * also inherit the {@link Parent} interface and if it has a parent it should
+ * inherit the {@link Child} interface.
+ * 
+ * @author  Emil Forslund
+ * @see     Parent
+ * @see     Child
  */
 public interface Node extends Nameable, Enableable {
+    
+    default Optional<? extends Child<?>> asChild() {
+        return Optional.empty();
+    }
 
-    @SuppressWarnings("unchecked")
-    default <P extends Parent<?>> Optional<P> getParent(Class<P> parentClass) {
-        return Optional.of(this)
-            .filter(e -> e.isChildInterface())
-            .map(e -> (Child<?>) e)
-            .flatMap(e -> e.getParent())
-            .filter(e -> parentClass.isAssignableFrom(e.getClass()))
-            .map(e -> (P) e);
+    default Optional<? extends Parent<?>> asParent() {
+        return Optional.empty();
     }
 
     default boolean isParentInterface() {
@@ -53,21 +57,17 @@ public interface Node extends Nameable, Enableable {
         return false;
     }
 
-    default Optional<? extends Child<?>> asChild() {
-        return Optional.empty();
-    }
-
-    default Optional<? extends Parent<?>> asParent() {
-        return Optional.empty();
-    }
-
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
-        return getParent(Parent.class).map(parent -> Trees.walkOptional(
-            parent,
-            (Parent<?> p) -> p.getParent(Parent.class).map(p2 -> (Parent<?>) p2),
-            Trees.WalkingOrder.BACKWARD
-        )).orElse(Stream.empty());
+        return asChild()
+            .flatMap(Child::getParent)
+            .map(p -> (Parent<?>) p)
+            .map(parent -> Trees.walkOptional(
+                parent, (Parent<?> p) -> p.asChild()
+                    .flatMap(Child::getParent)
+                    .map(p2 -> (Parent<?>) p2),
+                Trees.WalkingOrder.BACKWARD
+            )).orElse(Stream.empty());
     }
 
     @SuppressWarnings("unchecked")
@@ -100,9 +100,4 @@ public interface Node extends Nameable, Enableable {
     }
 
     Class<?> getInterfaceMainClass();
-
-    default boolean is(Class<?> clazz) {
-        final Class<?> first = getInterfaceMainClass();
-        return clazz.isAssignableFrom(first);
-    }
 }
