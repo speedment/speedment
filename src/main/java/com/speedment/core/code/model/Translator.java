@@ -24,6 +24,7 @@ import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
+import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -33,18 +34,17 @@ import java.util.stream.Stream;
  * interface is implemented to generate more files from the same database 
  * structure.
  * 
- * @author pemi
- * @param <T> The ConfigEntity type to use
- * @param <R> The type to translate into.
- * 
- * @See Node
+ * @author     pemi
+ * @param <T>  the ConfigEntity type to use
+ * @param <R>  the type to translate into
+ * @see        Node
  */
 public interface Translator<T extends Node, R> extends Supplier<R> {
 
     /**
      * The node being translated.
      * 
-     * @return the node.
+     * @return       the node
      */
     T getNode();
 
@@ -52,7 +52,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Return this node or any ancestral node that is a {@link Project}. If no 
      * such node exists, an <code>IllegalStateException</code> is thrown.
      * 
-     * @return the project node.
+     * @return       the project node
      */
     default Project project() {
         return getGenericConfigEntity(Project.class);
@@ -62,7 +62,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Return this node or any ancestral node that is a {@link Dbms}. If no 
      * such node exists, an <code>IllegalStateException</code> is thrown.
      * 
-     * @return the dbms node.
+     * @return       the dbms node
      */
     default Dbms dbms() {
         return getGenericConfigEntity(Dbms.class);
@@ -72,7 +72,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Return this node or any ancestral node that is a {@link Schema}. If no 
      * such node exists, an <code>IllegalStateException</code> is thrown.
      * 
-     * @return the schema node.
+     * @return       the schema node
      */
     default Schema schema() {
         return getGenericConfigEntity(Schema.class);
@@ -82,7 +82,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Return this node or any ancestral node that is a {@link Table}. If no 
      * such node exists, an <code>IllegalStateException</code> is thrown.
      * 
-     * @return the table node.
+     * @return       the table node
      */
     default Table table() {
         return getGenericConfigEntity(Table.class);
@@ -92,7 +92,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Return this node or any ancestral node that is a {@link Column}. If no 
      * such node exists, an <code>IllegalStateException</code> is thrown.
      * 
-     * @return the column node.
+     * @return       the column node
      */
     default Column column() {
         return getGenericConfigEntity(Column.class);
@@ -102,8 +102,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Returns a stream over all enabled columns in the node tree. Disabled
      * nodes will be ignored.
      * 
-     * @return the enabled columns.
-     * @see Column
+     * @return       the enabled columns
+     * @see          Column
+     * @see          Enableable#isEnabled()
      */
     default Stream<Column> columns() {
         return table().streamOf(Column.class).filter(Column::isEnabled);
@@ -113,8 +114,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Returns a stream over all enabled indexes in the node tree. Disabled
      * nodes will be ignored.
      * 
-     * @return the enabled indexes.
-     * @see Index
+     * @return       the enabled indexes
+     * @see          Index
+     * @see          Enableable#isEnabled()
      */
     default Stream<Index> indexes() {
         return table().streamOf(Index.class).filter(Index::isEnabled);
@@ -124,8 +126,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Returns a stream over all enabled foreign keys in the node tree. Disabled
      * nodes will be ignored.
      * 
-     * @return the enabled foreign keys.
-     * @see ForeignKey
+     * @return       the enabled foreign keys
+     * @see          ForeignKey
+     * @see          Enableable#isEnabled()
      */
     default Stream<ForeignKey> foreignKeys() {
         return table().streamOf(ForeignKey.class).filter(ForeignKey::isEnabled);
@@ -135,8 +138,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * Returns a stream over all enabled primary key columns in the node tree. 
      * Disabled nodes will be ignored.
      * 
-     * @return the enabled primary key columns.
-     * @see PrimaryKeyColumn
+     * @return       the enabled primary key columns
+     * @see          PrimaryKeyColumn
+     * @see          Enableable#isEnabled()
      */
     default Stream<PrimaryKeyColumn> primaryKeyColumns() {
         return table().streamOf(PrimaryKeyColumn.class).filter(PrimaryKeyColumn::isEnabled);
@@ -147,7 +151,9 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * specified <code>Class</code>. If no such node exists, an 
      * <code>IllegalStateException</code> is thrown.
      * 
-     * @return the node found.
+     * @param <E>    the type of the class to match
+     * @param clazz  the class to match
+     * @return       the node found
      */
     default <E extends Node> E getGenericConfigEntity(Class<E> clazz) {
         if (clazz.isAssignableFrom(getNode().getInterfaceMainClass())) {
