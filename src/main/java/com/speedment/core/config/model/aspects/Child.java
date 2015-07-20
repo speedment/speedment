@@ -25,11 +25,24 @@ import java.util.Optional;
  */
 public interface Child<P extends Parent<?>> extends Node {
 
+    /**
+     * Returns the parent node, if any, or else an empty <code>Optional</code>.
+     * 
+     * @return       the parent.
+     */
     Optional<P> getParent();
     
-    void setParent(Parent<?> parent);
-    
     Class<P> getParentInterfaceMainClass();
+    
+    /**
+     * Sets the parent for this node. This method does not do any changes in the
+     * parent object, the node will still have to be appended to the parent's
+     * list of children.
+     * 
+     * @param parent  the new parent.
+     * @see           Child
+     */
+    void setParent(Parent<?> parent);
     
     default boolean isRoot() {
         return !getParent().isPresent();

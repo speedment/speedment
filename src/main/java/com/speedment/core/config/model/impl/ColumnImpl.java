@@ -115,5 +115,5 @@ public class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
     @Override
     public void setAutoincrement(Boolean autoincrement) {
         this.autoincrement = autoincrement;
-    }    
+    }
 }

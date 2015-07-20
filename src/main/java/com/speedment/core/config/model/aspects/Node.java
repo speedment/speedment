@@ -60,11 +60,11 @@ public interface Node extends Nameable, Enableable {
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
         return asChild()
-            .flatMap(Child::getParent)
+            .flatMap(c -> c.getParent())
             .map(p -> (Parent<?>) p)
             .map(parent -> Trees.walkOptional(
                 parent, (Parent<?> p) -> p.asChild()
-                    .flatMap(Child::getParent)
+                    .flatMap(c -> c.getParent())
                     .map(p2 -> (Parent<?>) p2),
                 Trees.WalkingOrder.BACKWARD
             )).orElse(Stream.empty());

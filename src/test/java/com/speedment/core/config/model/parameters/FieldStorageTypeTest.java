@@ -77,17 +77,6 @@ public class FieldStorageTypeTest {
     }
 
     /**
-     * Test of streamFor method, of class FieldStorageType.
-     */
-    @Test
-    public void testStreamFor() {
-        System.out.println("streamFor");
-        Set<FieldStorageType> result = FieldStorageType.streamFor(column).collect(toSet());
-        Set<FieldStorageType> expected = Stream.of(FieldStorageType.values()).collect(toSet());
-        assertEquals(expected, result);
-    }
-
-    /**
      * Test of defaultFor method, of class FieldStorageType.
      */
     @Test
