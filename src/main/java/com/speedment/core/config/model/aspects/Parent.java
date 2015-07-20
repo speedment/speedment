@@ -23,26 +23,27 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
- * @param <C> Child type
+ * This interface should be implemented by all {@link Node Nodes} that is not
+ * a leaf in the database model tree. A node can be both a {@link Child}
+ * and a <code>Parent</code> at the same time if it is located somewhere in the
+ * middle of the tree.
+ * 
+ * @author     Emil Forslund
+ * @param <C>  the type of the children
  */
 public interface Parent<C extends Child<?>> extends Node {
 
+    /**
+     * Returns a {@link ChildHolder} that contains all the children of this
+     * node. The <code>ChildHolder</code> should be safe to make changes to.
+     * 
+     * @return  the children.
+     */
     ChildHolder getChildren();
 
     @SuppressWarnings("unchecked")
     default Optional<C> add(final C child) {
-        return getChildren().put(this, child).map(c -> (C) c);
-    }
-
-    @SuppressWarnings("unchecked")
-    default Optional<C> remove(final C child) {
-        return getChildren().remove(this, child).map(c -> (C) c);
-    }
-
-    default boolean contains(final C child) {
-        return getChildren().contains(child);
+        return getChildren().put(child, this).map(c -> (C) c);
     }
 
     @SuppressWarnings("unchecked")

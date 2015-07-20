@@ -17,26 +17,36 @@
 package com.speedment.core.config.model.aspects;
 
 /**
- *
+ * A trait for nodes that have a predefined order. This can for an example be
+ * columns or indexes.
+ * 
  * @author pemi
  */
 public interface Ordinable extends Node {
 
     final int ORDINAL_FIRST = 1, UNSET = -1;
 
+    /**
+     * Returns the position to use when ordering this node.
+     * 
+     * @return                 the ordinal position.
+     */
     int getOrdinalPosition();
 
+    /**
+     * Sets the position to use when ordering this node.
+     * 
+     * @param ordinalPosition  the ordinal position.
+     */
     void setOrdinalPosition(int ordinalPosition);
 
+    /**
+     * Returns <code>true</code> since nodes of this type has a specific order.
+     * 
+     * @return  <code>true</code> since this is an <code>Ordinable</code>.
+     */
     @Override
     default boolean isOrdinable() {
         return true;
-    }
-
-    default int compareToHelper(Ordinable that) {
-        return Integer.compare(
-                this.getOrdinalPosition(),
-                that.getOrdinalPosition()
-        );
     }
 }

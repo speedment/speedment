@@ -31,32 +31,79 @@ import java.util.stream.Stream;
  * also inherit the {@link Parent} interface and if it has a parent it should
  * inherit the {@link Child} interface.
  * 
+ * All nodes are both {@link Nameable} and {@link Enableable}.
+ * 
  * @author  Emil Forslund
  * @see     Parent
  * @see     Child
  */
 public interface Node extends Nameable, Enableable {
     
+    /**
+     * If this node implements the {@link Child} interface, it is returned
+     * wrapped in an <code>Optional</code>. If not, empty is returned. The 
+     * method does not take into consideration if the parent is set or not, only 
+     * if it is possible for it to have a parent.
+     * 
+     * @return       this entity if it is a child.
+     * @see          Child
+     */
     default Optional<? extends Child<?>> asChild() {
         return Optional.empty();
     }
 
+    /**
+     * If this node implements the {@link Parent} interface, it is returned
+     * wrapped in an <code>Optional</code>. If not, empty is returned. The 
+     * method does not take into consideration if any children exists or not, only
+     * if it is possible for it to have children.
+     * 
+     * @return       this entity if it is a parent.
+     * @see          Parent
+     */
     default Optional<? extends Parent<?>> asParent() {
         return Optional.empty();
     }
 
+    /**
+     * Returns <code>true</code> if this class implements the {@link Parent} 
+     * interface.
+     * 
+     * @return       <code>true</code> if this is a {@link Parent}.
+     * @see          Parent
+     */
     default boolean isParentInterface() {
         return false;
     }
 
+    /**
+     * Returns <code>true</code> if this class implements the {@link Child} 
+     * interface.
+     * 
+     * @return       <code>true</code> if this is a {@link Child}.
+     * @see          Child
+     */
     default boolean isChildInterface() {
         return false;
     }
 
+    /**
+     * Returns <code>true</code> if this class implements the {@link Ordinable} 
+     * interface.
+     * 
+     * @return       <code>true</code> if this is a {@link Ordinable}.
+     * @see          Ordinable
+     */
     default boolean isOrdinable() {
         return false;
     }
 
+    /**
+     * Returns a <code>Stream</code> with all the nodes above this node in the
+     * database model tree.
+     * 
+     * @return       a stream of all ancestors.
+     */
     @SuppressWarnings("unchecked")
     default Stream<? extends Parent<?>> ancestors() {
         return asChild()
@@ -70,6 +117,15 @@ public interface Node extends Nameable, Enableable {
             )).orElse(Stream.empty());
     }
 
+    /**
+     * Looks for an ancestor of the specified type above this node in the
+     * database model tree. If such an ancestor exists, it is returned. Else
+     * the result will be <code>empty</code>.
+     * 
+     * @param <E>    the type of the ancestor to return
+     * @param clazz  the class of the ancestor to search for
+     * @return       the ancestor
+     */
     @SuppressWarnings("unchecked")
     default <E extends Node> Optional<E> ancestor(final Class<E> clazz) {
         return ancestors()
@@ -78,6 +134,13 @@ public interface Node extends Nameable, Enableable {
             .findFirst();
     }
 
+    /**
+     * 
+     * 
+     * @param <T> sddasd
+     * @param from zsdzsd
+     * @return       asd
+     */
     default <T extends Parent<?>> String getRelativeName(final Class<T> from) {
         return getRelativeName(from, Function.identity());
     }
@@ -96,7 +159,6 @@ public interface Node extends Nameable, Enableable {
             }
         }
         return sj.toString() + childMapper.apply(getName());
-        //return ancestors().map(Nameable::getName).collect(joining(".", "", ".")) + getName();
     }
 
     Class<?> getInterfaceMainClass();

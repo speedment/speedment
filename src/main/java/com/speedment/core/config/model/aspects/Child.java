@@ -19,9 +19,13 @@ package com.speedment.core.config.model.aspects;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
- * @param <P> Parent type
+ * This interface should be implemented by all {@link Node Nodes} that is not
+ * the root of the database model tree. A node can be both a <code>Child</code>
+ * and a {@link Parent} at the same time if it is located somewhere in the
+ * middle of the tree.
+ * 
+ * @author     Emil Forslund
+ * @param <P>  the type of the parent
  */
 public interface Child<P extends Parent<?>> extends Node {
 
@@ -32,6 +36,13 @@ public interface Child<P extends Parent<?>> extends Node {
      */
     Optional<P> getParent();
     
+    /**
+     * Returns the class of the parent. This should be safe to call even if the
+     * node has been removed from the tree and {@link #getParent()} returns 
+     * empty.
+     * 
+     * @return        the parent class.
+     */
     Class<P> getParentInterfaceMainClass();
     
     /**
@@ -40,19 +51,37 @@ public interface Child<P extends Parent<?>> extends Node {
      * list of children.
      * 
      * @param parent  the new parent.
-     * @see           Child
+     * @see           Parent
      */
     void setParent(Parent<?> parent);
     
+    /**
+     * Returns whether this node is the root or not. This is equivalent to
+     * checking if the parent is missing or not.
+     * 
+     * @return <code>true</code> if this is the root.
+     */
     default boolean isRoot() {
         return !getParent().isPresent();
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return        always <code>true</code> since this is a child.
+     * @see           Parent
+     */
     @Override
     default boolean isChildInterface() {
         return true;
     }
     
+    /**
+     * {@inheritDoc}
+     * 
+     * @return        This entity wrapped in an <code>Optional</code>.
+     * @see           Parent
+     */
     @Override
     default Optional<Child<?>> asChild() {
         return Optional.of(this);
