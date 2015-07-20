@@ -27,6 +27,8 @@ import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import static com.speedment.gui.controllers.AlertController.showAlert;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.util.Trees;
 import java.io.IOException;
 import java.net.URL;
@@ -45,8 +47,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 /**
  * FXML Controller class
@@ -55,7 +56,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ProjectPromptController implements Initializable {
     
-    private final static Logger LOGGER = LogManager.getLogger(ProjectPromptController.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(ProjectPromptController.class);
     
     @FXML private Button buttonOpen;
     @FXML private TextField fieldHost;

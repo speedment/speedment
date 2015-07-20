@@ -32,6 +32,8 @@ import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
@@ -59,8 +61,6 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -72,7 +72,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends AbstractManager<PK, ENTITY, BUILDER> implements SqlManager<PK, ENTITY, BUILDER> {
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractSqlManager.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSqlManager.class);
 
     private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
 

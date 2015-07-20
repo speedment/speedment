@@ -26,10 +26,28 @@ import java.util.stream.Stream;
  */
 public interface ClassMapper<V> {
 
+    /**
+     * Adds a mapping for an item
+     *
+     * @param item to add
+     * @return the previous mapping that existed, or null
+     */
     V add(V item);
 
+    /**
+     * Returns the mapping for the given class, or null if no mapping exists.
+     *
+     * @param <R> The class type
+     * @param clazz the class to use
+     * @return the mapping for the given class, or null if no mapping exists
+     */
     public <R extends V> R get(Class<R> clazz);
 
+    /**
+     * Returns a stream of all mappings that exists.
+     *
+     * @return a stream of all mappings that exists
+     */
     Stream<Map.Entry<Class<?>, V>> stream();
 
 }

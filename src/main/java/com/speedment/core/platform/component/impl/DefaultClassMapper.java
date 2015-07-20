@@ -58,20 +58,7 @@ public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
         return oldItem;
     }
 
-    /**
-     * Gets a Platform Component based on its interface class.
-     * <p>
-     * Supported interfaces:
-     *   DbmsHandlerFactoryComponent
-     *   ManagerComponent
-     *   PrimaryKeyFactoryComponent
-     *   ProjectComponent
-     *   SqlTypeMapperComponent
-     * 
-     * @param <R> The intended return type
-     * @param clazz The class of the intended return type
-     * @return The currently mapped instance
-     */
+    
     @SuppressWarnings("unchecked") // Must be same type!
     @Override
     public <R extends V> R get(Class<R> clazz) {

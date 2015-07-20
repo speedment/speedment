@@ -34,6 +34,8 @@ import static com.speedment.gui.util.FadeAnimation.fadeIn;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
 import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.stat.Statistics;
 import java.io.File;
 import java.io.IOException;
@@ -82,8 +84,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import static javafx.util.Duration.ZERO;
 import static javafx.util.Duration.millis;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * FXML Controller class
@@ -92,7 +92,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class SceneController implements Initializable {
     
-    private final static Logger LOGGER = LogManager.getLogger(SceneController.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
     private final static String GITHUB_URL = "https://github.com/speedment/speedment";
 
     @FXML private Button buttonNew;

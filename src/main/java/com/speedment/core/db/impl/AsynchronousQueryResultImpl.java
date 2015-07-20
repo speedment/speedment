@@ -23,6 +23,8 @@ package com.speedment.core.db.impl;
 
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.exception.SpeedmentException;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.util.stream.StreamUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,8 +35,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -43,7 +43,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 
-    private static final Logger LOGGER = LogManager.getLogger(AsynchronousQueryResultImpl.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AsynchronousQueryResultImpl.class);
 
     private String sql;
     private List<?> values;

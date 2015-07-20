@@ -34,6 +34,8 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.util.java.sql.TypeInfo;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -56,8 +58,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -65,7 +65,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractRelationalDbmsHandler.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
 
     private final Dbms dbms;
     private transient Map<String, Class<?>> typeMapping;

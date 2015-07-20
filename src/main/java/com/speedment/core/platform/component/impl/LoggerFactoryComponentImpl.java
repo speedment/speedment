@@ -14,28 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.analytics;
+package com.speedment.core.platform.component.impl;
 
-import com.speedment.logging.Logger;
-import com.speedment.logging.LoggerManager;
+import com.speedment.core.platform.component.LoggerFactoryComponent;
+import com.speedment.logging.LoggerFactory;
+import com.speedment.logging.impl.SystemOutLoggerFactory;
+import java.util.Objects;
 
+public class LoggerFactoryComponentImpl implements LoggerFactoryComponent {
 
-/**
- *
- * @author pemi
- */
-public class LoggingAdapterImpl implements LoggingAdapter {
+    private LoggerFactory loggerFactory;
 
-    private final static Logger LOGGER = LoggerManager.getLogger(LoggingAdapterImpl.class);
-
-    @Override
-    public void logError(String errorMessage) {
-        LOGGER.error(errorMessage);
+    public LoggerFactoryComponentImpl() {
+        setLoggerFactory(new SystemOutLoggerFactory());
     }
 
     @Override
-    public void logMessage(String message) {
-        LOGGER.info(message);
+    public LoggerFactory getLoggerFactory() {
+        return loggerFactory;
     }
 
+    @Override
+    public void setLoggerFactory(LoggerFactory loggerFactory) {
+        this.loggerFactory = Objects.requireNonNull(loggerFactory);
+    }
 }

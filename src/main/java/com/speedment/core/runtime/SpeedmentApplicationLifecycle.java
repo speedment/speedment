@@ -31,6 +31,8 @@ import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.stat.Statistics;
 import static com.speedment.util.Beans.beanPropertyName;
 import com.speedment.util.Trees;
@@ -50,8 +52,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -60,7 +60,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
 
-    private final static Logger LOGGER = LogManager.getLogger(SpeedmentApplicationLifecycle.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(SpeedmentApplicationLifecycle.class);
 
     private final List<Tuple3<Class<? extends ConfigEntity>, String, Consumer<ConfigEntity>>> withsNamed;
     private final List<Tuple2<Class<? extends ConfigEntity>, Consumer<ConfigEntity>>> withsAll;

@@ -14,28 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.analytics;
+package com.speedment.logging.impl.formatter;
 
-import com.speedment.logging.Logger;
-import com.speedment.logging.LoggerManager;
-
+import com.speedment.logging.Level;
+import com.speedment.logging.LoggerFormatter;
+import java.time.Instant;
 
 /**
  *
  * @author pemi
  */
-public class LoggingAdapterImpl implements LoggingAdapter {
-
-    private final static Logger LOGGER = LoggerManager.getLogger(LoggingAdapterImpl.class);
+public class PlainFormatter implements LoggerFormatter {
 
     @Override
-    public void logError(String errorMessage) {
-        LOGGER.error(errorMessage);
-    }
-
-    @Override
-    public void logMessage(String message) {
-        LOGGER.info(message);
+    public String apply(Level level, String name, String message) {
+        final StringBuilder sb = new StringBuilder(Instant.now() +" "+level.toText()+" ["+Thread.currentThread().getName()+"] (").append(name).append(") - ").append(message);
+        return sb.toString();
     }
 
 }

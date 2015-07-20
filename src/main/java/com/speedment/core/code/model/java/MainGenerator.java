@@ -31,6 +31,9 @@ import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadata
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Table;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
+
 import com.speedment.stat.Statistics;
 import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.GENERATE;
@@ -46,8 +49,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -55,7 +56,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class MainGenerator implements Consumer<Project> {
 
-    private final static Logger LOGGER = LogManager.getLogger(MainGenerator.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
     private int fileCounter = 0;
 
     @Override

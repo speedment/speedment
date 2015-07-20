@@ -22,12 +22,11 @@ import com.speedment.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.core.platform.component.impl.DefaultClassMapper;
 import com.speedment.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.core.platform.component.impl.JavaTypeMapperComponentImpl;
+import com.speedment.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.core.platform.component.impl.SqlTypeMapperComponentImpl;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -35,8 +34,7 @@ import org.apache.logging.log4j.Logger;
  */
 public final class Platform extends DefaultClassMapper<Component> {
 
-    private final Logger logger = LogManager.getLogger(getClass());
-
+    //private final Logger logger = LogManager.getLogger(getClass());
     private Platform() {
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
@@ -45,10 +43,37 @@ public final class Platform extends DefaultClassMapper<Component> {
         add(new SqlTypeMapperComponentImpl());
         add(new JavaTypeMapperComponentImpl());
         add(new EntityManagerImpl());
+        add(new LoggerFactoryComponentImpl());
     }
 
+    /**
+     * Returns the Platform singleton.
+     *
+     * @return the Platform singleton
+     */
     public static Platform get() {
         return PlatformHolder.INSTANCE;
+    }
+
+    /**
+     * Gets a Platform Component based on its interface class.
+     * <p>
+     * Supported interfaces:      
+     *     {@link com.speedment.core.platform.component.EntityManager}
+     *     {@link com.speedment.core.platform.component.DbmsHandlerComponent}
+     *     {@link com.speedment.core.platform.component.ManagerComponent}
+     *     {@link com.speedment.core.platform.component.PrimaryKeyFactoryComponent}
+     *     {@link com.speedment.core.platform.component.ProjectComponent}
+     *     {@link com.speedment.core.platform.component.SqlTypeMapperComponent}
+     *     {@link com.speedment.core.platform.component.LoggerFactoryComponent}
+     *
+     * @param <R> The intended return type
+     * @param clazz The class of the intended return type
+     * @return The currently mapped instance
+     */
+    @Override
+    public <R extends Component> R get(Class<R> clazz) {
+        return super.get(clazz);
     }
 
     @Override

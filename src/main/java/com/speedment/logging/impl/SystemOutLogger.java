@@ -14,28 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.analytics;
+package com.speedment.logging.impl;
 
-import com.speedment.logging.Logger;
-import com.speedment.logging.LoggerManager;
-
+import com.speedment.logging.LoggerFormatter;
 
 /**
  *
  * @author pemi
  */
-public class LoggingAdapterImpl implements LoggingAdapter {
-
-    private final static Logger LOGGER = LoggerManager.getLogger(LoggingAdapterImpl.class);
+public class SystemOutLogger extends AbstractLogger {
 
     @Override
-    public void logError(String errorMessage) {
-        LOGGER.error(errorMessage);
+    void output(String message) {
+        System.out.println(message);
     }
 
-    @Override
-    public void logMessage(String message) {
-        LOGGER.info(message);
+    public SystemOutLogger(String name, LoggerFormatter formatter) {
+        super(name, formatter);
     }
 
 }

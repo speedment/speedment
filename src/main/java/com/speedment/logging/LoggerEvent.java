@@ -14,28 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.analytics;
-
-import com.speedment.logging.Logger;
-import com.speedment.logging.LoggerManager;
-
+package com.speedment.logging;
 
 /**
  *
  * @author pemi
  */
-public class LoggingAdapterImpl implements LoggingAdapter {
+public interface LoggerEvent {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(LoggingAdapterImpl.class);
+    Level getLevel();
 
-    @Override
-    public void logError(String errorMessage) {
-        LOGGER.error(errorMessage);
-    }
+    String getName();
 
-    @Override
-    public void logMessage(String message) {
-        LOGGER.info(message);
-    }
+    String getMessage();
 
 }
