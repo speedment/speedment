@@ -26,13 +26,14 @@ import java.util.Optional;
  * 
  * @author     Emil Forslund
  * @param <P>  the type of the parent
+ * @see        Parent
  */
 public interface Child<P extends Parent<?>> extends Node {
 
     /**
      * Returns the parent node, if any, or else an empty <code>Optional</code>.
      * 
-     * @return       the parent.
+     * @return       the parent
      */
     Optional<P> getParent();
     
@@ -41,7 +42,7 @@ public interface Child<P extends Parent<?>> extends Node {
      * node has been removed from the tree and {@link #getParent()} returns 
      * empty.
      * 
-     * @return        the parent class.
+     * @return        the parent class
      */
     Class<P> getParentInterfaceMainClass();
     
@@ -50,7 +51,7 @@ public interface Child<P extends Parent<?>> extends Node {
      * parent object, the node will still have to be appended to the parent's
      * list of children.
      * 
-     * @param parent  the new parent.
+     * @param parent  the new parent
      * @see           Parent
      */
     void setParent(Parent<?> parent);
@@ -59,7 +60,7 @@ public interface Child<P extends Parent<?>> extends Node {
      * Returns whether this node is the root or not. This is equivalent to
      * checking if the parent is missing or not.
      * 
-     * @return <code>true</code> if this is the root.
+     * @return        <code>true</code> if this is the root
      */
     default boolean isRoot() {
         return !getParent().isPresent();
@@ -68,7 +69,7 @@ public interface Child<P extends Parent<?>> extends Node {
     /**
      * {@inheritDoc}
      * 
-     * @return        always <code>true</code> since this is a child.
+     * @return        always <code>true</code> since this is a child
      * @see           Parent
      */
     @Override
@@ -79,7 +80,7 @@ public interface Child<P extends Parent<?>> extends Node {
     /**
      * {@inheritDoc}
      * 
-     * @return        This entity wrapped in an <code>Optional</code>.
+     * @return        this entity wrapped in an <code>Optional</code>
      * @see           Parent
      */
     @Override

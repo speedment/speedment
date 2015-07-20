@@ -30,6 +30,7 @@ import java.util.stream.Stream;
  * 
  * @author     Emil Forslund
  * @param <C>  the type of the children
+ * @see        Child
  */
 public interface Parent<C extends Child<?>> extends Node {
 
@@ -37,38 +38,71 @@ public interface Parent<C extends Child<?>> extends Node {
      * Returns a {@link ChildHolder} that contains all the children of this
      * node. The <code>ChildHolder</code> should be safe to make changes to.
      * 
-     * @return  the children.
+     * @return            the children
      */
     ChildHolder getChildren();
 
+    /**
+     * Add the node as a child to this node. This will set this node as the
+     * parent of the specified node automatically. If a parent is already set
+     * in the specified node, an <code>IllegalStateException</code> will be 
+     * thrown.
+     * 
+     * If a child with he same name (as returned by {@link Nameable#getName()})
+     * already existed, it is removed and returned by this method. Else, the
+     * <code>Optional</code> returned will be <code>empty</code>.
+     * 
+     * @param child       The child to add
+     * @return            If a child had to be removed it will be returned, else
+     *                    <code>empty</code>
+     * 
+     * @see               ChildHolder
+     */
     @SuppressWarnings("unchecked")
     default Optional<C> add(final C child) {
         return getChildren().put(child, this).map(c -> (C) c);
     }
 
+    /**
+     * Returns a <code>Stream</code> over all the children of this node. The
+     * elements in the stream is sorted primarily on (i) the class name
+     * of the type returned by {@link Child#getInterfaceMainClass()} and 
+     * secondly (ii) on the node name returned by {@link Child#getName()}.
+     * 
+     * @return            a <code>Stream</code> of all children
+     */
     @SuppressWarnings("unchecked")
     default Stream<? extends C> stream() {
         return getChildren().stream().map(c -> (C) c);
     }
 
+    /**
+     * Returns a <code>Stream</code> over all the children to this node with
+     * the specified interface main class. The inputted class should correspond
+     * to the one returned by {@link Child#getInterfaceMainClass()}. The stream
+     * will be sorted based on the node name returned by 
+     * {@link Child#getName()}.
+     * 
+     * @param <C>         the type of the children to return
+     * @param childClass  the class to search for amongst the children
+     * @return            a <code>Stream</code> of children of the specified 
+     *                    type
+     */
     default <T extends C> Stream<T> streamOf(Class<T> childClass) {
         return getChildren().streamOf(childClass);
     }
-
-    @SuppressWarnings("unchecked")
-    default <T extends Node> Stream<T> traverseOver(Class<T> childClass) {
-        return Parent.this.traverse()
-            .filter(t -> childClass.isAssignableFrom(t.getClass()))
-            //.filter(t -> childClass.isAssignableFrom(t.getInterfaceMainClass()))
-            .map(t -> (T) t);
-    }
-
-    @SuppressWarnings("unchecked")
+    
+    /**
+     * Returns a <code>Stream</code> with this node and all the descendants of 
+     * this node. The tree will be traversed using the breadth first approach.
+     * 
+     * @return            a <code>Stream</code> of all descendants
+     */
     default Stream<Node> traverse() {
         final Function<Node, Stream<Node>> traverse = n -> n.asParent()
-            .map(p -> p.stream())
+            .map(Parent::stream)
             .orElse(Stream.empty())
-            .map(e -> (Node) e);
+            .map(Node.class::cast);
 
         return Trees.traverse(
             this,
@@ -77,42 +111,41 @@ public interface Parent<C extends Child<?>> extends Node {
         ).map(Node.class::cast);
     }
 
-    default boolean isEmpty() {
-        return getChildren().isEmpty();
+    /**
+     * Returns a <code>Stream</code> with all the descendants of this node that
+     * is of the specified type. The tree will be traversed using the breadth 
+     * first approach.
+     * 
+     * @param <T>         the type of the descendants to return
+     * @param childClass  the class to search for amongst the descendants
+     * @return            a <code>Stream</code> of all descendants of a type
+     */
+    @SuppressWarnings("unchecked")
+    default <T extends Node> Stream<T> traverseOver(Class<T> childClass) {
+        return traverse()
+            .filter(t -> childClass.isAssignableFrom(t.getClass()))
+            .map(t -> (T) t);
     }
 
-    default long size() {
-        return getChildren().size();
-    }
-
+    /**
+     * {@inheritDoc}
+     * 
+     * @return        always <code>true</code> since this is a parent
+     * @see           Child
+     */
     @Override
     default boolean isParentInterface() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return        this entity wrapped in an <code>Optional</code>
+     * @see           Child
+     */
     @Override
     default Optional<Parent<?>> asParent() {
         return Optional.of(this);
     }
-
-    default Stream<Child<?>> descendants() {
-        return Parent.this.traverse().filter(n -> this != n).map(n -> (Child<?>) n);
-    }
-
-//    
-//    default Stream<Child<?>> descendants() {
-//        return stream()
-//            .flatMap((Child child) -> Trees.traverse(child, c -> c.asParent()
-//                    .map(p -> p.stream())
-//                    .orElse(Stream.empty())
-//                    .map(n -> (Child<?>) n),
-//                    Trees.TraversalOrder.DEPTH_FIRST_PRE
-//                ))
-//            .map(n -> (Child<?>) n);
-//    }
-//    
-//    default <T extends Child<?>> Stream<T> descendantsOf(Class<T> decendantsClass) {
-//        return descendants().filter(d -> d.getClass().equals(decendantsClass)).map(decendantsClass::cast);
-//    }
-//    
 }

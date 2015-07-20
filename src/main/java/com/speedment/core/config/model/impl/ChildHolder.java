@@ -70,24 +70,6 @@ public class ChildHolder {
     }
 
     /**
-     * The number of children in this holder.
-     * 
-     * @return               the number of children.
-     */
-    public long size() {
-        return stream().count();
-    }
-
-    /**
-     * Returns whether or not this holder is empty.
-     * 
-     * @return <code>true</code> if there are no children here.
-     */
-    public boolean isEmpty() {
-        return stream().findAny().isPresent();
-    }
-
-    /**
      * Put the specified child into this holder, also setting its parent to the
      * specified one. If the parent of the child is already set, an
      * <code>IllegalStateException</code> will be thrown. The children are stored
@@ -142,21 +124,25 @@ public class ChildHolder {
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder. The
-     * stream is sorted based on the ordering determined when constructing this
-     * holder.
+     * elements in the stream is sorted primarily on (i) the class name
+     * of the type returned by {@link Child#getInterfaceMainClass()} and 
+     * secondly (ii) on the node name returned by {@link Child#getName()}.
      * 
      * @return  a stream of all children
+     * @see     Nameable
      */
     public Stream<Child<?>> stream() {
         return Stream.of(children.values())
-                .flatMap(i -> i.stream())
+                .flatMap(i -> i.stream().sorted())
                 .flatMap(i -> i.values().stream().sorted());
     }
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder with
      * the specified interface main class. The inputted class should correspond
-     * to the one returned by {@link Child#getInterfaceMainClass()}.
+     * to the one returned by {@link Child#getInterfaceMainClass()}. The stream
+     * will be sorted based on the node name returned by 
+     * {@link Child#getName()}.
      * 
      * @param <C>    the type of the children to return
      * @param clazz  the class to search for amongst the children
