@@ -83,7 +83,7 @@ public interface Parent<C extends Child<?>> extends Node {
      * will be sorted based on the node name returned by 
      * {@link Child#getName()}.
      * 
-     * @param <C>         the type of the children to return
+     * @param <T>         the type of the children to return
      * @param childClass  the class to search for amongst the children
      * @return            a <code>Stream</code> of children of the specified 
      *                    type
