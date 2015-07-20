@@ -34,7 +34,6 @@ import com.speedment.core.platform.component.impl.SqlTypeMapperComponentImpl;
  */
 public final class Platform extends DefaultClassMapper<Component> {
 
-    //private final Logger logger = LogManager.getLogger(getClass());
     private Platform() {
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
@@ -58,14 +57,17 @@ public final class Platform extends DefaultClassMapper<Component> {
     /**
      * Gets a Platform Component based on its interface class.
      * <p>
-     * Supported interfaces:      
-     *     {@link com.speedment.core.platform.component.EntityManager}
-     *     {@link com.speedment.core.platform.component.DbmsHandlerComponent}
-     *     {@link com.speedment.core.platform.component.ManagerComponent}
-     *     {@link com.speedment.core.platform.component.PrimaryKeyFactoryComponent}
-     *     {@link com.speedment.core.platform.component.ProjectComponent}
-     *     {@link com.speedment.core.platform.component.SqlTypeMapperComponent}
-     *     {@link com.speedment.core.platform.component.LoggerFactoryComponent}
+     * The supported standard interfaces are:
+     * <ul>
+     * <li>{@link com.speedment.core.platform.component.EntityManager}</li>
+     * <li>{@link com.speedment.core.platform.component.DbmsHandlerComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.ManagerComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.PrimaryKeyFactoryComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.ProjectComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.SqlTypeMapperComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.LoggerFactoryComponent}</li>
+     * <li>{@link com.speedment.core.platform.component.JavaTypeMapperComponent}</li>
+     * </ul>
      *
      * @param <R> The intended return type
      * @param clazz The class of the intended return type
