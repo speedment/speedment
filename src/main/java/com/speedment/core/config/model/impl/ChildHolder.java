@@ -32,8 +32,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A container class for children to a node in the database model tree.
+ * 
+ * @author  Emil Forslund
+ * @see     com.speedment.core.config.model.aspects.Node
  */
 public class ChildHolder {
 
@@ -41,100 +43,114 @@ public class ChildHolder {
     private final Map<Class<?>, AtomicInteger> ordinalNumbers;
     private final Map<Class<?>, AtomicInteger> nameNumbers;
 
+    /**
+     * A comparator that uses the qualified class name to compare classes.
+     */
     private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b)
             -> Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
 
+    /**
+     * ChildHolder constructor. This will use the name of the qualified name of
+     * the children's implementation class to determine the order.
+     */
     public ChildHolder() {
         this(CLASS_COMPARATOR);
     }
 
+    /**
+     * ChildHolder constructor.
+     * 
+     * @param comparator     the comparator to use when determining the order of
+     *                       the children.
+     */
     public ChildHolder(Comparator<Class<?>> comparator) {
         children = new ConcurrentSkipListMap<>(comparator);
         ordinalNumbers = new ConcurrentHashMap<>();
         nameNumbers = new ConcurrentHashMap<>();
     }
 
-    public long size() {
-        return stream().count();
-    }
-
-    public boolean isEmpty() {
-        return stream().findAny().isPresent();
-    }
-
-    @SuppressWarnings("unchecked")
-    public <C extends Child<?>> Optional<C> get(Class<C> childClass, String name) {
-        return Optional.of((C) ensureMap(childClass).get(name));
-    }
-
-    public Optional<Child<?>> put(Parent<?> parent, Child<?> child) {
+    /**
+     * Put the specified child into this holder, also setting its parent to the
+     * specified one. If the parent of the child is already set, an
+     * <code>IllegalStateException</code> will be thrown. The children are stored
+     * mapped using their names (as returned by {@link Nameable#getName()} as keys.
+     * If a node already exist with that name, it will be removed from the map
+     * and returned.
+     * 
+     * @param child   the child to add.
+     * @param parent  the parent set in the child.
+     * @return        the old value if a child with that exact name already
+     *                existed or <code>empty</code> otherwise.
+     * @see           Nameable
+     * @see           Ordinable
+     */
+    public Optional<Child<?>> put(Child<?> child, Parent<?> parent) {
         child.getParent().ifPresent(c -> {
             throw new IllegalStateException(
-                    "It is illegal to add a child that already has a parent. child="
-                    + child + ", parent=" + child.getParent().get()
+                "It is illegal to add a child that already has a parent. child="
+                + child + ", parent=" + child.getParent().get()
             );
         });
 
-        child.setParentTo(parent);
+        child.setParent(parent);
 
         Optional.of(child)
-                .filter(c -> c.isOrdinable())
-                .map(c -> (Ordinable) c)
-                .filter(o -> o.getOrdinalPosition() == Ordinable.UNSET)
-                .ifPresent(o -> {
-                    o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
-                                    child.getInterfaceMainClass(),
-                                    m -> new AtomicInteger(Ordinable.ORDINAL_FIRST)
-                            ).getAndIncrement());
-                });
+            .filter(c -> c.isOrdinable())
+            .map(c -> (Ordinable) c)
+            .filter(o -> o.getOrdinalPosition() == Ordinable.UNSET)
+            .ifPresent(o -> {
+                o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
+                    child.getInterfaceMainClass(),
+                    m -> new AtomicInteger(Ordinable.ORDINAL_FIRST)
+                ).getAndIncrement());
+            });
 
         Optional.of(child)
-                .filter(c -> !c.hasName())
-                .ifPresent(c -> c.setName(
-                                JavaLanguage.toUnderscoreSeparated(
-                                        c.getInterfaceMainClass().getSimpleName()) + "_"
-                                + nameNumbers.computeIfAbsent(
-                                        child.getInterfaceMainClass(),
-                                        m -> new AtomicInteger(Nameable.NAMEABLE_FIRST)
-                                ).getAndIncrement()
-                        ));
+            .filter(c -> !c.hasName())
+            .ifPresent(c -> c.setName(
+                JavaLanguage.toUnderscoreSeparated(
+                    c.getInterfaceMainClass().getSimpleName()) + "_"
+                + nameNumbers.computeIfAbsent(
+                    child.getInterfaceMainClass(),
+                    m -> new AtomicInteger(Nameable.NAMEABLE_FIRST)
+                ).getAndIncrement()
+            ));
 
         return Optional.ofNullable(children.computeIfAbsent(
-                child.getInterfaceMainClass(),
-                m -> new ConcurrentSkipListMap<>()
+            child.getInterfaceMainClass(),
+            m -> new ConcurrentSkipListMap<>()
         ).put(child.getName(), child));
     }
 
-    public Optional<Child<?>> remove(Parent<?> parent, Child<?> child) {
-        if (child.getParent().filter(p -> p == parent).isPresent()) {
-            child.setParentTo(null);
-        }
-
-        return Optional.ofNullable(children.get(child.getClass()))
-                .map(m -> m.remove(child.getName()));
-    }
-
-    public boolean contains(Child<?> child) {
-        return ensureMap(child.getInterfaceMainClass())
-                .containsKey(child.getName());
-    }
-
+    /**
+     * Returns a <code>Stream</code> over all the children in this holder. The
+     * elements in the stream is sorted primarily on (i) the class name
+     * of the type returned by {@link Child#getInterfaceMainClass()} and 
+     * secondly (ii) on the node name returned by {@link Child#getName()}.
+     * 
+     * @return  a stream of all children
+     * @see     Nameable
+     */
     public Stream<Child<?>> stream() {
         return Stream.of(children.values())
-                .flatMap(i -> i.stream())
+                .flatMap(i -> i.stream().sorted())
                 .flatMap(i -> i.values().stream().sorted());
     }
 
+    /**
+     * Returns a <code>Stream</code> over all the children in this holder with
+     * the specified interface main class. The inputted class should correspond
+     * to the one returned by {@link Child#getInterfaceMainClass()}. The stream
+     * will be sorted based on the node name returned by 
+     * {@link Child#getName()}.
+     * 
+     * @param <C>    the type of the children to return
+     * @param clazz  the class to search for amongst the children
+     * @return       a stream of children of the specified type
+     */
     @SuppressWarnings("unchecked")
     public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
         return children.getOrDefault(clazz, Collections.emptyMap())
                 .values().stream().map(c -> (C) c).sorted();
-    }
-
-    private Map<String, Child<?>> ensureMap(Class<?> childClass) {
-        return children.getOrDefault(
-                childClass,
-                new ConcurrentHashMap<>()
-        );
     }
 }

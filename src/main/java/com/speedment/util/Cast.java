@@ -22,10 +22,9 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class Cast {
+public final class Cast {
 
-    private Cast() {
-    }
+    private Cast() {}
 
     public static <T> Optional<T> cast(Object o, Class<T> clazz) {
         if (clazz.isAssignableFrom(o.getClass())) {
@@ -35,5 +34,10 @@ public class Cast {
         return Optional.empty();
     }
 
-
+    public static <T> T orFail(Object obj, Class<T> clazz) {
+        return Optional.ofNullable(obj)
+            .filter(o -> clazz.isAssignableFrom(o.getClass()))
+            .map(clazz::cast)
+            .get();
+    }
 }

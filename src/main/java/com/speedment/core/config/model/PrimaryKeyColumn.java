@@ -56,5 +56,4 @@ public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Child<Table> 
     default Column getColumn() {
         return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
-
 }

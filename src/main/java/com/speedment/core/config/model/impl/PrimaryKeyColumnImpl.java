@@ -19,6 +19,7 @@ package com.speedment.core.config.model.impl;
 import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.aspects.Parent;
+import com.speedment.util.Cast;
 import java.util.Optional;
 
 /**
@@ -35,9 +36,8 @@ public class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity implements
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Table.class)
-            .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Table.class);
     }
 
     @Override

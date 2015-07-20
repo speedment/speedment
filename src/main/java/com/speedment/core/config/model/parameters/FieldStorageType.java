@@ -51,10 +51,6 @@ public enum FieldStorageType implements EnumHelper<FieldStorageType> {
     public static FieldStorageType defaultFor(final ConfigEntity entity) {
         return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, FieldStorageTypeable.class, WRAPPER);
     }
-    
-    public static Stream<FieldStorageType> streamFor(final Child<?> entity) {
-        return Hidden.streamFor(stream(), p -> false, entity, FieldStorageTypeable.class);
-    }
 
     public static Stream<FieldStorageType> stream() {
         return Stream.of(values());

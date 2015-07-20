@@ -22,6 +22,7 @@ import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.config.model.parameters.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
+import com.speedment.util.Cast;
 import java.util.Optional;
 
 /**
@@ -102,9 +103,8 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Project.class)
-                .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Project.class);
     }
 
     @Override
