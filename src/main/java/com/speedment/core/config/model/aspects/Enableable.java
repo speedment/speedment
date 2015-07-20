@@ -19,14 +19,26 @@ package com.speedment.core.config.model.aspects;
 import com.speedment.core.config.model.External;
 
 /**
- *
+ * A trait-like interface for nodes that can be enabled and disabled.
+ * 
  * @author Emil Forslund
  */
 public interface Enableable {
     
+    /**
+     * Enable or disable this node. This will have no effect if the node is
+     * already in the desired state.
+     * 
+     * @param enabled  <code>true</code> if this node is to be enabled.
+     */
     @External(type = Boolean.class)
     void setEnabled(Boolean enabled);
     
+    /**
+     * Returns whether or not this node is enabled.
+     * 
+     * @return <code>true</code> if this node is enabled.
+     */
     @External(type = Boolean.class)
     Boolean isEnabled();
 }

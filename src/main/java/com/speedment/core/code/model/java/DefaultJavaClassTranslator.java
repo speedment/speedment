@@ -248,40 +248,41 @@ public abstract class DefaultJavaClassTranslator<C extends ConfigEntity, J exten
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {
-        return with(Constructor.of().public_().add(Field.of(variableName(), type).final_()), constructor -> {
-            columns().forEachOrdered(c -> {
-                switch (mode) {
-                    case FIELD: {
-                        constructor.add("this." + variableName(c) + " = " + variableName() + "." + GETTER_METHOD_PREFIX + typeName(c) + "();");
-                        break;
-                    }
-                    case SETTER:
-                    case BUILDER: {
-                        final String setterPrefix = (mode == SETTER)
-                            ? SETTER_METHOD_PREFIX : BUILDER_METHOD_PREFIX;
+        final Constructor constructor = Constructor.of().public_()
+            .add(Field.of(variableName(), type).final_());
 
-                        if (c.isNullable()) {
-                            constructor.add(
-                                variableName() + "."
-                                + GETTER_METHOD_PREFIX + typeName(c)
-                                + "().ifPresent(this::"
-                                + setterPrefix + typeName(c)
-                                + ");"
-                            );
-                        } else {
-                            constructor.add(
-                                setterPrefix + typeName(c)
-                                + "(" + variableName()
-                                + ".get" + typeName(c)
-                                + "());"
-                            );
-                        }
-                        break;
-                    }
+        columns().forEachOrdered(c -> {
+            switch (mode) {
+                case FIELD: {
+                    constructor.add("this." + variableName(c) + " = " + variableName() + "." + GETTER_METHOD_PREFIX + typeName(c) + "();");
+                    break;
                 }
-            });
+                case SETTER:
+                case BUILDER: {
+                    final String setterPrefix = (mode == SETTER)
+                        ? SETTER_METHOD_PREFIX : BUILDER_METHOD_PREFIX;
+
+                    if (c.isNullable()) {
+                        constructor.add(
+                            variableName() + "."
+                            + GETTER_METHOD_PREFIX + typeName(c)
+                            + "().ifPresent(this::"
+                            + setterPrefix + typeName(c)
+                            + ");"
+                        );
+                    } else {
+                        constructor.add(
+                            setterPrefix + typeName(c)
+                            + "(" + variableName()
+                            + ".get" + typeName(c)
+                            + "());"
+                        );
+                    }
+                    break;
+                }
+            }
         });
-
+        
+        return constructor;
     }
-
 }

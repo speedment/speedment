@@ -16,28 +16,54 @@
  */
 package com.speedment.core.config.model.aspects;
 
-import java.util.Optional;
-
 /**
- *
+ * A trait-like interface for nodes that have a name.
+ * 
  * @author Emil Forslund
  */
 public interface Nameable {
 
     final int NAMEABLE_FIRST = 1;
 
+    /**
+     * Sets the name of this node.
+     * 
+     * @param name the new name
+     */
     void setName(String name);
 
+    /**
+     * Returns the name of this node.
+     * 
+     * @return the name
+     */
     String getName();
 
-    default int compareToHelper(Nameable that) {
-        return this.getName().compareTo(that.getName());
+    /**
+     * Compares the name of this node to the name of the specified node in a way
+     * that satisfies the {@link Comparable#compareTo(java.lang.Object) compareTo(Nameable)} interface. This
+     * can be useful to avoid collisions if an implementation class has several 
+     * comparable traits.
+     * 
+     * @param that  The node to compare names with
+     * @return      0 if the names are equal; a negative number that this name
+     *              should come before that name and a positive number that this
+     *              name should come after that name.
+     */
+    default int compareNames(Nameable that) {
+        return getName().compareTo(that.getName());
     }
 
+    /**
+     * Returns whether or not this node has been given a name. To satisfy this
+     * method, the string returned by {@link #getName()} must be non-null and
+     * non-empty.
+     * 
+     * @return      <code>true</code> if this node has a name. 
+     *              Else <code>false</code>.
+     */
     default boolean hasName() {
-        return Optional
-                .ofNullable(getName())
-                .filter(n -> !n.isEmpty())
-                .isPresent();
+        final String name = getName();
+        return name != null && !name.isEmpty();
     }
 }
