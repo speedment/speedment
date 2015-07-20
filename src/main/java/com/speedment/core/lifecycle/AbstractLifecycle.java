@@ -19,9 +19,31 @@ package com.speedment.core.lifecycle;
 import java.util.Objects;
 
 /**
+ * This class provides an abstract implementation of a
+ * <code>Lifecyclable</code>. It also introduces the following overridable
+ * events for each <code>Lifecyclable</code> transition:
+ * <ul>
+ * <li>{@link #onInit()}</li>
+ * <li>{@link #onResolve()}</li>
+ * <li>{@link #onStart()}</li>
+ * <li>{@link #onStop()}</li>
+ * </ul>
+ *
+ * It also introduces the following Runnables that can be set dynamically during
+ * run-time:
+ * <ul>
+ * <li>{@link #setPreInitialize(java.lang.Runnable)}</li>
+ * <li>{@link #setPreResolve(java.lang.Runnable)}</li>
+ * <li>{@link #setPreStart(java.lang.Runnable)}</li>
+ * <li>{@link #setPreStop(java.lang.Runnable)}</li>
+ * <li>{@link #setPostStop(java.lang.Runnable)}</li>
+ * </ul>
+ * The Runnable will be invoked upon its corresponding life-cycle method
  *
  * @author pemi
- * @param <T> the type
+ * @param <T> the self type
+ * @see com.speedment.core.lifecycle.Lifecyclable
+ * @since 2.0
  */
 public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implements Lifecyclable<T> {
 
@@ -29,18 +51,35 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
     private Runnable preInit, preResolve, preStart, preStop, postStop;
 
     public AbstractLifecycle() {
-        state = State.INIT;
+        state = State.CREATED;
         preInit = preResolve = preStart = preStop = postStop = NOTHING;
     }
 
+    /**
+     * This method is called by the {@link #initialize()} method to support easy
+     * over-riding.
+     */
     protected abstract void onInit();
 
+    /**
+     * This method is called by the {@link #resolve()} method to support easy
+     * over-riding.
+     */
     protected abstract void onResolve();
 
+    /**
+     * This method is called by the {@link #start()} method to support easy
+     * over-riding.
+     */
     protected abstract void onStart();
 
+    /**
+     * This method is called by the {@link #stop()} method to support easy
+     * over-riding.
+     */
     protected abstract void onStop();
 
+    @Override
     public State getState() {
         return state;
     }
@@ -61,7 +100,7 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
 
     @Override
     public T resolve() {
-        if (getState() == State.INIT) {
+        if (getState() == State.CREATED) {
             // Automatically call resolve() for conveniency
             initialize();
         }
@@ -73,8 +112,8 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
     }
 
     @Override
-    public T start() {		
-		if (getState() == State.INIT) {
+    public T start() {
+        if (getState() == State.CREATED) {
             // Automatically call init() for conveniency
             initialize();
         }
@@ -99,22 +138,6 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         return self();
     }
 
-    public boolean isInitialized() {
-        return getState().is(State.INIITIALIZED);
-    }
-
-    public boolean isResolved() {
-        return getState().is(State.RESOLVED);
-    }
-
-    public boolean isStarted() {
-        return getState().is(State.STARTED);
-    }
-
-    public boolean isStopped() {
-        return getState().is(State.STOPPED);
-    }
-
     @Override
     public String toString() {
         return getState().toString();
@@ -124,26 +147,61 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
     private static final Runnable NOTHING = () -> {
     };
 
+    /**
+     * Sets the non-null pre-initialize {@link Runnable} that is to be run
+     * before the {@link #onInit()} method is called.
+     *
+     * @param preInit Runnable to set
+     * @return this
+     */
     public T setPreInitialize(Runnable preInit) {
         this.preInit = Objects.requireNonNull(preInit);
         return self();
     }
 
+    /**
+     * Sets the non-null pre-resolve {@link Runnable} that is to be run before
+     * the {@link #onResolve()} method is called.
+     *
+     * @param preResolve Runnable to set
+     * @return this
+     */
     public T setPreResolve(Runnable preResolve) {
         this.preResolve = Objects.requireNonNull(preResolve);
         return self();
     }
 
+    /**
+     * Sets the non-null pre-start {@link Runnable} that is to be run before the
+     * {@link #onStart()} method is called.
+     *
+     * @param preStart Runnable to set
+     * @return this
+     */
     public T setPreStart(Runnable preStart) {
         this.preStart = Objects.requireNonNull(preStart);
         return self();
     }
 
+    /**
+     * Sets the non-null pre-stop {@link Runnable} that is to be run before the
+     * {@link #onStop()} method is called.
+     *
+     * @param preStop Runnable to set
+     * @return this
+     */
     public T setPreStop(Runnable preStop) {
         this.preStop = Objects.requireNonNull(preStop);
         return self();
     }
 
+    /**
+     * Sets the non-null post-stop {@link Runnable} that is to be run after the
+     * {@link #onStop()} method has been called.
+     *
+     * @param postStop Runnable to set
+     * @return this
+     */
     public T setPostStop(Runnable postStop) {
         this.postStop = Objects.requireNonNull(postStop);
         return self();

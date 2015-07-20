@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.manager;
 
 import com.speedment.core.annotations.Api;
@@ -45,7 +40,7 @@ import java.util.stream.Stream;
  * @param <BUILDER> Builder type for this Manager
  */
 @Api(version = 0)
-public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Boolean> {
+public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Manager<PK, ENTITY, BUILDER>> {
 
     // Entity Inspection
     PK primaryKeyFor(ENTITY entity);
@@ -71,14 +66,14 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY entity);
 
-	default JsonFormatter<ENTITY> toJson() {
-		return JsonFormatter.allFrom(getEntityClass());
-	}
-	
+    default JsonFormatter<ENTITY> toJson() {
+        return JsonFormatter.allFrom(getEntityClass());
+    }
+
     default String toJson(ENTITY entity) {
         return toJson().apply(entity);
     }
-	
+
     default ENTITY toInternal(ENTITY entity) {
         return entity;
     }

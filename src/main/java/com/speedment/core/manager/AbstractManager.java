@@ -20,6 +20,7 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.core.Buildable;
+import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.List;
@@ -43,12 +44,14 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
 
     private final Map<List<Column>, IndexHolder<Object, PK, ENTITY>> indexes;
     final Set<Consumer<ENTITY>> insertListeners, updateListeners, deleteListeners;
+    private Lifecyclable.State state;
 
     public AbstractManager() {
         indexes = new ConcurrentHashMap<>();
         insertListeners = new CopyOnWriteArraySet<>();
         updateListeners = new CopyOnWriteArraySet<>();
         deleteListeners = new CopyOnWriteArraySet<>();
+        state = Lifecyclable.State.CREATED;
     }
 
     protected void insertEvent(ENTITY entity) {
@@ -125,22 +128,32 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
-    public Boolean initialize() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> initialize() {
+        state = State.INIITIALIZED;
+        return this;
     }
 
     @Override
-    public Boolean resolve() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> resolve() {
+        state = State.RESOLVED;
+        return this;
     }
 
     @Override
-    public Boolean start() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> start() {
+        state = State.STARTED;
+        return this;
     }
 
     @Override
-    public Boolean stop() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> stop() {
+        state = State.STOPPED;
+        return this;
     }
+
+    @Override
+    public Lifecyclable.State getState() {
+        return state;
+    }
+
 }
