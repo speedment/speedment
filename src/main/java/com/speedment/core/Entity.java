@@ -16,6 +16,7 @@
  */
 package com.speedment.core;
 
+import com.speedment.core.manager.Manager;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,14 +38,14 @@ public @interface Entity {
      *
      * @return the manager class type
      */
-    Class<?> managerType();
+    Class<? extends Manager<?, ?, ?>> managerType();
 
     /**
      * Class that holds the builder type.
      *
      * @return the builder class type
      */
-    Class<?> builderType();
+    Class<? extends Buildable<?>> builderType();
 
     /**
      * Class that holds the primary key type.
