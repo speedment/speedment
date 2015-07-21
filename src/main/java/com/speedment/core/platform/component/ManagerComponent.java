@@ -17,7 +17,7 @@
 package com.speedment.core.platform.component;
 
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.manager.Manager;
 import java.util.stream.Stream;
 

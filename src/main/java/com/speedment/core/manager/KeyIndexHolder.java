@@ -16,7 +16,7 @@
  */
 package com.speedment.core.manager;
 
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import static com.speedment.util.stream.StreamUtil.streamOfNullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

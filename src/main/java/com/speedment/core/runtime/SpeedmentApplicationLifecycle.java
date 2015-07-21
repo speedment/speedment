@@ -23,7 +23,7 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
 import com.speedment.core.config.model.impl.utils.MethodsParser;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.lifecycle.AbstractLifecycle;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.exception.SpeedmentException;

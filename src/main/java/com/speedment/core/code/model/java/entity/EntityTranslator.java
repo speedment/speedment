@@ -37,7 +37,7 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
 import com.speedment.core.config.model.ForeignKeyColumn;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.entity.Entity;
+import com.speedment.core.Entity;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.util.Pluralis;

@@ -74,6 +74,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      *
      * @return if this <code>Lifecyclable</code> is initialized
      * @see #initialize()
+     * @see #INIITIALIZED
      */
     default boolean isInitialized() {
         return getState().is(State.INIITIALIZED);
@@ -84,6 +85,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      *
      * @return if this <code>Lifecyclable</code> is resolved
      * @see #resolve()
+     * @see #RESOLVED
      */
     default boolean isResolved() {
         return getState().is(State.RESOLVED);
@@ -94,6 +96,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      *
      * @return if this <code>Lifecyclable</code> is started
      * @see #start()
+     * @see #STARTED
      */
     default boolean isStarted() {
         return getState().is(State.STARTED);
@@ -104,6 +107,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      *
      * @return if this <code>Lifecyclable</code> is stopped
      * @see #stop()
+     * @see #STOPPED
      */
     default boolean isStopped() {
         return getState().is(State.STOPPED);

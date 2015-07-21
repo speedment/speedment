@@ -17,7 +17,7 @@
 package com.speedment.core.manager.sql;
 
 import com.speedment.codegen.base.Generator;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.manager.sql.generator.SQLGenerator;
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.field.BinaryPredicateBuilder;

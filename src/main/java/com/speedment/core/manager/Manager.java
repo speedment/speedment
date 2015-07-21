@@ -19,7 +19,7 @@ package com.speedment.core.manager;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.util.json.JsonFormatter;

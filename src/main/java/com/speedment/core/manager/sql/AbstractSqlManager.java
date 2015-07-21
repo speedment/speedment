@@ -22,7 +22,7 @@ import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.manager.AbstractManager;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.manager.metaresult.SqlMetaResult;

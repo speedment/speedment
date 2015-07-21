@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.entity;
+package com.speedment.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

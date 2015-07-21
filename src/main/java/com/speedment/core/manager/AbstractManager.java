@@ -19,7 +19,7 @@ package com.speedment.core.manager;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;

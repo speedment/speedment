@@ -23,7 +23,7 @@ import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 
 /**
  *
