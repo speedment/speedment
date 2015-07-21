@@ -133,8 +133,7 @@ public class ChildHolder {
      */
     public Stream<Child<?>> stream() {
         return children.entrySet().stream()
-            .sorted((a, b) -> CLASS_COMPARATOR.compare(a.getKey(), b.getKey()))
-            .map(i -> i.getValue())
+            .map(Map.Entry::getValue)
             .flatMap(i -> i.values().stream().sorted());
     }
 
