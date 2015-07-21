@@ -18,6 +18,7 @@ package com.speedment.util.stream;
 
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
+import com.speedment.util.PureStaticMethods;
 import com.speedment.util.json.JsonFormatter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,7 +43,17 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class CollectorUtil {
+public class CollectorUtil implements PureStaticMethods {
+
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     * @see PureStaticMethods#instanceNotAllowed()
+     */
+    private CollectorUtil() {
+        instanceNotAllowed();
+    }
 
     private final static Logger LOGGER = LoggerManager.getLogger(CollectorUtil.class);
     private static final String NULL_TEXT = " must not be null";

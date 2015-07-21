@@ -27,9 +27,10 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Trees {
+public class Trees implements PureStaticMethods {
 
-    public Trees() {
+    private Trees() {
+        instanceNotAllowed();
     }
 
     public static enum WalkingOrder {

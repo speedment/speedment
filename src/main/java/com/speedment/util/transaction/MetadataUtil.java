@@ -17,15 +17,23 @@
 package com.speedment.util.transaction;
 
 import com.speedment.core.manager.metaresult.MetaResult;
+import com.speedment.util.PureStaticMethods;
 import java.util.function.Consumer;
 
 /**
  *
  * @author pemi
  */
-public class MetadataUtil {
+public class MetadataUtil implements PureStaticMethods {
 
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     * @see PureStaticMethods#instanceNotAllowed()
+     */
     private MetadataUtil() {
+        instanceNotAllowed();
     }
 
     public static <T> Consumer<MetaResult<T>> toText(Consumer<String> consumer) {

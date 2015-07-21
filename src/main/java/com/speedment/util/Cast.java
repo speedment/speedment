@@ -22,9 +22,17 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class Cast {
+public final class Cast implements PureStaticMethods {
 
-    private Cast() {}
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     * @see PureStaticMethods#instanceNotAllowed()
+     */
+    private Cast() {
+        instanceNotAllowed();
+    }
 
     public static <T> Optional<T> cast(Object o, Class<T> clazz) {
         if (clazz.isAssignableFrom(o.getClass())) {

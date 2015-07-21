@@ -22,7 +22,18 @@ import java.nio.file.Path;
  *
  * @author Emil Forslund
  */
-public class Paths {
+public class Paths implements PureStaticMethods {
+
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     * @see PureStaticMethods#instanceNotAllowed()
+     */
+    private Paths() {
+        instanceNotAllowed();
+    }
+
     public static String toString(Path path) {
         return path.toString().replace("\\", "/");
     }
