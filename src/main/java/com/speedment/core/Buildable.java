@@ -19,13 +19,19 @@ package com.speedment.core;
 import com.speedment.core.annotations.Api;
 
 /**
+ * A <code>Buildable</code> provides a generic builder interface.
  *
  * @author pemi
  * @param <T> The type that can be built
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Buildable<T> {
 
+    /**
+     * Creates and returns a new immutable instance of type T.
+     *
+     * @return a new immutable instance of type T
+     */
     T build();
 
 }

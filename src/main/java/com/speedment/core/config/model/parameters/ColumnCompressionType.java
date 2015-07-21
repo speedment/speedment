@@ -24,14 +24,13 @@ import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.ConfigEntity;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public enum ColumnCompressionType implements EnumHelper<ColumnCompressionType> {
 
     INHERIT("Inherit from parent"), NONE("None"), DEDUPLICATION("Deduplication");

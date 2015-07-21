@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent<Schema> {
 
     enum Holder {

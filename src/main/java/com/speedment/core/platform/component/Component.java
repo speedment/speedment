@@ -22,14 +22,16 @@ import com.speedment.core.annotations.Api;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Component {
-    
+
     Class<? extends Component> getComponentClass();
 
     // Lifecycle operations for plugins
-    default void onAdd() {}
+    default void onAdd() {
+    }
 
-    default void onRemove() {}
+    default void onRemove() {
+    }
 
 }

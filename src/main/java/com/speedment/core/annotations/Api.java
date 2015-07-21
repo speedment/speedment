@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  *
  * @author pemi
  */
-@Api(version = 0, snapshot = true)
+@Api(version = "2.0", snapshot = false)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.CONSTRUCTOR})
 public @interface Api {
@@ -50,7 +50,7 @@ public @interface Api {
      *
      * @return the current API version.
      */
-    int version();
+    String version();
 
     /**
      * Returns if this API version is a snapshot, i.e. it is not yet "frozen"

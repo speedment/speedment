@@ -50,6 +50,7 @@ public final class Platform extends DefaultClassMapper<Component> {
      *
      * @return the Platform singleton
      */
+    @Api(version = "2.0")
     public static Platform get() {
         return PlatformHolder.INSTANCE;
     }
@@ -73,13 +74,14 @@ public final class Platform extends DefaultClassMapper<Component> {
      * @param clazz The class of the intended return type
      * @return The currently mapped instance
      */
+    @Api(version = "2.0")
     @Override
     public <R extends Component> R get(Class<R> clazz) {
         return super.get(clazz);
     }
 
+    @Api(version = "2.0")
     @Override
-    @Api(version = 0)
     public Component add(Component item) {
         return add(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
     }

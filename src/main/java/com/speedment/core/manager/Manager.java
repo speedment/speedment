@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @param <ENTITY> Entity type for this Manager
  * @param <BUILDER> Builder type for this Manager
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Manager<PK, ENTITY, BUILDER>> {
 
     // Entity Inspection

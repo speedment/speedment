@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public enum OrderType implements EnumHelper<OrderType> {
 
     ASC("Asc"), DESC("Desc"), NONE("None");

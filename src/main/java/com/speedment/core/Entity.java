@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * Marks this class as an Entity.
  * <p>
- * A Method that is marked as an entity can be used in some .
+ * A Class with this annotation is marked as an entity.
  *
  * @author pemi
  */

@@ -30,7 +30,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface EntityManager extends Component {
 
     @Override
