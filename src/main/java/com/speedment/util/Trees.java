@@ -128,7 +128,10 @@ public class Trees {
         while (!q.isEmpty()) {
             final T node = q.poll();
             builder.add(node);
-            traverser.apply(node).filter(Objects::nonNull).forEach(q::add);
+            traverser
+                .apply(node)
+                .filter(Objects::nonNull)
+                .forEach(q::add);
         }
         return builder;
     }

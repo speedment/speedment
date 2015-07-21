@@ -16,10 +16,18 @@
  */
 package com.speedment.core.exception;
 
+import com.speedment.core.annotations.Api;
+
 /**
+ * {@inheritDoc}
+ * 
+ * Generic RuntimeException for Speedment. 
+ * 
  *
  * @author pemi
+ * @since 2.0
  */
+@Api(version = "2.0")
 public class SpeedmentException extends RuntimeException {
 
     static final long serialVersionUID = -623523923713561356L;
@@ -41,8 +49,8 @@ public class SpeedmentException extends RuntimeException {
     }
 
     protected SpeedmentException(String message, Throwable cause,
-            boolean enableSuppression,
-            boolean writableStackTrace) {
+        boolean enableSuppression,
+        boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
