@@ -132,9 +132,10 @@ public class ChildHolder {
      * @see     Nameable
      */
     public Stream<Child<?>> stream() {
-        return Stream.of(children.values())
-                .flatMap(i -> i.stream().sorted())
-                .flatMap(i -> i.values().stream().sorted());
+        return children.entrySet().stream()
+            .sorted((a, b) -> CLASS_COMPARATOR.compare(a.getKey(), b.getKey()))
+            .map(i -> i.getValue())
+            .flatMap(i -> i.values().stream().sorted());
     }
 
     /**
