@@ -126,7 +126,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public Stream<Schema> schemasPopulated() {
+    public Stream<Schema> schemas() {
         try {
             try (final Connection connection = getConnection()) {
                 final List<Schema> schemas = schemas(connection).collect(toList());
@@ -151,7 +151,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public Stream<Schema> schemas() {
+    public Stream<Schema> schemasUnpopulated() {
         try {
             try (Connection connection = getConnection()) {
                 return schemas(connection);
@@ -405,11 +405,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> Stream<T> executeQuery(final String sql, final SqlFunction<ResultSet, T> rsMapper) {
-        return executeQuery(sql, Collections.emptyList(), rsMapper);
-    }
-
-    @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
         final String sql,
         final List<?> values,
@@ -422,10 +417,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             () -> getConnection());
     }
 
-    @Override
-    public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-        executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
-    }
 
     @Override
     public void executeUpdate(

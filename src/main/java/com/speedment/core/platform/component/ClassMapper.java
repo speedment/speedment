@@ -44,9 +44,9 @@ public interface ClassMapper<V> {
     public <R extends V> R get(Class<R> clazz);
 
     /**
-     * Returns a stream of all mappings that exists.
+     * Returns a {@link Stream} of all mappings that exists.
      *
-     * @return a stream of all mappings that exists
+     * @return a {@link Stream} of all mappings that exists
      */
     Stream<Map.Entry<Class<?>, V>> stream();
 

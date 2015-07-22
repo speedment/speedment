@@ -18,10 +18,10 @@ package com.speedment.core.db;
 
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
 import com.speedment.core.db.impl.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -33,30 +33,125 @@ import java.util.stream.Stream;
  */
 public interface DbmsHandler {
 
+    /**
+     * Returns the {@code Dbms} {@code ConfigEntity} that is used by this
+     * {@code DbmsHandler}.
+     *
+     * @return the {@code Dbms} {@code ConfigEntity} that is used by this
+     * {@code DbmsHandler}
+     */
     Dbms getDbms();
 
-    Stream<Schema> schemas();
+    /**
+     * Returns a Stream of un-populated Schemas that are available in this
+     * database. The schemas are not populated by tables, columns etc. and thus,
+     * contains only top level Schema information. Schemas that are a part of
+     * the getDbms().getType().getSchemaExcludSet() Set are excluded from the
+     * Stream.
+     * <p>
+     * This method can be used to present a list of available Schemas before
+     * they are actually being used, for example in a GUI.
+     *
+     * @return a Stream of un-populated Schemas that are available in this
+     * database
+     */
+    Stream<Schema> schemasUnpopulated();
 
-    public Stream<Schema> schemasPopulated();
+    /**
+     * Returns a Stream of populated Schemas that are available in this
+     * database. The schemas are populated by all their sub items such as
+     * tables, columns etc. Schemas that are a part of the
+     * getDbms().getType().getSchemaExcludSet() Set are excluded from the
+     * Stream.
+     * <p>
+     * This method can be used to obtain a complete inventory of the database
+     * structure.
+     *
+     * @return a Stream of populated Schemas that are available in this database
+     */
+    public Stream<Schema> schemas();
 
-    <ENTITY> long readAll(Consumer<ENTITY> consumer);
+//    <ENTITY> long readAll(Consumer<ENTITY> consumer);
+//
+//    <PK> ResultSet read(Table table, PK primaryKey);
+//
+//    <ENTITY> void insert(Table table, ENTITY entity);
+//
+//    <ENTITY> void update(Table table, ENTITY entity);
+//
+//    <ENTITY> void delete(Table table, ENTITY entity);
+    /**
+     * Eagerly executes a SQL query and subsequently maps each row in the
+     * ResultSet using a provided mapper and return a Stream of the mapped
+     * objects. The ResultSet is eagerly consumed so that all elements in the
+     * ResultSet are read before the Stream produces any objects. If no objects
+     * are present or if an SqlExeption is thrown internally, an empty Stream is
+     * returned.
+     *
+     * @param <T> The type of the objects in the Stream to return
+     * @param sql The SQL command to execute
+     * @param rsMapper The mapper to use when iterating over the ResultSet
+     * @return a Stream of the mapped objects
+     */
+    default <T> Stream<T> executeQuery(final String sql, SqlFunction<ResultSet, T> rsMapper) {
+        return executeQuery(sql, Collections.emptyList(), rsMapper);
+    }
 
-    <PK> ResultSet read(Table table, PK primaryKey);
-
-    <ENTITY> void insert(Table table, ENTITY entity);
-
-    <ENTITY> void update(Table table, ENTITY entity);
-
-    <ENTITY> void delete(Table table, ENTITY entity);
-
-    public <T> Stream<T> executeQuery(final String sql, SqlFunction<ResultSet, T> rsMapper);
-    
+    /**
+     * Eagerly executes a SQL query and subsequently maps each row in the
+     * ResultSet using a provided mapper and return a Stream of the mapped
+     * objects. The ResultSet is eagerly consumed. If no objects are present or
+     * if an SqlExeption is thrown internally, an empty Stream is returned.
+     *
+     * @param <T> The type of the objects in the Stream to return
+     * @param sql The non-null SQL command to execute
+     * @param values non-null values to use for "?" parameters in the sql
+     * command
+     * @param rsMapper The non-null mapper to use when iterating over the
+     * ResultSet
+     * @return a Stream of the mapped objects
+     */
     public <T> Stream<T> executeQuery(final String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper);
 
-    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql,  List<?> values, Function<ResultSet, T> rsMapper);
+    /**
+     * Lazily Executes a SQL query and subsequently maps each row in the
+     * ResultSet using a provided mapper and return a Stream of the mapped
+     * objects. The ResultSet is lazily consumed so that the Stream will consume
+     * the ResultSet as the objects are consumed. If no objects are present, an
+     * empty Stream is returned.
+     *
+     * @param <T> The type of the objects in the Stream to return
+     * @param sql The non-null SQL command to execute
+     * @param values non-null List of objects to use for "?" parameters in the
+     * sql command
+     * @param rsMapper The non-null mapper to use when iterating over the
+     * ResultSet
+     * @return a Stream of the mapped objects
+     */
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, List<?> values, Function<ResultSet, T> rsMapper);
 
-    public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
+    /**
+     * Executes a SQL update command. Generated key(s) following an insert
+     * command (if any) will be feed to the provided Consumer.
+     *
+     * @param sql The non-null SQL command to execute
+     * @param generatedKeyConsumer the non-null key Consumer
+     * @throws java.sql.SQLException if an error occurs
+     */
+    default void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+        executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
+    }
 
+    /**
+     * Executes a SQL update command. Generated key(s) following an insert
+     * command (if any) will be feed to the provided Consumer.
+     *
+     * @param sql The non-null SQL command to execute
+     * @param values A non-null list
+     * @param generatedKeyConsumer non-null List of objects to use for "?"
+     * parameters in the sql command
+     * @throws java.sql.SQLException if an error occurs
+     */
     public void executeUpdate(final String sql, final List<?> values, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
 
 }

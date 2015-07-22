@@ -29,6 +29,12 @@ import com.speedment.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.core.platform.component.impl.SqlTypeMapperComponentImpl;
 
 /**
+ * The {@code Platform} class acts as a generic holder of different system
+ * {@link Component Components}. Using its pluggable architecture, one can
+ * replace existing default implementations of existing Components or plug in
+ * custom made implementation of any Interface.
+ * <p>
+ * Pluggable instances must implement the {@link Component} interface.
  *
  * @author pemi
  */
@@ -46,7 +52,7 @@ public final class Platform extends DefaultClassMapper<Component> {
     }
 
     /**
-     * Returns the Platform singleton.
+     * Returns the {@code Platform} singleton.
      *
      * @return the Platform singleton
      */
@@ -56,7 +62,7 @@ public final class Platform extends DefaultClassMapper<Component> {
     }
 
     /**
-     * Gets a Platform Component based on its interface class.
+     * Gets a {@link Platform} {@link Component} based on its interface class.
      * <p>
      * The supported standard interfaces are:
      * <ul>
@@ -71,13 +77,13 @@ public final class Platform extends DefaultClassMapper<Component> {
      * </ul>
      *
      * @param <R> The intended return type
-     * @param clazz The class of the intended return type
+     * @param iface The interface class of the intended return type
      * @return The currently mapped instance
      */
     @Api(version = "2.0")
     @Override
-    public <R extends Component> R get(Class<R> clazz) {
-        return super.get(clazz);
+    public <R extends Component> R get(Class<R> iface) {
+        return super.get(iface);
     }
 
     @Api(version = "2.0")

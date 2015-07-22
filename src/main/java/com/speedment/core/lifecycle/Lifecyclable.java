@@ -32,7 +32,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * Initialize this <code>Lifecyclable</code>. This method can be used to set
      * initialize internal settings.
      *
-     * @return this
+     * @return this of type T
      */
     T initialize();
 
@@ -41,7 +41,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * initialized. This method can be used to link to other
      * <code>Lifecyclables</code>.
      *
-     * @return this
+     * @return this of type T
      */
     T resolve();
 
@@ -49,7 +49,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * Starts this <code>Lifecyclable</code>. Starts the actual service after
      * which it can serve requests.
      *
-     * @return this
+     * @return this of type T
      */
     T start();
 
@@ -57,7 +57,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * Stops this <code>Lifecyclable</code>. The method shall also deallocate
      * any resources previously allocated to this <code>Lifecyclable</code>.
      *
-     * @return this
+     * @return this of type T
      */
     T stop();
 

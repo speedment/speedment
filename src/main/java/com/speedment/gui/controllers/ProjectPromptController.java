@@ -152,7 +152,7 @@ public class ProjectPromptController implements Initializable {
 
                 try {
                     final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
-                    dh.schemasPopulated()
+                    dh.schemas()
                         .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
                         .forEachOrdered(dbms::add);
 

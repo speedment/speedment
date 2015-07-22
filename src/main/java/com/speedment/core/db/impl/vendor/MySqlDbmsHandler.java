@@ -14,23 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util;
+package com.speedment.core.db.impl.vendor;
+
+import com.speedment.core.config.model.Dbms;
+import com.speedment.core.db.impl.AbstractRelationalDbmsHandler;
 
 /**
- * Support interface for classes that only contains static methods. This
- * interface can for example be used for various "Util" classes.
+ * Specific MySQL implementation of a DbmsHandler. Currently, there are no
+ * specific implementations for MySQL.
  *
  * @author pemi
+ * @since 2.0
  */
-public interface PureStaticMethods {
+public class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
-    /**
-     * Support method that can be used in constructors to throw an
-     * {@code UnsupportedOperationException} if someone is trying to create an
-     * instance of the class.
-     */
-    default void instanceNotAllowed() {
-        throw new UnsupportedOperationException("It is not allowed to create instances of the " + getClass().getName() + " class");
+    public MySqlDbmsHandler(final Dbms dbms) {
+        super(dbms);
     }
 
 }

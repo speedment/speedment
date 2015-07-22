@@ -20,6 +20,10 @@ import com.speedment.core.config.model.Dbms;
 import com.speedment.core.db.DbmsHandler;
 
 /**
+ * This class is a pluggable factory that produces
+ * {@link DbmsHandler DbmsHandlers} for a given Dbms. The DbmsHandler is
+ * obtained via the #get() method and if an existing DbmsHandler can not be
+ * found, the #make() method is called to provide a new instance.
  *
  * @author pemi
  */

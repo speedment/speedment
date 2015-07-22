@@ -25,12 +25,26 @@ import com.speedment.core.annotations.Api;
 @Api(version = "2.0")
 public interface Component {
 
+    /**
+     * Returns the Component interface this Component implements.
+     *
+     * @return the Component interface this Component implements
+     */
     Class<? extends Component> getComponentClass();
 
     // Lifecycle operations for plugins
+    
+    /**
+     * This method is called whenever this Component is added to a Component
+     * manager.
+     */
     default void onAdd() {
     }
 
+    /**
+     * This method is called whenever this Component is removed from a Component
+     * manager.
+     */
     default void onRemove() {
     }
 
