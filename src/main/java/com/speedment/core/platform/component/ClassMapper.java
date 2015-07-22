@@ -20,6 +20,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
+ * A generic Class mapper interface. I.e. a mapper that can associate a class to
+ * an implementation of that class. Often, an interface is used as class key and
+ * then a concrete implementing class is used as an association to that
+ * interface. This creates a pluggable architecture framework.
  *
  * @author pemi
  * @param <V> The base type
@@ -27,7 +31,7 @@ import java.util.stream.Stream;
 public interface ClassMapper<V> {
 
     /**
-     * Adds a mapping for an item
+     * Adds a mapping for an item.
      *
      * @param item to add
      * @return the previous mapping that existed, or null

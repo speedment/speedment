@@ -28,8 +28,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
+ * A DbmsHandler provides the interface between Speedment an an underlying Dbms.
  *
  * @author pemi
+ * @since 2.0
  */
 public interface DbmsHandler {
 

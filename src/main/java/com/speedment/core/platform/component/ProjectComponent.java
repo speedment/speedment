@@ -20,7 +20,7 @@ import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Project;
 
 /**
- * This interface is used for holding the current {@link Project} that is being
+ * This Component interface is used for holding the current {@link Project} that is being
  * used by Speedment.
  *
  * @author Emil Forslund

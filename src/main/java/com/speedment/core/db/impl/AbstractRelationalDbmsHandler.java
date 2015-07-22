@@ -118,7 +118,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final TypeInfo typeInfo = TypeInfo.from(rs);
-                final Class<?> mappedClass = Platform.get().get(SqlTypeMapperComponent.class).map(dbms, typeInfo);
+                final Class<?> mappedClass = Platform.get().get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }

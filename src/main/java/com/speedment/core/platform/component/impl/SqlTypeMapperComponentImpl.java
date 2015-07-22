@@ -73,7 +73,7 @@ public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
     }
 
     @Override
-    public Class<?> map(Dbms dbms, TypeInfo typeInfo) {
+    public Class<?> apply(Dbms dbms, TypeInfo typeInfo) {
         final Optional<String> key = typeInfo.javaSqlTypeName();
         if (key.isPresent()) {
             return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), String.class);

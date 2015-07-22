@@ -19,6 +19,8 @@ package com.speedment.core.platform.component;
 import com.speedment.logging.LoggerFactory;
 
 /**
+ * The loggerFactoryComponent provides the logger factory that the Speedment
+ * framework is using. You can plug in your own LoggerFactory if needed.
  *
  * @author pemi
  */
@@ -29,8 +31,18 @@ public interface LoggerFactoryComponent extends Component {
         return LoggerFactoryComponent.class;
     }
 
+    /**
+     * Returns the current LoggerFactory.
+     *
+     * @return the current LoggerFactory
+     */
     LoggerFactory getLoggerFactory();
 
+    /**
+     * Sets the LoggerFactory to use.
+     *
+     * @param loggerFactory to use
+     */
     void setLoggerFactory(LoggerFactory loggerFactory);
 
 }

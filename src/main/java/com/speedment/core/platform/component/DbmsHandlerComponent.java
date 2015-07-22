@@ -26,6 +26,7 @@ import com.speedment.core.db.DbmsHandler;
  * found, the #make() method is called to provide a new instance.
  *
  * @author pemi
+ * @since 2.0
  */
 public interface DbmsHandlerComponent extends Component {
 

@@ -18,18 +18,30 @@ package com.speedment.core.platform.component;
 
 import com.speedment.core.config.model.Dbms;
 import com.speedment.util.java.sql.TypeInfo;
+import java.util.function.BiFunction;
 
 /**
+ * The SqlTypeMapperComponent Component interface allows a mapping from a SQL
+ * type to a Java type.
  *
  * @author pemi
+ * @since 2.0
  */
-public interface SqlTypeMapperComponent extends Component {
-    
+public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, TypeInfo, Class<?>> {
+
     @Override
     default Class<SqlTypeMapperComponent> getComponentClass() {
         return SqlTypeMapperComponent.class;
     }
-    
-    Class<?> map(Dbms dbms, TypeInfo typeInfo);
-    
+
+    /**
+     * Applies the mapping from Dbms and TypeInfo to a Java Class .
+     *
+     * @param dbms to apply
+     * @param typeInfo to apply
+     * @return the corresponding Java {@code Class}
+     */
+    @Override
+    Class<?> apply(Dbms dbms, TypeInfo typeInfo);
+
 }

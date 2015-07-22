@@ -21,8 +21,12 @@ import com.speedment.core.runtime.typemapping.JavaTypeMapping;
 import java.util.function.BiFunction;
 
 /**
+ * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and
+ * Class to a certain JavaTypeMapping. By implementing custom implementation of
+ * this interface, arbitrary mappings may be carried out.
  *
  * @author pemi
+ * @since 2.0
  */
 public interface JavaTypeMapperComponent extends Component, BiFunction<DbmsType, Class<?>, JavaTypeMapping> {
 
@@ -30,5 +34,17 @@ public interface JavaTypeMapperComponent extends Component, BiFunction<DbmsType,
     default Class<JavaTypeMapperComponent> getComponentClass() {
         return JavaTypeMapperComponent.class;
     }
+
+    /**
+     * Applies and returns the JavaTypeMapping that corresponds to the DbmsType
+     * and the Java Class.
+     *
+     * @param dbmsType to apply
+     * @param clazz to apply
+     * @return the JavaTypeMapping that corresponds to the DbmsType and the Java
+     * Class
+     */
+    @Override
+    public JavaTypeMapping apply(DbmsType dbmsType, Class<?> clazz);
 
 }
