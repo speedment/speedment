@@ -14,37 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util;
+package com.speedment.util.tuple.impl;
 
+import com.speedment.util.tuple.*;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
+ * @param <T0> Type of 0:th argument
+ * @param <T1> Type of 1:st argument
  */
-public final class Cast implements PureStatic {
+public class Tuple2OfNullablesImpl<T0, T1> extends AbstractTupleOfNullables implements Tuple2OfNullables<T0, T1> {
 
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private Cast() {
-        instanceNotAllowed();
+    @SuppressWarnings("rawtypes")
+    public Tuple2OfNullablesImpl(T0 e0, T1 e1) {
+        super(Tuple2OfNullablesImpl.class, e0, e1);
     }
 
-    public static <T> Optional<T> cast(Object o, Class<T> clazz) {
-        if (clazz.isAssignableFrom(o.getClass())) {
-            final T result = clazz.cast(o);
-            return Optional.of(result);
-        }
-        return Optional.empty();
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T0> get0() {
+        return Optional.ofNullable((T0) values[0]);
     }
 
-    public static <T> T orFail(Object obj, Class<T> clazz) {
-        return Optional.ofNullable(obj)
-            .filter(o -> clazz.isAssignableFrom(o.getClass()))
-            .map(clazz::cast)
-            .get();
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T1> get1() {
+        return Optional.ofNullable((T1) values[1]);
     }
+
 }

@@ -37,7 +37,7 @@ public class TableClassProperty extends TableProperty<Class> {
 	public TableClassProperty(String name, Class value) {
 		super (name);
 		combo = new ComboBox<>(
-			Stream.of(StandardJavaTypeMapping.values())
+			StandardJavaTypeMapping.stream()
 				.map(v -> v.getJavaClass())
 				.collect(Collectors.toCollection(
 					FXCollections::observableArrayList

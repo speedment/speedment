@@ -28,6 +28,7 @@ import com.speedment.core.lifecycle.AbstractLifecycle;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
@@ -40,6 +41,7 @@ import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.APP_STARTED;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuple3;
+import com.speedment.util.tuple.Tuples;
 import com.speedment.util.version.SpeedmentVersion;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -54,9 +56,14 @@ import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
+ * This Class provides the foundation for a SpeedmentApplication and is needed
+ * when initializing the Speedment framework. Specific SPeedment applications
+ * can inherit from this class.
  *
+ * @param <T> The (self) type of the SpeedmentApplicationLifecycle
  * @author pemi
- * @param <T> The type of the Lifecycle
+ * @since 2.0
+ *
  */
 public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
 
@@ -89,7 +96,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public <C extends ConfigEntity> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
         @SuppressWarnings("unchecked")
         final Consumer<ConfigEntity> consumerCasted = (Consumer<ConfigEntity>) Objects.requireNonNull(consumer);
-        withsNamed.add(new Tuple3<>(Objects.requireNonNull(type), Objects.requireNonNull(name), consumerCasted));
+        withsNamed.add(Tuples.of(Objects.requireNonNull(type), Objects.requireNonNull(name), consumerCasted));
         return self();
     }
 
@@ -106,7 +113,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public <C extends ConfigEntity> T with(final Class<C> type, final Consumer<C> consumer) {
         @SuppressWarnings("unchecked")
         final Consumer<ConfigEntity> consumerCasted = (Consumer<ConfigEntity>) Objects.requireNonNull(consumer);
-        withsAll.add(new Tuple2<>(Objects.requireNonNull(type), consumerCasted));
+        withsAll.add(Tuples.of(Objects.requireNonNull(type), consumerCasted));
         return self();
     }
 
@@ -238,6 +245,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         forEachManagerInSeparateThread(mgr -> mgr.stop());
     }
 
+    /**
+     * Builds up the complete Project meta data tree.
+     */
     protected void loadAndSetProject() {
         try {
             final Optional<Path> oPath = getConfigPath();
@@ -253,20 +263,23 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
                 .forEach((Node node) -> {
                     final Class<?> clazz = node.getClass();
-                    MethodsParser.streamOfExternalSetters(clazz).forEach(
-                        method -> {
-                            final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
-                            Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
-                                final External external = MethodsParser.getExternalFor(method, clazz);
-                                final Class<?> targetJavaType = external.type();
-                                final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
-                                try {
-                                    method.invoke(node, val);
-                                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                                    throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
-                                }
-                            });
-                        }
+                    MethodsParser.streamOfExternalSetters(clazz).forEach(method -> {
+                        final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
+                        Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
+                            final External external = MethodsParser.getExternalFor(method, clazz);
+                            final Class<?> targetJavaType = external.type();
+                            final Object val = Platform.get()
+                            .get(JavaTypeMapperComponent.class)
+                            .apply(targetJavaType)
+                            .parse(propString);
+                            //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
+                            try {
+                                method.invoke(node, val);
+                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                                throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
+                            }
+                        });
+                    }
                     );
                 });
 
@@ -312,6 +325,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         Platform.get().get(ManagerComponent.class).put(manager);
     }
 
+    /**
+     * Sets the SpeedmentApplicationMetadata. The meta data describes the layout
+     * of the Project (i.e. Dbms:es, Schemas, Tables, Columns etc)
+     *
+     * @param speedmentApplicationMetadata to use
+     * @return this instance
+     */
     public T setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
         this.speedmentApplicationMetadata = speedmentApplicationMetadata;
         return self();
@@ -321,11 +341,25 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return speedmentApplicationMetadata;
     }
 
+    /**
+     * Sets the Path from where the meta data configuration shall be retrieved.
+     * If no Path at all shall be used, a value of {@code null} can be used.
+     *
+     * @param configPath to use
+     * @return this instance
+     */
     public T setConfigPath(Path configPath) {
         this.configPath = configPath;
         return self();
     }
 
+    /**
+     * Returns the currently configured Path for meta data, or Optional.empty()
+     * of no Path is set.
+     *
+     * @return the currently configured Path for meta data, or Optional.empty()
+     * of no Path is set
+     */
     protected Optional<Path> getConfigPath() {
         return Optional.ofNullable(configPath);
     }
@@ -369,6 +403,12 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 //        return thizz();
 //    }
     // Utilities
+    /**
+     * Support method to do something with all managers i separate threads.
+     * Useful if, for example, initialization is lengthy.
+     *
+     * @param managerConsumer to accept all Managers
+     */
     protected void forEachManagerInSeparateThread(Consumer<Manager<?, ?, ?>> managerConsumer) {
         final ManagerComponent mc = Platform.get().get(ManagerComponent.class);
         final List<Thread> threads = mc.stream().map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName())).collect(toList());

@@ -16,19 +16,18 @@
  */
 package com.speedment.util.java.sql;
 
-import com.speedment.util.PureStaticMethods;
+import com.speedment.util.PureStatic;
 
 /**
  *
  * @author pemi
  */
-public class SqlUtil implements PureStaticMethods {
+public class SqlUtil implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     public SqlUtil() {
         instanceNotAllowed();

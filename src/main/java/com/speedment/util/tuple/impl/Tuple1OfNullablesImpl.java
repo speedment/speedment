@@ -14,24 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.tuple;
+package com.speedment.util.tuple.impl;
+
+import com.speedment.util.tuple.*;
+import java.util.Optional;
 
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
  *
  * @author pemi
  * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public class Tuple1OfNullablesImpl<T0> extends AbstractTupleOfNullables implements Tuple1OfNullables<T0> {
 
-    T0 get0();
+    @SuppressWarnings("rawtypes")
+    public Tuple1OfNullablesImpl(T0 e0) {
+        super(Tuple1OfNullablesImpl.class, e0);
+    }
 
-    T1 get1();
-
-    T2 get2();
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T0> get0() {
+        return Optional.ofNullable((T0) values[0]);
+    }
 
 }

@@ -16,45 +16,19 @@
  */
 package com.speedment.util.tuple;
 
-import java.util.Objects;
-
 /**
+ * {@inheritDoc}
+ *
+ * This {@link Tuple} holds two non-null elements.
  *
  * @author pemi
  * @param <T0> Type of 0:th argument
  * @param <T1> Type of 1:st argument
  */
-public class Tuple2<T0, T1> extends BasicTuple<Tuple2<T0, T1>> {
+public interface Tuple2<T0, T1> extends Tuple {
 
-    public Tuple2() {
-        super(Tuple2.class, 2);
-    }
+    T0 get0();
 
-    public Tuple2(T0 v0, T1 v1) {
-        super(Tuple2.class,
-            Objects.requireNonNull(v0),
-            Objects.requireNonNull(v1)
-        );
-    }
-
-    @SuppressWarnings("unchecked")
-    public T0 get0() {
-        return (T0) values[0];
-    }
-
-    @SuppressWarnings("unchecked")
-    public T1 get1() {
-        return (T1) values[1];
-    }
-
-    public Tuple2<T0, T1> set0(T0 v0) {
-        values[0] = Objects.requireNonNull(v0);
-        return this;
-    }
-
-    public Tuple2<T0, T1> set1(T1 v1) {
-        values[1] = Objects.requireNonNull(v1);
-        return this;
-    }
+    T1 get1();
 
 }

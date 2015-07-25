@@ -22,13 +22,12 @@ import java.nio.file.Path;
  *
  * @author Emil Forslund
  */
-public class Paths implements PureStaticMethods {
+public class Paths implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private Paths() {
         instanceNotAllowed();

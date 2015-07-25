@@ -16,84 +16,44 @@
  */
 package com.speedment.util.tuple;
 
-import java.util.Arrays;
-import java.util.Objects;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
- * @param <T> The implementation type of the BasicTuple
+ * @param <R> The return type of {@link #get(int)}
  */
-public abstract class BasicTuple<T extends BasicTuple<T>> {
+public interface BasicTuple<R> {
 
-    protected final Object[] values;
-    @SuppressWarnings("rawtypes")
-    private final Class<? extends BasicTuple> baseClass;
+    /**
+     * Returns the order of the Tuple. For example, a Tuple2 has an order of 2
+     * whereas a Tuple3 has an order of 3.
+     *
+     * @return the order of the Tuple
+     */
+    int order();
 
-    @SuppressWarnings("rawtypes")
-    public BasicTuple(Class<? extends BasicTuple> baseClass, int capacity) {
-        this.baseClass = baseClass;
-        this.values = new Object[capacity];
-    }
+    /**
+     * Gets the tuple element at the given index. For example, get(0) will
+     * return the first element and get(1) will return the second etc.
+     *
+     * @param index of the element to get
+     * @return the tuple element at the given index
+     * @throws IndexOutOfBoundsException if
+     * {@code index < 0 || index >= order()}
+     */
+    R get(int index);
 
-    @SuppressWarnings("rawtypes")
-    public BasicTuple(Class<? extends BasicTuple> baseClass, Object... values) {
-        this.baseClass = baseClass;
-        this.values = Arrays.copyOf(values, values.length);
-    }
+    /**
+     * Returns a {@link Stream} of all non-null values for this Tuple of the
+     * given class. I.e. all non-null members of a Tuple that can be cast to the
+     * given class are included in the Stream. If sequential, the Stream will
+     * start with the 0:th tuple and progress upwards.
+     *
+     * @param <T> The type of stream
+     * @param clazz The class of the type of the stream
+     * @return a {@link Stream} of all values for this Tuple of the given class
+     */
+    <T> Stream<T> streamOf(Class<T> clazz);
 
-    public int capacity() {
-        return values.length;
-    }
-
-    public Object get(int index) {
-        if (index < 0 || index >= capacity()) {
-            throw new IllegalArgumentException("index " + index + " is illegal. There is capacity for " + capacity() + " items in this class.");
-        }
-        return values[index];
-    }
-
-    //    We should not expose this method because then we can by-pass type checking.    
-    @SuppressWarnings("unchecked")
-    protected T set(int index, Object value) {
-        values[index] = value;
-        return (T) this;
-    }
-
-//    We should not expose this method because then we can by-pass type checking.
-//    public T set(int index, Object value) {
-//        values[index] = value;
-//        return (T) this;
-//    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(values);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!baseClass.isAssignableFrom(obj.getClass())) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        final T tuple = (T) obj;
-        return Arrays.equals(this.values, tuple.values);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " " + Stream.of(values).map(Objects::toString).collect(joining(", ", "{", "}"));
-    }
-
-    public Stream<Object> stream() {
-        return Stream.of(values);
-    }
-
-    public <T> Stream<T> streamOf(Class<T> clazz) {
-        return Stream.of(values).filter(Objects::nonNull).filter(e -> clazz.isAssignableFrom(e.getClass())).map(clazz::cast);
-    }
-
-    // Perhaps a list of expected classes T0, T1, ..., TN so that streamOf() can return null also
 }

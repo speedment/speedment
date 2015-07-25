@@ -16,22 +16,24 @@
  */
 package com.speedment.util.tuple;
 
+import java.util.stream.Stream;
+
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
+ * This interface defines a generic Tuple of any order that can hold non-null
+ * values. A Tuple is type safe, immutable and thread safe. For null value
+ * elements see {@link TupleOfNullables}
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
+ * @see TupleOfNullables
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public interface Tuple extends BasicTuple<Object> {
 
-    T0 get0();
-
-    T1 get1();
-
-    T2 get2();
+    /**
+     * Returns a {@link Stream} of all values for this Tuple. If sequential, the
+     * Stream will start with the 0:th tuple and progress upwards.
+     *
+     * @return a {@link Stream} of all values for this Tuple
+     */
+    Stream<Object> stream();
 
 }

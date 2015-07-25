@@ -14,24 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.tuple;
+package com.speedment.util.stream;
+
+import java.util.stream.Stream;
 
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
+ * Indicates that this class is Streamable.
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
+ * @param <T> type of {@link Stream}
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public interface Streamable<T> {
 
-    T0 get0();
-
-    T1 get1();
-
-    T2 get2();
+    Stream<T> stream();
 
 }

@@ -16,7 +16,7 @@
  */
 package com.speedment.util.stream;
 
-import com.speedment.util.PureStaticMethods;
+import com.speedment.util.PureStatic;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -24,13 +24,12 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class OptionalUtil implements PureStaticMethods {
+public final class OptionalUtil implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private OptionalUtil() {
         instanceNotAllowed();

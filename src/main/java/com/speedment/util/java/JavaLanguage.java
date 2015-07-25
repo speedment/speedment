@@ -17,7 +17,7 @@
 package com.speedment.util.java;
 
 import static com.speedment.codegen.util.Formatting.ucfirst;
-import com.speedment.util.PureStaticMethods;
+import com.speedment.util.PureStatic;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
@@ -32,13 +32,12 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class JavaLanguage implements PureStaticMethods {
+public class JavaLanguage implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private JavaLanguage() {
         instanceNotAllowed();

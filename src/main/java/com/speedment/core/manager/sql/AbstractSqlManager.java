@@ -31,6 +31,7 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
+import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
@@ -155,7 +156,15 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
                         .filter(Column::isAutoincrement)
                         .forEachOrdered(column -> {
                             // Cast from Long to the column target type
-                            final Object val = StandardJavaTypeMapping.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
+
+                            final Object val = Platform.get()
+                            .get(JavaTypeMapperComponent.class)
+                            .apply(column.getMapping())
+                            .parse(
+                                l.get(cnt.getAndIncrement())
+                            );
+
+                            //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
                             set(builder, column, val);
                         });
                 }

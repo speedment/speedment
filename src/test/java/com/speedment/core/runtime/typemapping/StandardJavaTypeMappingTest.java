@@ -56,11 +56,11 @@ public class StandardJavaTypeMappingTest {
     @Test
     public void testParse() {
         System.out.println("parse");
-        assertEquals(Boolean.TRUE, StandardJavaTypeMapping.parse(Boolean.class, "true"));
-        assertEquals(Boolean.FALSE, StandardJavaTypeMapping.parse(Boolean.class, "false"));
-        assertEquals(Byte.valueOf((byte) -47), StandardJavaTypeMapping.parse(Byte.class, "-47"));
-        assertEquals(Short.valueOf((byte) -47), StandardJavaTypeMapping.parse(Short.class, "-47"));
-        assertEquals(Integer.valueOf(-47), StandardJavaTypeMapping.parse(Integer.class, "-47"));
+        assertEquals(Boolean.TRUE, StandardJavaTypeMapping.BOOLEAN.parse("true"));
+        assertEquals(Boolean.FALSE, StandardJavaTypeMapping.BOOLEAN.parse("false"));
+        assertEquals(Byte.valueOf((byte) -47), StandardJavaTypeMapping.BYTE.parse("-47"));
+        assertEquals(Short.valueOf((byte) -47), StandardJavaTypeMapping.SHORT.parse("-47"));
+        assertEquals(Integer.valueOf(-47), StandardJavaTypeMapping.INTEGER.parse("-47"));
     }
 
 }

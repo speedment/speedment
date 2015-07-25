@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Trees implements PureStaticMethods {
+public class Trees implements PureStatic {
 
     private Trees() {
         instanceNotAllowed();

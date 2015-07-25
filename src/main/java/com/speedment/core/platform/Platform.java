@@ -29,6 +29,8 @@ import com.speedment.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.core.platform.component.impl.SqlTypeMapperComponentImpl;
 
 /**
+ * <img src="{@docRoot}/doc-files/hare.png" alt="Hare">
+ *
  * The {@code Platform} class acts as a generic holder of different system
  * {@link Component Components}. Using its pluggable architecture, one can
  * replace existing default implementations of existing Components or plug in

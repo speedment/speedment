@@ -17,11 +17,20 @@
 package com.speedment.core.runtime;
 
 /**
+ * This interface defines how a Speedment application can obtain its
+ * configuration meta data. For example, in a form of a groovy file
  *
  * @author pemi
+ * @since 2.0
  */
 public abstract interface ApplicationMetadata {
 
+    /**
+     * Returns the meta data as a String that shall be used to build up the
+     * complete Project meta data.
+     *
+     * @return the meta data
+     */
     String getMetadata();
 
 }

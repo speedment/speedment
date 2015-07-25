@@ -25,13 +25,12 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author pemi
  */
-public class LongUtil implements PureStaticMethods {
+public class LongUtil implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private LongUtil() {
         instanceNotAllowed();

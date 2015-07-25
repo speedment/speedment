@@ -16,13 +16,13 @@
  */
 package com.speedment.util.analytics;
 
-import com.speedment.util.PureStaticMethods;
+import com.speedment.util.PureStatic;
 
 /**
  *
  * @author pemi
  */
-public class AnalyticsUtil implements PureStaticMethods {
+public class AnalyticsUtil implements PureStatic {
 
     private static final String TRACKING_CODE = "UA-54384165-1";
 
@@ -30,7 +30,6 @@ public class AnalyticsUtil implements PureStaticMethods {
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private AnalyticsUtil() {
         instanceNotAllowed();

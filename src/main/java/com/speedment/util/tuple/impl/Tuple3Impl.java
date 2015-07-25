@@ -14,24 +14,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.tuple;
+package com.speedment.util.tuple.impl;
+
+import com.speedment.util.tuple.*;
 
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
  *
  * @author pemi
  * @param <T0> Type of 0:th argument
  * @param <T1> Type of 1:st argument
  * @param <T2> Type of 2:nd argument
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public class Tuple3Impl<T0, T1, T2> extends AbstractTuple implements Tuple3<T0, T1, T2> {
 
-    T0 get0();
+    public Tuple3Impl(T0 v0, T1 v1, T2 v2) {
+        super(Tuple3Impl.class, v0, v1, v2);
+    }
 
-    T1 get1();
+    @SuppressWarnings("unchecked")
+    @Override
+    public T0 get0() {
+        return (T0) values[0];
+    }
 
-    T2 get2();
+    @SuppressWarnings("unchecked")
+    @Override
+    public T1 get1() {
+        return (T1) values[1];
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T2 get2() {
+        return (T2) values[2];
+    }
 
 }

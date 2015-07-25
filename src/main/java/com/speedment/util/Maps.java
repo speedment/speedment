@@ -26,13 +26,12 @@ import java.util.stream.Collectors;
  *
  * @author pemi
  */
-public class Maps implements PureStaticMethods {
+public class Maps implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private Maps() {
         instanceNotAllowed();

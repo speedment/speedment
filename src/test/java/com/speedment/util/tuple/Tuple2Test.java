@@ -55,11 +55,14 @@ public class Tuple2Test {
 
     @Before
     public void setUp() {
-        instance = new Tuple2<>(FIRST, SECOND);
+        instance = Tuples.of(FIRST, SECOND);
+        //instance = new Tuple2<>(FIRST, SECOND);
     }
 
     @After
     public void tearDown() {
+        
+        Tuple1 t;
     }
 
     @Test
@@ -81,33 +84,33 @@ public class Tuple2Test {
         assertEquals(SECOND, instance.get(1));
     }
 
-    @Test
-    public void testSet0() {
-        System.out.println("set0");
-        instance.set1(32);
-        assertEquals(32, instance.get1().intValue());
-    }
+//    @Test
+//    public void testSet0() {
+//        System.out.println("set0");
+//        instance.set1(32);
+//        assertEquals(32, instance.get1().intValue());
+//    }
+//
+//    @Test
+//    public void testSet1() {
+//        System.out.println("set1");
+//        instance.set1(64);
+//        assertEquals(64, instance.get1().intValue());
+//    }
 
-    @Test
-    public void testSet1() {
-        System.out.println("set1");
-        instance.set1(64);
-        assertEquals(64, instance.get1().intValue());
-    }
-
-    @Test
-    public void testDefConstructor() {
-        System.out.println("Default constructor");
-        final Tuple2<Integer, Integer> newInstance = new Tuple2<>();
-        assertNull(newInstance.get0());
-        assertNull(newInstance.get1());
-    }
+//    @Test
+//    public void testDefConstructor() {
+//        System.out.println("Default constructor");
+//        final Tuple2<Integer, Integer> newInstance = Tuples.of(this, this)new Tuple2<>();
+//        assertNull(newInstance.get0());
+//        assertNull(newInstance.get1());
+//    }
 
     @Test
     public void testHash() {
         System.out.println("hashCode");
         int hashCodeInstance = instance.hashCode();
-        final Tuple2<Integer, Integer> newInstance = new Tuple2<>(FIRST, SECOND);
+        final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         int hashCodenewInstance = newInstance.hashCode();
         assertEquals(hashCodeInstance, hashCodenewInstance);
     }
@@ -115,7 +118,7 @@ public class Tuple2Test {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        final Tuple2<Integer, Integer> newInstance = new Tuple2<>(FIRST, SECOND);
+        final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         assertEquals(instance, newInstance);
     }
 
@@ -123,7 +126,7 @@ public class Tuple2Test {
     public void testToString() {
         System.out.println("toString");
         System.out.println(instance);
-        final Tuple2<Integer, Integer> newInstance = new Tuple2<>();
+        final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         System.out.println(newInstance);
     }
 
@@ -138,7 +141,7 @@ public class Tuple2Test {
     @Test
     public void testStreamOf() {
         System.out.println("StreamOf");
-        final Tuple2<Integer, String> newInstance = new Tuple2<>(FIRST, "Olle");
+        final Tuple2<Integer, String> newInstance = Tuples.of(FIRST, "Olle");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Arrays.asList(FIRST);
         assertEquals(expected, content);

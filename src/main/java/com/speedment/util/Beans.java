@@ -27,13 +27,12 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Beans implements PureStaticMethods {
+public class Beans implements PureStatic {
 
     /**
      * This class contains only static methods and thus, no instance shall be
      * created.
      *
-     * @see PureStaticMethods#instanceNotAllowed()
      */
     private Beans() {
         instanceNotAllowed();

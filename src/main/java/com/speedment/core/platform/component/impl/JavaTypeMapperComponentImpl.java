@@ -20,46 +20,80 @@ import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.runtime.typemapping.JavaTypeMapping;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.util.tuple.Tuple2;
+import com.speedment.util.tuple.Tuples;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class JavaTypeMapperComponentImpl implements JavaTypeMapperComponent {
 
-    private final Map<Class<?>, JavaTypeMapping> map;
-    private final Map<DbmsType, Map<Class<?>, JavaTypeMapping>> dbmsTypeMap;
+    private final Map<Class<?>, JavaTypeMapping<?>> map;
+    private final Map<DbmsType, Map<Class<?>, JavaTypeMapping<?>>> dbmsTypeMap;
 
     public JavaTypeMapperComponentImpl() {
-        map = new ConcurrentHashMap<>();
-        dbmsTypeMap = new ConcurrentHashMap<>();
-        Stream.of(StandardJavaTypeMapping.values()).forEach(m -> {
-            put(m);
-        });
+        map = newConcurrentMap();
+        dbmsTypeMap = newConcurrentMap();
+        StandardJavaTypeMapping.stream().forEach(this::put);
     }
 
-    public JavaTypeMapping put(JavaTypeMapping item) {
+    public JavaTypeMapping<?> put(JavaTypeMapping<?> item) {
         return map.put(item.getJavaClass(), item);
     }
 
-    public JavaTypeMapping put(DbmsType dbmsType, JavaTypeMapping item) {
+    public JavaTypeMapping<?> put(DbmsType dbmsType, JavaTypeMapping<?> item) {
         return dbmsTypeMap.computeIfAbsent(dbmsType, k -> new ConcurrentHashMap<>()).put(item.getJavaClass(), item);
     }
 
-    /**
-     * Gets the mapping from the javaClass to the JavaTypeMapping. If a specific
-     * mapping for the given DbmsType is present, that mapping is selected over
-     * the general mapping for any DbmsType.
-     *
-     * @param dbmsType the Dbms type
-     * @param javaClass the java class to map
-     * @return the mapping
-     */
     @Override
-    public JavaTypeMapping apply(DbmsType dbmsType, Class<?> javaClass) {
-        return Optional.ofNullable(
-                dbmsTypeMap.getOrDefault(dbmsType, map).get(javaClass))
-                .orElseThrow(() -> new NullPointerException("The "+JavaTypeMapperComponent.class.getSimpleName()+" does not have a mapping for " + dbmsType + ", " + javaClass));
+    public <T> JavaTypeMapping<T> apply(DbmsType dbmsType, Class<T> javaClass) {
+        return getFromMapOrThrow(dbmsTypeMap.getOrDefault(dbmsType, map), javaClass, () -> dbmsType + ", " + javaClass.getName());
+    }
+
+    @Override
+    public <T> JavaTypeMapping<T> apply(Class<T> javaClass) {
+        return getFromMapOrThrow(map, javaClass, javaClass::getName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> JavaTypeMapping<T> getFromMapOrThrow(Map<Class<?>, JavaTypeMapping<?>> map, Class<T> javaClass, Supplier<String> throwMessageSupplier) {
+        return Optional.ofNullable((JavaTypeMapping<T>) map.get(javaClass))
+            .orElseThrow(() -> new NullPointerException("The " + JavaTypeMapperComponent.class.getSimpleName() + " does not have a mapping for " + throwMessageSupplier.get()));
+    }
+
+    private <K, V> Map<K, V> newConcurrentMap() {
+        return new ConcurrentHashMap<>();
+    }
+
+    /**
+     * Returns a {@link Stream} of the current mappings that are registered with
+     * this class. Mappings that are not associated to any particular DbmsType
+     * will have their {@code Optional<DbmsType>} set to
+     * {@code Optional.empty()} whereas specific DbmsType mappings will have the
+     * {@code Optional<DbmsType>} field set accordingly.
+     *
+     * @return a {@link Stream} of the current mappings that are registered with
+     * this class
+     */
+    public Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> stream() {
+        
+
+        
+        final Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> s0 = map.values().stream().map(v -> Tuples.of(Optional.empty(), v));
+
+        final Stream.Builder<Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>>> sb = Stream.builder();
+        sb.add(s0);
+
+        dbmsTypeMap.entrySet().stream().forEach(e -> {
+            final DbmsType dbmsType = e.getKey();
+            Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> sn = e.getValue().values().stream().map(v -> Tuples.of(Optional.of(dbmsType), v));
+            sb.add(sn);
+        });
+
+        return sb.build().flatMap(Function.identity());
     }
 
 }

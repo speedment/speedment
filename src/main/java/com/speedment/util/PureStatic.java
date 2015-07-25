@@ -17,12 +17,12 @@
 package com.speedment.util;
 
 /**
- * Support interface for classes that only contains static methods. This
- * interface can for example be used for various "Util" classes.
+ * Support interface for classes that only contains static methods and fields.
+ * This interface can for example be used for various "Util" classes.
  *
  * @author pemi
  */
-public interface PureStaticMethods {
+public interface PureStatic {
 
     /**
      * Support method that can be used in constructors to throw an

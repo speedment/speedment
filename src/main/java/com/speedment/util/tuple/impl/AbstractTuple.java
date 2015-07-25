@@ -14,24 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.tuple;
+package com.speedment.util.tuple.impl;
+
+import com.speedment.util.tuple.Tuple;
+import java.util.stream.Stream;
 
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public abstract class AbstractTuple extends BasicAbstractTuple<AbstractTuple, Object> implements Tuple {
 
-    T0 get0();
+    public AbstractTuple(Class<? extends AbstractTuple> baseClass, Object... values) {
+        super(baseClass, values);
+    }
 
-    T1 get1();
+    @Override
+    protected boolean isNullable() {
+        return false;
+    }
 
-    T2 get2();
+    @Override
+    public Object get(int index) {
+        return values[assertIndexBounds(index)];
+    }
+
+    @Override
+    public Stream<Object> stream() {
+        return Stream.of(values);
+    }
 
 }

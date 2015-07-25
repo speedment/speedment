@@ -18,7 +18,6 @@ package com.speedment.core.platform.component;
 
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.runtime.typemapping.JavaTypeMapping;
-import java.util.function.BiFunction;
 
 /**
  * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and
@@ -28,7 +27,7 @@ import java.util.function.BiFunction;
  * @author pemi
  * @since 2.0
  */
-public interface JavaTypeMapperComponent extends Component, BiFunction<DbmsType, Class<?>, JavaTypeMapping> {
+public interface JavaTypeMapperComponent extends Component {
 
     @Override
     default Class<JavaTypeMapperComponent> getComponentClass() {
@@ -36,15 +35,25 @@ public interface JavaTypeMapperComponent extends Component, BiFunction<DbmsType,
     }
 
     /**
-     * Applies and returns the JavaTypeMapping that corresponds to the DbmsType
-     * and the Java Class.
+     * Gets the mapping from the javaClass to the JavaTypeMapping. If a specific
+     * mapping for the given DbmsType is present, that mapping is selected over
+     * the general mapping for any DbmsType.
      *
-     * @param dbmsType to apply
-     * @param clazz to apply
-     * @return the JavaTypeMapping that corresponds to the DbmsType and the Java
-     * Class
+     * @param <T> the java class type to map
+     * @param dbmsType the Dbms type
+     * @param javaClass the java class to map
+     * @return the mapping
      */
-    @Override
-    public JavaTypeMapping apply(DbmsType dbmsType, Class<?> clazz);
+    <T> JavaTypeMapping<T> apply(DbmsType dbmsType, Class<T> javaClass);
+
+    /**
+     * Gets the mapping from the javaClass to the JavaTypeMapping. The mapping
+     * will not consider DbmsType specific mappings.
+     *
+     * @param <T> the java class type to map
+     * @param javaClass the java class to map
+     * @return the mapping
+     */
+    <T> JavaTypeMapping<T> apply(Class<T> javaClass);
 
 }

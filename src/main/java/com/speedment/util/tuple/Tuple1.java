@@ -18,20 +18,14 @@ package com.speedment.util.tuple;
 
 /**
  * {@inheritDoc}
- *
- * This {@link Tuple} holds three non-null elements.
+ * 
+ * This {@link Tuple} holds one non-null element.
  *
  * @author pemi
  * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public interface Tuple1<T0> extends Tuple {
 
     T0 get0();
-
-    T1 get1();
-
-    T2 get2();
 
 }
