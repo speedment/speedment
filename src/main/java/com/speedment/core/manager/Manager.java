@@ -99,9 +99,9 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     Optional<ENTITY> remove(ENTITY entity);
 
-    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 
-    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 
-    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 }

@@ -43,11 +43,11 @@ import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 public class StandardJavaTypeMapping implements PureStatic {
-    
+
     private StandardJavaTypeMapping() {
         instanceNotAllowed();
     }
-    
+
     public static final JavaTypeMapping<Object> OBJECT = new JavaTypeMappingImpl<>(
         Object.class, "Object", s -> (Object) s, l -> (Object) l
     );
@@ -124,10 +124,10 @@ public class StandardJavaTypeMapping implements PureStatic {
      * @param f the field
      * @return the value of the static field
      */
-    private static Optional<Object> wrapGetStaticField(Field f) {
+    private static Object wrapGetStaticField(Field f) {
         try {
             final Object o = f.get(null);
-            return Optional.ofNullable(o);
+            return o;
         } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new SpeedmentException(e);
         }
@@ -161,9 +161,8 @@ public class StandardJavaTypeMapping implements PureStatic {
     public static Stream<JavaTypeMapping<?>> stream() {
         return Stream.of(values);
     }
-    
+
     //private static final Map<Class<?>, JavaTypeMapping<?>> classMap = stream().collect(Collectors.toMap(JavaTypeMapping::getJavaClass, Function.identity()));
-    
 }
 
 /**

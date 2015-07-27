@@ -19,6 +19,7 @@ package com.speedment.codegen.lang.models.implementation;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.JavadocTag;
 import com.speedment.codegen.util.Copier;
+import com.speedment.util.TextUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,38 +31,40 @@ import java.util.Optional;
  * @author Emil Forslund
  */
 public class JavadocImpl implements Javadoc {
-	private final List<String> rows;
-	private final List<JavadocTag> tags;
 
-	public JavadocImpl() {
-		rows = new ArrayList<>();
-		tags = new ArrayList<>();
-	}
-	
-	public JavadocImpl(final String text) {
-		rows = Arrays.asList(text.split("\n"));
-		tags = new ArrayList<>();
-	}
-	
-	protected JavadocImpl(final Javadoc prototype) {
-		rows = Copier.copy(prototype.getRows(), s -> s);
-		tags = Copier.copy(prototype.getTags());
-	}
-	
-    @Override
-	public List<String> getRows() {
-		return rows;
-	}
+    private final List<String> rows;
+    private final List<JavadocTag> tags;
+
+    public JavadocImpl() {
+        rows = new ArrayList<>();
+        tags = new ArrayList<>();
+    }
+
+    public JavadocImpl(final String text) {
+        final String formattedText = TextUtil.formatJavaDocBox(text);
+        rows = Arrays.asList(formattedText.split("\n"));
+        tags = new ArrayList<>();
+    }
+
+    protected JavadocImpl(final Javadoc prototype) {
+        rows = Copier.copy(prototype.getRows(), s -> s);
+        tags = Copier.copy(prototype.getTags());
+    }
 
     @Override
-	public List<JavadocTag> getTags() {
-		return tags;
-	}
-    
+    public List<String> getRows() {
+        return rows;
+    }
+
     @Override
-	public JavadocImpl copy() {
-		return new JavadocImpl(this);
-	}
+    public List<JavadocTag> getTags() {
+        return tags;
+    }
+
+    @Override
+    public JavadocImpl copy() {
+        return new JavadocImpl(this);
+    }
 
     @Override
     public int hashCode() {

@@ -61,8 +61,6 @@ public class Tuple2Test {
 
     @After
     public void tearDown() {
-        
-        Tuple1 t;
     }
 
     @Test
@@ -97,7 +95,6 @@ public class Tuple2Test {
 //        instance.set1(64);
 //        assertEquals(64, instance.get1().intValue());
 //    }
-
 //    @Test
 //    public void testDefConstructor() {
 //        System.out.println("Default constructor");
@@ -105,7 +102,6 @@ public class Tuple2Test {
 //        assertNull(newInstance.get0());
 //        assertNull(newInstance.get1());
 //    }
-
     @Test
     public void testHash() {
         System.out.println("hashCode");

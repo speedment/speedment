@@ -20,10 +20,13 @@ import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
+import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.core.code.model.java.DefaultJavaClassTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
@@ -46,9 +49,9 @@ public class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTran
     @Override
     protected Class make(File file) {
         final Method getMetadata = Method.of("getMetadata", STRING)
-                .public_()
-                .add(OVERRIDE)
-                .add("return ");
+            .public_()
+            .add(OVERRIDE)
+            .add("return ");
 
         GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
             getMetadata.add("        \"" + l.replace("\"", "\\\"") + "\\n\"+");
@@ -57,17 +60,23 @@ public class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTran
 
         //final Path path = project().getConfigPath();
         return Class.of(className)
+            .public_()
+            .add(Type.of(ApplicationMetadata.class))
+            .add(Constructor.of()
                 .public_()
-                .add(Type.of(ApplicationMetadata.class))
-                .add(Constructor.of()
-                        .public_()
-                )
-                .add(getMetadata);
+            )
+            .add(getMetadata)
+            .add(generated());
+    }
+
+    @Override
+    protected Javadoc getJavaDoc() {
+        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE).add(AUTHOR.setValue("Speedment"));
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A Speedment Application Metadata";
+        return "A Speedment Application Metadata class for the {@link com.speedment.core.config.model.Project}. This class contains the meta data present at code generation time.";
     }
 
     @Override

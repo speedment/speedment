@@ -133,4 +133,5 @@ public interface Tuples extends PureStatic {
         return new Tuple3OfNullablesImpl<>(e0, e1, e2);
     }
 
+    // Todo: Add builder that makes .add(e0) -> Tuple1  .add(e0).add(e2) -> Tuple2   .set(3, e3) -> Tuple3
 }
