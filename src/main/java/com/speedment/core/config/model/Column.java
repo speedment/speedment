@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
+ * A Column represents meta data that relates to a column in a database table.
  *
  * @author pemi
  */
@@ -63,13 +64,13 @@ public interface Column extends ConfigEntity, Ordinable, Child<Table>,
 
     @External(type = Boolean.class)
     void setNullable(Boolean nullable);
-    
+
     @External(type = Boolean.class)
     Boolean isAutoincrement();
 
     @External(type = Boolean.class)
     void setAutoincrement(Boolean nullable);
-    
+
     @External(type = String.class)
     Optional<String> getAlias();
 

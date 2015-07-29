@@ -23,13 +23,20 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
+ * Aggregation of a number of {@link Predicate Predicates} of the same type
+ * (e.g. AND or OR) that can be applied in combination.
  *
  * @author pemi
  * @param <ENTITY> the Entity type
  */
 public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY> {
 
+    /**
+     * This enum list all the different types of concrete implementation of the
+     * abstract CombinedBasePredicate
+     */
     public static enum Type {
+
         AND, OR
     }
 
@@ -43,6 +50,15 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
         add(Objects.requireNonNull(second));
     }
 
+    /**
+     * Adds the provided Predicate to this CombinedBasePredicate.
+     *
+     * @param <R> the Type of CombinedBasePredicate (AndCombinedBasePredicate or
+     * OrCombinedBasePredicate)
+     * @param predicate to add
+     * @return a reference to a CombinedPredicate after the method has been
+     * applied
+     */
     protected final <R extends CombinedBasePredicate<ENTITY>> R add(Predicate<? super ENTITY> predicate) {
         if (getClass().equals(predicate.getClass())) {
             @SuppressWarnings("unchecked")
@@ -52,33 +68,57 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
             predicates.add(predicate);
         }
 
-		@SuppressWarnings("unchecked")
-		final R self = (R) this;
+        @SuppressWarnings("unchecked")
+        final R self = (R) this;
         return self;
     }
 
+    /**
+     * Removes the provided Predicate from this CombinedBasePredicate.
+     *
+     * @param predicate to remove
+     * @return a reference to a CombinedPredicate after the method has been
+     * applied
+     */
     protected CombinedBasePredicate<ENTITY> remove(Predicate<? super ENTITY> predicate) {
         predicates.remove(predicate);
         return this;
     }
 
+    /**
+     * Creates and returns a {link Stream} of all predicates that this
+     * CombinedBasePredicate holds.
+     *
+     * @return a {link Stream} of all predicates that this CombinedBasePredicate
+     * holds
+     */
     public Stream<Predicate<? super ENTITY>> stream() {
         return predicates.stream();
     }
 
+    /**
+     * Returns the number of predicates that this CombinedBasePredicate holds
+     *
+     * @return the number of predicates that this CombinedBasePredicate holds
+     */
     public int size() {
         return predicates.size();
     }
 
+    /**
+     * Returns the {@link Type} of this CombinedBasePredicate
+     *
+     * @return the {@link Type} of this CombinedBasePredicate
+     */
     public Type getType() {
         return type;
     }
-	
-	@Override
-	public abstract AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other);
-	
-	@Override
-	public abstract OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other);
+
+    @Override
+    public abstract AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other);
+
+    @Override
+    public abstract OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other);
 
     public static class AndCombinedBasePredicate<ENTITY> extends CombinedBasePredicate<ENTITY> {
 

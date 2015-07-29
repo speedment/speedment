@@ -23,6 +23,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * This class represents a String Reference Field. A String Field maps to a
+ * {@link String} Column.
  *
  * @author pemi
  * @param <ENTITY> The entity type
@@ -33,27 +35,84 @@ public class StringReferenceField<ENTITY> extends ComparableReferenceField<ENTIT
         super(columnSupplier, getter);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>equal</em> to the given
+     * value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>equal</em> to the given value while ignoring the case
+     * of the Strings that are compared
+     *
+     * @see String#compareToIgnoreCase(java.lang.String)
+     */
     public StringBinaryPredicateBuilder<ENTITY> equalIgnoreCase(String value) {
         return newBinary(value, StandardStringBinaryOperator.EQUAL_IGNORE_CASE);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not equal</em> to the
+     * given value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not equal</em> to the given value while ignoring the
+     * case of the Strings that are compared
+     *
+     * @see String#compareToIgnoreCase(java.lang.String)
+     */
     public StringBinaryPredicateBuilder<ENTITY> notEqualIgnoreCase(String value) {
         return newBinary(value, StandardStringBinaryOperator.NOT_EQUAL_IGNORE_CASE);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>starts with</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>starts with</em> the given value
+     *
+     * @see String#startsWith(java.lang.String)
+     */
     public StringBinaryPredicateBuilder<ENTITY> startsWith(String value) {
         return newBinary(value, StandardStringBinaryOperator.STARTS_WITH);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>ends with</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>ends with</em> the given value
+     *
+     * @see String#endsWith(java.lang.String)
+     */
     public StringBinaryPredicateBuilder<ENTITY> endsWith(String value) {
         return newBinary(value, StandardStringBinaryOperator.ENDS_WITH);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>contains</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>contains</em> the given value
+     *
+     * @see String#endsWith(java.lang.String)
+     */
     public StringBinaryPredicateBuilder<ENTITY> contains(String value) {
         return newBinary(value, StandardStringBinaryOperator.CONTAINS);
     }
 
-    public StringBinaryPredicateBuilder<ENTITY> newBinary(String value, StandardStringBinaryOperator binaryOperator) {
+    protected StringBinaryPredicateBuilder<ENTITY> newBinary(String value, StandardStringBinaryOperator binaryOperator) {
         return new StringBinaryPredicateBuilder<>(this, value, binaryOperator);
     }
 

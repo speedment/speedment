@@ -21,6 +21,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * This class represents a Reference Field that is a Foreign key to another
+ * table/column. A Reference Field is something that extends {@link Object}.
  *
  * @author pemi
  * @param <ENTITY> The entity type
@@ -28,14 +30,20 @@ import java.util.function.Supplier;
  * @param <FK> The foreign entity type
  */
 public class ReferenceForeignKeyField<ENTITY, V, FK> extends ReferenceField<ENTITY, V> {
-	
-	private final Function<ENTITY, FK> finder;
+
+    private final Function<ENTITY, FK> finder;
 
     public ReferenceForeignKeyField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter, Function<ENTITY, FK> finder) {
         super(columnSupplier, getter);
-		this.finder = finder;
+        this.finder = finder;
     }
 
+    /**
+     * Finds and returns the foreign key Entity using the provided Entity.
+     *
+     * @param entity to use when finding the foreign key Entity
+     * @return the foreign key Entity
+     */
     public FK findFrom(ENTITY entity) {
         return finder.apply(entity);
     }

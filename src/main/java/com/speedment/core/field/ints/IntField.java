@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 /**
+ * This class represents an {@code int} Field.
  *
  * @author pemi
  * @param <ENTITY> The entity field
@@ -38,26 +39,80 @@ public class IntField<ENTITY> implements Field<ENTITY> {
         this.columnSupplier = columnSupplier;
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>equal</em> to the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>equal</em> to the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> equal(int value) {
         return newBinary(value, StandardBinaryOperator.EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not equal</em> to the
+     * given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not equal</em> to the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> notEqual(int value) {
         return newBinary(value, StandardBinaryOperator.NOT_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than</em> the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> lessThan(int value) {
         return newBinary(value, StandardBinaryOperator.LESS_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than or equal</em> to the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> lessOrEqual(int value) {
         return newBinary(value, StandardBinaryOperator.LESS_OR_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than</em>
+     * the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than</em> the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> greaterThan(int value) {
         return newBinary(value, StandardBinaryOperator.GREATER_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than or equal</em> to the given value
+     */
     public IntBinaryPredicateBuilder<ENTITY> greaterOrEqual(int value) {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
@@ -76,11 +131,11 @@ public class IntField<ENTITY> implements Field<ENTITY> {
         return columnSupplier.get();
     }
 
-    public IntBinaryPredicateBuilder<ENTITY> newBinary(int value, StandardBinaryOperator binaryOperator) {
+    protected IntBinaryPredicateBuilder<ENTITY> newBinary(int value, StandardBinaryOperator binaryOperator) {
         return new IntBinaryPredicateBuilder<>(this, value, binaryOperator);
     }
 
-    public IntUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
+    protected IntUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
         return new IntUnaryPredicateBuilder<>(this, unaryOperator);
     }
 

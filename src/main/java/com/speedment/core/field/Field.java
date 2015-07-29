@@ -19,14 +19,28 @@ package com.speedment.core.field;
 import com.speedment.core.config.model.Column;
 
 /**
+ * A Field is the most basic representation of an Entity field. Because Field
+ * has a generic type of its Entity, we can prevent applications from applying a
+ * field from another Entity type.
  *
  * @author pemi
  * @param <ENTITY> The entity type
  */
 public interface Field<ENTITY> {
 
+    /**
+     * Returns if this Field is {@code null} in the given entity.
+     *
+     * @param entity to use
+     * @return if this Field is {@code null} in the given entity
+     */
     public boolean isNullIn(ENTITY entity);
 
+    /**
+     * Returns the {@link Column} meta data that corresponds to this Field.
+     *
+     * @return the {@link Column} meta data that corresponds to this Field
+     */
     public Column getColumn();
-    
+
 }

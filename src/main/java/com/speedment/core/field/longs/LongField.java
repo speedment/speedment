@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.function.ToLongFunction;
 
 /**
+ * This class represents a {@code long} Field.
  *
  * @author pemi
  * @param <ENTITY> The entity type
@@ -38,26 +39,80 @@ public class LongField<ENTITY> implements Field<ENTITY> {
         this.columnSupplier = columnSupplier;
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>equal</em> to the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>equal</em> to the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> equal(long value) {
         return newBinary(value, StandardBinaryOperator.EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not equal</em> to the
+     * given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not equal</em> to the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> notEqual(long value) {
         return newBinary(value, StandardBinaryOperator.NOT_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than</em> the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> lessThan(long value) {
         return newBinary(value, StandardBinaryOperator.LESS_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than or equal</em> to the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> lessOrEqual(long value) {
         return newBinary(value, StandardBinaryOperator.LESS_OR_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than</em>
+     * the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than</em> the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> greaterThan(long value) {
         return newBinary(value, StandardBinaryOperator.GREATER_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than or equal</em> to the given value
+     */
     public LongBinaryPredicateBuilder<ENTITY> greaterOrEqual(long value) {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
@@ -76,11 +131,11 @@ public class LongField<ENTITY> implements Field<ENTITY> {
         return columnSupplier.get();
     }
 
-    public LongBinaryPredicateBuilder<ENTITY> newBinary(long value, StandardBinaryOperator binaryOperator) {
+    protected LongBinaryPredicateBuilder<ENTITY> newBinary(long value, StandardBinaryOperator binaryOperator) {
         return new LongBinaryPredicateBuilder<>(this, value, binaryOperator);
     }
 
-    public LongUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
+    protected LongUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
         return new LongUnaryPredicateBuilder<>(this, unaryOperator);
     }
 
