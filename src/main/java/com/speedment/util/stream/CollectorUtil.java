@@ -19,7 +19,7 @@ package com.speedment.util.stream;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.util.PureStatic;
-import com.speedment.util.json.JsonFormatter;
+import com.speedment.core.json.JsonFormatter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

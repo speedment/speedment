@@ -22,7 +22,7 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.Buildable;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.util.json.JsonFormatter;
+import com.speedment.core.json.JsonFormatter;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -67,7 +67,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     BUILDER toBuilder(ENTITY entity);
 
     default JsonFormatter<ENTITY> toJson() {
-        return JsonFormatter.allFrom(getEntityClass());
+        return JsonFormatter.allOf(getEntityClass());
     }
 
     default String toJson(ENTITY entity) {

@@ -47,7 +47,7 @@ import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.util.Pluralis;
 import com.speedment.util.java.JavaLanguage;
-import com.speedment.util.json.JsonFormatter;
+import com.speedment.core.json.JsonFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
