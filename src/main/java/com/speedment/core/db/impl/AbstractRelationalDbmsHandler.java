@@ -67,6 +67,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
 
+    private static final String PASSWORD = "password";
+    private static final String PASSWORD_PROTECTED = "********";
+    private static final String USER = "user";
+
     private final Dbms dbms;
     private transient Map<String, Class<?>> typeMapping;
 
@@ -86,12 +90,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     public Connection getConnection() {
         Connection conn;
         final Properties connectionProps = new Properties();
-        dbms.getUsername().ifPresent(u -> connectionProps.put("user", u));
-        dbms.getPassword().ifPresent(p -> connectionProps.put("password", p));
+        dbms.getUsername().ifPresent(u -> connectionProps.put(USER, u));
+        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
+        final String url = getUrl();
         try {
-            conn = DriverManager.getConnection(getUrl(), connectionProps);
+            conn = DriverManager.getConnection(url, connectionProps);
         } catch (SQLException sqle) {
-            final String msg = "Unable to get connection for " + dbms;
+            final Properties pwProtectedProperties = new Properties();
+            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
+            pwProtectedProperties.put(PASSWORD, PASSWORD_PROTECTED);
+            final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\" and connectionProperties " + pwProtectedProperties;
             LOGGER.error(msg, sqle);
             throw new SpeedmentException(msg, sqle);
         }
@@ -416,7 +424,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             Objects.requireNonNull(rsMapper),
             () -> getConnection());
     }
-
 
     @Override
     public void executeUpdate(

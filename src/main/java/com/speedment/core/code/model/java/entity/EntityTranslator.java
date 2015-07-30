@@ -107,7 +107,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 method.set(new JavadocImpl(
                         "Creates and returns a {@link Stream} of all "
                         + "{@link " + typeName(fu.getTable()) + "} Entities that references this Entity by "
-                        + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#" + typeName(fu.getColumn()) + "()}. "
+                        + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#get" + typeName(fu.getColumn()) + "()}. "
                         + "The order of the Entities are undefined and may change from time to time. "
                         + "<p>\n"
                         + "Using this method, you may \"walk the graph\" and jump "
@@ -116,7 +116,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                     .add(RETURN.setText(
                             "a {@link Stream} of all "
                             + "{@link " + typeName(fu.getTable()) + "} Entities  that references this Entity by "
-                            + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#" + typeName(fu.getColumn()) + "()}")
+                            + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#get" + typeName(fu.getColumn()) + "()}")
                     )
                 );
 
@@ -341,7 +341,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                     + " <p> "
                     + "When a terminating method is called on the Stream and there is an error in the underlying data source "
                     + "(e.g. the database user has not been granted SELECT rights), an unchecked (runtime) "
-                    + "{@link SpeedmentException} will be thrown."
+                    + "{@link " + SpeedmentException.class.getName() + " " + SpeedmentException.class.getSimpleName() + "} will be thrown."
                     + " <p> "
                     + "<em>N.B.</em> Because the Stream might reduce itself, methods that have a side effect (e.g. {@link Stream#peek(java.util.function.Consumer) peek()}) "
                     + "<em>will only operate on the reduced set of Entities</em>, not all Entities."
