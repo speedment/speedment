@@ -31,6 +31,10 @@ import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadata
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.Table;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
+
+import com.speedment.stat.Statistics;
 import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.GENERATE;
 import java.io.IOException;
@@ -45,9 +49,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 
 /**
  *
@@ -55,14 +56,16 @@ import org.apache.logging.log4j.Logger;
  */
 public class MainGenerator implements Consumer<Project> {
 
-    private final static Logger LOGGER = LogManager.getLogger(MainGenerator.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
     private int fileCounter = 0;
 
     @Override
     public void accept(Project project) {
-		AnalyticsUtil.notify(GENERATE);
+        AnalyticsUtil.notify(GENERATE);
+        Statistics.onGenerate();
+        
         fileCounter = 0;
-		
+
         final List<Translator<?, File>> translators = new ArrayList<>();
 
         final Generator gen = new JavaGenerator(
@@ -71,25 +74,27 @@ public class MainGenerator implements Consumer<Project> {
 
         translators.add(new SpeedmentApplicationTranslator(gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
-        
-        project.traversalOf(Table.class).forEach(table -> {
-            translators.add(new EntityTranslator(gen, table));
-            translators.add(new EntityBuilderTranslator(gen, table));
-            translators.add(new EntityImplTranslator(gen, table));
-            translators.add(new EntityManagerTranslator(gen, table));
-            translators.add(new EntityManagerImplTranslator(gen, table));
-        });
+
+        project.traverseOver(Table.class)
+            .filter(Table::isEnabled)
+            .forEach(table -> {
+                translators.add(new EntityTranslator(gen, table));
+                translators.add(new EntityBuilderTranslator(gen, table));
+                translators.add(new EntityImplTranslator(gen, table));
+                translators.add(new EntityManagerTranslator(gen, table));
+                translators.add(new EntityManagerImplTranslator(gen, table));
+            });
 
         Formatting.tab("    ");
         gen.metaOn(translators.stream()
-            .map(t -> t.get())
+            .map(Translator::get)
             .collect(Collectors.toList()))
-            .forEach(c -> {
-                
+            .forEach(meta -> {
+
                 final String fname = project.getPackageLocation()
                 + "/"
-                + c.getModel().getName();
-                final String content = c.getResult();
+                + meta.getModel().getName();
+                final String content = meta.getResult();
                 final Path path = Paths.get(fname);
                 path.getParent().toFile().mkdirs();
 
@@ -106,80 +111,49 @@ public class MainGenerator implements Consumer<Project> {
                 System.out.println(content);
                 System.out.println("*** END   File:" + fname);
             });
-        
-        
+
         List<Table> tables = project
-            .traversalOf(Table.class)
+            .traverseOver(Table.class)
+            .filter(Table::isEnabled)
             .collect(toList());
-        
+
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
             fileCounter++;
         });
-        
-        
-//        
-//        
-//        translators.forEach(t -> {
-//            File file = t.get();
-//            final Optional<String> code = cg.on(file);
-//            System.out.println("*** BEGIN File:" + file.getName());
-//            System.out.println(code.get());
-//            System.out.println("*** END   File:" + file.getName());
-//        });
-
     }
-    
+
     public int getFilesCreated() {
         return fileCounter;
     }
-    
+
     private static void writeToFile(Project project, Generator gen, Meta<Table, File> c) {
         final Optional<String> content = gen.on(c.getResult());
-        
+
         if (content.isPresent()) {
-            final String fname = 
-                project.getPackageLocation() + 
-                "/" + c.getResult().getName();
-            
+            final String fname
+                = project.getPackageLocation()
+                + "/" + c.getResult().getName();
+
             final Path path = Paths.get(fname);
             path.getParent().toFile().mkdirs();
-            
+
             try {
-                Files.write(path, 
+                Files.write(path,
                     content.get().getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException ex) {
                 LOGGER.error("Failed to create file " + fname, ex);
             }
-            
+
             LOGGER.info("done");
-            
+
             System.out.println("*** BEGIN File:" + fname);
             System.out.println(content);
             System.out.println("*** END   File:" + fname);
         } else {
             throw new IllegalArgumentException("Input file could not be generated.");
         }
-        
-//        final String fname = project.getPacketLocation()
-//        + "/"
-//        + c.getModel().getName();
-//        final String content = c.getResult();
-//        final Path path = Paths.get(fname);
-//        path.getParent().toFile().mkdirs();
-//
-//        try {
-//            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-//        } catch (IOException ex) {
-//            LOGGER.error("Failed to create file " + fname, ex);
-//        }
-//
-//        LOGGER.info("done");
-//
-//        System.out.println("*** BEGIN File:" + fname);
-//        System.out.println(content);
-//        System.out.println("*** END   File:" + fname);
     }
 
 }

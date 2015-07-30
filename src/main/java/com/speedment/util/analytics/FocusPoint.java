@@ -16,17 +16,17 @@
  */
 package com.speedment.util.analytics;
 
+import com.speedment.util.version.SpeedmentVersion;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Optional;
 
 public class FocusPoint {
 
-    public static final Optional<String> version = Optional.ofNullable(FocusPoint.class.getPackage().getImplementationVersion());
-    public static final Optional<String> title = Optional.ofNullable(FocusPoint.class.getPackage().getImplementationTitle());
+    public static final String VERSION = SpeedmentVersion.getImplementationVersion();
+    public static final String TITLE = SpeedmentVersion.getImplementationTitle();
 
-    public static final FocusPoint CORE = new FocusPoint(title.orElse("speedment"));
-    public static final FocusPoint CORE_WITH_VERSION = new FocusPoint(version.orElse("?.?.?"), CORE);
+    public static final FocusPoint CORE = new FocusPoint(TITLE);
+    public static final FocusPoint CORE_WITH_VERSION = new FocusPoint(VERSION, CORE);
 	public static final FocusPoint GUI_STARTED = new FocusPoint("GuiStarted", CORE_WITH_VERSION);
 	public static final FocusPoint APP_STARTED = new FocusPoint("AppStarted", CORE_WITH_VERSION);
     public static final FocusPoint GENERATE = new FocusPoint("Generate", CORE_WITH_VERSION);

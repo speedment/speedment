@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.code.model.java;
 
 import com.speedment.core.code.model.Translator;
@@ -28,32 +23,166 @@ import com.speedment.core.config.model.aspects.Node;
 import com.speedment.util.java.JavaLanguage;
 
 /**
- *
- * @author pemi
- * @param <T> The Node type
+ * A more specific {@link Translator} that results in a CodeGen {@link File}.
+ * The class contains many helper-functions to make the generation process
+ * easier.
+ * 
+ * @author      pemi
+ * @param <T>   The Node type
  */
 public interface JavaClassTranslator<T extends Node> extends Translator<T, File> {
 
+    /**
+     * Returns the name of the current node formatted as a java variable.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>employeesSchema</code>
+     *     <li><code>userTable</code>
+     *     <li><code>firstname</code>
+     * </ul>
+     * 
+     * @return         the node name as a variable
+     * @see            #getNode()
+     */
     default String variableName() {
         return variableName(getNode());
     }
 
+    /**
+     * Returns the name of the specified node formatted as a java variable.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>employeesSchema</code>
+     *     <li><code>userTable</code>
+     *     <li><code>firstname</code>
+     * </ul>
+     * 
+     * @param node     the node to retrieve the name from.
+     * @return         the node name as a variable
+     */
     default String variableName(Node node) {
         return JavaLanguage.javaVariableName(node.getName());
     }
 
+    /**
+     * Returns the name of the current node formatted as a java type.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>EmployeesSchema</code>
+     *     <li><code>UserTable</code>
+     *     <li><code>Firstname</code>
+     * </ul>
+     * 
+     * @return         the node name as a type
+     * @see            #getNode()
+     */
     default String typeName() {
         return typeName(getNode());
     }
+    
+    /**
+     * Returns the name of the specified node formatted as a java type.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>EmployeesSchema</code>
+     *     <li><code>UserTable</code>
+     *     <li><code>Firstname</code>
+     * </ul>
+     * 
+     * @param node     the node to retrieve the name from
+     * @return         the node name as a type
+     */
+    default String typeName(Node node) {
+        return JavaLanguage.javaTypeName(node.getName());
+    }
 
+    /**
+     * Returns the name of the current node as a java type but with the keyword
+     * 'Manager' appended to it.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>EmployeesSchemaManager</code>
+     *     <li><code>UserTableManager</code>
+     *     <li><code>FirstnameManager</code>
+     * </ul>
+     * 
+     * @return         the node name as a manager type
+     * @see            #getNode()
+     */
     default String managerTypeName() {
         return managerTypeName(getNode());
     }
+    
+    /**
+     * Returns the name of the specified node as a java type but with the 
+     * keyword 'Manager' appended to it.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>EmployeesSchemaManager</code>
+     *     <li><code>UserTableManager</code>
+     *     <li><code>FirstnameManager</code>
+     * </ul>
+     * 
+     * @param node     the node to retrieve the name from
+     * @return         the node name as a manager type
+     */
+    default String managerTypeName(Node node) {
+        return typeName(node) + "Manager";
+    }
 
+    /**
+     * Returns the fully qualified type name of the current node.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>com.speedment.example.employeesschema.EmployeesSchema</code>
+     *     <li><code>com.speedment.example.usertable.UserTable</code>
+     *     <li><code>com.speedment.example.usertable.firstname.Firstname</code>
+     * </ul>
+     * <p>
+     * Note that this method is only meant to work with nodes at 
+     * <code>Table</code> or higher level in the hierarchy. It will return a
+     * result for all nodes located in a valid hierarchy, but the result might
+     * not be as intended.
+     * 
+     * @return         the fully qualified type name of the current node
+     * @see            <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning fully qualified type names</a>
+     */
     default String fullyQualifiedTypeName() {
         return fullyQualifiedTypeName(null);
     }
 
+    /**
+     * Returns the fully qualified type name of the current node. The specified
+     * subpath will be added after the base package name and before the type
+     * name of the node. The subpath should not contain either leading nor 
+     * trailing dots.
+     * <p>
+     * Example:
+     * <ul>
+     *     <li><code>com.speedment.example.employeesschema.EmployeesSchema</code>
+     *     <li><code>com.speedment.example.usertable.UserTable</code>
+     *     <li><code>com.speedment.example.usertable.firstname.Firstname</code>
+     * </ul>
+     * <p>
+     * Note that this method is only meant to work with nodes at 
+     * <code>Table</code> or higher level in the hierarchy. It will return a
+     * result for all nodes located in a valid hierarchy, but the result might
+     * not be as intended.
+     * 
+     * @param subPath  A subpath to be added at the end of the 'package'-part of
+     *                 the qualified type name. This value can be <code>null</code>
+     *                 and in that case an ordinary fullyQualifiedTypeName will
+     *                 be returned.
+     * @return         the fully qualified type name of the current node
+     * @see            <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning fully qualified type names</a>
+     */
     default String fullyQualifiedTypeName(String subPath) {
         if (subPath == null || subPath.isEmpty()) {
             return basePackageName() + "." + typeName(getNode());
@@ -62,24 +191,29 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
         }
     }
 
-    default String typeName(Node node) {
-        return JavaLanguage.javaTypeName(node.getName());
-    }
-
-    default String managerTypeName(Node node) {
-        return typeName(node) + "Manager";
-    }
-
+    /**
+     * Returns the base package name of the current node. This is everything up
+     * to but not including the type name. No trailing dot is added.
+     * 
+     * @return the base package name in lowercase.
+     */
     default String basePackageName() {
+        final String packName = project().getPackageName().toLowerCase() + ".";
         if (getNode() instanceof Project) {
-            return project().getPackageName() + "." + project().getName();
+            return packName + project().getName();
         } else {
-            return project().getPackageName() + "." + getNode().getRelativeName(Project.class);
+            return packName + getNode().getRelativeName(Project.class);
         }
     }
 
+    /**
+     * Returns the base directory name of the current node. It is the same as
+     * returned by {@link #basePackageName()} but with dashes ('/') instead of
+     * dots ('.').
+     * 
+     * @return the base package name.
+     */
     default String baseDirectoryName() {
         return basePackageName().replace(".", "/");
     }
-
 }

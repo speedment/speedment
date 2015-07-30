@@ -16,8 +16,9 @@
  */
 package com.speedment.util.analytics;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
+
 
 /**
  *
@@ -25,7 +26,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class LoggingAdapterImpl implements LoggingAdapter {
 
-    private final static Logger LOGGER = LogManager.getLogger(LoggingAdapterImpl.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(LoggingAdapterImpl.class);
 
     @Override
     public void logError(String errorMessage) {

@@ -31,13 +31,13 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.0.0-EA</version>
+    <version>2.0.0-EA2</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mainClass>com.speedment.orm.gui.MainApp</mainClass>
+        <mainClass>com.speedment.gui.MainApp</mainClass>
     </properties>
     <name>Speedment</name>
     
@@ -48,13 +48,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
-    
+
     <scm>
         <connection>scm:git:git://github.com/speedment/speedment.git</connection>
         <developerConnection>scm:git:git@github.com:speedment/speedment.git</developerConnection>
         <url>https://github.com/speedment/speedment/</url>
     </scm>
+    
     <developers>
         <developer>
             <id>permin</id>
@@ -72,6 +72,7 @@
         <system>Github</system>
         <url>https://github.com/speedment/speedment/issues</url>
     </issueManagement>
+    
     <organization>
         <name>Speedment, Inc.</name>
         <url>http://www.speedment.com/</url>
@@ -188,7 +189,7 @@
                             <commandlineArgs>${runfx.args}</commandlineArgs>
                         </configuration>
                     </execution>
-                </executions>  
+                </executions> 
             </plugin>
 
             <plugin>
@@ -209,6 +210,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
+                <configuration>
+<!--                    <verbose>true</verbose>-->
+                    <docfilessubdirs>true</docfilessubdirs>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -220,7 +225,7 @@
             </plugin>
 
             <!-- http://maven.apache.org/plugins/maven-pdf-plugin/usage.html-->
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pdf-plugin</artifactId>
                 <version>1.3</version>
@@ -258,7 +263,7 @@
     </build>
             
     <!--    Make sure that the Log4J API and Log4J Core versionw stay in sync-->
-    <dependencyManagement>
+    <!--    <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -268,7 +273,7 @@
                 <type>pom</type>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
         
     <dependencies>
 
@@ -319,11 +324,11 @@
         2015-01-05
         permin
         -->        
-        <dependency>
+        <!--        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.1</version>
-        </dependency>
+        </dependency>-->
         <!-- LICENSE INFORMATION
         Log4j2:2.1
         Apache 2 License
@@ -331,11 +336,11 @@
         2015-01-05
         permin
         -->
-        <dependency>
+        <!--        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.1</version>
-        </dependency>
+        </dependency>-->
         
         <!--
         MySQL Connector:5.1.34

@@ -27,9 +27,10 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class Trees {
+public class Trees implements PureStatic {
 
-    public Trees() {
+    private Trees() {
+        instanceNotAllowed();
     }
 
     public static enum WalkingOrder {
@@ -128,7 +129,10 @@ public class Trees {
         while (!q.isEmpty()) {
             final T node = q.poll();
             builder.add(node);
-            traverser.apply(node).filter(Objects::nonNull).forEach(q::add);
+            traverser
+                .apply(node)
+                .filter(Objects::nonNull)
+                .forEach(q::add);
         }
         return builder;
     }

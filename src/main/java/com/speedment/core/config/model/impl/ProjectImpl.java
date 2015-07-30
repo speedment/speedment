@@ -19,6 +19,7 @@ package com.speedment.core.config.model.impl;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.ProjectManager;
 import com.speedment.core.config.model.aspects.Parent;
+import com.speedment.util.Cast;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -73,9 +74,8 @@ public class ProjectImpl extends AbstractNamedConfigEntity implements Project {
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, ProjectManager.class)
-                .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, ProjectManager.class);
     }
 
     @Override

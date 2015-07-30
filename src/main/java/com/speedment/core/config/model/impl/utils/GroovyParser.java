@@ -20,6 +20,7 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
 import static com.speedment.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.util.java.JavaLanguage;
+import com.speedment.util.version.SpeedmentVersion;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
@@ -87,8 +88,7 @@ public class GroovyParser {
     private static void fromGroovy(final Node node, final FunctionThrowsException<GroovyShell, DelegatingScript> scriptMapper) throws IOException {
 
         final Binding binding = new Binding();
-        binding.setVariable("implementationVersion", node.getClass().getPackage().getImplementationVersion());
-        binding.setVariable("specificationVersion", node.getClass().getPackage().getSpecificationVersion());
+        binding.setVariable("implementationVersion", SpeedmentVersion.getImplementationVersion());
 
         final CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.setScriptBaseClass(DelegatingScript.class.getName());

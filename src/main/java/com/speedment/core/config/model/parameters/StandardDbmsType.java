@@ -18,46 +18,53 @@ package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.ConfigEntity;
+import com.speedment.core.config.model.Dbms;
+import com.speedment.core.db.DbmsHandler;
+import com.speedment.core.db.impl.vendor.MySqlDbmsHandler;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
 
     MYSQL(
-            "MySQL",
-            "MySQL-AB JDBC Driver",
-            3306,
-            ".",
-            "Just a name",
-            "com.mysql.jdbc.Driver",
-            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
-            "mysql",
-            "`",
-            "`",
-            Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema")))
+        "MySQL",
+        "MySQL-AB JDBC Driver",
+        3306,
+        ".",
+        "Just a name",
+        "com.mysql.jdbc.Driver",
+        "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+        "mysql",
+        "`",
+        "`",
+        Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema"))),
+        d -> new MySqlDbmsHandler(d)
     ),
     MARIADB(
-            "MariaDB",
-            "MariaDB JDBC Driver",
-            3305,
-            ".",
-            "Just a name",
-            "com.mysql.jdbc.Driver",
-            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
-            "mariadb",
-            "`",
-            "`",
-            Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema")))
+        "MariaDB",
+        "MariaDB JDBC Driver",
+        3305,
+        ".",
+        "Just a name",
+        "com.mysql.jdbc.Driver",
+        "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+        "mariadb",
+        "`",
+        "`",
+        Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema"))),
+        d -> new MySqlDbmsHandler(d)
     );
 //    
 //    ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
@@ -70,29 +77,31 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
     private static final Map<String, StandardDbmsType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
 
     private StandardDbmsType(
-            final String name,
-            final String driverManagerName,
-            final int defaultPort,
-            final String schemaTableDelimiter,
-            final String nameMeaning,
-            final String driverName,
-            final String defaultConnectionParameters,
-            final String jdbcConnectorName,
-            final String fieldEncloserStart,
-            final String fieldEncloserEnd,
-            final Set<String> schemaExcludSet
+        final String name,
+        final String driverManagerName,
+        final int defaultPort,
+        final String schemaTableDelimiter,
+        final String nameMeaning,
+        final String driverName,
+        final String defaultConnectionParameters,
+        final String jdbcConnectorName,
+        final String fieldEncloserStart,
+        final String fieldEncloserEnd,
+        final Set<String> schemaExcludSet,
+        final Function<Dbms, DbmsHandler> dbmsMapper
     ) {
-        this.name = name;
-        this.driverManagerName = driverManagerName;
+        this.name = Objects.requireNonNull(name);
+        this.driverManagerName = Objects.requireNonNull(driverManagerName);
         this.defaultPort = defaultPort;
-        this.schemaTableDelimiter = schemaTableDelimiter;
-        this.nameMeaning = nameMeaning;
-        this.driverName = driverName;
-        this.defaultConnectionParameters = defaultConnectionParameters;
-        this.jdbcConnectorName = jdbcConnectorName;
-        this.fieldEncloserStart = fieldEncloserStart;
-        this.fieldEncloserEnd = fieldEncloserEnd;
-        this.schemaExcludSet = schemaExcludSet;
+        this.schemaTableDelimiter = Objects.requireNonNull(schemaTableDelimiter);
+        this.nameMeaning = Objects.requireNonNull(nameMeaning);
+        this.driverName = Objects.requireNonNull(driverName);
+        this.defaultConnectionParameters = Objects.requireNonNull(defaultConnectionParameters);
+        this.jdbcConnectorName = Objects.requireNonNull(jdbcConnectorName);
+        this.fieldEncloserStart = Objects.requireNonNull(fieldEncloserStart);
+        this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
+        this.schemaExcludSet = Objects.requireNonNull(schemaExcludSet);
+        this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
     }
     private final String name;
     private final String driverManagerName;
@@ -105,6 +114,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
     private final String fieldEncloserStart;
     private final String fieldEncloserEnd;
     private final Set<String> schemaExcludSet;
+    private final Function<Dbms, DbmsHandler> dbmsMapper;
 
     @Override
     public String getName() {
@@ -180,9 +190,13 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         return Stream.of(values());
     }
 
-    
-    
+    @Override
     public Set<String> getSchemaExcludSet() {
         return schemaExcludSet;
+    }
+
+    @Override
+    public DbmsHandler makeDbmsHandler(Dbms dbms) {
+        return dbmsMapper.apply(dbms);
     }
 }

@@ -17,6 +17,7 @@
 package com.speedment.util.java;
 
 import static com.speedment.codegen.util.Formatting.ucfirst;
+import com.speedment.util.PureStatic;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
@@ -31,96 +32,102 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class JavaLanguage {
+public class JavaLanguage implements PureStatic {
 
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     */
     private JavaLanguage() {
+        instanceNotAllowed();
     }
 
     // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
     //
     // Literals
     public final static Set<String> JAVA_LITERAL_WORDS = unmodifiableSetOf(
-            "true", "false", "null"
+        "true", "false", "null"
     );
 
     // Java reserved keywords
     public final static Set<String> JAVA_RESERVED_WORDS = unmodifiableSetOf(
-            // Unused
-            "const", "goto",
-            // The real ones...
-            "abstract",
-            "continue",
-            "for",
-            "new",
-            "switch",
-            "assert",
-            "default",
-            "goto",
-            "package",
-            "synchronized",
-            "boolean",
-            "do",
-            "if",
-            "private",
-            "this",
-            "break",
-            "double",
-            "implements",
-            "protected",
-            "throw",
-            "byte",
-            "else",
-            "import",
-            "public",
-            "throws",
-            "case",
-            "enum",
-            "instanceof",
-            "return",
-            "transient",
-            "catch",
-            "extends",
-            "int",
-            "short",
-            "try",
-            "char",
-            "final",
-            "interface",
-            "static",
-            "void",
-            "class",
-            "finally",
-            "long",
-            "strictfp",
-            "volatile",
-            "const",
-            "float",
-            "native",
-            "super",
-            "while"
+        // Unused
+        "const", "goto",
+        // The real ones...
+        "abstract",
+        "continue",
+        "for",
+        "new",
+        "switch",
+        "assert",
+        "default",
+        "goto",
+        "package",
+        "synchronized",
+        "boolean",
+        "do",
+        "if",
+        "private",
+        "this",
+        "break",
+        "double",
+        "implements",
+        "protected",
+        "throw",
+        "byte",
+        "else",
+        "import",
+        "public",
+        "throws",
+        "case",
+        "enum",
+        "instanceof",
+        "return",
+        "transient",
+        "catch",
+        "extends",
+        "int",
+        "short",
+        "try",
+        "char",
+        "final",
+        "interface",
+        "static",
+        "void",
+        "class",
+        "finally",
+        "long",
+        "strictfp",
+        "volatile",
+        "const",
+        "float",
+        "native",
+        "super",
+        "while"
     );
 
     public static final Set<Class<?>> JAVA_BUILT_IN_CLASSES = unmodifiableSetOf(
-            Boolean.class,
-            Byte.class,
-            Character.class,
-            Double.class,
-            Float.class,
-            Integer.class,
-            Long.class,
-            Object.class,
-            Short.class,
-            String.class,
-            BigDecimal.class,
-            BigInteger.class,
-            boolean.class,
-            byte.class,
-            char.class,
-            double.class,
-            float.class,
-            int.class,
-            long.class,
-            short.class
+        Boolean.class,
+        Byte.class,
+        Character.class,
+        Double.class,
+        Float.class,
+        Integer.class,
+        Long.class,
+        Object.class,
+        Short.class,
+        String.class,
+        BigDecimal.class,
+        BigInteger.class,
+        boolean.class,
+        byte.class,
+        char.class,
+        double.class,
+        float.class,
+        int.class,
+        long.class,
+        short.class
     );
 
     public static final Set<String> JAVA_DEFAULT_IMPORTS = unmodifiableSetOf("java.lang");
@@ -128,9 +135,9 @@ public class JavaLanguage {
     public final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toUnmodifiableSet());
 
     public final static Set<String> JAVA_USED_WORDS = Stream.of(
-            JAVA_LITERAL_WORDS,
-            JAVA_RESERVED_WORDS,
-            JAVA_BUILT_IN_CLASS_WORDS
+        JAVA_LITERAL_WORDS,
+        JAVA_RESERVED_WORDS,
+        JAVA_BUILT_IN_CLASS_WORDS
     ).flatMap(s -> s.stream()).collect(toUnmodifiableSet());
 
     private static final Set<String> REPLACEMENT_STRING_SET = unmodifiableSetOf("_", "-", "+", " ");
@@ -142,7 +149,7 @@ public class JavaLanguage {
     public static String javaVariableName(final String externalName) {
         return javaName(externalName, Character::toLowerCase);
     }
-    
+
     public static String javaStaticFieldName(final String externalName) {
         return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
     }
@@ -246,10 +253,10 @@ public class JavaLanguage {
 
     public static String toHumanReadable(final String javaName) {
         return Stream.of(unQuote(javaName.trim())
-                .replaceAll("([A-Z]+)", "_$1")
-                .split("[^A-Za-z0-9]"))
-                .map(String::trim).filter(s -> !s.isEmpty())
-                .map(String::toLowerCase)
-                .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
+            .replaceAll("([A-Z]+)", "_$1")
+            .split("[^A-Za-z0-9]"))
+            .map(String::trim).filter(s -> !s.isEmpty())
+            .map(String::toLowerCase)
+            .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
     }
 }

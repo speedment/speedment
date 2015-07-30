@@ -24,6 +24,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * This class represents a Reference Field. A Reference Field is something that
+ * extends {@link Object}.
  *
  * @author pemi
  * @param <ENTITY> The entity type
@@ -39,10 +41,24 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
         this.getter = Objects.requireNonNull(getter);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is {@code null}.
+     *
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is {@code null}
+     */
     public ReferenceUnaryPredicateBuilder<ENTITY, V> isNull() {
         return newUnary(StandardUnaryOperator.IS_NULL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not</em> {@code null}.
+     *
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not</em> {@code null}
+     */
     public ReferenceUnaryPredicateBuilder<ENTITY, V> isNotNull() {
         return newUnary(StandardUnaryOperator.IS_NOT_NULL);
     }
@@ -61,7 +77,7 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
         return columnSupplier.get();
     }
 
-    public ReferenceUnaryPredicateBuilder<ENTITY, V> newUnary(StandardUnaryOperator unaryOperator) {
+    protected ReferenceUnaryPredicateBuilder<ENTITY, V> newUnary(StandardUnaryOperator unaryOperator) {
         return new ReferenceUnaryPredicateBuilder<>(this, unaryOperator);
     }
 

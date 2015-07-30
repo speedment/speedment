@@ -30,7 +30,6 @@ import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
 import com.speedment.codegen.lang.models.constants.DefaultJavadocTag;
-import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.values.TextValue;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import com.speedment.core.code.model.java.ImportDelegator;
@@ -50,7 +49,11 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
     public Optional<File> transform(Generator gen, ImportDelegator model) {
         final Type fieldType = typeUsing(gen, model.getTable(), TableToFieldType.class);
 
-        final List<Column> cols = model.getTable().streamOf(Column.class).collect(toList());
+        final List<Column> cols = model.getTable()
+            .streamOf(Column.class)
+            .filter(Column::isEnabled)
+            .collect(toList());
+
         final File file = File.of(
             classToJavaFileName(
                 typeUsing(gen, model.getTable(), TableToFieldType.class).getName()
@@ -62,7 +65,7 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
         return Optional.of(
             file.add(Class.of(shortName(fieldType.getName()))
                 .add(GENERATED.set(new TextValue("Speedment")))
-                .set(javadoc())
+                .set(javadoc(shortName(fieldType.getName())))
                 .public_().final_()
                 .add(Constructor.of().private_())
                 .addAllFields(
@@ -76,8 +79,9 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
         );
     }
 
-    private Javadoc javadoc() {
-        return Javadoc.of("Interface representing the fields of an entity.", GENERATED_JAVADOC_MESSAGE.split("\n")).add(DefaultJavadocTag.AUTHOR.setValue("Speedment"));
+    private Javadoc javadoc(String entityName) {
+
+        return Javadoc.of("Interface representing the fields of the entity {@link " + entityName + "}.", GENERATED_JAVADOC_MESSAGE.split("\n")).add(DefaultJavadocTag.AUTHOR.setValue("Speedment"));
     }
 
 }

@@ -20,9 +20,15 @@ package com.speedment.util;
  *
  * @author pemi
  */
-public class CharSequences {
+public class CharSequences implements PureStatic {
 
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     */
     private CharSequences() {
+        instanceNotAllowed();
     }
 
     public static final int INDEX_NOT_FOUND = -1;

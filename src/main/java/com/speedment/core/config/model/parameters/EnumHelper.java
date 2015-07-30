@@ -18,6 +18,7 @@ package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Parent;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -29,16 +30,13 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
+ * @param <E> The Enum type
  */
 public interface EnumHelper<E extends Enum<E>> {
+    
     String getName();
 
     class Hidden {
-//        
-//        static <E extends Enum<E>, H extends EnumHelper<E>> Optional<E> findByNameIgnoreCase(final H helper, final String name) {
-//            return findByNameIgnoreCase(helper.getNameMap(), name);
-//        }
-        
         static <E extends Enum<E> & EnumHelper<E>, C extends ConfigEntity> E defaultFor(
             Stream<E> stream, Predicate<E> predicate, final C entity, final Class<?> ableClass, final E defaultValue) {
             
@@ -58,12 +56,6 @@ public interface EnumHelper<E extends Enum<E>> {
                 return stream.filter(predicate.negate());
             }
         }
-//
-//        static <E extends Enum<E> & EnumHelper<E>> Optional<E> findByNameIgnoreCase(Stream<E> values, final String name) {
-//            return values
-//                .filter((E t) -> name.equalsIgnoreCase(t.getName()))
-//                .findFirst();
-//        }
 
         static <E extends Enum<E> & EnumHelper<E>> Map<String, E> buildMap(E[] values) {
             return Collections.unmodifiableMap(Stream.of(values).collect(

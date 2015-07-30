@@ -19,17 +19,35 @@ package com.speedment.core.platform.component;
 import com.speedment.core.annotations.Api;
 
 /**
+ * A Component represents the basic functionality for a Speedment Platform
+ * Component.
  *
  * @author pemi
+ * @since 2.0
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Component {
-    
+
+    /**
+     * Returns the Component interface Class this Component implements.
+     *
+     * @return the Component interface Class this Component implements
+     */
     Class<? extends Component> getComponentClass();
 
     // Lifecycle operations for plugins
-    default void onAdd() {}
+    /**
+     * This method is called whenever this Component is added to a Component
+     * manager.
+     */
+    default void onAdd() {
+    }
 
-    default void onRemove() {}
+    /**
+     * This method is called whenever this Component is removed from a Component
+     * manager.
+     */
+    default void onRemove() {
+    }
 
 }

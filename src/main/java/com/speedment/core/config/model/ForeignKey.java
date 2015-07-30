@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKeyColumn> {
 
     enum Holder {

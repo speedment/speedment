@@ -14,15 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.config.model.aspects;
-
-import java.util.Optional;
+package com.speedment.util;
 
 /**
+ * Support interface for classes that only contains static methods and fields.
+ * This interface can for example be used for various "Util" classes.
  *
- * @author Emil Forslund
+ * @author pemi
  */
-public interface Parentable<P extends Parent<?>> extends Node {
-    
-    Optional<P> getParent();
+public interface PureStatic {
+
+    /**
+     * Support method that can be used in constructors to throw an
+     * {@code UnsupportedOperationException} if someone is trying to create an
+     * instance of the class.
+     */
+    default void instanceNotAllowed() {
+        throw new UnsupportedOperationException("It is not allowed to create instances of the " + getClass().getName() + " class");
+    }
+
 }

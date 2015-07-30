@@ -14,19 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core;
+package com.speedment.core.db.impl.vendor;
 
-import com.speedment.core.annotations.Api;
+import com.speedment.core.config.model.Dbms;
+import com.speedment.core.db.impl.AbstractRelationalDbmsHandler;
 
 /**
+ * Specific MySQL implementation of a DbmsHandler. Currently, there are no
+ * specific implementations for MySQL.
  *
- * @author Emil Forslund
+ * @author pemi
+ * @since 2.0
  */
-@Api(version = 0)
-public interface Persistable<T> {
+public class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
-    T persist();
-
-    T remove();
+    public MySqlDbmsHandler(final Dbms dbms) {
+        super(dbms);
+    }
 
 }

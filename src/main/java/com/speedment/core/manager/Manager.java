@@ -14,20 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.manager;
 
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.util.json.JsonFormatter;
+import com.speedment.core.json.JsonFormatter;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -44,8 +39,8 @@ import java.util.stream.Stream;
  * @param <ENTITY> Entity type for this Manager
  * @param <BUILDER> Builder type for this Manager
  */
-@Api(version = 0)
-public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Boolean> {
+@Api(version = "2.0")
+public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Manager<PK, ENTITY, BUILDER>> {
 
     // Entity Inspection
     PK primaryKeyFor(ENTITY entity);
@@ -71,12 +66,14 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     BUILDER toBuilder(ENTITY entity);
 
-	default JsonFormatter<ENTITY> toJson() {
-		return JsonFormatter.allFrom(this);
-	}
-	
-    String toJson(ENTITY entity);
-	
+    default JsonFormatter<ENTITY> toJson() {
+        return JsonFormatter.allOf(getEntityClass());
+    }
+
+    default String toJson(ENTITY entity) {
+        return toJson().apply(entity);
+    }
+
     default ENTITY toInternal(ENTITY entity) {
         return entity;
     }
@@ -102,9 +99,9 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
 
     Optional<ENTITY> remove(ENTITY entity);
 
-    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 
-    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 
-    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener);
+    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
 }

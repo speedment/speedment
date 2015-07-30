@@ -23,6 +23,7 @@ import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.core.code.model.java.TransformUtil.importType;
 import static com.speedment.core.code.model.java.TransformUtil.typeUsing;
@@ -49,104 +50,117 @@ public class ColumnToEntityFieldMember implements Transform<Column, Field> {
 
     @Override
     public Optional<Field> transform(Generator gen, Column column) {
-        final Type refType = getReferenceFieldType(gen, column);
+        if (column.isEnabled()) {
+            final Type refType = getReferenceFieldType(gen, column);
 
-        final Type entityType = typeUsing(gen, column, TableToEntityType.class);
-        final String shortEntityName = shortName(entityType.getName());
-        
-        importType(gen, Import.of(entityType));
-        importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
+            final Type entityType = typeUsing(gen, column, TableToEntityType.class);
+            final String shortEntityName = shortName(entityType.getName());
 
-		final String getter, finder;
-		if (column.isNullable()) {
-			getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
-            finder = getForeignKey(gen, column)
-                .map(fkc -> {
-                    return ", fk -> fk.find" + 
-                        javaTypeName(column.getName()) + 
-                        "().orElse(null)";
-                }).orElse("");
-		} else {
-			getter = shortEntityName + "::get" + javaTypeName(column.getName());
-            finder = getForeignKey(gen, column)
-                .map(fkc -> {
-                    return ", " + 
-                        shortEntityName + "::find" + 
-                        javaTypeName(column.getName());
+            importType(gen, Import.of(entityType));
+            importType(gen, Import.of(Type.of(FieldUtil.class)).static_().setStaticMember("findColumn"));
 
-                }).orElse("");
-		}
-		
-        return Optional.of(
-            Field.of(javaStaticFieldName(column.getName()), refType)
-            .public_().final_().static_()
-            .set(new ReferenceValue(
-                "new " + shortName(refType.getName()) + 
-                "<>(() -> findColumn(" + 
-                        shortEntityName + ".class, \"" + 
-                        column.getName() + 
-                    "\"), " + 
-                    getter +
-					finder +
-                ")"
-            ))
-        );
+            final String getter, finder;
+            if (column.isNullable()) {
+                getter = "o -> o.get" + javaTypeName(column.getName()) + "().orElse(null)";
+                finder = getForeignKey(gen, column)
+                    .map(fkc -> {
+                        return ", fk -> fk.find"
+                        + javaTypeName(column.getName())
+                        + "().orElse(null)";
+                    }).orElse("");
+            } else {
+                getter = shortEntityName + "::get" + javaTypeName(column.getName());
+                finder = getForeignKey(gen, column)
+                    .map(fkc -> {
+                        return ", "
+                        + shortEntityName + "::find"
+                        + javaTypeName(column.getName());
+
+                    }).orElse("");
+            }
+
+            return Optional.of(
+                Field.of(javaStaticFieldName(column.getName()), refType)
+                .public_().final_().static_()
+                .set(new ReferenceValue(
+                        "new " + shortName(refType.getName())
+                        + "<>(() -> findColumn("
+                        + shortEntityName + ".class, \""
+                        + column.getName()
+                        + "\"), "
+                        + getter
+                        + finder
+                        + ")"
+                    ))
+                .set(new JavadocImpl(
+                        "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
+                        + "{@link " + shortEntityName + "#get" + javaTypeName(column.getName()) + "()} method."
+                    ))
+            );
+
+        } else {
+            return Optional.empty();
+        }
     }
 
     private Type getReferenceFieldType(Generator gen, Column column) {
         final Class<?> mapping = column.getMapping();
         final Type entityType = typeUsing(gen, column, TableToEntityType.class);
 
-		return getForeignKey(gen, column)
-			// If this is a foreign key.
-			.map(fkc -> {
-				final Type t;
-				
-				final Type fkType = typeUsing(gen, fkc.getForeignColumn(), TableToEntityType.class);
-				importType(gen, Import.of(fkType));
-				
-				if (String.class.equals(mapping)) {
-					t = Type.of(StringReferenceForeignKeyField.class)
-						.add(Generic.of().add(entityType))
-						.add(Generic.of().add(fkType));
-				} else if (Comparable.class.isAssignableFrom(mapping)) {
-					t = Type.of(ComparableReferenceForeignKeyField.class)
-						.add(Generic.of().add(entityType))
-						.add(Generic.of().add(Type.of(mapping)))
-						.add(Generic.of().add(fkType));
-				} else {
-					t = Type.of(ReferenceForeignKeyField.class)
-						.add(Generic.of().add(entityType))
-						.add(Generic.of().add(Type.of(mapping)))
-						.add(Generic.of().add(fkType));
-				}
-				
-				return t;
-				
-			// If it is not a foreign key
-			}).orElseGet(() -> {
-				if (String.class.equals(mapping)) {
-					return Type.of(StringReferenceField.class)
-						.add(Generic.of().add(entityType));
-				} else if (Comparable.class.isAssignableFrom(mapping)) {
-					return Type.of(ComparableReferenceField.class)
-						.add(Generic.of().add(entityType))
-						.add(Generic.of().add(Type.of(mapping)));
-				} else {
-					return Type.of(ReferenceField.class)
-						.add(Generic.of().add(entityType))
-						.add(Generic.of().add(Type.of(mapping)));
-				}
-			});
+        return getForeignKey(gen, column)
+            // If this is a foreign key.
+            .map(fkc -> {
+                final Type t;
+
+                final Type fkType = typeUsing(gen, fkc.getForeignColumn(), TableToEntityType.class);
+                importType(gen, Import.of(fkType));
+
+                if (String.class.equals(mapping)) {
+                    t = Type.of(StringReferenceForeignKeyField.class)
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(fkType));
+                } else if (Comparable.class.isAssignableFrom(mapping)) {
+                    t = Type.of(ComparableReferenceForeignKeyField.class)
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(Type.of(mapping)))
+                    .add(Generic.of().add(fkType));
+                } else {
+                    t = Type.of(ReferenceForeignKeyField.class)
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(Type.of(mapping)))
+                    .add(Generic.of().add(fkType));
+                }
+
+                return t;
+
+                // If it is not a foreign key
+            }).orElseGet(() -> {
+                if (String.class.equals(mapping)) {
+                    return Type.of(StringReferenceField.class)
+                    .add(Generic.of().add(entityType));
+                } else if (Comparable.class.isAssignableFrom(mapping)) {
+                    return Type.of(ComparableReferenceField.class)
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(Type.of(mapping)));
+                } else {
+                    return Type.of(ReferenceField.class)
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(Type.of(mapping)));
+                }
+            });
     }
-	
-	private Optional<ForeignKeyColumn> getForeignKey(Generator gen, Column column) {
-		return gen.getRenderStack().fromBottom(Table.class).findFirst()
-			.flatMap(t -> 
-				t.streamOf(ForeignKey.class)
-					.flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
-					.filter(fkc -> fkc.getColumn().equals(column))
-					.findFirst()
-			);
-	}
+
+    private Optional<ForeignKeyColumn> getForeignKey(Generator gen, Column column) {
+        return gen.getRenderStack().fromBottom(Table.class)
+            .filter(Table::isEnabled)
+            .findFirst()
+            .flatMap(t
+                -> t.streamOf(ForeignKey.class)
+                .filter(ForeignKey::isEnabled)
+                .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
+                .filter(ForeignKeyColumn::isEnabled)
+                .filter(fkc -> fkc.getColumn().equals(column))
+                .findFirst()
+            );
+    }
 }

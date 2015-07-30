@@ -17,6 +17,9 @@
 package com.speedment.util.holder;
 
 /**
+ * A class for holding an {@link Object} of type T. This class can be used when
+ * {@code final} or effectively final variables must be used, for example in
+ * lambdas or Threads.
  *
  * @author pemi
  * @param <T> Type to hold
@@ -25,9 +28,17 @@ public class Holder<T> {
 
     private T value;
 
+    /**
+     * Constructs an empty Holder
+     */
     public Holder() {
     }
 
+    /**
+     * Constructs a Holder with the provided value
+     *
+     * @param value to use
+     */
     public Holder(T value) {
         this.value = value;
     }

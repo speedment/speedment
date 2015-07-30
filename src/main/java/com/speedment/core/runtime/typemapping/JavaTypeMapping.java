@@ -21,11 +21,67 @@ import com.speedment.core.config.model.Dbms;
 /**
  *
  * @author pemi
+ * @param <T> Java type for this mapping
  */
-public interface JavaTypeMapping {
+public interface JavaTypeMapping<T> {
 
-    Class<?> getJavaClass();
-    
+    /**
+     * Returns the Java Class to use for this type mapping.
+     *
+     * @return the Java Class to use for this type mapping
+     */
+    Class<T> getJavaClass();
+
+    /**
+     * Returns the name of the ResultSet method to be used when getting data
+     * from a database. If, for example, the Java class {@code Integer} is used,
+     * then this method will return "Int" because an {@code INteger} can be read
+     * from a {@link java.sql.ResultSet} with the method
+     * {@link java.sql.ResultSet#getInt(int)}. In some (rare) cases, the
+     * response might be different for different Dbms:es, so this is why the
+     * dmbs parameter needs to be provided.
+     *
+     * @param dbms to use
+     * @return the name of the ResultSet method to be used when getting data
+     * from a database.
+     */
     String getResultSetMethodName(Dbms dbms);
-        
+
+    /**
+     * Parses the given input {@code String} and returns an object of type T
+     * that corresponds to the given {@code long}. This function is needed to be
+     * able to reconstruct Entity fields from JSON strings or change data logs
+     * for example.
+     *
+     * @param s the input {@code long}
+     * @return an {@code Object} of type T that corresponds to the given
+     * {@code String}
+     */
+    T parse(String s);
+
+    /**
+     * Parses the given input {@code long} and returns an object of type T that
+     * corresponds to the given long. This function is needed to be able to
+     * reconstruct Entity fields that are auto increments in SQL tables.
+     * Typically, this method is only implemented for classes implementing the
+     * {@link Number} interface.
+     *
+     * @param l the input {@code long}
+     * @return an {@code Object} of type T that corresponds to the given
+     * {@code String}
+     */
+    T parse(long l);
+
+    static <T> T unableToMapString(Class<T> clazz) {
+        return unableToMap(String.class, clazz);
+    }
+
+    static <T> T unableToMapLong(Class<T> clazz) {
+        return unableToMap(Long.class, clazz);
+    }
+
+    static <T> T unableToMap(Class<?> from, Class<T> to) {
+        throw new IllegalArgumentException("Unable to parse a " + from.toString() + " and make it " + to.toString());
+    }
+
 }

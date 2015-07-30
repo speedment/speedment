@@ -22,9 +22,7 @@
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.parameters.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
-import com.speedment.core.db.impl.MySqlDbmsHandler;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,10 +46,7 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
     @Override
     public DbmsHandler make(final Dbms dbms) {
-        if (dbms.getType() == StandardDbmsType.MYSQL) {
-            return new MySqlDbmsHandler(dbms);
-        }
-        throw new UnsupportedOperationException(dbms.getType().getName() + " not supported yet.");
+        return dbms.getType().makeDbmsHandler(dbms);
     }
 
     @Override

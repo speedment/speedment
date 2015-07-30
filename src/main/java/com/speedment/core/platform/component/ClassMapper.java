@@ -20,16 +20,38 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
+ * A generic Class mapper interface. I.e. a mapper that can associate a class to
+ * an implementation of that class. Often, an interface is used as class key and
+ * then a concrete implementing class is used as an association to that
+ * interface. This creates a pluggable architecture framework.
  *
  * @author pemi
  * @param <V> The base type
  */
 public interface ClassMapper<V> {
 
+    /**
+     * Adds a mapping for an item.
+     *
+     * @param item to add
+     * @return the previous mapping that existed, or null
+     */
     V add(V item);
 
+    /**
+     * Returns the mapping for the given class, or null if no mapping exists.
+     *
+     * @param <R> The class type
+     * @param clazz the class to use
+     * @return the mapping for the given class, or null if no mapping exists
+     */
     public <R extends V> R get(Class<R> clazz);
 
+    /**
+     * Returns a {@link Stream} of all mappings that exists.
+     *
+     * @return a {@link Stream} of all mappings that exists
+     */
     Stream<Map.Entry<Class<?>, V>> stream();
 
 }

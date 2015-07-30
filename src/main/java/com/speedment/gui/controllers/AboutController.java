@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.controllers;
 
+import com.speedment.util.version.SpeedmentVersion;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -56,10 +57,7 @@ public class AboutController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		close.setOnAction(ev -> popup.close());
-		version.setText(
-			Optional.ofNullable(AboutController.class.getPackage().getImplementationVersion())
-				.orElse("Unknown version")
-		);
+		version.setText(SpeedmentVersion.getImplementationVersion());
 		external.setText(
 			"It includes software licensed as follows:\n\n" +
 			"Apache 2:\n" +

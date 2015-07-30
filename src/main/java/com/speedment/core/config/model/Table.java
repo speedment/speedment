@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>,
         FieldStorageTypeable,
         ColumnCompressionTypeable,

@@ -21,6 +21,8 @@ import com.speedment.core.field.CombinedBasePredicate.OrCombinedBasePredicate;
 import java.util.function.Predicate;
 
 /**
+ * This class represents a BasePredicate that is used to build up higher orders
+ * of predicates.
  *
  * @author pemi
  * @param <T> Type

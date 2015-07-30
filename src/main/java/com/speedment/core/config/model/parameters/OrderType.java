@@ -14,15 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.ConfigEntity;
-import com.speedment.core.config.model.aspects.Child;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,7 +26,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public enum OrderType implements EnumHelper<OrderType> {
 
     ASC("Asc"), DESC("Desc"), NONE("None");
@@ -46,27 +41,6 @@ public enum OrderType implements EnumHelper<OrderType> {
     public String getName() {
         return name;
     }
-//
-//    public static Optional<OrderType> findByNameIgnoreCase(final String name) {
-//        return Nameable.Hidden.findByNameIgnoreCase(NAME_MAP, name);
-//    }
-//
-//    public static <T extends ConfigEntity<T, ?, ?>> Stream<OrderType> streamFor(final T entity) {
-//        Objects.requireNonNull(entity);
-//        if (entity instanceof IndexColumn) {
-//            return stream();
-//        }
-//        return Stream.empty();
-//    }
-//
-//    public static <T extends ConfigEntity<T, ?, ?>> OrderType defaultFor(final T entity) {
-//        Objects.requireNonNull(entity);
-//        return ASC;
-//    }
-//
-//    public static Stream<OrderType> stream() {
-//        return Stream.of(values());
-//    }
 
     public static Optional<OrderType> findByIgnoreCase(String name) {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
@@ -76,12 +50,7 @@ public enum OrderType implements EnumHelper<OrderType> {
         return Hidden.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
     }
 
-    public static Stream<OrderType> streamFor(final Child<?> entity) {
-        return Hidden.streamFor(stream(), p -> false, entity, OrderTypeable.class);
-    }
-
     public static Stream<OrderType> stream() {
         return Stream.of(values());
     }
-
 }

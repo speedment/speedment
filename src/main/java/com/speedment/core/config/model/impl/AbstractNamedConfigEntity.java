@@ -34,6 +34,6 @@ public abstract class AbstractNamedConfigEntity extends AbstractConfigEntity
 
     @Override
     public int compareTo(Nameable o) {
-        return compareToHelper(o);
+        return compareNames(o);
     }
 }

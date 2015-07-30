@@ -127,7 +127,7 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
 
         columns().forEachOrdered(c -> {
 
-            final JavaTypeMapping mapping = mapperComponent.apply(dbms().getType(), c.getMapping());
+            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getMapping());
             final StringBuilder sb = new StringBuilder()
                 .append("builder.set")
                 .append(typeName(c))

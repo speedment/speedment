@@ -14,18 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core;
-
-import com.speedment.core.annotations.Api;
-
 /**
- *
- * @author pemi
- * @param <T> The type that can be built
+ * The {@code vendor} package contains specific implementations for different
+ * Dbms type vendors.
  */
-@Api(version = 0)
-public interface Buildable<T> {
-
-    T build();
-
-}
+package com.speedment.core.db.impl.vendor;

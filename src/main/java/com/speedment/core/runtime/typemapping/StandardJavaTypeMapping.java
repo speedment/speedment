@@ -16,9 +16,13 @@
  */
 package com.speedment.core.runtime.typemapping;
 
-import com.speedment.core.config.model.Dbms;
 import com.speedment.core.exception.SpeedmentException;
+import static com.speedment.core.runtime.typemapping.JavaTypeMapping.unableToMapLong;
+import static com.speedment.core.runtime.typemapping.JavaTypeMapping.unableToMapString;
 import com.speedment.util.LongUtil;
+import com.speedment.util.PureStatic;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,105 +36,175 @@ import java.sql.RowId;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
+
+public class StandardJavaTypeMapping implements PureStatic {
+
+    private StandardJavaTypeMapping() {
+        instanceNotAllowed();
+    }
+
+    public static final JavaTypeMapping<Object> OBJECT = new JavaTypeMappingImpl<>(
+        Object.class, "Object", s -> (Object) s, l -> (Object) l
+    );
+    public static final JavaTypeMapping<Boolean> BOOLEAN = new JavaTypeMappingImpl<>(
+        Boolean.class, "Boolean", Boolean::parseBoolean, l -> unableToMapLong(Boolean.class)
+    );
+    public static final JavaTypeMapping<Byte> BYTE = new JavaTypeMappingImpl<>(
+        Byte.class, "Byte", Byte::parseByte, l -> LongUtil.cast(l, Byte.class)
+    );
+    public static final JavaTypeMapping<Short> SHORT = new JavaTypeMappingImpl<>(
+        Short.class, "Short", Short::parseShort, l -> LongUtil.cast(l, Short.class)
+    );
+    public static final JavaTypeMapping<Integer> INTEGER = new JavaTypeMappingImpl<>(
+        Integer.class, "Int", Integer::parseInt, l -> LongUtil.cast(l, Integer.class)
+    );
+    public static final JavaTypeMapping<Long> LONG = new JavaTypeMappingImpl<>(
+        Long.class, "Long", Long::parseLong, Function.identity()
+    );
+    public static final JavaTypeMapping<Float> FLOAT = new JavaTypeMappingImpl<>(
+        Float.class, "Float", Float::parseFloat, l -> LongUtil.cast(l, Float.class)
+    );
+    public static final JavaTypeMapping<Double> DOUBLE = new JavaTypeMappingImpl<>(
+        Double.class, "Double", Double::parseDouble, l -> LongUtil.cast(l, Double.class)
+    );
+    public static final JavaTypeMapping<String> STRING = new JavaTypeMappingImpl<>(
+        String.class, "String", Function.identity(), l -> Optional.ofNullable(l).map(lo -> lo.toString()).orElse(null)
+    );
+    public static final JavaTypeMapping<Date> DATE = new JavaTypeMappingImpl<>(
+        Date.class, "Date", Date::valueOf, l -> unableToMapLong(Date.class)
+    );
+    public static final JavaTypeMapping<Time> TIME = new JavaTypeMappingImpl<>(
+        Time.class, "Time", Time::valueOf, l -> unableToMapLong(Time.class)
+    );
+    public static final JavaTypeMapping<Timestamp> TIMESTAMP = new JavaTypeMappingImpl<>(
+        Timestamp.class, "Timestamp", Timestamp::valueOf, l -> unableToMapLong(Timestamp.class)
+    );
+    public static final JavaTypeMapping<BigDecimal> BIG_DECIMAL = new JavaTypeMappingImpl<>(
+        BigDecimal.class, "BigDecimal", s -> new BigDecimal(s), l -> LongUtil.cast(l, BigDecimal.class)
+    );
+    public static final JavaTypeMapping<Blob> BLOB = new JavaTypeMappingImpl<>(
+        Blob.class, "Blob", s -> unableToMapString(Blob.class), l -> unableToMapLong(Blob.class)
+    );
+    public static final JavaTypeMapping<Clob> CLOB = new JavaTypeMappingImpl<>(
+        Clob.class, "Clob", s -> unableToMapString(Clob.class), l -> unableToMapLong(Clob.class)
+    );
+    public static final JavaTypeMapping<Array> ARRAY = new JavaTypeMappingImpl<>(
+        Array.class, "Array", s -> unableToMapString(Array.class), l -> unableToMapLong(Array.class)
+    );
+    public static final JavaTypeMapping<Ref> REF = new JavaTypeMappingImpl<>(
+        Ref.class, "Ref", s -> unableToMapString(Ref.class), l -> unableToMapLong(Ref.class)
+    );
+    public static final JavaTypeMapping<URL> URL = new JavaTypeMappingImpl<>(
+        URL.class, "URL", s -> {
+            try {
+                return new URL(s);
+            } catch (MalformedURLException mfe) {
+                throw new SpeedmentException(mfe);
+            }
+        }, l -> unableToMapLong(URL.class)
+    );
+    public static final JavaTypeMapping<RowId> ROW_ID = new JavaTypeMappingImpl<>(
+        RowId.class, "RowId", s -> unableToMapString(RowId.class), l -> unableToMapLong(RowId.class)
+    );
+    public static final JavaTypeMapping<NClob> N_CLOB = new JavaTypeMappingImpl<>(
+        NClob.class, "NClob", s -> unableToMapString(NClob.class), l -> unableToMapLong(NClob.class)
+    );
+    public static final JavaTypeMapping<SQLXML> SQLXML = new JavaTypeMappingImpl<>(
+        SQLXML.class, "SQLXML", s -> unableToMapString(SQLXML.class), l -> unableToMapLong(SQLXML.class)
+    );
+
+    /**
+     * Wraps the exception so that we can use Field::get in Streams.
+     *
+     * @param f the field
+     * @return the value of the static field
+     */
+    private static Object wrapGetStaticField(Field f) {
+        try {
+            final Object o = f.get(null);
+            return o;
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new SpeedmentException(e);
+        }
+    }
+
+    /**
+     * Iterate over all JavaTypeMapping fields that are defined in this Class
+     * and collect them in an array. If we add new static fields in the future,
+     * they will be added automatically :-)
+     *
+     */
+    private static final JavaTypeMapping<?>[] values = Stream.of(StandardJavaTypeMapping.class.getDeclaredFields())
+        .filter(f -> Modifier.isStatic(f.getModifiers()))
+        .map(StandardJavaTypeMapping::wrapGetStaticField)
+        .filter(Objects::nonNull)
+        .filter(f -> JavaTypeMapping.class.isAssignableFrom(f.getClass()))
+        .map(JavaTypeMapping.class::cast)
+        .collect(toList()).toArray(new JavaTypeMapping<?>[0]);
+
+//    Old hat. Do not expose...
+//    public static JavaTypeMapping[] values() {
+//        return values.clone();
+//    }
+    /**
+     * Returns a {@link Stream} of all JavaTypeMapping that is defined in this
+     * class.
+     *
+     * @return a {@link Stream} of all JavaTypeMapping that is defined in this
+     * class
+     */
+    public static Stream<JavaTypeMapping<?>> stream() {
+        return Stream.of(values);
+    }
+
+    //private static final Map<Class<?>, JavaTypeMapping<?>> classMap = stream().collect(Collectors.toMap(JavaTypeMapping::getJavaClass, Function.identity()));
+}
 
 /**
  *
  * @author pemi
  */
-public enum StandardJavaTypeMapping implements JavaTypeMapping {
-
-    // If you add a mapping X here, make sure that AbstractSqlManager has a
-    // corresponding method getX(ResultSet, String)
-    OBJECT(Object.class, "Object", s -> (Object) s, l -> (Object) l),
-    BOOLEAN(Boolean.class, "Boolean", Boolean::parseBoolean, l -> unableToMapLong(Boolean.class)),
-    BYTE(Byte.class, "Byte", Byte::parseByte, l -> LongUtil.cast(l, Byte.class)),
-    SHORT(Short.class, "Short", Short::parseShort, l -> LongUtil.cast(l, Short.class)),
-    INTEGER(Integer.class, "Int", Integer::parseInt, l -> LongUtil.cast(l, Integer.class)),
-    LONG(Long.class, "Long", Long::parseLong, Function.identity()),
-    FLOAT(Float.class, "Float", Float::parseFloat, l -> LongUtil.cast(l, Float.class)),
-    DOUBLE(Double.class, "Double", Double::parseDouble, l -> LongUtil.cast(l, Double.class)),
-    STRING(String.class, "String", Function.identity(), l -> Optional.ofNullable(l).map(lo -> lo.toString()).orElse(null)),
-    DATE(Date.class, "Date", Date::valueOf, l -> unableToMapLong(Date.class)),
-    TIME(Time.class, "Time", Time::valueOf, l -> unableToMapLong(Time.class)),
-    TIMESTAMP(Timestamp.class, "Timestamp", Timestamp::valueOf, l -> unableToMapLong(Timestamp.class)),
-    BIG_DECIMAL(BigDecimal.class, "BigDecimal", s -> new BigDecimal(s), l -> LongUtil.cast(l, BigDecimal.class)),
-    BLOB(Blob.class, "Blob", s -> unableToMapString(Blob.class), l -> unableToMapLong(Blob.class)),
-    CLOB(Clob.class, "Clob", s -> unableToMapString(Clob.class), l -> unableToMapLong(Clob.class)),
-    ARRAY(Array.class, "Array", s -> unableToMapString(Array.class), l -> unableToMapLong(Array.class)),
-    REF(Ref.class, "Ref", s -> unableToMapString(Ref.class), l -> unableToMapLong(Ref.class)),
-    URL(URL.class, "URL", s -> {
-        try {
-            return new URL(s);
-        } catch (MalformedURLException mfe) {
-            throw new SpeedmentException(mfe);
-        }
-    }, l -> unableToMapLong(URL.class)),
-    ROW_ID(RowId.class, "RowId", s -> unableToMapString(RowId.class), l -> unableToMapLong(RowId.class)),
-    N_CLOB(NClob.class, "NClob", s -> unableToMapString(NClob.class), l -> unableToMapLong(NClob.class)),
-    SQLXML(SQLXML.class, "SQLXML", s -> unableToMapString(SQLXML.class), l -> unableToMapLong(SQLXML.class));
-
-    private static final Map<Class<?>, Function<String, ?>> stringParsers = new HashMap<>();
-    private static final Map<Class<?>, Function<Long, ?>> longParsers = new HashMap<>();
-
-    static {
-        for (StandardJavaTypeMapping mapping : values()) {
-            stringParsers.put(mapping.clazz, mapping.stringMapper);
-            longParsers.put(mapping.clazz, mapping.longMapper);
-        }
-    }
-
-    private static <T> T unableToMapString(Class<T> clazz) {
-        return unableToMap(String.class, clazz);
-    }
-
-    private static <T> T unableToMapLong(Class<T> clazz) {
-        return unableToMap(Long.class, clazz);
-    }
-
-    private static <T> T unableToMap(Class<?> from, Class<T> to) {
-        throw new IllegalArgumentException("Unable to parse a " + from.toString() + " and make it " + to.toString());
-    }
-
-    private <T> StandardJavaTypeMapping(Class<T> clazz, String resultSetMethodName, Function<String, T> stringMapper, Function<Long, T> longMapper) {
-        this.clazz = Objects.requireNonNull(clazz);
-        this.resultSetMethodName = Objects.requireNonNull(resultSetMethodName);
-        this.stringMapper = Objects.requireNonNull(stringMapper);
-        this.longMapper = longMapper;
-    }
-
-    private final Class<?> clazz;
-    private final String resultSetMethodName;
-    private final Function<String, ?> stringMapper;
-    private final Function<Long, ?> longMapper; // Used for auto-increment fields for example
-
-//    private <T> void put(Class<T> clazz, Function<String, T> mapper) {
-//        parsers.put(clazz, mapper);
+//abstract class Holder implements PureStatic {
+//
+//    private Holder() {
+//        instanceNotAllowed();
 //    }
-    public static <T> T parse(Class<T> type, String inputValue) {
-        @SuppressWarnings("unchecked")
-        final Function<String, T> mapper = (Function<String, T>) stringParsers.getOrDefault(type, s -> unableToMapString(type));
-        return mapper.apply(inputValue);
-    }
-
-    public static <T> T parse(Class<T> type, Long inputValue) {
-        @SuppressWarnings("unchecked")
-        final Function<Long, T> mapper = (Function<Long, T>) longParsers.getOrDefault(type, s -> unableToMapLong(type));
-        return mapper.apply(inputValue);
-    }
-
-    @Override
-    public Class<?> getJavaClass() {
-        return clazz;
-    }
-
-    @Override
-    public String getResultSetMethodName(Dbms dbms) {
-        return resultSetMethodName;
-    }
-
-}
+//
+//    static final JavaTypeMapping<Object> OBJECT = new JavaTypeMappingImpl<>(Object.class, "Object", s -> (Object) s, l -> (Object) l);
+//    static final JavaTypeMapping<Boolean> BOOLEAN = new JavaTypeMappingImpl<>(Boolean.class, "Boolean", Boolean::parseBoolean, l -> unableToMapLong(Boolean.class));
+//    static final JavaTypeMapping<Byte> BYTE = new JavaTypeMappingImpl<>(Byte.class, "Byte", Byte::parseByte, l -> LongUtil.cast(l, Byte.class));
+//    static final JavaTypeMapping<Short> SHORT = new JavaTypeMappingImpl<>(Short.class, "Short", Short::parseShort, l -> LongUtil.cast(l, Short.class));
+//    static final JavaTypeMapping<Integer> INTEGER = new JavaTypeMappingImpl<>(Integer.class, "Int", Integer::parseInt, l -> LongUtil.cast(l, Integer.class));
+//    static final JavaTypeMapping<Long> LONG = new JavaTypeMappingImpl<>(Long.class, "Long", Long::parseLong, Function.identity());
+//    static final JavaTypeMapping<Float> FLOAT = new JavaTypeMappingImpl<>(Float.class, "Float", Float::parseFloat, l -> LongUtil.cast(l, Float.class));
+//    static final JavaTypeMapping<Double> DOUBLE = new JavaTypeMappingImpl<>(Double.class, "Double", Double::parseDouble, l -> LongUtil.cast(l, Double.class));
+//    static final JavaTypeMapping<String> STRING = new JavaTypeMappingImpl<>(String.class, "String", Function.identity(), l -> Optional.ofNullable(l).map(lo -> lo.toString()).orElse(null));
+//    static final JavaTypeMapping<Date> DATE = new JavaTypeMappingImpl<>(Date.class, "Date", Date::valueOf, l -> unableToMapLong(Date.class));
+//    static final JavaTypeMapping<Time> TIME = new JavaTypeMappingImpl<>(Time.class, "Time", Time::valueOf, l -> unableToMapLong(Time.class));
+//    static final JavaTypeMapping<Timestamp> TIMESTAMP = new JavaTypeMappingImpl<>(Timestamp.class, "Timestamp", Timestamp::valueOf, l -> unableToMapLong(Timestamp.class));
+//    static final JavaTypeMapping<BigDecimal> BIG_DECIMAL = new JavaTypeMappingImpl<>(BigDecimal.class, "BigDecimal", s -> new BigDecimal(s), l -> LongUtil.cast(l, BigDecimal.class));
+//    static final JavaTypeMapping<Blob> BLOB = new JavaTypeMappingImpl<>(Blob.class, "Blob", s -> unableToMapString(Blob.class), l -> unableToMapLong(Blob.class));
+//    static final JavaTypeMapping<Clob> CLOB = new JavaTypeMappingImpl<>(Clob.class, "Clob", s -> unableToMapString(Clob.class), l -> unableToMapLong(Clob.class));
+//    static final JavaTypeMapping<Array> ARRAY = new JavaTypeMappingImpl<>(Array.class, "Array", s -> unableToMapString(Array.class), l -> unableToMapLong(Array.class));
+//    static final JavaTypeMapping<Ref> REF = new JavaTypeMappingImpl<>(Ref.class, "Ref", s -> unableToMapString(Ref.class), l -> unableToMapLong(Ref.class));
+//    static final JavaTypeMapping<URL> URL = new JavaTypeMappingImpl<>(URL.class, "URL", s -> {
+//        try {
+//            return new URL(s);
+//        } catch (MalformedURLException mfe) {
+//            throw new SpeedmentException(mfe);
+//        }
+//    }, l -> unableToMapLong(URL.class));
+//    static final JavaTypeMapping<RowId> ROW_ID = new JavaTypeMappingImpl<>(RowId.class, "RowId", s -> unableToMapString(RowId.class), l -> unableToMapLong(RowId.class));
+//    static final JavaTypeMapping<NClob> N_CLOB = new JavaTypeMappingImpl<>(NClob.class, "NClob", s -> unableToMapString(NClob.class), l -> unableToMapLong(NClob.class));
+//    static final JavaTypeMapping<SQLXML> SQLXML = new JavaTypeMappingImpl<>(SQLXML.class, "SQLXML", s -> unableToMapString(SQLXML.class), l -> unableToMapLong(SQLXML.class));
+//
+////    
+////    
+////    static final JavaTypeMapping<Integer> INTEGER_ = new JavaTypeMappingImpl<>(Integer.class, "Int", Integer::parseInt, l -> LongUtil.cast(l, Integer.class));
+////    static final JavaTypeMapping<Long> LONG_ = new JavaTypeMappingImpl<>(Long.class, "Long", Long::parseLong, Function.identity());
+//}

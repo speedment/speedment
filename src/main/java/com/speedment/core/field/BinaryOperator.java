@@ -17,9 +17,10 @@
 package com.speedment.core.field;
 
 /**
+ * Marker interface for a BinaryOperator. A BinaryOperator takes two arguments.
  *
  * @author Emil Forslund
  */
 public interface BinaryOperator extends Operator {
-    
+
 }

@@ -41,137 +41,158 @@ import java.util.stream.Collectors;
  * @author Emil Forslund
  * @param <T> The extending type
  */
-public class AutoEquals<T extends HasFields<T>&HasMethods<T>&HasName<T>> implements Consumer<T> {
-
-    private final HasImports<?> importer;
-    private final static String 
-        EQUALS = "equals",
+public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> implements Consumer<T> {
+    
+    protected final HasImports<?> importer;
+    protected final static String EQUALS = "equals",
         HASHCODE = "hashCode";
-
+    
     public AutoEquals(HasImports<?> importer) {
         this.importer = importer;
     }
     
-	@Override
-	public void accept(T t) {
-		if (!hasMethod(t, EQUALS, 1)) {
-            if (importer != null) {
-                importer.add(Import.of(Type.of(Objects.class)));
-                importer.add(Import.of(Type.of(Optional.class)));
-            }
-            
-			t.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
-                .set(
-                    Javadoc.of(
-                        "Compares this object with the specified one for equality.",
-                        "The other object must be of the same type and not null for",
-                        "the method to return true."
-                    )
-                    .add(PARAM.setValue("other").setText("The object to compare with."))
-                    .add(RETURN.setText("True if the objects are equal."))
-                ).public_()
-                .add(OVERRIDE)
-				.add(Field.of("other", OBJECT))
-                .add("return Optional.ofNullable(other)")
-                
-                .call(m -> {
-                    if (HasSupertype.class.isAssignableFrom(t.getClass())) {
-                        final Optional<Type> supertype = ((HasSupertype<?>) t).getSupertype();
-                        if (supertype.isPresent()) {
-                            m.add(tab() + ".filter(o -> super.equals(o))");
-                        }
-                    }
-                })
-                
-                .add(tab() + ".filter(o -> getClass().equals(o.getClass()))")
-                .add(tab() + ".map(o -> (" + t.getName() + ") o)")
-                .add(tab() + t.getFields().stream().map(f -> compare(f)).collect(
-					Collectors.joining(nl() + tab())
-				))
-                .add(tab() + ".isPresent();")
-			);
-		}
-		
-		if (!hasMethod(t, HASHCODE, 0)) {
-			t.add(Method.of(HASHCODE, INT_PRIMITIVE)
-                .set(
-                    Javadoc.of(
-                        "Generates a hashCode for this object. If any field is ",
-                        "changed to another value, the hashCode may be different. ",
-                        "Two objects with the same values are garanteed to have ",
-                        "the same hashCode. Two objects with the same hashCode are ",
-                        "not garantueed to have the same hashCode."
-                    )
-                    .add(RETURN.setText("The hash code."))
-                ).public_()
-                .add(OVERRIDE)
-				.add("int hash = 7;")
-				.add(t.getFields().stream()
-                    .map(f -> hash(f))
-                    .collect(Collectors.joining(nl()))
+    @Override
+    public void accept(T t) {
+        if (!hasMethod(t, EQUALS, 1)) {
+            acceptEquals(t);
+        }
+        
+        if (!hasMethod(t, HASHCODE, 0)) {
+            acceptHashcode(t);
+        }
+    }
+    
+    protected void acceptEquals(T t) {
+        if (importer != null) {
+            importer.add(Import.of(Type.of(Objects.class)));
+            importer.add(Import.of(Type.of(Optional.class)));
+        }
+        
+        t.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
+            .set(
+                Javadoc.of(
+                    "Compares this object with the specified one for equality.",
+                    "The other object must be of the same type and not null for",
+                    "the method to return true."
                 )
-				.add("return hash;")
-			);
-		}
-	}
-	
-	private String compare(Field f) {
+                .add(PARAM.setValue("other").setText("The object to compare with."))
+                .add(RETURN.setText("True if the objects are equal."))
+            ).public_()
+            .add(OVERRIDE)
+            .add(Field.of("other", OBJECT))
+            .add("return Optional.ofNullable(other)")
+            .call(m -> {
+                if (HasSupertype.class.isAssignableFrom(t.getClass())) {
+                    final Optional<Type> supertype = ((HasSupertype<?>) t).getSupertype();
+                    if (supertype.isPresent()) {
+                        m.add(tab() + ".filter(o -> super.equals(o))");
+                    }
+                }
+            })
+            .add(tab() + ".filter(o -> getClass().equals(o.getClass()))")
+            .add(tab() + ".map(o -> (" + t.getName() + ") o)")
+            .add(tab() + t.getFields().stream().map(f -> compare(f)).collect(
+                    Collectors.joining(nl() + tab())
+                ))
+            .add(tab() + ".isPresent();")
+        );
+        
+    }
+    
+    protected void acceptHashcode(T t) {
+        t.add(Method.of(HASHCODE, INT_PRIMITIVE)
+            .set(
+                Javadoc.of(
+                    "Generates a hashCode for this object. If any field is ",
+                    "changed to another value, the hashCode may be different. ",
+                    "Two objects with the same values are guaranteed to have ",
+                    "the same hashCode. Two objects with the same hashCode are ",
+                    "not guaranteed to have the same hashCode."
+                )
+                .add(RETURN.setText("The hash code."))
+            ).public_()
+            .add(OVERRIDE)
+            .add("int hash = 7;")
+            .add(t.getFields().stream()
+                .map(f -> hash(f))
+                .collect(Collectors.joining(nl()))
+            )
+            .add("return hash;")
+        );
+    }
+    
+    protected String compare(Field f) {
         final StringBuilder str = new StringBuilder(".filter(o -> ");
-		if (isPrimitive(f.getType())) {
-			str.append("(this.")
-               .append(f.getName())
-               .append(" == o.")
-               .append(f.getName())
-               .append(")");
-		} else {
-			str.append("Objects.equals(this.")
-               .append(f.getName())
-               .append(", o.")
-               .append(f.getName())
-               .append(")");
-		}
+        if (isPrimitive(f.getType())) {
+            str.append("(this.")
+                .append(f.getName())
+                .append(" == o.")
+                .append(f.getName())
+                .append(")");
+        } else {
+            str.append("Objects.equals(this.")
+                .append(f.getName())
+                .append(", o.")
+                .append(f.getName())
+                .append(")");
+        }
         
         return str.append(")").toString();
-	}
-	
-	private String hash(Field f) {
-		final String prefix = "hash = 31 * hash + ";
-		final String suffix = ".hashCode(this." + f.getName() + ");";
-
-		switch (f.getType().getName()) {
-			case "byte" : return prefix + "Byte" + suffix;
-			case "short" : return prefix + "Short" + suffix;
-			case "int" : return prefix + "Integer" + suffix;
-			case "long" : return prefix + "Long" + suffix;
-			case "float" : return prefix + "Float" + suffix;
-			case "double" : return prefix + "Double" + suffix;
-			case "boolean" : return prefix + "Boolean" + suffix;
-			case "char" : return prefix + "Character" + suffix;
-			default: return prefix + "(this." + f.getName() + " == null) ? 0 : this." + f.getName() + ".hashCode();";
-		}
-	}
-	
-	private boolean isPrimitive(Type type) {
-		switch (type.getName()) {
-			case "byte" : case "short" : case "int" : case "long" : 
-			case "float" : case "double" : case "boolean" : case "char" :
-				return true;
-			default:
-				return false;
-		}
-	}
-	
-	private boolean hasMethod(T t, String method, int params) {
-		Method found = null;
-		
-		for (Method m : t.getMethods()) {
-			if (method.equals(m.getName())
-			&&  m.getFields().size() == params) {
-				found = m;
-				break;
-			}
-		}
-		
-		return found != null;
-	}
+    }
+    
+    protected String hash(Field f) {
+        final String prefix = "hash = 31 * hash + (";
+        final String suffix = ".hashCode(this." + f.getName() + "));";
+        
+        switch (f.getType().getName()) {
+            case "byte":
+                return prefix + "Byte" + suffix;
+            case "short":
+                return prefix + "Short" + suffix;
+            case "int":
+                return prefix + "Integer" + suffix;
+            case "long":
+                return prefix + "Long" + suffix;
+            case "float":
+                return prefix + "Float" + suffix;
+            case "double":
+                return prefix + "Double" + suffix;
+            case "boolean":
+                return prefix + "Boolean" + suffix;
+            case "char":
+                return prefix + "Character" + suffix;
+            default:
+                return prefix + "(this." + f.getName() + " == null) ? 0 : this." + f.getName() + ".hashCode();";
+        }
+    }
+    
+    protected boolean isPrimitive(Type type) {
+        switch (type.getName()) {
+            case "byte":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+            case "boolean":
+            case "char":
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    protected boolean hasMethod(T t, String method, int params) {
+        Method found = null;
+        
+        for (Method m : t.getMethods()) {
+            if (method.equals(m.getName())
+                && m.getFields().size() == params) {
+                found = m;
+                break;
+            }
+        }
+        
+        return found != null;
+    }
 }

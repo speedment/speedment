@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManager> {
 
     enum Holder {

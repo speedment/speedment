@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Child<Table> {
 
     enum Holder {
@@ -56,5 +56,4 @@ public interface PrimaryKeyColumn extends ConfigEntity, Ordinable, Child<Table> 
     default Column getColumn() {
         return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
     }
-
 }

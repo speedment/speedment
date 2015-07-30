@@ -26,6 +26,7 @@ import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.ColumnCompressionType;
 import com.speedment.core.config.model.parameters.FieldStorageType;
 import com.speedment.core.config.model.parameters.StorageEngineType;
+import com.speedment.util.Cast;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -106,10 +107,10 @@ public class TableImpl extends AbstractNamedConfigEntity implements Table {
         this.tableName = tableName;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Schema.class)
-            .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Schema.class);
     }
 
     @Override

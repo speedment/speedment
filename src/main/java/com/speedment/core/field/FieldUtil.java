@@ -20,20 +20,32 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
+import com.speedment.util.PureStatic;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class FieldUtil {
+public class FieldUtil implements PureStatic {
 
     private FieldUtil() {
+        instanceNotAllowed();
     }
 
+    /**
+     * Finds and returns a {@code Column} from an entityClass with the given
+     * name.
+     *
+     * @param entityClass to use
+     * @param name of the Column
+     * @return a {@code Column} from an entityClass with the given name
+     */
     public static Column findColumn(Class<?> entityClass, String name) {
         final Table table = Platform.get().get(ManagerComponent.class).managerOf(entityClass).getTable();
-        final Optional<Column> oColumn = table.streamOf(Column.class).filter(c -> c.getName().equals(name)).findAny();
+        final Optional<Column> oColumn = table.streamOf(Column.class)
+            .filter(c -> c.getName().equals(name))
+            .findAny();
         return oColumn.orElseThrow(() -> new IllegalStateException("A column named " + name + " can not be found in the table " + table.getName()));
     }
 

@@ -46,7 +46,14 @@ public abstract class AbstractOrdinalConfigEntity extends AbstractConfigEntity
     }
 
     @Override
-    public int compareTo(Ordinable o) {
-        return compareToHelper(o);
+    public int compareTo(Ordinable that) {
+        if (that == null) {
+            return Ordinable.UNSET;
+        } else {
+            return Integer.compare(
+                this.getOrdinalPosition(),
+                that.getOrdinalPosition()
+            );
+        }
     }
 }

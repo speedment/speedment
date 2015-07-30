@@ -16,63 +16,203 @@
  */
 package com.speedment.core.lifecycle;
 
+import java.util.Optional;
+
 /**
+ * A <code>Lifecyclable</code> is an object that has a defined life-cycles. The
+ * different life-cycle stated are defined in the {@link State} enum and the
+ * corresponding methods are defined hereunder.
  *
  * @author pemi
  * @param <T> Return type
  */
-public interface Lifecyclable<T> {
+public interface Lifecyclable<T extends Lifecyclable<T>> {
 
     /**
-     * Initialize this Lifecyclable. This method is used to set initial
-     * dependencies and internal settings.
-     * 
-     * @return this
+     * Initialize this <code>Lifecyclable</code>. This method can be used to set
+     * initialize internal settings.
+     *
+     * @return this of type T
      */
     T initialize();
 
     /**
-     * Resolve is called when all Lifecyclables has been initialized. This
-     * method can be used to link to other Lifecyclables.
-     * 
-     * @return this
+     * Resolve is called when all the <code>Lifecyclables</code> has been
+     * initialized. This method can be used to link to other
+     * <code>Lifecyclables</code>.
+     *
+     * @return this of type T
      */
     T resolve();
 
     /**
-     * Starts this Lifecyclable. This method can be used to link to other
-     * Lifecyclables.
-     * 
-     * @return this
+     * Starts this <code>Lifecyclable</code>. Starts the actual service after
+     * which it can serve requests.
+     *
+     * @return this of type T
      */
     T start();
 
     /**
-     * Stops this Lifecyclable. The method shall also deallocate any resources
-     * allocated to this Lifecyclable.
-     * 
-     * @return this
+     * Stops this <code>Lifecyclable</code>. The method shall also deallocate
+     * any resources previously allocated to this <code>Lifecyclable</code>.
+     *
+     * @return this of type T
      */
     T stop();
 
+    /**
+     * Returns the current {@link State} of this <code>Lifecyclable</code>.
+     *
+     * @return the current {@link State} of this <code>Lifecyclable</code>
+     * @see State
+     */
+    State getState();
+
+    /**
+     * Returns if this <code>Lifecyclable</code> is initialized.
+     *
+     * @return if this <code>Lifecyclable</code> is initialized
+     * @see #initialize()
+     * @see State#INIITIALIZED
+     */
+    default boolean isInitialized() {
+        return getState().is(State.INIITIALIZED);
+    }
+
+    /**
+     * Returns if this <code>Lifecyclable</code> is resolved.
+     *
+     * @return if this <code>Lifecyclable</code> is resolved
+     * @see #resolve()
+     * @see State#RESOLVED
+     */
+    default boolean isResolved() {
+        return getState().is(State.RESOLVED);
+    }
+
+    /**
+     * Returns if this <code>Lifecyclable</code> is started.
+     *
+     * @return if this <code>Lifecyclable</code> is started
+     * @see #start()
+     * @see State#STARTED
+     */
+    default boolean isStarted() {
+        return getState().is(State.STARTED);
+    }
+
+    /**
+     * Returns if this <code>Lifecyclable</code> is stopped.
+     *
+     * @return if this <code>Lifecyclable</code> is stopped
+     * @see #stop()
+     * @see State#STOPPED
+     */
+    default boolean isStopped() {
+        return getState().is(State.STOPPED);
+    }
+
+    /**
+     * The state of the <code>Lifecyclable</code> is defined by the enum
+     * constants. Transition from one state to another must only be made
+     * sequentially in strict ordinal order using the {@link #nextState()}
+     * method or an equivalent.
+     *
+     * @see #CREATED
+     * @see #INIITIALIZED
+     * @see #RESOLVED
+     * @see #STARTED
+     * @see #STOPPED
+     *
+     */
     public enum State {
 
-        INIT, INIITIALIZED, RESOLVED, STARTED, STOPPED;
+        /**
+         * The <code>Lifecyclable</code> has been created but no
+         * <code>Lifecyclable</code> methods has been called on it yet.
+         */
+        CREATED,
+        /**
+         * The <code>Lifecyclable</code> has been initialized.
+         *
+         * The following method(s) has been called and has completed on the
+         * <code>Lifecyclable</code>:
+         * <ul>
+         * <li>{@link #initialize()}</li>
+         * </ul>
+         *
+         */
+        INIITIALIZED,
+        /**
+         * The <code>Lifecyclable</code> has been initialized and resolved.
+         *
+         * The following method(s) has been called and has completed on the
+         * <code>Lifecyclable</code>:
+         * <ul>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #resolve()}</li>
+         * </ul>
+         *
+         */
+        RESOLVED,
+        /**
+         * The <code>Lifecyclable</code> has been initialized, resolved and
+         * started.
+         *
+         * The following method(s) has been called and has completed on the
+         * <code>Lifecyclable</code>:
+         * <ul>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #resolve()}</li>
+         * <li>{@link #start()}</li>
+         * </ul>
+         *
+         */
+        STARTED,
+        /**
+         * The <code>Lifecyclable</code> has been initialized, resolved, started
+         * and stopped.
+         *
+         * The following method(s) has been called and has completed on the
+         * <code>Lifecyclable</code>:
+         * <ul>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #resolve()}</li>
+         * <li>{@link #start()}</li>
+         * <li>{@link #stop()}</li>
+         * </ul>
+         *
+         */
+        STOPPED;
 
-        public void checkNextState(State nextState) {
+        protected void checkNextState(State nextState) {
             if (ordinal() + 1 != nextState.ordinal()) {
                 throw new IllegalStateException("Cannot move from " + this + " to " + nextState);
             }
         }
 
-        public State nextState() {
+        /**
+         * Returns the next state after this, if any. If there is no following
+         * State,
+         *
+         * @return if this State is on or after the provided state
+         */
+        public Optional<State> nextState() {
             final State[] states = State.values();
             if (states.length >= ordinal()) {
-                throw new IllegalStateException("No next state for " + this);
+                return Optional.empty();
             }
-            return states[ordinal() + 1];
+            return Optional.of(states[ordinal() + 1]);
         }
 
+        /**
+         * Returns if this State is on or after the provided state. Thus, it
+         * returns if this State is the same or has passed the provided state.
+         *
+         * @param compareToState the State to compare this State with
+         * @return if this State is on or after the provided state
+         */
         public boolean is(State compareToState) {
             return ordinal() >= compareToState.ordinal();
         }

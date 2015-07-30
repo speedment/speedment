@@ -38,7 +38,7 @@ public class MockMySqlDbmsHandler extends AbstractRelationalDbmsHandler implemen
     }
 
     @Override
-    public Stream<Schema> schemas() {
+    public Stream<Schema> schemasUnpopulated() {
 
         final Schema schema = Schema.newSchema();
         schema.setName("test_schema");
@@ -63,31 +63,6 @@ public class MockMySqlDbmsHandler extends AbstractRelationalDbmsHandler implemen
         table.add(pkc);
 
         return Stream.of(schema);
-    }
-
-    @Override
-    public <ENTITY> long readAll(Consumer<ENTITY> consumer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public <PK> ResultSet read(Table table, PK primaryKey) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public <ENTITY> void insert(Table table, ENTITY entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public <ENTITY> void update(Table table, ENTITY entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public <ENTITY> void delete(Table table, ENTITY entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

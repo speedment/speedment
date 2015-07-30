@@ -34,6 +34,8 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import com.speedment.util.java.sql.TypeInfo;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -44,7 +46,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +57,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -65,7 +64,11 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractRelationalDbmsHandler.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
+
+    private static final String PASSWORD = "password";
+    private static final String PASSWORD_PROTECTED = "********";
+    private static final String USER = "user";
 
     private final Dbms dbms;
     private transient Map<String, Class<?>> typeMapping;
@@ -86,12 +89,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     public Connection getConnection() {
         Connection conn;
         final Properties connectionProps = new Properties();
-        dbms.getUsername().ifPresent(u -> connectionProps.put("user", u));
-        dbms.getPassword().ifPresent(p -> connectionProps.put("password", p));
+        dbms.getUsername().ifPresent(u -> connectionProps.put(USER, u));
+        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
+        final String url = getUrl();
         try {
-            conn = DriverManager.getConnection(getUrl(), connectionProps);
+            conn = DriverManager.getConnection(url, connectionProps);
         } catch (SQLException sqle) {
-            final String msg = "Unable to get connection for " + dbms;
+            final Properties pwProtectedProperties = new Properties();
+            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
+            pwProtectedProperties.put(PASSWORD, PASSWORD_PROTECTED);
+            final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\" and connectionProperties " + pwProtectedProperties;
             LOGGER.error(msg, sqle);
             throw new SpeedmentException(msg, sqle);
         }
@@ -118,7 +125,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final TypeInfo typeInfo = TypeInfo.from(rs);
-                final Class<?> mappedClass = Platform.get().get(SqlTypeMapperComponent.class).map(dbms, typeInfo);
+                final Class<?> mappedClass = Platform.get().get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }
@@ -126,7 +133,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public Stream<Schema> schemasPopulated() {
+    public Stream<Schema> schemas() {
         try {
             try (final Connection connection = getConnection()) {
                 final List<Schema> schemas = schemas(connection).collect(toList());
@@ -151,7 +158,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public Stream<Schema> schemas() {
+    public Stream<Schema> schemasUnpopulated() {
         try {
             try (Connection connection = getConnection()) {
                 return schemas(connection);
@@ -405,11 +412,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <T> Stream<T> executeQuery(final String sql, final SqlFunction<ResultSet, T> rsMapper) {
-        return executeQuery(sql, Collections.emptyList(), rsMapper);
-    }
-
-    @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
         final String sql,
         final List<?> values,
@@ -420,11 +422,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
             () -> getConnection());
-    }
-
-    @Override
-    public void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-        executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
     }
 
     @Override

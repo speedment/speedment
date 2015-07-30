@@ -22,9 +22,15 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class Cast {
+public final class Cast implements PureStatic {
 
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     */
     private Cast() {
+        instanceNotAllowed();
     }
 
     public static <T> Optional<T> cast(Object o, Class<T> clazz) {
@@ -35,5 +41,10 @@ public class Cast {
         return Optional.empty();
     }
 
-
+    public static <T> T orFail(Object obj, Class<T> clazz) {
+        return Optional.ofNullable(obj)
+            .filter(o -> clazz.isAssignableFrom(o.getClass()))
+            .map(clazz::cast)
+            .get();
+    }
 }

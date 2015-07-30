@@ -22,6 +22,7 @@ import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.ColumnCompressionType;
 import com.speedment.core.config.model.parameters.FieldStorageType;
 import com.speedment.core.config.model.parameters.StorageEngineType;
+import com.speedment.util.Cast;
 import java.util.Optional;
 
 /**
@@ -114,9 +115,8 @@ public class SchemaImpl extends AbstractNamedConfigEntity implements Schema {
     }
 
     @Override
-    public void setParentTo(Parent<?> parent) {
-        setParentHelper(parent, Dbms.class)
-            .ifPresent(p -> this.parent = p);
+    public void setParent(Parent<?> parent) {
+        this.parent = Cast.orFail(parent, Dbms.class);
     }
 
     @Override

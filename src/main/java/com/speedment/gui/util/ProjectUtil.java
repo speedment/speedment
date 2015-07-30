@@ -21,6 +21,8 @@ import com.speedment.core.config.model.impl.utils.GroovyParser;
 import com.speedment.gui.Settings;
 import com.speedment.gui.controllers.AlertController;
 import com.speedment.gui.controllers.SceneController;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import java.io.File;
 import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -34,8 +36,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 /**
  *
@@ -43,7 +44,7 @@ import org.apache.logging.log4j.Logger;
  */
 public final class ProjectUtil {
     
-    private final static Logger LOGGER = LogManager.getLogger(ProjectUtil.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(ProjectUtil.class);
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&

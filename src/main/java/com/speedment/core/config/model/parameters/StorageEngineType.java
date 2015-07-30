@@ -22,14 +22,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-@Api(version = 0)
+@Api(version = "2.0")
 public enum StorageEngineType implements EnumHelper<StorageEngineType> {
 
     INHERIT("Inherit from parent", ConcurrentHashMap.class, true),

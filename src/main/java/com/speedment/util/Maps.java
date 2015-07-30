@@ -26,7 +26,16 @@ import java.util.stream.Collectors;
  *
  * @author pemi
  */
-public class Maps {
+public class Maps implements PureStatic {
+
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     */
+    private Maps() {
+        instanceNotAllowed();
+    }
 
     public static <K, V> Map.Entry<? extends K, ? extends V> entry(K key, V value) {
         return new AbstractMap.SimpleEntry<>(key, value);

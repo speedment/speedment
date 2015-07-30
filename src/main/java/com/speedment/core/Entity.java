@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.core.entity;
+package com.speedment.core;
 
+import com.speedment.core.manager.Manager;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,7 +25,7 @@ import java.lang.annotation.Target;
 /**
  * Marks this class as an Entity.
  * <p>
- * A Method that is marked as an entity can be used in some .
+ * A Class with this annotation is marked as an entity.
  *
  * @author pemi
  */
@@ -37,14 +38,14 @@ public @interface Entity {
      *
      * @return the manager class type
      */
-    Class<?> managerType();
+    Class<? extends Manager<?, ?, ?>> managerType();
 
     /**
      * Class that holds the builder type.
      *
      * @return the builder class type
      */
-    Class<?> builderType();
+    Class<? extends Buildable<?>> builderType();
 
     /**
      * Class that holds the primary key type.

@@ -16,20 +16,35 @@
  */
 package com.speedment.core.platform.component;
 
+import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Project;
 
 /**
+ * This Component interface is used for holding the current {@link Project} that is being
+ * used by Speedment.
  *
  * @author Emil Forslund
+ * @since 2.0
  */
+@Api(version = "2.0")
 public interface ProjectComponent extends Component {
-    
+
     @Override
     default Class<ProjectComponent> getComponentClass() {
         return ProjectComponent.class;
     }
-    
+
+    /**
+     * Returns the current {@link Project}.
+     *
+     * @return the current {@link Project}
+     */
     Project getProject();
-    
+
+    /**
+     * Sets the current {@link Project}.
+     *
+     * @param project to set
+     */
     void setProject(Project project);
 }

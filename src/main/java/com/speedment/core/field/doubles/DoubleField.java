@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 
 /**
+ * This class represents a {@code double} Field.
  *
  * @author pemi
  * @param <ENTITY> the entity type
@@ -38,26 +39,80 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
         this.columnSupplier = columnSupplier;
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>equal</em> to the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>equal</em> to the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> equal(double value) {
         return newBinary(value, StandardBinaryOperator.EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not equal</em> to the
+     * given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not equal</em> to the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> notEqual(double value) {
         return newBinary(value, StandardBinaryOperator.NOT_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than</em> the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> lessThan(double value) {
         return newBinary(value, StandardBinaryOperator.LESS_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>less than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>less than or equal</em> to the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> lessOrEqual(double value) {
         return newBinary(value, StandardBinaryOperator.LESS_OR_EQUAL);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than</em>
+     * the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than</em> the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> greaterThan(double value) {
         return newBinary(value, StandardBinaryOperator.GREATER_THAN);
     }
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>greater than or equal</em>
+     * to the given value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than or equal</em> to the given value
+     */
     public DoubleBinaryPredicateBuilder<ENTITY> greaterOrEqual(double value) {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
@@ -76,11 +131,11 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
         return columnSupplier.get();
     }
 
-    public DoubleBinaryPredicateBuilder<ENTITY> newBinary(double value, StandardBinaryOperator binaryOperator) {
+    protected DoubleBinaryPredicateBuilder<ENTITY> newBinary(double value, StandardBinaryOperator binaryOperator) {
         return new DoubleBinaryPredicateBuilder<>(this, value, binaryOperator);
     }
 
-    public DoubleUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
+    protected DoubleUnaryPredicateBuilder<ENTITY> newUnary(StandardUnaryOperator unaryOperator) {
         return new DoubleUnaryPredicateBuilder<>(this, unaryOperator);
     }
 

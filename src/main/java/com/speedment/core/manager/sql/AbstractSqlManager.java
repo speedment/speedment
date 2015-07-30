@@ -21,7 +21,8 @@ import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.config.model.parameters.DbmsType;
+import com.speedment.core.Buildable;
 import com.speedment.core.manager.AbstractManager;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.manager.metaresult.SqlMetaResult;
@@ -30,8 +31,10 @@ import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
+import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
-import com.speedment.util.LongUtil;
+import com.speedment.logging.Logger;
+import com.speedment.logging.LoggerManager;
 import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
@@ -58,10 +61,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -73,7 +73,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends AbstractManager<PK, ENTITY, BUILDER> implements SqlManager<PK, ENTITY, BUILDER> {
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractSqlManager.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSqlManager.class);
 
     private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
 
@@ -93,11 +93,27 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     public String sqlColumnList() {
-        return getTable().streamOf(Column.class).map(Column::getName).collect(Collectors.joining(","));
+        return sqlColumnList(Function.identity());
+    }
+
+    public String sqlColumnList(Function<String, String> postMapper) {
+        return getTable().streamOf(Column.class)
+            .map(Column::getName)
+            .map(this::quoteField)
+            .map(postMapper)
+            .collect(Collectors.joining(","));
+    }
+
+    public String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
+        return getTable().streamOf(PrimaryKeyColumn.class)
+            .map(PrimaryKeyColumn::getName)
+            .map(this::quoteField)
+            .map(postMapper)
+            .collect(Collectors.joining(" AND "));
     }
 
     public String sqlTableReference() {
-        return getTable().getRelativeName(Schema.class);
+        return getTable().getRelativeName(Schema.class, this::quoteField);
     }
 
     public String sqlSelect(String suffix) {
@@ -124,10 +140,10 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     public Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb.append("insert into ").append(table.getRelativeName(Schema.class));
-        sb.append("(").append(table.streamOf(Column.class).map(Column::getName).collect(joining(", "))).append(")");
+        sb.append("insert into ").append(sqlTableReference());
+        sb.append(" (").append(sqlColumnList()).append(")");
         sb.append(" values ");
-        sb.append("(").append(table.streamOf(Column.class).map(c -> "?").collect(joining(", "))).append(")");
+        sb.append("(").append(sqlColumnList(c -> "?")).append(")");
 
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
 
@@ -140,7 +156,15 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
                         .filter(Column::isAutoincrement)
                         .forEachOrdered(column -> {
                             // Cast from Long to the column target type
-                            final Object val = StandardJavaTypeMapping.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
+
+                            final Object val = Platform.get()
+                            .get(JavaTypeMapperComponent.class)
+                            .apply(column.getMapping())
+                            .parse(
+                                l.get(cnt.getAndIncrement())
+                            );
+
+                            //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
                             set(builder, column, val);
                         });
                 }
@@ -160,10 +184,10 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
-        sb.append("update ").append(table.getRelativeName(Schema.class)).append(" set ");
-        sb.append(table.streamOf(Column.class).map(c -> c.getName() + " = ?").collect(joining(", ")));
+        sb.append("update ").append(sqlTableReference()).append(" set ");
+        sb.append(sqlColumnList(n -> n + " = ?"));
         sb.append(" where ");
-        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
+        sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
@@ -180,9 +204,9 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     public Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb.append("delete from ").append(table.getRelativeName(Schema.class)).append(" set ");
+        sb.append("delete from ").append(sqlTableReference());
         sb.append(" where ");
-        sb.append(table.streamOf(PrimaryKeyColumn.class).map(pk -> "(" + pk.getName() + " = ?)").collect(joining(" AND ")));
+        sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
 
         return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
@@ -203,7 +227,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         try {
             newEntity = executeUpdate(entity, sql, values, generatedKeyconsumer);
         } catch (SQLException sqle) {
-            LOGGER.error("Unable to persist", sqle);
+            //LOGGER.error("Unable to persist", sqle);
             if (meta != null) {
                 meta.setThrowable(sqle);
             }
@@ -222,11 +246,8 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final List<Object> values,
         final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer
     ) throws SQLException {
-        final Table table = getTable();
-        final Dbms dbms = table.ancestor(Dbms.class).get();
-        final DbmsHandler dbmsHandler = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
         final BUILDER builder = toBuilder(entity);
-        dbmsHandler.executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
+        dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
         return builder.build();
     }
 
@@ -243,10 +264,21 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     private final Function<BUILDER, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
     };
 
+    protected Dbms getDbms() {
+        return getTable().ancestor(Dbms.class).get();
+    }
+
+    protected DbmsType getDbmsType() {
+        return getDbms().getType();
+    }
+
+    private String quoteField(final String s) {
+        final DbmsType dbmsType = getDbms().getType();
+        return dbmsType.getFieldEncloserStart() + s + dbmsType.getFieldEncloserEnd();
+    }
+
     protected DbmsHandler dbmsHandler() {
-        final Table table = getTable();
-        final Dbms dbms = table.ancestor(Dbms.class).get();
-        return Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+        return Platform.get().get(DbmsHandlerComponent.class).get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters

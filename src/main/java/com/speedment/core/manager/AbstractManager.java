@@ -19,10 +19,10 @@ package com.speedment.core.manager;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.core.Buildable;
+import com.speedment.core.Buildable;
+import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.json.JsonFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,12 +44,14 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
 
     private final Map<List<Column>, IndexHolder<Object, PK, ENTITY>> indexes;
     final Set<Consumer<ENTITY>> insertListeners, updateListeners, deleteListeners;
+    private Lifecyclable.State state;
 
     public AbstractManager() {
         indexes = new ConcurrentHashMap<>();
         insertListeners = new CopyOnWriteArraySet<>();
         updateListeners = new CopyOnWriteArraySet<>();
         deleteListeners = new CopyOnWriteArraySet<>();
+        state = Lifecyclable.State.CREATED;
     }
 
     protected void insertEvent(ENTITY entity) {
@@ -111,29 +113,6 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public String toJson(ENTITY entity) {
-        return JsonFormatter.allFrom(this).apply(entity);
-//        return "{ " + getTable().streamOf(Column.class).map(c -> {
-//            final StringBuilder sb = new StringBuilder();
-//            sb.append("\"").append(JavaLanguage.javaVariableName(c.getName())).append("\" : ");
-//
-//			Object val = get(entity, c);
-//			if (val == null) {
-//				sb.append("null");
-//			} else if (val instanceof Number) {
-//				sb.append(val.toString());
-//			} else if (val instanceof Boolean) {
-//				sb.append(val.toString());
-//			} else {
-//				sb.append("\"").append(val.toString()).append("\"");
-//			}
-//			
-//            return sb.toString();
-//        }).collect(Collectors.joining(", ")) + " }";
-    }
-
-    @Override
     public void onInsert(Consumer<ENTITY> listener) {
         insertListeners.add(listener);
     }
@@ -149,22 +128,32 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
-    public Boolean initialize() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> initialize() {
+        state = State.INIITIALIZED;
+        return this;
     }
 
     @Override
-    public Boolean resolve() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> resolve() {
+        state = State.RESOLVED;
+        return this;
     }
 
     @Override
-    public Boolean start() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> start() {
+        state = State.STARTED;
+        return this;
     }
 
     @Override
-    public Boolean stop() {
-        return Boolean.TRUE;
+    public Manager<PK, ENTITY, BUILDER> stop() {
+        state = State.STOPPED;
+        return this;
     }
+
+    @Override
+    public Lifecyclable.State getState() {
+        return state;
+    }
+
 }

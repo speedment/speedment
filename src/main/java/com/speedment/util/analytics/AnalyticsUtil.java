@@ -16,25 +16,33 @@
  */
 package com.speedment.util.analytics;
 
+import com.speedment.util.PureStatic;
+
 /**
  *
  * @author pemi
  */
-public class AnalyticsUtil {
-    
+public class AnalyticsUtil implements PureStatic {
+
     private static final String TRACKING_CODE = "UA-54384165-1";
-    
+
+    /**
+     * This class contains only static methods and thus, no instance shall be
+     * created.
+     *
+     */
     private AnalyticsUtil() {
+        instanceNotAllowed();
     }
-    
+
     public static void notify(final FocusPoint focusPoint) {
         final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
         tracker.setLoggingAdapter(new LoggingAdapterImpl());
         tracker.trackAsynchronously(focusPoint);
     }
-    
+
     public static void notify(final String focusPointName) {
         notify(new FocusPoint(focusPointName));
     }
-    
+
 }
