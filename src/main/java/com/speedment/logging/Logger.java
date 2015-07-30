@@ -802,7 +802,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(String format, Object arg) {
-        log(Level.FATAL, Optional.empty(), format, arg);
+        log(Level.ERROR, Optional.empty(), format, arg);
     }
 
     /**
@@ -816,7 +816,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(String format, Object arg1, Object arg2) {
-        log(Level.FATAL, Optional.empty(), format, arg1, arg2);
+        log(Level.ERROR, Optional.empty(), format, arg1, arg2);
     }
 
     /**
@@ -831,7 +831,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(String format, Object arg1, Object arg2, Object arg3) {
-        log(Level.FATAL, Optional.empty(), format, arg1, arg2, arg3);
+        log(Level.ERROR, Optional.empty(), format, arg1, arg2, arg3);
     }
 
     /**
@@ -847,7 +847,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(String format, Object arg1, Object arg2, Object arg3, Object... args) {
-        log(Level.FATAL, Optional.empty(), format, arg1, arg2, arg3, args);
+        log(Level.ERROR, Optional.empty(), format, arg1, arg2, arg3, args);
     }
 
     /**
@@ -861,7 +861,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(Throwable throwable, String message) {
-        log(Level.FATAL, Optional.ofNullable(throwable), message);
+        log(Level.ERROR, Optional.ofNullable(throwable), message);
     }
 
     /**
@@ -877,7 +877,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(Throwable throwable, String format, Object arg) {
-        log(Level.FATAL, Optional.ofNullable(throwable), format, arg);
+        log(Level.ERROR, Optional.ofNullable(throwable), format, arg);
     }
 
     /**
@@ -894,7 +894,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(Throwable throwable, String format, Object arg1, Object arg2) {
-        log(Level.FATAL, Optional.ofNullable(throwable), format, arg1, arg2);
+        log(Level.ERROR, Optional.ofNullable(throwable), format, arg1, arg2);
     }
 
     /**
@@ -912,7 +912,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
-        log(Level.FATAL, Optional.ofNullable(throwable), format, arg1, arg2, arg3);
+        log(Level.ERROR, Optional.ofNullable(throwable), format, arg1, arg2, arg3);
     }
 
     /**
@@ -931,7 +931,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
-        log(Level.FATAL, Optional.ofNullable(throwable), format, arg1, arg2, arg3, args);
+        log(Level.ERROR, Optional.ofNullable(throwable), format, arg1, arg2, arg3, args);
     }
 
     /**
