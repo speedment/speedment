@@ -32,7 +32,7 @@ public class SpeedmentVersion implements PureStatic {
     
     private static final String IMPLEMENTATION_TITLE = "Speedment";
     private static final String IMPLEMENTATION_VENDOR = "Speedment Inc."; // "Speedment, Inc." difficult to enter into POM because of ','
-    private static final String IMPLEMENTATION_VERSION = "2.0.0-EA2-SNAPSHOT";
+    private static final String IMPLEMENTATION_VERSION = "2.0.0-EA2";
 
 //    private static final String SPECIFICATION_TITLE = "Speedment";
 //    private static final String SPECIFICATION_VENDOR = "Speedment Inc.";
