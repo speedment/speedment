@@ -103,6 +103,23 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 .add("return " + managerTypeName(fu.getTable()) + ".get()")
                 //.add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
                 .add("        .stream().filter(" + typeName(fu.getTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
+
+                method.set(new JavadocImpl(
+                        "Creates and returns a {@link Stream} of all "
+                        + "{@link " + typeName(fu.getTable()) + "} Entities that references this Entity by "
+                        + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#" + typeName(fu.getColumn()) + "()}. "
+                        + "The order of the Entities are undefined and may change from time to time. "
+                        + "<p>\n"
+                        + "Using this method, you may \"walk the graph\" and jump "
+                        + "directly between referencing Entities without using {@code JOIN}s."
+                    )
+                    .add(RETURN.setText(
+                            "a {@link Stream} of all "
+                            + "{@link " + typeName(fu.getTable()) + "} Entities  that references this Entity by "
+                            + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#" + typeName(fu.getColumn()) + "()}")
+                    )
+                );
+
                 i.add(method);
             })
             .addForeignKeyConsumer((i, fk) -> {
@@ -154,6 +171,12 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                             ) + "));\n"
                         ));
                 }
+                final String returns = "the foreign key Entity {@link " + typeName(fu.getForeignTable()) + "} referenced "
+                + "by the field that can be obtained using {@link " + ENTITY.getName() + "#get" + typeName(fu.getColumn()) + "()}";
+                method.set(new JavadocImpl(
+                        "Finds and returns " + returns + "."
+                    ).add(RETURN.setText(returns)
+                    ));
 
 //                method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
 //                //method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
