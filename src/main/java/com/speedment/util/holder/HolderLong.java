@@ -17,6 +17,9 @@
 package com.speedment.util.holder;
 
 /**
+ * A class for holding a {@link long}. This class can be used when {@code final}
+ * or effectively final variables must be used, for example in lambdas or
+ * Threads.
  *
  * @author pemi
  */
@@ -24,9 +27,17 @@ public class HolderLong {
 
     private long value;
 
+    /**
+     * Constructs an empty Holder
+     */
     public HolderLong() {
     }
 
+    /**
+     * Constructs a Holder with the provided value
+     *
+     * @param value to use
+     */
     public HolderLong(long value) {
         this.value = value;
     }

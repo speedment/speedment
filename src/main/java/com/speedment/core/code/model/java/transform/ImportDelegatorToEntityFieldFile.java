@@ -53,7 +53,7 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
             .streamOf(Column.class)
             .filter(Column::isEnabled)
             .collect(toList());
-        
+
         final File file = File.of(
             classToJavaFileName(
                 typeUsing(gen, model.getTable(), TableToFieldType.class).getName()
@@ -65,7 +65,7 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
         return Optional.of(
             file.add(Class.of(shortName(fieldType.getName()))
                 .add(GENERATED.set(new TextValue("Speedment")))
-                .set(javadoc())
+                .set(javadoc(shortName(fieldType.getName())))
                 .public_().final_()
                 .add(Constructor.of().private_())
                 .addAllFields(
@@ -79,8 +79,9 @@ public class ImportDelegatorToEntityFieldFile implements Transform<ImportDelegat
         );
     }
 
-    private Javadoc javadoc() {
-        return Javadoc.of("Interface representing the fields of an entity.", GENERATED_JAVADOC_MESSAGE.split("\n")).add(DefaultJavadocTag.AUTHOR.setValue("Speedment"));
+    private Javadoc javadoc(String entityName) {
+
+        return Javadoc.of("Interface representing the fields of the entity {@link " + entityName + "}.", GENERATED_JAVADOC_MESSAGE.split("\n")).add(DefaultJavadocTag.AUTHOR.setValue("Speedment"));
     }
 
 }

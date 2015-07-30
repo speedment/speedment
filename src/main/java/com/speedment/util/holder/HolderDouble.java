@@ -17,6 +17,9 @@
 package com.speedment.util.holder;
 
 /**
+ * A class for holding a {@link double}. This class can be used when
+ * {@code final} or effectively final variables must be used, for example in
+ * lambdas or Threads.
  *
  * @author pemi
  */
@@ -24,9 +27,17 @@ public class HolderDouble {
 
     private double value;
 
+    /**
+     * Constructs an empty Holder
+     */
     public HolderDouble() {
     }
 
+    /**
+     * Constructs a Holder with the provided value
+     *
+     * @param value to use
+     */
     public HolderDouble(double value) {
         this.value = value;
     }

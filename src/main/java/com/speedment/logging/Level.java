@@ -59,18 +59,40 @@ public enum Level {
         this.text = text;
     }
 
+    /**
+     * Returns the default level for the Logging framework.
+     *
+     * @return the default level for the Logging framework
+     */
     public static Level defaultLevel() {
         return INFO;
     }
 
+    /**
+     * Returns if this level is equal or lower than the provided level.
+     *
+     * @param otherLevel to compare to
+     * @return if this level is equal or lower than the provided level
+     */
     public boolean isEqualOrLowerThan(Level otherLevel) {
         return ordinal() <= otherLevel.ordinal();
     }
 
+    /**
+     * Returns if this level is equal or higher than the provided level.
+     *
+     * @param otherLevel to compare to
+     * @return if this level is equal or higher than the provided level
+     */
     public boolean isEqualOrHigherThan(Level otherLevel) {
         return ordinal() >= otherLevel.ordinal();
     }
 
+    /**
+     * Returns the text to use in the output logger for this level.
+     *
+     * @return the text to use in the output logger for this level
+     */
     public String toText() {
         return text;
     }

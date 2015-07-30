@@ -17,6 +17,9 @@
 package com.speedment.util.holder;
 
 /**
+ * A class for holding an {@link int}. This class can be used when {@code final}
+ * or effectively final variables must be used, for example in lambdas or
+ * Threads.
  *
  * @author pemi
  */
@@ -24,9 +27,17 @@ public class HolderInt {
 
     private int value;
 
+    /**
+     * Constructs an empty Holder
+     */
     public HolderInt() {
     }
 
+    /**
+     * Constructs a Holder with the provided value
+     *
+     * @param value to use
+     */
     public HolderInt(int value) {
         this.value = value;
     }
