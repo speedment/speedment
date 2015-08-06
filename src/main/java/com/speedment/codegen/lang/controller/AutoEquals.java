@@ -37,38 +37,84 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
+ * This control can be applied on a class, enum or similar to auto generate
+ * an <code>equals</code> and a <code>hashCode</code> method. The control uses
+ * all the fields to determine the salt.
+ * <p>
+ * The control must be instantiated with the <code>File</code> as a parameter.
+ * The reason for this is that the generated methods might require new 
+ * dependencies to be imported.
+ * <p>
+ * To use <code>AutoEquals</code>, follow this example:
+ * <pre>
+ *     file.add(
+ *         Class.of("Vector2f")
+ *             .add(Field.of("x", FLOAT_PRIMITIVE)
+ *                 .public_()
+ *                 .set(new NumberValue(0)))
+ * 
+ *             .add(Field.of("y", FLOAT_PRIMITIVE)
+ *                 .public_()
+ *                 .set(new NumberValue(0)))
+ * 
+ *             .call(new AutoEquals&lt;&gt;(file))
+ *     );
+ * </pre>
+ * <p>
+ * If one of the methods already exists, it will not be overwritten.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
-public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> implements Consumer<T> {
+public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> 
+implements Consumer<T> {
     
     protected final HasImports<?> importer;
     protected final static String EQUALS = "equals",
         HASHCODE = "hashCode";
     
+    /**
+     * Instantiates the <code>AutoEquals</code> using something that imports
+     * can be added to. This can for an example be a 
+     * {@link com.speedment.codegen.lang.models.File}.
+     * 
+     * @param importer  the importer
+     */
     public AutoEquals(HasImports<?> importer) {
         this.importer = importer;
     }
     
+    /**
+     * Adds an <code>equals()</code> and a <code>hashCode()</code> method to 
+     * the specified model.
+     * <p>
+     * If one of the methods already exists, it will not be overwritten.
+     * 
+     * @param model  the model 
+     */
     @Override
-    public void accept(T t) {
-        if (!hasMethod(t, EQUALS, 1)) {
-            acceptEquals(t);
+    public void accept(T model) {
+        if (!hasMethod(model, EQUALS, 1)) {
+            acceptEquals(model);
         }
         
-        if (!hasMethod(t, HASHCODE, 0)) {
-            acceptHashcode(t);
+        if (!hasMethod(model, HASHCODE, 0)) {
+            acceptHashcode(model);
         }
     }
     
-    protected void acceptEquals(T t) {
+    /**
+     * The <code>equals()</code>-part of the <code>accept</code> method.
+     * 
+     * @param model  the model
+     */
+    protected void acceptEquals(T model) {
         if (importer != null) {
             importer.add(Import.of(Type.of(Objects.class)));
             importer.add(Import.of(Type.of(Optional.class)));
         }
         
-        t.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
+        model.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
             .set(
                 Javadoc.of(
                     "Compares this object with the specified one for equality.",
@@ -82,16 +128,16 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
             .add(Field.of("other", OBJECT))
             .add("return Optional.ofNullable(other)")
             .call(m -> {
-                if (HasSupertype.class.isAssignableFrom(t.getClass())) {
-                    final Optional<Type> supertype = ((HasSupertype<?>) t).getSupertype();
+                if (HasSupertype.class.isAssignableFrom(model.getClass())) {
+                    final Optional<Type> supertype = ((HasSupertype<?>) model).getSupertype();
                     if (supertype.isPresent()) {
                         m.add(tab() + ".filter(o -> super.equals(o))");
                     }
                 }
             })
             .add(tab() + ".filter(o -> getClass().equals(o.getClass()))")
-            .add(tab() + ".map(o -> (" + t.getName() + ") o)")
-            .add(tab() + t.getFields().stream().map(f -> compare(f)).collect(
+            .add(tab() + ".map(o -> (" + model.getName() + ") o)")
+            .add(tab() + model.getFields().stream().map(f -> compare(f)).collect(
                     Collectors.joining(nl() + tab())
                 ))
             .add(tab() + ".isPresent();")
@@ -99,8 +145,13 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
         
     }
     
-    protected void acceptHashcode(T t) {
-        t.add(Method.of(HASHCODE, INT_PRIMITIVE)
+    /**
+     * The <code>hashCode()</code>-part of the <code>accept</code> method.
+     * 
+     * @param model  the model
+     */
+    protected void acceptHashcode(T model) {
+        model.add(Method.of(HASHCODE, INT_PRIMITIVE)
             .set(
                 Javadoc.of(
                     "Generates a hashCode for this object. If any field is ",
@@ -113,7 +164,7 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
             ).public_()
             .add(OVERRIDE)
             .add("int hash = 7;")
-            .add(t.getFields().stream()
+            .add(model.getFields().stream()
                 .map(f -> hash(f))
                 .collect(Collectors.joining(nl()))
             )
@@ -121,6 +172,13 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
         );
     }
     
+    /**
+     * Generates code for comparing the specified field in this and another
+     * object.
+     * 
+     * @param f  the field
+     * @return   the comparing code
+     */
     protected String compare(Field f) {
         final StringBuilder str = new StringBuilder(".filter(o -> ");
         if (isPrimitive(f.getType())) {
@@ -140,6 +198,12 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
         return str.append(")").toString();
     }
     
+    /**
+     * Generates code for hashing the specified field.
+     * 
+     * @param f  the field
+     * @return   the hashing code
+     */
     protected String hash(Field f) {
         final String prefix = "hash = 31 * hash + (";
         final String suffix = ".hashCode(this." + f.getName() + "));";
@@ -166,6 +230,12 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
         }
     }
     
+    /**
+     * Returns <code>true</code> if the specified type is a primitive type.
+     * 
+     * @param type  the type
+     * @return      <code>true</code> if primitive, else <code>false</code>
+     */
     protected boolean isPrimitive(Type type) {
         switch (type.getName()) {
             case "byte":
@@ -182,10 +252,18 @@ public class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T>> imp
         }
     }
     
-    protected boolean hasMethod(T t, String method, int params) {
+    /**
+     * Returns the a method with the specified signature exists.
+     * 
+     * @param model   the model
+     * @param method  the method name to look for
+     * @param params  the number of parameters in the signature
+     * @return        <code>true</code> if found, else <code>false</code>
+     */
+    protected boolean hasMethod(T model, String method, int params) {
         Method found = null;
         
-        for (Method m : t.getMethods()) {
+        for (Method m : model.getMethods()) {
             if (method.equals(m.getName())
                 && m.getFields().size() == params) {
                 found = m;

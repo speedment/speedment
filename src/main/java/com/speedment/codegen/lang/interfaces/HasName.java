@@ -30,7 +30,7 @@ public interface HasName<T extends HasName<T>> {
      * This must not be null!
      * 
      * @param name  the new name
-     * @return      
+     * @return      a reference to this
      */
     T setName(final String name);
     
