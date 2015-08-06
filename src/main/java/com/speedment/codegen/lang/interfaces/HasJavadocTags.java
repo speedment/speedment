@@ -14,20 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.codegen.java.views.interfaces;
+package com.speedment.codegen.lang.interfaces;
 
-import java.util.Collection;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import com.speedment.codegen.lang.models.JavadocTag;
+import java.util.List;
 
 /**
  *
  * @author Emil Forslund
+ * @param <T> The extending type
  */
-public interface Wrappable {
+public interface HasJavadocTags<T extends HasJavadocTags<T>> {
     
-    default <In, C extends Collection<In>> Collection<Object> 
-		wrap(C models, Function<In, Object> wrapper) {
-		return models.stream().map(wrapper).collect(Collectors.toList());
-	}
+    @SuppressWarnings("unchecked")
+    default T add(final JavadocTag tag) {
+        getTags().add(tag);
+        return (T) this;
+    }
+    
+    List<JavadocTag> getTags();
 }

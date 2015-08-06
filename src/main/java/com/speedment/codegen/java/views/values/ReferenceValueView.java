@@ -22,13 +22,17 @@ import com.speedment.codegen.lang.models.values.ReferenceValue;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from an {@link ReferenceValue} to java code.
+ * 
  * @author Emil Forslund
  */
 public class ReferenceValueView implements Transform<ReferenceValue, String> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, ReferenceValue model) {
+	public Optional<String> transform(Generator gen, ReferenceValue model) {
 		return Optional.of(model.getValue());
 	}
 }

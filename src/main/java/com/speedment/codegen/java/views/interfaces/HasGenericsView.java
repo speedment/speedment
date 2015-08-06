@@ -26,12 +26,25 @@ import com.speedment.codegen.lang.interfaces.HasGenerics;
 import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasGenerics}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasGenericsView<M extends HasGenerics<M>> extends Transform<M, String> {
-    default String renderGenerics(Generator cg, M model) {
-        return cg.onEach(model.getGenerics()).collect(joinIfNotEmpty(COMMA_SPACE, SS, SE)) + SPACE;
+public interface HasGenericsView<M extends HasGenerics<M>> extends 
+    Transform<M, String> {
+    
+    /**
+     * Render the generics-part of the model followed by a space character.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderGenerics(Generator gen, M model) {
+        return gen.onEach(model.getGenerics())
+            .collect(joinIfNotEmpty(COMMA_SPACE, SS, SE)) + SPACE;
     }
 }

@@ -24,16 +24,37 @@ import com.speedment.codegen.lang.interfaces.HasImplements;
 import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasImplements}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasImplementsView<M extends HasImplements<M>> extends Transform<M, String> {
+public interface HasImplementsView<M extends HasImplements<M>> extends 
+    Transform<M, String> {
     
+    /**
+     * Returns the correct term to use when describing the supertype of this
+     * component. In java, <code>"extends"</code> is used when an interface 
+     * has another interface as a supertype and <code>"implements"</code> when a 
+     * class and an enum uses it.
+     * 
+     * @return  "extends" or "implements".
+     */
     String extendsOrImplementsInterfaces();
     
-    default String renderInterfaces(Generator cg, M model) {
-        return cg.onEach(model.getInterfaces()).collect(
+    /**
+     * Render the supertype-part of the model. The 
+     * {@link #extendsOrImplementsInterfaces()}-method should be implemented to
+     * answer which wording to use; 'implements' or 'extends'.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderInterfaces(Generator gen, M model) {
+        return gen.onEach(model.getInterfaces()).collect(
             joinIfNotEmpty(
                 COMMA_SPACE, 
                 extendsOrImplementsInterfaces(), 

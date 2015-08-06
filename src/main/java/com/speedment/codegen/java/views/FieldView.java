@@ -28,22 +28,26 @@ import com.speedment.codegen.java.views.interfaces.HasValueView;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from a {@link Field} to java code.
+ * 
  * @author Emil Forslund
  */
 public class FieldView implements Transform<Field, String>, HasNameView<Field>, 
     HasJavadocView<Field>, HasModifiersView<Field>, HasTypeView<Field>,
     HasValueView<Field>, HasAnnotationUsageView<Field> {
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, Field model) {
+	public Optional<String> transform(Generator gen, Field model) {
 		return Optional.of(
-			renderJavadoc(cg, model) +
-            renderAnnotations(cg, model) +
-			renderModifiers(cg, model) +
-			renderType(cg, model) +
-			renderName(cg, model) +
-			renderValue(cg, model)
+			renderJavadoc(gen, model) +
+            renderAnnotations(gen, model) +
+			renderModifiers(gen, model) +
+			renderType(gen, model) +
+			renderName(gen, model) +
+			renderValue(gen, model)
 		);
 	}
 	

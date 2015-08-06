@@ -28,13 +28,17 @@ import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 
 /**
- *
+ * Transforms from an {@link TextValue} to java code.
+ * 
  * @author Emil Forslund
  */
 public class TextValueView implements Transform<TextValue, String> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, TextValue model) {
+	public Optional<String> transform(Generator gen, TextValue model) {
 		return Optional.of(H + model.getValue() + H);
 	}
 }

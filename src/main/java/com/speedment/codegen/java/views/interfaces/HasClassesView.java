@@ -23,12 +23,24 @@ import com.speedment.codegen.lang.interfaces.HasClasses;
 import static java.util.stream.Collectors.joining;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasClasses}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
 public interface HasClassesView<M extends HasClasses<M>> extends Transform<M, String> {
-    default String renderClasses(Generator cg, M model) {
-        return cg.onEach(model.getClasses()).collect(joining(dnl()));
+    
+    /**
+     * Render the classes-part of the model separated by two new-line characters.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderClasses(Generator gen, M model) {
+        return gen.onEach(model.getClasses())
+            .collect(joining(dnl()));
     }
 }

@@ -24,17 +24,20 @@ import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Transform;
 
 /**
- *
+ * Transforms from an {@link Initalizer} to java code.
+ * 
  * @author Emil Forslund
  */
 public class InitalizerView implements Transform<Initalizer, String> {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Optional<String> transform(Generator cg, Initalizer model) {
+    public Optional<String> transform(Generator gen, Initalizer model) {
         return Optional.of(
-            cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+            gen.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
             block(model.getCode().stream())
         );
     }
-    
 }

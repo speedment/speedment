@@ -27,13 +27,37 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Transforms from a {@link Type} to java code.
+ * 
  * @author Emil Forslund
  */
 public class TypeView implements Transform<Type, String> {
-	private Optional<String> renderName(Generator cg, Type model, String name) {
+    
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public Optional<String> transform(Generator gen, Type model) {
+		final DependencyManager mgr = gen.getDependencyMgr();
+
+		if (mgr.isLoaded(model.getName())) {
+			return renderName(gen, model, shortName(model.getName()));
+		} else {
+			return renderName(gen, model, model.getName());
+		}
+	}
+    
+    /**
+     * Renders the full name of the type with generics and array dimension. 
+     * 
+     * @param gen    the generator
+     * @param model  the type
+     * @param name   the name, short or full
+     * @return       the generated name
+     */
+	private Optional<String> renderName(Generator gen, Type model, String name) {
 		return Optional.of(
-			name + cg.onEach(model.getGenerics()).collect(
+			name + gen.onEach(model.getGenerics()).collect(
 				CodeCombiner.joinIfNotEmpty(
 					COMMA_SPACE, 
 					SS, 
@@ -48,16 +72,5 @@ public class TypeView implements Transform<Type, String> {
 				: EMPTY
 			)
 		);
-	}
-	
-	@Override
-	public Optional<String> transform(Generator cg, Type model) {
-		final DependencyManager mgr = cg.getDependencyMgr();
-
-		if (mgr.isLoaded(model.getName())) {
-			return renderName(cg, model, shortName(model.getName()));
-		} else {
-			return renderName(cg, model, model.getName());
-		}
 	}
 }

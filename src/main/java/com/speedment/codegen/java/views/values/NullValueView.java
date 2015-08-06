@@ -18,19 +18,23 @@ package com.speedment.codegen.java.views.values;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.codegen.lang.models.values.NumberValue;
+import com.speedment.codegen.lang.models.values.NullValue;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from an {@link NullValue} to java code.
+ * 
  * @author Emil Forslund
  */
-public class NullValueView implements Transform<NumberValue, String> {
+public class NullValueView implements Transform<NullValue, String> {
     
 	private final static String NULL = "null";
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, NumberValue model) {
+	public Optional<String> transform(Generator gen, NullValue model) {
 		return Optional.of(NULL);
 	}
 }

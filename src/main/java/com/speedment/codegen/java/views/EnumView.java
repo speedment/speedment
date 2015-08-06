@@ -23,30 +23,43 @@ import com.speedment.codegen.util.CodeCombiner;
 import static java.util.stream.Collectors.joining;
 
 /**
- *
+ * Transforms from an {@link Enum} to java code.
+ * 
  * @author Emil Forslund
  */
 public class EnumView extends ClassOrInterfaceView<Enum> {
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	protected String renderDeclarationType() {
 		return ENUM_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return IMPLEMENTS_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	protected String renderSupertype(Generator cg, Enum model) {
+	protected String renderSupertype(Generator gen, Enum model) {
 		return EMPTY;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	protected String onBeforeFields(Generator cg, Enum model) {
+	protected String onBeforeFields(Generator gen, Enum model) {
 		return model.getConstants().stream()
-			.map(c -> cg.on(c).get()).collect(
+			.map(c -> gen.on(c).get()).collect(
 				CodeCombiner.joinIfNotEmpty(
 					(!model.getConstants().isEmpty()
 					&& !model.getConstants().get(0).getValues().isEmpty())
@@ -57,9 +70,12 @@ public class EnumView extends ClassOrInterfaceView<Enum> {
 			);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected String renderConstructors(Generator cg, Enum model) {
-        return cg.onEach(model.getConstructors())
+    protected String renderConstructors(Generator gen, Enum model) {
+        return gen.onEach(model.getConstructors())
             .collect(joining(dnl()));
     }
 }

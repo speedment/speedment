@@ -16,36 +16,42 @@
  */
 package com.speedment.codegen.java.views.interfaces;
 
-import static com.speedment.codegen.util.Formatting.EMPTY;
-import static com.speedment.codegen.util.Formatting.dnl;
-import static com.speedment.codegen.util.Formatting.nl;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.codegen.lang.interfaces.HasImports;
-import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasJavadocTags;
+import static com.speedment.codegen.util.Formatting.EMPTY;
+import java.util.stream.Stream;
 
 /**
  * A trait with the functionality to render models with the trait 
- * {@link HasImports}.
+ * {@link HasJavadoc}.
  * 
  * @author     Emil Forslund
  * @param <M>  The model type
  * @see        Transform
  */
-public interface HasImportsView<M extends HasImports<M>> extends 
-    Transform<M, String> {
+public interface HasJavadocTagsView<M extends HasJavadocTags<M>> {
     
     /**
-     * Render the imports-part of the model separated by new-line characters and
-     * appended by two new-line characters.
+     * Returns a stream of javadoc lines generated from the tags in the
+     * specified model. If the stream is not empty it is prepended by an
+     * empty line.
      * 
      * @param gen    the generator
      * @param model  the model
      * @return       the generated code
      */
-    default String renderImports(Generator gen, M model) {
-        return gen.onEach(model.getImports())
-            .distinct().sorted()
-            .collect(joinIfNotEmpty(nl(), EMPTY, dnl()));
+    default Stream<String> renderJavadocTags(Generator gen, M model) {
+        final Stream<String> stream = gen.onEach(model.getTags());
+        
+        if (model.getTags().isEmpty()) {
+            return stream;
+        } else {
+            return Stream.concat(
+                Stream.of(EMPTY), // to get an empty line before the tags...
+                stream
+            );
+        }
     }
 }

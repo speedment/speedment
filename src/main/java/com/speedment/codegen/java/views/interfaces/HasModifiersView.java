@@ -21,17 +21,29 @@ import static com.speedment.codegen.util.Formatting.SPACE;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasModifiers;
-import com.speedment.codegen.util.CodeCombiner;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasModifiers}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasModifiersView<M extends HasModifiers<M>> extends Transform<M, String> {
+public interface HasModifiersView<M extends HasModifiers<M>> extends 
+    Transform<M, String> {
     
-    default String renderModifiers(Generator cg, M model) {
-        return cg.onEach(model.getModifiers())
-            .collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE));
+    /**
+     * Render the modifiers-part of the model with an extra space appended
+     * afterwards. If no modifiers exists, an empty string is returned.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderModifiers(Generator gen, M model) {
+        return gen.onEach(model.getModifiers())
+            .collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
     }
 }

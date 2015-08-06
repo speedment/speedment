@@ -22,25 +22,32 @@ import java.util.Optional;
 import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.java.views.interfaces.HasJavadocTagsView;
 import java.util.stream.Stream;
 
 /**
- *
+ * Transforms from a {@link Javadoc} to java code.
+ * 
  * @author Emil Forslund
  */
-public class JavadocView implements Transform<Javadoc, String> {
+public class JavadocView implements Transform<Javadoc, String>, 
+    HasJavadocTagsView<Javadoc> {
+    
 	private final static String
 		JAVADOC_DELIMITER = nl() + SPACE + STAR + SPACE,
 		JAVADOC_PREFIX = SLASH + STAR + STAR + nl() + SPACE + STAR + SPACE,
 		JAVADOC_SUFFIX = nl() + SPACE + STAR + SLASH;
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, Javadoc model) {
+	public Optional<String> transform(Generator gen, Javadoc model) {
 		return CodeCombiner.ifEmpty(
-            Stream.of(
+            Stream.concat(
                 model.getRows().stream(),
-                renderParams(cg, model)
-			).flatMap(s -> s).collect(
+                renderJavadocTags(gen, model)
+			).collect(
 				CodeCombiner.joinIfNotEmpty(
 					JAVADOC_DELIMITER, 
 					JAVADOC_PREFIX, 
@@ -49,14 +56,4 @@ public class JavadocView implements Transform<Javadoc, String> {
 			)
 		);
 	}
-
-    private static Stream<String> renderParams(Generator cg, Javadoc model) {
-        final Stream<String> stream = cg.onEach(model.getTags());
-        
-        if (model.getTags().isEmpty()) {
-            return stream;
-        } else {
-            return Stream.of(Stream.of(EMPTY), stream).flatMap(s -> s);
-        }
-    }
 }

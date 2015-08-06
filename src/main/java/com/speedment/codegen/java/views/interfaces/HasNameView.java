@@ -21,13 +21,23 @@ import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasName;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasName}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
 public interface HasNameView<M extends HasName<M>> extends Transform<M, String> {
     
-    default String renderName(Generator cg, M model) {
+    /**
+     * Render the name of the model.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderName(Generator gen, M model) {
         return model.getName();
     }
 }

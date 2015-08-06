@@ -19,44 +19,54 @@ package com.speedment.codegen.java.views;
 import com.speedment.codegen.util.Formatting;
 import static com.speedment.codegen.util.Formatting.EMPTY;
 import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.implementation.InterfaceFieldImpl;
 import com.speedment.codegen.lang.models.implementation.InterfaceMethodImpl;
 
 /**
- *
+ * Transforms from an {@link Interface} to java code.
+ * 
  * @author Emil Forslund
  */
 public class InterfaceView extends ClassOrInterfaceView<Interface> {
+    
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	protected String renderDeclarationType() {
 		return INTERFACE_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return EXTENDS_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	protected String renderSupertype(Generator cg, Interface model) {
+	protected String renderSupertype(Generator gen, Interface model) {
 		return Formatting.EMPTY;
 	}
 
-	@Override
-	protected Object wrapField(Field field) {
-		return new InterfaceFieldImpl(field);
-	}
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object wrapMethod(Method method) {
         return new InterfaceMethodImpl(method);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected String renderConstructors(Generator cg, Interface model) {
+    protected String renderConstructors(Generator gen, Interface model) {
         return EMPTY;
     }
 }

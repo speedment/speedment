@@ -22,12 +22,17 @@ import com.speedment.codegen.lang.models.values.NumberValue;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from an {@link NumberValue} to java code.
+ * 
  * @author Emil Forslund
  */
 public class NumberValueView implements Transform<NumberValue, String> {
+    
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, NumberValue model) {
+	public Optional<String> transform(Generator gen, NumberValue model) {
 		return Optional.of(model.getValue().toString());
 	}
 }

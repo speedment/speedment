@@ -27,29 +27,21 @@ import com.speedment.codegen.lang.models.File;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from a {@link File} to java code.
+ * 
  * @author Emil Forslund
  */
 public class FileView implements Transform<File, String>, HasJavadocView<File>, 
     HasClassesView<File>, HasImportsView<File> {
     
 	private final static String PACKAGE_STRING = "package ";
-	
-	private String renderPackage(File file) {
-		final Optional<String> name = fileToClassName(file.getName());
-		if (name.isPresent()) {
-			final Optional<String> pack = packageName(name.get());
-			if (pack.isPresent()) {
-				return PACKAGE_STRING + pack.get() + scdnl();
-			}
-		}
-		
-		return EMPTY;
-	}
-	
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, File model) {
-		final DependencyManager mgr = cg.getDependencyMgr();
+	public Optional<String> transform(Generator gen, File model) {
+		final DependencyManager mgr = gen.getDependencyMgr();
 		final Optional<String> className = fileToClassName(model.getName());
 		Optional<String> packageName = packageName(className.orElse(EMPTY));
 		mgr.clearDependencies();
@@ -63,10 +55,10 @@ public class FileView implements Transform<File, String>, HasJavadocView<File>,
 		}
 
 		final Optional<String> view = Optional.of(
-			renderJavadoc(cg, model) +
+			renderJavadoc(gen, model) +
 			renderPackage(model) +
-            renderImports(cg, model) +
-            renderClasses(cg, model)
+            renderImports(gen, model) +
+            renderClasses(gen, model)
 		);
 		
 		if (packageName.isPresent()) {
@@ -74,5 +66,30 @@ public class FileView implements Transform<File, String>, HasJavadocView<File>,
 		}
 		
 		return view;
+	}
+    
+    /**
+     * Renders the 'package'-part of the file. In java, the package should only
+     * be present if the file is located in a directory in the sources folder.
+     * If the file is in the global package, an empty string will be returned.
+     * <p>
+     * The package part will be suffixed by two new line characters if a package
+     * was outputted.
+     * <p>
+     * Example: <pre>"package com.speedment.example;\n\n"</pre>
+     * 
+     * @param file  the file
+     * @return      the package part or an empty string
+     */
+    private String renderPackage(File file) {
+		final Optional<String> name = fileToClassName(file.getName());
+		if (name.isPresent()) {
+			final Optional<String> pack = packageName(name.get());
+			if (pack.isPresent()) {
+				return PACKAGE_STRING + pack.get() + scdnl();
+			}
+		}
+		
+		return EMPTY;
 	}
 }

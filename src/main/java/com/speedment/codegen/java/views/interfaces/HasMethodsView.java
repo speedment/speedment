@@ -24,17 +24,45 @@ import com.speedment.codegen.lang.models.Method;
 import java.util.stream.Collectors;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasMethods}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasMethodsView<M extends HasMethods<M>> extends Transform<M, String>, Wrappable {
+public interface HasMethodsView<M extends HasMethods<M>> extends Transform<M, String> {
     
-    default String renderMethods(Generator cg, M model) {
-        return cg.onEach(wrap(model.getMethods(), m -> wrapMethod(m)))
-			.collect(Collectors.joining(dnl()));
+    /**
+     * Render the methods-part of the model separated with two new-line 
+     * characters. The {@link #wrapMethod(com.speedment.codegen.lang.models.Method)}-method
+     * can be overridden to change the implementation type of the methods before
+     * rendering.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderMethods(Generator gen, M model) {
+        return gen.onEach(
+            model.getMethods().stream()
+                .map(this::wrapMethod)
+                .collect(Collectors.toList())
+        ).collect(Collectors.joining(dnl()));
     }
     
+    /**
+     * This method is called for every method being generated to give the
+     * implementing class a chance to change the implementation before rendering.
+     * There must be a {@link Transform} installed in the generator that can
+     * handle the output of this method.
+     * <p>
+     * The default behaviour of this method is to return the input without any
+     * modifications.
+     * 
+     * @param method  the method to wrap
+     * @return        a model derived from the method
+     */
     default Object wrapMethod(Method method) {
         return method;
     }

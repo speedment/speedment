@@ -22,14 +22,17 @@ import com.speedment.codegen.lang.models.modifiers.Modifier;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from a {@link Modifier} to java code.
+ * 
  * @author Emil Forslund
  */
 public class ModifierView implements Transform<Modifier, String> {
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, Modifier model) {
+	public Optional<String> transform(Generator gen, Modifier model) {
 		return Optional.of(model.getName());
 	}
-	
 }

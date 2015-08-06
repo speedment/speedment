@@ -25,23 +25,28 @@ import com.speedment.codegen.util.CodeCombiner;
 import java.util.stream.Stream;
 
 /**
- *
+ * Transforms from an {@link AnnotationUsage} to java code.
+ * 
  * @author Emil Forslund
  */
 public class AnnotationUsageView implements Transform<AnnotationUsage, String> {
+    
 	private final static String 
 		PSTART = "(", 
 		EQUALS = " = ";
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, AnnotationUsage model) {
-        final Optional<String> value = cg.on(model.getValue());
+	public Optional<String> transform(Generator gen, AnnotationUsage model) {
+        final Optional<String> value = gen.on(model.getValue());
         final Stream<String> valueStream = value.isPresent() ? Stream.of(value.get()) : Stream.empty();
         
 		return Optional.of(
-			AT + cg.on(model.getType()).get() +
+			AT + gen.on(model.getType()).get() +
             Stream.of(
-                model.getValues().stream().map(e -> e.getKey() + cg.on(e.getValue()).map(s -> EQUALS + s).orElse(EMPTY)),
+                model.getValues().stream().map(e -> e.getKey() + gen.on(e.getValue()).map(s -> EQUALS + s).orElse(EMPTY)),
                 valueStream
             ).flatMap(s -> s).collect(
                 CodeCombiner.joinIfNotEmpty(

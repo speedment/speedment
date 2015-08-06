@@ -18,6 +18,7 @@ package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Callable;
 import com.speedment.codegen.lang.interfaces.Copyable;
+import com.speedment.codegen.lang.interfaces.HasJavadocTags;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,9 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc> {
+public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>, 
+    HasJavadocTags<Javadoc> {
+    
     default Javadoc add(String row) {
 		getRows().add(row);
 		return this;
@@ -39,13 +42,7 @@ public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc> {
 		return this;
 	}
 
-	default Javadoc add(JavadocTag tag) {
-		getTags().add(tag);
-		return this;
-	}
-
     List<String> getRows();
-	List<JavadocTag> getTags();
     
     enum Factory { INST;
         private Supplier<Javadoc> prototype = () -> new JavadocImpl();

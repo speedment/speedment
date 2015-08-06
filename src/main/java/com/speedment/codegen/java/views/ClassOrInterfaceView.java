@@ -30,18 +30,18 @@ import com.speedment.codegen.java.views.interfaces.HasMethodsView;
 import com.speedment.codegen.java.views.interfaces.HasModifiersView;
 import com.speedment.codegen.java.views.interfaces.HasNameView;
 import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Field;
 import java.util.Optional;
-import java.util.Collection;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 
 /**
- *
+ * An abstract base class used to share functionality between different view
+ * components such as {@link ClassView}, {@link EnumView} and 
+ * {@link InterfaceView}.
+ * 
+ * @param <M> The extending model type
  * @author Emil Forslund
- * @param <M> The extending type
  */
 public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements 
     Transform<M, String>, HasNameView<M>, HasModifiersView<M>, HasJavadocView<M>, 
@@ -55,61 +55,99 @@ public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implem
 		IMPLEMENTS_STRING = "implements ",
 		EXTENDS_STRING = "extends ";
 
-	protected String onBeforeFields(Generator cg, M model) {
+    /**
+     * A hook that is executed just before the 'fields' part of the class code.
+     * 
+     * @param gen    the generator being used
+     * @param model  the model that is generated
+     * @return       code to be inserted before the fields
+     */
+	protected String onBeforeFields(Generator gen, M model) {
 		return EMPTY;
 	}
-	
-	protected Object wrapField(Field field) {return field;}
 
-    @Override
-	public <In, C extends Collection<In>> Collection<Object> 
-		wrap(C models, Function<In, Object> wrapper) {
-		return models.stream().map(wrapper).collect(Collectors.toList());
-	}
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String fieldSeparator() {
         return nl();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String fieldSuffix() {
         return SC;
     }
 	
+    /**
+     * Returns the declaration type of this model. This can be either 'class',
+     * 'interface' or 'enum'.
+     * 
+     * @return  the declaration type
+     */
     protected abstract String renderDeclarationType();
-	protected abstract String renderSupertype(Generator cg, M model);
-    protected abstract String renderConstructors(Generator cg, M model);
     
+    /**
+     * Returns the supertype of this model. The supertype should include any
+     * declaration like 'implements' or 'extends'.
+     * <p>
+     * Example: <pre>"implements List<T>"</pre>
+     * 
+     * @return  the supertype part
+     */
+	protected abstract String renderSupertype(Generator gen, M model);
+    
+    /**
+     * Should render the constructors part of the code and return it.
+     * 
+     * @param gen    the generator to use
+     * @param model  the model of the component
+     * @return       generated constructors or an empty string if there shouldn't
+     *               be any
+     */
+    protected abstract String renderConstructors(Generator gen, M model);
+    
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, M model) {
-		return Optional.of(renderJavadoc(cg, model) +
-            renderAnnotations(cg, model) +
-			renderModifiers(cg, model) +
+	public Optional<String> transform(Generator gen, M model) {
+		return Optional.of(renderJavadoc(gen, model) +
+            renderAnnotations(gen, model) +
+			renderModifiers(gen, model) +
             renderDeclarationType() + 
-            renderName(cg, model) + 
-            renderGenerics(cg, model) +
-            renderSupertype(cg, model) +
-			renderInterfaces(cg, model) +
+            renderName(gen, model) + 
+            renderGenerics(gen, model) +
+            renderSupertype(gen, model) +
+			renderInterfaces(gen, model) +
                 
             // Code
             block(nl() + separate(
-				onBeforeFields(cg, model), // Enums have constants here.
-//				cg.onEach(wrap(model.getFields(), f -> wrapField(f)))
-//					.collect(joinIfNotEmpty(scnl(), EMPTY, SC)),
-                renderFields(cg, model),
-				renderConstructors(cg, model),
-                renderInitalizers(cg, model),
-				renderMethods(cg, model),
-				renderClasses(cg, model)
+				onBeforeFields(gen, model), // Enums have constants here.´
+                renderFields(gen, model),
+				renderConstructors(gen, model),
+                renderInitalizers(gen, model),
+				renderMethods(gen, model),
+				renderClasses(gen, model)
 			))
 		);
 	}
 	
+    /**
+     * Converts the specified elements into strings using their
+     * <code>toString</code>-method and combines them with two new-line-characters.
+     * Empty strings will be discarded.
+     * 
+     * @param strings  the strings to combine
+     * @return         the combined string
+     */
 	private String separate(Object... strings) {
 		return Stream.of(strings)
 			.map(o -> o.toString())
 			.filter(s -> s.length() > 0)
-			.collect(Collectors.joining(dnl()));
+			.collect(joining(dnl()));
 	}
 }

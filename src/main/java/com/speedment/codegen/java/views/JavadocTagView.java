@@ -23,18 +23,21 @@ import com.speedment.codegen.lang.models.JavadocTag;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from a {@link JavadocTag} to java code.
+ * 
  * @author Emil Forslund
  */
 public class JavadocTagView implements Transform<JavadocTag, String> {
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, JavadocTag model) {
+	public Optional<String> transform(Generator gen, JavadocTag model) {
 		return Optional.of(
 			AT + model.getName() + 
 			ifelse(model.getValue(), s -> SPACE + s, EMPTY) + SPACE +
 			model.getText().orElse(EMPTY)
 		);
 	}
-	
 }

@@ -22,33 +22,46 @@ import com.speedment.codegen.lang.models.Class;
 import static java.util.stream.Collectors.joining;
 
 /**
- *
+ * Transforms from a {@link Class} to java code.
+ * 
  * @author Emil Forslund
  */
 public class ClassView extends ClassOrInterfaceView<Class> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	protected String renderDeclarationType() {
 		return CLASS_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return IMPLEMENTS_STRING;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	protected String renderSupertype(Generator cg, Class model) {
+	protected String renderSupertype(Generator gen, Class model) {
 		if (model.getSupertype().isPresent()) {
-			return EXTENDS_STRING + cg.on(model.getSupertype().get()).orElse(EMPTY) + SPACE;
+			return EXTENDS_STRING + gen.on(model.getSupertype().get()).orElse(EMPTY) + SPACE;
 		} else {
 			return EMPTY;
 		}
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected String renderConstructors(Generator cg, Class model) {
-		return cg.onEach(model.getConstructors())
+    protected String renderConstructors(Generator gen, Class model) {
+		return gen.onEach(model.getConstructors())
             .collect(joining(dnl()));
     }
 }

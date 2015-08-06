@@ -24,19 +24,23 @@ import static com.speedment.codegen.lang.models.modifiers.Modifier.FINAL;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from an {@link InterfaceField} to java code.
+ * 
  * @author Emil Forslund
  */
 public class InterfaceFieldView implements Transform<InterfaceField, String> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, InterfaceField model) {
+	public Optional<String> transform(Generator gen, InterfaceField model) {
 		return Optional.of(
-			cg.on(model.getJavadoc()).orElse(EMPTY) +	
+			gen.on(model.getJavadoc()).orElse(EMPTY) +	
 			(model.getModifiers().contains(FINAL) ?
-				cg.on(FINAL).get() + SPACE : EMPTY
+				gen.on(FINAL).get() + SPACE : EMPTY
 			) +		
-			cg.on(model.getType()).orElse(EMPTY) + SPACE +
+			gen.on(model.getType()).orElse(EMPTY) + SPACE +
 			model.getName()
 		);
 	}

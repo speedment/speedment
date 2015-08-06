@@ -24,23 +24,28 @@ import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.util.CodeCombiner;
 
 /**
- *
+ * Transforms from a {@link Generic} to java code.
+ * 
  * @author Emil Forslund
  */
 public class GenericView implements Transform<Generic, String> {
+    
 	private final static String 
 			EXTENDS_STRING = " extends ", 
 			SUPER_STRING = " super ";
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, Generic model) {
+	public Optional<String> transform(Generator gen, Generic model) {
 		if (!model.getLowerBound().isPresent() 
 		&&   model.getUpperBounds().isEmpty()) {
 			return Optional.empty();
 		} else {
 			return Optional.of(
 				model.getLowerBound().orElse(EMPTY) +
-				cg.onEach(model.getUpperBounds()).collect(CodeCombiner.joinIfNotEmpty(AND, 
+				gen.onEach(model.getUpperBounds()).collect(CodeCombiner.joinIfNotEmpty(AND, 
 						model.getLowerBound().isPresent() ? 
 							model.getBoundType() == Generic.BoundType.EXTENDS ?
 							EXTENDS_STRING : SUPER_STRING

@@ -23,12 +23,27 @@ import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasJavadoc;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasJavadoc}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasJavadocView<M extends HasJavadoc<M>> extends Transform<M, String> {
-    default String renderJavadoc(Generator cg, M model) {
-        return cg.on(model.getJavadoc()).map(jd -> jd + nl()).orElse(EMPTY);
+public interface HasJavadocView<M extends HasJavadoc<M>> extends 
+    Transform<M, String> {
+    
+    /**
+     * Render the javadoc-part of the model with an extra new-line appended
+     * afterwards. If no javadoc exists, an empty string is returned.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderJavadoc(Generator gen, M model) {
+        return gen.on(model.getJavadoc())
+            .map(jd -> jd + nl())
+            .orElse(EMPTY);
     }
 }

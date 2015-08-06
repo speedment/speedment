@@ -25,26 +25,30 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Transforms from a {@link Method} to java code.
+ * 
  * @author Emil Forslund
  */
 public class MethodView implements Transform<Method, String> {
     
     private final static String THROWS = "throws ";
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, Method model) {
+	public Optional<String> transform(Generator gen, Method model) {
 		return Optional.of(
-			ifelse(cg.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
-			cg.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
-			cg.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
-			cg.onEach(model.getGenerics()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE)) +
-			ifelse(cg.on(model.getType()), s -> s + SPACE, EMPTY) +
+			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
+			gen.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
+			gen.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+			gen.onEach(model.getGenerics()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE)) +
+			ifelse(gen.on(model.getType()), s -> s + SPACE, EMPTY) +
 			model.getName() +
-			cg.onEach(model.getFields()).collect(
+			gen.onEach(model.getFields()).collect(
 				Collectors.joining(COMMA_SPACE, PS, PE)
 			) + SPACE + 
-            cg.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
+            gen.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
             block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())

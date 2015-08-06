@@ -22,13 +22,17 @@ import com.speedment.codegen.lang.models.values.BooleanValue;
 import java.util.Optional;
 
 /**
- *
+ * Transforms from an {@link BooleanValue} to java code.
+ * 
  * @author Emil Forslund
  */
 public class BooleanValueView implements Transform<BooleanValue, String> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, BooleanValue model) {
+	public Optional<String> transform(Generator gen, BooleanValue model) {
 		return Optional.of(model.getValue().toString());
 	}
 }

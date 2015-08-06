@@ -23,15 +23,26 @@ import com.speedment.codegen.lang.interfaces.HasFields;
 import com.speedment.codegen.util.CodeCombiner;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasFields}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
-public interface HasFieldsView<M extends HasFields<M>> 
-extends Transform<M, String> {
+public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, String> {
     
-    default String renderFields(Generator g, M model) {
-        return g.onEach(model.getFields())
+    /**
+     * Render the fields-part of the model using the {@link #fieldSeparator()}
+     * method to separate the fields and the {@link #fieldPrefix()}- and
+     * {@link #fieldSuffix()}-methods on each field.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
+    default String renderFields(Generator gen, M model) {
+        return gen.onEach(model.getFields())
             .collect(CodeCombiner.joinIfNotEmpty(
                 fieldSuffix() + fieldSeparator() + fieldPrefix(), 
                 fieldPrefix(), 
@@ -39,12 +50,27 @@ extends Transform<M, String> {
             ));
     }
     
+    /**
+     * The separator string used when joining fields.
+     * 
+     * @return  the field separator
+     */
     String fieldSeparator();
     
+    /**
+     * A text to be inserted before each field.
+     * 
+     * @return  the field prefix
+     */
     default String fieldPrefix() {
         return EMPTY;
     }
     
+    /**
+     * A text to be inserted after each field.
+     * 
+     * @return  the field suffix
+     */
     default String fieldSuffix() {
         return EMPTY;
     }

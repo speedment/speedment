@@ -24,12 +24,22 @@ import com.speedment.codegen.lang.interfaces.HasCode;
 import static java.util.stream.Collectors.joining;
 
 /**
- *
- * @author Emil Forslund
- * @param <M> The extending type
+ * A trait with the functionality to render models with the trait 
+ * {@link HasCode}.
+ * 
+ * @author     Emil Forslund
+ * @param <M>  The model type
+ * @see        Transform
  */
 public interface HasCodeView<M extends HasCode<M>> extends Transform<M, String> {
 
+    /**
+     * Render the code-part of the model separated by new-line characters.
+     * 
+     * @param gen    the generator
+     * @param model  the model
+     * @return       the generated code
+     */
     default String renderCode(Generator gen, M model) {
         return block(model.getCode().stream()
             .collect(joining(nl()))

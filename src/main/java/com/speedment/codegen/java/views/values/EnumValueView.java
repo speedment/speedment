@@ -23,15 +23,19 @@ import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 
 /**
- *
+ * Transforms from an {@link EnumValue} to java code.
+ * 
  * @author Emil Forslund
  */
 public class EnumValueView implements Transform<EnumValue, String> {
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
-	public Optional<String> transform(Generator cg, EnumValue model) {
+	public Optional<String> transform(Generator gen, EnumValue model) {
 		return Optional.of(
-			cg.on(model.getType()).orElse(EMPTY) + DOT +
+			gen.on(model.getType()).orElse(EMPTY) + DOT +
 			model.getValue()
 		);
 	}
