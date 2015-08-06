@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 
 /**
  * A transform that uses a series of transforms to complete the transformation.
- * For an example, if you have two transforms A -> B and A -> C you can define
- * a <code>BridgeTransform</code> for A -> C.
+ * For an example, if you have two transforms A → B and A → C you can define
+ * a <code>BridgeTransform</code> for A → C.
  * 
  * @author Emil Forslund
  */

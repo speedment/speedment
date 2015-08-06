@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * example, if a <code>Field</code> is currently being transformed into a String,
  * the stack might look like this:
  * <pre>
- *     File -> Class -> Method -> Field
+ *     File → Class → Method → Field
  * </pre>
  * 
  * @author Emil Forslund
