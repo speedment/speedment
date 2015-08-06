@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a block of documentation in code. 
+ * 
+ * @author  Emil Forslund
+ * @see     JavadocTag
  */
 public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>, 
     HasJavadocTags<Javadoc> {

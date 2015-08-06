@@ -22,6 +22,11 @@ import com.speedment.codegen.lang.models.implementation.ClassImpl;
 import com.speedment.codegen.lang.models.modifiers.ClassModifier;
 import java.util.function.Supplier;
 
+/**
+ * A model that represents a class in code.
+ * 
+ * @author Emil Forslund
+ */
 public interface Class extends ClassOrInterface<Class>, HasConstructors<Class>, 
     HasSupertype<Class>, ClassModifier<Class> {
 

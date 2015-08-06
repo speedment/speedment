@@ -31,8 +31,9 @@ import com.speedment.codegen.lang.models.modifiers.MethodModifier;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a method declaration in code.
+ * 
+ * @author  Emil Forslund
  */
 public interface Method extends HasName<Method>, HasType<Method>, HasThrows<Method>,
     HasGenerics<Method>, HasFields<Method>, HasJavadoc<Method>, HasAnnotationUsage<Method>, 

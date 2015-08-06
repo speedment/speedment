@@ -29,8 +29,10 @@ import com.speedment.codegen.lang.models.implementation.InterfaceMethodImpl;
 import com.speedment.codegen.lang.models.modifiers.InterfaceMethodModifier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a method of an interface in code.
+ * 
+ * @author  Emil Forslund
+ * @see     Interface
  */
 public interface InterfaceMethod extends HasName<InterfaceMethod>, 
     HasThrows<InterfaceMethod>,

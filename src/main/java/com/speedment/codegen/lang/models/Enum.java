@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents an enumeration in code.
+ * 
+ * @author  Emil Forslund
+ * @see     EnumConstant
  */
 public interface Enum extends ClassOrInterface<Enum>, EnumModifier<Enum>, 
     HasConstructors<Enum> {

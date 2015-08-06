@@ -26,8 +26,10 @@ import com.speedment.codegen.lang.models.implementation.InterfaceFieldImpl;
 import com.speedment.codegen.lang.models.modifiers.InterfaceFieldModifier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a field of an interface in code.
+ * 
+ * @author  Emil Forslund
+ * @see     Interface
  */
 public interface InterfaceField extends HasName<InterfaceField>, 
     HasType<InterfaceField>, InterfaceFieldModifier<InterfaceField>, 

@@ -20,17 +20,31 @@ import com.speedment.codegen.lang.models.Initalizer;
 import java.util.List;
 
 /**
- *
+ * A trait for models that contain {@link Initalizer} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasInitalizers<T extends HasInitalizers<T>> {
     
+    /**
+     * Adds the specified {@link Initalizer} to this model.
+     * 
+     * @param init  the new child
+     * @return      a reference to this
+     */
     @SuppressWarnings("unchecked")
-    default T add(final Initalizer dep) {
-        getInitalizers().add(dep);
+    default T add(final Initalizer init) {
+        getInitalizers().add(init);
         return (T) this;
     }
     
+    /**
+     * Returns a list of all intializers in this model.
+     * <p>
+     * The list returned must be mutable for changes!
+     * 
+     * @return  the initalizers
+     */
     List<Initalizer> getInitalizers();
 }

@@ -19,11 +19,25 @@ package com.speedment.codegen.lang.interfaces;
 import com.speedment.codegen.lang.models.Type;
 
 /**
- *
+ * A trait for models that has a {@link Type}.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasType<T extends HasType<T>> {
+    
+    /**
+     * Sets the type of this model.
+     * 
+     * @param type  the new type
+     * @return      a reference to this
+     */
     T set(final Type type);
+    
+    /**
+     * Returns the type of this model.
+     * 
+     * @return  the type
+     */
     Type getType();
 }

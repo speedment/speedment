@@ -20,11 +20,25 @@ import com.speedment.codegen.lang.models.Value;
 import java.util.Optional;
 
 /**
- *
+ * A trait for models that has a {@link Value}.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasValue<T extends HasValue<T>> {
+    
+    /**
+     * Sets the value of this model.
+     * 
+     * @param val  the new value
+     * @return     a reference to this
+     */
 	T set(final Value<?> val);
+    
+    /**
+     * Returns the value of this model.
+     * 
+     * @return  the value
+     */
 	Optional<Value<?>> getValue();
 }

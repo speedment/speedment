@@ -23,7 +23,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents the generic part of a type declaration in code. A
+ * type can have multiple generics.
+ * 
  * @author Emil Forslund
  */
 public interface Generic extends Copyable<Generic> {

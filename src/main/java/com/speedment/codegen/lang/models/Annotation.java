@@ -27,8 +27,10 @@ import com.speedment.codegen.lang.models.modifiers.AnnotationModifier;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents an annotation in code.
+ * 
+ * @author  Emil Forslund
+ * @see     AnnotationUsage
  */
 public interface Annotation extends Copyable<Annotation>, HasName<Annotation>, 
     HasJavadoc<Annotation>, HasFields<Annotation>, HasImports<Annotation>, 

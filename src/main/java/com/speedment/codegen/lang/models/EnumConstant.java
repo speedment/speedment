@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a constant in an enumeration.
+ * 
+ * @author  Emil Forslund
+ * @see     Enum
  */
 public interface EnumConstant extends Copyable<EnumConstant>, HasName<EnumConstant> {
     

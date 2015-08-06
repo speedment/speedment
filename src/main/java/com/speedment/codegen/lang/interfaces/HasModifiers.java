@@ -20,10 +20,19 @@ import com.speedment.codegen.lang.models.modifiers.Modifier;
 import java.util.Set;
 
 /**
- *
+ * A trait for models that contain {@link Modifier} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasModifiers<T extends HasModifiers<T>> {
+    
+    /**
+     * Returns a <code>Set</code> with all modifiers of this model.
+     * <p>
+     * The set returned must be mutable for changes!
+     * 
+     * @return  the modifiers
+     */
 	Set<Modifier> getModifiers();
 }

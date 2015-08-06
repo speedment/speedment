@@ -21,8 +21,11 @@ import com.speedment.codegen.lang.models.modifiers.InterfaceModifier;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents an interface in code.
+ * 
+ * @author  Emil Forslund
+ * @see     InterfaceField
+ * @see     InterfaceMethod
  */
 public interface Interface extends ClassOrInterface<Interface>, InterfaceModifier<Interface> {
     

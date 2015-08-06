@@ -21,23 +21,43 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *
+ * A trait for models that contain {@link Field} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasFields<T extends HasFields<T>> {
     
+    /**
+     * Adds the specified {@link Field} to this model.
+     * 
+     * @param field  the new child
+     * @return       a reference to this
+     */
     @SuppressWarnings("unchecked")
     default T add(final Field field) {
         getFields().add(field);
         return (T) this;
     }
     
+    /**
+     * Adds all the specified {@link Field} members to this model.
+     * 
+     * @param fields  the new children
+     * @return        a reference to this
+     */
     @SuppressWarnings("unchecked")
     default T addAllFields(final Collection<? extends Field> fields) {
         getFields().addAll(fields);
         return (T) this;
     }
     
+    /**
+     * Returns a list of all the fields in this model.
+     * <p>
+     * The list returned must be mutable for changes!
+     * 
+     * @return  all the fields 
+     */
     List<Field> getFields();
 }

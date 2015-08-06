@@ -20,11 +20,26 @@ import com.speedment.codegen.lang.models.Javadoc;
 import java.util.Optional;
 
 /**
- *
+ * A trait for models that contain {@link Javadoc} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasJavadoc<T extends HasJavadoc<T>> {
+    
+    /**
+     * Sets the {@link Javadoc} of this model.
+     * 
+     * @param doc  the javadoc
+     * @return     a reference to this
+     */
     T set(final Javadoc doc);
+    
+    /**
+     * Returns the documentation of this model if such exists, else 
+     * <code>empty</code>.
+     * 
+     * @return  the documentation or <code>empty</code>
+     */
     Optional<Javadoc> getJavadoc();
 }

@@ -28,7 +28,9 @@ import com.speedment.codegen.lang.models.modifiers.FieldModifier;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents a field in code. This can be either as a method
+ * parameter or as a class member.
+ * 
  * @author Emil Forslund
  */
 public interface Field extends Copyable<Field>, Callable<Field>, HasName<Field>, 

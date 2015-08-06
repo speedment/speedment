@@ -20,11 +20,25 @@ import com.speedment.codegen.lang.models.Type;
 import java.util.Optional;
 
 /**
- *
+ * A trait for models that has a super type.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasSupertype<T extends HasSupertype<T>> {
+    
+    /**
+     * Sets the super type of this model.
+     * 
+     * @param type  the super type
+     * @return      a reference to this
+     */
 	T setSupertype(Type type);
+    
+    /**
+     * Returns the super type if such exists, else <code>empty</code>.
+     * 
+     * @return  the super type or <code>empty</code>
+     */
 	Optional<Type> getSupertype();
 }

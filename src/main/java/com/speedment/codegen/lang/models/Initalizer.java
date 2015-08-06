@@ -24,7 +24,8 @@ import com.speedment.codegen.lang.models.modifiers.InitalizerModifier;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents an initalizer in code.
+ * 
  * @author Emil Forslund
  */
 public interface Initalizer extends Copyable<Initalizer>, Callable<Initalizer>, 

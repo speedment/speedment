@@ -20,17 +20,32 @@ import com.speedment.codegen.lang.models.Type;
 import java.util.List;
 
 /**
- *
+ * A trait for models that have interfaces as supertypes.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasImplements<T extends HasImplements<T>> {
     
+    /**
+     * Adds the specified supertype to this model. The type should represent
+     * an interface.
+     * 
+     * @param interf  the new child
+     * @return        a reference to this
+     */
     @SuppressWarnings("unchecked")
     default T add(final Type interf) {
         getInterfaces().add(interf);
         return (T) this;
     }
     
+    /**
+     * Returns a list of all the interfaces implemented by this model.
+     * <p>
+     * The list returned must be mutable for changes!
+     * 
+     * @return  the interfaces
+     */
     List<Type> getInterfaces();
 }

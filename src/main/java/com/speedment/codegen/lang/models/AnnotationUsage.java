@@ -25,8 +25,10 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents the usage of a particular annotation in code.
+ * 
+ * @author  Emil Forslund
+ * @see     Annotation
  */
 public interface AnnotationUsage extends Copyable<AnnotationUsage>, 
     HasType<AnnotationUsage>, HasValue<AnnotationUsage> {

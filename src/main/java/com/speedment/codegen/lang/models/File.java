@@ -26,7 +26,8 @@ import com.speedment.codegen.lang.models.implementation.FileImpl;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents an entire code file.
+ * 
  * @author Emil Forslund
  */
 public interface File extends Copyable<File>, HasName<File>, 

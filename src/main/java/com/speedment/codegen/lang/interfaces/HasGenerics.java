@@ -20,17 +20,31 @@ import com.speedment.codegen.lang.models.Generic;
 import java.util.List;
 
 /**
- *
+ * A trait for models that contain {@link Generic} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasGenerics<T extends HasGenerics<T>> {
     
+    /**
+     * Adds the specified {@link Generic} to this model.
+     * 
+     * @param generic  the new child
+     * @return         a reference to this
+     */
     @SuppressWarnings("unchecked")
     default T add(final Generic generic) {
         getGenerics().add(generic);
         return (T) this;
     }
     
+    /**
+     * Returns a list of all the generics in this model.
+     * <p>
+     * The list returned must be mutable for changes!
+     * 
+     * @return  the generics 
+     */
     List<Generic> getGenerics();
 }

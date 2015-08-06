@@ -25,10 +25,14 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a type in code. When classes, enumerations and
+ * interfaces are referenced, it is often a <code>Type</code> that is used.
+ * 
+ * @author  Emil Forslund
  */
-public interface Type extends Copyable<Type>, HasName<Type>, HasGenerics<Type>, HasAnnotationUsage<Type> {
+public interface Type extends Copyable<Type>, HasName<Type>, HasGenerics<Type>, 
+    HasAnnotationUsage<Type> {
+    
     Type setJavaImpl(java.lang.Class<?> javaImpl);
     Optional<java.lang.Class<?>> getJavaImpl();
     Type setArrayDimension(int arrayDimension);

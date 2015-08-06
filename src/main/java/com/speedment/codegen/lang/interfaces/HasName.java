@@ -17,11 +17,29 @@
 package com.speedment.codegen.lang.interfaces;
 
 /**
- *
+ * A trait for models that have a name.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasName<T extends HasName<T>> {
+    
+    /**
+     * Sets the name of this model.
+     * <p>
+     * This must not be null!
+     * 
+     * @param name  the new name
+     * @return      
+     */
     T setName(final String name);
+    
+    /**
+     * Returns the name of this model. 
+     * <p>
+     * This should never be null!
+     * 
+     * @return  the name
+     */
     String getName();
 }

@@ -19,11 +19,21 @@ package com.speedment.codegen.lang.interfaces;
 import java.util.function.Consumer;
 
 /**
- *
+ * Trait for code generator models that can be called.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface Callable<T> {
+    
+    /**
+     * Calls the specified {@link Consumer} with this object as the parameter.
+     * This method exists so that methods can operate on an object without
+     * breaking the flow.
+     * 
+     * @param procedure  the procedure to call
+     * @return           a reference to this
+     */
 	@SuppressWarnings("unchecked")
     default public T call(Consumer<T> procedure) {
 		procedure.accept((T) this);

@@ -19,11 +19,25 @@ package com.speedment.codegen.lang.interfaces;
 import java.util.Optional;
 
 /**
- *
+ * A trait for models that can have a comment.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasComment<T extends HasComment<T>> {
+    
+    /**
+     * If a comment is attached to this model, return it. Else <code>empty</code>.
+     * 
+     * @return  the comment or empty
+     */
 	Optional<String> getComment();
+    
+    /**
+     * Sets the comment of this model. The comment may have multiple rows.
+     * 
+     * @param comment  the comment
+     * @return         a reference to this
+     */
 	T setComment(String comment);
 }

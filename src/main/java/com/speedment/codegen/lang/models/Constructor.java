@@ -28,7 +28,8 @@ import com.speedment.codegen.lang.models.modifiers.ConstructorModifier;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents a constructor in code.
+ * 
  * @author Emil Forslund
  */
 public interface Constructor extends Copyable<Constructor>, Callable<Constructor>, 

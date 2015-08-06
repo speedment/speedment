@@ -24,8 +24,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- *
- * @author Emil Forslund
+ * A model that represents a specific tag in a {@link Javadoc} block.
+ * 
+ * @author  Emil Forslund
+ * @see     Javadoc
  */
 public interface JavadocTag extends Copyable<JavadocTag>, HasName<JavadocTag>, 
     Callable<JavadocTag> {

@@ -24,7 +24,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- *
+ * A model that represents the explicit import of an dependency in code.
+ * 
  * @author Emil Forslund
  */
 public interface Import extends Copyable<Import>, HasType<Import>, 

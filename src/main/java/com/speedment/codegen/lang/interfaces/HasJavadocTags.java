@@ -20,17 +20,31 @@ import com.speedment.codegen.lang.models.JavadocTag;
 import java.util.List;
 
 /**
- *
+ * A trait for models that contain {@link JavadocTag} components.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface HasJavadocTags<T extends HasJavadocTags<T>> {
     
+    /**
+     * Adds the specified {@link JavadocTag} to this model.
+     * 
+     * @param tag  the new child
+     * @return     a reference to this
+     */
     @SuppressWarnings("unchecked")
     default T add(final JavadocTag tag) {
         getTags().add(tag);
         return (T) this;
     }
     
+    /**
+     * Returns a list of all documentation tags of this model.
+     * <p>
+     * The list returned must be mutable for changes!
+     * 
+     * @return  the javadoc tags
+     */
     List<JavadocTag> getTags();
 }

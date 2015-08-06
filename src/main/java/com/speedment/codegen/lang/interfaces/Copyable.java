@@ -17,10 +17,17 @@
 package com.speedment.codegen.lang.interfaces;
 
 /**
- *
+ * Trait for code generator models that can be deep-copied.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public interface Copyable<T extends Copyable<T>> {
+    
+    /**
+     * Create a deep copy of this model.
+     * 
+     * @return  the copy
+     */
 	public T copy();
 }
