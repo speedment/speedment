@@ -23,10 +23,12 @@ import java.util.stream.Collectors;
 import static com.speedment.codegen.util.Formatting.*;
 
 /**
- *
+ * Default implementation of the {@link DependencyManager} interface.
+ * 
  * @author Emil Forslund
  */
 public class DefaultDependencyManager implements DependencyManager {
+    
 	private final Set<String> dependencies = new HashSet<>();
 	private final Set<String> ignorePackages;
 	
@@ -39,7 +41,8 @@ public class DefaultDependencyManager implements DependencyManager {
 	
 	/**
 	 * Initalises the DependencyManager.
-	 * @param ignoredPackage A package that should be on the ignore list.
+     * 
+	 * @param ignoredPackage  a package that should be on the ignore list
 	 */
 	public DefaultDependencyManager(String ignoredPackage) {
 		ignorePackages = new HashSet<>();
@@ -48,7 +51,8 @@ public class DefaultDependencyManager implements DependencyManager {
     
     /**
 	 * Initalises the DependencyManager.
-	 * @param ignoredPackages Packages that should be ignored.
+     * 
+	 * @param ignoredPackages  packages that should be ignored
 	 */
 	public DefaultDependencyManager(String[] ignoredPackages) {
 		ignorePackages = Arrays.stream(ignoredPackages)
@@ -57,8 +61,9 @@ public class DefaultDependencyManager implements DependencyManager {
 	
 	/**
 	 * Initalises the DependencyManager.
-	 * @param ignoredPackage A package that should be on the ignore list.
-	 * @param ignoredPackages More packages that should be on the ignore list.
+     * 
+	 * @param ignoredPackage   a package that should be on the ignore list
+	 * @param ignoredPackages  more packages that should be on the ignore list
 	 */
 	public DefaultDependencyManager(String ignoredPackage, String... ignoredPackages) {
 		this (ignoredPackages);
@@ -68,7 +73,8 @@ public class DefaultDependencyManager implements DependencyManager {
 	/**
 	 * Adds the specified package to the ignore list. This is the opposite as
 	 * calling <code>acceptPackage</code>.
-	 * @param packageName The full name of the package.
+     * 
+	 * @param packageName  the full name of the package
 	 */
 	@Override
 	public void ignorePackage(String packageName) {
@@ -78,7 +84,8 @@ public class DefaultDependencyManager implements DependencyManager {
 	/**
 	 * Removes the specified package from the ignore list. This is the opposite 
 	 * as calling <code>ignorePackage</code>.
-	 * @param packageName The full name of the package.
+     * 
+	 * @param packageName  the full name of the package
 	 */
 	@Override
 	public void acceptPackage(String packageName) {
@@ -88,8 +95,9 @@ public class DefaultDependencyManager implements DependencyManager {
 	/**
 	 * Returns true if the specified class belongs to a package that is on the
 	 * ignore list.
-	 * @param fullname The full name of a package or a class.
-	 * @return True if it should be ignored as a dependency.
+     * 
+	 * @param fullname  the full name of a package or a class
+	 * @return          true if it should be ignored as a dependency
 	 */
 	@Override
 	public boolean isIgnored(String fullname) {
@@ -99,9 +107,16 @@ public class DefaultDependencyManager implements DependencyManager {
 		);
 	}
 
+    /**
+     * Add the specified dependency to the manager. If the dependency is 
+     * redundant, false is returned and the dependency is not added.
+     * 
+     * @param fullname  the full name of the dependency
+     * @return          true if the dependency was accepted
+     */
 	@Override
 	public boolean load(String fullname) {
-		if (isNameTaken(fullname)) {
+		if (isLoaded(fullname)) {
 			return false;
 		} else {
 			dependencies.add(fullname);
@@ -109,6 +124,14 @@ public class DefaultDependencyManager implements DependencyManager {
 		}
 	}
 
+    /**
+     * Checks if the specified dependency is already loaded. If the dependency
+     * matches an ignored package, true is returned even if it is not
+     * specifically loaded.
+     * 
+     * @param fullname  the name of the dependency
+     * @return          true if it is loaded or redundant
+     */
 	@Override
 	public boolean isLoaded(String fullname) {
 		return (dependencies.contains(fullname)) 
@@ -117,13 +140,10 @@ public class DefaultDependencyManager implements DependencyManager {
 			||   fullname.equals(p)
 		);
 	}
-	
-	private boolean isNameTaken(String fullname) {
-		return dependencies.stream().anyMatch(
-			d -> d.endsWith(DOT + shortName(fullname))
-		);
-	}
 
+    /**
+     * Clear the list of dependencies.
+     */
 	@Override
 	public void clearDependencies() {
 		dependencies.clear();

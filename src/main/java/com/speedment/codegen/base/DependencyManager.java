@@ -17,52 +17,65 @@
 package com.speedment.codegen.base;
 
 /**
- *
+ * Keeps track of which dependencies have been imported and which is not 
+ * included. This is useful for solving the issue of when to write the full name
+ * of a class and when to only include the short name.
+ * 
  * @author Emil Forslund
  */
 public interface DependencyManager {
+    
 	/**
 	 * Attempts to add the specified resource to the dependency list.
-	 * If the name is already taken it will return false.
-	 * @param fullname The full name of the resource.
-	 * @return True if it was added, else false.
+	 * If the name is already taken it will return <code>false</code>.
+     * 
+	 * @param fullname  the full name of the resource.
+	 * @return          <code>true</code> if it was added, else <code>false</code>
 	 */
 	boolean load(String fullname);
 	
 	/**
-	 * Returns true if the specified fullname is either:
+	 * Returns <code>true</code> if the specified fullname is either:
+     * 
+     * <pre>
 	 *		(A) loaded into the dependency list;
 	 *		(B) on the ignore list.
-	 * Else it returns false.
-	 * @param fullname The full name of the resource.
-	 * @return True if it don't have to be loaded.
+     * </pre>
+     * 
+	 * Else it returns <code>false</code>.
+     * 
+	 * @param fullname  the full name of the resource.
+	 * @return          <code>true</code> if it don't have to be loaded.
 	 */
 	boolean isLoaded(String fullname);
 	
 	/**
-	 * Clear all dependencies.
+	 * Returns true if the specified class belongs to a package that is on the
+	 * ignore list.
+     * 
+	 * @param fullname  the full name of a package or a class
+	 * @return          <code>true</code> if it should be ignored as a dependency
 	 */
-	void clearDependencies();
-	
-	/**
-	 * Adds the specified package to the ignore list. This is the opposite as
-	 * calling <code>acceptPackage</code>.
-	 * @param packageName The full name of the package.
-	 */
-	void ignorePackage(String packageName);
-	
-	/**
+	boolean isIgnored(String fullname);
+    
+    /**
 	 * Removes the specified package from the ignore list. This is the opposite 
 	 * as calling <code>ignorePackage</code>.
-	 * @param packageName The full name of the package.
+     * 
+	 * @param packageName  the full name of the package
 	 */
 	void acceptPackage(String packageName);
 	
 	/**
-	 * Returns true if the specified class belongs to a package that is on the
-	 * ignore list.
-	 * @param fullname The full name of a package or a class.
-	 * @return True if it should be ignored as a dependency.
+	 * Adds the specified package to the ignore list. This is the opposite as
+	 * calling <code>acceptPackage</code>.
+     * 
+	 * @param packageName  the full name of the package
 	 */
-	boolean isIgnored(String fullname);
+	void ignorePackage(String packageName);
+	
+    /**
+	 * Clear all dependencies.
+	 */
+	void clearDependencies();
 }
