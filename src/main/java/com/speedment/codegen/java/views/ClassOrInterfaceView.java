@@ -94,9 +94,11 @@ public abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implem
      * Returns the supertype of this model. The supertype should include any
      * declaration like 'implements' or 'extends'.
      * <p>
-     * Example: <pre>"implements List<T>"</pre>
+     * Example: <pre>"implements List"</pre>
      * 
-     * @return  the supertype part
+     * @param gen    the generator to use
+     * @param model  the model of the component
+     * @return       the supertype part
      */
 	protected abstract String renderSupertype(Generator gen, M model);
     

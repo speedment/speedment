@@ -17,6 +17,7 @@
 package com.speedment.codegen.java;
 
 import com.speedment.codegen.base.DefaultTransformFactory;
+import com.speedment.codegen.base.TransformFactory;
 import com.speedment.codegen.java.views.AnnotationUsageView;
 import com.speedment.codegen.java.views.InterfaceMethodView;
 import com.speedment.codegen.lang.models.Annotation;
@@ -86,7 +87,8 @@ public class JavaTransformFactory extends DefaultTransformFactory {
     
     /**
      * Instantiates the JavaTransformFactory with a custom name.
-     * @param name 
+     * 
+     * @param name  the custom name
      */
     public JavaTransformFactory(String name) {
         super(name);

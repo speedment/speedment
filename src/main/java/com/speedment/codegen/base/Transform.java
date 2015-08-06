@@ -35,9 +35,9 @@ public interface Transform<F, T> {
      * accept a particular input and therefore return <code>empty</code>.
      * <p>
      * This method is not meant to be called outside the code generator. If you
-     * want to transform between different types, setup a {@see Generator},
+     * want to transform between different types, setup a {@link Generator},
      * install the <code>Transform</code> in the factory and call one of the
-     * <code>on()<code>-methods in <code>Generator</code>.
+     * <code>on()</code>-methods in <code>Generator</code>.
      * 
      * @param gen    a reference to the generator being used
      * @param model  the model to transform
