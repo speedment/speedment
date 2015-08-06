@@ -18,11 +18,15 @@ package com.speedment.codegen.base;
 
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- *
+ * A transform that uses a series of transforms to complete the transformation.
+ * For an example, if you have two transforms A -> B and A -> C you can define
+ * a <code>BridgeTransform</code> for A -> C.
+ * 
  * @author Emil Forslund
  */
 public class BridgeTransform<A, B> implements Transform<A, B> {
@@ -30,26 +34,149 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
     private final List<Transform<?, ?>> steps;
     private final Class<A> from;
     private final Class<B> to;
-    private final TransformFactory installer;
+    private final TransformFactory factory;
     private Class<?> end;
     
-    public BridgeTransform(Class<A> from, Class<B> to, TransformFactory installer) {
+    /**
+     * Constructs a new transform from one model class to another. The bridge
+     * requires a factory to create the intermediate steps.
+     * 
+     * @param from the type to transform from
+     * @param to the type to transform to
+     * @param factory a factory with all the required steps installed
+     */
+    private BridgeTransform(Class<A> from, Class<B> to, TransformFactory factory) {
+        this.from    = requireNonNull(from);
+        this.to      = requireNonNull(to);
+        this.factory = requireNonNull(factory);
+        
         this.steps = new ArrayList<>();
-        this.from = from;
-        this.to = to;
-        this.end = from;
-        this.installer = installer;
+        this.end   = requireNonNull(from);
     }
     
+    /**
+     * Creates a shallow copy of a bridge.
+     * 
+     * @param prototype the prototype
+     */
     private BridgeTransform(BridgeTransform<A, B> prototype) {
-        steps     = new ArrayList<>(prototype.steps);
-        from      = prototype.from;
-        to        = prototype.to;
-        end       = prototype.end;
-        installer = prototype.installer;
+        steps   = new ArrayList<>(prototype.steps);
+        from    = prototype.from;
+        to      = prototype.to;
+        end     = prototype.end;
+        factory = prototype.factory;
     }
     
-    public <A2, B2> boolean addStep(Class<A2> from, Class<B2> to, Transform<A2, B2> step) {
+    /**
+     * Transforms the specified model using this transform. A code generator is
+     * supplied so that the transform can initiate new generation processes to
+     * resolve dependencies.
+     * 
+     * @param gen   the current code generator 
+     * @param model the model to transform
+     * @return      the transformation result or empty if any of the steps 
+     *              returned empty
+     */
+    @Override
+    public Optional<B> transform(Generator gen, A model) {
+        Object o = model;
+        
+        for (final Transform<?, ?> step : steps) {
+            if (o == null) {
+                return Optional.empty();
+            } else {
+                @SuppressWarnings("unchecked")
+                final Transform<Object, ?> step2 = (Transform<Object, ?>) step;
+                
+                o = gen.transform(step2, o, factory)
+                    .map(m -> m.getResult())
+                    .orElse(null);
+            }
+        }
+        
+        return Optional.ofNullable((B) o);
+    }
+    
+    /**
+     * Creates a bridge from one model type to another. A factory is supplied so
+     * that intermediate steps can be resolved.
+     * 
+     * @param <A>     the initial type of a model to transform
+     * @param <B>     the final type of a model after transformation
+     * @param <T>     the type of a transform between A and B
+     * @param factory a factory with all intermediate steps installed
+     * @param from    the initial class of a model to transform
+     * @param to      the final class of a model after transformation
+     * @return        a <code>Stream</code> of all unique paths between A and B
+     */
+    public static <A, B, T extends Transform<A, B>> Stream<T> create(TransformFactory factory, Class<A> from, Class<B> to) {
+        return create(factory, new BridgeTransform<>(from, to, factory));
+    }
+    
+    /**
+     * Takes a bridge and completes it if it is not finished. Returns all valid 
+     * paths through the graph as a <code>Stream</code>.
+     * 
+     * @param <A>     the initial type of a model to transform
+     * @param <B>     the final type of a model after transformation
+     * @param <T>     the type of a transform between A and B
+     * @param factory a factory with all intermediate steps installed
+     * @param bridge  the incomplete bridge to finish
+     * @return        a <code>Stream</code> of all unique paths between A and B
+     */
+    private static <A, B, T extends Transform<A, B>> Stream<T> create(TransformFactory factory, BridgeTransform<A, B> bridge) {
+        if (bridge.end.equals(bridge.to)) {
+            return Stream.of((T) bridge);
+        } else {
+            final List<Stream<T>> bridges = new ArrayList<>();
+            
+            factory.allFrom(bridge.end).stream().forEachOrdered(e -> {
+                
+                final BridgeTransform<A, B> br = new BridgeTransform<>(bridge);
+                
+                @SuppressWarnings("unchecked")
+                Class<Object> a = (Class<Object>) bridge.end;
+                
+                @SuppressWarnings("unchecked")
+                Class<Object> b = (Class<Object>) e.getKey();
+                
+                @SuppressWarnings("unchecked")
+                Transform<Object, Object> transform = (Transform<Object, Object>) e.getValue();
+                
+                if (br.addStep(a, b, transform)) {
+                    bridges.add(create(factory, br));
+                }
+            });
+            
+            return bridges.stream().flatMap(i -> i);
+        }
+    }
+
+    /**
+     * Returns true if this transform is or contains the specified 
+     * transformer. This is used internally by the code generator to avoid 
+     * circular paths.
+     * 
+     * @param transformer  the type of the transformer to check
+     * @return             true if this transform is or contains the input
+     */
+    @Override
+    public boolean is(Class<? extends Transform<?, ?>> transformer) {
+        return steps.stream().anyMatch(t -> t.is(transformer));
+    }
+    
+    /**
+     * Attempts to add a new step to the bridge. If the step is already part of
+     * the bridge, it will not be added. Returns true if the step was added.
+     * 
+     * @param <A2>  the initial type of the step
+     * @param <B2>  the outputed type of the step
+     * @param from  the initial type of the step
+     * @param to    the outputed type of the step
+     * @param step  the step to attempt to add
+     * @return      true if the step was added
+     */
+    private <A2, B2> boolean addStep(Class<A2> from, Class<B2> to, Transform<A2, B2> step) {
         if (end == null || from.equals(end)) {
             if (steps.contains(step)) {
                 return false;
@@ -61,57 +188,5 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
         } else {
             throw new IllegalArgumentException("Transform " + step + " has a different entry class (" + from + ") than the last class in the current build (" + end + ").");
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Optional<B> transform(Generator gen, A model) {
-        Object o = model;
-        
-        for (final Transform<?, ?> step : steps) {
-            if (o == null) {
-                return Optional.empty();
-            } else {
-                final Transform<Object, ?> step2 = (Transform<Object, ?>) step;
-                o = gen.transform(step2, o, installer)
-                    .map(m -> m.getResult())
-                    .orElse(null);
-            }
-        }
-        
-        return Optional.ofNullable((B) o);
-    }
-    
-    public static <A, B, T extends Transform<A, B>> Stream<T> create(TransformFactory installer, Class<A> from, Class<B> to) {
-        return create(installer, new BridgeTransform<>(from, to, installer));
-    }
-    
-    @SuppressWarnings("unchecked")
-    public static <A, B, T extends Transform<A, B>> Stream<T> create(TransformFactory installer, BridgeTransform<A, B> bridge) {
-        if (bridge.end.equals(bridge.to)) {
-            return Stream.of((T) bridge);
-        } else {
-            final List<Stream<T>> bridges = new ArrayList<>();
-            
-            installer.allFrom(bridge.end).stream().forEachOrdered(e -> {
-                
-                final BridgeTransform<A, B> br = new BridgeTransform<>(bridge);
-                
-                Class<Object> a = (Class<Object>) bridge.end;
-                Class<Object> b = (Class<Object>) e.getKey();
-                Transform<Object, Object> transform = (Transform<Object, Object>) e.getValue();
-                
-                if (br.addStep(a, b, transform)) {
-                    bridges.add(create(installer, br));
-                }
-            });
-            
-            return bridges.stream().flatMap(i -> i);
-        }
-    }
-
-    @Override
-    public boolean is(Class<? extends Transform<?, ?>> transformer) {
-        return steps.stream().anyMatch(t -> t.is(transformer));
     }
 }
