@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- *
+ * The default implementation of the {@link TransformFactory} interface.
+ * 
  * @author Emil Forslund
  */
 public class DefaultTransformFactory implements TransformFactory {
@@ -32,22 +33,36 @@ public class DefaultTransformFactory implements TransformFactory {
     private final Map<Class<?>, Set<Map.Entry<Class<?>, Class<? extends Transform<?, ?>>>>> transforms;
 	private final String name;
     
+    /**
+     * Instantiates the factory.
+     * 
+     * @param name  the unique name to use
+     */
 	public DefaultTransformFactory(String name) {
         this.name = name;
         this.transforms = new ConcurrentHashMap<>();
 	}
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * {@inheritDoc} 
+     */
 	@Override
 	public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Class<T> transform) {
         transforms.computeIfAbsent(from, f -> new HashSet<>()).add(new AbstractMap.SimpleEntry<>(to, transform));
         return this;
 	}
 
+    /**
+     * {@inheritDoc} 
+     */
 	@Override
     @SuppressWarnings("unchecked")
 	public <A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> model) {
