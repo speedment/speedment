@@ -17,19 +17,52 @@
 package com.speedment.codegen.base;
 
 /**
- *
+ * Meta information about the generation process.
+ * 
  * @author Emil Forslund
  * @param <A> the model type
  * @param <B> the result type
  */
 public interface Meta<A, B> {
     
+    /**
+     * The model that was sent to the generator.
+     * @return  the model
+     */
     A getModel();
+    
+    /**
+     * The result that was produced by the generator.
+     * @return  the model
+     */
     B getResult();
+    
+    /**
+     * The transform that was used to produce the result.
+     * @return  the transform
+     */
     Transform<A, B> getTransform();
+    
+    /**
+     * The factory that created the transform.
+     * @return  the factory
+     */
     TransformFactory getFactory();
+    
+    /**
+     * The render stack that represents which generation processes is waiting
+     * for this result.
+     * 
+     * @return  the current render stack
+     */
     RenderStack getRenderStack();
     
+    /**
+     * Meta implementation.
+     * 
+     * @param <A> the model type
+     * @param <B> the result type
+     */
     class Impl<A, B> implements Meta<A, B> {
     
         private A model;
@@ -39,12 +72,12 @@ public interface Meta<A, B> {
         private RenderStack stack;
 
         Impl() {}
- 
+
         @Override
         public B getResult() {
             return result;
         }
-        
+
         protected Impl<A, B> setResult(B result) {
             this.result = result;
             return this;
@@ -74,7 +107,7 @@ public interface Meta<A, B> {
         public A getModel() {
             return model;
         }
-
+        
         public Impl<A, B> setModel(A model) {
             this.model = model;
             return this;
