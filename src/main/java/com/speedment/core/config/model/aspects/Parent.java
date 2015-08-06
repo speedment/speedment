@@ -100,7 +100,7 @@ public interface Parent<C extends Child<?>> extends Node {
      */
     default Stream<Node> traverse() {
         final Function<Node, Stream<Node>> traverse = n -> n.asParent()
-            .map(Parent::stream)
+            .map(p -> p.stream())
             .orElse(Stream.empty())
             .map(Node.class::cast);
 

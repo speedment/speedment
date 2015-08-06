@@ -94,7 +94,23 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
             }
         }
         
-        return Optional.ofNullable((B) o);
+        if (o == null) {
+            return Optional.empty();
+        } else {
+            if (to.isAssignableFrom(o.getClass())) {
+                @SuppressWarnings("unchecked")
+                final B result = (B) o;
+                return Optional.of(result);
+            } else {
+                throw new IllegalStateException(
+                    "The bridge between '" + 
+                    from.getSimpleName() + 
+                    "' to '" + 
+                    to.getSimpleName() + 
+                    "' is not complete."
+                );
+            }
+        }
     }
     
     /**
@@ -126,7 +142,9 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
      */
     private static <A, B, T extends Transform<A, B>> Stream<T> create(TransformFactory factory, BridgeTransform<A, B> bridge) {
         if (bridge.end.equals(bridge.to)) {
-            return Stream.of((T) bridge);
+            @SuppressWarnings("unchecked")
+            final T result = (T) bridge;
+            return Stream.of(result);
         } else {
             final List<Stream<T>> bridges = new ArrayList<>();
             
