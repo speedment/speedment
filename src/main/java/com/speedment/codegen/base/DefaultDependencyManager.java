@@ -134,11 +134,8 @@ public class DefaultDependencyManager implements DependencyManager {
      */
 	@Override
 	public boolean isLoaded(String fullname) {
-		return (dependencies.contains(fullname)) 
-		|| ignorePackages.stream().anyMatch(
-			p -> fullname.startsWith(p + DOT)
-			||   fullname.equals(p)
-		);
+		return dependencies.contains(fullname)
+            || isIgnored(fullname);
 	}
 
     /**

@@ -25,6 +25,7 @@ import com.speedment.codegen.base.DefaultGenerator;
  * @author Emil Forslund
  */
 public class JavaGenerator extends DefaultGenerator {
+    
 	private final static String[] types = new String[] {
 		"void", "byte", "short", "char", "int", "long", "float", 
 		"double", "boolean"
