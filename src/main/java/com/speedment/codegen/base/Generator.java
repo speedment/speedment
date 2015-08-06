@@ -42,15 +42,9 @@ public interface Generator {
      * recent rendered and the bottom one will be the element that was first
      * passed to the generator. Elements are removed from the stack once they
      * have finished rendering.
-     *
+     * <p>
      * If an element needs to access its parent, it can call this method and
      * peek on the second element from the top.
-     *
-     * The elements in the Stack will be of Object type. That is because the
-     * framework doesn't put any constraints on what can be rendered. The
-     * elements should not be cast directly to the model class but rather to an
-     * interface describing the properties you need to read. That way, the
-     * design remains dynamic even if the exact implementation isn't the same.
      *
      * @return  the current rendering stack
      * 

@@ -22,8 +22,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * A generator that can have multiple transform factories. Step-wise generation
- * will be handled by concatenating transform into a <code>BridgeTransform</code>.
+ * The default implementation of the {@link Generator} interface.
  * 
  * @author Emil Forslund
  */
@@ -34,10 +33,11 @@ public class DefaultGenerator implements Generator {
 	private final DefaultRenderStack renderStack;
 	
 	/**
-	 * Creates a new generator. This constructor will use a <code>DefaultDependnecyManager</code>
-     * with no parameters to handle any dependencies.
+	 * Creates a new generator. This constructor will use a 
+     * {@link DefaultDependencyManager} with no parameters to handle any 
+     * dependencies.
      * 
-	 * @param factories The factories to use.
+	 * @param factories  the factories to use
 	 */
 	public DefaultGenerator(TransformFactory... factories) {
 		this(new DefaultDependencyManager(), factories);
@@ -46,8 +46,8 @@ public class DefaultGenerator implements Generator {
 	/**
 	 * Creates a new generator.
      * 
-	 * @param mgr The dependency manager to use.
-	 * @param factories The factories to use. 
+	 * @param mgr        the dependency manager to use
+	 * @param factories  the factories to use 
 	 */
 	public DefaultGenerator(DependencyManager mgr, TransformFactory... factories) {
 		this.factories = Arrays.asList(factories);
@@ -56,7 +56,7 @@ public class DefaultGenerator implements Generator {
 	}
 	
 	/**
-	 * @return the dependency manager.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public DependencyManager getDependencyMgr() {
@@ -64,24 +64,7 @@ public class DefaultGenerator implements Generator {
 	}
 	
 	/**
-	 * Returns the current rendering stack. The top element will be the one most
-	 * recent rendered and the bottom one will be the element that was first
-	 * passed to the generator. Elements are removed from the stack once they
-	 * have finished rendering.
-	 * 
-	 * If an element needs to access its parent, it can call this method and
-	 * peek on the second element from the top.
-	 * 
-	 * The elements in the Stack will be of Object type. That is because the
-	 * framework doesn't put any constraints on what can be rendered.
-	 * The elements should not be cast directly to the model class but rather
-	 * to an interface describing the properties you need to read. That way,
-	 * the design remains dynamic even if the exact implementation isn't the
-	 * same.
-	 * 
-	 * The returned Stack will be immutable.
-	 * 
-	 * @return the current rendering stack.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public RenderStack getRenderStack() {
@@ -89,14 +72,7 @@ public class DefaultGenerator implements Generator {
 	}
 
     /**
-     * Renders the specified model into a stream of code models. This is used
-     * internally to provide the other interface methods.
-     *
-     * @param <A> The input type.
-     * @param <B> The expected output type.
-     * @param from The model to generate.
-     * @param to The model type to transform to.
-     * @return A stream of meta objects.
+     * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -117,15 +93,7 @@ public class DefaultGenerator implements Generator {
     }
 
     /**
-     * Transforms the specified model using the specified transform from the
-     * specified installer.
-     * 
-     * @param <A> The input type.
-     * @param <B> The expected output type.
-     * @param transform The transform to use.
-     * @param model The inputed model.
-     * @param factory The factory used when instantiating the transform.
-     * @return The meta object if successful, else empty.
+     * {@inheritDoc}
      */
     @Override
     public <A, B> Optional<Meta<A, B>> transform(Transform<A, B> transform, A model, TransformFactory factory) {
