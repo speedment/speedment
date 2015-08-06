@@ -19,11 +19,42 @@ package com.speedment.codegen.base;
 import java.util.stream.Stream;
 
 /**
- *
+ * Represents the stack of models currently processed by the generator. For an
+ * example, if a <code>Field</code> is currently being transformed into a String,
+ * the stack might look like this:
+ * <pre>
+ *     File -> Class -> Method -> Field
+ * </pre>
+ * 
  * @author Emil Forslund
+ * @see Generator
  */
 public interface RenderStack {
+    
+    /**
+     * Returns a <code>Stream</code> of all models in the stack of a particular 
+     * type from bottom and up.
+     * 
+     * @param <T>   the type of the models to return
+     * @param type  the type of the models to return
+     * @return      a stream of all models of that type
+     */
     <T> Stream<T> fromBottom(Class<T> type);
+    
+    /**
+     * Returns a <code>Stream</code> of all models in the stack of a particular 
+     * type from top to bottom.
+     * 
+     * @param <T>   the type of the models to return
+     * @param type  the type of the models to return
+     * @return      a stream of all models of that type
+     */
     <T> Stream<T> fromTop(Class<T> type);
+    
+    /**
+     * Returns true if there are no models in the stack.
+     * 
+     * @return  true if the stack is empty
+     */
     boolean isEmpty();
 }
