@@ -41,79 +41,124 @@ public class InterfaceMethodImpl implements InterfaceMethod {
 		this.m = wrapped;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public String getName() {
 		return m.getName();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Type getType() {
 		return m.getType();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<Field> getFields() {
 		return m.getFields();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<String> getCode() {
 		return m.getCode();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Set<Modifier> getModifiers() {
 		return m.getModifiers();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Optional<Javadoc> getJavadoc() {
 		return m.getJavadoc();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<AnnotationUsage> getAnnotations() {
 		return m.getAnnotations();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InterfaceMethod setName(String name) {
         m.setName(name);
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InterfaceMethod set(Type type) {
         m.set(type);
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Generic> getGenerics() {
         return m.getGenerics();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InterfaceMethod set(Javadoc doc) {
         m.set(doc);
         return this;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Type> getExceptions() {
         return m.getExceptions();
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public InterfaceMethodImpl copy() {
 		return new InterfaceMethodImpl(m.copy());
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return m.hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

@@ -46,38 +46,59 @@ public class ImportImpl implements Import {
 		modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Import set(Type type) {
 		this.type = type;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Type getType() {
 		return type;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Set<Modifier> getModifiers() {
 		return this.modifiers;
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<String> getStaticMember() {
         return Optional.ofNullable(staticMember);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Import setStaticMember(String member) {
         staticMember = member;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public ImportImpl copy() {
 		return new ImportImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -86,6 +107,9 @@ public class ImportImpl implements Import {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

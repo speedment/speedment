@@ -33,7 +33,22 @@ import java.util.function.Supplier;
 public interface AnnotationUsage extends Copyable<AnnotationUsage>, 
     HasType<AnnotationUsage>, HasValue<AnnotationUsage> {
     
+    /**
+     * Use the specified key-value pair when referencing the annotation. If you
+     * only want to show a single value without any key, consider using the
+     * {@link #set(com.speedment.codegen.lang.models.Value) set()} method.
+     * 
+     * @param key  the key
+     * @param val  the value
+     * @return     a reference to this model
+     */
     AnnotationUsage put(String key, Value<?> val);
+    
+    /**
+     * Returns a list of all the key-value pairs in this model.
+     * 
+     * @return  all key-value pairs 
+     */
     List<Map.Entry<String, Value<?>>> getValues();
     
     enum Factory { INST;

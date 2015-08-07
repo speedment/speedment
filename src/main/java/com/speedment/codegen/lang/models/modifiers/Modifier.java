@@ -19,10 +19,13 @@ package com.speedment.codegen.lang.models.modifiers;
 import com.speedment.codegen.lang.interfaces.Copyable;
 
 /**
- *
+ * A modifier is a keyword that the programmer can put before a declaration
+ * to configure things like accessibility and lifespan.
+ * 
  * @author Emil Forslund
  */
 public enum Modifier implements Copyable<Modifier> {
+    
 	PUBLIC ("public"),
 	PROTECTED ("protected"),
 	PRIVATE ("private"),
@@ -42,10 +45,18 @@ public enum Modifier implements Copyable<Modifier> {
 		this.name = name;
 	}
 	
+    /**
+     * Returns the name of the modifier.
+     * 
+     * @return the name
+     */
 	public String getName() {
 		return name;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Modifier copy() {
 		return this;

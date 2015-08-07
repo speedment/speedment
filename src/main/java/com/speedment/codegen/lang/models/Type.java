@@ -33,9 +33,45 @@ import java.util.function.Supplier;
 public interface Type extends Copyable<Type>, HasName<Type>, HasGenerics<Type>, 
     HasAnnotationUsage<Type> {
     
+    /**
+     * Sets the java class to reference with this type. The name will also be
+     * set using the {@link java.lang.Class#getSimpleName() Class#getSimpleName()}
+     * method.
+     * 
+     * @param javaImpl  the new implementation
+     * @return          a reference to this model
+     */
     Type setJavaImpl(java.lang.Class<?> javaImpl);
+    
+    /**
+     * Returns the implementation used in this type, or an <code>empty</code>
+     * if no such is defined for this type.
+     * 
+     * @return  the java class or <code>empty</code> 
+     */
     Optional<java.lang.Class<?>> getJavaImpl();
+    
+    /**
+     * Sets the dimension for the array in this type. 
+     * <p>
+     * Here are some examples:
+     * <pre>
+     *     String       → 0
+     *     String[]     → 1
+     *     String[][]   → 2
+     *     String[][][] → 3
+     * </pre>
+     * 
+     * @param arrayDimension  the new array dimension
+     * @return                a reference to this model
+     */
     Type setArrayDimension(int arrayDimension);
+    
+    /**
+     * Returns the array dimension of this type.
+     * 
+     * @return  the array dimension
+     */
     int getArrayDimension();
     
     enum Factory { INST;

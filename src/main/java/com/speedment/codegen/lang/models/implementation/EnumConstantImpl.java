@@ -43,27 +43,42 @@ public class EnumConstantImpl implements EnumConstant {
 		values	= Copier.copy(prototype.getValues(), v -> v.copy());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public EnumConstant setName(String name) {
 		this.name = name;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String getName() {
 		return name;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<Value<?>> getValues() {
 		return values;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public EnumConstantImpl copy() {
 		return new EnumConstantImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -72,6 +87,9 @@ public class EnumConstantImpl implements EnumConstant {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

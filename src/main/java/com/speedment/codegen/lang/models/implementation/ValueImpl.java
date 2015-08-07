@@ -31,31 +31,47 @@ import java.util.Optional;
  * @param <V> The extending type
  */
 public abstract class ValueImpl<V> implements Value<V> {
+    
 	private V value;
 	
 	public ValueImpl(V val) {
 		value = val;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Value<V> setValue(V value) {
 		this.value = value;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public V getValue() {
 		return value;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public abstract ValueImpl<V> copy();
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public int hashCode() {
 		return value.hashCode();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {

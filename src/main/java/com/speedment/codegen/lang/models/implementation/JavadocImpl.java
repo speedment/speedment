@@ -51,21 +51,33 @@ public class JavadocImpl implements Javadoc {
         tags = Copier.copy(prototype.getTags());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getRows() {
         return rows;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<JavadocTag> getTags() {
         return tags;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JavadocImpl copy() {
         return new JavadocImpl(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -74,6 +86,9 @@ public class JavadocImpl implements Javadoc {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

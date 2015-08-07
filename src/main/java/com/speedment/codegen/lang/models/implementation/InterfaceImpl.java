@@ -31,6 +31,9 @@ public class InterfaceImpl extends ClassOrInterfaceImpl<Interface> implements In
 		super (prototype);
     }
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public InterfaceImpl copy() {
 		return new InterfaceImpl(this);

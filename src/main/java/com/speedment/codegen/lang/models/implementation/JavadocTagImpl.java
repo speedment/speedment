@@ -53,44 +53,68 @@ public class JavadocTagImpl implements JavadocTag {
 		this.text  = prototype.getText().orElse(null);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Optional<String> getValue() {
 		return Optional.ofNullable(value);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public JavadocTag setValue(String value) {
 		this.value = value;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Optional<String> getText() {
 		return Optional.ofNullable(text);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public JavadocTag setText(String text) {
 		this.text = text;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public JavadocTag setName(String name) {
 		this.name = name;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String getName() {
 		return name;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public JavadocTagImpl copy() {
 		return new JavadocTagImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -100,6 +124,9 @@ public class JavadocTagImpl implements JavadocTag {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
@@ -113,7 +140,8 @@ public class JavadocTagImpl implements JavadocTag {
     }
 	
 	public final static class JavadocTagConst extends JavadocTagImpl {
-		public JavadocTagConst(String name) {
+		
+        public JavadocTagConst(String name) {
 			super(name);
 		}
 
@@ -125,21 +153,33 @@ public class JavadocTagImpl implements JavadocTag {
 			super(name, value, text);
 		}
 		
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public JavadocTag setValue(String value) {
 			return copy().setValue(value);
 		}
 		
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public JavadocTag setText(String text) {
 			return copy().setText(text);
 		}
 
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public JavadocTag setName(String name) {
 			return copy().setName(name);
 		}
 		
+        /**
+         * {@inheritDoc}
+         */
 		@Override
 		public JavadocTagImpl copy() {
 			return new JavadocTagImpl(this);

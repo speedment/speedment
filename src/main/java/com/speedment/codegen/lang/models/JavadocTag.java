@@ -32,9 +32,54 @@ import java.util.function.Supplier;
 public interface JavadocTag extends Copyable<JavadocTag>, HasName<JavadocTag>, 
     Callable<JavadocTag> {
     
+    /**
+     * Sets the value of this javadoc tag. In the following examples, the value
+     * is the "foo" part:
+     * <pre>
+     *     &#64;param foo bar
+     *     &#64;return foo
+     * </pre>
+     * 
+     * @param value  the new value
+     * @return       a reference to this model
+     */
     JavadocTag setValue(String value);
+    
+    /**
+     * Returns the value of this javadoc tag. In the following examples, the 
+     * value is the "foo" part:
+     * <pre>
+     *     &#64;param foo bar
+     *     &#64;return foo
+     * </pre>
+
+     * @return  the value part of the tag or <code>empty</code> if none exists
+     */
     Optional<String> getValue();
+    
+    /**
+     * Sets the text of this javadoc tag. In the following examples, the text
+     * is the "bar" part:
+     * <pre>
+     *     &#64;param foo bar
+     *     &#64;return foo
+     * </pre>
+     * 
+     * @param text  the new text
+     * @return      a reference to this model
+     */
     JavadocTag setText(String text);
+    
+    /**
+     * Returns the text of this javadoc tag. In the following examples, the 
+     * text is the "bar" part:
+     * <pre>
+     *     &#64;param foo bar
+     *     &#64;return foo
+     * </pre>
+
+     * @return  the text part of the tag or <code>empty</code> if none exists
+     */
 	Optional<String> getText();
     
     enum Factory { INST;

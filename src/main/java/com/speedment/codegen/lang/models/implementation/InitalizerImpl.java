@@ -45,21 +45,33 @@ public class InitalizerImpl implements Initalizer {
         modifiers = Copier.copy(prototype.getModifiers(), c -> c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getCode() {
         return code;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InitalizerImpl copy() {
         return new InitalizerImpl(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -68,6 +80,9 @@ public class InitalizerImpl implements Initalizer {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

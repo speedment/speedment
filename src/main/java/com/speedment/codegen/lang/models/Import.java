@@ -31,7 +31,21 @@ import java.util.function.Supplier;
 public interface Import extends Copyable<Import>, HasType<Import>, 
     ImportModifier<Import> {
     
+    /**
+     * Returns any static member referenced in this import. For non-static
+     * imports, this value will be empty.
+     * 
+     * @return  the static member referenced
+     */
     Optional<String> getStaticMember();
+    
+    /**
+     * Sets the static member referenced by this import. Remember to also set
+     * the modifier to static using the {@link #static_()} method!
+     * 
+     * @param member  the new static member to reference
+     * @return        a reference to this model
+     */
     Import setStaticMember(String member);
 
     enum Factory { INST;

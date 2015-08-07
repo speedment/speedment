@@ -17,6 +17,7 @@
 package com.speedment.codegen.lang.models;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
+import com.speedment.codegen.lang.models.constants.DefaultType;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import java.util.List;
 import java.util.Optional;
@@ -30,19 +31,108 @@ import java.util.function.Supplier;
  */
 public interface Generic extends Copyable<Generic> {
     
+    /**
+     * Represents the bound type of this generic. If the generic is bound
+     * using the <code>extends</code> keyword it means that the lower bound
+     * is a descendant of the upper bound. If the <code>super</code> keyword
+     * is used it means that the lower bound is an ancestor of the upper bound.
+     * Both bound types also accept identical types.
+     */
     public static enum BoundType {EXTENDS, SUPER};
     
+    /**
+     * Sets the lower bound of this generic.
+     * <p>
+     * In the following example, <code>T</code> is the lower bound:
+     * <pre>
+     *     T extends List&lt;String&gt;
+     * </pre>
+     * <p>
+     * If the lower bound is anonymous, the special type 
+     * {@link DefaultType#WILDCARD} can be used.
+     * 
+     * @param lowerBound  the new lower bound
+     * @return            a reference to this model
+     */
     Generic setLowerBound(String lowerBound);
+    
+    /**
+     * Returns the lower bound of this generic if it exists.
+     * <p>
+     * In the following example, <code>T</code> is the lower bound:
+     * <pre>
+     *     T extends List&lt;String&gt;
+     * </pre>
+     * <p>
+     * If the lower bound is anonymous, the special type 
+     * {@link DefaultType#WILDCARD} can be used.
+     * 
+     * @return  the lower bound if such exists
+     */
 	Optional<String> getLowerBound();
 
+    /**
+     * Adds an upper bound to this generic.
+     * <p>
+     * In the following example, <code>List&lt;String&gt;</code> and 
+     * <code>Serializable</code> are upper bounds:
+     * <pre>
+     *     T extends List&lt;String&gt;&Serializable
+     * </pre>
+     * 
+     * @param upperBound  the new upper bound
+     * @return            a reference to this model
+     */
     default Generic add(Type upperBound) {
 		getUpperBounds().add(upperBound);
 		return this;
 	}
     
+    /**
+     * Returns a modifiable list of all upper bounds to this generic.
+     * <p>
+     * In the following example, <code>List&lt;String&gt;</code> and 
+     * <code>Serializable</code> are upper bounds:
+     * <pre>
+     *     T extends List&lt;String&gt;&Serializable
+     * </pre>
+     * 
+     * @return  the list of upper bounds
+     */
     List<Type> getUpperBounds();
+    
+    /**
+     * Sets the bound type of this generic. If the generic is bound
+     * using the <code>extends</code> keyword it means that the lower bound
+     * is a descendant of the upper bound. If the <code>super</code> keyword
+     * is used it means that the lower bound is an ancestor of the upper bound.
+     * Both bound types also accept identical types.
+     * <p>
+     * Valid input:
+     * <ul>
+     *     <li>{@link BoundType#EXTENDS}
+     *     <li>{@link BoundType#SUPER}
+     * </ul>
+     * 
+     * @param type  the new bound type
+     * @return      a reference to this model
+     */
 	Generic setBoundType(BoundType type);
+    
+    /**
+     * Returns the current bound type of this generic. Note that the bound type
+     * is irrelevant when there are no upper bounds!
+     * 
+     * @return  the bound type
+     */
 	BoundType getBoundType();
+    
+    /**
+     * Parses a {@link Type} from the lower bound of this generic. This can be
+     * used to reference the generic variable from other contexts.
+     * 
+     * @return  a {@link Type} representing this generic variable
+     */
 	Optional<Type> asType();
     
     enum Factory { INST;

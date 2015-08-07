@@ -62,47 +62,74 @@ public class ConstructorImpl implements Constructor {
         exceptions  = Copier.copy(prototype.getExceptions());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<Field> getFields() {
 		return params;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<String> getCode() {
 		return code;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Set<Modifier> getModifiers() {
 		return modifiers;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Constructor set(Javadoc doc) {
 		javadoc = doc;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Optional<Javadoc> getJavadoc() {
 		return Optional.ofNullable(javadoc);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<AnnotationUsage> getAnnotations() {
 		return annotations;
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Type> getExceptions() {
         return exceptions;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public ConstructorImpl copy() {
 		return new ConstructorImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -114,6 +141,9 @@ public class ConstructorImpl implements Constructor {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

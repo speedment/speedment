@@ -52,27 +52,42 @@ public class ClassImpl extends ClassOrInterfaceImpl<Class> implements Class {
 		this.constructors = Copier.copy(prototype.getConstructors());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Class setSupertype(Type superType) {
 		this.superType = superType;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Optional<Type> getSupertype() {
 		return Optional.ofNullable(superType);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<Constructor> getConstructors() {
 		return constructors;
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public ClassImpl copy() {
 		return new ClassImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -81,6 +96,9 @@ public class ClassImpl extends ClassOrInterfaceImpl<Class> implements Class {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

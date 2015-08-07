@@ -30,11 +30,23 @@ import java.util.function.Supplier;
  */
 public interface EnumConstant extends Copyable<EnumConstant>, HasName<EnumConstant> {
     
+    /**
+     * Adds the specified construction parameter to this constant.
+     * 
+     * @param value  the construction parameter
+     * @return       a reference to this model
+     */
     default EnumConstant add(Value<?> value) {
         getValues().add(value);
         return this;
     }
     
+    /**
+     * Returns a modifiable list of all the construction parameters used when
+     * instantiating this enum constant.
+     * 
+     * @return  all construction parameters 
+     */
     List<Value<?>> getValues();
     
     enum Factory { INST;

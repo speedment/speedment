@@ -22,6 +22,7 @@ import com.speedment.codegen.lang.interfaces.HasJavadocTags;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import java.util.Collections;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 /**
@@ -33,17 +34,35 @@ import java.util.function.Supplier;
 public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>, 
     HasJavadocTags<Javadoc> {
     
+    /**
+     * Adds the specified row of documentation to this block.
+     * 
+     * @param row  the new row
+     * @return     a reference to this model
+     */
     default Javadoc add(String row) {
-		getRows().add(row);
+		getRows().add(requireNonNull(row));
 		return this;
 	}
 	
+    /**
+     * Adds multiple rows of documentation to this block.
+     * 
+     * @param first  the first row
+     * @param rows   the following rows
+     * @return       a reference to this model
+     */
 	default Javadoc add(String first, String... rows) {
-		getRows().add(first);
-		Collections.addAll(getRows(), rows);
+		getRows().add(requireNonNull(first));
+		Collections.addAll(getRows(), requireNonNull(rows));
 		return this;
 	}
 
+    /**
+     * Returns a modifiable list of documentation text rows.
+     * 
+     * @return  the rows of documentation
+     */
     List<String> getRows();
     
     enum Factory { INST;

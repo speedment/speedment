@@ -59,33 +59,51 @@ public class GenericImpl implements Generic {
 		upperBounds = Copier.copy(prototype.getUpperBounds());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Generic setLowerBound(String lowerBound) {
 		this.lowerBound = lowerBound;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Optional<String> getLowerBound() {
 		return Optional.ofNullable(lowerBound);
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Generic setBoundType(BoundType type) {
 		this.type = type;
 		return this;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public BoundType getBoundType() {
 		return type;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<Type> getUpperBounds() {
 		return upperBounds;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public Optional<Type> asType() {
 		return (lowerBound == null ? 
@@ -94,11 +112,17 @@ public class GenericImpl implements Generic {
         );
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public GenericImpl copy() {
 		return new GenericImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -108,6 +132,9 @@ public class GenericImpl implements Generic {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

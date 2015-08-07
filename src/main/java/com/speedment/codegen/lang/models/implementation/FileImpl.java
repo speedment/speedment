@@ -16,7 +16,6 @@
  */
 package com.speedment.codegen.lang.models.implementation;
 
-import com.speedment.codegen.java.views.interfaces.HasJavadocView;
 import com.speedment.codegen.lang.models.ClassOrInterface;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
@@ -52,43 +51,67 @@ public class FileImpl implements File {
 		this.classes = Copier.copy(prototype.getClasses(), c -> c.copy());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public File setName(String name) {
 		this.name = name;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public File set(Javadoc doc) {
 		this.doc = doc;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Optional<Javadoc> getJavadoc() {
 		return Optional.ofNullable(doc);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<Import> getImports() {
 		return imports;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<ClassOrInterface<?>> getClasses() {
 		return classes;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public FileImpl copy() {
 		return new FileImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -99,6 +122,9 @@ public class FileImpl implements File {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {

@@ -26,6 +26,18 @@ import com.speedment.codegen.lang.interfaces.Copyable;
  */
 public interface Value<V> extends Copyable<Value<V>> {
     
+    /**
+     * Sets the inner value of this.
+     * 
+     * @param value  the new value
+     * @return       a reference to this model
+     */
     Value<V> setValue(V value);
+    
+    /**
+     * Returns the inner value of this model.
+     * 
+     * @return  the inner value 
+     */
 	V getValue();
 }

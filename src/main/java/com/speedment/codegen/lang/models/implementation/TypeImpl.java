@@ -21,7 +21,6 @@ import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,22 +61,34 @@ public class TypeImpl implements Type {
         javaImpl = prototype.getJavaImpl().orElse(null);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Type setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<java.lang.Class<?>> getJavaImpl() {
         return Optional.ofNullable(javaImpl);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Type setJavaImpl(java.lang.Class<?> javaImpl) {
         this.javaImpl = javaImpl;
@@ -85,32 +96,50 @@ public class TypeImpl implements Type {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getArrayDimension() {
         return arrayDimension;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Type setArrayDimension(int arrayDimension) {
         this.arrayDimension = arrayDimension;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Generic> getGenerics() {
         return generics;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AnnotationUsage> getAnnotations() {
         return annotations;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeImpl copy() {
         return new TypeImpl(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
@@ -125,6 +154,9 @@ public class TypeImpl implements Type {
             .isPresent();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public int hashCode() {
 		int hash = 7;
@@ -150,26 +182,41 @@ public class TypeImpl implements Type {
             super(name, javaImpl);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Type setArrayDimension(int arrayDimension) {
             return copy().setArrayDimension(arrayDimension);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Type setJavaImpl(java.lang.Class<?> javaImpl) {
             return copy().setJavaImpl(javaImpl);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Type setName(String name) {
             return copy().setName(name);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Type add(AnnotationUsage annotation) {
             return copy().add(annotation);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Type add(Generic generic) {
             return copy().add(generic);

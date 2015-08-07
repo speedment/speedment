@@ -59,44 +59,68 @@ public class AnnotationUsageImpl implements AnnotationUsage {
 		);
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public AnnotationUsage set(Value<?> val) {
 		value = val;
 		return this;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public AnnotationUsage put(String key, Value<?> val) {
 		values.add(new AbstractMap.SimpleEntry<>(key, val));
 		return this;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Optional<Value<?>> getValue() {
 		return Optional.ofNullable(value);
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<Entry<String, Value<?>>> getValues() {
 		return values;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public AnnotationUsage set(Type type) {
 		this.type = type;
 		return this;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Type getType() {
 		return type;
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public AnnotationUsageImpl copy() {
 		return new AnnotationUsageImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -106,6 +130,9 @@ public class AnnotationUsageImpl implements AnnotationUsage {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
@@ -119,6 +146,7 @@ public class AnnotationUsageImpl implements AnnotationUsage {
     }
 	
 	public final static class AnnotationUsageConst extends AnnotationUsageImpl {
+        
 		public AnnotationUsageConst(Type type) { 
 			super(type); 
 		}
@@ -127,16 +155,25 @@ public class AnnotationUsageImpl implements AnnotationUsage {
 			super(type, value); 
 		}
 
+        /**
+        * {@inheritDoc}
+        */
 		@Override
 		public AnnotationUsage set(Value<?> val) {
 			return copy().set(val);
 		}
 		
+        /**
+        * {@inheritDoc}
+        */
 		@Override
 		public AnnotationUsage put(String key, Value<?> val) {
 			return copy().put(key, val);
 		}
 
+        /**
+        * {@inheritDoc}
+        */
 		@Override
 		public AnnotationUsage set(Type type) {
 			return copy().set(type);

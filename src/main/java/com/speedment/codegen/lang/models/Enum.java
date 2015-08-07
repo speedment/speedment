@@ -20,6 +20,7 @@ import com.speedment.codegen.lang.interfaces.HasConstructors;
 import com.speedment.codegen.lang.models.implementation.EnumImpl;
 import com.speedment.codegen.lang.models.modifiers.EnumModifier;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 /**
@@ -31,11 +32,22 @@ import java.util.function.Supplier;
 public interface Enum extends ClassOrInterface<Enum>, EnumModifier<Enum>, 
     HasConstructors<Enum> {
 
+    /**
+     * Adds the specified constant to this enum. The constant must not be null.
+     * 
+     * @param constant  the constant
+     * @return          a reference to this model
+     */
     default Enum add(EnumConstant constant) {
-		getConstants().add(constant);
+		getConstants().add(requireNonNull(constant));
 		return this;
 	}
 	
+    /**
+     * Returns a modifiable list of all the constants in this enum.
+     * 
+     * @return  a list of constants 
+     */
 	List<EnumConstant> getConstants();
     
     enum Factory { INST;

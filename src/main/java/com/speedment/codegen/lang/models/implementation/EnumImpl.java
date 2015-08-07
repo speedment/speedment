@@ -46,21 +46,33 @@ public class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
 		constructors = Copier.copy(prototype.getConstructors());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
 	public List<EnumConstant> getConstants() {
 		return constants;
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<Constructor> getConstructors() {
 		return constructors;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public EnumImpl copy() {
 		return new EnumImpl(this);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -69,6 +81,9 @@ public class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
         return hash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
