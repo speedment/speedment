@@ -31,15 +31,31 @@ import java.util.function.Supplier;
 public interface Initalizer extends Copyable<Initalizer>, Callable<Initalizer>, 
 HasCode<Initalizer>, InitalizerModifier<Initalizer> {
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Initalizer> supplier = () -> new InitalizerImpl();
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return      the new instance
+     */
     static Initalizer of() {
         return Factory.INST.supplier.get();
     }
-    
-    static void setSupplier(Supplier<Initalizer> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Initalizer> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

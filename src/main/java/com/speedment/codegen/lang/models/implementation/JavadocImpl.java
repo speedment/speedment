@@ -27,25 +27,50 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link Javadoc} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link Javadoc#of()} method to get an instance. In that way, you can layer 
+ * change the implementing class without modifying the using code.
+ * 
  * @author Emil Forslund
+ * @see    Javadoc
  */
 public class JavadocImpl implements Javadoc {
 
     private final List<String> rows;
     private final List<JavadocTag> tags;
 
+    /**
+     * Initialises this javadoc block.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Javadoc#of()} method!
+     */
     public JavadocImpl() {
         rows = new ArrayList<>();
         tags = new ArrayList<>();
     }
 
+    /**
+     * Initialises this javadoc block using a text. The text may have multiple
+     * lines separated by new-line characters.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Javadoc#of(java.lang.String)} method!
+     * 
+     * @param text  the text
+     */
     public JavadocImpl(final String text) {
         final String formattedText = TextUtil.formatJavaDocBox(text);
         rows = Arrays.asList(formattedText.split("\n"));
         tags = new ArrayList<>();
     }
 
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype the prototype
+     */
     protected JavadocImpl(final Javadoc prototype) {
         rows = Copier.copy(prototype.getRows(), s -> s);
         tags = Copier.copy(prototype.getTags());

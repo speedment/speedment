@@ -26,8 +26,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link Type} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link Type#of(java.lang.Class)} method to get an instance. In that 
+ * way, you can layer change the implementing class without modifying the using 
+ * code.
+ * 
  * @author Emil Forslund
+ * @see    Type
  */
 public class TypeImpl implements Type {
 
@@ -37,14 +43,39 @@ public class TypeImpl implements Type {
     private final List<Generic> generics;
     private java.lang.Class<?> javaImpl;
 
+    /**
+     * Initialises this type using a java class.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using the
+     * {@link Type#of(java.lang.Class)} method!
+     * 
+     * @param javaImpl  the java class to use
+     */
     public TypeImpl(java.lang.Class<?> javaImpl) {
         this(javaImpl.getName(), javaImpl);
     }
 
+    /**
+     * Initialises this type using an absolute type name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using the
+     * {@link Type#of(java.lang.String)} method!
+     * 
+     * @param name  the type name
+     */
     public TypeImpl(String name) {
         this(name, null);
     }
 
+    /**
+     * Initialises this type using both a java class and an absolute type name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using the
+     * {@link Type#of(java.lang.Class)} method!
+     * 
+     * @param name      the type name
+     * @param javaImpl  the type name
+     */
     public TypeImpl(String name, java.lang.Class<?> javaImpl) {
         this.name = name;
         this.arrayDimension = 0;
@@ -53,6 +84,11 @@ public class TypeImpl implements Type {
         this.javaImpl = javaImpl;
     }
 
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
     protected TypeImpl(Type prototype) {
         name = prototype.getName();
         arrayDimension = prototype.getArrayDimension();

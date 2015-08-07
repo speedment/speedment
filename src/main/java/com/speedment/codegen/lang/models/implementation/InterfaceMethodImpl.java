@@ -37,6 +37,11 @@ public class InterfaceMethodImpl implements InterfaceMethod {
 	
     private final Method m;
 	
+    /**
+     * Wraps the specified method.
+     * 
+     * @param wrapped  the inner method
+     */
 	public InterfaceMethodImpl(Method wrapped) {
 		this.m = wrapped;
 	}

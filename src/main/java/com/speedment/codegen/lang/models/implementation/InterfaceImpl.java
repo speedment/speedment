@@ -19,14 +19,29 @@ package com.speedment.codegen.lang.models.implementation;
 import com.speedment.codegen.lang.models.Interface;
 
 /**
- *
+ * The default implementation of the wrapper for the {@link Method} interface.
+ * 
  * @author Emil Forslund
  */
 public class InterfaceImpl extends ClassOrInterfaceImpl<Interface> implements Interface {
+    
+    /**
+     * Initialises this interface using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Interface#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
     public InterfaceImpl(String name) {
 		super (name);
     }
 	
+    /**
+     * Copy constructor
+     * 
+     * @param prototype  the prototype
+     */
 	protected InterfaceImpl(Interface prototype) {
 		super (prototype);
     }

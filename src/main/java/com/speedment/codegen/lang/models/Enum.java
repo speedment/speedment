@@ -50,15 +50,32 @@ public interface Enum extends ClassOrInterface<Enum>, EnumModifier<Enum>,
      */
 	List<EnumConstant> getConstants();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Enum> supplier = () -> new EnumImpl(null);
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @return      the new instance
+     */
     static Enum of(String name) {
         return Factory.INST.supplier.get().setName(name);
     }
-    
-    static void setSupplier(Supplier<Enum> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Enum> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

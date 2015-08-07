@@ -27,8 +27,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link File} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link File#of(java.lang.String)} method to get an instance. In that way, 
+ * you can layer change the implementing class without modifying the using code.
+ * 
  * @author Emil Forslund
+ * @see    File
  */
 public class FileImpl implements File {
 	

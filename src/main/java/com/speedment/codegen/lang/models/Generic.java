@@ -135,15 +135,31 @@ public interface Generic extends Copyable<Generic> {
      */
 	Optional<Type> asType();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Generic> supplier = () -> new GenericImpl();
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return      the new instance
+     */
     static Generic of() {
         return Factory.INST.supplier.get();
     }
-    
-    static void setSupplier(Supplier<Generic> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Generic> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

@@ -21,32 +21,72 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link JavadocTag} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link JavadocTag#of(java.lang.String)} method to get an instance. In that 
+ * way, you can layer change the implementing class without modifying the using 
+ * code.
+ * 
  * @author Emil Forslund
+ * @see    JavadocTag
  */
 public class JavadocTagImpl implements JavadocTag {
+    
 	private String name;
 	private String value;
 	private String text;
 	
+    /**
+     * Initialises this javadoc tag using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link JavadocTag#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
 	public JavadocTagImpl(String name) {
 		this.name  = name;
 		this.value = null;
 		this.text  = null;
 	}
 	
+    /**
+     * Initialises this javadoc tag using a name and a text.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link JavadocTag#of(java.lang.String, java.lang.String)} method!
+     * 
+     * @param name  the name
+     * @param text  the text
+     */
 	public JavadocTagImpl(String name, String text) {
 		this.name  = name;
 		this.value = null;
 		this.text  = text;
     }
 	
+    /**
+     * Initialises this javadoc tag using a name, a value and a text.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link JavadocTag#of(java.lang.String, java.lang.String, java.lang.String)} 
+     * method!
+     * 
+     * @param name   the name
+     * @param value  the value
+     * @param text   the text
+     */
 	public JavadocTagImpl(String name, String value, String text) {
 		this.name  = name;
 		this.value = value;
 		this.text  = text;
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected JavadocTagImpl(JavadocTag prototype) {
 		this.name  = prototype.getName();
 		this.value = prototype.getValue().orElse(null);

@@ -82,23 +82,59 @@ public interface JavadocTag extends Copyable<JavadocTag>, HasName<JavadocTag>,
      */
 	Optional<String> getText();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<JavadocTag> supplier = () -> new JavadocTagImpl(null);
     }
-
+    
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @return      the new instance
+     */
     static JavadocTag of(String name) {
         return Factory.INST.supplier.get().setName(name);
     }
-    
+        
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @param text  the text
+     * @return      the new instance
+     */
     static JavadocTag of(String name, String text) {
         return Factory.INST.supplier.get().setName(name).setText(text);
     }
     
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name   the name
+     * @param value  the value
+     * @param text   the text
+     * @return       the new instance
+     */
     static JavadocTag of(String name, String value, String text) {
         return Factory.INST.supplier.get().setName(name).setValue(value).setText(text);
     }
-    
-    static void setSupplier(Supplier<JavadocTag> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<JavadocTag> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

@@ -26,7 +26,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * The default implementation of the {@link Value} interface.
+ * 
  * @author Emil Forslund
  * @param <V> The extending type
  */
@@ -34,6 +35,11 @@ public abstract class ValueImpl<V> implements Value<V> {
     
 	private V value;
 	
+    /**
+     * Initialises this value.
+     * 
+     * @param val  the inner value
+     */
 	public ValueImpl(V val) {
 		value = val;
 	}

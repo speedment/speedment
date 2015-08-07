@@ -41,6 +41,13 @@ public interface InterfaceMethod extends HasName<InterfaceMethod>,
     HasAnnotationUsage<InterfaceMethod>, HasCode<InterfaceMethod>, 
     InterfaceMethodModifier<InterfaceMethod>, Copyable<InterfaceMethod> {
 
+    /**
+     * Creates a new instance implementing this interface by wrapping an existing
+     * {@link Method} in an {@link InterfaceMethodImpl}.
+     * 
+     * @param wrapped  the wrapped method
+     * @return         the new instance
+     */
     static InterfaceMethod of(Method wrapped) {
         return new InterfaceMethodImpl(wrapped);
     }

@@ -51,15 +51,32 @@ public interface AnnotationUsage extends Copyable<AnnotationUsage>,
      */
     List<Map.Entry<String, Value<?>>> getValues();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<AnnotationUsage> supplier = () -> new AnnotationUsageImpl(null);
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param type  the type
+     * @return      the new instance
+     */
     static AnnotationUsage of(Type type) {
         return Factory.INST.supplier.get().set(type);
     }
-    
-    static void setSupplier(Supplier<AnnotationUsage> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<AnnotationUsage> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

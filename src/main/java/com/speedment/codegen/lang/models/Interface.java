@@ -29,15 +29,32 @@ import java.util.function.Supplier;
  */
 public interface Interface extends ClassOrInterface<Interface>, InterfaceModifier<Interface> {
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Interface> supplier = () -> new InterfaceImpl(null);
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @return      the new instance
+     */
     static Interface of(String name) {
         return Factory.INST.supplier.get().setName(name);
     }
-    
-    static void setSupplier(Supplier<Interface> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Interface> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

@@ -65,23 +65,56 @@ public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>,
      */
     List<String> getRows();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Javadoc> prototype = () -> new JavadocImpl();
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return      the new instance
+     */
     static Javadoc of() {
         return Factory.INST.prototype.get();
     }
     
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param row  the documentation row
+     * @return     the new instance
+     */
     static Javadoc of(String row) {
         return Factory.INST.prototype.get().add(row);
     }
     
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param row   the first documentation row
+     * @param rows  the following documentation rows
+     * @return      the new instance
+     */
     static Javadoc of(String row, String... rows) {
         return Factory.INST.prototype.get().add(row, rows);
     }
-    
-    static void setSupplier(Supplier<Javadoc> a) {
-        Factory.INST.prototype = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Javadoc> supplier) {
+        Factory.INST.prototype = supplier;
     }
 }

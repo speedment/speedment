@@ -31,8 +31,14 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * This is the default implementation of the {@link Annotation} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link Annotation#of(java.lang.String)} method to get an instance. In that
+ * way, you can layer change the implementing class without modifying the using
+ * code.
+ * 
  * @author Emil Forslund
+ * @see    Annotation
  */
 public class AnnotationImpl implements Annotation {
 	

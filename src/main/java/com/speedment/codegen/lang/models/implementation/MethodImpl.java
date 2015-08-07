@@ -33,8 +33,14 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * This is the default implementation of the {@link Method} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link Method#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
+ * method to get an instance. In that way, you can layer change the implementing 
+ * class without modifying the using code.
+ * 
  * @author Emil Forslund
+ * @see    Method
  */
 public class MethodImpl implements Method {
 	
@@ -48,6 +54,16 @@ public class MethodImpl implements Method {
 	private final Set<Modifier> modifiers;
     private final Set<Type> exceptions;
 	
+    /**
+     * Initialises this method using a name and a type.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Method#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
+     * method!
+     * 
+     * @param name  the name
+     * @param type  the type
+     */
 	public MethodImpl(String name, Type type) {
 		this.name			= name;
 		this.type			= type;
@@ -60,6 +76,11 @@ public class MethodImpl implements Method {
         this.exceptions     = new HashSet<>();
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected MethodImpl(final Method prototype) {
 		name		= prototype.getName();
 		type		= Copier.copy(prototype.getType());

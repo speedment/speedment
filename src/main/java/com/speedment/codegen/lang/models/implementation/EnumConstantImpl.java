@@ -25,8 +25,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link EnumConstant} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link EnumConstant#of(java.lang.String)} method to get an instance. In that way, 
+ * you can layer change the implementing class without modifying the using code.
+ * 
  * @author Emil Forslund
+ * @see    EnumConstant
  */
 public class EnumConstantImpl implements EnumConstant {
 	

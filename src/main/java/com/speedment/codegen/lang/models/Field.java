@@ -37,15 +37,33 @@ public interface Field extends Copyable<Field>, Callable<Field>, HasName<Field>,
     HasType<Field>, HasJavadoc<Field>, HasValue<Field>, HasAnnotationUsage<Field>, 
     FieldModifier<Field> {
 
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Field> supplier = () -> new FieldImpl(null, null);
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @param type  the type
+     * @return      the new instance
+     */
     static Field of(String name, Type type) {
         return Factory.INST.supplier.get().setName(name).set(type);
     }
-    
-    static void setSupplier(Supplier<Field> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Field> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

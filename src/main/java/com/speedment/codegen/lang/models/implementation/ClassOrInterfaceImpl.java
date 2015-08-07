@@ -34,7 +34,9 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * This is the abstract base implementation used by the classes {@link ClassImpl},
+ * {@link EnumImpl} and {@link InterfaceImpl} to share functionality.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */

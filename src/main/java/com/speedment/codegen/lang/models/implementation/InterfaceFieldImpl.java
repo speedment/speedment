@@ -29,12 +29,19 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * The default implementation of the wrapper for the {@link Field} interface.
+ * 
  * @author Emil Forslund
  */
 public class InterfaceFieldImpl implements InterfaceField {
+    
 	private final Field f;
 	
+    /**
+     * Wraps the specified field.
+     * 
+     * @param wrapped  the inner field
+     */
 	public InterfaceFieldImpl(Field wrapped) {
 		f = wrapped;
 	}

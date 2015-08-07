@@ -26,8 +26,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
+ * This is the default implementation of the {@link Class} interface.
+ * This class should not be instantiated directly. Instead you should call the
+ * {@link Class#of(java.lang.String)} method to get an instance. In that way, 
+ * you can layer change the implementing class without modifying the using code.
+ * 
  * @author Emil Forslund
+ * @see    Class
  */
 public class ClassImpl extends ClassOrInterfaceImpl<Class> implements Class {
 

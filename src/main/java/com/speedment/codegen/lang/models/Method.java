@@ -39,15 +39,33 @@ public interface Method extends HasName<Method>, HasType<Method>, HasThrows<Meth
     HasGenerics<Method>, HasFields<Method>, HasJavadoc<Method>, HasAnnotationUsage<Method>, 
     HasCode<Method>, Callable<Method>, MethodModifier<Method>, Copyable<Method> {
 
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Method> supplier = () -> new MethodImpl(null, null);
     }
-
+    
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the name
+     * @param type  the type
+     * @return      the new instance
+     */
     static Method of(String name, Type type) {
         return Factory.INST.supplier.get().setName(name).set(type);
     }
-    
-    static void setSupplier(Supplier<Method> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Method> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }

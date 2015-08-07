@@ -74,19 +74,44 @@ public interface Type extends Copyable<Type>, HasName<Type>, HasGenerics<Type>,
      */
     int getArrayDimension();
     
+    /**
+     * Factory holder.
+     */
     enum Factory { INST;
         private Supplier<Type> supplier = () -> new TypeImpl("");
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param name  the type name
+     * @return      the new instance
+     */
     static Type of(String name) {
         return Factory.INST.supplier.get().setName(name);
     }
-    
+
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * 
+     * @param clazz  the java implementation
+     * @return       the new instance
+     */
     static Type of(java.lang.Class<?> clazz) {
         return Factory.INST.supplier.get().setJavaImpl(clazz);
     }
-    
-    static void setSupplier(Supplier<Type> a) {
-        Factory.INST.supplier = a;
+        
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param supplier  the new constructor 
+     */
+    static void setSupplier(Supplier<Type> supplier) {
+        Factory.INST.supplier = supplier;
     }
 }
