@@ -39,12 +39,25 @@ public class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
 	private final List<EnumConstant> constants;
 	private final List<Constructor> constructors;
 	
+    /**
+     * Initialises this enum using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Enum#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
 	public EnumImpl(String name) {
 		super(name);
 		constants    = new ArrayList<>();
 		constructors = new ArrayList<>();
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected EnumImpl(Enum prototype) {
 		super (prototype);
 		constants    = Copier.copy(prototype.getConstants());

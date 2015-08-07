@@ -43,18 +43,26 @@ public class AnnotationUsageImpl implements AnnotationUsage {
 	private Value<?> value;
 	private final List<Entry<String, Value<?>>> values;
 	
+    /**
+     * Initialises this annotation usage using a type.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link AnnotationUsage#of(com.speedment.codegen.lang.models.Type)} 
+     * method!
+     * 
+     * @param type  the type
+     */
 	public AnnotationUsageImpl(Type type) {
 		this.type	= type;
 		this.value	= null;
 		this.values = new ArrayList<>();
 	}
-    
-    public AnnotationUsageImpl(Type type, Value<?> value) {
-		this.type	= type;
-		this.value	= value;
-		this.values = new ArrayList<>();
-	}
-	
+
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected AnnotationUsageImpl(AnnotationUsage prototype) {
 		type   = prototype.getType();
 		value  = prototype.getValue().map(Copier::copy).orElse(null);
@@ -155,10 +163,6 @@ public class AnnotationUsageImpl implements AnnotationUsage {
         
 		public AnnotationUsageConst(Type type) { 
 			super(type); 
-		}
-        
-        public AnnotationUsageConst(Type type, Value<?> value) { 
-			super(type, value); 
 		}
 
         /**

@@ -41,12 +41,25 @@ public class ImportImpl implements Import {
     private String staticMember;
 	private final Set<Modifier> modifiers;
 
+    /**
+     * Initialises this import using a type.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Import#of(com.speedment.codegen.lang.models.Type)} method!
+
+     * @param type  the type
+     */
 	public ImportImpl(Type type) {
 		this.type = type;
         this.staticMember = null;
 		this.modifiers = EnumSet.noneOf(Modifier.class);
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected ImportImpl(Import prototype) {
 		type = Copier.copy(prototype.getType());
 		modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));

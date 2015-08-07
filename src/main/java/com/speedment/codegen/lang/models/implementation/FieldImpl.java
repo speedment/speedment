@@ -49,6 +49,16 @@ public class FieldImpl implements Field {
 	private final List<AnnotationUsage> annotations;
 	private final Set<Modifier> modifiers;
 	
+    /**
+     * Initialises this field using a name and a type.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Field#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
+     * method!
+     * 
+     * @param name  the name
+     * @param type  the type
+     */
 	public FieldImpl(String name, Type type) {
 		this.name			= name;
 		this.type			= type;
@@ -58,6 +68,11 @@ public class FieldImpl implements Field {
 		this.modifiers		= EnumSet.noneOf(Modifier.class);
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected FieldImpl(Field prototype) {
 		name		= prototype.getName();
 		type		= Copier.copy(prototype.getType());

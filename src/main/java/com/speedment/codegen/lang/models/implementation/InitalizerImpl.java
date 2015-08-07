@@ -40,11 +40,22 @@ public class InitalizerImpl implements Initalizer {
     private final List<String> code;
     private final Set<Modifier> modifiers;
     
+    /**
+     * Initialises this initalizer.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Initalizer#of()} method!
+     */
     public InitalizerImpl() {
         code      = new ArrayList<>();
         modifiers = EnumSet.noneOf(Modifier.class);
     }
     
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
     protected InitalizerImpl(Initalizer prototype) {
         code      = Copier.copy(prototype.getCode(), c -> c);
         modifiers = Copier.copy(prototype.getModifiers(), c -> c);

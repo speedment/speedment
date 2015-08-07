@@ -49,6 +49,14 @@ public class AnnotationImpl implements Annotation {
 	private final List<Import> imports;
 	private final Set<Modifier> modifiers;
 
+    /**
+     * Initialises this annotation using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Annotation#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
 	public AnnotationImpl(String name) {
 		this.name        = name;
 		this.javadoc     = null;
@@ -58,6 +66,11 @@ public class AnnotationImpl implements Annotation {
 		this.modifiers   = EnumSet.noneOf(Modifier.class);
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected AnnotationImpl(Annotation prototype) {
 		name        = prototype.getName();
 		javadoc     = prototype.getJavadoc().map(Copier::copy).orElse(null);

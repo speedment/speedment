@@ -20,9 +20,10 @@ import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.util.Copier;
 import java.util.ArrayList;
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
@@ -41,24 +42,60 @@ public class GenericImpl implements Generic {
 
 	private BoundType type = BoundType.EXTENDS;
 	
+    /**
+     * Initialises this generic.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Generic#of()} method!
+     */
 	public GenericImpl() {
 		lowerBound  = null;
 		upperBounds = new ArrayList<>();
 	}
 
+    /**
+     * Initialises this generic using a lower bound.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Generic#of()} method!
+     * 
+     * @param lowerBound   the lower bound
+     */
 	public GenericImpl(String lowerBound) {
-		this(lowerBound, new Type[0]);
+		this (lowerBound, new Type[0]);
 	}
 	
+    /**
+     * Initialises this generic using a number of upper bounds.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Generic#of()} method!
+     * 
+     * @param upperBounds  the upper bounds
+     */
 	public GenericImpl(Type... upperBounds) {
-		this(null, upperBounds);
+		this (null, upperBounds);
 	}
 	
+    /**
+     * Initialises this generic using a lower bound and a number of upper bounds.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Generic#of()} method!
+     * 
+     * @param lowerBound   the lower bound
+     * @param upperBounds  the upper bounds
+     */
 	public GenericImpl(String lowerBound, Type... upperBounds) {
-		this.lowerBound = lowerBound;
-		this.upperBounds = Arrays.asList(upperBounds);
+		this.lowerBound  = lowerBound;
+		this.upperBounds = asList(upperBounds);
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected GenericImpl(Generic prototype) {
 		lowerBound  = prototype.getLowerBound().orElse(null);
 		upperBounds = Copier.copy(prototype.getUpperBounds());

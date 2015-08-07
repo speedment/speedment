@@ -38,11 +38,24 @@ public class EnumConstantImpl implements EnumConstant {
 	private String name;
 	private final List<Value<?>> values;
 
+    /**
+     * Initialises this enum constant using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link EnumConstant#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
 	public EnumConstantImpl(String name) {
 		this.name	= name;
 		this.values = new ArrayList<>();
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype 
+     */
 	protected EnumConstantImpl(EnumConstant prototype) {
 		name	= prototype.getName();
 		values	= Copier.copy(prototype.getValues(), v -> v.copy());

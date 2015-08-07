@@ -42,6 +42,14 @@ public class FileImpl implements File {
 	private final List<Import> imports;
 	private final List<ClassOrInterface<?>> classes;
 	
+    /**
+     * Initialises this file using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link File#of(java.lang.String)} method!
+     * 
+     * @param name  the filename
+     */
 	public FileImpl(String name) {
 		this.name	 = name;
 		this.doc	 = null;
@@ -49,6 +57,11 @@ public class FileImpl implements File {
 		this.classes = new ArrayList<>();
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected FileImpl(File prototype) {
 		this.name	 = prototype.getName();
 		this.doc	 = prototype.getJavadoc().map(Copier::copy).orElse(null);

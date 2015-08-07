@@ -54,7 +54,11 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 	private final List<ClassOrInterface<?>> classes;
 	private final Set<Modifier> modifiers;
     
-
+    /**
+     * Initialises this model.
+     * 
+     * @param name  the name
+     */
 	public ClassOrInterfaceImpl(String name) {
 		this.name		 = name;
 		this.javadoc	 = null;
@@ -68,6 +72,11 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		this.modifiers	 = EnumSet.noneOf(Modifier.class);
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected ClassOrInterfaceImpl(ClassOrInterface<T> prototype) {
 		name		= prototype.getName();
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);

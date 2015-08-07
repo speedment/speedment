@@ -49,6 +49,12 @@ public class ConstructorImpl implements Constructor {
 	private final Set<Modifier> modifiers;
     private final Set<Type> exceptions;
 	
+    /**
+     * Initialises this constructor.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Constructor#of()} method!
+     */
 	public ConstructorImpl() {
 		javadoc		= null;
 		annotations = new ArrayList<>();
@@ -58,6 +64,11 @@ public class ConstructorImpl implements Constructor {
         exceptions  = new HashSet<>();
 	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected ConstructorImpl(final Constructor prototype) {
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());

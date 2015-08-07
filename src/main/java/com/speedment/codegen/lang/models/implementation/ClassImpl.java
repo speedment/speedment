@@ -39,18 +39,25 @@ public class ClassImpl extends ClassOrInterfaceImpl<Class> implements Class {
 	private Type superType;
 	private final List<Constructor> constructors;
 
+    /**
+     * Initialises this class using a name.
+     * <p>
+     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * the {@link Class#of(java.lang.String)} method!
+     * 
+     * @param name  the name
+     */
 	public ClassImpl(String name) {
 		super(name);
 		superType = null;
 		constructors = new ArrayList<>();
 	}
-
-	public ClassImpl(String name, Type superType) {
-		super(name);
-		this.superType = superType;
-		this.constructors = new ArrayList<>();
-	}
 	
+    /**
+     * Copy constructor.
+     * 
+     * @param prototype  the prototype
+     */
 	protected ClassImpl(Class prototype) {
 		super (prototype);
 		this.superType = prototype.getSupertype().map(Copier::copy).orElse(null);
