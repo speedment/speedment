@@ -21,16 +21,27 @@ import com.speedment.codegen.lang.models.values.NullValue;
 import com.speedment.codegen.lang.models.values.TextValue;
 
 /**
- *
+ * Contains common default values used when generating java code.
+ * 
  * @author Emil Forslund
  */
-public abstract class DefaultValue {
+public final class DefaultValue {
+    
+    /**
+     * The class should never be instantiated.
+     */
     private DefaultValue() {}
     
     public final static Value<?>
 		NULL         = new NullValue(),
 		EMPTY_STRING = string("");
     
+    /**
+     * Creates a 'string' value with the specified content.
+     * 
+     * @param text  the inner text
+     * @return      a value representing that string
+     */
     public static final Value<String> string(String text) {
 		return new TextValue(text);
 	}

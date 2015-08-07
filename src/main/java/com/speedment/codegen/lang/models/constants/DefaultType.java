@@ -16,9 +16,11 @@
  */
 package com.speedment.codegen.lang.models.constants;
 
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl.TypeConst;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,87 +31,315 @@ import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
- *
+ * Constant implementations of the {@link Type} interface that can be used to
+ * reference standard java types. If a modifying method is called on any of
+ * these objects, the model will be copied before performing the operation.
+ * This makes sure the original state of the constant is never changed.
+ * 
  * @author Emil Forslund
  */
-public abstract class DefaultType {
-	private DefaultType() {}
+public enum DefaultType implements Type {
 
-	public static final Type
-		BYTE_PRIMITIVE = new TypeConst(byte.class),
-		SHORT_PRIMITIVE = new TypeConst(short.class),
-		INT_PRIMITIVE = new TypeConst(int.class),
-		LONG_PRIMITIVE = new TypeConst(long.class),
-		FLOAT_PRIMITIVE = new TypeConst(float.class),
-		DOUBLE_PRIMITIVE = new TypeConst(double.class),
-		BOOLEAN_PRIMITIVE = new TypeConst(boolean.class),
-		CHAR_PRIMITIVE = new TypeConst(char.class),
-		BYTE = new TypeConst(Byte.class),
-		SHORT = new TypeConst(Short.class),
-		INT = new TypeConst(Integer.class),
-		LONG = new TypeConst(Long.class),
-		FLOAT = new TypeConst(Float.class),
-		DOUBLE = new TypeConst(Double.class),
-		BOOLEAN = new TypeConst(Boolean.class),
-		CHARACTER = new TypeConst(Character.class),
-		STRING = new TypeConst(String.class),
-		OBJECT = new TypeConst(Object.class),
-		VOID = new TypeConst("void"),
-		WILDCARD = new TypeConst("?"),
-		LIST = new TypeConst(List.class),
-		SET = new TypeConst(Set.class),
-		MAP = new TypeConst(Map.class),
-		QUEUE = new TypeConst(Queue.class),
-		STACK = new TypeConst(Stack.class),
-		OPTIONAL = new TypeConst(Optional.class),
-		ENTRY = new TypeConst(HashMap.Entry.class),
-		FUNCTION = new TypeConst(Function.class),
-		PREDICATE = new TypeConst(Predicate.class),
-		CONSUMER = new TypeConst(Consumer.class);
-		
-	public static final Type list(Type innerType) {
+		BYTE_PRIMITIVE(byte.class),
+		SHORT_PRIMITIVE(short.class),
+		INT_PRIMITIVE(int.class),
+		LONG_PRIMITIVE(long.class),
+		FLOAT_PRIMITIVE(float.class),
+		DOUBLE_PRIMITIVE(double.class),
+		BOOLEAN_PRIMITIVE(boolean.class),
+		CHAR_PRIMITIVE(char.class),
+		BYTE(Byte.class),
+		SHORT(Short.class),
+		INT(Integer.class),
+		LONG(Long.class),
+		FLOAT(Float.class),
+		DOUBLE(Double.class),
+		BOOLEAN(Boolean.class),
+		CHARACTER(Character.class),
+		STRING(String.class),
+		OBJECT(Object.class),
+		VOID("void"),
+		WILDCARD("?"),
+		LIST(List.class),
+		SET(Set.class),
+		MAP(Map.class),
+		QUEUE(Queue.class),
+		STACK(Stack.class),
+		OPTIONAL(Optional.class),
+		ENTRY(HashMap.Entry.class),
+		FUNCTION(Function.class),
+		PREDICATE(Predicate.class),
+		CONSUMER(Consumer.class),
+        SUPPLIER(Supplier.class);
+      
+    /**
+     * Generates a {@link Type} to represent a java standard {@link List} with
+     * a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type list(Type innerType) {
 		return LIST.add(new GenericImpl().add(innerType));
 	}
 	
-	public static final Type set(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Set} with
+     * a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+	public static Type set(Type innerType) {
 		return SET.add(new GenericImpl().add(innerType));
 	}
 	
-	public static final Type map(Type innerTypeA, Type innerTypeB) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Map} with
+     * generic type variables.
+     * 
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @return            the resulting type
+     */
+	public static Type map(Type innerTypeA, Type innerTypeB) {
 		return MAP.add(new GenericImpl().add(innerTypeA)).add(new GenericImpl(innerTypeB));
 	}
 	
-	public static final Type queue(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Queue} with
+     * a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+	public static Type queue(Type innerType) {
 		return QUEUE.add(new GenericImpl().add(innerType));
 	}
 	
-    public static final Type stack(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Stack} with
+     * a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type stack(Type innerType) {
         return STACK.add(new GenericImpl().add(innerType));
     }
     
-    public static final Type optional(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Optional} 
+     * with a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type optional(Type innerType) {
         return OPTIONAL.add(new GenericImpl().add(innerType));
     }
     
-    public static final Type entry(Type innerTypeA, Type innerTypeB) {
+    /**
+     * Generates a {@link Type} to represent a java standard 
+     * {@link java.util.HashMap.Entry Entry} with generic type variables.
+     * 
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @return           the resulting type
+     */
+    public static Type entry(Type innerTypeA, Type innerTypeB) {
         return ENTRY.add(new GenericImpl().add(innerTypeA).add(innerTypeB));
     }
     
-    public static final Type function(Type innerTypeA, Type innerTypeB) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Function} 
+     * with generic type variables.
+     * 
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @return            the resulting type
+     */
+    public static Type function(Type innerTypeA, Type innerTypeB) {
         return FUNCTION.add(new GenericImpl().add(innerTypeA).add(innerTypeB));
     }
     
-    public static final Type predicate(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Predicate} 
+     * with a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type predicate(Type innerType) {
         return PREDICATE.add(new GenericImpl().add(innerType));
     }
     
-    public static final Type consumer(Type innerType) {
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Consumer} 
+     * with a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type consumer(Type innerType) {
         return CONSUMER.add(new GenericImpl().add(innerType));
     }
     
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Supplier} 
+     * with a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type supplier(Type innerType) {
+        return SUPPLIER.add(new GenericImpl().add(innerType));
+    }
+    
+    /**
+     * Checks if the specified {@link Type} represents a <code>void</code> 
+     * return type.
+     * 
+     * @param type  the type to check
+     * @return      <code>true</code> if the type is void, else <code>false</code>
+     */
     public static boolean isVoid(Type type) {
-        return type == null || VOID.equals(type) || "void".equals(type.getName());
+        return type == null 
+            || VOID.equals(type) 
+            || "void".equals(type.getName());
+    }
+        
+    private final Class<?> javaImpl;
+    private final String typeName;
+    
+    /**
+     * Constructs the Type based on the type name.
+     * 
+     * @param typeName  the name
+     */
+    private DefaultType(String typeName) {
+        this.javaImpl = null;
+        this.typeName = typeName;
+    }
+    
+    /**
+     * Constructs the Type based on the java implementation class. The type name
+     * will be calculated using {@link Class#getName()}.
+     * 
+     * @param typeName  the name
+     */
+    private DefaultType(Class<?> javaImpl) {
+        this.javaImpl = javaImpl;
+        this.typeName = javaImpl.getName();
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public Type setName(String name) {
+        return copy().setName(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public Type setJavaImpl(Class<?> javaImpl) {
+        return copy().setJavaImpl(javaImpl);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public Type setArrayDimension(int arrayDimension) {
+        return copy().setArrayDimension(arrayDimension);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public Type add(Generic generic) {
+        return copy().add(generic);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public Type add(AnnotationUsage annotation) {
+        return copy().add(annotation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return typeName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Class<?>> getJavaImpl() {
+        return Optional.ofNullable(javaImpl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getArrayDimension() {
+        return 0;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Generic> getGenerics() {
+        return new ArrayList<>();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<AnnotationUsage> getAnnotations() {
+        return new ArrayList<>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Type copy() {
+        if (javaImpl == null) {
+            return Type.of(typeName);
+        } else {
+            return Type.of(javaImpl);
+        }
     }
 }

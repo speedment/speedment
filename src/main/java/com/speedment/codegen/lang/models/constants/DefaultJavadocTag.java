@@ -17,22 +17,110 @@
 package com.speedment.codegen.lang.models.constants;
 
 import com.speedment.codegen.lang.models.JavadocTag;
-import com.speedment.codegen.lang.models.implementation.JavadocTagImpl.JavadocTagConst;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Emil Forslund
  */
-public abstract class DefaultJavadocTag {
-    private DefaultJavadocTag() {}
+public enum DefaultJavadocTag implements JavadocTag {
     
-    public final static JavadocTag
-		PARAM		= new JavadocTagConst("param"),
-		AUTHOR		= new JavadocTagConst("author"),
-		DEPRICATED	= new JavadocTagConst("depricated"),
-		RETURN		= new JavadocTagConst("return"),
-		SEE			= new JavadocTagConst("see"),
-		THROWS		= new JavadocTagConst("throws"),
-		SINCE		= new JavadocTagConst("since"),
-		VERSION		= new JavadocTagConst("version");
+    PARAM      ("param"),
+    AUTHOR     ("author"),
+    DEPRICATED ("depricated"),
+    RETURN     ("return"),
+    SEE        ("see"),
+    THROWS     ("throws"),
+    SINCE      ("since"),
+    VERSION    ("version");
+    
+    private final String name;
+    
+    /**
+     * Constructs the JavadocTag based on the name.
+     * 
+     * @param name  the name
+     */
+    private DefaultJavadocTag(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public JavadocTag setName(String name) {
+        return copy().setName(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public JavadocTag setValue(String value) {
+        return copy().setValue(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public JavadocTag setText(String text) {
+        return copy().setText(text);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Since this is a constant, the model will first be copied and the
+     * operation will then be performed on the copy.
+     */
+    @Override
+    public JavadocTag call(Consumer<JavadocTag> procedure) {
+        final JavadocTag copy = copy();
+        procedure.accept(copy);
+        return copy;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<String> getValue() {
+        return Optional.empty();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<String> getText() {
+        return Optional.empty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JavadocTag copy() {
+        return JavadocTag.of(name);
+    }
 }
