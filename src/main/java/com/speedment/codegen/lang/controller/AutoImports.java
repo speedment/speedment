@@ -36,16 +36,31 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- *
+ * This control can be applied to a {@link File} to automatically add imports
+ * for all types mentioned in the model hierarchy. Types mentioned inside
+ * strings still need to be imported manually.
+ * 
  * @author Emil Forslund
  */
 public class AutoImports implements Consumer<File> {
+    
 	private final DependencyManager mgr;
 	
+    /**
+     * Initialises the <code>AutoImports</code>.
+     * 
+     * @param mgr  the dependency manager
+     */
 	public AutoImports(DependencyManager mgr) {
 		this.mgr = mgr;
 	}
 	
+    /**
+     * Adds explicit imports for all {@link Type} references mentioned in the
+     * specified {@link File}.
+     * 
+     * @param file  the file to add imports in
+     */
 	@Override
 	public void accept(File file) {
 		findTypesIn(file).forEach((s, t) -> {
@@ -53,74 +68,101 @@ public class AutoImports implements Consumer<File> {
 		});
 	}
 	
-	private Map<String, Type> findTypesIn(Object o) {
+    /**
+     * Returns a map with all the types found in the specified model. The model
+     * can be anything, but it will only find types if it inherits from any of
+     * the supported traits.
+     * <p>
+     * The key of the map will be the name of the type.
+     * 
+     * @param model  the model
+     * @return       the types found
+     */
+	private Map<String, Type> findTypesIn(Object model) {
 		final Map<String, Type> map = new HashMap<>();
-		findTypesIn(o, map);
+		findTypesIn(model, map);
 		return map;
 	}
 	
-	private void findTypesIn(Object o, Map<String, Type> types) {
-		if (HasSupertype.class.isAssignableFrom(o.getClass())) {
-			((HasSupertype<?>) o).getSupertype().ifPresent(t -> addType(t, types));
+    /**
+     * A recursive method that parses through the model hierarchy of the
+     * specified object and adds all found types to the supplied map. The type
+     * names will be used as keys.
+     * 
+     * @param model  the model to parse recursively
+     * @param types  the map to add the results to
+     */
+	private void findTypesIn(Object model, Map<String, Type> types) {
+		if (HasSupertype.class.isAssignableFrom(model.getClass())) {
+			((HasSupertype<?>) model).getSupertype().ifPresent(t -> addType(t, types));
 		}
 		
-		if (HasAnnotationUsage.class.isAssignableFrom(o.getClass())) {
-			((HasAnnotationUsage<?>) o).getAnnotations().forEach(a -> {
+		if (HasAnnotationUsage.class.isAssignableFrom(model.getClass())) {
+			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
 				addType(a.getType(), types);
 			});
 		}
 		
-		if (HasClasses.class.isAssignableFrom(o.getClass())) {
-			((HasClasses<?>) o).getClasses().forEach(c -> {
+		if (HasClasses.class.isAssignableFrom(model.getClass())) {
+			((HasClasses<?>) model).getClasses().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (HasConstructors.class.isAssignableFrom(o.getClass())) {
-			((HasConstructors<?>) o).getConstructors().forEach(c -> {
+		if (HasConstructors.class.isAssignableFrom(model.getClass())) {
+			((HasConstructors<?>) model).getConstructors().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (HasFields.class.isAssignableFrom(o.getClass())) {
-			((HasFields<?>) o).getFields().forEach(f -> {
+		if (HasFields.class.isAssignableFrom(model.getClass())) {
+			((HasFields<?>) model).getFields().forEach(f -> {
 				addType(f.getType(), types);
 				findTypesIn(f, types);
 			});
 		}
 		
-		if (HasGenerics.class.isAssignableFrom(o.getClass())) {
-			((HasGenerics<?>) o).getGenerics().forEach(g -> {
+		if (HasGenerics.class.isAssignableFrom(model.getClass())) {
+			((HasGenerics<?>) model).getGenerics().forEach(g -> {
 				g.getUpperBounds().forEach(ub -> {
 					addType(ub, types);
 				});
 			});
 		}
 		
-		if (HasImplements.class.isAssignableFrom(o.getClass())) {
-			((HasImplements<?>) o).getInterfaces().forEach(i -> {
+		if (HasImplements.class.isAssignableFrom(model.getClass())) {
+			((HasImplements<?>) model).getInterfaces().forEach(i -> {
 				addType(i, types);
 			});
 		}
 		
-		if (HasMethods.class.isAssignableFrom(o.getClass())) {
-			((HasMethods<?>) o).getMethods().forEach(m -> {
+		if (HasMethods.class.isAssignableFrom(model.getClass())) {
+			((HasMethods<?>) model).getMethods().forEach(m -> {
 				addType(m.getType(), types);
 				findTypesIn(m, types);
 			});
 		}
         
-        if (HasThrows.class.isAssignableFrom(o.getClass())) {
-			((HasThrows<?>) o).getExceptions().forEach(e -> {
+        if (HasThrows.class.isAssignableFrom(model.getClass())) {
+			((HasThrows<?>) model).getExceptions().forEach(e -> {
 				addType(e, types);
 			});
 		}
 		
-		if (HasType.class.isAssignableFrom(o.getClass())) {
-			addType(((HasType<?>) o).getType(), types);
+		if (HasType.class.isAssignableFrom(model.getClass())) {
+			addType(((HasType<?>) model).getType(), types);
 		}
 	}
 	
+    /**
+     * Add the specified {@link Type} to the supplied map. The key will be 
+     * calculated using the type name. If the <code>Type</code> represents a
+     * dependency that should be ignored according to the 
+     * {@link DependencyManager}, it will not be added.
+     * 
+     * @param type   the type to try to add
+     * @param types  the map to add it to
+     */
 	private void addType(Type type, Map<String, Type> types) {
 		final String name = type.getName();
 
