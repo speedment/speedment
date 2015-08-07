@@ -16,30 +16,28 @@
  */
 package com.speedment.codegen.lang.controller;
 
-import com.speedment.codegen.util.Formatting;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Method;
 import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.JavadocTag;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OPTIONAL;
-import com.speedment.codegen.lang.models.implementation.FieldImpl;
-import com.speedment.codegen.lang.models.implementation.JavadocImpl;
-import com.speedment.codegen.lang.models.implementation.JavadocTagImpl;
-import com.speedment.codegen.lang.models.implementation.MethodImpl;
-import com.speedment.codegen.lang.models.implementation.TypeImpl;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
- *
+ * Control that is used to generate setters, getters and adders for fields in 
+ * the specified class. 
+ * 
  * @author Emil Forslund
  */
 public class SetGetAdd implements Consumer<Class> {
+    
 	private final static String 
 		SET = "set",
 		GET = "get",
@@ -54,24 +52,49 @@ public class SetGetAdd implements Consumer<Class> {
 		G = "G", S = "S", Y = "y",
 		ETS_THE = "ets the ",
 		ADDS_THE_SPECIFIED = "Adds the specified ",
+        TO_THIS = " to this ",
 		PARAM = "param",
 		THE_NEW_VALUE = "the new value.",
 		A_REFERENCE_TO_THIS = "a reference to this object.",
 		OF_THIS = " of this ",
 		BRACKETS = BS + BE;
 	
-	private final List<String> methods;
+	private final BiPredicate<Field, Method> onlyInclude;
 	
+    /**
+     * Initialises the control with all methods included.
+     */
 	public SetGetAdd() {
-		this.methods = new ArrayList<>();
+		onlyInclude = (f, m) -> true;
 	}
 	
-	public SetGetAdd(Method... methods) {
-		this.methods = Arrays.stream(methods)
-			.map(m -> getSignature(m))
-			.collect(Collectors.toList());
+    /**
+     * Initialises the control but with only some {@link Method Methods} 
+     * included. The input of the <code>BiPredicate</code> will be the field
+     * in the class that the method is generated for and the suggested method
+     * to add to the class.
+     * 
+     * @param onlyInclude  a filter for methods to include
+     */
+	public SetGetAdd(BiPredicate<Field, Method> onlyInclude) {
+		this.onlyInclude = requireNonNull(onlyInclude);
 	}
 	
+    /**
+     * Generates getters, setters and adders for the fields in the specified 
+     * model and sets the fields to private. Method signatures that has been 
+     * excluded in the construction of this control will be excluded from the 
+     * generation.
+     * <p>
+     * For fields of a subtype to {@link Collection}, an 'adder' will be
+     * generated instead of a 'setter'.
+     * <p>
+     * For fields of type {@link Optional}, the inner type will be used in the
+     * setter parameter but the wrapped type will be used as output for the
+     * getter.
+     * 
+     * @param model  the model to generate for
+     */
 	@Override
 	public void accept(Class model) {
 		model.getFields().forEach(f -> {
@@ -80,56 +103,62 @@ public class SetGetAdd implements Consumer<Class> {
 			if (isCollection(f.getType())) {
 				f.final_();
 				
-				final Field param = new FieldImpl(singular(f.getName()), f.getType().getGenerics().get(0).getUpperBounds().get(0));
-				final Method add = new MethodImpl(ADD, new TypeImpl(model.getName()))
-					.set(new JavadocImpl()
-						.add(ADDS_THE_SPECIFIED + lcfirst(shortName(param.getType().getName())) + " to this " + shortName(model.getName()) + DOT)
-						.add(new JavadocTagImpl(PARAM, param.getName(), THE_NEW_VALUE))
-						.add(new JavadocTagImpl(RETURN, A_REFERENCE_TO_THIS))
+				final Field param = Field.of(singular(f.getName()), f.getType().getGenerics().get(0).getUpperBounds().get(0));
+				final Method add = Method.of(ADD, Type.of(model.getName()))
+					.set(Javadoc.of()
+						.add(ADDS_THE_SPECIFIED + lcfirst(shortName(param.getType().getName())) + TO_THIS + shortName(model.getName()) + DOT)
+						.add(JavadocTag.of(PARAM, param.getName(), THE_NEW_VALUE))
+						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
 					).public_()
 					.add(param)
 					.add(THIS + f.getName() + ADD_TO + param.getName() + PE + SC)
 					.add(RETURN_THIS + SC);
 				
-				if (includeMethod(model, add)) {
+				if (onlyInclude.test(f, add)) {
 					model.add(add);
 				}
 			} else {
-				final Method set = new MethodImpl(SET + ucfirst(f.getName()), new TypeImpl(model.getName()))
-					.set(new JavadocImpl()
+				final Method set = Method.of(SET + ucfirst(f.getName()), Type.of(model.getName()))
+					.set(Javadoc.of()
 						.add(S + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
-						.add(new JavadocTagImpl(PARAM, f.getName(), THE_NEW_VALUE))
-						.add(new JavadocTagImpl(RETURN, A_REFERENCE_TO_THIS))
+						.add(JavadocTag.of(PARAM, f.getName(), THE_NEW_VALUE))
+						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
 					).public_();
                 
 				if (isOptional(f.getType())) {
-					set.add(new FieldImpl(f.getName(), f.getType().getGenerics().get(0).getUpperBounds().get(0)))
+					set.add(Field.of(f.getName(), f.getType().getGenerics().get(0).getUpperBounds().get(0)))
 						.add(THIS + f.getName() + ASSIGN + OPTIONAL_OF + f.getName() + PE + SC)
 						.add(RETURN_THIS + SC);
 				} else {
-					set.add(new FieldImpl(f.getName(), f.getType()))
+					set.add(Field.of(f.getName(), f.getType()))
 						.add(THIS + f.getName() + ASSIGN + f.getName() + SC)
 						.add(RETURN_THIS + SC);
 				}
 				
-				if (includeMethod(model, set)) {
+				if (onlyInclude.test(f, set)) {
 					model.add(set);
 				}
 			}
 			
-			final Method get = new MethodImpl(GET + ucfirst(f.getName()), f.getType())
-				.set(new JavadocImpl()
+			final Method get = Method.of(GET + ucfirst(f.getName()), f.getType())
+				.set(Javadoc.of()
 					.add(G + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
-					.add(new JavadocTagImpl(RETURN, THE + f.getName() + DOT))
+					.add(JavadocTag.of(RETURN, THE + f.getName() + DOT))
 				).public_()
 				.add(RETURN_THIS + DOT + f.getName() + SC);
 			
-			if (includeMethod(model, get)) {
+			if (onlyInclude.test(f, get)) {
 				model.add(get);
 			}
 		});
 	}
 	
+    /**
+     * Checks if the specified type is a java {@link Collection}.
+     * 
+     * @param type  the type to check
+     * @return      <code>true</code> if collection, else <code>false</code>
+     */
 	private boolean isCollection(Type type) {
 		if (type.getJavaImpl().isPresent()) {
 			return Collection.class.isAssignableFrom(type.getJavaImpl().get());
@@ -137,38 +166,32 @@ public class SetGetAdd implements Consumer<Class> {
 			return false;
 		}
 	}
+    
+    /**
+     * Checks if the specified type is a java {@link Optional}.
+     * 
+     * @param type  the type to check
+     * @return      <code>true</code> if Optional, else <code>false</code>
+     */
+	private boolean isOptional(Type type) {
+		return type.getName().equals(OPTIONAL.getName())
+		&& !type.getGenerics().isEmpty()
+		&& !type.getGenerics().get(0).getUpperBounds().isEmpty();
+	}
 	
-	private String singular(String name) {
-		if (name.endsWith("ies")) {
-			return name.substring(0, name.length() - 3) + Y;
-		} else if (name.endsWith("s")) {
-			return name.substring(0, name.length() - 1);
+    /**
+     * Returns the specified word in singular.
+     * 
+     * @param word  the word
+     * @return      the word in singular
+     */
+	private String singular(String word) {
+		if (word.endsWith("ies")) {
+			return word.substring(0, word.length() - 3) + Y;
+		} else if (word.endsWith("s")) {
+			return word.substring(0, word.length() - 1);
 		} else {
-			return name;
+			return word;
 		}
-	}
-	
-	private boolean isOptional(Type fieldType) {
-		return fieldType.getName().equals(OPTIONAL.getName())
-		&& !fieldType.getGenerics().isEmpty()
-		&& !fieldType.getGenerics().get(0).getUpperBounds().isEmpty();
-	}
-
-	private boolean includeMethod(Class class_, Method method) {
-		if (methods.isEmpty() || methods.contains(getSignature(method))) {
-			return !class_.getMethods().stream().anyMatch(
-					m -> getSignature(method).equals(getSignature(m))
-			);
-		} else {
-			return false;
-		}
-	}
-	
-	private String getSignature(Method method) {
-		return method.getName() + PS +
-			method.getFields().stream().map(f -> 
-				f.getType().getName() + 
-				Formatting.repeat(BRACKETS, f.getType().getArrayDimension())
-			).collect(Collectors.joining(COMMA)) + PE;
 	}
 }
