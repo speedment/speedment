@@ -77,7 +77,7 @@ public interface Generic extends Copyable<Generic> {
      * In the following example, <code>List&lt;String&gt;</code> and 
      * <code>Serializable</code> are upper bounds:
      * <pre>
-     *     T extends List&lt;String&gt;&Serializable
+     *     T extends List&lt;String&gt;&amp;Serializable
      * </pre>
      * 
      * @param upperBound  the new upper bound
@@ -94,7 +94,7 @@ public interface Generic extends Copyable<Generic> {
      * In the following example, <code>List&lt;String&gt;</code> and 
      * <code>Serializable</code> are upper bounds:
      * <pre>
-     *     T extends List&lt;String&gt;&Serializable
+     *     T extends List&lt;String&gt;&amp;Serializable
      * </pre>
      * 
      * @return  the list of upper bounds
