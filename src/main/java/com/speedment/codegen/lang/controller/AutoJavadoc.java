@@ -33,21 +33,44 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.RETU
 import java.util.function.Consumer;
 
 /**
- *
+ * This control generates javadoc stubs for all models descending from the
+ * one applied to.
+ * 
  * @author Emil Forslund
  * @param <T> The extending type
  */
 public class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
+    
 	private final static String 
 			DEFAULT_TEXT = "Write some documentation here.",
 			DEFAULT_NAME = "Your Name";
  
+    /**
+     * Parses the specified model recursively to find all models that implements
+     * the {@link HasJavadoc} trait but that does not have proper documentation
+     * and generates javadoc stubs for those models.
+     * 
+     * @param model  the model to parse
+     */
     @Override
     public void accept(T model) {
 		createJavadoc(model);
     }
 	
-	private static <T extends HasJavadoc<?>> T createJavadoc(T model) {
+    /**
+     * Checks if the specified model already has documentation and if not,
+     * generates it. This method will recurse through the model tree to make
+     * sure all children also have documentation.
+     * <p>
+     * If documentation exists but is incomplete, it will be completed without
+     * changing the existing content.
+     * 
+     * @param <T>    the type of the model to operate on
+     * @param model  the model to add documentation to 
+     */
+    @SuppressWarnings("unchecked")
+	private static <T extends HasJavadoc<?>> void createJavadoc(T model) {
+        
 		final Javadoc doc = model.getJavadoc().orElse(Javadoc.of(DEFAULT_TEXT));
 		model.set(doc);
 
@@ -63,6 +86,7 @@ public class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 		if (model instanceof ClassOrInterface) {
 			// Add @author
 			doc.add(AUTHOR.setValue(DEFAULT_NAME));
+            
 		} else {
 			// Add @param for each parameter.
 			if (model instanceof HasFields) {
@@ -96,16 +120,29 @@ public class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
             ((HasClasses<?>) model).getClasses()
                 .forEach(m -> createJavadoc(m));
         }
-		
-		return model;
 	}
 	
+    /**
+     * Add a javadoc tag to the specified documentation block. If the tag is
+     * already defined, this will have no effect.
+     * 
+     * @param doc  the documentation block
+     * @param tag  the tag to add
+     */
 	private static void addTag(Javadoc doc, JavadocTag tag) {
 		if (!hasTagAlready(doc, tag)) {
 			doc.add(tag);
 		}
 	}
 	
+    /**
+     * Checks if the specified tag is already defined in the supplied
+     * documentation block. 
+     * 
+     * @param doc  the documentation block
+     * @param tag  the tag to check
+     * @return     <code>true</code> if it exists, else <code>false</code>
+     */
 	private static boolean hasTagAlready(Javadoc doc, JavadocTag tag) {
 		return doc.getTags().stream().anyMatch(t -> 
 			tag.getName().equals(t.getName())
