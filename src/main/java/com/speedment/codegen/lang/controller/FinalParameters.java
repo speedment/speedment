@@ -20,13 +20,24 @@ import com.speedment.codegen.lang.interfaces.HasMethods;
 import java.util.function.Consumer;
 
 /**
- *
- * @author Emil Forslund
- * @param <T> The extending type
+ * This control makes sure all method parameters in the specified model is set
+ * to final.
+ * 
+ * @author     Emil Forslund
+ * @param <T>  The extending type
  */
 public class FinalParameters<T extends HasMethods<T>> implements Consumer<T> {
+    
+    /**
+     * Sets all method parameters in the specified model to <code>final</code>.
+     * 
+     * @param model  the model to operate on
+     */
 	@Override
 	public void accept(T model) {
-		model.getMethods().forEach(m -> m.getFields().forEach(p -> p.final_()));
+		model.getMethods()
+            .forEach(m -> m.getFields()
+                .forEach(p -> p.final_())
+            );
 	}
 }
