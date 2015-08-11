@@ -32,54 +32,139 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.0")
 public interface Column extends ConfigEntity, Ordinable, Child<Table>,
-    FieldStorageTypeable,
-    ColumnCompressionTypeable {
+    FieldStorageTypeable, ColumnCompressionTypeable {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<Column> provider = () -> new ColumnImpl();
+    /**
+     * The holder of the factory for instances of the {@link Column} interface.
+     * To create a new instance, call the {@link #newColumn()} method. To change
+     * the implementing class, call {@link #setSupplier(java.util.function.Supplier)}.
+     */
+    enum Holder { HOLDER;
+        private Supplier<Column> provider = ColumnImpl::new;
     }
 
+    /**
+     * Set the implementation class to use when {@link Column#newColumn()} is
+     * called.
+     * 
+     * @param provider  the constructor of the new implementation class
+     */
     static void setSupplier(Supplier<Column> provider) {
         Holder.HOLDER.provider = provider;
     }
 
+    /**
+     * Creates a new instance that satisfies the <code>Column</code> interface.
+     * 
+     * @return  the created instance
+     */
     static Column newColumn() {
         return Holder.HOLDER.provider.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<Column> getInterfaceMainClass() {
         return Column.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<Table> getParentInterfaceMainClass() {
         return Table.class;
     }
 
+    /**
+     * Returns whether or not this column can hold <code>null</code> values.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  <code>true</code> if null values are tolerated, else 
+     *          <code>false</code>
+     */
     @External(type = Boolean.class)
     Boolean isNullable();
 
+    /**
+     * Sets if this column should tolerate <code>null</code> values or not.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param nullable <code>true</code> if null values should be tolerated
+     */
     @External(type = Boolean.class)
     void setNullable(Boolean nullable);
 
+    /**
+     * Returns whether or not this column will auto increment when new values
+     * are added to the table.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  <code>true</code> if the column auto increments, else 
+     *          <code>false</code>
+     */
     @External(type = Boolean.class)
     Boolean isAutoincrement();
 
+    /**
+     * Sets if this column should auto increment when new values are added to 
+     * the table.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param nullable <code>true</code> if the column should auto increment
+     */
     @External(type = Boolean.class)
     void setAutoincrement(Boolean nullable);
 
+    /**
+     * Returns the alias of this column, which is the name that Speedment will
+     * use when generating code. This can be different from the actual column
+     * name used in the database.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  the alias
+     */
     @External(type = String.class)
     Optional<String> getAlias();
 
+    /**
+     * Sets the alias of this column, which is the name that Speedment will
+     * use when generating code. This can be different from the actual column
+     * name used in the database.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param alias  the alias
+     */
     @External(type = String.class)
     void setAlias(String alias);
 
+    /**
+     * Returns the mapping class that will be used to represent the column data
+     * in the generated code.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  the mapping class
+     */
     @External(type = Class.class)
     Class<?> getMapping();
 
+    /**
+     * Sets the mapping class that will be used to represent the column data
+     * in the generated code.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param mappedClass  the new mapping class
+     */
     @External(type = Class.class)
     void setMapping(Class<?> mappedClass);
 }
