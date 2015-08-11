@@ -1,5 +1,7 @@
 /target/
 /.sonar
+/.idea
+/speedment.iml
 /nb-configuration.xml
 /sonar-project.properties
 *~
