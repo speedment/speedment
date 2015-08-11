@@ -26,7 +26,4 @@ import com.speedment.core.config.model.aspects.Node;
  * @author pemi
  */
 @Api(version = "2.0")
-public abstract interface ConfigEntity extends Node, Enableable {
-    final int INDEX_FIRST = 0;
-    final int INDEX_UNSET = -1;
-}
+public abstract interface ConfigEntity extends Node, Enableable {}
