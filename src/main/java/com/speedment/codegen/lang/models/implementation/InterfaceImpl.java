@@ -17,6 +17,7 @@
 package com.speedment.codegen.lang.models.implementation;
 
 import com.speedment.codegen.lang.models.Interface;
+import com.speedment.codegen.lang.models.Method;
 
 /**
  * The default implementation of the wrapper for the {@link Method} interface.

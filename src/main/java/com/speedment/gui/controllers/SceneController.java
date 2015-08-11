@@ -483,7 +483,7 @@ public final class SceneController implements Initializable {
      * @param stage      the stage to display it in
      * @param project    the project to work on
      * @param savedFile  location for quick-saves
-     * @return
+     * @return           the created scene controller
      */
     public static SceneController showIn(Stage stage, Project project, File savedFile) {
         return Optional.ofNullable(showIn(stage, project))
