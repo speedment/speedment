@@ -41,6 +41,11 @@ public enum Modifier implements Copyable<Modifier> {
 	
 	private final String name;
 	
+    /**
+     * Modifier constructor.
+     * 
+     * @param name the name in lowercase
+     */
 	Modifier(String name) {
 		this.name = name;
 	}
