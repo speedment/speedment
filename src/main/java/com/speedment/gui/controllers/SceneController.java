@@ -21,22 +21,39 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.gui.MainApp;
-import static com.speedment.gui.MainApp.showWebsite;
 import com.speedment.gui.controllers.NotificationController.Notification;
-import static com.speedment.gui.controllers.NotificationController.showNotification;
 import com.speedment.gui.icons.Icons;
 import com.speedment.gui.icons.SilkIcons;
 import com.speedment.gui.properties.TableProperty;
 import com.speedment.gui.properties.TablePropertyManager;
 import com.speedment.gui.properties.TablePropertyRow;
 import com.speedment.gui.util.FadeAnimation;
-import static com.speedment.gui.util.FadeAnimation.fadeIn;
-import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
-import static com.speedment.gui.util.ProjectUtil.createSaveAsProjectHandler;
-import static com.speedment.gui.util.ProjectUtil.createSaveProjectHandler;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.stat.Statistics;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -50,47 +67,23 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.speedment.gui.MainApp.showWebsite;
+import static com.speedment.gui.controllers.NotificationController.showNotification;
+import static com.speedment.gui.util.FadeAnimation.fadeIn;
+import static com.speedment.gui.util.ProjectUtil.*;
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.animation.Interpolator.EASE_BOTH;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import static javafx.util.Duration.ZERO;
 import static javafx.util.Duration.millis;
 
 /**
- * FXML Controller class
+ * FXML Controller class for the main window of the GUI.
  *
  * @author Emil Forslund
  */
-public class SceneController implements Initializable {
+public final class SceneController implements Initializable {
     
     private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
     private final static String GITHUB_URL = "https://github.com/speedment/speedment";
@@ -117,15 +110,29 @@ public class SceneController implements Initializable {
     @FXML private StackPane arrowContainer;
     @FXML private Label arrow;
 
-    private File savedFile;
     private final Stage stage;
     private Project project;
+    private File savedFile;
     private TablePropertyManager propertyMgr;
 
+    /**
+     * Initializes the scene by specifying the stage to show it in as well as the project node to work with in the GUI.
+     *
+     * @param stage    the stage
+     * @param project  the project to work with
+     */
     private SceneController(Stage stage, Project project) {
         this (stage, project, null);
     }
-    
+
+    /**
+     * Initializes the scene by specifying the stage to show it in, the project node to work with and a file to use
+     * when fast-saving.
+     *
+     * @param stage      the stage to show the GUI in
+     * @param project    the project to work with
+     * @param savedFile  an optional file to fast-save changes to that can be null
+     */
     private SceneController(Stage stage, Project project, File savedFile) {
         this.stage     = stage;
         this.project   = project;
@@ -135,8 +142,8 @@ public class SceneController implements Initializable {
     /**
      * Initializes the controller class.
      *
-     * @param url the URL to use
-     * @param rb the ResourceBundle to use
+     * @param url  the URL to use
+     * @param rb   the ResourceBundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -258,34 +265,60 @@ public class SceneController implements Initializable {
         Statistics.onGuiStarted();
     }
 
+    /**
+     * Returns the stage used in this scene.
+     *
+     * @return  the stage
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Returns the project currently working on.
+     *
+     * @return  the project
+     */
     public Project getProject() {
         return project;
     }
 
+    /**
+     * Returns the location where the project was last saved.
+     *
+     * @return  the location of the last save
+     */
     public File getLastSaved() {
         return savedFile;
     }
-    
+
+    /**
+     * Updates the location where the last save is located. This should be called each time the user manually saves
+     * the project somewhere.
+     *
+     * @param savedFile  the new save location
+     * @return           a reference to this controller
+     */
     public SceneController setLastSaved(File savedFile) {
         this.savedFile = savedFile;
         return this;
     }
 
+    /**
+     * Populates the project tree using the nodes from the specified project.
+     *
+     * @param project  the project to display
+     */
     private void populateTree(Project project) {
-        final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
-
+        final ListChangeListener<? super TreeItem<Child<?>>> change = l ->
             populatePropertyTable(
                 propertyMgr.propertiesFor(
                     l.getList().stream()
-                    .map(i -> i.getValue())
+                    .map(TreeItem::getValue)
                     .collect(Collectors.toList())
                 )
-            );
-        };
+            )
+        ;
 
         treeHierarchy.setCellFactory(v -> new TreeCell<Child<?>>() {
 
@@ -308,6 +341,13 @@ public class SceneController implements Initializable {
         treeHierarchy.setRoot(branch(project));
     }
 
+    /**
+     * Returns the appropriate icon for the specified node type. This is used when constructing the project tree.
+     *
+     * @param node  the node
+     * @return      the appropriate icon
+     * @see         #populateTree(Project)
+     */
     private ImageView iconFor(Node node) {
         final Icons icon = Icons.forNodeType(node.getInterfaceMainClass());
 
@@ -323,19 +363,31 @@ public class SceneController implements Initializable {
         }
     }
 
+    /**
+     * Creates a new branch in the tree to represent the specified node. This is used when constructing the project
+     * tree.
+     *
+     * @param node  the node
+     * @return      the created branch
+     */
     private TreeItem<Child<?>> branch(Child<?> node) {
         final TreeItem<Child<?>> branch = new TreeItem<>(node);
         branch.setExpanded(true);
 
-        node.asParent().ifPresent(p -> {
-            p.stream().map(c -> branch(c)).forEachOrdered(
-                c -> branch.getChildren().add(c)
-            );
-        });
+        node.asParent().ifPresent(p ->
+            p.stream().map(this::branch).forEachOrdered(
+                branch.getChildren()::add
+            )
+        );
 
         return branch;
     }
 
+    /**
+     * Populates the property table with the specified values.
+     *
+     * @param properties  the properties
+     */
     private void populatePropertyTable(Stream<TableProperty<?>> properties) {
         propertiesContainer.getChildren().clear();
 
@@ -345,6 +397,9 @@ public class SceneController implements Initializable {
         });
     }
 
+    /**
+     * Animates the arrow if it exists in the arrow container.
+     */
     private void animateArrow() {
         if (arrowContainer.getChildren().contains(arrow)) {
             fadeIn(arrow);
@@ -379,7 +434,10 @@ public class SceneController implements Initializable {
             arrow.setOnMouseEntered(over);
         }
     }
-    
+
+    /**
+     * Removes the animated arrow if it exists.
+     */
     private void removeArrow() {
         if (arrowContainer.getChildren().contains(arrow)) {
             if (arrow.getOpacity() > 0) {
@@ -389,7 +447,14 @@ public class SceneController implements Initializable {
             }
         }
     }
-    
+
+    /**
+     * Creates and configures a new GUI scene in the specified stage to work with the specified project.
+     *
+     * @param stage    the stage to display it in
+     * @param project  the project node to work with
+     * @return         the newly created scene controller
+     */
     public static SceneController showIn(Stage stage, Project project) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/Scene.fxml"));
         final SceneController control = new SceneController(stage, project);
@@ -400,7 +465,7 @@ public class SceneController implements Initializable {
             final Scene scene = new Scene(root);
 
             stage.hide();
-            stage.setTitle("Speedment ORM");
+            stage.setTitle("Speedment");
             stage.setMaximized(true);
             stage.setScene(scene);
             stage.show();
@@ -411,6 +476,15 @@ public class SceneController implements Initializable {
         return control;
     }
 
+    /**
+     * Creates and configures a new GUI scene in the specified stage to work with the specified project. The specified
+     * save location will be used when the user quick-saves.
+     *
+     * @param stage      the stage to display it in
+     * @param project    the project to work on
+     * @param savedFile  location for quick-saves
+     * @return
+     */
     public static SceneController showIn(Stage stage, Project project, File savedFile) {
         return Optional.ofNullable(showIn(stage, project))
             .map(sc -> sc.setLastSaved(savedFile))
@@ -418,13 +492,26 @@ public class SceneController implements Initializable {
     }
 
     private final StringBuilder outputBuffer = new StringBuilder();
-    
+
+    /**
+     * Writes the specified message to the system log and also shows it in the GUI log.
+     *
+     * @param msg  the message
+     */
     private void writeToLog(String msg) {
         outputBuffer.append("<p style=\"font-family:Courier,monospace;font-size:12px;margin:0px;padding:0px;\">").append(msg).append("</p>");
         output.getEngine().loadContent(outputBuffer.toString());
         LOGGER.info(msg);
     }
-    
+
+    /**
+     * Writes a special message to the GUI log to notify the user that the generation is complete.
+     *
+     * @param started       the time when the generation started
+     * @param finished      the time when the generation finished
+     * @param filesCreated  the number of files that was created
+     * @param succeeded     <code>true</code> if the generation was successful, else <code>false</code>
+     */
     private void writeGenerationStatus(Instant started, Instant finished, int filesCreated, boolean succeeded) {
         
         final LocalDateTime ldt = LocalDateTime.ofInstant(finished, ZoneId.systemDefault());

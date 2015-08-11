@@ -18,11 +18,6 @@ package com.speedment.gui.controllers;
 
 import com.speedment.gui.MainApp;
 import com.speedment.gui.Settings;
-import static com.speedment.gui.controllers.AlertController.showAlert;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,37 +28,49 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
+
+import static com.speedment.gui.controllers.AlertController.showAlert;
+
 /**
- * FXML Controller class
+ * FXML Controller class for the mail prompt that is shown the first time the user launches the GUI.
  *
  * @author Emil Forslund
  */
-public class MailPromptController implements Initializable {
+public final class MailPromptController implements Initializable {
 
     @FXML private Label labelHeader;
     @FXML private TextField fieldMail;
     @FXML private Label labelLicense;
     @FXML private Button buttonOkey;
 
-    private final Predicate<String> isInvalidMail
-            = s -> !s.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-
     private final Stage stage;
 
-    public MailPromptController(Stage stage) {
+    private final static Predicate<String> IS_INVALID_MAIL
+            = s -> !s.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+
+    /**
+     * Initializes the prompt using the stage to display it in.
+     *
+     * @param stage  the stage
+     */
+    private MailPromptController(Stage stage) {
         this.stage = stage;
     }
 
     /**
      * Initializes the controller class.
      *
-     * @param url the URL to use
-     * @param rb the ResourceBundle to use
+     * @param url  the URL to use
+     * @param rb   the ResourceBundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         fieldMail.textProperty().addListener((ov, o, n) -> {
-            buttonOkey.setDisable(isInvalidMail.test(n));
+            buttonOkey.setDisable(IS_INVALID_MAIL.test(n));
         });
 
         buttonOkey.setOnAction(ev -> {
@@ -80,6 +87,11 @@ public class MailPromptController implements Initializable {
         });
     }
 
+    /**
+     * Creates and configures a new Mail Prompt-component in the specified stage.
+     *
+     * @param stage  the stage
+     */
     public static void showIn(Stage stage) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/MailPrompt.fxml"));
         final MailPromptController control = new MailPromptController(stage);

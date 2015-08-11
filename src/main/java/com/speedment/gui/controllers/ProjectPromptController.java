@@ -21,20 +21,13 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.parameters.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
-import com.speedment.gui.MainApp;
-import com.speedment.gui.Settings;
-import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
-import static com.speedment.gui.controllers.AlertController.showAlert;
+import com.speedment.gui.MainApp;
+import com.speedment.gui.Settings;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.util.Trees;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,13 +41,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.speedment.gui.controllers.AlertController.showAlert;
+import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
+
 
 /**
- * FXML Controller class
+ * FXML Controller class for the prompt that lets the user either load an existing project or create a new one by
+ * connecting to a database.
  *
  * @author Emil Forslund
  */
-public class ProjectPromptController implements Initializable {
+public final class ProjectPromptController implements Initializable {
     
     private final static Logger LOGGER = LoggerManager.getLogger(ProjectPromptController.class);
     
@@ -71,16 +74,21 @@ public class ProjectPromptController implements Initializable {
     @FXML private StackPane openContainer;
     
     private final Stage stage;
-    
-    public ProjectPromptController(Stage stage) {
+
+    /**
+     * Initializes the prompt by specifying the stage to display it in.
+     *
+     * @param stage  the stage
+     */
+    private ProjectPromptController(Stage stage) {
         this.stage = stage;
     }
 
     /**
      * Initializes the controller class.
      *
-     * @param url the URL to use
-     * @param rb the ResourceBundle to use
+     * @param url  the URL to use
+     * @param rb   the ResourceBundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -184,7 +192,10 @@ public class ProjectPromptController implements Initializable {
             throw exxx;
         }
     }
-    
+
+    /**
+     * Updated the enabled-flag of the connect button by making sure no required values are still empty.
+     */
     private void toggleConnectButton() {
         buttonConnect.setDisable(
                 fieldHost.textProperty().getValue().isEmpty()
@@ -195,7 +206,12 @@ public class ProjectPromptController implements Initializable {
                 || fieldUser.textProperty().getValue().isEmpty()
         );
     }
-    
+
+    /**
+     * Creates and configures a new Project Prompt-component in the specified stage.
+     *
+     * @param stage  the stage
+     */
     public static void showIn(Stage stage) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/ProjectPrompt.fxml"));
         final ProjectPromptController control = new ProjectPromptController(stage);
@@ -206,7 +222,7 @@ public class ProjectPromptController implements Initializable {
             final Scene scene = new Scene(root);
             
             stage.hide();
-            stage.setTitle("Speedment ORM - New project");
+            stage.setTitle("Speedment - New project");
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {

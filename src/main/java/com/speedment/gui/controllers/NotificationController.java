@@ -16,11 +16,6 @@
  */
 package com.speedment.gui.controllers;
 
-import static com.speedment.gui.util.FadeAnimation.fadeOut;
-import static com.speedment.gui.util.TransitionAnimation.enterFromRight;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,8 +24,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static com.speedment.gui.util.FadeAnimation.fadeOut;
+import static com.speedment.gui.util.TransitionAnimation.enterFromRight;
+
 /**
- * FXML Controller class
+ * FXML Controller class for the notification messages that can be triggered in the bottom right part of the window.
  *
  * @author Emil Forslund
  */
@@ -39,8 +41,11 @@ public final class NotificationController implements Initializable {
     @FXML private VBox container;
     @FXML private Button closeButton;
     @FXML private Label message;
-    
-    public static enum Notification {
+
+    /**
+     * The notification type and the relevant background color.
+     */
+    public enum Notification {
         INFO ("#e5e5e5"), 
         WARNING ("#ffe5aa"), 
         ERROR ("#ffaaaa"), 
@@ -48,7 +53,7 @@ public final class NotificationController implements Initializable {
         
         private final String color;
         
-        private Notification(String hexColor) {
+        Notification(String hexColor) {
             color = hexColor;
         }
         
@@ -59,7 +64,13 @@ public final class NotificationController implements Initializable {
     
     private final String text;
     private final Notification type;
-    
+
+    /**
+     * Initializes the controller using the text to show and the notification type.
+     *
+     * @param text  the text to show
+     * @param type  the notification type
+     */
     private NotificationController(String text, Notification type) {
         this.text   = text;
         this.type   = type;
@@ -67,6 +78,9 @@ public final class NotificationController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url  the url to use
+     * @param rb   the resource bundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,7 +98,14 @@ public final class NotificationController implements Initializable {
         closeButton.setOnAction(ev -> closer.run());
         container.setOnMouseReleased(ev -> closer.run());
     }
-    
+
+    /**
+     * Creates and configures a new Notification-component in the specified stage.
+     *
+     * @param parent   the parent to show it in
+     * @param message  the message to display
+     * @param type     the type of notification
+     */
     public static void showNotification(Pane parent, String message, Notification type) {
 		final FXMLLoader loader = new FXMLLoader(AlertController.class.getResource("/fxml/Notification.fxml"));
 		final NotificationController control = new NotificationController(message, type);

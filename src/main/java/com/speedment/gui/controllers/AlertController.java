@@ -16,9 +16,6 @@
  */
 package com.speedment.gui.controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,15 +23,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static javafx.stage.Modality.APPLICATION_MODAL;
+
 /**
- * FXML Controller class
+ * FXML Controller class for the alert messages used in the GUI.
  *
  * @author Emil Forslund
  */
-public class AlertController implements Initializable {
+public final class AlertController implements Initializable {
     
     @FXML private Label title;
     @FXML private Label message;
@@ -42,7 +44,14 @@ public class AlertController implements Initializable {
     
     private final Stage dialog;
     private final String strTitle, strMessage;
-    
+
+    /**
+     * Initializes this controller using the stage to display it in, a title and a text message.
+     *
+     * @param dialog   the dialog stage to display the message in
+     * @param title    the title
+     * @param message  the message
+     */
     private AlertController(Stage dialog, String title, String message) {
         this.dialog     = dialog;
         this.strTitle   = title;
@@ -52,8 +61,8 @@ public class AlertController implements Initializable {
     /**
      * Initializes the controller class.
      * 
-     * @param url The url.
-     * @param rb The resource bundle.
+     * @param url  the url
+     * @param rb   the resource bundle
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,7 +70,14 @@ public class AlertController implements Initializable {
         message.setText(strMessage);
         buttonClose.setOnAction(ev -> dialog.close());
     }
-    
+
+    /**
+     * Creates and configures a new Alert-component in the specified stage.
+     *
+     * @param stage    the stage to display it in
+     * @param title    the title
+     * @param message  the message
+     */
     public static void showAlert(Stage stage, String title, String message) {
 		final FXMLLoader loader = new FXMLLoader(AlertController.class.getResource("/fxml/Alert.fxml"));
 		final Stage dialog = new Stage();

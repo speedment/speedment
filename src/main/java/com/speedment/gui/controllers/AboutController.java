@@ -17,10 +17,6 @@
 package com.speedment.gui.controllers;
 
 import com.speedment.util.version.SpeedmentVersion;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,15 +24,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static javafx.stage.Modality.APPLICATION_MODAL;
+
 /**
- * FXML Controller class
+ * FXML Controller class for the about dialog that can be opened from within the GUI. This class important as it is the
+ * main point where external libraries is credited.
  *
  * @author Emil Forslund
  */
-public class AboutController implements Initializable {
+public final class AboutController implements Initializable {
 	
 	@FXML private Button close;
 	@FXML private Label title;
@@ -44,15 +46,22 @@ public class AboutController implements Initializable {
 	@FXML private Label license;
 	@FXML private Label external;
 	private final Stage popup;
-	
+
+	/**
+	 * Initializes this controller by specifying the window it will be visible in. This is required to allow the popup
+	 * to close itself.
+	 *
+	 * @param popup  the popup stage
+	 */
 	public AboutController(Stage popup) {
 		this.popup = popup;
 	}
 
 	/**
 	 * Initializes the controller class.
-	 * @param url The url
-	 * @param rb The resource bundle.
+	 *
+	 * @param url  the url
+	 * @param rb   the resource bundle
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -61,14 +70,22 @@ public class AboutController implements Initializable {
 		external.setText(
 			"It includes software licensed as follows:\n\n" +
 			"Apache 2:\n" +
-			"groovy-all (2.4.0), log4j-api (2.1), log4j-core (2.1).\n" +
+			"groovy-all (2.4.0).\n" +
+			"\n" +
+			"GPL 2 with FOSS exception:\n" +
+			"mysql-connector-java (5.1.34)\n" +
 			"\n" +
 			"Creative Commons 2.5:\n" +
 			"silk (1.3)\n" +
 			"\n" 
 		);
 	}
-	
+
+	/**
+	 * Creates and configures a new About-component in the specified stage.
+	 *
+	 * @param stage  the stage
+	 */
 	public static void showIn(Stage stage) {
 		final FXMLLoader loader = new FXMLLoader(AboutController.class.getResource("/fxml/About.fxml"));
 		final Stage dialog = new Stage();
