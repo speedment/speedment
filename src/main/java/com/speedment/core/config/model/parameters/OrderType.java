@@ -28,14 +28,14 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = "2.0")
-public enum OrderType implements EnumHelper<OrderType> {
+public enum OrderType implements Nameable<OrderType> {
 
     ASC  ("Asc"), 
     DESC ("Desc"), 
     NONE ("None");
     
     private static final Map<String, OrderType> NAME_MAP =
-        EnumHelper.Hidden.buildMap(values());
+        EnumHelper.buildMap(values());
     
     private final String name;
 
@@ -49,11 +49,11 @@ public enum OrderType implements EnumHelper<OrderType> {
     }
 
     public static Optional<OrderType> findByIgnoreCase(String name) {
-        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+        return EnumHelper.findByNameIgnoreCase(NAME_MAP, name);
     }
 
     public static <C extends Node & Enableable> OrderType defaultFor(final C entity) {
-        return Hidden.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
+        return EnumHelper.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
     }
 
     public static Stream<OrderType> stream() {

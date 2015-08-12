@@ -28,14 +28,14 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = "2.0")
-public enum FieldStorageType implements EnumHelper<FieldStorageType> {
+public enum FieldStorageType implements Nameable<FieldStorageType> {
 
     INHERIT   ("Inherit from parent"), 
     WRAPPER   ("Wrapper class"), 
     PRIMITIVE ("Primitive class");
     
     private static final Map<String, FieldStorageType> NAME_MAP = 
-        EnumHelper.Hidden.buildMap(values());
+        EnumHelper.buildMap(values());
     
     private final String name;
 
@@ -49,11 +49,11 @@ public enum FieldStorageType implements EnumHelper<FieldStorageType> {
     }
     
     public static Optional<FieldStorageType> findByIgnoreCase(String name) {
-        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+        return EnumHelper.findByNameIgnoreCase(NAME_MAP, name);
     }
     
     public static <C extends Node & Enableable> FieldStorageType defaultFor(final C entity) {
-        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, FieldStorageTypeable.class, WRAPPER);
+        return EnumHelper.defaultFor(stream(), f -> f == INHERIT, entity, FieldStorageTypeable.class, WRAPPER);
     }
 
     public static Stream<FieldStorageType> stream() {

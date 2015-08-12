@@ -28,14 +28,14 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = "2.0")
-public enum ColumnCompressionType implements EnumHelper<ColumnCompressionType> {
+public enum ColumnCompressionType implements Nameable<ColumnCompressionType> {
     
     INHERIT       ("Inherit from parent"), 
     NONE          ("None"), 
     DEDUPLICATION ("Deduplication");
     
     private static final Map<String, ColumnCompressionType> NAME_MAP = 
-        EnumHelper.Hidden.buildMap(values());
+        EnumHelper.buildMap(values());
     
     private final String name;
     
@@ -44,11 +44,11 @@ public enum ColumnCompressionType implements EnumHelper<ColumnCompressionType> {
     }
 
     public static Optional<ColumnCompressionType> findByIgnoreCase(String name) {
-        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+        return EnumHelper.findByNameIgnoreCase(NAME_MAP, name);
     }
     
     public static <C extends Node & Enableable> ColumnCompressionType defaultFor(final C entity) {
-        return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, ColumnCompressionTypeable.class, NONE);
+        return EnumHelper.defaultFor(stream(), f -> f == INHERIT, entity, ColumnCompressionTypeable.class, NONE);
     }
     
     public static Stream<ColumnCompressionType> stream() {

@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = "2.0")
-public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
+public enum StandardDbmsType implements Nameable<StandardDbmsType>, DbmsType {
 
     MYSQL(
         "MySQL",
@@ -78,7 +78,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
 //    MONETDB("MonetDB", "MonetDB JDBC Driver", 50000, ".", "Database");
 
     private final static Map<String, StandardDbmsType> NAME_MAP = 
-        EnumHelper.Hidden.buildMap(values());
+        EnumHelper.buildMap(values());
     
     private final String name;
     private final String driverManagerName;
@@ -184,11 +184,11 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
     }
 
     public static Optional<StandardDbmsType> findByIgnoreCase(String name) {
-        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+        return EnumHelper.findByNameIgnoreCase(NAME_MAP, name);
     }
 
     public static <C extends Node & Enableable> StandardDbmsType defaultFor(final C entity) {
-        return Hidden.defaultFor(stream(), t -> false, entity, DbmsTypeable.class, MYSQL);
+        return EnumHelper.defaultFor(stream(), t -> false, entity, DbmsTypeable.class, MYSQL);
     }
 
     public static Stream<StandardDbmsType> stream() {

@@ -19,62 +19,69 @@ package com.speedment.core.config.model.parameters;
 import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
-import java.util.Collections;
+import static java.util.Collections.unmodifiableMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
+import static java.util.function.Function.identity;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toMap;
 import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
- * @param <E> The Enum type
  */
-public interface EnumHelper<E extends Enum<E>> {
+public final class EnumHelper {
     
-    String getName();
+    private EnumHelper() {}
 
-    class Hidden {
-        
-        static <E extends Enum<E> & EnumHelper<E>, C extends Node & Enableable> 
-            E defaultFor(
-                Stream<E> stream, 
-                Predicate<E> predicate, 
-                final C entity, 
-                final Class<?> ableClass, 
-                final E defaultValue) {
-            
-            return Optional.ofNullable(entity)
-                .flatMap(e -> e.asChild())
-                .flatMap(e -> streamFor(
+    public static <E extends Enum<E>, C extends Node & Enableable> E defaultFor(
+            final Stream<E> stream, 
+            final Predicate<E> predicate, 
+            final C entity, 
+            final Class<?> ableClass, 
+            final E defaultValue) {
+
+        return Optional.ofNullable(entity)
+            .flatMap(e -> e.asChild())
+            .flatMap(e -> streamFor(
                     stream, predicate, e, ableClass
-                ).filter(predicate).findAny())
-                .orElse(defaultValue);
-        }
-    
-        static <E extends Enum<E>, H extends EnumHelper<E>, C extends Child<?>> Stream<E> streamFor(
-            Stream<E> stream, Predicate<E> predicate, final C entity, final Class<?> ableClass) {
-            if (ableClass.isAssignableFrom(entity.getParentInterfaceMainClass())) {
-                return stream;
-            } else {
-                return stream.filter(predicate.negate());
-            }
-        }
+                )
+                .filter(predicate)
+                .findAny()
+            )
+            .orElse(defaultValue);
+    }
 
-        static <E extends Enum<E> & EnumHelper<E>> Map<String, E> buildMap(E[] values) {
-            return Collections.unmodifiableMap(Stream.of(values).collect(
-                Collectors.toMap((dt) -> Hidden.normalize(dt.getName()), Function.identity())
-            ));
+    public static <E extends Enum<E>, C extends Child<?>> Stream<E> streamFor(
+            final Stream<E> stream, 
+            final Predicate<E> predicate, 
+            final C entity, 
+            final Class<?> ableClass) {
+        
+        if (ableClass.isAssignableFrom(entity.getParentInterfaceMainClass())) {
+            return stream;
+        } else {
+            return stream.filter(predicate.negate());
         }
+    }
 
-        static <E> Optional<E> findByNameIgnoreCase(Map<String, E> map, final String name) {
-            return Optional.ofNullable(map.get(normalize(name)));
-        }
+    public static <E extends Enum<E> & Nameable<E>> Map<String, E> buildMap(
+            final E[] values) {
+        
+        return unmodifiableMap(Stream.of(values).collect(
+            toMap(dt -> normalize(dt.getName()), identity())
+        ));
+    }
 
-        private static String normalize(String string) {
-            return string == null ? null : string.toLowerCase();
-        }
+    public static <E> Optional<E> findByNameIgnoreCase(
+        final Map<String, E> map, 
+        final String name) {
+        
+        return Optional.ofNullable(map.get(normalize(name)));
+    }
+
+    private static String normalize(final String string) {
+        return string == null ? null : string.toLowerCase();
     }
 }

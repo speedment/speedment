@@ -21,4 +21,6 @@ package com.speedment.core.config.model.parameters;
  * @author pemi
  * @param <R> Return type
  */
-interface Nameable<R extends Enum<R> & Nameable<R>> {}
+interface Nameable<R extends Enum<R> & Nameable<R>> {
+    String getName();
+}

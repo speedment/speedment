@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author pemi
  */
 @Api(version = "2.0")
-public enum StorageEngineType implements EnumHelper<StorageEngineType> {
+public enum StorageEngineType implements Nameable<StorageEngineType> {
 
     INHERIT   ("Inherit from parent", ConcurrentHashMap.class, true),
     ON_HEAP   ("On Heap", ConcurrentHashMap.class, true),
@@ -39,7 +39,7 @@ public enum StorageEngineType implements EnumHelper<StorageEngineType> {
     
     public final static StorageEngineType DEFAULT_STORAGE_ENGINE = ON_HEAP;
     private static final Map<String, StorageEngineType> NAME_MAP = 
-        EnumHelper.Hidden.buildMap(values());
+        EnumHelper.buildMap(values());
     
     private final String name;
     private final Class<?> implementationClass;
@@ -111,11 +111,11 @@ public enum StorageEngineType implements EnumHelper<StorageEngineType> {
     }
     
     public static Optional<StorageEngineType> findByIgnoreCase(String name) {
-        return Hidden.findByNameIgnoreCase(NAME_MAP, name);
+        return EnumHelper.findByNameIgnoreCase(NAME_MAP, name);
     }
     
     public static <C extends Node & Enableable> StorageEngineType defaultFor(final C entity) {
-        return Hidden.defaultFor(stream(), p -> p == INHERIT, entity, StorageEngineTypeable.class, ON_HEAP);
+        return EnumHelper.defaultFor(stream(), p -> p == INHERIT, entity, StorageEngineTypeable.class, ON_HEAP);
     }
 
     public static Stream<StorageEngineType> stream() {
