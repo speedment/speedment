@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.config.model.aspects.Ordinable;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.IndexColumnImpl;
 import com.speedment.core.config.model.parameters.OrderTypeable;
 import java.util.function.Supplier;
@@ -28,13 +30,11 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface IndexColumn extends ConfigEntity, Ordinable, Child<Index>,
+public interface IndexColumn extends Node, Enableable, Ordinable, Child<Index>,
     OrderTypeable {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<IndexColumn> provider = () -> new IndexColumnImpl();
+    enum Holder { HOLDER;
+        private Supplier<IndexColumn> provider = IndexColumnImpl::new;
     }
 
     static void setSupplier(Supplier<IndexColumn> provider) {

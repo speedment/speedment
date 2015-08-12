@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.config.model.aspects.Ordinable;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ColumnImpl;
 import com.speedment.core.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.core.config.model.parameters.FieldStorageTypeable;
@@ -31,7 +33,7 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface Column extends ConfigEntity, Ordinable, Child<Table>,
+public interface Column extends Node, Enableable, Ordinable, Child<Table>,
     FieldStorageTypeable, ColumnCompressionTypeable {
 
     /**

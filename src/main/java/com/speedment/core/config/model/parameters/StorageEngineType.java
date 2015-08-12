@@ -17,9 +17,10 @@
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.config.model.ConfigEntity;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Map;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -31,33 +32,45 @@ import java.util.stream.Stream;
 @Api(version = "2.0")
 public enum StorageEngineType implements EnumHelper<StorageEngineType> {
 
-    INHERIT("Inherit from parent", ConcurrentHashMap.class, true),
-    ON_HEAP("On Heap", ConcurrentHashMap.class, true),
-    OFF_HEAP("Off Heap", ConcurrentHashMap.class, true),
-    HAZELCAST("Hazelcast", ConcurrentHashMap.class, false);
+    INHERIT   ("Inherit from parent", ConcurrentHashMap.class, true),
+    ON_HEAP   ("On Heap", ConcurrentHashMap.class, true),
+    OFF_HEAP  ("Off Heap", ConcurrentHashMap.class, true),
+    HAZELCAST ("Hazelcast", ConcurrentHashMap.class, false);
+    
+    public final static StorageEngineType DEFAULT_STORAGE_ENGINE = ON_HEAP;
+    private static final Map<String, StorageEngineType> NAME_MAP = 
+        EnumHelper.Hidden.buildMap(values());
+    
     private final String name;
     private final Class<?> implementationClass;
     private final boolean useNativeMaps;
-    public final static StorageEngineType DEFAULT_STORAGE_ENGINE = ON_HEAP;
-
-    static final Map<String, StorageEngineType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
-
-    private StorageEngineType(final String name, final Class<?> implementationClass, boolean useNativeMaps) {
-        this.name = Objects.requireNonNull(name);
-        this.implementationClass = Objects.requireNonNull(implementationClass);
+    
+    StorageEngineType(final String name, final Class<?> implementationClass, boolean useNativeMaps) {
+        this.name                = requireNonNull(name);
+        this.implementationClass = requireNonNull(implementationClass);
+        
         if (!Map.class.isAssignableFrom(implementationClass)) {
-            throw new IllegalArgumentException("Implementing class must implement Map");
+            throw new IllegalArgumentException(
+                "Implementing class must implement Map"
+            );
         }
         this.useNativeMaps = useNativeMaps;
     }
 
+    /**
+     * Returns the human-readable name of the storage engine type.
+     * 
+     * @return  the name
+     */
     @Override
     public String getName() {
         return name;
     }
 
     /**
-     * @return the implName
+     * Returns the implementation class.
+     * 
+     * @return the implementation class
      */
     public Class<?> getImplementationClass() {
         return implementationClass;
@@ -101,7 +114,7 @@ public enum StorageEngineType implements EnumHelper<StorageEngineType> {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
     
-    public static StorageEngineType defaultFor(final ConfigEntity entity) {
+    public static <C extends Node & Enableable> StorageEngineType defaultFor(final C entity) {
         return Hidden.defaultFor(stream(), p -> p == INHERIT, entity, StorageEngineTypeable.class, ON_HEAP);
     }
 

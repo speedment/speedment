@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.DbmsImpl;
 import com.speedment.core.config.model.parameters.DbmsTypeable;
 import com.speedment.core.db.DbmsHandler;
@@ -31,12 +33,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface Dbms extends ConfigEntity, DbmsTypeable, Child<Project>, Parent<Schema> {
+public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Parent<Schema> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<Dbms> provider = () -> new DbmsImpl();
+    enum Holder { HOLDER;
+        private Supplier<Dbms> provider = DbmsImpl::new;
     }
 
     static void setSupplier(Supplier<Dbms> provider) {

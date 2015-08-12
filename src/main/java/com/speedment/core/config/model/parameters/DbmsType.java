@@ -198,5 +198,4 @@ public interface DbmsType {
      * @return a new {@code DbmsHandler} instance for the given database
      */
     DbmsHandler makeDbmsHandler(Dbms dbms);
-
 }

@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.TableImpl;
 import com.speedment.core.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.core.config.model.parameters.FieldStorageTypeable;
@@ -32,15 +34,13 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface Table extends ConfigEntity, Child<Schema>, Parent<Child<Table>>,
+public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Table>>,
         FieldStorageTypeable,
         ColumnCompressionTypeable,
         StorageEngineTypeable {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<Table> provider = () -> new TableImpl();
+    enum Holder { HOLDER;
+        private Supplier<Table> provider = TableImpl::new;
     }
 
     static void setSupplier(Supplier<Table> provider) {

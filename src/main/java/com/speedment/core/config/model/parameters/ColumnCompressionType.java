@@ -14,14 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.config.model.ConfigEntity;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -32,20 +29,25 @@ import java.util.stream.Stream;
  */
 @Api(version = "2.0")
 public enum ColumnCompressionType implements EnumHelper<ColumnCompressionType> {
-
-    INHERIT("Inherit from parent"), NONE("None"), DEDUPLICATION("Deduplication");
-    static final Map<String, ColumnCompressionType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
-
-    private ColumnCompressionType(final String name) {
-        this.name = name;
-    }
+    
+    INHERIT       ("Inherit from parent"), 
+    NONE          ("None"), 
+    DEDUPLICATION ("Deduplication");
+    
+    private static final Map<String, ColumnCompressionType> NAME_MAP = 
+        EnumHelper.Hidden.buildMap(values());
+    
     private final String name;
     
+    ColumnCompressionType(final String name) {
+        this.name = name;
+    }
+
     public static Optional<ColumnCompressionType> findByIgnoreCase(String name) {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
     
-    public static ColumnCompressionType defaultFor(final ConfigEntity entity) {
+    public static <C extends Node & Enableable> ColumnCompressionType defaultFor(final C entity) {
         return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, ColumnCompressionTypeable.class, NONE);
     }
     

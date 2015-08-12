@@ -17,15 +17,16 @@
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.Dbms;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.vendor.MySqlDbmsHandler;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -52,6 +53,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema"))),
         d -> new MySqlDbmsHandler(d)
     ),
+    
     MARIADB(
         "MariaDB",
         "MariaDB JDBC Driver",
@@ -66,6 +68,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema"))),
         d -> new MySqlDbmsHandler(d)
     );
+    
 //    
 //    ORACLE("Oracle", "Oracle JDBC Driver", 1521, ".", "SID"),
 //    SQLSERVER("SQLServer", "SQLServer JDBC Driver", 1433),
@@ -74,9 +77,23 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
 //    INFORMIX("Informix", "Informix JDBC Driver", 1526, ":", "SID"),
 //    MONETDB("MonetDB", "MonetDB JDBC Driver", 50000, ".", "Database");
 
-    private static final Map<String, StandardDbmsType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
+    private final static Map<String, StandardDbmsType> NAME_MAP = 
+        EnumHelper.Hidden.buildMap(values());
+    
+    private final String name;
+    private final String driverManagerName;
+    private final int defaultPort;
+    private final String schemaTableDelimiter;
+    private final String nameMeaning;
+    private final String driverName;
+    private final String defaultConnectionParameters;
+    private final String jdbcConnectorName;
+    private final String fieldEncloserStart;
+    private final String fieldEncloserEnd;
+    private final Set<String> schemaExcludSet;
+    private final Function<Dbms, DbmsHandler> dbmsMapper;
 
-    private StandardDbmsType(
+    StandardDbmsType(
         final String name,
         final String driverManagerName,
         final int defaultPort,
@@ -90,31 +107,19 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         final Set<String> schemaExcludSet,
         final Function<Dbms, DbmsHandler> dbmsMapper
     ) {
-        this.name = Objects.requireNonNull(name);
-        this.driverManagerName = Objects.requireNonNull(driverManagerName);
-        this.defaultPort = defaultPort;
-        this.schemaTableDelimiter = Objects.requireNonNull(schemaTableDelimiter);
-        this.nameMeaning = Objects.requireNonNull(nameMeaning);
-        this.driverName = Objects.requireNonNull(driverName);
-        this.defaultConnectionParameters = Objects.requireNonNull(defaultConnectionParameters);
-        this.jdbcConnectorName = Objects.requireNonNull(jdbcConnectorName);
-        this.fieldEncloserStart = Objects.requireNonNull(fieldEncloserStart);
-        this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
-        this.schemaExcludSet = Objects.requireNonNull(schemaExcludSet);
-        this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
+        this.name                        = requireNonNull(name);
+        this.driverManagerName           = requireNonNull(driverManagerName);
+        this.defaultPort                 = defaultPort;
+        this.schemaTableDelimiter        = requireNonNull(schemaTableDelimiter);
+        this.nameMeaning                 = requireNonNull(nameMeaning);
+        this.driverName                  = requireNonNull(driverName);
+        this.defaultConnectionParameters = requireNonNull(defaultConnectionParameters);
+        this.jdbcConnectorName           = requireNonNull(jdbcConnectorName);
+        this.fieldEncloserStart          = requireNonNull(fieldEncloserStart);
+        this.fieldEncloserEnd            = requireNonNull(fieldEncloserEnd);
+        this.schemaExcludSet             = requireNonNull(schemaExcludSet);
+        this.dbmsMapper                  = requireNonNull(dbmsMapper);
     }
-    private final String name;
-    private final String driverManagerName;
-    private final int defaultPort;
-    private final String schemaTableDelimiter;
-    private final String nameMeaning;
-    private final String driverName;
-    private final String defaultConnectionParameters;
-    private final String jdbcConnectorName;
-    private final String fieldEncloserStart;
-    private final String fieldEncloserEnd;
-    private final Set<String> schemaExcludSet;
-    private final Function<Dbms, DbmsHandler> dbmsMapper;
 
     @Override
     public String getName() {
@@ -182,7 +187,7 @@ public enum StandardDbmsType implements EnumHelper<StandardDbmsType>, DbmsType {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
 
-    public static StandardDbmsType defaultFor(final ConfigEntity entity) {
+    public static <C extends Node & Enableable> StandardDbmsType defaultFor(final C entity) {
         return Hidden.defaultFor(stream(), t -> false, entity, DbmsTypeable.class, MYSQL);
     }
 

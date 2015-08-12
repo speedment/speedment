@@ -17,7 +17,8 @@
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.config.model.ConfigEntity;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -29,13 +30,18 @@ import java.util.stream.Stream;
 @Api(version = "2.0")
 public enum OrderType implements EnumHelper<OrderType> {
 
-    ASC("Asc"), DESC("Desc"), NONE("None");
-    static final Map<String, OrderType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
+    ASC  ("Asc"), 
+    DESC ("Desc"), 
+    NONE ("None");
+    
+    private static final Map<String, OrderType> NAME_MAP =
+        EnumHelper.Hidden.buildMap(values());
+    
+    private final String name;
 
-    private OrderType(final String name) {
+    OrderType(final String name) {
         this.name = name;
     }
-    private final String name;
 
     @Override
     public String getName() {
@@ -46,7 +52,7 @@ public enum OrderType implements EnumHelper<OrderType> {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
 
-    public static OrderType defaultFor(final ConfigEntity entity) {
+    public static <C extends Node & Enableable> OrderType defaultFor(final C entity) {
         return Hidden.defaultFor(stream(), p -> false, entity, OrderTypeable.class, ASC);
     }
 

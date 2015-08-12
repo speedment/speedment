@@ -17,6 +17,8 @@
 package com.speedment.core.config.model;
 
 import com.speedment.core.annotations.Api;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.impl.ProjectManagerImpl;
 import java.util.function.Supplier;
@@ -26,12 +28,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface ProjectManager extends ConfigEntity, Parent<Project> {
+public interface ProjectManager extends Node, Enableable, Parent<Project> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<ProjectManager> provider = () -> new ProjectManagerImpl();
+    enum Holder { HOLDER;
+        private Supplier<ProjectManager> provider = ProjectManagerImpl::new;
     }
 
     static void setSupplier(Supplier<ProjectManager> provider) {

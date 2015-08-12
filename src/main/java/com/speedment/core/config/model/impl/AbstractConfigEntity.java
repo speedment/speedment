@@ -16,10 +16,11 @@
  */
 package com.speedment.core.config.model.impl;
 
-import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Optional;
 
 /**
@@ -29,7 +30,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements ConfigEntity {
+public abstract class AbstractConfigEntity implements Node, Enableable {
 
     private boolean enabled;
     private String name;
@@ -63,25 +64,24 @@ public abstract class AbstractConfigEntity implements ConfigEntity {
     public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("A name can't be null");
-        }
-        if (name.contains(".")) {
+        } else if (name.contains(".")) {
             throw new IllegalArgumentException("A name can't contain a '.' character");
-        }
-        if (name.contains(" ")) {
+        } else if (name.contains(" ")) {
             throw new IllegalArgumentException("A name can't contain a space character");
         }
+        
         this.name = name;
     }
 
     @Override
     public String toString() {
         return getInterfaceMainClass().getSimpleName()
-                + " '" + Optional.of(this)
-                .filter(e -> e.isChildInterface())
-                .map(e -> (Child<?>) e)
-                .flatMap(e -> e.getParent())
-                .map(e -> getRelativeName(Project.class) /*+ "." + getName()*/)
-                .orElse(getName())
-                + "'";
+            + " '" + Optional.of(this)
+            .filter(AbstractConfigEntity::isChildInterface)
+            .map(e -> (Child<?>) e)
+            .flatMap(Child::getParent)
+            .map(e -> getRelativeName(Project.class))
+            .orElse(getName())
+            + "'";
     }
 }

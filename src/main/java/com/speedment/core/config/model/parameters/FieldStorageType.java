@@ -17,7 +17,8 @@
 package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.config.model.ConfigEntity;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -29,14 +30,18 @@ import java.util.stream.Stream;
 @Api(version = "2.0")
 public enum FieldStorageType implements EnumHelper<FieldStorageType> {
 
-    INHERIT("Inherit from parent"), WRAPPER("Wrapper class"), PRIMITIVE("Primitive class");
-    static final Map<String, FieldStorageType> NAME_MAP = EnumHelper.Hidden.buildMap(values());
-
-    private FieldStorageType(final String name) {
-        this.name = name;
-    }
+    INHERIT   ("Inherit from parent"), 
+    WRAPPER   ("Wrapper class"), 
+    PRIMITIVE ("Primitive class");
+    
+    private static final Map<String, FieldStorageType> NAME_MAP = 
+        EnumHelper.Hidden.buildMap(values());
     
     private final String name;
+
+    FieldStorageType(final String name) {
+        this.name = name;
+    }
 
     @Override
     public String getName() {
@@ -47,7 +52,7 @@ public enum FieldStorageType implements EnumHelper<FieldStorageType> {
         return Hidden.findByNameIgnoreCase(NAME_MAP, name);
     }
     
-    public static FieldStorageType defaultFor(final ConfigEntity entity) {
+    public static <C extends Node & Enableable> FieldStorageType defaultFor(final C entity) {
         return Hidden.defaultFor(stream(), f -> f == INHERIT, entity, FieldStorageTypeable.class, WRAPPER);
     }
 

@@ -16,9 +16,9 @@
  */
 package com.speedment.core.config.model.parameters;
 
-import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.aspects.Parent;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author pemi
  * @param <E> The Enum type
  */
 public interface EnumHelper<E extends Enum<E>> {
@@ -37,8 +37,14 @@ public interface EnumHelper<E extends Enum<E>> {
     String getName();
 
     class Hidden {
-        static <E extends Enum<E> & EnumHelper<E>, C extends ConfigEntity> E defaultFor(
-            Stream<E> stream, Predicate<E> predicate, final C entity, final Class<?> ableClass, final E defaultValue) {
+        
+        static <E extends Enum<E> & EnumHelper<E>, C extends Node & Enableable> 
+            E defaultFor(
+                Stream<E> stream, 
+                Predicate<E> predicate, 
+                final C entity, 
+                final Class<?> ableClass, 
+                final E defaultValue) {
             
             return Optional.ofNullable(entity)
                 .flatMap(e -> e.asChild())

@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.IndexImpl;
 import groovy.lang.Closure;
 import java.util.function.Supplier;
@@ -28,12 +30,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface Index extends ConfigEntity, Child<Table>, Parent<IndexColumn> {
+public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColumn> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<Index> provider = () -> new IndexImpl();
+    enum Holder { HOLDER;
+        private Supplier<Index> provider = IndexImpl::new;
     }
 
     static void setSupplier(Supplier<Index> provider) {

@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ForeignKeyImpl;
 import groovy.lang.Closure;
 import java.util.function.Supplier;
@@ -28,12 +30,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface ForeignKey extends ConfigEntity, Child<Table>, Parent<ForeignKeyColumn> {
+public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<ForeignKeyColumn> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<ForeignKey> provider = () -> new ForeignKeyImpl();
+    enum Holder { HOLDER;
+        private Supplier<ForeignKey> provider = ForeignKeyImpl::new;
     }
 
     static void setSupplier(Supplier<ForeignKey> provider) {

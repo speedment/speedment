@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.config.model.aspects.Ordinable;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ForeignKeyColumnImpl;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -28,12 +30,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface ForeignKeyColumn extends ConfigEntity, Ordinable, Child<ForeignKey> {
+public interface ForeignKeyColumn extends Node, Enableable, Ordinable, Child<ForeignKey> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<ForeignKeyColumn> provider = () -> new ForeignKeyColumnImpl();
+    enum Holder { HOLDER;
+        private Supplier<ForeignKeyColumn> provider = ForeignKeyColumnImpl::new;
     }
 
     static void setSupplier(Supplier<ForeignKeyColumn> provider) {

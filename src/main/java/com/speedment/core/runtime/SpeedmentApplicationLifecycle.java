@@ -16,7 +16,6 @@
  */
 package com.speedment.core.runtime;
 
-import com.speedment.core.config.model.ConfigEntity;
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.External;
 import com.speedment.core.config.model.Project;
@@ -24,6 +23,7 @@ import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
 import com.speedment.core.config.model.impl.utils.MethodsParser;
 import com.speedment.core.Buildable;
+import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.lifecycle.AbstractLifecycle;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.exception.SpeedmentException;
@@ -31,7 +31,6 @@ import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
-import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.stat.Statistics;
@@ -48,7 +47,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -69,8 +68,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     private final static Logger LOGGER = LoggerManager.getLogger(SpeedmentApplicationLifecycle.class);
 
-    private final List<Tuple3<Class<? extends ConfigEntity>, String, Consumer<ConfigEntity>>> withsNamed;
-    private final List<Tuple2<Class<? extends ConfigEntity>, Consumer<ConfigEntity>>> withsAll;
+    private final List<Tuple3<Class<? extends Node>, String, Consumer<? extends Node>>> withsNamed;
+    private final List<Tuple2<Class<? extends Node>, Consumer<Node>>> withsAll;
 
     private ApplicationMetadata speedmentApplicationMetadata;
     private Path configPath;
@@ -93,10 +92,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param consumer the consumer to apply.
      * @return this instance
      */
-    public <C extends ConfigEntity> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
+    public <C extends Node & Enableable> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
         @SuppressWarnings("unchecked")
-        final Consumer<ConfigEntity> consumerCasted = (Consumer<ConfigEntity>) Objects.requireNonNull(consumer);
-        withsNamed.add(Tuples.of(Objects.requireNonNull(type), Objects.requireNonNull(name), consumerCasted));
+        final Consumer<Node> consumerCasted = (Consumer<Node>) requireNonNull(consumer);
+        withsNamed.add(Tuples.of(requireNonNull(type), requireNonNull(name), consumerCasted));
         return self();
     }
 
@@ -110,10 +109,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param consumer the consumer to apply.
      * @return this instance
      */
-    public <C extends ConfigEntity> T with(final Class<C> type, final Consumer<C> consumer) {
+    public <C extends Node & Enableable> T with(final Class<C> type, final Consumer<C> consumer) {
         @SuppressWarnings("unchecked")
-        final Consumer<ConfigEntity> consumerCasted = (Consumer<ConfigEntity>) Objects.requireNonNull(consumer);
-        withsAll.add(Tuples.of(Objects.requireNonNull(type), consumerCasted));
+        final Consumer<Node> consumerCasted = (Consumer<Node>) requireNonNull(consumer);
+        withsAll.add(Tuples.of(requireNonNull(type), consumerCasted));
         return self();
     }
 
@@ -227,22 +226,22 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     @Override
     protected void onInit() {
-        forEachManagerInSeparateThread(mgr -> mgr.initialize());
+        forEachManagerInSeparateThread(Manager::initialize);
     }
 
     @Override
     protected void onResolve() {
-        forEachManagerInSeparateThread(mgr -> mgr.resolve());
+        forEachManagerInSeparateThread(Manager::resolve);
     }
 
     @Override
     protected void onStart() {
-        forEachManagerInSeparateThread(mgr -> mgr.start());
+        forEachManagerInSeparateThread(Manager::start);
     }
 
     @Override
     protected void onStop() {
-        forEachManagerInSeparateThread(mgr -> mgr.stop());
+        forEachManagerInSeparateThread(Manager::stop);
     }
 
     /**
@@ -285,33 +284,27 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
             // Apply overidden item (if any) for all ConfigEntities of a given class
             withsAll.forEach(t2 -> {
-                final Class<? extends ConfigEntity> clazz = t2.get0();
-                final Consumer<ConfigEntity> consumer = t2.get1();
+                final Class<? extends Node> clazz = t2.get0();
+                final Consumer<Node> consumer = t2.get1();
                 project.traverse()
                     .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                    .map(ConfigEntity.class::cast)
-                    .forEachOrdered(n -> consumer.accept(n));
+                    .map(Node.class::cast)
+                    .forEachOrdered(consumer::accept);
             });
 
             // Apply a named overidden item (if any) for all ConfigEntities of a given class
             withsNamed.forEach(t3 -> {
-                final Class<? extends ConfigEntity> clazz = t3.get0();
+                final Class<? extends Node> clazz = t3.get0();
                 final String name = t3.get1();
-                final Consumer<ConfigEntity> consumer = t3.get2();
+                
+                @SuppressWarnings("unchecked")
+                final Consumer<Node> consumer = (Consumer<Node>) t3.get2();
+                
                 project.traverse()
                     .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                    .map(ConfigEntity.class::cast)
+                    .map(Node.class::cast)
                     .filter(c -> name.equals(c.getRelativeName(Project.class)))
-                    .forEachOrdered(n -> consumer.accept(n));
-
-//                    Trees.traverse((Child) project, c -> c.asParent()
-//                        .map(p -> p.stream())
-//                        .orElse(Stream.empty())
-//                        .map(n -> (Child<?>) n),
-//                        Trees.TraversalOrder.DEPTH_FIRST_PRE
-//                    ).filter((Child c) -> clazz.equals(c.getClass()))
-//                        .filter((Child c) -> name.equals(c.getRelativeName(Project.class)))
-//                        .forEachOrdered((Child c) -> consumer.accept(c));
+                    .forEachOrdered(consumer::accept);
             });
 
             Platform.get().get(ProjectComponent.class).setProject(project);
@@ -369,7 +362,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         AnalyticsUtil.notify(APP_STARTED);
         Statistics.onNodeStarted();
 
-        Package package_ = SpeedmentApplicationLifecycle.class.getPackage();
         LOGGER.info(
             SpeedmentVersion.getImplementationTitle()
             + " (" + SpeedmentVersion.getImplementationVersion() + ")"
@@ -384,24 +376,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return super.toString() + ", path=" + getConfigPath().toString();
     }
 
-//    /// Bean methods
-//    public String getConfigFileName() {
-//        return configFileName;
-//    }
-//
-//    public T setConfigFileName(String configFileName) {
-//        this.configFileName = Objects.requireNonNull(configFileName);
-//        return thizz();
-//    }
-//
-//    public String getConfigDirectoryName() {
-//        return configDirectoryName;
-//    }
-//
-//    public T setConfigDirectoryName(String configDirectoryName) {
-//        this.configDirectoryName = Objects.requireNonNull(configDirectoryName);
-//        return thizz();
-//    }
     // Utilities
     /**
      * Support method to do something with all managers i separate threads.
@@ -426,5 +400,4 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private static <T> List<T> newList() {
         return new ArrayList<>();
     }
-
 }

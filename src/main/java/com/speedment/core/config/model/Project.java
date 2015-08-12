@@ -19,6 +19,8 @@ package com.speedment.core.config.model;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ProjectImpl;
 import groovy.lang.Closure;
 import java.nio.file.Path;
@@ -30,12 +32,10 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface Project extends ConfigEntity, Parent<Dbms>, Child<ProjectManager> {
+public interface Project extends Node, Enableable, Parent<Dbms>, Child<ProjectManager> {
 
-    enum Holder {
-
-        HOLDER;
-        private Supplier<Project> provider = () -> new ProjectImpl();
+    enum Holder { HOLDER;
+        private Supplier<Project> provider = ProjectImpl::new;
     }
 
     static void setSupplier(Supplier<Project> provider) {
