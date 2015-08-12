@@ -16,20 +16,13 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
+
 /**
  *
  * @author pemi
  */
-public class CharSequences implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private CharSequences() {
-        instanceNotAllowed();
-    }
+public class CharSequences {
 
     public static final int INDEX_NOT_FOUND = -1;
 
@@ -89,4 +82,8 @@ public class CharSequences implements PureStatic {
         return cs.subSequence(startIndex, cs.length());
     }
 
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private CharSequences() { instanceNotAllowed(getClass()); }
 }

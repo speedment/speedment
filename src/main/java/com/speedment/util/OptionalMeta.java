@@ -42,6 +42,16 @@ public final class OptionalMeta<T, M> {
         this.metaData = null;
     }
 
+    private OptionalMeta(T value) {
+        this.value = Objects.requireNonNull(value);
+        this.metaData = null;
+    }
+
+    private OptionalMeta(T value, M metaData) {
+        this.value = value;
+        this.metaData = metaData;
+    }
+
     /**
      * Returns an empty {@code OptionalMeta} instance. No value is present for
      * this OptionalMeta.
@@ -59,16 +69,6 @@ public final class OptionalMeta<T, M> {
         @SuppressWarnings("unchecked")
         final OptionalMeta<T, M> t = (OptionalMeta<T, M>) EMPTY;
         return t;
-    }
-
-    private OptionalMeta(T value) {
-        this.value = Objects.requireNonNull(value);
-        this.metaData = null;
-    }
-
-    private OptionalMeta(T value, M metaData) {
-        this.value = value;
-        this.metaData = metaData;
     }
 
     private static final OptionalMeta<?, ?> EMPTY = new OptionalMeta<>();

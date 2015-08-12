@@ -17,7 +17,7 @@
 package com.speedment.util.java;
 
 import static com.speedment.codegen.util.Formatting.ucfirst;
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 import static com.speedment.util.java.sql.SqlUtil.unQuote;
 import static com.speedment.util.stream.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.stream.CollectorUtil.unmodifiableSetOf;
@@ -32,16 +32,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class JavaLanguage implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private JavaLanguage() {
-        instanceNotAllowed();
-    }
+public final class JavaLanguage {
 
     // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
     //
@@ -259,4 +250,9 @@ public class JavaLanguage implements PureStatic {
             .map(String::toLowerCase)
             .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private JavaLanguage() { instanceNotAllowed(getClass()); }
 }

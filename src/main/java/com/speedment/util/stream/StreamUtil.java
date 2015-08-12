@@ -22,7 +22,7 @@
 package com.speedment.util.stream;
 
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -37,16 +37,7 @@ import java.util.stream.StreamSupport;
  *
  * @author Emil Forslund
  */
-public class StreamUtil implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private StreamUtil() {
-        instanceNotAllowed();
-    }
+public final class StreamUtil {
 
     public static <T> Stream<T> streamOfNullable(T element) {
         if (element == null) {
@@ -96,4 +87,8 @@ public class StreamUtil implements PureStatic {
 
     }
 
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private StreamUtil() { instanceNotAllowed(getClass()); }
 }

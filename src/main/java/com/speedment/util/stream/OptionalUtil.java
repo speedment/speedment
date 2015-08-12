@@ -16,7 +16,7 @@
  */
 package com.speedment.util.stream;
 
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -24,16 +24,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class OptionalUtil implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private OptionalUtil() {
-        instanceNotAllowed();
-    }
+public final class OptionalUtil {
 
     public static <T> Stream<T> from(Optional<T> optional) {
         return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
@@ -46,4 +37,9 @@ public final class OptionalUtil implements PureStatic {
             return optional;
         }
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private OptionalUtil() { instanceNotAllowed(getClass()); }
 }

@@ -16,6 +16,7 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -24,19 +25,10 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- *
+ * 
  * @author pemi
  */
-public class Beans implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private Beans() {
-        instanceNotAllowed();
-    }
+public class Beans {
 
     public static <P, T> T with(final T thizz, final P item, final Consumer<P> consumer) {
         consumer.accept(item);
@@ -101,5 +93,9 @@ public class Beans implements PureStatic {
 
         return Optional.of(beanPropertyName(m.getName()) + " = " + quote + String.valueOf(value) + quote + ";");
     }
-
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Beans() { instanceNotAllowed(getClass()); }
 }

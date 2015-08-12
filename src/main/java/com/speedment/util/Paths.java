@@ -16,24 +16,21 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.nio.file.Path;
 
 /**
  *
  * @author Emil Forslund
  */
-public class Paths implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private Paths() {
-        instanceNotAllowed();
-    }
+public final class Paths {
 
     public static String toString(Path path) {
         return path.toString().replace("\\", "/");
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Paths() { instanceNotAllowed(getClass()); }
 }

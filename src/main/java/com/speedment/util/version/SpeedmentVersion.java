@@ -17,7 +17,7 @@
 package com.speedment.util.version;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 
 /**
  * This class holds the parameters normally held in the JAR MANIFEST. By holding
@@ -28,7 +28,7 @@ import com.speedment.util.PureStatic;
  * @since 2.0
  */
 @Api(version = "2.0")
-public class SpeedmentVersion implements PureStatic {
+public final class SpeedmentVersion {
     
     private static final String IMPLEMENTATION_TITLE = "Speedment";
     private static final String IMPLEMENTATION_VENDOR = "Speedment Inc."; // "Speedment, Inc." difficult to enter into POM because of ','
@@ -39,18 +39,9 @@ public class SpeedmentVersion implements PureStatic {
     private static final String SPECIFICATION_VERSION = "2.0";
 
     /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private SpeedmentVersion() {
-        instanceNotAllowed();
-    }
-
-    /**
      * Returns the non-null title of the Speedment framework.
      *
-     * @return the non-null title of the Speedment framework
+     * @return the title
      */
     public static String getImplementationTitle() {
         return IMPLEMENTATION_TITLE;
@@ -102,4 +93,9 @@ public class SpeedmentVersion implements PureStatic {
     public static String getSpecificationVersion() {
         return SPECIFICATION_VERSION;
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private SpeedmentVersion() { instanceNotAllowed(getClass()); }
 }

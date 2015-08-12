@@ -17,20 +17,28 @@
 package com.speedment.util;
 
 /**
- * Support interface for classes that only contains static methods and fields.
+ * Support class for classes that only contains static methods and fields.
  * This interface can for example be used for various "Util" classes.
  *
  * @author pemi
  */
-public interface PureStatic {
+public final class Util {
 
     /**
      * Support method that can be used in constructors to throw an
      * {@code UnsupportedOperationException} if someone is trying to create an
      * instance of the class.
      */
-    default void instanceNotAllowed() {
-        throw new UnsupportedOperationException("It is not allowed to create instances of the " + getClass().getName() + " class");
+    public static void instanceNotAllowed(Class<?> caller) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+            "It is not allowed to create instances of the " + 
+            caller.getName() + 
+            " class."
+        );
     }
-
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Util() { instanceNotAllowed(getClass()); }
 }

@@ -43,7 +43,7 @@ public enum Pluralis {
     private final Set<String> uncountables;
     private final Map<String, String> irregulars;
 
-    private Pluralis() {
+    Pluralis() {
         rules = new ArrayList<>();
         uncountables = new HashSet<>();
         irregulars = new HashMap<>();
@@ -184,13 +184,13 @@ public enum Pluralis {
         addUncountable("furniture", "equipment", "information", "rice", "money", "species", "series", "fish", "sheep", "data");
     }
 
-    protected class Rule implements Function<String, Optional<String>> {
+    private final class Rule implements Function<String, Optional<String>> {
 
         protected final String expression;
         protected final Pattern expressionPattern;
         protected final String replacement;
 
-        protected Rule(final String expression, final String replacement) {
+        private Rule(final String expression, final String replacement) {
             this.expression = Objects.requireNonNull(expression);
             this.replacement = Objects.requireNonNull(replacement);
             this.expressionPattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);

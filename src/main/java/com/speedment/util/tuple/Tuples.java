@@ -16,7 +16,6 @@
  */
 package com.speedment.util.tuple;
 
-import com.speedment.util.PureStatic;
 import com.speedment.util.tuple.impl.Tuple1Impl;
 import com.speedment.util.tuple.impl.Tuple1OfNullablesImpl;
 import com.speedment.util.tuple.impl.Tuple2Impl;
@@ -29,7 +28,7 @@ import com.speedment.util.tuple.impl.Tuple3OfNullablesImpl;
  *
  * @author pemi
  */
-public interface Tuples extends PureStatic {
+public interface Tuples {
 
     /**
      * Creates and returns a Tuple1 with the given parameters.

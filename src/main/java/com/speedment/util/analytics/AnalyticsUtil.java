@@ -16,24 +16,15 @@
  */
 package com.speedment.util.analytics;
 
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 
 /**
  *
  * @author pemi
  */
-public class AnalyticsUtil implements PureStatic {
+public final class AnalyticsUtil {
 
     private static final String TRACKING_CODE = "UA-54384165-1";
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private AnalyticsUtil() {
-        instanceNotAllowed();
-    }
 
     public static void notify(final FocusPoint focusPoint) {
         final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
@@ -45,4 +36,8 @@ public class AnalyticsUtil implements PureStatic {
         notify(new FocusPoint(focusPointName));
     }
 
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private AnalyticsUtil() { instanceNotAllowed(getClass()); }
 }

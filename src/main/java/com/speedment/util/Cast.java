@@ -16,22 +16,14 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public final class Cast implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private Cast() {
-        instanceNotAllowed();
-    }
+public final class Cast {
 
     public static <T> Optional<T> cast(Object o, Class<T> clazz) {
         if (clazz.isAssignableFrom(o.getClass())) {
@@ -47,4 +39,9 @@ public final class Cast implements PureStatic {
             .map(clazz::cast)
             .get();
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Cast() { instanceNotAllowed(getClass()); }
 }

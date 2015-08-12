@@ -20,18 +20,14 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.PureStatic;
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public class FieldUtil implements PureStatic {
-
-    private FieldUtil() {
-        instanceNotAllowed();
-    }
+public final class FieldUtil {
 
     /**
      * Finds and returns a {@code Column} from an entityClass with the given
@@ -48,5 +44,9 @@ public class FieldUtil implements PureStatic {
             .findAny();
         return oColumn.orElseThrow(() -> new IllegalStateException("A column named " + name + " can not be found in the table " + table.getName()));
     }
-
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private FieldUtil() { instanceNotAllowed(getClass()); }
 }

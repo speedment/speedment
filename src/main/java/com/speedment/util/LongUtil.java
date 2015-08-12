@@ -16,6 +16,7 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,16 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author pemi
  */
-public class LongUtil implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private LongUtil() {
-        instanceNotAllowed();
-    }
+public class LongUtil {
 
     @SuppressWarnings("unchecked")
     public static <T extends Number> T cast(Long l, Class<T> targetClass) {
@@ -78,4 +70,8 @@ public class LongUtil implements PureStatic {
         }
     }
 
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private LongUtil() { instanceNotAllowed(getClass()); }
 }

@@ -16,6 +16,7 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class TextUtil implements PureStatic {
+public final class TextUtil {
 
     //private static final Pattern WORDS = Pattern.compile("[\\.,\\s!;?:\"]+");
     private static final Pattern WORDS = Pattern.compile("[\\s]+");
@@ -37,10 +38,6 @@ public class TextUtil implements PureStatic {
     private static final String NL = "\n";
     private static final int JAVA_DOC_WIDTH = 74;
     private static final Set<String> JAVA_DOC_SINGLE_LINE_WORDS = Collections.unmodifiableSet(Stream.of("<p>").collect(Collectors.toSet()));
-
-    private TextUtil() {
-        instanceNotAllowed();
-    }
 
     /**
      * Creates and returns a Stream of the words in the given text. Words are a
@@ -115,4 +112,9 @@ public class TextUtil implements PureStatic {
     public static String formatJavaDocBox(String text) {
         return formatTextBox(text, JAVA_DOC_WIDTH, JAVADOC_WORDS, JAVA_DOC_SINGLE_LINE_WORDS);
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private TextUtil() { instanceNotAllowed(getClass()); }
 }

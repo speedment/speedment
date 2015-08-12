@@ -16,6 +16,7 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -26,16 +27,7 @@ import java.util.stream.Collectors;
  *
  * @author pemi
  */
-public class Maps implements PureStatic {
-
-    /**
-     * This class contains only static methods and thus, no instance shall be
-     * created.
-     *
-     */
-    private Maps() {
-        instanceNotAllowed();
-    }
+public final class Maps {
 
     public static <K, V> Map.Entry<? extends K, ? extends V> entry(K key, V value) {
         return new AbstractMap.SimpleEntry<>(key, value);
@@ -49,4 +41,8 @@ public class Maps implements PureStatic {
         return Collectors.toConcurrentMap((e) -> e.getKey(), (e) -> e.getValue());
     }
 
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Maps() { instanceNotAllowed(getClass()); }
 }
