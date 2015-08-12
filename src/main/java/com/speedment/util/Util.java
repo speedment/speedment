@@ -28,6 +28,8 @@ public final class Util {
      * Support method that can be used in constructors to throw an
      * {@code UnsupportedOperationException} if someone is trying to create an
      * instance of the class.
+     * 
+     * @param caller the class of the instance that called this method
      */
     public static void instanceNotAllowed(Class<?> caller) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(

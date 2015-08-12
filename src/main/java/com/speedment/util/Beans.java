@@ -20,50 +20,25 @@ import static com.speedment.util.Util.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
+ * Utility class with methods for managing generated beans.
  * 
  * @author pemi
  */
-public class Beans {
+public final class Beans {
 
-    public static <P, T> T with(final T thizz, final P item, final Consumer<P> consumer) {
-        consumer.accept(item);
-        return thizz;
-    }
-
-    public static <P, T> T run(final T thizz, final Runnable runnable) {
-        runnable.run();
-        return thizz;
-    }
-
-    public static <P, T> T withSeveral(final T thizz, final P[] restOfParameters, final Consumer<P> consumer) {
-        Stream.of(restOfParameters).forEach(consumer::accept);
-        return thizz;
-    }
-
-    public static <P1, P2, T> T with(final T thizz, final P1 firstParameter, final P2 secondParameter, final BiConsumer<P1, P2> biConsumer) {
-        biConsumer.accept(firstParameter, secondParameter);
-        return thizz;
-    }
-
-    public static String beanPropertyName(String getterName) {
+    public static String beanPropertyName(Method method) {
+        final String getterName = method.getName();
         final int startIndex = (getterName.startsWith("is")) ? 2 : 3;
         return getterName.substring(startIndex, startIndex + 1).toLowerCase() + getterName.substring(startIndex + 1);
     }
 
-    public static String beanPropertyName(Method m) {
-        return beanPropertyName(m.getName());
-    }
-
-    public static Optional<String> getterBeanPropertyNameAndValue(Method m, Object invocationTarget) {
+    public static Optional<String> getterBeanPropertyNameAndValue(Method method, Object invocationTarget) {
 
         Object value;
         try {
-            value = m.invoke(invocationTarget);
+            value = method.invoke(invocationTarget);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             return Optional.empty();
         }
@@ -91,7 +66,7 @@ public class Beans {
             value = value.getClass().getSimpleName() + "." + ((Enum) value).name();
         }
 
-        return Optional.of(beanPropertyName(m.getName()) + " = " + quote + String.valueOf(value) + quote + ";");
+        return Optional.of(beanPropertyName(method) + " = " + quote + String.valueOf(value) + quote + ";");
     }
     
     /**

@@ -43,12 +43,11 @@ import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
-import com.speedment.util.Beans;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 
 /**
@@ -129,40 +128,48 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable,
         }
 
         public Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Project.class, consumer));
+            aquireListAndAdd(Project.class, consumer);
+            return this;
         }
 
         public Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Dbms.class, consumer));
+            aquireListAndAdd(Dbms.class, consumer);
+            return this;
         }
 
         public Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Schema.class, consumer));
+            aquireListAndAdd(Schema.class, consumer);
+            return this;
         }
 
         public Builder<T> addTableConsumer(BiConsumer<T, Table> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Table.class, consumer));
+            aquireListAndAdd(Table.class, consumer);
+            return this;
         }
 
         public Builder<T> addColumnConsumer(BiConsumer<T, Column> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Column.class, consumer));
+            aquireListAndAdd(Column.class, consumer);
+            return this;
         }
 
         public Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(Index.class, consumer));
+            aquireListAndAdd(Index.class, consumer);
+            return this;
         }
 
         public Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer) {
-            return Beans.run(this, () -> aquireListAndAdd(ForeignKey.class, consumer));
+            aquireListAndAdd(ForeignKey.class, consumer);
+            return this;
         }
 
         public Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
-            return Beans.run(this, () -> this.foreignKeyReferencesThisTableConsumers.add(Objects.requireNonNull(consumer)));
+            foreignKeyReferencesThisTableConsumers.add(requireNonNull(consumer));
+            return this;
         }
 
         @SuppressWarnings("unchecked")
         protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
-            aquireList(clazz).add(Objects.requireNonNull((BiConsumer<T, Node>) consumer));
+            aquireList(clazz).add(requireNonNull((BiConsumer<T, Node>) consumer));
         }
 
         @SuppressWarnings("unchecked")
