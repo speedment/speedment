@@ -17,6 +17,7 @@
 package com.speedment.codegen.util;
 
 import static com.speedment.codegen.util.Formatting.EMPTY;
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.stream.Collector;
 import java.util.Collections;
 import java.util.Optional;
@@ -31,7 +32,8 @@ import java.util.function.Supplier;
  *
  * @author Emil Forslund
  */
-public class CodeCombiner {
+public final class CodeCombiner {
+    
 	public static Collector<String, ?, String> joinIfNotEmpty(String delimiter) {
 		return joinIfNotEmpty(delimiter, EMPTY, EMPTY);
 	}
@@ -111,4 +113,9 @@ public class CodeCombiner {
             return characteristics;
         }
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private CodeCombiner() { instanceNotAllowed(getClass()); }
 }

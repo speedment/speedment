@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.util;
 
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public class Formatting {
+public final class Formatting {
     
     /**
      * Returns a string consisting of the specified blocks concatenated
@@ -324,4 +325,9 @@ public class Formatting {
 			SLASH = "/",
 			H = "\"",
             DOLLAR = "$";
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Formatting() { instanceNotAllowed(getClass()); }
 }

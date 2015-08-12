@@ -17,6 +17,7 @@
 package com.speedment.codegen.util;
 
 import com.speedment.codegen.lang.interfaces.Copyable;
+import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,7 +30,8 @@ import java.util.function.Function;
  *
  * @author Emil Forslund
  */
-public abstract class Copier {
+public final class Copier {
+    
 	public static <T extends Copyable<T>> T copy(T prototype) {
         return prototype == null ? null : prototype.copy();
     }
@@ -68,4 +70,9 @@ public abstract class Copier {
 		prototype.forEach(e -> empty.add(copier.apply(e)));
 		return empty;
 	}
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private Copier() { instanceNotAllowed(getClass()); }
 }

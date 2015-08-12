@@ -18,6 +18,7 @@ package com.speedment.core.config.model;
 
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
+import static com.speedment.util.Util.instanceNotAllowed;
 import groovy.lang.Closure;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,10 +29,6 @@ import java.util.function.Supplier;
  * @author pemi
  */
 final class ConfigEntityUtil {
-
-    private ConfigEntityUtil() {
-        throw new IllegalStateException("No instances of this class allowed");
-    }
 
     static protected <E extends Node & Enableable> Column findColumnByName(E configEntity, Optional<Table> optionalTable, String name) {
         final Table table = optionalTable
@@ -149,4 +146,9 @@ final class ConfigEntityUtil {
         c.call();
         return result;
     }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private ConfigEntityUtil() { instanceNotAllowed(getClass()); }
 }
