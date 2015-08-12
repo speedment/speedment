@@ -87,7 +87,7 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
 
     // Groovy
     default Table table(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewTable);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewTable);
     }
 
 }

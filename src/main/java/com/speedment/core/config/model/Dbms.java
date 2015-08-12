@@ -89,7 +89,7 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
 
     // Groovy
     default Schema schema(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewSchema);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewSchema);
     }
 
     Optional<DbmsHandler> getDbmsHandler();

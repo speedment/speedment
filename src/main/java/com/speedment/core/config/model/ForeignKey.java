@@ -61,7 +61,7 @@ public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<Forei
     }
 
     default ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewForeignKeyColumn);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKeyColumn);
     }
 
 }

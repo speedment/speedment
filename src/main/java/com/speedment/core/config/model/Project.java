@@ -81,7 +81,7 @@ public interface Project extends Node, Enableable, Parent<Dbms>, Child<ProjectMa
 
     // Groovy
     default Dbms dbms(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewDbms);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewDbms);
     }
 
     default Table findTableByName(String fullName) {

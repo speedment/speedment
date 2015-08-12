@@ -93,19 +93,19 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
 
     // Groovy
     default Column column(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewColumn);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewColumn);
     }
 
     default Index index(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewIndex);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndex);
     }
 
     default ForeignKey foreignKey(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
     }
 
     default PrimaryKeyColumn primaryKeyColumn(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewPrimaryKeyColumn);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewPrimaryKeyColumn);
     }
 
 }

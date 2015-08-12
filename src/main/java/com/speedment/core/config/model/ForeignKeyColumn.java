@@ -18,11 +18,14 @@ package com.speedment.core.config.model;
 
 import com.speedment.core.config.model.aspects.Ordinable;
 import com.speedment.core.annotations.Api;
+import static com.speedment.core.config.model.ConfigUtil.findColumnByName;
+import static com.speedment.core.config.model.ConfigUtil.findTableByName;
+import static com.speedment.core.config.model.ConfigUtil.thereIsNo;
 import com.speedment.core.config.model.aspects.Child;
+import com.speedment.core.config.model.aspects.Columnable;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ForeignKeyColumnImpl;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -30,7 +33,8 @@ import java.util.function.Supplier;
  * @author pemi
  */
 @Api(version = "2.0")
-public interface ForeignKeyColumn extends Node, Enableable, Ordinable, Child<ForeignKey> {
+public interface ForeignKeyColumn extends Node, Enableable, Ordinable, 
+    Columnable, Child<ForeignKey> {
 
     enum Holder { HOLDER;
         private Supplier<ForeignKeyColumn> provider = ForeignKeyColumnImpl::new;
@@ -54,10 +58,6 @@ public interface ForeignKeyColumn extends Node, Enableable, Ordinable, Child<For
         return ForeignKey.class;
     }
 
-    default Column getColumn() {
-        return ConfigEntityUtil.findColumnByName(this, ancestor(Table.class), getName());
-    }
-
     @External(type = String.class)
     String getForeignColumnName();
 
@@ -71,10 +71,18 @@ public interface ForeignKeyColumn extends Node, Enableable, Ordinable, Child<For
     void setForeignTableName(String foreignTableName);
 
     default Column getForeignColumn() {
-        return ConfigEntityUtil.findColumnByName(this, Optional.of(getForeignTable()), getForeignColumnName());
+        return findColumnByName(
+            getForeignTable(), 
+            getForeignColumnName()
+        );
     }
 
     default Table getForeignTable() {
-        return ConfigEntityUtil.findTableByName(this, ancestor(Schema.class), getForeignTableName());
+        return findTableByName(
+            ancestor(Schema.class).orElseThrow(
+                thereIsNo(Table.class, ForeignKeyColumn.class, getForeignTableName())
+            ), 
+            getForeignTableName()
+        );
     }
 }

@@ -67,7 +67,7 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
     void setUnique(Boolean unique);
 
     default IndexColumn indexColumn(Closure<?> c) {
-        return ConfigEntityUtil.groovyDelegatorHelper(c, this::addNewIndexColumn);
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndexColumn);
     }
 
 }
