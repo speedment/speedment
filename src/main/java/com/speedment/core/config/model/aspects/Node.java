@@ -161,5 +161,12 @@ public interface Node extends Nameable, Enableable {
         return sj.toString() + childMapper.apply(getName());
     }
 
+    /**
+     * Returns the {@code Class} of the interface of this node. 
+     * <p>
+     * This should <b>not</b> be overridden by implementing classes!
+     * 
+     * @return  the main interface class
+     */
     Class<?> getInterfaceMainClass();
 }

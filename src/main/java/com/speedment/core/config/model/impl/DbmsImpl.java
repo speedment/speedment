@@ -21,7 +21,6 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Parent;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.config.model.parameters.StandardDbmsType;
-import com.speedment.core.db.DbmsHandler;
 import com.speedment.util.Cast;
 import java.util.Optional;
 
@@ -37,7 +36,6 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     private String ipAddress;
     private Integer port;
     private String username, password;
-    private DbmsHandler dbmsHandler;
 
     public DbmsImpl() {
         children = new ChildHolder();
@@ -115,15 +113,5 @@ public class DbmsImpl extends AbstractNamedConfigEntity implements Dbms {
     @Override
     public ChildHolder getChildren() {
         return children;
-    }
-
-    @Override
-    public Optional<DbmsHandler> getDbmsHandler() {
-        return Optional.ofNullable(dbmsHandler);
-    }
-
-    @Override
-    public void setDbmsHandler(DbmsHandler dbmsHandler) {
-        this.dbmsHandler = dbmsHandler;
     }
 }

@@ -34,23 +34,45 @@ import java.util.function.Supplier;
 public interface IndexColumn extends Node, Enableable, Ordinable, OrderTypeable, 
     Columnable, Child<Index> {
 
+    /**
+     * Factory holder.
+     */
     enum Holder { HOLDER;
         private Supplier<IndexColumn> provider = IndexColumnImpl::new;
     }
 
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param provider  the new constructor 
+     */
     static void setSupplier(Supplier<IndexColumn> provider) {
         Holder.HOLDER.provider = provider;
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return  the new instance
+     */
     static IndexColumn newIndexColumn() {
         return Holder.HOLDER.provider.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<IndexColumn> getInterfaceMainClass() {
         return IndexColumn.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<Index> getParentInterfaceMainClass() {
         return Index.class;

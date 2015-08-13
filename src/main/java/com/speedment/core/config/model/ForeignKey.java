@@ -22,7 +22,6 @@ import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ForeignKeyImpl;
-import groovy.lang.Closure;
 import java.util.function.Supplier;
 
 /**
@@ -32,36 +31,59 @@ import java.util.function.Supplier;
 @Api(version = "2.0")
 public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<ForeignKeyColumn> {
 
+    /**
+     * Factory holder.
+     */
     enum Holder { HOLDER;
         private Supplier<ForeignKey> provider = ForeignKeyImpl::new;
     }
 
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param provider  the new constructor 
+     */
     static void setSupplier(Supplier<ForeignKey> provider) {
         Holder.HOLDER.provider = provider;
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return  the new instance
+     */
     static ForeignKey newForeignKey() {
         return Holder.HOLDER.provider.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<ForeignKey> getInterfaceMainClass() {
         return ForeignKey.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<Table> getParentInterfaceMainClass() {
         return Table.class;
     }
 
+    /**
+     * Creates and adds a new {@link ForeignKeyColumn} as a child to this node 
+     * in the configuration tree.
+     * 
+     * @return  the newly added child
+     */
     default ForeignKeyColumn addNewForeignKeyColumn() {
         final ForeignKeyColumn e = ForeignKeyColumn.newForeignKeyColumn();
         add(e);
         return e;
     }
-
-    default ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKeyColumn);
-    }
-
 }

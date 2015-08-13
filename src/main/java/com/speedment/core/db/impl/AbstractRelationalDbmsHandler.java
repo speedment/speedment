@@ -176,7 +176,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             typeMapping = readTypeMapFromDB(connection);
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
-                    final String schemaName = rs.getString("TABLE_SCHEM");
+                    final String schemaName = rs.getString("TABLE_SCHEMA");
                     String catalogName = "";
                     try {
                         // This column is not there for Oracle so handle it

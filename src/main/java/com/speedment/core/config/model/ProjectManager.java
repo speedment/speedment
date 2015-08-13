@@ -30,23 +30,48 @@ import java.util.function.Supplier;
 @Api(version = "2.0")
 public interface ProjectManager extends Node, Enableable, Parent<Project> {
 
+    /**
+     * Factory holder.
+     */
     enum Holder { HOLDER;
         private Supplier<ProjectManager> provider = ProjectManagerImpl::new;
     }
 
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param provider  the new constructor 
+     */
     static void setSupplier(Supplier<ProjectManager> provider) {
         Holder.HOLDER.provider = provider;
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return  the new instance
+     */
     static ProjectManager newProjectManager() {
         return Holder.HOLDER.provider.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<ProjectManager> getInterfaceMainClass() {
         return ProjectManager.class;
     }
 
+    /**
+     * Creates and adds a new {@link Project} as a child to this node in the 
+     * configuration tree.
+     * 
+     * @return  the newly added child
+     */
     default Project addNewProject() {
         final Project e = Project.newProject();
         add(e);

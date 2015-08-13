@@ -33,23 +33,45 @@ import java.util.function.Supplier;
 public interface PrimaryKeyColumn extends Node, Enableable, Ordinable, 
     Columnable, Child<Table> {
 
+    /**
+     * Factory holder.
+     */
     enum Holder { HOLDER;
         private Supplier<PrimaryKeyColumn> provider = PrimaryKeyColumnImpl::new;
     }
 
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     * 
+     * @param provider  the new constructor 
+     */
     static void setSupplier(Supplier<PrimaryKeyColumn> provider) {
         Holder.HOLDER.provider = provider;
     }
 
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use
+     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+
+     * @return  the new instance
+     */
     static PrimaryKeyColumn newPrimaryKeyColumn() {
         return Holder.HOLDER.provider.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<PrimaryKeyColumn> getInterfaceMainClass() {
         return PrimaryKeyColumn.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default Class<Table> getParentInterfaceMainClass() {
         return Table.class;

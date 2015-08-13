@@ -132,7 +132,7 @@ public final class ConfigUtil {
      * @param nodeType    the node type
      * @param parentType  the parent type
      * @param name        the name to look for
-     * @return 
+     * @return            the exception supplier
      */
     public static Supplier<SpeedmentException> thereIsNo(Class<?> nodeType, Class<?> parentType, String name) {
         return () -> new SpeedmentException(
