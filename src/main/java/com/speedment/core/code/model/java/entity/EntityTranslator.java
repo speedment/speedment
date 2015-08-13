@@ -315,6 +315,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link JsonFormatter}"))
                 .add(SEE.setText("JsonFormatter"))
             );
+
     }
 
     private Method stream() {
