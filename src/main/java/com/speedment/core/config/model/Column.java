@@ -119,10 +119,10 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      * <p>
      * This property is editable in the GUI through reflection.
      * 
-     * @param nullable <code>true</code> if the column should auto increment
+     * @param autoIncrement <code>true</code> if the column should auto increment
      */
     @External(type = Boolean.class)
-    void setAutoincrement(Boolean nullable);
+    void setAutoincrement(Boolean autoIncrement);
 
     /**
      * Returns the alias of this column, which is the name that Speedment will
