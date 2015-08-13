@@ -28,7 +28,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * A DbmsHandler provides the interface between Speedment an an underlying Dbms.
+ * A DbmsHandler provides the interface between Speedment an an underlying 
+ * {@link Dbms}.
  *
  * @author pemi
  * @since 2.0
@@ -36,111 +37,116 @@ import java.util.stream.Stream;
 public interface DbmsHandler {
 
     /**
-     * Returns the {@code Dbms} {@code ConfigEntity} that is used by this
-     * {@code DbmsHandler}.
+     * Returns the {@link Dbms} node that is used by this {@code DbmsHandler}.
      *
-     * @return the {@code Dbms} {@code ConfigEntity} that is used by this
-     * {@code DbmsHandler}
+     * @return  the {@link Dbms} node
      */
     Dbms getDbms();
 
     /**
-     * Returns a Stream of un-populated Schemas that are available in this
-     * database. The schemas are not populated by tables, columns etc. and thus,
-     * contains only top level Schema information. Schemas that are a part of
-     * the getDbms().getType().getSchemaExcludSet() Set are excluded from the
-     * Stream.
+     * Returns a Stream of un-populated {@link Schema Schemas} that are 
+     * available in this database. The schemas are not populated by tables, 
+     * columns etc. and thus, contains only top level Schema information. 
+     * Schemas that are a part of the 
+     * {@code getDbms().getType().getSchemaExcludSet()} set are excluded from 
+     * the {@code Stream}.
      * <p>
      * This method can be used to present a list of available Schemas before
      * they are actually being used, for example in a GUI.
      *
-     * @return a Stream of un-populated Schemas that are available in this
-     * database
+     * @return  a Stream of un-populated Schemas that are available in this
+     *          database
      */
     Stream<Schema> schemasUnpopulated();
 
     /**
-     * Returns a Stream of populated Schemas that are available in this
-     * database. The schemas are populated by all their sub items such as
-     * tables, columns etc. Schemas that are a part of the
-     * getDbms().getType().getSchemaExcludSet() Set are excluded from the
-     * Stream.
+     * Returns a Stream of populated {@link Schema Schemas} that are available 
+     * in this database. The schemas are populated by all their sub items such 
+     * as tables, columns etc. Schemas that are a part of the
+     * {@code getDbms().getType().getSchemaExcludSet()} set are excluded from 
+     * the {@code Stream}.
      * <p>
      * This method can be used to obtain a complete inventory of the database
      * structure.
      *
-     * @return a Stream of populated Schemas that are available in this database
+     * @return  a stream of populated {@link Schema Schemas} that are available 
+     *          in this database
      */
     public Stream<Schema> schemas();
 
-//    <ENTITY> long readAll(Consumer<ENTITY> consumer);
-//
-//    <PK> ResultSet read(Table table, PK primaryKey);
-//
-//    <ENTITY> void insert(Table table, ENTITY entity);
-//
-//    <ENTITY> void update(Table table, ENTITY entity);
-//
-//    <ENTITY> void delete(Table table, ENTITY entity);
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
      * ResultSet using a provided mapper and return a Stream of the mapped
      * objects. The ResultSet is eagerly consumed so that all elements in the
      * ResultSet are read before the Stream produces any objects. If no objects
-     * are present or if an SqlExeption is thrown internally, an empty Stream is
-     * returned.
+     * are present or if an SqlExeption is thrown internally, an {@code empty} 
+     * stream is returned.
      *
-     * @param <T> The type of the objects in the Stream to return
-     * @param sql The SQL command to execute
-     * @param rsMapper The mapper to use when iterating over the ResultSet
-     * @return a Stream of the mapped objects
+     * @param <T>       the type of the objects in the stream to return
+     * @param sql       the SQL command to execute
+     * @param rsMapper  the mapper to use when iterating over the ResultSet
+     * @return          a stream of the mapped objects
      */
-    default <T> Stream<T> executeQuery(final String sql, SqlFunction<ResultSet, T> rsMapper) {
+    default <T> Stream<T> executeQuery(
+        final String sql, 
+        final SqlFunction<ResultSet, T> rsMapper) {
+        
         return executeQuery(sql, Collections.emptyList(), rsMapper);
     }
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
-     * ResultSet using a provided mapper and return a Stream of the mapped
-     * objects. The ResultSet is eagerly consumed. If no objects are present or
-     * if an SqlExeption is thrown internally, an empty Stream is returned.
+     * {@link ResultSet} using a provided mapper and return a stream of the 
+     * mapped objects. The {@code ResultSet} is eagerly consumed. If no objects 
+     * are present or if an {@link SqlExeption} is thrown internally, an 
+     * {@code empty} stream is returned.
      *
-     * @param <T> The type of the objects in the Stream to return
-     * @param sql The non-null SQL command to execute
-     * @param values non-null values to use for "?" parameters in the sql
-     * command
-     * @param rsMapper The non-null mapper to use when iterating over the
-     * ResultSet
-     * @return a Stream of the mapped objects
+     * @param <T>       the type of the objects in the stream to return
+     * @param sql       the non-null SQL command to execute
+     * @param values    non-null values to use for "?" parameters in the sql
+     *                  command
+     * @param rsMapper  the non-null mapper to use when iterating over the
+     *                  {@link ResultSet}
+     * @return          a stream of the mapped objects
      */
-    public <T> Stream<T> executeQuery(final String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper);
+    public <T> Stream<T> executeQuery(
+        final String sql, 
+        final List<?> values, 
+        final SqlFunction<ResultSet, T> rsMapper);
 
     /**
      * Lazily Executes a SQL query and subsequently maps each row in the
-     * ResultSet using a provided mapper and return a Stream of the mapped
-     * objects. The ResultSet is lazily consumed so that the Stream will consume
-     * the ResultSet as the objects are consumed. If no objects are present, an
-     * empty Stream is returned.
+     * {@link ResultSet} using a provided mapper and return a stream of the 
+     * mapped objects. The {@code ResultSet} is lazily consumed so that the 
+     * stream will consume the {@code ResultSet} as the objects are consumed. If 
+     * no objects are present, an {@code empty} stream is returned.
      *
-     * @param <T> The type of the objects in the Stream to return
-     * @param sql The non-null SQL command to execute
-     * @param values non-null List of objects to use for "?" parameters in the
-     * sql command
-     * @param rsMapper The non-null mapper to use when iterating over the
-     * ResultSet
-     * @return a Stream of the mapped objects
+     * @param <T>       the type of the objects in the Stream to return
+     * @param sql       the non-null SQL command to execute
+     * @param values    non-null List of objects to use for "?" parameters in 
+     *                  the SQL command
+     * @param rsMapper  the non-null mapper to use when iterating over the
+     *                  {@link ResultSet}
+     * @return          a stream of the mapped objects
      */
-    public <T> AsynchronousQueryResult<T> executeQueryAsync(final String sql, List<?> values, Function<ResultSet, T> rsMapper);
+    public <T> AsynchronousQueryResult<T> executeQueryAsync(
+        final String sql, 
+        final List<?> values, 
+        final Function<ResultSet, T> rsMapper);
 
     /**
      * Executes a SQL update command. Generated key(s) following an insert
-     * command (if any) will be feed to the provided Consumer.
+     * command (if any) will be feed to the provided {code Consumer}.
      *
-     * @param sql The non-null SQL command to execute
-     * @param generatedKeyConsumer the non-null key Consumer
-     * @throws java.sql.SQLException if an error occurs
+     * @param sql                   the non-null SQL command to execute
+     * @param generatedKeyConsumer  the non-null key Consumer
+     * @throws                      {link SQLException} if an error occurs
      */
-    default void executeUpdate(final String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    default void executeUpdate(
+        final String sql, 
+        final Consumer<List<Long>> generatedKeyConsumer
+    ) throws SQLException {
+        
         executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
     }
 
@@ -148,12 +154,15 @@ public interface DbmsHandler {
      * Executes a SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
      *
-     * @param sql The non-null SQL command to execute
-     * @param values A non-null list
-     * @param generatedKeyConsumer non-null List of objects to use for "?"
-     * parameters in the sql command
-     * @throws java.sql.SQLException if an error occurs
+     * @param sql                   the non-null SQL command to execute
+     * @param values                a non-null list
+     * @param generatedKeyConsumer  non-null List of objects to use for "?"
+     *                              parameters in the SQL command
+     * @throws                      {link SQLException} if an error occurs
      */
-    public void executeUpdate(final String sql, final List<?> values, Consumer<List<Long>> generatedKeyConsumer) throws SQLException;
-
+    public void executeUpdate(
+        final String sql, 
+        final List<?> values, 
+        final Consumer<List<Long>> generatedKeyConsumer
+    ) throws SQLException;
 }
