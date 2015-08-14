@@ -17,7 +17,10 @@
 package com.speedment.core.platform.component;
 
 import com.speedment.core.config.model.Dbms;
+import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.db.DbmsHandler;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * This class is a pluggable factory that produces
@@ -29,6 +32,36 @@ import com.speedment.core.db.DbmsHandler;
  * @since 2.0
  */
 public interface DbmsHandlerComponent extends Component {
+    
+    /**
+     * Installs a new {@link DbmsType} so that handlers can be created using the
+     * {@link #make(com.speedment.core.config.model.Dbms)} method.
+     * <p>
+     * The type will be indexed by its name as returned by 
+     * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name, 
+     * only the most recently installed will be saved.
+     * 
+     * @param dbmsType  the type to install
+     */
+    void install(DbmsType dbmsType);
+    
+    /**
+     * Returns a stream of all {@link DbmsType DbmsTypes} that has been 
+     * installed in this component.
+     * 
+     * @return  a stream of installed DbmsTypes.
+     */
+    Stream<DbmsType> supportedDbmsTypes();
+    
+    /**
+     * Searches for the specified {@link DbmsType} by its name as defined by
+     * {@link DbmsType#getName()}. If none is found, an {@code empty} is 
+     * returned.
+     * 
+     * @param dbmsTypeName  the name to search for
+     * @return              the {@link DbmsType} found or {@code empty}
+     */
+    Optional<DbmsType> findByName(String dbmsTypeName);
 
     /**
      * Creates and returns a new DbmsHandler for the given Dbms.
@@ -46,5 +79,4 @@ public interface DbmsHandlerComponent extends Component {
      * @return the DbmsHandler for the given dbms
      */
     DbmsHandler get(Dbms dbms);
-
 }

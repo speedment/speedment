@@ -14,18 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.config.model.Dbms;
+import com.speedment.core.config.model.parameters.DbmsType;
+import com.speedment.core.config.model.parameters.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  *
@@ -33,25 +32,63 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
+    private final Map<String, DbmsType> dbmsTypes;
     private final Map<Dbms, DbmsHandler> map;
 
     public DbmsHandlerComponentImpl() {
-        this.map = new ConcurrentHashMap<>();
+        this.dbmsTypes = new ConcurrentHashMap<>();
+        this.map       = new ConcurrentHashMap<>();
+        
+        StandardDbmsType.stream().forEach(this::install);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public Class<DbmsHandlerComponent> getComponentClass() {
         return DbmsHandlerComponent.class;
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public DbmsHandler make(final Dbms dbms) {
         return dbms.getType().makeDbmsHandler(dbms);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public DbmsHandler get(Dbms dbms) {
-        return map.computeIfAbsent(dbms, d -> make(d));
+        return map.computeIfAbsent(dbms, this::make);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public void install(DbmsType dbmsType) {
+        dbmsTypes.put(dbmsType.getName(), dbmsType);
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public Stream<DbmsType> supportedDbmsTypes() {
+        return dbmsTypes.values().stream();
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public Optional<DbmsType> findByName(String dbmsTypeName) {
+        return Optional.ofNullable(
+            dbmsTypes.get(dbmsTypeName)
+        );
+    }
 }

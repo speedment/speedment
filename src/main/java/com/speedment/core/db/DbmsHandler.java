@@ -79,7 +79,7 @@ public interface DbmsHandler {
      * ResultSet using a provided mapper and return a Stream of the mapped
      * objects. The ResultSet is eagerly consumed so that all elements in the
      * ResultSet are read before the Stream produces any objects. If no objects
-     * are present or if an SqlExeption is thrown internally, an {@code empty} 
+     * are present or if an SQLException is thrown internally, an {@code empty} 
      * stream is returned.
      *
      * @param <T>       the type of the objects in the stream to return
@@ -98,7 +98,7 @@ public interface DbmsHandler {
      * Eagerly executes a SQL query and subsequently maps each row in the
      * {@link ResultSet} using a provided mapper and return a stream of the 
      * mapped objects. The {@code ResultSet} is eagerly consumed. If no objects 
-     * are present or if an {@link SqlExeption} is thrown internally, an 
+     * are present or if an {@link SQLException} is thrown internally, an 
      * {@code empty} stream is returned.
      *
      * @param <T>       the type of the objects in the stream to return
@@ -140,7 +140,7 @@ public interface DbmsHandler {
      *
      * @param sql                   the non-null SQL command to execute
      * @param generatedKeyConsumer  the non-null key Consumer
-     * @throws                      {link SQLException} if an error occurs
+     * @throws SQLException         if an error occurs
      */
     default void executeUpdate(
         final String sql, 
@@ -158,7 +158,7 @@ public interface DbmsHandler {
      * @param values                a non-null list
      * @param generatedKeyConsumer  non-null List of objects to use for "?"
      *                              parameters in the SQL command
-     * @throws                      {link SQLException} if an error occurs
+     * @throws SQLException         if an error occurs
      */
     public void executeUpdate(
         final String sql, 

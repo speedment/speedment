@@ -19,8 +19,9 @@ package com.speedment.gui.controllers;
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.parameters.StandardDbmsType;
+import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.db.DbmsHandler;
+import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.gui.MainApp;
@@ -49,6 +50,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.gui.controllers.AlertController.showAlert;
 import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 
 /**
@@ -98,8 +101,8 @@ public final class ProjectPromptController implements Initializable {
             }
 
             fieldType.setItems(
-                    Stream.of(StandardDbmsType.values())
-                    .map(s -> s.getName())
+                getDbmsTypes()
+                    .map(DbmsType::getName)
                     .collect(Collectors.toCollection(FXCollections::observableArrayList))
             );
 
@@ -108,7 +111,8 @@ public final class ProjectPromptController implements Initializable {
 
             fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
                 if (!observable.getValue().isEmpty()) {
-                    final StandardDbmsType item = StandardDbmsType.valueOf(next.toUpperCase());
+                    final DbmsType item = findDbmsType(next)
+                        .orElseThrow(dbmsTypeNotInstalled(next));
 
                     if (fieldHost.textProperty().getValue().isEmpty()) {
                         fieldHost.textProperty().setValue("127.0.0.1");
@@ -138,8 +142,12 @@ public final class ProjectPromptController implements Initializable {
             fieldName.setText(Settings.inst().get("last_known_name", "db0"));
 
             buttonConnect.setOnAction(ev -> {
+                
+                final String dbmsTypeName = fieldType.getSelectionModel().getSelectedItem();
+                final DbmsType dbmsType = findDbmsType(dbmsTypeName)
+                    .orElseThrow(dbmsTypeNotInstalled(dbmsTypeName));
 
-                Project project = Project.newProject();
+                final Project project = Project.newProject();
 
                 Dbms dbms = Dbms.newDbms();
                 dbms.setIpAddress(fieldHost.getText());
@@ -147,19 +155,19 @@ public final class ProjectPromptController implements Initializable {
                 dbms.setName(fieldName.getText());
                 dbms.setUsername(fieldUser.getText());
                 dbms.setPassword(fieldPass.getText());
-                dbms.setType(fieldType.getSelectionModel().getSelectedItem());
+                dbms.setType(dbmsType);
                 project.add(dbms);
 
                 project.setName(fieldSchema.getText());
                 Settings.inst().set("last_known_schema", fieldSchema.getText());
-                Settings.inst().set("last_known_dbtype", fieldType.getSelectionModel().getSelectedItem());
+                Settings.inst().set("last_known_dbtype", dbmsTypeName);
                 Settings.inst().set("last_known_host", fieldHost.getText());
                 Settings.inst().set("last_known_user", fieldUser.getText());
                 Settings.inst().set("last_known_name", fieldName.getText());
                 Settings.inst().set("last_known_port", fieldPort.getText());
 
                 try {
-                    final DbmsHandler dh = Platform.get().get(DbmsHandlerComponent.class).get(dbms);
+                    final DbmsHandler dh = dbmsType.makeDbmsHandler(dbms);
                     dh.schemas()
                         .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
                         .forEachOrdered(dbms::add);
@@ -198,12 +206,43 @@ public final class ProjectPromptController implements Initializable {
      */
     private void toggleConnectButton() {
         buttonConnect.setDisable(
-                fieldHost.textProperty().getValue().isEmpty()
-                || fieldPort.textProperty().getValue().isEmpty()
-                || fieldType.getSelectionModel().isEmpty()
-                || fieldName.textProperty().getValue().isEmpty()
-                || fieldSchema.textProperty().getValue().isEmpty()
-                || fieldUser.textProperty().getValue().isEmpty()
+            fieldHost.textProperty().getValue().isEmpty()
+         || fieldPort.textProperty().getValue().isEmpty()
+         || fieldType.getSelectionModel().isEmpty()
+         || fieldName.textProperty().getValue().isEmpty()
+         || fieldSchema.textProperty().getValue().isEmpty()
+         || fieldUser.textProperty().getValue().isEmpty()
+        );
+    }
+    
+    /**
+     * Returns a stream of all installed {@link DbmsType DbmsTypes}.
+     * 
+     * @return  supported dbms types
+     */
+    private Stream<DbmsType> getDbmsTypes() {
+        return Platform.get()
+            .get(DbmsHandlerComponent.class)
+            .supportedDbmsTypes();
+    }
+    
+    /**
+     * Attempts to locate the installed {@link DbmsType} with the specified
+     * name.
+     * 
+     * @return  the {@link DbmsType} found or {@code empty}
+     */
+    private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
+        return Platform.get()
+            .get(DbmsHandlerComponent.class)
+            .findByName(dbmsTypeName);
+    }
+    
+    private Supplier<SpeedmentException> dbmsTypeNotInstalled(String dbmsTypeName) {
+        return () -> new SpeedmentException(
+            "Required DbmsType '" + 
+            dbmsTypeName + 
+            "' is not installed correctly."
         );
     }
 
