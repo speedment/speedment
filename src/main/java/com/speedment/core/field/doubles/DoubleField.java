@@ -20,8 +20,8 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
+
 import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
 
 /**
  * This class represents a {@code double} Field.
@@ -32,10 +32,10 @@ import java.util.function.ToDoubleFunction;
 public class DoubleField<ENTITY> implements Field<ENTITY> {
 
     private final Supplier<Column> columnSupplier;
-    private final ToDoubleFunction<ENTITY> getter;
+    private final DoubleGetter<ENTITY> getter;
     private final DoubleSetter<ENTITY> setter;
 
-    public DoubleField(Supplier<Column> columnSupplier, ToDoubleFunction<ENTITY> getter, DoubleSetter<ENTITY> setter) {
+    public DoubleField(Supplier<Column> columnSupplier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter) {
         this.getter         = getter;
         this.setter         = setter;
         this.columnSupplier = columnSupplier;

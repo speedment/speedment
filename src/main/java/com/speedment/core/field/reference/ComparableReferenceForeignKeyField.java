@@ -18,8 +18,6 @@ package com.speedment.core.field.reference;
 
 import com.speedment.core.config.model.Column;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -31,9 +29,9 @@ import java.util.function.Supplier;
  */
 public class ComparableReferenceForeignKeyField<ENTITY, V extends Comparable<? super V>, FK> extends ComparableReferenceField<ENTITY, V> {
 
-    private final Function<ENTITY, FK> finder;
+    private final Getter<ENTITY, FK> finder;
 
-    public ComparableReferenceForeignKeyField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter, BiFunction<ENTITY, V, ENTITY> setter, Function<ENTITY, FK> finder) {
+    public ComparableReferenceForeignKeyField(Supplier<Column> columnSupplier, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter, Getter<ENTITY, FK> finder) {
         super(columnSupplier, getter, setter);
         this.finder = finder;
     }

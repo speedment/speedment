@@ -20,8 +20,8 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
+
 import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
 
 import static java.util.Objects.requireNonNull;
 
@@ -34,10 +34,10 @@ import static java.util.Objects.requireNonNull;
 public class IntField<ENTITY> implements Field<ENTITY> {
 
     private final Supplier<Column> columnSupplier;
-    private final ToIntFunction<ENTITY> getter;
+    private final IntGetter<ENTITY> getter;
     private final IntSetter<ENTITY> setter;
 
-    public IntField(Supplier<Column> columnSupplier, ToIntFunction<ENTITY> getter, IntSetter<ENTITY> setter) {
+    public IntField(Supplier<Column> columnSupplier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter) {
         this.getter         = requireNonNull(getter);
         this.setter         = requireNonNull(setter);
         this.columnSupplier = requireNonNull(columnSupplier);

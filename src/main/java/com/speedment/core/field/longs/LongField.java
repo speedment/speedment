@@ -22,7 +22,6 @@ import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
 
 import java.util.function.Supplier;
-import java.util.function.ToLongFunction;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,10 +34,10 @@ import static java.util.Objects.requireNonNull;
 public class LongField<ENTITY> implements Field<ENTITY> {
 
     private final Supplier<Column> columnSupplier;
-    private final ToLongFunction<ENTITY> getter;
+    private final LongGetter<ENTITY> getter;
     private final LongSetter<ENTITY> setter;
 
-    public LongField(Supplier<Column> columnSupplier, ToLongFunction<ENTITY> getter, LongSetter<ENTITY> setter) {
+    public LongField(Supplier<Column> columnSupplier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter) {
         this.getter         = requireNonNull(getter);
         this.setter         = requireNonNull(setter);
         this.columnSupplier = requireNonNull(columnSupplier);

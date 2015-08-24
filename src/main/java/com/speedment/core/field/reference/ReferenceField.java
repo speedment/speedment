@@ -20,8 +20,6 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardUnaryOperator;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
@@ -37,13 +35,13 @@ import static java.util.Objects.requireNonNull;
 public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
 
     private final Supplier<Column> columnSupplier;
-    private final Function<ENTITY, V> getter;
-    private final BiFunction<ENTITY, V, ENTITY> setter;
+    private final Getter<ENTITY, V> getter;
+    private final Setter<ENTITY, V> setter;
 
-    public ReferenceField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter, BiFunction<ENTITY, V, ENTITY> setter) {
+    public ReferenceField(Supplier<Column> columnSupplier, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
         this.columnSupplier = requireNonNull(columnSupplier);
-        this.getter = requireNonNull(getter);
-        this.setter = requireNonNull(setter);
+        this.getter         = requireNonNull(getter);
+        this.setter         = requireNonNull(setter);
     }
 
     /**

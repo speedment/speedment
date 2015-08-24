@@ -19,9 +19,9 @@ package com.speedment.core.field.reference.string;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.field.StandardStringBinaryOperator;
 import com.speedment.core.field.reference.ComparableReferenceField;
+import com.speedment.core.field.reference.Getter;
+import com.speedment.core.field.reference.Setter;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  */
 public class StringReferenceField<ENTITY> extends ComparableReferenceField<ENTITY, String> {
 
-    public StringReferenceField(final Supplier<Column> columnSupplier, Function<ENTITY, String> getter, BiFunction<ENTITY, String, ENTITY> setter) {
+    public StringReferenceField(final Supplier<Column> columnSupplier, Getter<ENTITY, String> getter, Setter<ENTITY, String> setter) {
         super(columnSupplier, getter, setter);
     }
 
