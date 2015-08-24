@@ -96,7 +96,7 @@ public class SpeedmentVersionTest {
 //        String expResult2 = getFromManifest("ImplementationVersion");
 
         // Todo: Implement a real test. Like extract version from POM or MANIFEST.MF
-        String expResult = "2.0.0-EA2";
+        String expResult = "2.1.0-SNAPSHOT";
         String result = SpeedmentVersion.getImplementationVersion();
         assertEquals(expResult, result);
     }

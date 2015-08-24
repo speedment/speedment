@@ -32,11 +32,11 @@ public final class SpeedmentVersion {
     
     private static final String IMPLEMENTATION_TITLE = "Speedment";
     private static final String IMPLEMENTATION_VENDOR = "Speedment Inc."; // "Speedment, Inc." difficult to enter into POM because of ','
-    private static final String IMPLEMENTATION_VERSION = "2.0.0-EA2";
+    private static final String IMPLEMENTATION_VERSION = "2.1.0-SNAPSHOT";
 
 //    private static final String SPECIFICATION_TITLE = "Speedment";
 //    private static final String SPECIFICATION_VENDOR = "Speedment Inc.";
-    private static final String SPECIFICATION_VERSION = "2.0";
+    private static final String SPECIFICATION_VERSION = "2.1";
 
     /**
      * Returns the non-null title of the Speedment framework.

@@ -25,6 +25,7 @@ import com.speedment.core.config.model.impl.TableImpl;
 import com.speedment.core.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.core.config.model.parameters.FieldStorageTypeable;
 import com.speedment.core.config.model.parameters.StorageEngineTypeable;
+import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -34,22 +35,23 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.0")
 public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Table>>,
-        FieldStorageTypeable,
-        ColumnCompressionTypeable,
-        StorageEngineTypeable {
+    FieldStorageTypeable,
+    ColumnCompressionTypeable,
+    StorageEngineTypeable {
 
     /**
      * Factory holder.
      */
-    enum Holder { HOLDER;
+    enum Holder {
+        HOLDER;
         private Supplier<Table> provider = TableImpl::new;
     }
 
     /**
      * Sets the instantiation method used to create new instances of this
      * interface.
-     * 
-     * @param provider  the new constructor 
+     *
+     * @param provider the new constructor
      */
     static void setSupplier(Supplier<Table> provider) {
         Holder.HOLDER.provider = provider;
@@ -57,10 +59,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
 
     /**
      * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-
-     * @return  the new instance
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     *
+     * @return the new instance
      */
     static Table newTable() {
         return Holder.HOLDER.provider.get();
@@ -83,10 +85,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     }
 
     /**
-     * Creates and adds a new {@link Column} as a child to this node in the 
+     * Creates and adds a new {@link Column} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default Column addNewColumn() {
         final Column e = Column.newColumn();
@@ -95,10 +97,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     }
 
     /**
-     * Creates and adds a new {@link Index} as a child to this node in the 
+     * Creates and adds a new {@link Index} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default Index addNewIndex() {
         final Index e = Index.newIndex();
@@ -107,10 +109,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     }
 
     /**
-     * Creates and adds a new {@link PrimaryKeyColumn} as a child to this node 
+     * Creates and adds a new {@link PrimaryKeyColumn} as a child to this node
      * in the configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default PrimaryKeyColumn addNewPrimaryKeyColumn() {
         final PrimaryKeyColumn e = PrimaryKeyColumn.newPrimaryKeyColumn();
@@ -119,10 +121,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     }
 
     /**
-     * Creates and adds a new {@link ForeignKey} as a child to this node in the 
+     * Creates and adds a new {@link ForeignKey} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default ForeignKey addNewForeignKey() {
         final ForeignKey e = ForeignKey.newForeignKey();
@@ -134,8 +136,8 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * Returns the name of this table as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the table name in the database
+     *
+     * @return the table name in the database
      */
     @External(type = String.class)
     Optional<String> getTableName();
@@ -144,9 +146,62 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * Sets the name of this table as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param tableName  the table name in the database
+     *
+     * @param tableName the table name in the database
      */
     @External(type = String.class)
     void setTableName(String tableName);
+
+    /**
+     * Creates and returns a new Column.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new Column
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default Column column(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewColumn);
+    }
+
+    /**
+     * Creates and returns a new Index.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new Index
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default Index index(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndex);
+    }
+
+    /**
+     * Creates and returns a new ForeignKey.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new ForeignKey
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default ForeignKey foreignKey(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
+    }
+
+    /**
+     * Creates and returns a new PrimaryKeyColumn.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new PrimaryKeyColumn
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default PrimaryKeyColumn primaryKeyColumn(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewPrimaryKeyColumn);
+    }
+
 }

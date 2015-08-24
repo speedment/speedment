@@ -101,12 +101,13 @@ public abstract class AbstractLogger implements Logger {
 
     protected String fixMessage(Level level, String msg, Optional<Throwable> throwable) {
         final StringBuilder sb = new StringBuilder(formatter.apply(level, name, msg));
-        return throwable.map(t -> {
+        throwable.ifPresent(t -> {
             final StringWriter writer = new StringWriter();
             final PrintWriter pipe = new PrintWriter(new StringWriter());
             t.printStackTrace(pipe);
-            return sb.append("\n").append(writer.toString()).toString();
-        }).orElse(sb.toString());
+            sb.append("\n").append(writer.toString());
+        });
+        return sb.toString();
     }
 
     public Level getLevel() {

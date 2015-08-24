@@ -22,6 +22,7 @@ import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.IndexImpl;
+import groovy.lang.Closure;
 import java.util.function.Supplier;
 
 /**
@@ -34,15 +35,16 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
     /**
      * Factory holder.
      */
-    enum Holder { HOLDER;
+    enum Holder {
+        HOLDER;
         private Supplier<Index> provider = IndexImpl::new;
     }
 
     /**
      * Sets the instantiation method used to create new instances of this
      * interface.
-     * 
-     * @param provider  the new constructor 
+     *
+     * @param provider the new constructor
      */
     static void setSupplier(Supplier<Index> provider) {
         Holder.HOLDER.provider = provider;
@@ -50,10 +52,10 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
 
     /**
      * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-
-     * @return  the new instance
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     *
+     * @return the new instance
      */
     static Index newIndex() {
         return Holder.HOLDER.provider.get();
@@ -76,10 +78,10 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
     }
 
     /**
-     * Creates and adds a new {@link IndexColumn} as a child to this node in the 
+     * Creates and adds a new {@link IndexColumn} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default IndexColumn addNewIndexColumn() {
         final IndexColumn e = IndexColumn.newIndexColumn();
@@ -91,8 +93,8 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
      * Returns whether or not this index is an {@code UNIQUE} index.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  {@code true} if this index is {@code UNIQUE}
+     *
+     * @return {@code true} if this index is {@code UNIQUE}
      */
     @External(type = Boolean.class)
     Boolean isUnique();
@@ -101,9 +103,23 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
      * Sets whether or not this index is an {@code UNIQUE} index.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param unique  {@code true} if this index should be {@code UNIQUE}
+     *
+     * @param unique {@code true} if this index should be {@code UNIQUE}
      */
     @External(type = Boolean.class)
     void setUnique(Boolean unique);
+
+    /**
+     * Creates and returns a new IndexColumn.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new IndexColumn
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default IndexColumn indexColumn(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndexColumn);
+    }
+
 }

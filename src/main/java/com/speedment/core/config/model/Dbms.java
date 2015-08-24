@@ -23,6 +23,7 @@ import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.DbmsImpl;
 import com.speedment.core.config.model.parameters.DbmsTypeable;
+import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -36,15 +37,16 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
     /**
      * Factory holder.
      */
-    enum Holder { HOLDER;
+    enum Holder {
+        HOLDER;
         private Supplier<Dbms> provider = DbmsImpl::new;
     }
 
     /**
      * Sets the instantiation method used to create new instances of this
      * interface.
-     * 
-     * @param provider  the new constructor 
+     *
+     * @param provider the new constructor
      */
     static void setSupplier(Supplier<Dbms> provider) {
         Holder.HOLDER.provider = provider;
@@ -52,10 +54,10 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
 
     /**
      * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-
-     * @return  the new instance
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     *
+     * @return the new instance
      */
     static Dbms newDbms() {
         return Holder.HOLDER.provider.get();
@@ -78,10 +80,10 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
     }
 
     /**
-     * Creates and adds a new {@link Schema} as a child to this node in the 
+     * Creates and adds a new {@link Schema} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default Schema addNewSchema() {
         final Schema e = Schema.newSchema();
@@ -91,23 +93,23 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
 
     /**
      * Returns the address of the database host if it is specified. The address
-     * could be an ip-address or a hostname. If no address is specified, 
+     * could be an ip-address or a hostname. If no address is specified,
      * {@code empty} will be returned.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the address of the host or {@code empty}
+     *
+     * @return the address of the host or {@code empty}
      */
     @External(type = String.class)
     Optional<String> getIpAddress();
 
     /**
-     * Sets the address of the database host. The address could be an ip-address 
+     * Sets the address of the database host. The address could be an ip-address
      * or a hostname.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param ipAddress  the new address of the host or {@code null}
+     *
+     * @param ipAddress the new address of the host or {@code null}
      */
     @External(type = String.class)
     void setIpAddress(String ipAddress);
@@ -117,8 +119,8 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
      * is specified, {@code empty} is returned.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the port of the database or {@code empty}
+     *
+     * @return the port of the database or {@code empty}
      */
     @External(type = Integer.class)
     Optional<Integer> getPort();
@@ -128,55 +130,68 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
      * should be specified, enter {@code null}.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param port  the port of the database or {@code null}
+     *
+     * @param port the port of the database or {@code null}
      */
     @External(type = Integer.class)
     void setPort(Integer port);
 
     /**
-     * Returns the database username to use when connecting to the dbms. If no 
+     * Returns the database username to use when connecting to the dbms. If no
      * username is specified, {@code empty} is returned.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the database username or {@code empty}
+     *
+     * @return the database username or {@code empty}
      */
     @External(type = String.class)
     Optional<String> getUsername();
 
     /**
-     * Sets the database username to use when connecting to the dbms. If no 
+     * Sets the database username to use when connecting to the dbms. If no
      * username should be specified, use {@code null}.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param username  the database username or {@code null}
+     *
+     * @param username the database username or {@code null}
      */
     @External(type = String.class)
     void setUsername(String username);
 
     /**
-     * Returns the password to use when connecting to the dbms. If no 
-     * password is specified, {@code empty} is returned.
+     * Returns the password to use when connecting to the dbms. If no password
+     * is specified, {@code empty} is returned.
      * <p>
      * This property is editable in the GUI through reflection, but will not
      * appear in generated configuration files for security reasons.
-     * 
-     * @return  the dbms password or {@code empty}
+     *
+     * @return the dbms password or {@code empty}
      */
     @External(type = String.class, isSecret = true)
     Optional<String> getPassword();
 
     /**
-     * Sets the password to use when connecting to the dbms. If no password 
+     * Sets the password to use when connecting to the dbms. If no password
      * should be specified, use {@code null} instead.
      * <p>
      * This property is editable in the GUI through reflection, but will not
      * appear in generated configuration files for security reasons.
-     * 
-     * @param password  the dbms password or {@code null}
+     *
+     * @param password the dbms password or {@code null}
      */
     @External(type = String.class, isSecret = true)
     void setPassword(String password);
+
+    /**
+     * Creates and returns a new Schema.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new Schema
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default Schema schema(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewSchema);
+    }
 }

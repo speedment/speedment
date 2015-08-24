@@ -30,14 +30,18 @@ public final class OptionalUtil {
         return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
     }
 
-    public static Object unwrap(Object optional) {
-        if (optional instanceof Optional<?>) {
-            return ((Optional<?>) optional).orElse(null);
+    public static Object unwrap(Object potentiallyOptional) {
+        if (potentiallyOptional instanceof Optional<?>) {
+            return unwrap((Optional<?>) potentiallyOptional);
         } else {
-            return optional;
+            return potentiallyOptional;
         }
     }
-    
+
+    public static <T> T unwrap(Optional<T> optional) {
+        return optional.orElse(null);
+    }
+
     /**
      * Utility classes should not be instantiated.
      */

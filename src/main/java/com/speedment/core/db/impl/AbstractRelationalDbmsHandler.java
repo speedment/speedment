@@ -33,13 +33,14 @@ import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.component.ConnectionPoolComponent;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.util.java.sql.TypeInfo;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -50,7 +51,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -88,17 +88,20 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     // Todo: Use DataSoruce instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
     public Connection getConnection() {
         Connection conn;
-        final Properties connectionProps = new Properties();
-        dbms.getUsername().ifPresent(u -> connectionProps.put(USER, u));
-        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
+//        final Properties connectionProps = new Properties();
+//        dbms.getUsername().ifPresent(u -> connectionProps.put(USER, u));
+//        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
         final String url = getUrl();
+        final String user = unwrap(dbms.getUsername());
+        final String password = unwrap(dbms.getPassword());
         try {
-            conn = DriverManager.getConnection(url, connectionProps);
+            //conn = DriverManager.getConnection(url, user, password);
+            conn = Platform.get().get(ConnectionPoolComponent.class).getConnection(url, user, password);
         } catch (SQLException sqle) {
-            final Properties pwProtectedProperties = new Properties();
-            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
-            pwProtectedProperties.put(PASSWORD, PASSWORD_PROTECTED);
-            final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\" and connectionProperties " + pwProtectedProperties;
+//            final Properties pwProtectedProperties = new Properties();
+//            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
+//            pwProtectedProperties.put(PASSWORD, PASSWORD_PROTECTED);
+            final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\", user = " + user + ", password = " + PASSWORD_PROTECTED;
             LOGGER.error(msg, sqle);
             throw new SpeedmentException(msg, sqle);
         }

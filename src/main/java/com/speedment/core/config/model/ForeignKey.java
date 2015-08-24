@@ -22,6 +22,7 @@ import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.ForeignKeyImpl;
+import groovy.lang.Closure;
 import java.util.function.Supplier;
 
 /**
@@ -34,15 +35,16 @@ public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<Forei
     /**
      * Factory holder.
      */
-    enum Holder { HOLDER;
+    enum Holder {
+        HOLDER;
         private Supplier<ForeignKey> provider = ForeignKeyImpl::new;
     }
 
     /**
      * Sets the instantiation method used to create new instances of this
      * interface.
-     * 
-     * @param provider  the new constructor 
+     *
+     * @param provider the new constructor
      */
     static void setSupplier(Supplier<ForeignKey> provider) {
         Holder.HOLDER.provider = provider;
@@ -50,10 +52,10 @@ public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<Forei
 
     /**
      * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-
-     * @return  the new instance
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     *
+     * @return the new instance
      */
     static ForeignKey newForeignKey() {
         return Holder.HOLDER.provider.get();
@@ -76,14 +78,28 @@ public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<Forei
     }
 
     /**
-     * Creates and adds a new {@link ForeignKeyColumn} as a child to this node 
+     * Creates and adds a new {@link ForeignKeyColumn} as a child to this node
      * in the configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default ForeignKeyColumn addNewForeignKeyColumn() {
         final ForeignKeyColumn e = ForeignKeyColumn.newForeignKeyColumn();
         add(e);
         return e;
     }
+
+    /**
+     * Creates and returns a new ForeignKeyColumn.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new ForeignKeyColumn
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKeyColumn);
+    }
+
 }

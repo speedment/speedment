@@ -18,6 +18,7 @@ package com.speedment.core.platform;
 
 import com.speedment.core.platform.component.Component;
 import com.speedment.core.annotations.Api;
+import com.speedment.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.core.platform.component.impl.DefaultClassMapper;
 import com.speedment.core.platform.component.impl.EntityManagerImpl;
@@ -51,6 +52,7 @@ public final class Platform extends DefaultClassMapper<Component> {
         add(new JavaTypeMapperComponentImpl());
         add(new EntityManagerImpl());
         add(new LoggerFactoryComponentImpl());
+        add(new ConnectionPoolComponentImpl());
     }
 
     /**

@@ -25,6 +25,7 @@ import com.speedment.core.config.model.impl.SchemaImpl;
 import com.speedment.core.config.model.parameters.ColumnCompressionTypeable;
 import com.speedment.core.config.model.parameters.FieldStorageTypeable;
 import com.speedment.core.config.model.parameters.StorageEngineTypeable;
+import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -34,22 +35,23 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.0")
 public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
-        FieldStorageTypeable,
-        ColumnCompressionTypeable,
-        StorageEngineTypeable {
+    FieldStorageTypeable,
+    ColumnCompressionTypeable,
+    StorageEngineTypeable {
 
     /**
      * Factory holder.
      */
-    enum Holder { HOLDER;
+    enum Holder {
+        HOLDER;
         private Supplier<Schema> provider = SchemaImpl::new;
     }
 
     /**
      * Sets the instantiation method used to create new instances of this
      * interface.
-     * 
-     * @param provider  the new constructor 
+     *
+     * @param provider the new constructor
      */
     static void setSupplier(Supplier<Schema> provider) {
         Holder.HOLDER.provider = provider;
@@ -57,10 +59,10 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
 
     /**
      * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-
-     * @return  the new instance
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     *
+     * @return the new instance
      */
     static Schema newSchema() {
         return Holder.HOLDER.provider.get();
@@ -83,10 +85,10 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
     }
 
     /**
-     * Creates and adds a new {@link Table} as a child to this node in the 
+     * Creates and adds a new {@link Table} as a child to this node in the
      * configuration tree.
-     * 
-     * @return  the newly added child
+     *
+     * @return the newly added child
      */
     default Table addNewTable() {
         final Table e = Table.newTable();
@@ -95,11 +97,12 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
     }
 
     /**
-     * Returns {@code true} if this schema is the default one, else {@code false}.
+     * Returns {@code true} if this schema is the default one, else
+     * {@code false}.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  {@code true} if default, else {@code false}
+     *
+     * @return {@code true} if default, else {@code false}
      */
     @External(type = Boolean.class)
     Boolean isDefaultSchema();
@@ -108,8 +111,8 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      * Sets whether this schema should be the default one or not.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param defaultSchema  {@code true} for this schema to be default
+     *
+     * @param defaultSchema {@code true} for this schema to be default
      */
     @External(type = Boolean.class)
     void setDefaultSchema(Boolean defaultSchema);
@@ -118,8 +121,8 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      * Returns the catalog name of this schema as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the catalog name in the database
+     *
+     * @return the catalog name in the database
      */
     @External(type = String.class)
     Optional<String> getCatalogName();
@@ -128,8 +131,8 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      * Sets the catalog name of this schema as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param catalogName  the catalog name in the database
+     *
+     * @param catalogName the catalog name in the database
      */
     @External(type = String.class)
     void setCatalogName(String catalogName);
@@ -138,8 +141,8 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      * Returns the name of this schema as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @return  the schema name in the database
+     *
+     * @return the schema name in the database
      */
     @External(type = String.class)
     Optional<String> getSchemaName();
@@ -148,9 +151,23 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      * Sets the name of this schema as specified in the database.
      * <p>
      * This property is editable in the GUI through reflection.
-     * 
-     * @param schemaName  the schema name in the database
+     *
+     * @param schemaName the schema name in the database
      */
     @External(type = String.class)
     void setSchemaName(String schemaName);
+
+    /**
+     * Creates and returns a new Table.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new Table
+     */
+    // DO NOT REMOVE, CALLED VIA REFLECTION
+    default Table table(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, this::addNewTable);
+    }
+
 }
