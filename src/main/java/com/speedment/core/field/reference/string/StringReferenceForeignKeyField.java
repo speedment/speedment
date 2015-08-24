@@ -17,6 +17,8 @@
 package com.speedment.core.field.reference.string;
 
 import com.speedment.core.config.model.Column;
+
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,8 +32,8 @@ public class StringReferenceForeignKeyField<ENTITY, FK> extends StringReferenceF
 	
 	private final Function<ENTITY, FK> finder;
 
-    public StringReferenceForeignKeyField(Supplier<Column> columnSupplier, Function<ENTITY, String> getter, Function<ENTITY, FK> finder) {
-        super(columnSupplier, getter);
+    public StringReferenceForeignKeyField(Supplier<Column> columnSupplier, Function<ENTITY, String> getter, BiFunction<ENTITY, String, ENTITY> setter, Function<ENTITY, FK> finder) {
+        super(columnSupplier, getter, setter);
 		this.finder = finder;
     }
 

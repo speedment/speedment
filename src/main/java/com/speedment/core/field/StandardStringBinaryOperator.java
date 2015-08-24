@@ -33,7 +33,7 @@ public enum StandardStringBinaryOperator implements BinaryOperator {
 
     private final BiPredicate<String, String> biPredicate;
 
-    private StandardStringBinaryOperator(BiPredicate<String, String> biPredicate) {
+    StandardStringBinaryOperator(BiPredicate<String, String> biPredicate) {
         this.biPredicate = Objects.requireNonNull(biPredicate);
     }
 

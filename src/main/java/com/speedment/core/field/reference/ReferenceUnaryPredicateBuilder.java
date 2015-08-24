@@ -19,8 +19,8 @@ package com.speedment.core.field.reference;
 import com.speedment.core.field.BasePredicate;
 import com.speedment.core.field.StandardUnaryOperator;
 import com.speedment.core.field.UnaryPredicateBuilder;
+
 import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
  *
@@ -28,13 +28,13 @@ import java.util.function.Predicate;
  * @param <ENTITY> Entity type
  * @param <V> Value type
  */
-public class ReferenceUnaryPredicateBuilder<ENTITY, V> extends BasePredicate<ENTITY> implements Predicate<ENTITY>, UnaryPredicateBuilder<ENTITY> {
+public class ReferenceUnaryPredicateBuilder<ENTITY, V> extends BasePredicate<ENTITY> implements UnaryPredicateBuilder<ENTITY> {
 
-    private final ReferenceField<ENTITY, ?> field;
+    private final ReferenceField<ENTITY, V> field;
     private final StandardUnaryOperator unaryOperator;
 
     public ReferenceUnaryPredicateBuilder(
-        final ReferenceField<ENTITY, ?> field,
+        final ReferenceField<ENTITY, V> field,
         final StandardUnaryOperator unaryOperator
     ) {
         this.field = Objects.requireNonNull(field);
@@ -47,7 +47,7 @@ public class ReferenceUnaryPredicateBuilder<ENTITY, V> extends BasePredicate<ENT
     }
 
     @Override
-    public ReferenceField<ENTITY, ?> getField() {
+    public ReferenceField<ENTITY, V> getField() {
         return field;
     }
 

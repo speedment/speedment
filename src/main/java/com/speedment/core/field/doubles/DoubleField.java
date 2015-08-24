@@ -33,9 +33,11 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
 
     private final Supplier<Column> columnSupplier;
     private final ToDoubleFunction<ENTITY> getter;
+    private final DoubleSetter<ENTITY> setter;
 
-    public DoubleField(Supplier<Column> columnSupplier, ToDoubleFunction<ENTITY> getter) {
-        this.getter = getter;
+    public DoubleField(Supplier<Column> columnSupplier, ToDoubleFunction<ENTITY> getter, DoubleSetter<ENTITY> setter) {
+        this.getter         = getter;
+        this.setter         = setter;
         this.columnSupplier = columnSupplier;
     }
 
@@ -117,6 +119,10 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
 
+    public DoubleFunctionBuilder<ENTITY> set(double value) {
+        return new DoubleFunctionBuilder<>(this, value);
+    }
+
     @Override
     public boolean isNullIn(ENTITY entity) {
         return false;
@@ -124,6 +130,10 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
 
     public double getFrom(ENTITY entity) {
         return getter.applyAsDouble(entity);
+    }
+
+    public ENTITY setIn(ENTITY entity, double value) {
+        return setter.applyAsDouble(entity, value);
     }
 
     @Override

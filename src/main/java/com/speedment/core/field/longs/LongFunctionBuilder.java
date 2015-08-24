@@ -16,34 +16,32 @@
  */
 package com.speedment.core.field.longs;
 
-import com.speedment.core.field.BasePredicate;
-import com.speedment.core.field.Operator;
-import com.speedment.core.field.PredicateBuilder;
-import com.speedment.core.field.StandardUnaryOperator;
+import com.speedment.core.field.BaseFunction;
+import com.speedment.core.field.FunctionBuilder;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  * @param <ENTITY> Entity type
  */
-public class LongUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> implements PredicateBuilder<ENTITY> {
+public class LongFunctionBuilder<ENTITY> extends BaseFunction<ENTITY> implements FunctionBuilder<ENTITY> {
 
     private final LongField<ENTITY> field;
-    private final StandardUnaryOperator unaryOperator;
+    private final long newValue;
 
-    public LongUnaryPredicateBuilder(
+    public LongFunctionBuilder(
         final LongField<ENTITY> field,
-        final StandardUnaryOperator unaryOperator
+        final long newValue
     ) {
-        this.field = Objects.requireNonNull(field);
-        this.unaryOperator = Objects.requireNonNull(unaryOperator);
+        this.field    = requireNonNull(field);
+        this.newValue = requireNonNull(newValue);
     }
 
     @Override
-    public boolean test(ENTITY t) {
-        return unaryOperator.getComparator().test(getField().getFrom(t));
+    public ENTITY apply(ENTITY entity) {
+        return field.setIn(entity, newValue);
     }
 
     @Override
@@ -51,9 +49,7 @@ public class LongUnaryPredicateBuilder<ENTITY> extends BasePredicate<ENTITY> imp
         return field;
     }
 
-    @Override
-    public Operator getOperator() {
-        return unaryOperator;
+    public long getValue() {
+        return newValue;
     }
-
 }
