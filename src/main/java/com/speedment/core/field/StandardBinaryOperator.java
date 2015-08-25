@@ -34,7 +34,7 @@ public enum StandardBinaryOperator implements BinaryOperator {
 
     private final IntPredicate comparator;
 
-    private StandardBinaryOperator(IntPredicate comparator) {
+    StandardBinaryOperator(IntPredicate comparator) {
         this.comparator = Objects.requireNonNull(comparator);
     }
 

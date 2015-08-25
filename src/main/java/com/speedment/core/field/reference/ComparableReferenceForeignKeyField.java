@@ -16,8 +16,6 @@
  */
 package com.speedment.core.field.reference;
 
-import java.util.function.Function;
-
 /**
  *
  * @author pemi
@@ -27,10 +25,15 @@ import java.util.function.Function;
  */
 public class ComparableReferenceForeignKeyField<ENTITY, V extends Comparable<? super V>, FK> extends ComparableReferenceField<ENTITY, V> {
 
-    private final Function<ENTITY, FK> finder;
-
-    public ComparableReferenceForeignKeyField(String columnName, Function<ENTITY, V> getter, Function<ENTITY, FK> finder) {
-        super(columnName, getter);
+    private final Getter<ENTITY, FK> finder;
+    
+    public ComparableReferenceForeignKeyField(
+        String columnName, 
+        Getter<ENTITY, V> getter, 
+        Setter<ENTITY, V> setter, 
+        Getter<ENTITY, FK> finder) {
+        
+        super(columnName, getter, setter);
         this.finder = finder;
     }
 

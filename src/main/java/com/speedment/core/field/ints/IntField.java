@@ -16,12 +16,11 @@
  */
 package com.speedment.core.field.ints;
 
-import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents an {@code int} Field.
@@ -32,10 +31,12 @@ import java.util.function.ToIntFunction;
 public class IntField<ENTITY> implements Field<ENTITY> {
 
     private final String columnName;
-    private final ToIntFunction<ENTITY> getter;
+    private final IntGetter<ENTITY> getter;
+    private final IntSetter<ENTITY> setter;
 
-    public IntField(String columnName, ToIntFunction<ENTITY> getter) {
-        this.getter = getter;
+    public IntField(String columnName, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter) {
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
         this.columnName = columnName;
     }
 
@@ -117,6 +118,10 @@ public class IntField<ENTITY> implements Field<ENTITY> {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
 
+    public IntFunctionBuilder<ENTITY> set(int value) {
+        return new IntFunctionBuilder<>(this, value);
+    }
+
     @Override
     public boolean isNullIn(ENTITY entity) {
         return false;
@@ -124,6 +129,10 @@ public class IntField<ENTITY> implements Field<ENTITY> {
 
     public int getFrom(ENTITY entity) {
         return getter.applyAsInt(entity);
+    }
+
+    public ENTITY setIn(ENTITY entity, int value) {
+        return setter.applyAsInt(entity, value);
     }
 
     @Override

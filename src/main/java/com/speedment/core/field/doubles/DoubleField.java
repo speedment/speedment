@@ -16,11 +16,9 @@
  */
 package com.speedment.core.field.doubles;
 
-import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.function.ToDoubleFunction;
 
 /**
  * This class represents a {@code double} Field.
@@ -31,10 +29,12 @@ import java.util.function.ToDoubleFunction;
 public class DoubleField<ENTITY> implements Field<ENTITY> {
 
     private final String columnName;
-    private final ToDoubleFunction<ENTITY> getter;
+    private final DoubleGetter<ENTITY> getter;
+    private final DoubleSetter<ENTITY> setter;
 
-    public DoubleField(String columnName, ToDoubleFunction<ENTITY> getter) {
-        this.getter = getter;
+    public DoubleField(String columnName, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter) {
+        this.getter     = getter;
+        this.setter     = setter;
         this.columnName = columnName;
     }
 
@@ -116,6 +116,10 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
 
+    public DoubleFunctionBuilder<ENTITY> set(double value) {
+        return new DoubleFunctionBuilder<>(this, value);
+    }
+
     @Override
     public boolean isNullIn(ENTITY entity) {
         return false;
@@ -123,6 +127,10 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
 
     public double getFrom(ENTITY entity) {
         return getter.applyAsDouble(entity);
+    }
+
+    public ENTITY setIn(ENTITY entity, double value) {
+        return setter.applyAsDouble(entity, value);
     }
 
     @Override

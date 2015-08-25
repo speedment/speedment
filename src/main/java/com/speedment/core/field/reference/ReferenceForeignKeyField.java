@@ -16,8 +16,6 @@
  */
 package com.speedment.core.field.reference;
 
-import java.util.function.Function;
-
 /**
  * This class represents a Reference Field that is a Foreign key to another
  * table/column. A Reference Field is something that extends {@link Object}.
@@ -29,10 +27,10 @@ import java.util.function.Function;
  */
 public class ReferenceForeignKeyField<ENTITY, V, FK> extends ReferenceField<ENTITY, V> {
 
-    private final Function<ENTITY, FK> finder;
+    private final Getter<ENTITY, FK> finder;
 
-    public ReferenceForeignKeyField(String columnName, Function<ENTITY, V> getter, Function<ENTITY, FK> finder) {
-        super(columnName, getter);
+    public ReferenceForeignKeyField(String columnName, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter, Getter<ENTITY, FK> finder) {
+        super(columnName, getter, setter);
         this.finder = finder;
     }
 

@@ -18,7 +18,8 @@ package com.speedment.core.field.reference.string;
 
 import com.speedment.core.field.StandardStringBinaryOperator;
 import com.speedment.core.field.reference.ComparableReferenceField;
-import java.util.function.Function;
+import com.speedment.core.field.reference.Getter;
+import com.speedment.core.field.reference.Setter;
 
 /**
  * This class represents a String Reference Field. A String Field maps to a
@@ -29,8 +30,8 @@ import java.util.function.Function;
  */
 public class StringReferenceField<ENTITY> extends ComparableReferenceField<ENTITY, String> {
 
-    public StringReferenceField(String columnName, Function<ENTITY, String> getter) {
-        super(columnName, getter);
+    public StringReferenceField(String columnName, Getter<ENTITY, String> getter, Setter<ENTITY, String> setter) {
+        super(columnName, getter, setter);
     }
 
     /**

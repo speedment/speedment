@@ -17,7 +17,6 @@
 package com.speedment.core.field.reference;
 
 import com.speedment.core.field.StandardBinaryOperator;
-import java.util.function.Function;
 
 /**
  * This class represents a Comparable Reference Field. A Reference Field is
@@ -29,8 +28,8 @@ import java.util.function.Function;
  */
 public class ComparableReferenceField<ENTITY, V extends Comparable<? super V>> extends ReferenceField<ENTITY, V> {
 
-    public ComparableReferenceField(String columnName, Function<ENTITY, V> getter) {
-        super(columnName, getter);
+    public ComparableReferenceField(String columnName, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
+        super(columnName, getter, setter);
     }
 
     /**

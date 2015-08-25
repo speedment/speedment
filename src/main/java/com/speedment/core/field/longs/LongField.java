@@ -16,11 +16,11 @@
  */
 package com.speedment.core.field.longs;
 
-import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.function.ToLongFunction;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a {@code long} Field.
@@ -31,10 +31,12 @@ import java.util.function.ToLongFunction;
 public class LongField<ENTITY> implements Field<ENTITY> {
 
     private final String columnName;
-    private final ToLongFunction<ENTITY> getter;
+    private final LongGetter<ENTITY> getter;
+    private final LongSetter<ENTITY> setter;
 
-    public LongField(String columnName, ToLongFunction<ENTITY> getter) {
-        this.getter = getter;
+    public LongField(String columnName, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter) {
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
         this.columnName = columnName;
     }
 
@@ -116,6 +118,10 @@ public class LongField<ENTITY> implements Field<ENTITY> {
         return newBinary(value, StandardBinaryOperator.GREATER_OR_EQUAL);
     }
 
+    public LongFunctionBuilder<ENTITY> set(long value) {
+        return new LongFunctionBuilder<>(this, value);
+    }
+
     @Override
     public boolean isNullIn(ENTITY entity) {
         return false;
@@ -123,6 +129,10 @@ public class LongField<ENTITY> implements Field<ENTITY> {
 
     public long getFrom(ENTITY entity) {
         return getter.applyAsLong(entity);
+    }
+
+    public ENTITY setIn(ENTITY entity, long value) {
+        return setter.applyAsLong(entity, value);
     }
 
     @Override

@@ -24,6 +24,6 @@ package com.speedment.core.field;
 public interface UnaryPredicateBuilder<ENTITY> extends PredicateBuilder<ENTITY> {
 
     @Override
-    public StandardUnaryOperator getOperator();
+    StandardUnaryOperator getOperator();
     
 }

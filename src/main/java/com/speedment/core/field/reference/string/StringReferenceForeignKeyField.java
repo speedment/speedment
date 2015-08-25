@@ -16,7 +16,8 @@
  */
 package com.speedment.core.field.reference.string;
 
-import java.util.function.Function;
+import com.speedment.core.field.reference.Getter;
+import com.speedment.core.field.reference.Setter;
 
 /**
  *
@@ -26,10 +27,15 @@ import java.util.function.Function;
  */
 public class StringReferenceForeignKeyField<ENTITY, FK> extends StringReferenceField<ENTITY> {
 	
-	private final Function<ENTITY, FK> finder;
+	private final Getter<ENTITY, FK> finder;
 
-    public StringReferenceForeignKeyField(String columnName, Function<ENTITY, String> getter, Function<ENTITY, FK> finder) {
-        super(columnName, getter);
+    public StringReferenceForeignKeyField(
+        String columnName, 
+        Getter<ENTITY, String> getter, 
+        Setter<ENTITY, String> setter, 
+        Getter<ENTITY, FK> finder) {
+        
+        super(columnName, getter, setter);
 		this.finder = finder;
     }
 

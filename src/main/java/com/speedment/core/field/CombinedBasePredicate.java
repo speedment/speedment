@@ -18,9 +18,10 @@ package com.speedment.core.field;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Aggregation of a number of {@link Predicate Predicates} of the same type
@@ -35,8 +36,7 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
      * This enum list all the different types of concrete implementation of the
      * abstract CombinedBasePredicate
      */
-    public static enum Type {
-
+    public enum Type {
         AND, OR
     }
 
@@ -46,8 +46,8 @@ public abstract class CombinedBasePredicate<ENTITY> extends BasePredicate<ENTITY
     private CombinedBasePredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
         this.type = type;
         this.predicates = new ArrayList<>();
-        add(Objects.requireNonNull(first));
-        add(Objects.requireNonNull(second));
+        add(requireNonNull(first));
+        add(requireNonNull(second));
     }
 
     /**

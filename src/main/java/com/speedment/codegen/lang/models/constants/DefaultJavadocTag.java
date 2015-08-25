@@ -28,7 +28,7 @@ public enum DefaultJavadocTag implements JavadocTag {
     
     PARAM      ("param"),
     AUTHOR     ("author"),
-    DEPRICATED ("depricated"),
+    DEPRECATED ("deprecated"),
     RETURN     ("return"),
     SEE        ("see"),
     THROWS     ("throws"),
@@ -42,7 +42,7 @@ public enum DefaultJavadocTag implements JavadocTag {
      * 
      * @param name  the name
      */
-    private DefaultJavadocTag(String name) {
+    DefaultJavadocTag(String name) {
         this.name = name;
     }
     

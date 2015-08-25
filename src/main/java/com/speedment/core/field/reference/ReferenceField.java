@@ -18,8 +18,8 @@ package com.speedment.core.field.reference;
 
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.Objects;
-import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -32,19 +32,21 @@ import java.util.function.Function;
 public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
 
     private final String columnName;
-    private final Function<ENTITY, V> getter;
+    private final Getter<ENTITY, V> getter;
+    private final Setter<ENTITY, V> setter;
 
-    public ReferenceField(String columnName, Function<ENTITY, V> getter) {
-        this.columnName = Objects.requireNonNull(columnName);
-        this.getter = Objects.requireNonNull(getter);
+    public ReferenceField(String columnName, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
+        this.columnName = requireNonNull(columnName);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
     }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is {@code null}.
      *
-     * @return a Predicate that will evaluate to {@code true}, if and only if
-     * this Field is {@code null}
+     * @return  a Predicate that will evaluate to {@code true}, if and only if
+     *          this Field is {@code null}
      */
     public ReferenceUnaryPredicateBuilder<ENTITY, V> isNull() {
         return newUnary(StandardUnaryOperator.IS_NULL);
@@ -54,11 +56,15 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>not</em> {@code null}.
      *
-     * @return a Predicate that will evaluate to {@code true}, if and only if
-     * this Field is <em>not</em> {@code null}
+     * @return  a Predicate that will evaluate to {@code true}, if and only if
+     *          this Field is <em>not</em> {@code null}
      */
     public ReferenceUnaryPredicateBuilder<ENTITY, V> isNotNull() {
         return newUnary(StandardUnaryOperator.IS_NOT_NULL);
+    }
+
+    public ReferenceFunctionBuilder<ENTITY, V> set(V newValue) {
+        return new ReferenceFunctionBuilder<>(this, newValue);
     }
 
     @Override
@@ -68,6 +74,10 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
 
     public V getFrom(ENTITY entity) {
         return getter.apply(entity);
+    }
+
+    public ENTITY setIn(ENTITY entity, V value) {
+        return setter.apply(entity, value);
     }
 
     @Override

@@ -27,5 +27,5 @@ public interface BinaryPredicateBuilder<ENTITY, V> extends PredicateBuilder<ENTI
     V getValueAsObject();
     
     @Override
-    public BinaryOperator getOperator();
+    BinaryOperator getOperator();
 }

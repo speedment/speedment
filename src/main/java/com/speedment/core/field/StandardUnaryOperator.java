@@ -30,7 +30,7 @@ public enum StandardUnaryOperator implements Operator {
 
     private final Predicate<Object> predicate;
 
-    private StandardUnaryOperator(Predicate<Object> predicate) {
+    StandardUnaryOperator(Predicate<Object> predicate) {
         this.predicate = Objects.requireNonNull(predicate);
     }
 
