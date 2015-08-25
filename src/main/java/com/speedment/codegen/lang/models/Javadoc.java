@@ -20,9 +20,6 @@ import com.speedment.codegen.lang.interfaces.Callable;
 import com.speedment.codegen.lang.interfaces.Copyable;
 import com.speedment.codegen.lang.interfaces.HasJavadocTags;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
-import java.util.Collections;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 /**
@@ -35,35 +32,19 @@ public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>,
     HasJavadocTags<Javadoc> {
     
     /**
-     * Adds the specified row of documentation to this block.
+     * Sets the body text shown in the javadoc.
      * 
-     * @param row  the new row
-     * @return     a reference to this model
+     * @param text  the text
+     * @return      a reference to this model
      */
-    default Javadoc add(String row) {
-		getRows().add(requireNonNull(row));
-		return this;
-	}
-	
-    /**
-     * Adds multiple rows of documentation to this block.
-     * 
-     * @param first  the first row
-     * @param rows   the following rows
-     * @return       a reference to this model
-     */
-	default Javadoc add(String first, String... rows) {
-		getRows().add(requireNonNull(first));
-		Collections.addAll(getRows(), requireNonNull(rows));
-		return this;
-	}
+    Javadoc setText(String text);
 
     /**
-     * Returns a modifiable list of documentation text rows.
+     * Returns the body text shown in the javadoc.
      * 
-     * @return  the rows of documentation
+     * @return  the body documentation text
      */
-    List<String> getRows();
+    String getText();
     
     /**
      * Factory holder.
@@ -88,24 +69,11 @@ public interface Javadoc extends Copyable<Javadoc>, Callable<Javadoc>,
      * supplied by the default factory. To change implementation, please use
      * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
      * 
-     * @param row  the documentation row
-     * @return     the new instance
-     */
-    static Javadoc of(String row) {
-        return Factory.INST.prototype.get().add(row);
-    }
-    
-    /**
-     * Creates a new instance implementing this interface by using the class
-     * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
-     * 
-     * @param row   the first documentation row
-     * @param rows  the following documentation rows
+     * @param text  the documentation
      * @return      the new instance
      */
-    static Javadoc of(String row, String... rows) {
-        return Factory.INST.prototype.get().add(row, rows);
+    static Javadoc of(String text) {
+        return Factory.INST.prototype.get().setText(text);
     }
         
     /**

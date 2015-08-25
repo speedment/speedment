@@ -20,6 +20,7 @@ import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.config.model.parameters.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.Map;
 import java.util.Optional;
@@ -34,16 +35,17 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
     private final Map<Dbms, DbmsHandler> map;
+    private final Speedment speedment;
 
-    public DbmsHandlerComponentImpl() {
+    public DbmsHandlerComponentImpl(Speedment speedment) {
         this.dbmsTypes = new ConcurrentHashMap<>();
-        this.map       = new ConcurrentHashMap<>();
-        
+        this.map = new ConcurrentHashMap<>();
+        this.speedment = speedment;
         StandardDbmsType.stream().forEach(this::install);
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public Class<DbmsHandlerComponent> getComponentClass() {
@@ -51,15 +53,15 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public DbmsHandler make(final Dbms dbms) {
-        return dbms.getType().makeDbmsHandler(dbms);
+        return dbms.getType().makeDbmsHandler(speedment, dbms);
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public DbmsHandler get(Dbms dbms) {
@@ -67,7 +69,7 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public void install(DbmsType dbmsType) {
@@ -75,7 +77,7 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public Stream<DbmsType> supportedDbmsTypes() {
@@ -83,7 +85,7 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public Optional<DbmsType> findByName(String dbmsTypeName) {

@@ -15,7 +15,7 @@
  * the License.
  */
 /**
- * The {@code platform} package contains the {@link Platform} itself and all its
+ * The {@code platform} package contains the {@link Speedment} itself and all its
  * {@link com.speedment.core.platform.component.Component Components}. It also
  * contains all default implementation of the Components.
  */

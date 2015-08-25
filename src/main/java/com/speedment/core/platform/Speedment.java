@@ -41,32 +41,22 @@ import com.speedment.core.platform.component.impl.SqlTypeMapperComponentImpl;
  *
  * @author pemi
  */
-public final class Platform extends DefaultClassMapper<Component> {
+public final class Speedment extends DefaultClassMapper<Component> {
 
-    private Platform() {
+    public Speedment() {
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
         add(new PrimaryKeyFactoryComponentImpl());
-        add(new DbmsHandlerComponentImpl());
+        add(new DbmsHandlerComponentImpl(this));
         add(new SqlTypeMapperComponentImpl());
         add(new JavaTypeMapperComponentImpl());
-        add(new EntityManagerImpl());
+        add(new EntityManagerImpl(this));
         add(new LoggerFactoryComponentImpl());
         add(new ConnectionPoolComponentImpl());
     }
 
     /**
-     * Returns the {@code Platform} singleton.
-     *
-     * @return the Platform singleton
-     */
-    @Api(version = "2.0")
-    public static Platform get() {
-        return PlatformHolder.INSTANCE;
-    }
-
-    /**
-     * Gets a {@link Platform} {@link Component} based on its interface class.
+     * Gets a {@link Speedment} {@link Component} based on its interface class.
      * <p>
      * The supported standard interfaces are:
      * <ul>
@@ -96,8 +86,4 @@ public final class Platform extends DefaultClassMapper<Component> {
         return add(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
     }
 
-    private static class PlatformHolder {
-
-        private static final Platform INSTANCE = new Platform();
-    }
 }

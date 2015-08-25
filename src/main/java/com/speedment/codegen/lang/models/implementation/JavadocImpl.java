@@ -19,9 +19,7 @@ package com.speedment.codegen.lang.models.implementation;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.JavadocTag;
 import com.speedment.codegen.util.Copier;
-import com.speedment.util.TextUtil;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,22 +35,22 @@ import java.util.Optional;
  */
 public class JavadocImpl implements Javadoc {
 
-    private final List<String> rows;
+    private String text;
     private final List<JavadocTag> tags;
 
     /**
-     * Initialises this javadoc block.
+     * Initializes this javadoc block.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
      * the {@link Javadoc#of()} method!
      */
     public JavadocImpl() {
-        rows = new ArrayList<>();
+        text = "";
         tags = new ArrayList<>();
     }
 
     /**
-     * Initialises this javadoc block using a text. The text may have multiple
+     * Initializes this javadoc block using a text. The text may have multiple
      * lines separated by new-line characters.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
@@ -61,9 +59,8 @@ public class JavadocImpl implements Javadoc {
      * @param text  the text
      */
     public JavadocImpl(final String text) {
-        final String formattedText = TextUtil.formatJavaDocBox(text);
-        rows = Arrays.asList(formattedText.split("\n"));
-        tags = new ArrayList<>();
+        this.text = text;
+        this.tags = new ArrayList<>();
     }
 
     /**
@@ -72,7 +69,7 @@ public class JavadocImpl implements Javadoc {
      * @param prototype the prototype
      */
     protected JavadocImpl(final Javadoc prototype) {
-        rows = Copier.copy(prototype.getRows(), s -> s);
+        text = prototype.getText();
         tags = Copier.copy(prototype.getTags());
     }
 
@@ -80,8 +77,17 @@ public class JavadocImpl implements Javadoc {
      * {@inheritDoc}
      */
     @Override
-    public List<String> getRows() {
-        return rows;
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Javadoc setText(String text) {
+        this.text = text;
+        return this;
     }
 
     /**
@@ -106,7 +112,7 @@ public class JavadocImpl implements Javadoc {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.rows);
+        hash = 47 * hash + Objects.hashCode(this.text);
         hash = 47 * hash + Objects.hashCode(this.tags);
         return hash;
     }
@@ -120,7 +126,7 @@ public class JavadocImpl implements Javadoc {
         return Optional.ofNullable(obj)
             .filter(o -> Javadoc.class.isAssignableFrom(o.getClass()))
             .map(o -> (Javadoc) o)
-            .filter(o -> Objects.equals(getRows(), o.getRows()))
+            .filter(o -> Objects.equals(getText(), o.getText()))
             .filter(o -> Objects.equals(getTags(), o.getTags()))
             .isPresent();
     }

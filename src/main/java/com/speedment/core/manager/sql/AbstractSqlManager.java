@@ -22,19 +22,16 @@ import com.speedment.core.config.model.PrimaryKeyColumn;
 import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.core.Buildable;
 import com.speedment.core.manager.AbstractManager;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.core.manager.metaresult.SqlMetaResult;
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.SqlFunction;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
-import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
-import com.speedment.logging.Logger;
-import com.speedment.logging.LoggerManager;
 import static com.speedment.util.stream.OptionalUtil.unwrap;
 import com.speedment.util.stream.builder.ReferenceStreamBuilder;
 import com.speedment.util.stream.builder.pipeline.BasePipeline;
@@ -54,7 +51,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -62,25 +58,28 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
 
 /**
  *
  * @author pemi
  *
- * @param <PK> PrimaryKey type for this Manager
  * @param <ENTITY> Entity type for this Manager
- * @param <BUILDER> Builder type for this Manager
  */
-public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends AbstractManager<PK, ENTITY, BUILDER> implements SqlManager<PK, ENTITY, BUILDER> {
-
-    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSqlManager.class);
+public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
     private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
+
+    public AbstractSqlManager(Speedment speedment) {
+        super(speedment);
+    }
 
     @Override
     public Stream<ENTITY> stream() {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap());
-        final SqlStreamTerminator<PK, ENTITY, BUILDER> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult);
+        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> asynchronousQueryResult.stream();
         final Stream<ENTITY> result = new ReferenceStreamBuilder<>(new BasePipeline<>(initialSupplier), terminator);
         result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
@@ -132,12 +131,12 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     @Override
-    public Optional<ENTITY> persist(ENTITY entity) {
-        return persist(entity, null);
+    public void persist(ENTITY entity) throws SpeedmentException {
+        persist(entity, null);
     }
 
     @Override
-    public Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
+    public void persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("insert into ").append(sqlTableReference());
@@ -147,7 +146,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
 
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
 
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
@@ -157,12 +156,12 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
                         .forEachOrdered(column -> {
                             // Cast from Long to the column target type
 
-                            final Object val = Platform.get()
-                            .get(JavaTypeMapperComponent.class)
-                            .apply(column.getMapping())
-                            .parse(
-                                l.get(cnt.getAndIncrement())
-                            );
+                            final Object val = speedment
+                                .get(JavaTypeMapperComponent.class)
+                                .apply(column.getMapping())
+                                .parse(
+                                    l.get(cnt.getAndIncrement())
+                                );
 
                             //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
                             set(builder, column, val);
@@ -171,16 +170,16 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
             };
         };
 
-        return executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
+        executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
     }
 
     @Override
-    public Optional<ENTITY> update(ENTITY entity) {
-        return update(entity, null);
+    public void update(ENTITY entity) {
+        update(entity, null);
     }
 
     @Override
-    public Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
+    public void update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
@@ -192,16 +191,16 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
-        return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
     }
 
     @Override
-    public Optional<ENTITY> remove(ENTITY entity) {
-        return remove(entity, null);
+    public void remove(ENTITY entity) {
+        remove(entity, null);
     }
 
     @Override
-    public Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) {
+    public void remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("delete from ").append(sqlTableReference());
@@ -209,46 +208,44 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
 
-        return executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
     }
 
-    private Optional<ENTITY> executeUpdate(
+    private void executeUpdate(
         final ENTITY entity,
         final String sql,
         final List<Object> values,
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer,
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Consumer<MetaResult<ENTITY>> listener
-    ) {
-        ENTITY newEntity;
+    ) throws SpeedmentException {
         SqlMetaResult<ENTITY> meta = null;
         if (listener != null) {
             meta = new SqlMetaResult<ENTITY>().setQuery(sql).setParameters(values);
         }
         try {
-            newEntity = executeUpdate(entity, sql, values, generatedKeyconsumer);
+            executeUpdate(entity, sql, values, generatedKeyconsumer);
         } catch (SQLException sqle) {
             //LOGGER.error("Unable to persist", sqle);
             if (meta != null) {
                 meta.setThrowable(sqle);
             }
-            return Optional.empty();
+            throw new SpeedmentException(sqle);
         } finally {
             if (listener != null) {
                 listener.accept(meta);
             }
         }
-        return Optional.of(newEntity);
     }
 
-    private ENTITY executeUpdate(
+    private void executeUpdate(
         final ENTITY entity,
         final String sql,
         final List<Object> values,
-        final Function<BUILDER, Consumer<List<Long>>> generatedKeyconsumer
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
     ) throws SQLException {
-        final BUILDER builder = toBuilder(entity);
-        dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(builder));
-        return builder.build();
+        //final ENTITY builder = toBuilder(entity);
+        dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));
+        //return entity;
     }
 
     private String sqlQuote(Object o) {
@@ -261,7 +258,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
         return "'" + o.toString() + "'";
     }
 
-    private final Function<BUILDER, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
+    private final Function<ENTITY, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
     };
 
     protected Dbms getDbms() {
@@ -278,7 +275,7 @@ public abstract class AbstractSqlManager<PK, ENTITY, BUILDER extends Buildable<E
     }
 
     protected DbmsHandler dbmsHandler() {
-        return Platform.get().get(DbmsHandlerComponent.class).get(getDbms());
+        return speedment.get(DbmsHandlerComponent.class).get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters

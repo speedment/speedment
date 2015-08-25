@@ -14,13 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.json;
+package com.speedment.core.formatter;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.Buildable;
-import com.speedment.core.field.Field;
-import com.speedment.core.manager.Manager;
 import com.speedment.core.field.doubles.DoubleField;
 import com.speedment.core.field.ints.IntField;
 import com.speedment.core.field.longs.LongField;
@@ -28,30 +23,25 @@ import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
 import com.speedment.core.field.reference.ReferenceField;
 import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
-import com.speedment.core.json.impl.JsonFormatterImpl;
-import com.speedment.core.platform.Platform;
-import com.speedment.core.platform.component.ManagerComponent;
-import static com.speedment.util.java.JavaLanguage.javaVariableName;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
 /**
- * The JsonFormatter can be used to format an Entity into JSON strings. Fields
+ * The EntityFormatter can be used to format an Entity into any kind of strings. Fields
  * can be added, removed and it is also possible to change the way a field is
- * rendered into the resulting JSON String.
+ * rendered into the resulting String.
  * <p>
- * A field can also be rendered using another JsonFormatter when that other
+ * A field can also be rendered using another EntityFormatter when that other
  * field is a foreign key or, for that matter, another Field in any Entity.
  *
  * @author Emil Forslund
  * @param <ENTITY> Entity type
+ * @param <R> Type of formatter
  */
-public interface JsonFormatter<ENTITY> {
+public interface EntityFormatter<ENTITY, R extends EntityFormatter<ENTITY, R>> {
 
     // Fields
     /**
@@ -62,7 +52,7 @@ public interface JsonFormatter<ENTITY> {
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    <T> JsonFormatter<ENTITY> put(ReferenceField<ENTITY, T> field);
+    <T> R put(ReferenceField<ENTITY, T> field);
 
     /**
      * Adds this Integer Field to the output renderer. The field will be
@@ -71,7 +61,7 @@ public interface JsonFormatter<ENTITY> {
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> put(IntField<ENTITY> field);
+    R put(IntField<ENTITY> field);
 
     /**
      * Adds this Long Field to the output renderer. The field will be rendered
@@ -80,7 +70,7 @@ public interface JsonFormatter<ENTITY> {
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> put(LongField<ENTITY> field);
+    R put(LongField<ENTITY> field);
 
     /**
      * Adds this Double Field to the output renderer. The field will be rendered
@@ -89,7 +79,7 @@ public interface JsonFormatter<ENTITY> {
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> put(DoubleField<ENTITY> field);
+    R put(DoubleField<ENTITY> field);
 
     // Foreign key fields.
     /**
@@ -104,7 +94,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <T, FK_ENTITY> JsonFormatter<ENTITY> put(ReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, JsonFormatter<FK_ENTITY> fkFormatter);
+    <T, FK_ENTITY> R put(ReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, EntityFormatter<FK_ENTITY, ?> fkFormatter);
 
     /**
      * Adds this ComparableReferenceForeignKeyField to the output renderer. The
@@ -118,7 +108,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <T extends Comparable<? super T>, FK_ENTITY> JsonFormatter<ENTITY> put(ComparableReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, JsonFormatter<FK_ENTITY> fkFormatter);
+    <T extends Comparable<? super T>, FK_ENTITY> R put(ComparableReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, EntityFormatter<FK_ENTITY, ?> fkFormatter);
 
     /**
      * Adds this StringReferenceForeignKeyField to the output renderer. The
@@ -131,7 +121,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <FK_ENTITY> JsonFormatter<ENTITY> put(StringReferenceForeignKeyField<ENTITY, FK_ENTITY> field, JsonFormatter<FK_ENTITY> fkFormatter);
+    <FK_ENTITY> R put(StringReferenceForeignKeyField<ENTITY, FK_ENTITY> field, EntityFormatter<FK_ENTITY, ?> fkFormatter);
 
     // Label-and-getter pairs
     /**
@@ -145,7 +135,7 @@ public interface JsonFormatter<ENTITY> {
      * @param getter to apply to the Entity
      * @return a reference to a resulting JsonFormatter
      */
-    <T> JsonFormatter<ENTITY> put(String label, Function<ENTITY, T> getter);
+    <T> R put(String label, Function<ENTITY, T> getter);
 
     /**
      * Adds a field that corresponds to the label to the output renderer. The
@@ -157,7 +147,7 @@ public interface JsonFormatter<ENTITY> {
      * @param getter to apply to the Entity
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> putDouble(String label, ToDoubleFunction<ENTITY> getter);
+    R putDouble(String label, ToDoubleFunction<ENTITY> getter);
 
     /**
      * Adds a field that corresponds to the label to the output renderer. The
@@ -169,7 +159,7 @@ public interface JsonFormatter<ENTITY> {
      * @param getter to apply to the Entity
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> putInt(String label, ToIntFunction<ENTITY> getter);
+    R putInt(String label, ToIntFunction<ENTITY> getter);
 
     /**
      * Adds a field that corresponds to the label to the output renderer. The
@@ -181,7 +171,7 @@ public interface JsonFormatter<ENTITY> {
      * @param getter to apply to the Entity
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> putLong(String label, ToLongFunction<ENTITY> getter);
+    R putLong(String label, ToLongFunction<ENTITY> getter);
 
     // Label-and-getter with custom formatter
     /**
@@ -197,7 +187,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <FK_ENTITY> JsonFormatter<ENTITY> put(String label, Function<ENTITY, FK_ENTITY> getter, JsonFormatter<FK_ENTITY> fkFormatter);
+    <FK_ENTITY> R put(String label, Function<ENTITY, FK_ENTITY> getter, EntityFormatter<FK_ENTITY, ?> fkFormatter);
 
     // Label-and-streamer with custom formatter.
     /**
@@ -214,7 +204,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <FK_ENTITY> JsonFormatter<ENTITY> putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, JsonFormatter<FK_ENTITY> fkFormatter);
+    <FK_ENTITY> R putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, EntityFormatter<FK_ENTITY, ?> fkFormatter);
 
     /**
      * Adds a field that corresponds to the label to the output renderer. The
@@ -230,7 +220,7 @@ public interface JsonFormatter<ENTITY> {
      * @param fkMapper the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <FK_ENTITY> JsonFormatter<ENTITY> putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> fkMapper);
+    <FK_ENTITY> R putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> fkMapper);
 
     // Removers by label
     /**
@@ -241,7 +231,7 @@ public interface JsonFormatter<ENTITY> {
      * @param label the name of the field to remove from the output renderer
      * @return a reference to a resulting JsonFormatter
      */
-    JsonFormatter<ENTITY> remove(String label);
+    R remove(String label);
 
     /**
      * Removes the field that corresponds to the provided label from the output
@@ -260,105 +250,8 @@ public interface JsonFormatter<ENTITY> {
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    <T> JsonFormatter<ENTITY> remove(ReferenceField<ENTITY, T> field);
+    <T> R remove(ReferenceField<ENTITY, T> field);
 
     String apply(ENTITY entity);
-
-    /**
-     * Creates and return a new JsonFormatter with no fields added to the
-     * renderer.
-     *
-     * @param <ENTITY> the Entity type
-     * @param entityClass the class of the ENTITY
-     * @return a new JsonFormatter with no fields added to the renderer
-     */
-    public static <ENTITY> JsonFormatter<ENTITY> noneOf(Class<ENTITY> entityClass) {
-        return new JsonFormatterImpl<>();
-    }
-
-    /**
-     * Creates and return a new JsonFormatter with all the Entity fields added
-     * to the renderer. The field(s) will be rendered using their default class
-     * renderer.
-     * <p>
-     * <em>N.B</em> This method can only be called <em>AFTER</em> the
-     * application's
-     * {@link com.speedment.core.runtime.SpeedmentApplicationLifecycle} has been
-     * {@link com.speedment.core.runtime.SpeedmentApplicationLifecycle#start() started}
-     * because it relies on the project's meta data. Thus, normally, it cannot
-     * be called in a static context.
-     *
-     * @param <ENTITY> the Entity type
-     * @param entityClass the class of the ENTITY
-     * @return a new JsonFormatter with all the Entity fields added to the
-     * renderer
-     */
-    public static <ENTITY> JsonFormatter<ENTITY> allOf(Class<ENTITY> entityClass) {
-
-        final JsonFormatter<ENTITY> formatter = noneOf(entityClass);
-
-        final Manager<?, ENTITY, ? extends Buildable<ENTITY>> manager = Platform.get()
-            .get(ManagerComponent.class)
-            .managerOf(entityClass);
-
-        final Table table = manager.getTable();
-
-        table
-            .streamOf(Column.class)
-            .forEachOrdered(c -> {
-
-                formatter.put(
-                    javaVariableName(c.getName()),
-                    (ENTITY entity) -> manager.get(entity, c)
-                );
-            });
-
-        return formatter;
-    }
-
-    /**
-     * Creates and return a new JsonFormatter with the provided Entity field(s)
-     * added to the renderer. The field(s) will be rendered using their default
-     * class renderer.
-     * <p>
-     * <em>N.B</em> This method can only be called <em>AFTER</em> the
-     * application's
-     * {@link com.speedment.core.runtime.SpeedmentApplicationLifecycle} has been
-     * {@link com.speedment.core.runtime.SpeedmentApplicationLifecycle#start() started}
-     * because it relies on the project's meta data. Thus, normally, it cannot
-     * be called in a static context.
-     *
-     * @param <ENTITY> the Entity type
-     * @param entityClass the class of the ENTITY
-     * @param fields to add to the output renderer
-     * @return a new JsonFormatter with the specified fields added to the
-     * renderer
-     *
-     */
-    @SafeVarargs
-    @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
-    public static <ENTITY> JsonFormatter<ENTITY> of(Class<ENTITY> entityClass, Field<ENTITY>... fields) {
-        final JsonFormatter<ENTITY> formatter = new JsonFormatterImpl<>();
-
-        final Manager<?, ENTITY, ? extends Buildable<ENTITY>> manager = Platform.get()
-            .get(ManagerComponent.class)
-            .managerOf(entityClass);
-
-        final Set<String> fieldNames = Stream.of(fields).map(f -> f.getColumn().getName()).collect(toSet());
-        final Table table = manager.getTable();
-
-        table
-            .streamOf(Column.class)
-            .filter(c -> fieldNames.contains(c.getName()))
-            .forEachOrdered(c -> {
-
-                formatter.put(
-                    javaVariableName(c.getName()),
-                    (ENTITY entity) -> manager.get(entity, c)
-                );
-            });
-
-        return formatter;
-    }
 
 }

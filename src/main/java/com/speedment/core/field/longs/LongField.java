@@ -20,7 +20,6 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.function.Supplier;
 import java.util.function.ToLongFunction;
 
 /**
@@ -31,12 +30,12 @@ import java.util.function.ToLongFunction;
  */
 public class LongField<ENTITY> implements Field<ENTITY> {
 
-    private final Supplier<Column> columnSupplier;
+    private final String columnName;
     private final ToLongFunction<ENTITY> getter;
 
-    public LongField(Supplier<Column> columnSupplier, ToLongFunction<ENTITY> getter) {
+    public LongField(String columnName, ToLongFunction<ENTITY> getter) {
         this.getter = getter;
-        this.columnSupplier = columnSupplier;
+        this.columnName = columnName;
     }
 
     /**
@@ -127,8 +126,8 @@ public class LongField<ENTITY> implements Field<ENTITY> {
     }
 
     @Override
-    public Column getColumn() {
-        return columnSupplier.get();
+    public String getColumnName() {
+        return columnName;
     }
 
     protected LongBinaryPredicateBuilder<ENTITY> newBinary(long value, StandardBinaryOperator binaryOperator) {

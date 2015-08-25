@@ -16,7 +16,6 @@
  */
 package com.speedment.core.manager.sql;
 
-import com.speedment.core.Buildable;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.db.impl.SqlFunction;
 import java.sql.ResultSet;
@@ -24,15 +23,12 @@ import java.sql.ResultSet;
 /**
  *
  * @author pemi
- * @param <PK> PrimaryKey type for this SqlManager
  * @param <ENTITY> Entity type for this SqlManager
- * @param <BUILDER> Builder type for this SqlManager
  */
-public interface SqlManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Manager<PK, ENTITY, BUILDER> {
+public interface SqlManager<ENTITY> extends Manager<ENTITY> {
 
     SqlFunction<ResultSet, ENTITY> getSqlEntityMapper();
 
     void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper);
-
 
 }

@@ -19,9 +19,9 @@ package com.speedment.core.manager;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.ForeignKey;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.Buildable;
+import com.speedment.core.formatter.json.JsonFormatter;
 import com.speedment.core.lifecycle.Lifecyclable;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.List;
 import java.util.Map;
@@ -36,22 +36,26 @@ import java.util.stream.Collectors;
  *
  * @author Emil Forslund
  *
- * @param <PK> PrimaryKey type for this Manager
  * @param <ENTITY> Entity type for this Manager
- * @param <BUILDER> Builder type for this Manager
  */
-public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements Manager<PK, ENTITY, BUILDER> {
+public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    private final Map<List<Column>, IndexHolder<Object, PK, ENTITY>> indexes;
+    protected final Speedment speedment;
+
+    private final Map<List<Column>, IndexHolder<Object, Object, ENTITY>> indexes;
     final Set<Consumer<ENTITY>> insertListeners, updateListeners, deleteListeners;
     private Lifecyclable.State state;
 
-    public AbstractManager() {
+    private final JsonFormatter<ENTITY> sharedJasonFormatter;
+
+    public AbstractManager(Speedment speedment) {
+        this.speedment = speedment;
         indexes = new ConcurrentHashMap<>();
         insertListeners = new CopyOnWriteArraySet<>();
         updateListeners = new CopyOnWriteArraySet<>();
         deleteListeners = new CopyOnWriteArraySet<>();
         state = Lifecyclable.State.CREATED;
+        sharedJasonFormatter = JsonFormatter.allOf(this, getEntityClass());
     }
 
     protected void insertEvent(ENTITY entity) {
@@ -94,6 +98,11 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
+    public String toJson(ENTITY entity) {
+        return sharedJasonFormatter.apply(entity);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public Optional<Object> find(ENTITY entity, Column column) {
         return getTable()
@@ -104,7 +113,7 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
                 Column fkColumn = oFkc.getForeignColumn();
 
                 @SuppressWarnings("rawtypes")
-                final Manager fkManager = Platform.get().get(ManagerComponent.class).findByTable(fkTable);
+                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
 
                 Object key = get(entity, column);
 
@@ -128,25 +137,25 @@ public abstract class AbstractManager<PK, ENTITY, BUILDER extends Buildable<ENTI
     }
 
     @Override
-    public Manager<PK, ENTITY, BUILDER> initialize() {
+    public Manager<ENTITY> initialize() {
         state = State.INIITIALIZED;
         return this;
     }
 
     @Override
-    public Manager<PK, ENTITY, BUILDER> resolve() {
+    public Manager<ENTITY> resolve() {
         state = State.RESOLVED;
         return this;
     }
 
     @Override
-    public Manager<PK, ENTITY, BUILDER> start() {
+    public Manager<ENTITY> start() {
         state = State.STARTED;
         return this;
     }
 
     @Override
-    public Manager<PK, ENTITY, BUILDER> stop() {
+    public Manager<ENTITY> stop() {
         state = State.STOPPED;
         return this;
     }

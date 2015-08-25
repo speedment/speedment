@@ -31,12 +31,12 @@ import java.util.function.ToIntFunction;
  */
 public class IntField<ENTITY> implements Field<ENTITY> {
 
-    private final Supplier<Column> columnSupplier;
+    private final String columnName;
     private final ToIntFunction<ENTITY> getter;
 
-    public IntField(Supplier<Column> columnSupplier, ToIntFunction<ENTITY> getter) {
+    public IntField(String columnName, ToIntFunction<ENTITY> getter) {
         this.getter = getter;
-        this.columnSupplier = columnSupplier;
+        this.columnName = columnName;
     }
 
     /**
@@ -127,8 +127,8 @@ public class IntField<ENTITY> implements Field<ENTITY> {
     }
 
     @Override
-    public Column getColumn() {
-        return columnSupplier.get();
+    public String getColumnName() {
+        return columnName;
     }
 
     protected IntBinaryPredicateBuilder<ENTITY> newBinary(int value, StandardBinaryOperator binaryOperator) {

@@ -16,12 +16,10 @@
  */
 package com.speedment.core.field.reference;
 
-import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardUnaryOperator;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -33,11 +31,11 @@ import java.util.function.Supplier;
  */
 public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
 
-    private final Supplier<Column> columnSupplier;
+    private final String columnName;
     private final Function<ENTITY, V> getter;
 
-    public ReferenceField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter) {
-        this.columnSupplier = Objects.requireNonNull(columnSupplier);
+    public ReferenceField(String columnName, Function<ENTITY, V> getter) {
+        this.columnName = Objects.requireNonNull(columnName);
         this.getter = Objects.requireNonNull(getter);
     }
 
@@ -73,8 +71,8 @@ public class ReferenceField<ENTITY, V> implements Field<ENTITY> {
     }
 
     @Override
-    public Column getColumn() {
-        return columnSupplier.get();
+    public String getColumnName() {
+        return columnName;
     }
 
     protected ReferenceUnaryPredicateBuilder<ENTITY, V> newUnary(StandardUnaryOperator unaryOperator) {

@@ -22,12 +22,11 @@ import com.speedment.core.config.model.Project;
 import com.speedment.core.config.model.aspects.Node;
 import com.speedment.core.config.model.impl.utils.GroovyParser;
 import com.speedment.core.config.model.impl.utils.MethodsParser;
-import com.speedment.core.Buildable;
 import com.speedment.core.config.model.aspects.Enableable;
 import com.speedment.core.lifecycle.AbstractLifecycle;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
@@ -53,6 +52,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -74,8 +76,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private ApplicationMetadata speedmentApplicationMetadata;
     private Path configPath;
 
+    private final Speedment speedment;
+
     public SpeedmentApplicationLifecycle() {
         super();
+        speedment = new Speedment();
         configPath = null;
         withsNamed = newList();
         withsAll = newList();
@@ -267,10 +272,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                         Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
                             final External external = MethodsParser.getExternalFor(method, clazz);
                             final Class<?> targetJavaType = external.type();
-                            final Object val = Platform.get()
-                            .get(JavaTypeMapperComponent.class)
-                            .apply(targetJavaType)
-                            .parse(propString);
+                            final Object val = speedment
+                                .get(JavaTypeMapperComponent.class)
+                                .apply(targetJavaType)
+                                .parse(propString);
                             //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
                             try {
                                 method.invoke(node, val);
@@ -296,10 +301,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             withsNamed.forEach(t3 -> {
                 final Class<? extends Node> clazz = t3.get0();
                 final String name = t3.get1();
-                
+
                 @SuppressWarnings("unchecked")
                 final Consumer<Node> consumer = (Consumer<Node>) t3.get2();
-                
+
                 project.traverse()
                     .filter(c -> clazz.isAssignableFrom(c.getClass()))
                     .map(Node.class::cast)
@@ -307,15 +312,15 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                     .forEachOrdered(consumer::accept);
             });
 
-            Platform.get().get(ProjectComponent.class).setProject(project);
+            speedment.get(ProjectComponent.class).setProject(project);
 
         } catch (IOException ioe) {
             throw new SpeedmentException("Failed to read config file", ioe);
         }
     }
 
-    protected <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager) {
-        Platform.get().get(ManagerComponent.class).put(manager);
+    protected <ENTITY> void put(Manager<ENTITY> manager) {
+        speedment.get(ManagerComponent.class).put(manager);
     }
 
     /**
@@ -383,8 +388,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      *
      * @param managerConsumer to accept all Managers
      */
-    protected void forEachManagerInSeparateThread(Consumer<Manager<?, ?, ?>> managerConsumer) {
-        final ManagerComponent mc = Platform.get().get(ManagerComponent.class);
+    protected void forEachManagerInSeparateThread(Consumer<Manager<?>> managerConsumer) {
+        final ManagerComponent mc = speedment.get(ManagerComponent.class);
         final List<Thread> threads = mc.stream().map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName())).collect(toList());
         threads.forEach(t -> t.start());
         threads.forEach(t -> {

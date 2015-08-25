@@ -117,8 +117,8 @@ implements Consumer<T> {
         model.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
             .set(
                 Javadoc.of(
-                    "Compares this object with the specified one for equality.",
-                    "The other object must be of the same type and not null for",
+                    "Compares this object with the specified one for equality. " +
+                    "The other object must be of the same type and not null for " +
                     "the method to return true."
                 )
                 .add(PARAM.setValue("other").setText("The object to compare with."))
@@ -154,10 +154,10 @@ implements Consumer<T> {
         model.add(Method.of(HASHCODE, INT_PRIMITIVE)
             .set(
                 Javadoc.of(
-                    "Generates a hashCode for this object. If any field is ",
-                    "changed to another value, the hashCode may be different. ",
-                    "Two objects with the same values are guaranteed to have ",
-                    "the same hashCode. Two objects with the same hashCode are ",
+                    "Generates a hashCode for this object. If any field is " +
+                    "changed to another value, the hashCode may be different. " +
+                    "Two objects with the same values are guaranteed to have " +
+                    "the same hashCode. Two objects with the same hashCode are " +
                     "not guaranteed to have the same hashCode."
                 )
                 .add(RETURN.setText("The hash code."))

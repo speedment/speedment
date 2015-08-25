@@ -46,17 +46,15 @@ import static java.util.stream.Collectors.toList;
 /**
  *
  * @author pemi
- * @param <PK> the primary key type
  * @param <ENTITY> the entity type
- * @param <BUILDER> the builder type
  */
-public class SqlStreamTerminator<PK, ENTITY, BUILDER extends Buildable<ENTITY>> implements StreamTerminator {
+public class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
-    private final AbstractSqlManager<PK, ENTITY, BUILDER> manager;
+    private final AbstractSqlManager<ENTITY> manager;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
     private final Generator generator; // Todo: Static?
 
-    public SqlStreamTerminator(AbstractSqlManager<PK, ENTITY, BUILDER> manager, final AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
+    public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, final AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
         this.manager = manager;
         this.asynchronousQueryResult = asynchronousQueryResult;
         this.generator = new SQLGenerator();

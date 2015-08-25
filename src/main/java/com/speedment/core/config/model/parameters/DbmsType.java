@@ -18,6 +18,7 @@ package com.speedment.core.config.model.parameters;
 
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.db.DbmsHandler;
+import com.speedment.core.platform.Speedment;
 import java.util.Optional;
 import java.util.Set;
 
@@ -194,8 +195,9 @@ public interface DbmsType {
      * Creates and returns a new {@code DbmsHandler} instance for the given
      * database.
      *
+     * @param speedment instance to use
      * @param dbms the Dbms configuration to use
      * @return a new {@code DbmsHandler} instance for the given database
      */
-    DbmsHandler makeDbmsHandler(Dbms dbms);
+    DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms);
 }

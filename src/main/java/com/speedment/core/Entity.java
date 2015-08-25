@@ -38,7 +38,7 @@ public @interface Entity {
      *
      * @return the manager class type
      */
-    Class<? extends Manager<?, ?, ?>> managerType();
+    Class<? extends Manager<?>> managerType();
 
     /**
      * Class that holds the builder type.

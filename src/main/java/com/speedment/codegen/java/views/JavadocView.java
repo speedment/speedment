@@ -16,14 +16,14 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.util.CodeCombiner;
 import com.speedment.codegen.lang.models.Javadoc;
 import java.util.Optional;
 import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.java.views.interfaces.HasJavadocTagsView;
-import java.util.stream.Stream;
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
+import com.speedment.util.TextUtil;
 
 /**
  * Transforms from a {@link Javadoc} to java code.
@@ -43,17 +43,15 @@ public class JavadocView implements Transform<Javadoc, String>,
      */
 	@Override
 	public Optional<String> transform(Generator gen, Javadoc model) {
-		return CodeCombiner.ifEmpty(
-            Stream.concat(
-                model.getRows().stream(),
-                renderJavadocTags(gen, model)
-			).collect(
-				CodeCombiner.joinIfNotEmpty(
-					JAVADOC_DELIMITER, 
-					JAVADOC_PREFIX, 
-					JAVADOC_SUFFIX
-				)
-			)
-		);
+        final String formattedText = TextUtil.formatJavaDocBox(model.getText()) + 
+            renderJavadocTags(gen, model)
+                .map(TextUtil::formatJavaDocBox)
+                .collect(joinIfNotEmpty(nl(), nl(), EMPTY));
+        
+		return Optional.of(
+            JAVADOC_PREFIX + 
+            formattedText.replace(nl(), JAVADOC_DELIMITER) + 
+            JAVADOC_SUFFIX
+        );
 	}
 }

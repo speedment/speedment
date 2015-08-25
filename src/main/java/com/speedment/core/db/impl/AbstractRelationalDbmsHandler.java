@@ -32,7 +32,7 @@ import com.speedment.core.manager.sql.SqlUpdateStatement;
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.ConnectionPoolComponent;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
 import com.speedment.logging.Logger;
@@ -57,6 +57,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static com.speedment.util.stream.OptionalUtil.unwrap;
 
 /**
  *
@@ -75,7 +76,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static final Boolean SHOW_METADATA = false;
 
-    public AbstractRelationalDbmsHandler(Dbms dbms) {
+    private final Speedment speedment;
+
+    public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
+        this.speedment = speedment;
         this.dbms = dbms;
         typeMapping = new ConcurrentHashMap<>();
     }
@@ -96,7 +100,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final String password = unwrap(dbms.getPassword());
         try {
             //conn = DriverManager.getConnection(url, user, password);
-            conn = Platform.get().get(ConnectionPoolComponent.class).getConnection(url, user, password);
+            conn = speedment.get(ConnectionPoolComponent.class).getConnection(url, user, password);
         } catch (SQLException sqle) {
 //            final Properties pwProtectedProperties = new Properties();
 //            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
@@ -128,7 +132,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final TypeInfo typeInfo = TypeInfo.from(rs);
-                final Class<?> mappedClass = Platform.get().get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
+                final Class<?> mappedClass = speedment.get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }

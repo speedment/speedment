@@ -16,9 +16,9 @@
  */
 package com.speedment.core.platform.component.impl;
 
-import com.speedment.core.Buildable;
+import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.manager.Manager;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.EntityManager;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.Optional;
@@ -29,28 +29,34 @@ import java.util.Optional;
  */
 public class EntityManagerImpl implements EntityManager {
 
+    private final Speedment speedment;
+
+    public EntityManagerImpl(Speedment speedment) {
+        this.speedment = speedment;
+    }
+    
     @Override
-    public <ENTITY> Optional<ENTITY> persist(ENTITY entity) {
-        return managerOf(entity).persist(entity);
+    public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
+        managerOf(entity).persist(entity);
     }
 
     @Override
-    public <ENTITY> Optional<ENTITY> update(ENTITY entity) {
-        return managerOf(entity).update(entity);
+    public <ENTITY> void update(ENTITY entity) throws SpeedmentException {
+        managerOf(entity).update(entity);
     }
 
     @Override
-    public <ENTITY> Optional<ENTITY> remove(ENTITY entity) {
-        return managerOf(entity).remove(entity);
+    public <ENTITY> void remove(ENTITY entity) throws SpeedmentException {
+        managerOf(entity).remove(entity);
     }
 
-    private static <ENTITY, BUILDER extends Buildable<ENTITY>> Manager<?, ENTITY, BUILDER> managerOf(ENTITY entity) {
-        final ManagerComponent managerComponent = Platform.get().get(ManagerComponent.class);
+    private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
+        final ManagerComponent managerComponent = speedment.get(ManagerComponent.class);
         @SuppressWarnings("rawtypes")
         final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
         if (manager.isPresent()) {
             @SuppressWarnings("unchecked")
-            final Manager<?, ENTITY, BUILDER> result = (Manager<?, ENTITY, BUILDER>) manager.get();
+            final Manager<ENTITY> result = (Manager<ENTITY>) manager.get();
             return result;
         }
         throw new IllegalStateException("There is no registered Manager for the class " + entity.getClass().getName());

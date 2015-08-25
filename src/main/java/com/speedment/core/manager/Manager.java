@@ -19,35 +19,34 @@ package com.speedment.core.manager;
 import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.Buildable;
+import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.field.Field;
+import com.speedment.core.formatter.EntityFormatter;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.core.json.JsonFormatter;
-import java.util.Optional;
+import com.speedment.core.formatter.json.JsonFormatter;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * A Manager is responsible for abstracting away an Entity source build the
- * application. Entity sources can be RDBMSes, files or other data sources.
+ * A Manager is responsible for abstracting away an Entity's data source. Entity
+ * sources can be RDBMSes, files or other data sources.
  *
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
  *
  * @author pemi
- * @param <PK> PrimaryKey type for this Manager
  * @param <ENTITY> Entity type for this Manager
- * @param <BUILDER> Builder type for this Manager
  */
 @Api(version = "2.0")
-public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends Lifecyclable<Manager<PK, ENTITY, BUILDER>> {
+public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
 
     // Entity Inspection
-    PK primaryKeyFor(ENTITY entity);
+    Object primaryKeyFor(ENTITY entity);
 
     Object get(ENTITY entity, Column column);
 
-    void set(BUILDER builder, Column column, Object value);
+    void set(ENTITY builder, Column column, Object value);
 
     Object find(ENTITY entity, Column column);
 
@@ -55,24 +54,19 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     Table getTable();
 
     // Introspectors
-    Class<? extends Manager<PK, ENTITY, BUILDER>> getManagerClass();
+    // Class<? extends Manager<ENTITY>> getManagerClass();
+    ENTITY newInstance();
 
     Class<ENTITY> getEntityClass();
 
-    Class<BUILDER> getBuilderClass();
-
+//    Class<BUILDER> getBuilderClass();
     // Factories
-    BUILDER builder();
-
-    BUILDER toBuilder(ENTITY entity);
-
-    default JsonFormatter<ENTITY> toJson() {
-        return JsonFormatter.allOf(getEntityClass());
-    }
-
-    default String toJson(ENTITY entity) {
-        return toJson().apply(entity);
-    }
+    //Stream<ENTITY> copies(ENTITY entity);
+//    BUILDER builder();
+//
+//    BUILDER toBuilder(ENTITY entity);
+    
+   String toJson(ENTITY entity);
 
     default ENTITY toInternal(ENTITY entity) {
         return entity;
@@ -85,7 +79,7 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
         return stream().count();
     }
 
-    // Add and remove
+    // Reactor methods
     void onInsert(Consumer<ENTITY> listener);
 
     void onUpdate(Consumer<ENTITY> listener);
@@ -93,15 +87,15 @@ public interface Manager<PK, ENTITY, BUILDER extends Buildable<ENTITY>> extends 
     void onDelete(Consumer<ENTITY> listener);
 
     // Persistence
-    Optional<ENTITY> persist(ENTITY entity);
+    void persist(ENTITY entity) throws SpeedmentException;
 
-    Optional<ENTITY> update(ENTITY entity);
+    void update(ENTITY entity) throws SpeedmentException;
 
-    Optional<ENTITY> remove(ENTITY entity);
+    void remove(ENTITY entity) throws SpeedmentException;
 
-    Optional<ENTITY> persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
+    void persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
-    Optional<ENTITY> update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
+    void update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
-    Optional<ENTITY> remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer);
+    void remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 }

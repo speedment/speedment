@@ -20,7 +20,6 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
-import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 
 /**
@@ -31,12 +30,12 @@ import java.util.function.ToDoubleFunction;
  */
 public class DoubleField<ENTITY> implements Field<ENTITY> {
 
-    private final Supplier<Column> columnSupplier;
+    private final String columnName;
     private final ToDoubleFunction<ENTITY> getter;
 
-    public DoubleField(Supplier<Column> columnSupplier, ToDoubleFunction<ENTITY> getter) {
+    public DoubleField(String columnName, ToDoubleFunction<ENTITY> getter) {
         this.getter = getter;
-        this.columnSupplier = columnSupplier;
+        this.columnName = columnName;
     }
 
     /**
@@ -127,8 +126,8 @@ public class DoubleField<ENTITY> implements Field<ENTITY> {
     }
 
     @Override
-    public Column getColumn() {
-        return columnSupplier.get();
+    public String getColumnName() {
+        return columnName;
     }
 
     protected DoubleBinaryPredicateBuilder<ENTITY> newBinary(double value, StandardBinaryOperator binaryOperator) {

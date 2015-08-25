@@ -42,52 +42,44 @@ public interface ManagerComponent extends Component {
      * with an Entity class, table or interface, that association(s) is/are
      * replaced.
      *
-     * @param <PK> the primary key type
      * @param <E> the Entity interface type
-     * @param <B> the {@link Buildable} type
      * @param manager to associate
      */
-    <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager);
+    <E> void put(Manager<E> manager);
 
-    /**
-     * Obtains and returns the currently associated {@link Manager}
-     * implementation for the given Manager interface Class.
-     *
-     * @param <PK> the primary key type
-     * @param <E> the Entity interface type
-     * @param <B> the {@link Buildable} type
-     * @param <M> the {@link Manager} interface type
-     * @param managerClass the {@link Manager} interface {@code Class}
-     * @return the currently associated {@link Manager} implementation for the
-     * given Manager interface Class
-     */
-    <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> M manager(Class<M> managerClass);
+//    /**
+//     * Obtains and returns the currently associated {@link Manager}
+//     * implementation for the given Manager interface Class.
+//     *
+//     * @param <E> the Entity interface type
+//     * @param <M> the {@link Manager} interface type
+//     * @param managerClass the {@link Manager} interface {@code Class}
+//     * @return the currently associated {@link Manager} implementation for the
+//     * given Manager interface Class
+//     */
+//    <E, M extends Manager<E>> M manager(Class<M> managerClass);
 
     /**
      * Obtains and returns the currently associated {@link Manager}
      * implementation for the given Entity interface Class.
      *
-     * @param <PK> the primary key type
      * @param <E> the Entity interface type
-     * @param <B> the {@link Buildable} type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class
      */
-    <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass);
+    <E> Manager<E> managerOf(Class<E> entityClass);
 
     /**
      * Obtains and returns the currently associated {@link Manager}
      * implementation for the given Table.
      *
-     * @param <PK> the primary key type
      * @param <E> the Entity interface type
-     * @param <B> the {@link Buildable} type
      * @param table the table to use
      * @return the currently associated {@link Manager} implementation for the
      * given table
      */
-    <PK, E, B extends Buildable<E>> Manager<PK, E, B> findByTable(Table table);
+    <E> Manager<E> findByTable(Table table);
 
     /**
      * Returns a {@link Stream} of all {@link Manager Managers} associated with
@@ -96,6 +88,5 @@ public interface ManagerComponent extends Component {
      * @return a {@link Stream} of all {@link Manager Managers} associated with
      * this ManagerComponent
      */
-    Stream<Manager<?, ?, ?>> stream();
-
+    Stream<Manager<?>> stream();
 }

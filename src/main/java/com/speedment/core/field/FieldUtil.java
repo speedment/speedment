@@ -18,7 +18,7 @@ package com.speedment.core.field;
 
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.ManagerComponent;
 import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.Optional;
@@ -37,13 +37,13 @@ public final class FieldUtil {
      * @param name of the Column
      * @return a {@code Column} from an entityClass with the given name
      */
-    public static Column findColumn(Class<?> entityClass, String name) {
-        final Table table = Platform.get().get(ManagerComponent.class).managerOf(entityClass).getTable();
-        final Optional<Column> oColumn = table.streamOf(Column.class)
-            .filter(c -> c.getName().equals(name))
-            .findAny();
-        return oColumn.orElseThrow(() -> new IllegalStateException("A column named " + name + " can not be found in the table " + table.getName()));
-    }
+//    public static Column findColumn(Class<?> entityClass, String name) {
+//        final Table table = Speedment.get().get(ManagerComponent.class).managerOf(entityClass).getTable();
+//        final Optional<Column> oColumn = table.streamOf(Column.class)
+//            .filter(c -> c.getName().equals(name))
+//            .findAny();
+//        return oColumn.orElseThrow(() -> new IllegalStateException("A column named " + name + " can not be found in the table " + table.getName()));
+//    }
     
     /**
      * Utility classes should not be instantiated.

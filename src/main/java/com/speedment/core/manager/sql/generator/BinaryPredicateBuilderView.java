@@ -54,7 +54,7 @@ public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuil
     public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
         if (model.getOperator() instanceof StandardBinaryOperator) {
             return Optional.of("("
-                + model.getField().getColumn().getName()
+                + model.getField().getColumnName()
                 + render((StandardBinaryOperator) model.getOperator())
                 + "?)"
             );

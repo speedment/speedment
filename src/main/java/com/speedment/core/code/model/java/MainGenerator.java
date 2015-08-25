@@ -22,7 +22,6 @@ import com.speedment.codegen.base.Meta;
 import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.core.code.model.Translator;
-import com.speedment.core.code.model.java.entity.EntityBuilderTranslator;
 import com.speedment.core.code.model.java.entity.EntityImplTranslator;
 import com.speedment.core.code.model.java.manager.EntityManagerImplTranslator;
 import com.speedment.core.code.model.java.manager.EntityManagerTranslator;
@@ -68,9 +67,7 @@ public class MainGenerator implements Consumer<Project> {
 
         final List<Translator<?, File>> translators = new ArrayList<>();
 
-        final Generator gen = new JavaGenerator(
-            new SpeedmentTransformFactory()
-        );
+        final Generator gen = new JavaGenerator();
 
         translators.add(new SpeedmentApplicationTranslator(gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
@@ -79,9 +76,7 @@ public class MainGenerator implements Consumer<Project> {
             .filter(Table::isEnabled)
             .forEach(table -> {
                 translators.add(new EntityTranslator(gen, table));
-                translators.add(new EntityBuilderTranslator(gen, table));
                 translators.add(new EntityImplTranslator(gen, table));
-                translators.add(new EntityManagerTranslator(gen, table));
                 translators.add(new EntityManagerImplTranslator(gen, table));
             });
 

@@ -106,7 +106,7 @@ public class SetGetAdd implements Consumer<Class> {
 				final Field param = Field.of(singular(f.getName()), f.getType().getGenerics().get(0).getUpperBounds().get(0));
 				final Method add = Method.of(ADD, Type.of(model.getName()))
 					.set(Javadoc.of()
-						.add(ADDS_THE_SPECIFIED + lcfirst(shortName(param.getType().getName())) + TO_THIS + shortName(model.getName()) + DOT)
+						.setText(ADDS_THE_SPECIFIED + lcfirst(shortName(param.getType().getName())) + TO_THIS + shortName(model.getName()) + DOT)
 						.add(JavadocTag.of(PARAM, param.getName(), THE_NEW_VALUE))
 						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
 					).public_()
@@ -120,7 +120,7 @@ public class SetGetAdd implements Consumer<Class> {
 			} else {
 				final Method set = Method.of(SET + ucfirst(f.getName()), Type.of(model.getName()))
 					.set(Javadoc.of()
-						.add(S + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
+						.setText(S + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
 						.add(JavadocTag.of(PARAM, f.getName(), THE_NEW_VALUE))
 						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
 					).public_();
@@ -142,7 +142,7 @@ public class SetGetAdd implements Consumer<Class> {
 			
 			final Method get = Method.of(GET + ucfirst(f.getName()), f.getType())
 				.set(Javadoc.of()
-					.add(G + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
+					.setText(G + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
 					.add(JavadocTag.of(RETURN, THE + f.getName() + DOT))
 				).public_()
 				.add(RETURN_THIS + DOT + f.getName() + SC);

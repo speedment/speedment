@@ -71,8 +71,8 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
     public final ClassType ENTITY = new ClassType("", "Impl"),
             BUILDER = new ClassType("Builder", "Impl"),
             CONFIG = new ClassType("Config", "Impl"),
-            MANAGER = new ClassType("Manager", "Impl"),
-            FIELD = new ClassType("Field", "Impl");
+            MANAGER = new ClassType("Manager", "Impl");
+//            FIELD = new ClassType("Field", "Impl");
 
     public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
             GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),

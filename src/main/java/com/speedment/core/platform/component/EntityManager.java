@@ -22,7 +22,8 @@
 package com.speedment.core.platform.component;
 
 import com.speedment.core.annotations.Api;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.platform.Speedment;
 import java.util.Optional;
 
 /**
@@ -49,10 +50,8 @@ public interface EntityManager extends Component {
      *
      * @param <ENTITY> the type of the Entity
      * @param entity to persist
-     * @return a new {@code Optional<Entity>} that was the result of the
-     * persistence, or Optional.empty() if the method failed
      */
-    <ENTITY> Optional<ENTITY> persist(ENTITY entity);
+    <ENTITY> void persist(ENTITY entity) throws SpeedmentException;
 
     /**
      * Updates the given Entity and returns a new {@code Optional<Entity>} that
@@ -60,10 +59,8 @@ public interface EntityManager extends Component {
      *
      * @param <ENTITY> the type of the Entity
      * @param entity to update
-     * @return a new {@code Optional<Entity>} that was the result of the update,
-     * or Optional.empty() if the method failed
      */
-    <ENTITY> Optional<ENTITY> update(ENTITY entity);
+    <ENTITY> void update(ENTITY entity) throws SpeedmentException;
 
     /**
      * Updates the given Entity and returns a new {@code Optional<Entity>} that
@@ -71,18 +68,17 @@ public interface EntityManager extends Component {
      *
      * @param <ENTITY> the type of the Entity
      * @param entity to remove
-     * @return a new {@code Optional<Entity>} that was the result of the
-     * removal, or Optional.empty() if the method failed
      */
-    <ENTITY> Optional<ENTITY> remove(ENTITY entity);
+    <ENTITY> void remove(ENTITY entity) throws SpeedmentException;
 
     /**
      * Returns the default EntityManager from the Platform. This method is there
      * for JPA compatibility.
      *
+     * @param speedment instance to use
      * @return the default EntityManager from the Platform
      */
-    public static EntityManager get() {
-        return Platform.get().get(EntityManager.class);
+    public static EntityManager get(Speedment speedment) {
+        return speedment.get(EntityManager.class);
     }
 }

@@ -22,7 +22,7 @@ import com.speedment.core.config.model.aspects.Child;
 import com.speedment.core.config.model.parameters.DbmsType;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.gui.MainApp;
 import com.speedment.gui.Settings;
@@ -53,45 +53,57 @@ import static com.speedment.gui.util.ProjectUtil.createOpenProjectHandler;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-
 /**
- * FXML Controller class for the prompt that lets the user either load an existing project or create a new one by
- * connecting to a database.
+ * FXML Controller class for the prompt that lets the user either load an
+ * existing project or create a new one by connecting to a database.
  *
  * @author Emil Forslund
  */
 public final class ProjectPromptController implements Initializable {
-    
+
     private final static Logger LOGGER = LoggerManager.getLogger(ProjectPromptController.class);
-    
-    @FXML private Button buttonOpen;
-    @FXML private TextField fieldHost;
-    @FXML private TextField fieldPort;
-    @FXML private ChoiceBox<String> fieldType;
-    @FXML private TextField fieldName;
-    @FXML private TextField fieldSchema;
-    @FXML private TextField fieldUser;
-    @FXML private PasswordField fieldPass;
-    @FXML private Button buttonConnect;
-    @FXML private HBox container;
-    @FXML private StackPane openContainer;
-    
+
+    @FXML
+    private Button buttonOpen;
+    @FXML
+    private TextField fieldHost;
+    @FXML
+    private TextField fieldPort;
+    @FXML
+    private ChoiceBox<String> fieldType;
+    @FXML
+    private TextField fieldName;
+    @FXML
+    private TextField fieldSchema;
+    @FXML
+    private TextField fieldUser;
+    @FXML
+    private PasswordField fieldPass;
+    @FXML
+    private Button buttonConnect;
+    @FXML
+    private HBox container;
+    @FXML
+    private StackPane openContainer;
+
     private final Stage stage;
+    private final Speedment speedment;
 
     /**
      * Initializes the prompt by specifying the stage to display it in.
      *
-     * @param stage  the stage
+     * @param stage the stage
      */
     private ProjectPromptController(Stage stage) {
         this.stage = stage;
+        this.speedment = new Speedment();
     }
 
     /**
      * Initializes the controller class.
      *
-     * @param url  the URL to use
-     * @param rb   the ResourceBundle to use
+     * @param url the URL to use
+     * @param rb the ResourceBundle to use
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -102,8 +114,8 @@ public final class ProjectPromptController implements Initializable {
 
             fieldType.setItems(
                 getDbmsTypes()
-                    .map(DbmsType::getName)
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList))
+                .map(DbmsType::getName)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList))
             );
 
             fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
@@ -142,7 +154,7 @@ public final class ProjectPromptController implements Initializable {
             fieldName.setText(Settings.inst().get("last_known_name", "db0"));
 
             buttonConnect.setOnAction(ev -> {
-                
+
                 final String dbmsTypeName = fieldType.getSelectionModel().getSelectedItem();
                 final DbmsType dbmsType = findDbmsType(dbmsTypeName)
                     .orElseThrow(dbmsTypeNotInstalled(dbmsTypeName));
@@ -167,25 +179,25 @@ public final class ProjectPromptController implements Initializable {
                 Settings.inst().set("last_known_port", fieldPort.getText());
 
                 try {
-                    final DbmsHandler dh = dbmsType.makeDbmsHandler(dbms);
+                    final DbmsHandler dh = dbmsType.makeDbmsHandler(speedment, dbms);
                     dh.schemas()
                         .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
                         .forEachOrdered(dbms::add);
 
                     Trees.traverse((Child) project, c -> c.asParent()
-                            .map(p -> p.stream())
-                            .orElse(Stream.empty())
-                            .map(n -> (Child<?>) n),
-                            Trees.TraversalOrder.DEPTH_FIRST_PRE
+                        .map(p -> p.stream())
+                        .orElse(Stream.empty())
+                        .map(n -> (Child<?>) n),
+                        Trees.TraversalOrder.DEPTH_FIRST_PRE
                     ).forEachOrdered(System.out::println);
 
                     SceneController.showIn(stage, project);
                     Settings.inst().set("hide_open_option", false);
                 } catch (Exception ex) {
-                    showAlert(stage, "Error!", 
-                        "Could not connect to the database. Make sure the " +
-                        "information provided is correct and that the database " +
-                        "server is running."
+                    showAlert(stage, "Error!",
+                        "Could not connect to the database. Make sure the "
+                        + "information provided is correct and that the database "
+                        + "server is running."
                     );
                     throw ex;
                 }
@@ -202,64 +214,66 @@ public final class ProjectPromptController implements Initializable {
     }
 
     /**
-     * Updated the enabled-flag of the connect button by making sure no required values are still empty.
+     * Updated the enabled-flag of the connect button by making sure no required
+     * values are still empty.
      */
     private void toggleConnectButton() {
         buttonConnect.setDisable(
             fieldHost.textProperty().getValue().isEmpty()
-         || fieldPort.textProperty().getValue().isEmpty()
-         || fieldType.getSelectionModel().isEmpty()
-         || fieldName.textProperty().getValue().isEmpty()
-         || fieldSchema.textProperty().getValue().isEmpty()
-         || fieldUser.textProperty().getValue().isEmpty()
-        );
-    }
-    
-    /**
-     * Returns a stream of all installed {@link DbmsType DbmsTypes}.
-     * 
-     * @return  supported dbms types
-     */
-    private Stream<DbmsType> getDbmsTypes() {
-        return Platform.get()
-            .get(DbmsHandlerComponent.class)
-            .supportedDbmsTypes();
-    }
-    
-    /**
-     * Attempts to locate the installed {@link DbmsType} with the specified
-     * name.
-     * 
-     * @return  the {@link DbmsType} found or {@code empty}
-     */
-    private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
-        return Platform.get()
-            .get(DbmsHandlerComponent.class)
-            .findByName(dbmsTypeName);
-    }
-    
-    private Supplier<SpeedmentException> dbmsTypeNotInstalled(String dbmsTypeName) {
-        return () -> new SpeedmentException(
-            "Required DbmsType '" + 
-            dbmsTypeName + 
-            "' is not installed correctly."
+            || fieldPort.textProperty().getValue().isEmpty()
+            || fieldType.getSelectionModel().isEmpty()
+            || fieldName.textProperty().getValue().isEmpty()
+            || fieldSchema.textProperty().getValue().isEmpty()
+            || fieldUser.textProperty().getValue().isEmpty()
         );
     }
 
     /**
-     * Creates and configures a new Project Prompt-component in the specified stage.
+     * Returns a stream of all installed {@link DbmsType DbmsTypes}.
      *
-     * @param stage  the stage
+     * @return supported dbms types
+     */
+    private Stream<DbmsType> getDbmsTypes() {
+        return speedment
+            .get(DbmsHandlerComponent.class)
+            .supportedDbmsTypes();
+    }
+
+    /**
+     * Attempts to locate the installed {@link DbmsType} with the specified
+     * name.
+     *
+     * @return the {@link DbmsType} found or {@code empty}
+     */
+    private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
+        return speedment
+            .get(DbmsHandlerComponent.class)
+            .findByName(dbmsTypeName);
+    }
+
+    private Supplier<SpeedmentException> dbmsTypeNotInstalled(String dbmsTypeName) {
+        return () -> new SpeedmentException(
+            "Required DbmsType '"
+            + dbmsTypeName
+            + "' is not installed correctly."
+        );
+    }
+
+    /**
+     * Creates and configures a new Project Prompt-component in the specified
+     * stage.
+     *
+     * @param stage the stage
      */
     public static void showIn(Stage stage) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/ProjectPrompt.fxml"));
         final ProjectPromptController control = new ProjectPromptController(stage);
         loader.setController(control);
-        
+
         try {
             final HBox root = (HBox) loader.load();
             final Scene scene = new Scene(root);
-            
+
             stage.hide();
             stage.setTitle("Speedment - New project");
             stage.setScene(scene);

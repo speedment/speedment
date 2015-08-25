@@ -16,8 +16,6 @@
  */
 package com.speedment.core.field;
 
-import com.speedment.core.config.model.Column;
-
 /**
  * A Field is the most basic representation of an Entity field. Because Field
  * has a generic type of its Entity, we can prevent applications from applying a
@@ -34,13 +32,13 @@ public interface Field<ENTITY> {
      * @param entity to use
      * @return if this Field is {@code null} in the given entity
      */
-    public boolean isNullIn(ENTITY entity);
+    boolean isNullIn(ENTITY entity);
 
     /**
-     * Returns the {@link Column} meta data that corresponds to this Field.
+     * Returns the column name that corresponds to this Field.
      *
-     * @return the {@link Column} meta data that corresponds to this Field
+     * @return the name
      */
-    public Column getColumn();
+    String getColumnName();
 
 }

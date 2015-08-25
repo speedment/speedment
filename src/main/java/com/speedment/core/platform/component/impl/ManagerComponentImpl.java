@@ -17,7 +17,6 @@
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.config.model.Table;
-import com.speedment.core.Buildable;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.Map;
@@ -30,43 +29,43 @@ import java.util.stream.Stream;
  */
 public class ManagerComponentImpl implements ManagerComponent {
 
-    private final Map<Class<?>, Manager<?, ?, ?>> managersByEntity, managersByManager;
-    private final Map<Table, Manager<?, ?, ?>> tableMap;
+    private final Map<Class<?>, Manager<?>> managersByEntity/*, managersByManager*/;
+    private final Map<Table, Manager<?>> tableMap;
 
     public ManagerComponentImpl() {
         managersByEntity = new ConcurrentHashMap<>();
-        managersByManager = new ConcurrentHashMap<>();
+//        managersByManager = new ConcurrentHashMap<>();
         tableMap = new ConcurrentHashMap<>();
     }
 
     @Override
-    public <PK, E, B extends Buildable<E>> void put(Manager<PK, E, B> manager) {
+    public <ENTITY> void put(Manager<ENTITY> manager) {
         managersByEntity.put(manager.getEntityClass(), manager);
-        managersByManager.put(manager.getManagerClass(), manager);
+//        managersByManager.put(manager.getManagerClass(), manager);
         tableMap.put(manager.getTable(), manager);
     }
 
+//    @Override
+//    @SuppressWarnings("unchecked")
+//    public <ENTITY, M extends Manager<ENTITY>> M manager(Class<M> managerClass) {
+//        return (M) managersByManager.get(managerClass);
+//    }
+
     @Override
     @SuppressWarnings("unchecked")
-    public <PK, E, B extends Buildable<E>, M extends Manager<PK, E, B>> M manager(Class<M> managerClass) {
-        return (M) managersByManager.get(managerClass);
+    public <E> Manager<E> managerOf(Class<E> entityClass) {
+        return (Manager<E>) managersByEntity.get(entityClass);
+    }
+
+    @Override
+    public Stream<Manager<?>> stream() {
+        return managersByEntity.values().stream();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <PK, E, B extends Buildable<E>> Manager<PK, E, B> managerOf(Class<E> entityClass) {
-        return (Manager<PK, E, B>) managersByEntity.get(entityClass);
-    }
-
-    @Override
-    public Stream<Manager<?, ?, ?>> stream() {
-        return managersByManager.values().stream();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <PK, E, B extends Buildable<E>> Manager<PK, E, B> findByTable(Table table) {
-        return (Manager<PK, E, B>) tableMap.get(table);
+    public <ENTITY> Manager<ENTITY> findByTable(Table table) {
+        return (Manager<ENTITY>) tableMap.get(table);
     }
 
 }

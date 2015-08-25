@@ -48,7 +48,7 @@ public abstract class UnaryPredicateBuilderView implements Transform<UnaryPredic
     @Override
     public Optional<String> transform(Generator gen, UnaryPredicateBuilder model) {
         return Optional.of("("
-            + model.getField().getColumn().getName()
+            + model.getField().getColumnName()
             + render(model.getOperator())
             + ")"
         );

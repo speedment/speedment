@@ -23,8 +23,7 @@ import com.speedment.core.config.model.Schema;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.db.impl.AbstractRelationalDbmsHandler;
-import java.sql.ResultSet;
-import java.util.function.Consumer;
+import com.speedment.core.platform.Speedment;
 import java.util.stream.Stream;
 
 /**
@@ -33,8 +32,8 @@ import java.util.stream.Stream;
  */
 public class MockMySqlDbmsHandler extends AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    public MockMySqlDbmsHandler(Dbms dbms) {
-        super(dbms);
+    public MockMySqlDbmsHandler(Speedment speedment, Dbms dbms) {
+        super(speedment, dbms);
     }
 
     @Override

@@ -16,7 +16,6 @@
  */
 package com.speedment.core.manager;
 
-import com.speedment.core.Buildable;
 import static com.speedment.util.stream.StreamUtil.streamOfNullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,10 +30,10 @@ import java.util.stream.Stream;
  */
 public class KeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENTITY> {
 
-    private final Manager<PK, ENTITY, Buildable<ENTITY>> manager;
+    private final Manager<ENTITY> manager;
     private final Map<KEY, Map<PK, ENTITY>> entities;
 
-    public KeyIndexHolder(Manager<PK, ENTITY, Buildable<ENTITY>> manager) {
+    public KeyIndexHolder(Manager<ENTITY> manager) {
         this.manager = manager;
         this.entities = new ConcurrentHashMap<>();
     }
@@ -51,8 +50,9 @@ public class KeyIndexHolder<KEY, PK, ENTITY> implements IndexHolder<KEY, PK, ENT
 
     @Override
     public void put(KEY key, ENTITY entity) {
+        
         entities.computeIfAbsent(key, k -> new ConcurrentHashMap<>())
-                .put(manager.primaryKeyFor(entity), entity);
+                .put((PK) manager.primaryKeyFor(entity), entity); // TODO Check if this cast is safe!!!
     }
 
     @Override

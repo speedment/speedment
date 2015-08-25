@@ -21,6 +21,7 @@ import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Constructor;
 import com.speedment.codegen.lang.models.Field;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Generic;
@@ -31,10 +32,23 @@ import static com.speedment.codegen.lang.models.constants.DefaultType.INT_PRIMIT
 import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
+import com.speedment.codegen.lang.models.implementation.GenericImpl;
+import static com.speedment.codegen.util.Formatting.indent;
 import com.speedment.core.config.model.Table;
+import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.manager.Manager;
+import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.component.ManagerComponent;
+import com.speedment.util.java.JavaLanguage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -42,14 +56,19 @@ import java.util.StringJoiner;
  */
 public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> {
 
+    private static final String SPEEDMENT_INSTANCE_NAME = "speedmentInstance_";
+    private static final String MANAGER_METHOD = "manager_";
+    private static final String MANAGER_OF_METHOD = "managerOf_";
+
     public EntityImplTranslator(Generator cg, Table configEntity) {
         super(cg, configEntity);
     }
 
     @Override
     protected Class make(File file) {
+        final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        return new ClassBuilder(ENTITY.getImplName())
+        final Class newClass = new ClassBuilder(ENTITY.getImplName())
             .addColumnConsumer((cl, c) -> {
 
                 final Type retType;
@@ -63,30 +82,164 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
                 }
 
                 cl
-                .add(fieldFor(c).private_())
-                .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), retType)
-                    .public_()
-                    .add(OVERRIDE)
-                    .add("return " + getter + ";"))
-                .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
-                    .public_().final_()
-                    .add(OVERRIDE)
-                    .add(fieldFor(c))
-                    .add("this." + variableName(c) + " = " + variableName(c) + ";")
-                    .add("return this;"));
+                    .add(fieldFor(c).private_())
+                    .add(Method.of(GETTER_METHOD_PREFIX + typeName(c), retType)
+                        .public_()
+                        .add(OVERRIDE)
+                        .add("return " + getter + ";"))
+                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), ENTITY.getImplType())
+                        .public_().final_()
+                        .add(OVERRIDE)
+                        .add(fieldFor(c))
+                        .add("this." + variableName(c) + " = " + variableName(c) + ";")
+                        .add("return this;"));
+            })
+            // Add streamers from back pointing FK:s
+            .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
+                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
+                fu.imports().forEachOrdered(file::add);
+                final String methodName = EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
+                // Record for later use in the construction of aggregate streamers
+                fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
+                final Type returnType = Type.of(Stream.class).add(fu.getEmt().GENERIC_OF_ENTITY);
+                final Method method = Method.of(methodName, returnType).public_().add(OVERRIDE)
+                    //.add("return " + managerTypeName(fu.getTable()) + ".get()")
+                    .add("return " + MANAGER_OF_METHOD + "(" + typeName(fu.getTable()) + ".class)")
+                    //.add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
+                    .add("        .stream().filter(" + typeName(fu.getTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
+                i.add(method);
+            })
+            .addForeignKeyConsumer((i, fk) -> {
+                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
+                fu.imports().forEachOrdered(file::add);
+
+                final Type returnType;
+                if (fu.getColumn().isNullable()) {
+                    file.add(Import.of(OPTIONAL));
+                    returnType = OPTIONAL.add(fu.getForeignEmt().GENERIC_OF_ENTITY);
+
+                } else {
+                    returnType = fu.getForeignEmt().ENTITY.getType();
+                }
+
+                final Method method = Method.of("find" + typeName(fu.getColumn()), returnType).public_().add(OVERRIDE);
+                if (fu.getColumn().isNullable()) {
+                    final String varName = variableName(fu.getForeignTable());
+                    method.add("return get" + typeName(fu.getColumn()) + "()")
+                        .add(indent(
+                            //".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
+                            ".flatMap(" + varName + " -> " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).stream()\n" + indent(
+                                ".filter(" + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n"
+                                + ".findAny()"
+                            ) + "\n);"
+                        ));
+                } else {
+                    file.add(Import.of(Type.of(SpeedmentException.class)));
+                    //method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
+                    method.add("return " +  MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).stream()\n" + indent(
+                        ".filter(" + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(get" + typeName(fu.getColumn()) + "()))\n"
+                        + ".findAny().orElseThrow(() -> new SpeedmentException(\n" + indent(
+                            "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
+                        ) + "));\n"
+                    ));
+                }
+                i.add(method);
             })
             .build()
             .public_()
-            .add(BUILDER.getType())
-            .add(emptyConstructor())
-            .add(copyConstructor(ENTITY.getType(), CopyConstructorMode.BUILDER))
-            .add(Method.of("build", ENTITY.getType())
-                .add(OVERRIDE)
-                .public_()
-                .add("return new " + ENTITY.getImplName() + "(this);"))
+            .final_()
+            .add(ENTITY.getType())
+            .add(Field.of(SPEEDMENT_INSTANCE_NAME, Type.of(Speedment.class)).private_().final_())
+            .add(Constructor.of().add(Field.of(SPEEDMENT_INSTANCE_NAME, Type.of(Speedment.class)))
+                .add("this." + SPEEDMENT_INSTANCE_NAME + " = " + SPEEDMENT_INSTANCE_NAME + ";")
+            )
+            .add(EntityTranslatorSupport.toJson().public_().add(OVERRIDE).add("return manager_().toJson(this);"))
+            //.add(EntityTranslatorSupport.toJsonExtended(ENTITY.getType()).public_().add(OVERRIDE))
+            //.add(stream())
+            .add(manager())
+            .add(managerOf(file))
+            .add(persist())
+            .add(update())
+            .add(remove())
+            .add(persistWithListener())
+            .add(updateWithListener())
+            .add(removeWithListener())
             .add(toString(file))
             .add(equalsMethod())
             .add(hashCodeMethod());
+
+        // Create aggregate streaming functions, if any
+        fkStreamers.keySet().stream().forEach((referencingTable) -> {
+            final List<String> methodNames = fkStreamers.get(referencingTable);
+            if (!methodNames.isEmpty()) {
+                final Method method = Method.of(
+                    EntityTranslatorSupport.pluralis(referencingTable), 
+                    Type.of(Stream.class).add(Generic.of().setLowerBound(typeName(referencingTable)))
+                ).public_().add(OVERRIDE);
+                
+                if (methodNames.size() == 1) {
+                    method.add("return " + methodNames.get(0) + "();");
+                } else {
+                    file.add(Import.of(Type.of(Function.class)));
+                    method.add("return Stream.of("
+                        + methodNames.stream().map(n -> n + "()").collect(Collectors.joining(", "))
+                        + ").flatMap(Function.identity()).distinct();");
+                }
+                newClass.add(method);
+            }
+        });
+
+        return newClass;
+
+    }
+
+    private Method manager() {
+        //file.add(Import.of(Type.of(ManagerComponent.class)));
+        return Method.of(MANAGER_METHOD, Type.of(Manager.class).add(Generic.of().add(ENTITY.getType()))).private_()
+            .add("return " + MANAGER_OF_METHOD + "(" + ENTITY.getName() + ".class);");
+//            .add("return " + SPEEDMENT_INSTANCE_NAME + ".get(ManagerComponent.class).managerOf(" + ENTITY.getName() + ".class);");
+    }
+
+    private Method managerOf(File file) {
+        file.add(Import.of(Type.of(ManagerComponent.class)));
+        final Generic genericTypeT = Generic.of().add(Type.of("T"));
+        final String parameterName = "entityClass";
+        return Method.of(MANAGER_OF_METHOD, Type.of(Manager.class).add(genericTypeT))
+            .add(genericTypeT)
+            .add(Field.of(parameterName, Type.of(java.lang.Class.class).add(genericTypeT)))
+            .private_()
+            .add("return " + SPEEDMENT_INSTANCE_NAME + ".get(ManagerComponent.class).managerOf(" + parameterName + ");");
+    }
+
+    private Method persist() {
+        return EntityTranslatorSupport.persist().public_().add(OVERRIDE)
+            .add("manager_().persist(this);");
+
+    }
+
+    private Method update() {
+        return EntityTranslatorSupport.update().public_().add(OVERRIDE)
+            .add("manager_().update(this);");
+    }
+
+    private Method remove() {
+        return EntityTranslatorSupport.remove().public_().add(OVERRIDE)
+            .add("manager_().remove(this);");
+    }
+
+    private Method persistWithListener() {
+        return EntityTranslatorSupport.persistWithListener(ENTITY.getType()).public_().add(OVERRIDE)
+            .add("manager_().persist(this, " + EntityTranslatorSupport.CONSUMER_NAME + ");");
+    }
+
+    private Method updateWithListener() {
+        return EntityTranslatorSupport.updateWithListener(ENTITY.getType()).public_().add(OVERRIDE)
+            .add("manager_().update(this, " + EntityTranslatorSupport.CONSUMER_NAME + ");");
+    }
+
+    private Method removeWithListener() {
+        return EntityTranslatorSupport.removeWithListener(ENTITY.getType()).public_().add(OVERRIDE)
+            .add("manager_().remove(this, " + EntityTranslatorSupport.CONSUMER_NAME + ");");
     }
 
     protected Method toString(File file) {

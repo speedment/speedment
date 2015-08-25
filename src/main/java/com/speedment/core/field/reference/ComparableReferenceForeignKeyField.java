@@ -16,9 +16,7 @@
  */
 package com.speedment.core.field.reference;
 
-import com.speedment.core.config.model.Column;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  *
@@ -31,8 +29,8 @@ public class ComparableReferenceForeignKeyField<ENTITY, V extends Comparable<? s
 
     private final Function<ENTITY, FK> finder;
 
-    public ComparableReferenceForeignKeyField(Supplier<Column> columnSupplier, Function<ENTITY, V> getter, Function<ENTITY, FK> finder) {
-        super(columnSupplier, getter);
+    public ComparableReferenceForeignKeyField(String columnName, Function<ENTITY, V> getter, Function<ENTITY, FK> finder) {
+        super(columnName, getter);
         this.finder = finder;
     }
 

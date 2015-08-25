@@ -33,7 +33,7 @@ import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Dbms;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.manager.sql.SqlManager;
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import java.util.Arrays;
@@ -55,10 +55,10 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                 .public_()
                 .add(Type.of(SqlManager.class).add(GENERIC_OF_PK).add(GENERIC_OF_ENTITY).add(GENERIC_OF_BUILDER))
                 .add(generatePrimaryKeyFor(file))
-                .call(i -> file.add(Import.of(Type.of(Platform.class))))
+                .call(i -> file.add(Import.of(Type.of(Speedment.class))))
                 .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
                 .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                        .add("return " + Platform.class.getSimpleName()
+                        .add("return " + Speedment.class.getSimpleName()
                                 + ".get().get(" + ProjectComponent.class.getSimpleName()
                                 + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
                 //            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
@@ -72,10 +72,10 @@ public class EntityManagerTranslator extends BaseEntityAndManagerTranslator<Inte
                         .add("return " + BUILDER.getName() + ".class;"))
                 .add(generateGet(file))
                 .add(generateSet(file))
-                .call(i -> file.add(Import.of(Type.of(Platform.class))))
+                .call(i -> file.add(Import.of(Type.of(Speedment.class))))
                 .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
                 .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
-                        .add("return " + Platform.class.getSimpleName()
+                        .add("return " + Speedment.class.getSimpleName()
                                 + ".get().get(" + ManagerComponent.class.getSimpleName()
                                 + ".class).manager(" + MANAGER.getName() + ".class);"));
     }

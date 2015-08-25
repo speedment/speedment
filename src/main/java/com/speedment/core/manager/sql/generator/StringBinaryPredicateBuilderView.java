@@ -51,7 +51,7 @@ public class StringBinaryPredicateBuilderView implements Transform<StringBinaryP
     @Override
     public Optional<String> transform(Generator gen, StringBinaryPredicateBuilder model) {
         return Optional.of("("
-            + render(model.getOperator(), model.getField().getColumn().getName())
+            + render(model.getOperator(), model.getField().getColumnName())
             + ")"
         );
     }

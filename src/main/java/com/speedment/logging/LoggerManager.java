@@ -16,8 +16,9 @@
  */
 package com.speedment.logging;
 
-import com.speedment.core.platform.Platform;
+import com.speedment.core.platform.Speedment;
 import com.speedment.core.platform.component.LoggerFactoryComponent;
+import com.speedment.logging.impl.SystemOutLoggerFactory;
 
 /**
  *
@@ -25,15 +26,24 @@ import com.speedment.core.platform.component.LoggerFactoryComponent;
  */
 public interface LoggerManager {
 
+    enum Holder {
+        INST;
+        private LoggerFactory defaultFactory = new SystemOutLoggerFactory();
+    }
+
+    static void setFactory(LoggerFactory newFactory) {
+        Holder.INST.defaultFactory = newFactory;
+    }
+
     /**
      * Creates and returns a new <tt>Logger</tt> bound to the given
-     * <tt>binding</tt> type using Platform's LoggerFactoryComponent.
+     * <tt>binding</tt> type using
      *
      * @param binding the <tt>java.lang.Class</tt> to bind to
      * @return the <b>new</b> <tt>Logger</tt> instance
      */
     static Logger getLogger(Class<?> binding) {
-        return Platform.get().get(LoggerFactoryComponent.class).getLoggerFactory().create(binding);
+        return Holder.INST.defaultFactory.create(binding);
     }
 
     /**
@@ -44,7 +54,31 @@ public interface LoggerManager {
      * @return the <b>new</b> <tt>Logger</tt> instance
      */
     static Logger getLogger(String binding) {
-        return Platform.get().get(LoggerFactoryComponent.class).getLoggerFactory().create(binding);
+        return Holder.INST.defaultFactory.create(binding);
+    }
+
+    /**
+     * Creates and returns a new <tt>Logger</tt> bound to the given
+     * <tt>binding</tt> type using Speedment's LoggerFactoryComponent.
+     *
+     * @param speedment instance to use
+     * @param binding the <tt>java.lang.Class</tt> to bind to
+     * @return the <b>new</b> <tt>Logger</tt> instance
+     */
+    static Logger getLogger(Speedment speedment, Class<?> binding) {
+        return speedment.get(LoggerFactoryComponent.class).getLoggerFactory().create(binding);
+    }
+
+    /**
+     * Creates and returns a new <tt>Logger</tt> bound to the given
+     * <tt>binding</tt> string using Speedment's LoggerFactoryComponent.
+     *
+     * @param speedment instance to use
+     * @param binding the <tt>java.lang.String</tt> to bind to
+     * @return the <b>new</b> <tt>Logger</tt> instance
+     */
+    static Logger getLogger(Speedment speedment, String binding) {
+        return speedment.get(LoggerFactoryComponent.class).getLoggerFactory().create(binding);
     }
 
 }
