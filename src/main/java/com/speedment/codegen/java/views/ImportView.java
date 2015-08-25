@@ -16,14 +16,16 @@
  */
 package com.speedment.codegen.java.views;
 
-import com.speedment.codegen.util.CodeCombiner;
-import com.speedment.codegen.lang.models.Import;
-import java.util.Optional;
-import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.util.CodeCombiner;
+
+import java.util.Optional;
+
+import static com.speedment.codegen.util.Formatting.*;
 
 /**
  * Transforms from an {@link Import} to java code.
@@ -63,7 +65,8 @@ public class ImportView implements Transform<Import, String> {
      * @return      <code>true</code> if it should be imported explicitly
      */
 	private boolean shouldImport(Generator gen, Type type) {
-        return gen.getRenderStack().fromBottom(File.class)
+        return !gen.getDependencyMgr().isIgnored(packageName(type.getName()).orElse(type.getName()))
+		&& gen.getRenderStack().fromBottom(File.class)
             .map(f -> fileToClassName(f.getName()))
             .filter(f -> f.isPresent())
             .map(f -> f.get())
