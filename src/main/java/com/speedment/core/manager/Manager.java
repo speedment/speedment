@@ -20,11 +20,8 @@ import com.speedment.core.annotations.Api;
 import com.speedment.core.config.model.Column;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.field.Field;
-import com.speedment.core.formatter.EntityFormatter;
 import com.speedment.core.lifecycle.Lifecyclable;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.core.formatter.json.JsonFormatter;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -65,8 +62,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
 //    BUILDER builder();
 //
 //    BUILDER toBuilder(ENTITY entity);
-    
-   String toJson(ENTITY entity);
+    String toJson(ENTITY entity);
 
     default ENTITY toInternal(ENTITY entity) {
         return entity;
@@ -87,15 +83,71 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
     void onDelete(Consumer<ENTITY> listener);
 
     // Persistence
-    void persist(ENTITY entity) throws SpeedmentException;
+    /**
+     * Persists the provided entity to the underlying database and returns a
+     * potentially updated entity. If the persistence fails for any reason, an
+     * unchecked {@link SpeedmentException} is thrown.
+     * <p>
+     * It is unspecified if the returned updated entity is the same provided
+     * entity instance or another entity instance. It is erroneous to assume
+     * either, so you should use only the returned entity after the method has
+     * been called. However, it is guaranteed that the provided entity is
+     * untouched if an exception is thrown.
+     * <p>
+     * The fields of returned entity instance may differ from the provided
+     * entity fields due to auto generated column(s) or because of any other
+     * modification that the underlying database imposed on the persisted
+     * entity.
+     *
+     * @param entity to persist
+     * @return an entity reflecting the result of the persisted entity
+     * @throws SpeedmentException if the underlying database throws an exception
+     * (e.g. SQLException)
+     */
+    ENTITY persist(ENTITY entity) throws SpeedmentException;
 
-    void update(ENTITY entity) throws SpeedmentException;
+    /**
+     * Updates the provided entity in the underlying database and returns a
+     * potentially updated entity. If the update fails for any reason, an
+     * unchecked {@link SpeedmentException} is thrown.
+     * <p>
+     * It is unspecified if the returned updated entity is the same provided
+     * entity instance or another entity instance. It is erroneous to assume
+     * either, so you should use only the returned entity after the method has
+     * been called. However, it is guaranteed that the provided entity is
+     * untouched if an exception is thrown.
+     * <p>
+     * The fields of returned entity instance may differ from the provided
+     * entity fields due to auto generated column(s) or because of any other
+     * modification that the underlying database imposed on the persisted
+     * entity.
+     * <p>
+     * Entities are uniquely identified by their primary key(s).
+     *
+     * @param entity to update
+     * @return an entity reflecting the result of the updated entity
+     * @throws SpeedmentException if the underlying database throws an exception
+     * (e.g. SQLException)
+     */
+    ENTITY update(ENTITY entity) throws SpeedmentException;
 
-    void remove(ENTITY entity) throws SpeedmentException;
+    /**
+     * Removes the provided entity from the underlying database and returns the
+     * provided entity instance. If the deletion fails for any reason, an
+     * unchecked {@link SpeedmentException} is thrown.
+     * <p>
+     * Entities are uniquely identified by their primary key(s).
+     *
+     * @param entity to remove
+     * @return the provided entity instance
+     * @throws SpeedmentException if the underlying database throws an exception
+     * (e.g. SQLException)
+     */
+    ENTITY remove(ENTITY entity) throws SpeedmentException;
 
-    void persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
-    void update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
-    void remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 }

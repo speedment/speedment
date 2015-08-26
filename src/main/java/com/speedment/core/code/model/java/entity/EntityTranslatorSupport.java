@@ -58,15 +58,17 @@ public class EntityTranslatorSupport {
 
     public static final String CONSUMER_NAME = "consumer";
 
-    public EntityTranslatorSupport() { instanceNotAllowed(getClass()); }
-    
+    public EntityTranslatorSupport() {
+        instanceNotAllowed(getClass());
+    }
+
     public static Type getEntityType(Table table) {
         final Project project = table.ancestor(Project.class).get();
-        
+
         return Type.of(
-            project.getPackageName().toLowerCase() + DOT + 
-            table.getRelativeName(Project.class) + DOT +
-            javaTypeName(table.getName())
+            project.getPackageName().toLowerCase() + DOT
+            + table.getRelativeName(Project.class) + DOT
+            + javaTypeName(table.getName())
         );
     }
 
@@ -155,28 +157,28 @@ public class EntityTranslatorSupport {
             .findFirst();
     }
 
-    public static Method dbMethod(String name) {
-        return Method.of(name, VOID).add(Type.of(SpeedmentException.class));
+    public static Method dbMethod(String name, Type entityType) {
+        return Method.of(name, entityType).add(Type.of(SpeedmentException.class));
         //.add("return " + MANAGER.getName() + ".get()." + name + "(this);");
     }
 
     public static Method dbMethodWithListener(String name, Type entityType) {
-        return Method.of(name, VOID).add(Type.of(SpeedmentException.class))
+        return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
             .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class).add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))));
         //.add("return " + MANAGER.getName() + ".get()." + name + "(this, " + CONSUMER_NAME + ");");
     }
 
-    public static Method persist() {
-        return EntityTranslatorSupport.dbMethod("persist");
+    public static Method persist(Type entityType) {
+        return EntityTranslatorSupport.dbMethod("persist", entityType);
     }
 
-    public static Method update() {
-        return EntityTranslatorSupport.dbMethod("update");
+    public static Method update(Type entityType) {
+        return EntityTranslatorSupport.dbMethod("update", entityType);
 
     }
 
-    public static Method remove() {
-        return EntityTranslatorSupport.dbMethod("remove");
+    public static Method remove(Type entityType) {
+        return EntityTranslatorSupport.dbMethod("remove", entityType);
     }
 
     public static Method persistWithListener(Type entityType) {

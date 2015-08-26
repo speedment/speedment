@@ -131,12 +131,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     @Override
-    public void persist(ENTITY entity) throws SpeedmentException {
-        persist(entity, null);
+    public ENTITY persist(ENTITY entity) throws SpeedmentException {
+        return persist(entity, null);
     }
 
     @Override
-    public void persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
+    public ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("insert into ").append(sqlTableReference());
@@ -171,15 +171,16 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         };
 
         executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
+        return entity;
     }
 
     @Override
-    public void update(ENTITY entity) {
-        update(entity, null);
+    public ENTITY update(ENTITY entity) {
+        return update(entity, null);
     }
 
     @Override
-    public void update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
+    public ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
@@ -192,15 +193,16 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        return entity;
     }
 
     @Override
-    public void remove(ENTITY entity) {
-        remove(entity, null);
+    public ENTITY remove(ENTITY entity) {
+        return remove(entity, null);
     }
 
     @Override
-    public void remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
+    public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("delete from ").append(sqlTableReference());
@@ -209,6 +211,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        return entity;
     }
 
     private void executeUpdate(

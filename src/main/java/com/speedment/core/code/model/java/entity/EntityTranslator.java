@@ -35,8 +35,8 @@ import static com.speedment.codegen.util.Formatting.shortName;
 import static com.speedment.core.code.model.java.entity.EntityTranslatorSupport.toJson;
 import com.speedment.core.config.model.Table;
 import com.speedment.core.config.model.Dbms;
+import com.speedment.core.entity.BaseEntity;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.field.FieldUtil;
 import static com.speedment.util.java.JavaLanguage.javaStaticFieldName;
 import static com.speedment.util.java.JavaLanguage.javaTypeName;
 import java.util.ArrayList;
@@ -237,7 +237,8 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 i.add(method);
             })
             .build()
-            .public_();
+            .public_()
+            .add(Type.of(BaseEntity.class).add(Generic.of().add(ENTITY.getType())));
 
         // Create aggregate streaming functions, if any
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
@@ -280,6 +281,9 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //        file.add(Import.of(Type.of(Platform.class)));
 //        file.add(Import.of(Type.of(ManagerComponent.class)));
 //        file.add(Import.of(Type.of(Optional.class)));
+
+        /*
+
         iface
             //.add(entityAnnotation(file))
             //.add(builder())
@@ -293,7 +297,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             .add(persistWithListener())
             .add(updateWithListener())
             .add(removeWithListener());
-//                .add(manager());
+//                .add(manager()); */
         return iface;
     }
 
@@ -311,57 +315,78 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 //                .add("return Platform.get().get(ManagerComponent.class).manager(" + MANAGER.getName() + ".class);");
 //    }
     private Method persist() {
-        return EntityTranslatorSupport.persist()
+        return EntityTranslatorSupport.persist(ENTITY.getType())
             .set(persistJavadoc("")
             );
 
     }
 
     private Method update() {
-        return EntityTranslatorSupport.update()
+        return EntityTranslatorSupport.update(ENTITY.getType())
             .set(updateJavadoc("")
             );
     }
 
     private Method remove() {
-        return EntityTranslatorSupport.remove()
+        return EntityTranslatorSupport.remove(ENTITY.getType())
             .set(removeJavadoc(""));
     }
 
     private Javadoc persistJavadoc(String extraInfo) {
-        return Javadoc.of("Persists this Entity to the underlying database and optionally updates the provided entity."
-            + "If the persistence fails for any reason, an unchecked {@link SpeedmentException} is thrown."
+        return Javadoc.of("Persists the provided entity to the underlying database and returns a "
+            + "potentially updated entity.If the persistence fails for any reason, an "
+            + "unchecked {@link SpeedmentException} is thrown. "
             + " <p> "
-            + "The provided Entity may be changed by the method "
-            + "due to auto generated column(s) or because of any other "
-            + "modification that the underlying database imposed on the persisted Entity."
+            + extraInfo
+            + "It is unspecified if the returned updated entity is the same provided "
+            + "entity instance or another entity instance. It is erroneous to assume "
+            + "either, so you should use only the returned entity after the method has "
+            + "been called. However, it is guaranteed that the provided entity is "
+            + "untouched if an exception is thrown. "
+            + " <p> "
+            + "The fields of returned entity instance may differ from the provided "
+            + "entity fields due to auto generated column(s) or because of any other "
+            + "modification that the underlying database imposed on the persisted "
+            + "entity."
         )
+            .add(RETURN.setText("an entity reflecting the result of the persisted entity"))
             .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
 
     }
 
     private Javadoc updateJavadoc(String extraInfo) {
-        return Javadoc.of(
-            "Updates this Entity in the underlying database and optionally updates the provided entity."
-            + "If the update fails for any reason, an unchecked {@link SpeedmentException} is thrown."
+        return Javadoc.of("Updates the provided entity in the underlying database and returns a "
+            + "potentially updated entity.If the update fails for any reason, an "
+            + "unchecked {@link SpeedmentException} is thrown. "
             + " <p> "
-            + "The provided Entity may be changed by the method "
-            + "due to auto generated column(s) or because of any other "
-            + "modification that the underlying database imposed on the updated Entity."
+            + extraInfo
+            + "It is unspecified if the returned updated entity is the same provided "
+            + "entity instance or another entity instance. It is erroneous to assume "
+            + "either, so you should use only the returned entity after the method has "
+            + "been called. However, it is guaranteed that the provided entity is "
+            + "untouched if an exception is thrown. "
+            + " <p> "
+            + "The fields of returned entity instance may differ from the provided "
+            + "entity fields due to auto generated column(s) or because of any other "
+            + "modification that the underlying database imposed on the persisted "
+            + "entity."
             + " <p> "
             + "Entities are uniquely identified by their primary key(s)."
         )
+            .add(RETURN.setText("an entity reflecting the result of the updated entity"))
             .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
+
     }
 
     private Javadoc removeJavadoc(String extraInfo) {
-        return Javadoc.of(
-            "Removes this Entity from the underlying database."
-            + "If the removal fails for any reason, an unchecked {@link SpeedmentException} is thrown."
+        return Javadoc.of("Removes the provided entity from the underlying database and returns the "
+            + "provided entity instance.  If the deletion fails for any reason, an "
+            + "unchecked {@link SpeedmentException} is thrown. "
             + " <p> "
             + extraInfo
             + "Entities are uniquely identified by their primary key(s)."
         )
+            .add(RETURN.setText("the provided entity instance"))
             .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
     }
 
