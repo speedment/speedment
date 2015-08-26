@@ -55,7 +55,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         updateListeners = new CopyOnWriteArraySet<>();
         deleteListeners = new CopyOnWriteArraySet<>();
         state = Lifecyclable.State.CREATED;
-        sharedJasonFormatter = JsonFormatter.allOf(this, getEntityClass());
+        sharedJasonFormatter = JsonFormatter.allOf(this);
     }
 
     protected void insertEvent(ENTITY entity) {

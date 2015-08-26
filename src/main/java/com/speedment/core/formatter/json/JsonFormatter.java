@@ -195,10 +195,10 @@ public class JsonFormatter<ENTITY> implements EntityFormatter<ENTITY, JsonFormat
      * renderer.
      *
      * @param <ENTITY> the Entity type
-     * @param entityClass the class of the ENTITY
+     * @param manager of the entity
      * @return a new JsonFormatter with no fields added to the renderer
      */
-    public static <ENTITY> JsonFormatter<ENTITY> noneOf(Class<ENTITY> entityClass) {
+    public static <ENTITY> JsonFormatter<ENTITY> noneOf(Manager<ENTITY> manager) {
         return new JsonFormatter<>();
     }
 
@@ -216,13 +216,12 @@ public class JsonFormatter<ENTITY> implements EntityFormatter<ENTITY, JsonFormat
      *
      * @param <ENTITY> the Entity type
      * @param manager of the entity
-     * @param entityClass the class of the ENTITY
      * @return a new JsonFormatter with all the Entity fields added to the
      * renderer
      */
-    public static <ENTITY> JsonFormatter<ENTITY> allOf(Manager<ENTITY> manager, Class<ENTITY> entityClass) {
+    public static <ENTITY> JsonFormatter<ENTITY> allOf(Manager<ENTITY> manager) {
 
-        final JsonFormatter<ENTITY> formatter = noneOf(entityClass);
+        final JsonFormatter<ENTITY> formatter = noneOf(manager);
 
         final Table table = manager.getTable();
 
@@ -253,7 +252,6 @@ public class JsonFormatter<ENTITY> implements EntityFormatter<ENTITY, JsonFormat
      *
      * @param <ENTITY> the Entity type
      * @param manager of the ENTITY
-     * @param entityClass the class of the ENTITY
      * @param fields to add to the output renderer
      * @return a new JsonFormatter with the specified fields added to the
      * renderer
@@ -261,8 +259,8 @@ public class JsonFormatter<ENTITY> implements EntityFormatter<ENTITY, JsonFormat
      */
     @SafeVarargs
     @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
-    public static <ENTITY> JsonFormatter<ENTITY> of(Manager<ENTITY> manager, Class<ENTITY> entityClass, Field<ENTITY>... fields) {
-        final JsonFormatter<ENTITY> formatter = noneOf(entityClass);
+    public static <ENTITY> JsonFormatter<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
+        final JsonFormatter<ENTITY> formatter = noneOf(manager);
 
         final Set<String> fieldNames = Stream.of(fields).map(Field::getColumnName).collect(toSet());
         final Table table = manager.getTable();
