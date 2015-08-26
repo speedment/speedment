@@ -16,12 +16,14 @@
  */
 package com.speedment.codegen.java.views;
 
+import com.speedment.codegen.base.DependencyManager;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.util.CodeCombiner;
+import com.speedment.codegen.util.Formatting;
 
 import java.util.Optional;
 
@@ -65,14 +67,21 @@ public class ImportView implements Transform<Import, String> {
      * @return      <code>true</code> if it should be imported explicitly
      */
 	private boolean shouldImport(Generator gen, Type type) {
-        return !gen.getDependencyMgr().isIgnored(packageName(type.getName()).orElse(type.getName()))
-		&& gen.getRenderStack().fromBottom(File.class)
-            .map(f -> fileToClassName(f.getName()))
-            .filter(f -> f.isPresent())
-            .map(f -> f.get())
-            .filter(n -> {
-                final Optional<String> pack = packageName(n);
-                return !(pack.isPresent() && type.getName().startsWith(pack.get() + DOT));
-            }).findAny().isPresent();
+        final DependencyManager mgr = gen.getDependencyMgr();
+        
+        if (mgr.isIgnored(type.getName())) {
+            return false;
+        }
+        
+        if (mgr.isLoaded(type.getName())) {
+            return false;
+        }
+        
+        final Optional<String> current = mgr.getCurrentPackage();
+        if (current.isPresent() && type.getName().startsWith(current.get())) {
+            return false;
+        }
+        
+        return true;
 	}
 }

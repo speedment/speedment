@@ -18,6 +18,9 @@ package com.speedment.core.platform;
 
 import com.speedment.core.platform.component.Component;
 import com.speedment.core.annotations.Api;
+import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.manager.Manager;
+import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.core.platform.component.impl.DefaultClassMapper;
@@ -84,6 +87,26 @@ public final class Speedment extends DefaultClassMapper<Component> {
     @Override
     public Component add(Component item) {
         return add(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
+    }
+
+    /**
+     * Obtains and returns the currently associated {@link Manager}
+     * implementation for the given Entity interface Class. If no Manager exists
+     * for the given entityClass, a SpeedmentException will be thrown.
+     * <p>
+     * N.B.This conveniency method is a pure delegator to the ManagerComponent
+     * and is exactly equivalent to the code:
+     * <p>
+     * {@code get(ManagerComponent.class).managerOf(entityClass) }
+     *
+     * @param <ENTITY> the Entity interface type
+     * @param entityClass the Entity interface {@code Class}
+     * @return the currently associated {@link Manager} implementation for the
+     * given Entity interface Class
+     * @throws SpeedmentException if no Manager exists for the given entityClass
+     */
+    public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException {
+        return get(ManagerComponent.class).managerOf(entityClass);
     }
 
 }

@@ -19,6 +19,9 @@ package com.speedment.codegen.java;
 import com.speedment.codegen.base.DefaultDependencyManager;
 import com.speedment.codegen.base.TransformFactory;
 import com.speedment.codegen.base.DefaultGenerator;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A hook to the generator that can be passed to various stages in the pipeline.
@@ -32,10 +35,20 @@ import com.speedment.codegen.base.DefaultGenerator;
  */
 public class JavaGenerator extends DefaultGenerator {
     
-	private final static String[] types = new String[] {
-		"void", "byte", "short", "char", "int", "long", "float", 
-		"double", "boolean"
-	};
+	private final static Pattern[] IGNORED = Stream.of(
+        "^void$",
+		"^byte$",
+        "^short$",
+        "^char$",
+        "^int$",
+        "^long$",
+        "^boolean$",
+        "^float$",
+        "^double$",
+        "^java\\.lang\\."
+    ).map(Pattern::compile)
+        .collect(Collectors.toSet())
+        .toArray(new Pattern[0]);
     
     /**
      * Instantiates the JavaGenerator.
@@ -54,6 +67,6 @@ public class JavaGenerator extends DefaultGenerator {
      * @param factories  an array of the factories to use
      */
 	public JavaGenerator(TransformFactory... factories) {
-		super(new DefaultDependencyManager("java.lang", types), factories);
+		super(new DefaultDependencyManager(IGNORED), factories);
 	}
 }

@@ -24,6 +24,7 @@ import com.speedment.codegen.java.views.interfaces.HasClassesView;
 import com.speedment.codegen.java.views.interfaces.HasJavadocView;
 import com.speedment.codegen.java.views.interfaces.HasImportsView;
 import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.util.Formatting;
 import java.util.Optional;
 
 /**
@@ -42,17 +43,13 @@ public class FileView implements Transform<File, String>, HasJavadocView<File>,
 	@Override
 	public Optional<String> transform(Generator gen, File model) {
 		final DependencyManager mgr = gen.getDependencyMgr();
-		final Optional<String> className = fileToClassName(model.getName());
-		Optional<String> packageName = packageName(className.orElse(EMPTY));
-		mgr.clearDependencies();
-		
-		if (packageName.isPresent()) {
-			if (mgr.isIgnored(packageName.get())) {
-				packageName = Optional.empty();
-			} else {
-				mgr.ignorePackage(packageName.get());
-			}
-		}
+        mgr.clearDependencies();
+        
+        final String pack = fileToClassName(model.getName())
+                                .flatMap(Formatting::packageName)
+                                .orElse(EMPTY);
+        
+        mgr.setCurrentPackage(pack);
 
 		final Optional<String> view = Optional.of(
 			renderJavadoc(gen, model) +
@@ -61,9 +58,7 @@ public class FileView implements Transform<File, String>, HasJavadocView<File>,
             renderClasses(gen, model)
 		);
 		
-		if (packageName.isPresent()) {
-			mgr.acceptPackage(packageName.get());
-		}
+		mgr.unsetCurrentPackage(pack);
 		
 		return view;
 	}

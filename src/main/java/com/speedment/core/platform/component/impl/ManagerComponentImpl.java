@@ -17,9 +17,11 @@
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.config.model.Table;
+import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.manager.Manager;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -50,11 +52,10 @@ public class ManagerComponentImpl implements ManagerComponent {
 //    public <ENTITY, M extends Manager<ENTITY>> M manager(Class<M> managerClass) {
 //        return (M) managersByManager.get(managerClass);
 //    }
-
     @Override
     @SuppressWarnings("unchecked")
-    public <E> Manager<E> managerOf(Class<E> entityClass) {
-        return (Manager<E>) managersByEntity.get(entityClass);
+    public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
+        return (Manager<E>) Optional.ofNullable(managersByEntity.get(entityClass)).orElseThrow(() -> new SpeedmentException("No manager exists for " + entityClass));
     }
 
     @Override

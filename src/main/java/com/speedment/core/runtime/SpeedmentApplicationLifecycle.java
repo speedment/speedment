@@ -76,7 +76,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private ApplicationMetadata speedmentApplicationMetadata;
     private Path configPath;
 
-    private final Speedment speedment;
+    protected final Speedment speedment;
 
     public SpeedmentApplicationLifecycle() {
         super();
@@ -374,6 +374,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         );
         LOGGER.warn("This is a BETA version that is NOT INTEDNED FOR PRODUCTION USE!");
         return super.start();
+    }
+
+    public Speedment build() {
+        if (!isStarted()) {
+            start();
+        }
+        return speedment;
     }
 
     @Override

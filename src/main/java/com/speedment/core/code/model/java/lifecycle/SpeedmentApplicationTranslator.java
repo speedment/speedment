@@ -62,7 +62,7 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
                 EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
                 final Type managerType = entityManagerImplTranslator.getImplType();
                 file.add(Import.of(managerType));
-                onInit.add("put(new " + managerType.getName() + "());");
+                onInit.add("put(new " + managerType.getName() + "(speedment));");
             });
 
         onInit.add("super.onInit();");

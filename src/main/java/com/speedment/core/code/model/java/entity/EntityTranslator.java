@@ -120,6 +120,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
 
                         }).orElse("");
                 }
+                final String setter = ", " + shortEntityName + "::set" + typeName(c);
 
                 i.add(Field.of(javaStaticFieldName(c.getName()), refType)
                     .public_().final_().static_()
@@ -129,6 +130,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                         + c.getName()
                         + "\", "
                         + getter
+                        + setter
                         + finder
                         + ")"
                     ))

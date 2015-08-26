@@ -17,7 +17,7 @@
 package com.speedment.core.platform.component;
 
 import com.speedment.core.config.model.Table;
-import com.speedment.core.Buildable;
+import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.manager.Manager;
 import java.util.stream.Stream;
 
@@ -58,17 +58,18 @@ public interface ManagerComponent extends Component {
 //     * given Manager interface Class
 //     */
 //    <E, M extends Manager<E>> M manager(Class<M> managerClass);
-
     /**
      * Obtains and returns the currently associated {@link Manager}
-     * implementation for the given Entity interface Class.
+     * implementation for the given Entity interface Class. If no Manager exists
+     * for the given entityClass, a SpeedmentException will be thrown.
      *
      * @param <E> the Entity interface type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class
+     * @throws SpeedmentException if no Manager exists for the given entityClass
      */
-    <E> Manager<E> managerOf(Class<E> entityClass);
+    <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException;
 
     /**
      * Obtains and returns the currently associated {@link Manager}

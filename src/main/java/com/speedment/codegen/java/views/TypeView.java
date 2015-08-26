@@ -38,9 +38,7 @@ public class TypeView implements Transform<Type, String> {
      */
 	@Override
 	public Optional<String> transform(Generator gen, Type model) {
-		final DependencyManager mgr = gen.getDependencyMgr();
-
-		if (mgr.isLoaded(model.getName())) {
+		if (shouldUseShortName(gen, model)) {
 			return renderName(gen, model, shortName(model.getName()));
 		} else {
 			return renderName(gen, model, model.getName());
@@ -73,4 +71,30 @@ public class TypeView implements Transform<Type, String> {
 			)
 		);
 	}
+    
+    /**
+     * Returns whether or not to use the short name for the type.
+     * 
+     * @param gen   the generator
+     * @param type  the type
+     * @return      {@code true} if the short name should be used.
+     */
+    private boolean shouldUseShortName(Generator gen, Type type) {
+        final DependencyManager mgr = gen.getDependencyMgr();
+        
+        if (mgr.isIgnored(type.getName())) {
+            return true;
+        }
+        
+        if (mgr.isLoaded(type.getName())) {
+            return true;
+        }
+        
+        final Optional<String> current = mgr.getCurrentPackage();
+        if (current.isPresent() && type.getName().startsWith(current.get())) {
+            return true;
+        }
+        
+        return false;
+    }
 }

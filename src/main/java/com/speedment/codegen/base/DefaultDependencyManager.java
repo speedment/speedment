@@ -16,133 +16,105 @@
  */
 package com.speedment.codegen.base;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import static com.speedment.codegen.util.Formatting.*;
+import java.util.Collections;
+import static java.util.Collections.emptySet;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link DependencyManager} interface.
- * 
+ *
  * @author Emil Forslund
  */
 public class DefaultDependencyManager implements DependencyManager {
+
+    private final Set<String> dependencies = new HashSet<>();
+    private final Set<Pattern> ignorePatterns;
+    private String currentPackage;
+
+    /**
+     * Initializes the DependencyManager.
+     */
+    public DefaultDependencyManager() {
+        ignorePatterns = emptySet();
+    }
+
+    /**
+     * Initializes the DependencyManager.
+     *
+     * @param ignoredPatterns to add to the ignore list
+     */
+    public DefaultDependencyManager(Pattern... ignoredPatterns) {
+        ignorePatterns = Stream.of(ignoredPatterns)
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean load(String fullname) {
+        return dependencies.add(fullname);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isLoaded(String fullname) {
+        return dependencies.contains(fullname);
+    }
     
-	private final Set<String> dependencies = new HashSet<>();
-	private final Set<String> ignorePackages;
-	
-	/**
-	 * Initalises the DependencyManager.
-	 */
-	public DefaultDependencyManager() {
-		ignorePackages = new HashSet<>();
-	}
-	
-	/**
-	 * Initalises the DependencyManager.
-     * 
-	 * @param ignoredPackage  a package that should be on the ignore list
-	 */
-	public DefaultDependencyManager(String ignoredPackage) {
-		ignorePackages = new HashSet<>();
-		ignorePackages.add(ignoredPackage);
-	}
-    
     /**
-	 * Initalises the DependencyManager.
-     * 
-	 * @param ignoredPackages  packages that should be ignored
-	 */
-	public DefaultDependencyManager(String[] ignoredPackages) {
-		ignorePackages = Arrays.stream(ignoredPackages)
-			.collect(Collectors.toSet());
-	}
-	
-	/**
-	 * Initalises the DependencyManager.
-     * 
-	 * @param ignoredPackage   a package that should be on the ignore list
-	 * @param ignoredPackages  more packages that should be on the ignore list
-	 */
-	public DefaultDependencyManager(String ignoredPackage, String... ignoredPackages) {
-		this (ignoredPackages);
-		ignorePackages.add(ignoredPackage);
-	}
-
-	/**
-	 * Adds the specified package to the ignore list. This is the opposite as
-	 * calling <code>acceptPackage</code>.
-     * 
-	 * @param packageName  the full name of the package
-	 */
-	@Override
-	public void ignorePackage(String packageName) {
-		ignorePackages.add(packageName);
-	}
-	
-	/**
-	 * Removes the specified package from the ignore list. This is the opposite 
-	 * as calling <code>ignorePackage</code>.
-     * 
-	 * @param packageName  the full name of the package
-	 */
-	@Override
-	public void acceptPackage(String packageName) {
-		ignorePackages.removeIf(p -> packageName.startsWith(p + DOT));
-	}
-	
-	/**
-	 * Returns true if the specified class belongs to a package that is on the
-	 * ignore list.
-     * 
-	 * @param fullname  the full name of a package or a class
-	 * @return          true if it should be ignored as a dependency
-	 */
-	@Override
-	public boolean isIgnored(String fullname) {
-		return ignorePackages.stream().anyMatch(p -> 
-			fullname.startsWith(p + DOT) ||
-			fullname.equals(p)
-		);
-	}
-
-    /**
-     * Add the specified dependency to the manager. If the dependency is 
-     * redundant, false is returned and the dependency is not added.
-     * 
-     * @param fullname  the full name of the dependency
-     * @return          true if the dependency was accepted
+     * {@inheritDoc}
      */
-	@Override
-	public boolean load(String fullname) {
-		if (isLoaded(fullname)) {
-			return false;
-		} else {
-			dependencies.add(fullname);
-			return true;
-		}
-	}
+    @Override
+    public void clearDependencies() {
+        dependencies.clear();
+    }
 
     /**
-     * Checks if the specified dependency is already loaded. If the dependency
-     * matches an ignored package, true is returned even if it is not
-     * specifically loaded.
-     * 
-     * @param fullname  the name of the dependency
-     * @return          true if it is loaded or redundant
+     * {@inheritDoc}
      */
-	@Override
-	public boolean isLoaded(String fullname) {
-		return dependencies.contains(fullname)
-            || isIgnored(fullname);
-	}
+    @Override
+    public boolean isIgnored(String fullname) {
+        return  ignorePatterns.stream()
+            .map(Pattern::asPredicate)
+            .anyMatch(p -> p.test(fullname));
+    }
 
     /**
-     * Clear the list of dependencies.
+     * {@inheritDoc}
      */
-	@Override
-	public void clearDependencies() {
-		dependencies.clear();
-	}
+    @Override
+    public boolean setCurrentPackage(String pack) {
+        if (currentPackage == null) {
+            currentPackage = pack;
+            return true;
+        } else return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean unsetCurrentPackage(String pack) {
+        if (currentPackage != null && currentPackage.equals(pack)) {
+            currentPackage = null;
+            return true;
+        } else return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<String> getCurrentPackage() {
+        return Optional.ofNullable(currentPackage);
+    }
 }
