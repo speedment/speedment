@@ -16,16 +16,17 @@
  */
 package com.speedment.gui.controllers;
 
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.parameters.DbmsType;
+import com.speedment.api.Speedment;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.aspects.Child;
+import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.gui.MainApp;
-import com.speedment.gui.Settings;
+import com.speedment.util.Settings;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 import com.speedment.util.Trees;
@@ -96,7 +97,7 @@ public final class ProjectPromptController implements Initializable {
      */
     private ProjectPromptController(Stage stage) {
         this.stage = stage;
-        this.speedment = new Speedment();
+        this.speedment = new SpeedmentImpl();
     }
 
     /**
@@ -159,9 +160,9 @@ public final class ProjectPromptController implements Initializable {
                 final DbmsType dbmsType = findDbmsType(dbmsTypeName)
                     .orElseThrow(dbmsTypeNotInstalled(dbmsTypeName));
 
-                final Project project = Project.newProject();
+                final Project project = Project.newProject(speedment);
 
-                Dbms dbms = Dbms.newDbms();
+                Dbms dbms = Dbms.newDbms(speedment);
                 dbms.setIpAddress(fieldHost.getText());
                 dbms.setPort(Integer.parseInt(fieldPort.getText()));
                 dbms.setName(fieldName.getText());
@@ -191,7 +192,7 @@ public final class ProjectPromptController implements Initializable {
                         Trees.TraversalOrder.DEPTH_FIRST_PRE
                     ).forEachOrdered(System.out::println);
 
-                    SceneController.showIn(stage, project);
+                    SceneController.showIn(speedment, stage, project);
                     Settings.inst().set("hide_open_option", false);
                 } catch (Exception ex) {
                     showAlert(stage, "Error!",
@@ -203,9 +204,9 @@ public final class ProjectPromptController implements Initializable {
                 }
             });
 
-            buttonOpen.setOnAction(createOpenProjectHandler(stage, (f, p) -> {
+            buttonOpen.setOnAction(createOpenProjectHandler(speedment, stage, (f, p) -> {
                 // Todo: set saved file;
-                SceneController.showIn(stage, p, f);
+                SceneController.showIn(speedment, stage, p, f);
             }));
         } catch (Exception exxx) {
             exxx.printStackTrace();

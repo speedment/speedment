@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java.manager;
 
+import com.speedment.api.Speedment;
 import com.speedment.core.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Field;
@@ -32,12 +33,12 @@ import static com.speedment.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.codegen.util.Formatting;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.Table;
 import com.speedment.core.manager.sql.AbstractSqlManager;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.core.runtime.typemapping.JavaTypeMapping;
@@ -55,12 +56,12 @@ import static com.speedment.codegen.util.Formatting.nl;
  */
 public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<Class> {
 
-    private static final Speedment speedment = new Speedment(); // default values from here.. Todo: Make pluggable later
+    private static final Speedment SPEEDMENT = new SpeedmentImpl(); // default values from here.. Todo: Make pluggable later
     
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
 
-    public EntityManagerImplTranslator(Generator cg, Table configEntity) {
-        super(cg, configEntity);
+    public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
+        super(speedment, cg, configEntity);
     }
 
     @Override
@@ -155,7 +156,7 @@ public class EntityManagerImplTranslator extends BaseEntityAndManagerTranslator<
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
-        final JavaTypeMapperComponent mapperComponent = speedment.get(JavaTypeMapperComponent.class);
+        final JavaTypeMapperComponent mapperComponent = SPEEDMENT.get(JavaTypeMapperComponent.class);
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         columns().forEachOrdered(c -> {

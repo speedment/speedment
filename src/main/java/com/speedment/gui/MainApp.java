@@ -16,6 +16,7 @@
  */
 package com.speedment.gui;
 
+import com.speedment.util.Settings;
 import com.speedment.gui.controllers.MailPromptController;
 import com.speedment.gui.controllers.ProjectPromptController;
 import com.speedment.gui.icons.Icons;

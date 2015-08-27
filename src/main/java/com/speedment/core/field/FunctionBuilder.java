@@ -16,6 +16,8 @@
  */
 package com.speedment.core.field;
 
+import com.speedment.api.field.Field;
+
 /**
  *
  * @author Emil Forslund

@@ -16,9 +16,10 @@
  */
 package com.speedment.gui.util;
 
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.impl.utils.GroovyParser;
-import com.speedment.gui.Settings;
+import com.speedment.api.Speedment;
+import com.speedment.api.config.Project;
+import com.speedment.core.config.impl.utils.GroovyParser;
+import com.speedment.util.Settings;
 import com.speedment.gui.controllers.AlertController;
 import com.speedment.gui.controllers.SceneController;
 import com.speedment.logging.Logger;
@@ -60,7 +61,7 @@ public final class ProjectUtil {
 
     private ProjectUtil() {}
 
-    public static EventHandler<ActionEvent> createOpenProjectHandler(Stage stage, BiConsumer<File, Project> biConsumer) {
+    public static EventHandler<ActionEvent> createOpenProjectHandler(Speedment speedment, Stage stage, BiConsumer<File, Project> biConsumer) {
         return ev -> {
             final FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open .groovy File");
@@ -75,7 +76,7 @@ public final class ProjectUtil {
             if (file != null) {
                 if (OPEN_FILE_CONDITIONS.test(file)) {
                     try {
-                        final Project p = Project.newProject();
+                        final Project p = Project.newProject(speedment);
                         GroovyParser.fromGroovy(p, file.toPath());
                         biConsumer.accept(file, p);
                     } catch (Exception e) {

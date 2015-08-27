@@ -16,21 +16,15 @@
  */
 package com.speedment.core.manager;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.formatter.json.JsonFormatter;
+import com.speedment.api.Manager;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.Table;
+import com.speedment.core.encoder.JsonEncoder;
 import com.speedment.core.lifecycle.Lifecyclable;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.ManagerComponent;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -40,61 +34,16 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    protected final Speedment speedment;
+    protected final SpeedmentImpl speedment;
 
-    private final Map<List<Column>, IndexHolder<Object, Object, ENTITY>> indexes;
-    final Set<Consumer<ENTITY>> insertListeners, updateListeners, deleteListeners;
     private Lifecyclable.State state;
 
-    private final JsonFormatter<ENTITY> sharedJasonFormatter;
+    private final JsonEncoder<ENTITY> sharedJasonFormatter;
 
-    public AbstractManager(Speedment speedment) {
+    public AbstractManager(SpeedmentImpl speedment) {
         this.speedment = speedment;
-        indexes = new ConcurrentHashMap<>();
-        insertListeners = new CopyOnWriteArraySet<>();
-        updateListeners = new CopyOnWriteArraySet<>();
-        deleteListeners = new CopyOnWriteArraySet<>();
         state = Lifecyclable.State.CREATED;
-        sharedJasonFormatter = JsonFormatter.allOf(this);
-    }
-
-    protected void insertEvent(ENTITY entity) {
-        insertToIndexes(entity);
-        insertListeners.stream().forEachOrdered(c -> c.accept(entity));
-    }
-
-    private void insertToIndexes(ENTITY entity) {
-        indexes.entrySet().stream().forEach(e -> {
-            e.getValue().put(makeKey(e.getKey(), entity), entity);
-        });
-    }
-
-    protected void updateEvent(ENTITY entity) {
-        //TODO Make atomic.
-        deleteFromIndexes(entity);
-        insertToIndexes(entity);
-        updateListeners.stream().forEachOrdered(c -> c.accept(entity));
-    }
-
-    protected void deleteEvent(ENTITY entity) {
-        deleteFromIndexes(entity);
-        deleteListeners.stream().forEachOrdered(c -> c.accept(entity));
-    }
-
-    private void deleteFromIndexes(ENTITY entity) {
-        indexes.entrySet().stream().forEach(e -> {
-            e.getValue().remove(makeKey(e.getKey(), entity));
-        });
-    }
-
-    private Object makeKey(List<Column> columns, ENTITY entity) {
-        if (columns.size() == 1) {
-            return get(entity, columns.get(0));
-        } else {
-            return columns.stream()
-                .map(c -> get(entity, c))
-                .collect(Collectors.toList());
-        }
+        sharedJasonFormatter = JsonEncoder.allOf(this);
     }
 
     @Override
@@ -121,20 +70,6 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
             }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
     }
 
-    @Override
-    public void onInsert(Consumer<ENTITY> listener) {
-        insertListeners.add(listener);
-    }
-
-    @Override
-    public void onUpdate(Consumer<ENTITY> listener) {
-        updateListeners.add(listener);
-    }
-
-    @Override
-    public void onDelete(Consumer<ENTITY> listener) {
-        deleteListeners.add(listener);
-    }
 
     @Override
     public Manager<ENTITY> initialize() {

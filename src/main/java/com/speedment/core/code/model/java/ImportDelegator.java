@@ -17,7 +17,7 @@
 package com.speedment.core.code.model.java;
 
 import com.speedment.codegen.lang.models.Import;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 

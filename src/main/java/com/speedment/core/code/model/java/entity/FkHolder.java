@@ -16,14 +16,15 @@
  */
 package com.speedment.core.code.model.java.entity;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Import;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.core.code.model.java.manager.EntityManagerTranslator;
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.ForeignKeyColumn;
+import com.speedment.api.config.Table;
 import java.util.stream.Stream;
 
 /**
@@ -41,7 +42,7 @@ class FkHolder {
     private final EntityManagerTranslator emt;
     private final EntityManagerTranslator foreignEmt;
 
-    public FkHolder(Generator generator, ForeignKey fk) {
+    public FkHolder(Speedment speedment, Generator generator, ForeignKey fk) {
         this.fk = fk;
         fkc = fk.stream()
                 .filter(ForeignKeyColumn::isEnabled)
@@ -51,8 +52,8 @@ class FkHolder {
         table = column.ancestor(Table.class).get();
         foreignColumn = fkc.getForeignColumn();
         foreignTable = fkc.getForeignTable();
-        emt = new EntityManagerTranslator(generator, getTable());
-        foreignEmt = new EntityManagerTranslator(generator, getForeignTable());
+        emt = new EntityManagerTranslator(speedment, generator, getTable());
+        foreignEmt = new EntityManagerTranslator(speedment, generator, getForeignTable());
     }
 
     public Stream<Import> imports() {

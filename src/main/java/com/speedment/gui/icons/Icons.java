@@ -16,17 +16,17 @@
  */
 package com.speedment.gui.icons;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
-import com.speedment.core.config.model.Index;
-import com.speedment.core.config.model.IndexColumn;
-import com.speedment.core.config.model.PrimaryKeyColumn;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.ProjectManager;
-import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.ForeignKeyColumn;
+import com.speedment.api.config.Index;
+import com.speedment.api.config.IndexColumn;
+import com.speedment.api.config.PrimaryKeyColumn;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.ProjectManager;
+import com.speedment.api.config.Schema;
+import com.speedment.api.config.Table;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

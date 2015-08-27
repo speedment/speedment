@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import javafx.beans.property.Property;
 import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
@@ -28,8 +29,8 @@ public class TablePasswordProperty extends TableProperty<String> {
 	
 	private final PasswordField textfield;
 
-	public TablePasswordProperty(String name, String value) {
-		super (name);
+	public TablePasswordProperty(Speedment speedment, String name, String value) {
+		super (speedment, name);
 		textfield = new PasswordField();
 		
 		if (value == null) {

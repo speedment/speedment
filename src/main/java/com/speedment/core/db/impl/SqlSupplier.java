@@ -27,8 +27,8 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface SqlSupplier<T> {
 
-    abstract T get() throws SQLException;
+    T get() throws SQLException;
     
-    public static <T> SqlSupplier<T> wrap(Supplier<T> inner) { return inner::get; }
+    static <T> SqlSupplier<T> wrap(Supplier<T> inner) { return inner::get; }
 
 }

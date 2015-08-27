@@ -16,7 +16,7 @@
  */
 package com.speedment.core.field.longs;
 
-import com.speedment.core.field.Field;
+import com.speedment.api.field.Field;
 import com.speedment.core.field.StandardBinaryOperator;
 import com.speedment.core.field.StandardUnaryOperator;
 

@@ -16,7 +16,8 @@
  */
 package com.speedment.core.code.model.java;
 
-import com.speedment.core.code.model.java.MainGenerator;
+import com.speedment.api.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,7 +31,8 @@ public class MainGeneratorTest extends SimpleModelTest {
     @Ignore
     public void testAccept() {
         System.out.println("accept");
-        final MainGenerator instance = new MainGenerator();
+        final Speedment speedment = new SpeedmentImpl();
+        final MainGenerator instance = new MainGenerator(speedment);
         instance.accept(project);
     }
 

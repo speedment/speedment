@@ -16,7 +16,7 @@
  */
 package com.speedment.core.platform.component.impl;
 
-import com.speedment.core.config.model.Project;
+import com.speedment.api.config.Project;
 import com.speedment.core.platform.component.ProjectComponent;
 
 

@@ -17,8 +17,8 @@
 package com.speedment.core.platform.component.impl;
 
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.manager.Manager;
-import com.speedment.core.platform.Speedment;
+import com.speedment.api.Manager;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.EntityManager;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.Optional;
@@ -29,9 +29,9 @@ import java.util.Optional;
  */
 public class EntityManagerImpl implements EntityManager {
 
-    private final Speedment speedment;
+    private final SpeedmentImpl speedment;
 
-    public EntityManagerImpl(Speedment speedment) {
+    public EntityManagerImpl(SpeedmentImpl speedment) {
         this.speedment = speedment;
     }
     

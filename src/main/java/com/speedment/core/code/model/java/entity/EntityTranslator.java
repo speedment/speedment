@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java.entity;
 
+import com.speedment.api.Speedment;
 import com.speedment.core.code.model.java.BaseEntityAndManagerTranslator;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Field;
@@ -32,13 +33,12 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.THRO
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.codegen.util.Formatting.shortName;
-import static com.speedment.core.code.model.java.entity.EntityTranslatorSupport.toJson;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.Dbms;
+import com.speedment.api.config.Table;
+import com.speedment.api.config.Dbms;
 import com.speedment.core.entity.BaseEntity;
 import com.speedment.core.exception.SpeedmentException;
-import static com.speedment.util.java.JavaLanguage.javaStaticFieldName;
-import static com.speedment.util.java.JavaLanguage.javaTypeName;
+import static com.speedment.util.JavaLanguage.javaStaticFieldName;
+import static com.speedment.util.JavaLanguage.javaTypeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +52,8 @@ import java.util.stream.Stream;
  */
 public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> {
 
-    public EntityTranslator(Generator cg, Table configEntity) {
-        super(cg, configEntity);
+    public EntityTranslator(Speedment speedment, Generator cg, Table configEntity) {
+        super(speedment, cg, configEntity);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             })
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
-                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
 //                final Type fieldClassType = Type.of(Formatting.packageName(fu.getEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getTable()) + "Field");
 //                file.add(Import.of(fieldClassType));
                 fu.imports().forEachOrdered(file::add);
@@ -176,24 +176,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
             })
             .addForeignKeyConsumer((i, fk) -> {
 
-//                default Optional<Hare> findRival() {
-//                    return getRival()
-//                        .flatMap(hare -> HareManager.get().stream()
-//                            .filter(HareField.ID.equal(hare))
-//                            .findAny()
-//                        );
-//                }
-//                default Hare findOwner() {
-//                    return HareManager.get().stream()
-//                        .filter(HareField.ID.equal(getOwner()))
-//                        .findAny().orElseThrow(() -> new SpeedmentException(
-//                            "Foreign key constraint error. Owner is set to " + getOwner()
-//                        ));
-//                }
-                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
-
-//                final Type fieldClassType = Type.of(Formatting.packageName(fu.getForeignEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getForeignTable()) + "Field");
-//                file.add(Import.of(fieldClassType));
+                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
 
                 final Type returnType;
@@ -206,24 +189,7 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 }
 
                 final Method method = Method.of("find" + typeName(fu.getColumn()), returnType);
-                if (fu.getColumn().isNullable()) {
-                    final String varName = variableName(fu.getForeignTable());
-//                    method.add("return get" + typeName(fu.getColumn()) + "()")
-//                        .add(indent(
-//                            ".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
-//                                ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n"
-//                                + ".findAny()"
-//                            ) + "\n);"
-//                        ));
-                } else {
-                    file.add(Import.of(Type.of(SpeedmentException.class)));
-//                    method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
-//                        ".filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(get" + typeName(fu.getColumn()) + "()))\n"
-//                        + ".findAny().orElseThrow(() -> new SpeedmentException(\n" + indent(
-//                            "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
-//                        ) + "));\n"
-//                    ));
-                }
+
                 final String returns = "the foreign key Entity {@link " + typeName(fu.getForeignTable()) + "} referenced "
                     + "by the field that can be obtained using {@link " + ENTITY.getName() + "#get" + typeName(fu.getColumn()) + "()}";
                 method.set(Javadoc.of(
@@ -231,9 +197,6 @@ public class EntityTranslator extends BaseEntityAndManagerTranslator<Interface> 
                 ).add(RETURN.setText(returns)
                 ));
 
-//                method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get()");
-//                //method.add("        .stream().filter(" + variableName(fu.getForeignTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "(), " + variableName(fu.getForeignTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "())).findAny()" + getCode + ";");
-//                method.add("        .stream().filter(" + typeName(fu.getForeignTable()) + "Field." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "())).findAny()" + getCode + ";");
                 i.add(method);
             })
             .build()

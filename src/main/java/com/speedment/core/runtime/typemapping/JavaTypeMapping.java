@@ -16,7 +16,7 @@
  */
 package com.speedment.core.runtime.typemapping;
 
-import com.speedment.core.config.model.Dbms;
+import com.speedment.api.config.Dbms;
 
 /**
  *

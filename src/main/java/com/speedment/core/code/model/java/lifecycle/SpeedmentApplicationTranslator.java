@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java.lifecycle;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
@@ -33,8 +34,8 @@ import com.speedment.core.code.model.java.DefaultJavaClassTranslator;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadataTranslator.METADATA;
 import com.speedment.core.code.model.java.manager.EntityManagerImplTranslator;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Table;
 import com.speedment.core.runtime.SpeedmentApplicationLifecycle;
 
 /**
@@ -45,8 +46,8 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
 
     private final String className = typeName(project()) + "Application";
 
-    public SpeedmentApplicationTranslator(Generator cg, Project configEntity) {
-        super(cg, configEntity);
+    public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
+        super(speedment, cg, configEntity);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<P
         project().traverseOver(Table.class)
             .filter(Table::isEnabled)
             .forEachOrdered(t -> {
-                EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getCodeGenerator(), t);
+                EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
                 final Type managerType = entityManagerImplTranslator.getImplType();
                 file.add(Import.of(managerType));
                 onInit.add("put(new " + managerType.getName() + "(speedment));");

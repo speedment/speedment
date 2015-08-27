@@ -16,16 +16,16 @@
  */
 package com.speedment.core.code.model;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.Index;
-import com.speedment.core.config.model.PrimaryKeyColumn;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.aspects.Enableable;
-import com.speedment.core.config.model.aspects.Node;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.Index;
+import com.speedment.api.config.PrimaryKeyColumn;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Schema;
+import com.speedment.api.config.Table;
+import com.speedment.api.config.aspects.Enableable;
+import com.speedment.api.config.Node;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

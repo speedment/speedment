@@ -16,7 +16,7 @@
  */
 package com.speedment.util.analytics;
 
-import com.speedment.util.version.SpeedmentVersion;
+import com.speedment.SpeedmentVersion;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 

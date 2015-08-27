@@ -16,7 +16,7 @@
  */
 package com.speedment.core.field.reference;
 
-import com.speedment.core.field.Field;
+import com.speedment.api.field.Field;
 import com.speedment.core.field.StandardUnaryOperator;
 
 import static java.util.Objects.requireNonNull;

@@ -32,15 +32,14 @@ import static com.speedment.codegen.lang.models.constants.DefaultType.INT_PRIMIT
 import static com.speedment.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
-import com.speedment.codegen.lang.models.implementation.GenericImpl;
 import static com.speedment.codegen.util.Formatting.indent;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Table;
 import com.speedment.core.entity.impl.AbstractBaseEntity;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.manager.Manager;
-import com.speedment.core.platform.Speedment;
+import com.speedment.api.Manager;
+import com.speedment.api.Speedment;
 import com.speedment.core.platform.component.ManagerComponent;
-import com.speedment.util.java.JavaLanguage;
+import com.speedment.util.JavaLanguage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,8 +60,8 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
     private static final String MANAGER_METHOD = "manager_";
     private static final String MANAGER_OF_METHOD = "managerOf_";
     
-    public EntityImplTranslator(Generator cg, Table configEntity) {
-        super(cg, configEntity);
+    public EntityImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
+        super(speedment, cg, configEntity);
     }
     
     @Override
@@ -97,7 +96,7 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
             })
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
-                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
                 // Record for later use in the construction of aggregate streamers
@@ -111,7 +110,7 @@ public class EntityImplTranslator extends BaseEntityAndManagerTranslator<Class> 
                 i.add(method);
             })
             .addForeignKeyConsumer((i, fk) -> {
-                final FkHolder fu = new FkHolder(getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
                 
                 final Type returnType;

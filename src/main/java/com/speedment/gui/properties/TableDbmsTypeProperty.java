@@ -16,9 +16,10 @@
  */
 package com.speedment.gui.properties;
 
-import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.core.config.model.parameters.StandardDbmsType;
-import com.speedment.gui.util.EnumUtil;
+import com.speedment.api.Speedment;
+import com.speedment.api.config.parameters.DbmsType;
+import com.speedment.core.config.dbms.StandardDbmsType;
+import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.property.Property;
@@ -35,11 +36,11 @@ public class TableDbmsTypeProperty extends TableProperty<DbmsType> {
 	
 	private final ChoiceBox<DbmsType> choice;
 
-	public TableDbmsTypeProperty(String name, DbmsType value) {
-		super (name);
+	public TableDbmsTypeProperty(Speedment speedment, String name, DbmsType value) {
+		super (speedment, name);
 
 		choice = new ChoiceBox<>(
-			Stream.of(StandardDbmsType.values())
+			supportedDbmsTypes()
 				.collect(Collectors.toCollection(
 					FXCollections::observableArrayList
 				))
@@ -60,7 +61,7 @@ public class TableDbmsTypeProperty extends TableProperty<DbmsType> {
 
 			@Override
 			public DbmsType fromString(String string) {
-				return Stream.of(StandardDbmsType.values())
+				return supportedDbmsTypes()
 					.map(e -> (DbmsType) e)
 					.filter(e -> e.getName().equalsIgnoreCase(string))
 					.findAny().orElse(null);
@@ -77,4 +78,8 @@ public class TableDbmsTypeProperty extends TableProperty<DbmsType> {
 	public Node getValueGraphic() {
 		return choice;
 	}
+    
+    private Stream<DbmsType> supportedDbmsTypes() {
+        return getSpeedment().get(DbmsHandlerComponent.class).supportedDbmsTypes();
+    }
 }

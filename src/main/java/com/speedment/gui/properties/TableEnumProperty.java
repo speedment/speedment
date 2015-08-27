@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.property.Property;
@@ -33,8 +34,8 @@ public class TableEnumProperty<T extends Enum<T>> extends TableProperty<T> {
 	
 	private final ChoiceBox<T> choice;
 
-	public TableEnumProperty(String name, T value) {
-		super (name);
+	public TableEnumProperty(Speedment speedment, String name, T value) {
+		super (speedment, name);
 
 		choice = new ChoiceBox<>(streamConstants(value)
 			.collect(Collectors.toCollection(

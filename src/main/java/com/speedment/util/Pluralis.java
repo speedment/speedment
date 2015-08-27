@@ -16,7 +16,6 @@
  */
 package com.speedment.util;
 
-import com.speedment.util.java.JavaLanguage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

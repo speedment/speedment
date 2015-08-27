@@ -16,10 +16,11 @@
  */
 package com.speedment.gui.controllers;
 
+import com.speedment.api.Speedment;
 import com.speedment.core.code.model.java.MainGenerator;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.aspects.Node;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.aspects.Child;
+import com.speedment.api.config.Node;
 import com.speedment.gui.MainApp;
 import com.speedment.gui.controllers.NotificationController.Notification;
 import com.speedment.gui.icons.Icons;
@@ -30,7 +31,7 @@ import com.speedment.gui.properties.TablePropertyRow;
 import com.speedment.gui.util.FadeAnimation;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
-import com.speedment.stat.Statistics;
+import com.speedment.util.Statistics;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -110,6 +111,7 @@ public final class SceneController implements Initializable {
     @FXML private StackPane arrowContainer;
     @FXML private Label arrow;
 
+    private final Speedment speedment;
     private final Stage stage;
     private Project project;
     private File savedFile;
@@ -118,22 +120,25 @@ public final class SceneController implements Initializable {
     /**
      * Initializes the scene by specifying the stage to show it in as well as the project node to work with in the GUI.
      *
-     * @param stage    the stage
-     * @param project  the project to work with
+     * @param speedment  the {@link Speedment} instance
+     * @param stage      the stage
+     * @param project    the project to work with
      */
-    private SceneController(Stage stage, Project project) {
-        this (stage, project, null);
+    private SceneController(Speedment speedment, Stage stage, Project project) {
+        this (speedment, stage, project, null);
     }
 
     /**
      * Initializes the scene by specifying the stage to show it in, the project node to work with and a file to use
      * when fast-saving.
      *
+     * @param speedment  the {@link Speedment} instance
      * @param stage      the stage to show the GUI in
      * @param project    the project to work with
      * @param savedFile  an optional file to fast-save changes to that can be null
      */
-    private SceneController(Stage stage, Project project, File savedFile) {
+    private SceneController(Speedment speedment, Stage stage, Project project, File savedFile) {
+        this.speedment = speedment;
         this.stage     = stage;
         this.project   = project;
         this.savedFile = savedFile;
@@ -147,7 +152,7 @@ public final class SceneController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.propertyMgr = new TablePropertyManager(treeHierarchy);
+        propertyMgr = new TablePropertyManager(speedment, treeHierarchy);
 
         populateTree(project);
         arrow.setOpacity(0);
@@ -177,7 +182,7 @@ public final class SceneController implements Initializable {
 
         // Open project.
         final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
-            stage, (f, p) -> {
+            speedment, stage, (f, p) -> {
                 
             savedFile = f;
             treeHierarchy.setRoot(branch(p));
@@ -211,7 +216,7 @@ public final class SceneController implements Initializable {
             writeToLog("Generating classes " + project.getPackageName() + "." + project.getName() + ".*");
             writeToLog("Target directory is " + project.getPackageLocation());
 
-            final MainGenerator instance = new MainGenerator();
+            final MainGenerator instance = new MainGenerator(speedment);
             
             try {
                 instance.accept(project);
@@ -451,13 +456,14 @@ public final class SceneController implements Initializable {
     /**
      * Creates and configures a new GUI scene in the specified stage to work with the specified project.
      *
-     * @param stage    the stage to display it in
-     * @param project  the project node to work with
-     * @return         the newly created scene controller
+     * @param speedment  the {@link Speedment} instance
+     * @param stage      the stage to display it in
+     * @param project    the project node to work with
+     * @return           the newly created scene controller
      */
-    public static SceneController showIn(Stage stage, Project project) {
+    public static SceneController showIn(Speedment speedment, Stage stage, Project project) {
         final FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/Scene.fxml"));
-        final SceneController control = new SceneController(stage, project);
+        final SceneController control = new SceneController(speedment, stage, project);
         loader.setController(control);
 
         try {
@@ -480,13 +486,14 @@ public final class SceneController implements Initializable {
      * Creates and configures a new GUI scene in the specified stage to work with the specified project. The specified
      * save location will be used when the user quick-saves.
      *
+     * @param speedment  the {@link Speedment} instance
      * @param stage      the stage to display it in
      * @param project    the project to work on
      * @param savedFile  location for quick-saves
      * @return           the created scene controller
      */
-    public static SceneController showIn(Stage stage, Project project, File savedFile) {
-        return Optional.ofNullable(showIn(stage, project))
+    public static SceneController showIn(Speedment speedment, Stage stage, Project project, File savedFile) {
+        return Optional.ofNullable(showIn(speedment, stage, project))
             .map(sc -> sc.setLastSaved(savedFile))
             .orElse(null);
     }

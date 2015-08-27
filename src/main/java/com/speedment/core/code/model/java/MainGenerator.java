@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.util.Formatting;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Meta;
@@ -24,16 +25,15 @@ import com.speedment.codegen.lang.models.File;
 import com.speedment.core.code.model.Translator;
 import com.speedment.core.code.model.java.entity.EntityImplTranslator;
 import com.speedment.core.code.model.java.manager.EntityManagerImplTranslator;
-import com.speedment.core.code.model.java.manager.EntityManagerTranslator;
 import com.speedment.core.code.model.java.entity.EntityTranslator;
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationMetadataTranslator;
 import com.speedment.core.code.model.java.lifecycle.SpeedmentApplicationTranslator;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Table;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
 
-import com.speedment.stat.Statistics;
+import com.speedment.util.Statistics;
 import com.speedment.util.analytics.AnalyticsUtil;
 import static com.speedment.util.analytics.FocusPoint.GENERATE;
 import java.io.IOException;
@@ -57,6 +57,12 @@ public class MainGenerator implements Consumer<Project> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
     private int fileCounter = 0;
+    
+    private final Speedment speedment;
+    
+    public MainGenerator(Speedment speedment) {
+        this.speedment = speedment;
+    }
 
     @Override
     public void accept(Project project) {
@@ -69,15 +75,15 @@ public class MainGenerator implements Consumer<Project> {
 
         final Generator gen = new JavaGenerator();
 
-        translators.add(new SpeedmentApplicationTranslator(gen, project));
-        translators.add(new SpeedmentApplicationMetadataTranslator(gen, project));
+        translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
+        translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
         project.traverseOver(Table.class)
             .filter(Table::isEnabled)
             .forEach(table -> {
-                translators.add(new EntityTranslator(gen, table));
-                translators.add(new EntityImplTranslator(gen, table));
-                translators.add(new EntityManagerImplTranslator(gen, table));
+                translators.add(new EntityTranslator(speedment, gen, table));
+                translators.add(new EntityImplTranslator(speedment, gen, table));
+                translators.add(new EntityManagerImplTranslator(speedment, gen, table));
             });
 
         Formatting.tab("    ");

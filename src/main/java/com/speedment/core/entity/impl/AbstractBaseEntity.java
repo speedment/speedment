@@ -18,9 +18,10 @@ package com.speedment.core.entity.impl;
 
 import com.speedment.core.entity.BaseEntity;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.manager.Manager;
+import com.speedment.core.encoder.JsonEncoder;
+import com.speedment.api.Manager;
 import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.ManagerComponent;
 import java.util.function.Consumer;
 
@@ -31,14 +32,19 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractBaseEntity<ENTITY> implements BaseEntity<ENTITY> {
 
-    private final Speedment speedment;
+    private final SpeedmentImpl speedment;
 
-    public AbstractBaseEntity(Speedment speedment) {
+    public AbstractBaseEntity(SpeedmentImpl speedment) {
         this.speedment = speedment;
     }
 
-    protected Speedment getSpeedment_() {
+    protected SpeedmentImpl getSpeedment_() {
         return speedment;
+    }
+
+    @Override
+    public String toJson(JsonEncoder<ENTITY> jsonFormatter) {
+        return jsonFormatter.apply((selfAsEntity()));
     }
 
     @Override

@@ -21,9 +21,9 @@
  */
 package com.speedment.core.platform.component;
 
-import com.speedment.core.annotations.Api;
+import com.speedment.api.annotation.Api;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import java.util.Optional;
 
 /**
@@ -78,7 +78,7 @@ public interface EntityManager extends Component {
      * @param speedment instance to use
      * @return the default EntityManager from the Platform
      */
-    public static EntityManager get(Speedment speedment) {
+    public static EntityManager get(SpeedmentImpl speedment) {
         return speedment.get(EntityManager.class);
     }
 }

@@ -16,9 +16,9 @@
  */
 package com.speedment.core.platform.component;
 
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Table;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.manager.Manager;
+import com.speedment.api.Manager;
 import java.util.stream.Stream;
 
 /**

@@ -16,12 +16,14 @@
  */
 package com.speedment.core.code.model.java.entity;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.java.JavaGenerator;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.File;
 import com.speedment.core.code.model.java.SimpleModelTest;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Table;
+import com.speedment.core.platform.SpeedmentImpl;
 import java.util.Optional;
 import org.junit.Test;
 
@@ -41,7 +43,7 @@ public class EntityTranslatorTest extends SimpleModelTest {
             .filter(e -> TABLE_NAME.equals(e.getName()))
             .findAny().get();
 
-        final EntityTranslator instance = new EntityTranslator(cg, table2);
+        final EntityTranslator instance = new EntityTranslator(speedment, cg, table2);
         final File file = instance.get();
 
         file.call(new AutoImports(cg.getDependencyMgr()));

@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import java.util.Objects;
 import java.util.Optional;
 import javafx.beans.property.Property;
@@ -30,10 +31,12 @@ import javafx.scene.Node;
  */
 public abstract class TableProperty<V> implements Comparable<TableProperty<V>> {
 	
+    private final Speedment speedment;
 	private final StringProperty name;
 	
-	public TableProperty(String name) {
-		this.name  = new SimpleStringProperty(name);
+	public TableProperty(Speedment speedment, String name) {
+        this.speedment = speedment;
+		this.name      = new SimpleStringProperty(name);
 	}
 	
 	public StringProperty nameProperty() {
@@ -42,6 +45,10 @@ public abstract class TableProperty<V> implements Comparable<TableProperty<V>> {
 
 	public abstract Property<V> valueProperty();
 	public abstract Node getValueGraphic();
+    
+    protected Speedment getSpeedment() {
+        return speedment;
+    }
 
     @Override
     public int compareTo(TableProperty<V> that) {

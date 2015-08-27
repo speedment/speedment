@@ -16,9 +16,9 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
@@ -34,8 +34,8 @@ public class TableClassProperty extends TableProperty<Class> {
 	
 	private final ComboBox<Class> combo;
 
-	public TableClassProperty(String name, Class value) {
-		super (name);
+	public TableClassProperty(Speedment speedment, String name, Class value) {
+		super (speedment, name);
 		combo = new ComboBox<>(
 			StandardJavaTypeMapping.stream()
 				.map(v -> v.getJavaClass())

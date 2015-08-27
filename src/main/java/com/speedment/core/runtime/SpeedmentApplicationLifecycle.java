@@ -16,23 +16,26 @@
  */
 package com.speedment.core.runtime;
 
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.External;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.aspects.Node;
-import com.speedment.core.config.model.impl.utils.GroovyParser;
-import com.speedment.core.config.model.impl.utils.MethodsParser;
-import com.speedment.core.config.model.aspects.Enableable;
+import com.speedment.SpeedmentVersion;
+import com.speedment.api.HasSpeedment;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.annotation.External;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Node;
+import com.speedment.core.config.impl.utils.GroovyParser;
+import com.speedment.core.config.impl.utils.MethodsParser;
+import com.speedment.api.config.aspects.Enableable;
 import com.speedment.core.lifecycle.AbstractLifecycle;
-import com.speedment.core.manager.Manager;
+import com.speedment.api.Manager;
+import com.speedment.api.Speedment;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.ProjectComponent;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
-import com.speedment.stat.Statistics;
+import com.speedment.util.Statistics;
 import static com.speedment.util.Beans.beanPropertyName;
 import com.speedment.util.Trees;
 import com.speedment.util.analytics.AnalyticsUtil;
@@ -40,7 +43,6 @@ import static com.speedment.util.analytics.FocusPoint.APP_STARTED;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuple3;
 import com.speedment.util.tuple.Tuples;
-import com.speedment.util.version.SpeedmentVersion;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -52,9 +54,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -80,7 +79,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     public SpeedmentApplicationLifecycle() {
         super();
-        speedment = new Speedment();
+        speedment = new SpeedmentImpl();
         configPath = null;
         withsNamed = newList();
         withsAll = newList();
@@ -257,9 +256,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Optional<Path> oPath = getConfigPath();
             final Project project;
             if (oPath.isPresent()) {
-                project = GroovyParser.projectFromGroovy(oPath.get());
+                project = GroovyParser.projectFromGroovy(speedment, oPath.get());
             } else {
-                project = GroovyParser.projectFromGroovy(getSpeedmentApplicationMetadata().getMetadata());
+                project = GroovyParser.projectFromGroovy(speedment, getSpeedmentApplicationMetadata().getMetadata());
             }
 
             // Apply overridden values from the system properties (if any)

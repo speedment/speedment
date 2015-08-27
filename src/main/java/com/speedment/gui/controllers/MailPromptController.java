@@ -17,7 +17,7 @@
 package com.speedment.gui.controllers;
 
 import com.speedment.gui.MainApp;
-import com.speedment.gui.Settings;
+import com.speedment.util.Settings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

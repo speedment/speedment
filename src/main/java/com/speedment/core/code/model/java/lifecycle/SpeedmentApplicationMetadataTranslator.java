@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java.lifecycle;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.Class;
 import com.speedment.codegen.lang.models.Constructor;
@@ -28,8 +29,8 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.AUTH
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.core.code.model.java.DefaultJavaClassTranslator;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.impl.utils.GroovyParser;
+import com.speedment.api.config.Project;
+import com.speedment.core.config.impl.utils.GroovyParser;
 import com.speedment.core.runtime.ApplicationMetadata;
 
 /**
@@ -42,8 +43,8 @@ public class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTran
 
     private final String className = typeName(project()) + "Application" + METADATA;
 
-    public SpeedmentApplicationMetadataTranslator(Generator cg, Project configEntity) {
-        super(cg, configEntity);
+    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator cg, Project configEntity) {
+        super(speedment, cg, configEntity);
     }
 
     @Override

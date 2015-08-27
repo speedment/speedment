@@ -17,7 +17,7 @@
 package com.speedment.core.entity;
 
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.formatter.json.JsonFormatter;
+import com.speedment.core.encoder.JsonEncoder;
 import com.speedment.core.manager.metaresult.MetaResult;
 import java.util.function.Consumer;
 
@@ -31,27 +31,32 @@ import java.util.function.Consumer;
 public interface BaseEntity<ENTITY> {
 
     /**
+     * Creates and returns a new copy of this entity.
+     *
+     * @return Creates and returns a new copy of this entity
+     */
+    ENTITY copy();
+
+    /**
      * Returns a JSON representation of this Entity using the default {@link
-     * JsonFormatter}. All of the fields in this Entity will appear in the
+     * JsonEncoder}. All of the fields in this Entity will appear in the
      * returned JSON String.
      *
      * @return Returns a JSON representation of this Entity using the default
-     * {@link JsonFormatter}
+     * {@link JsonEncoder}
      */
     String toJson();
 
     /**
      * Returns a JSON representation of this Entity using the provided {@link
-     * JsonFormatter}.
+     * JsonEncoder}.
      *
      * @param jsonFormatter to use as a formatter
      * @return Returns a JSON representation of this Entity using the provided
-     * {@link JsonFormatter}
-     * @see JsonFormatter
+     * {@link JsonEncoder}
+     * @see JsonEncoder
      */
-    default String toJson(JsonFormatter<ENTITY> jsonFormatter) {
-        return jsonFormatter.apply((ENTITY) this);
-    }
+    String toJson(JsonEncoder<ENTITY> jsonFormatter);
 
     /**
      * Persists this entity to the underlying database and returns a potentially

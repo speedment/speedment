@@ -21,13 +21,15 @@
  */
 package com.speedment.core.code.model.java;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.PrimaryKeyColumn;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.impl.ProjectImpl;
+import com.speedment.api.Speedment;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.PrimaryKeyColumn;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Schema;
+import com.speedment.api.config.Table;
+import com.speedment.core.config.impl.ProjectImpl;
+import com.speedment.core.platform.SpeedmentImpl;
 import org.junit.Before;
 
 /**
@@ -38,6 +40,7 @@ public abstract class SimpleModelTest {
     protected static final String TABLE_NAME = "user";
     protected static final String COLUMN_NAME = "first_name";
 
+    protected Speedment speedment;
     protected Project project;
     protected Dbms dbms;
     protected Schema schema;
@@ -47,8 +50,9 @@ public abstract class SimpleModelTest {
 
     @Before
     public void setUp() {
-        project = new ProjectImpl();
-        dbms = project.addNewDbms();
+        speedment = new SpeedmentImpl();
+        project = new ProjectImpl(speedment);
+        dbms = project.addNewDbms(speedment);
         schema = dbms.addNewSchema();
         table = schema.addNewTable();
         column = table.addNewColumn();

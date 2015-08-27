@@ -16,8 +16,8 @@
  */
 package com.speedment.core.db;
 
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.Schema;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.Schema;
 import com.speedment.core.db.impl.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;

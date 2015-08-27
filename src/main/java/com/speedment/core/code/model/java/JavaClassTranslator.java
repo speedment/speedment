@@ -18,9 +18,9 @@ package com.speedment.core.code.model.java;
 
 import com.speedment.core.code.model.Translator;
 import com.speedment.codegen.lang.models.File;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.aspects.Node;
-import com.speedment.util.java.JavaLanguage;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Node;
+import com.speedment.util.JavaLanguage;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.

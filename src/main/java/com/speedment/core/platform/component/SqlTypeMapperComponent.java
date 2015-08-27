@@ -16,8 +16,8 @@
  */
 package com.speedment.core.platform.component;
 
-import com.speedment.core.config.model.Dbms;
-import com.speedment.util.java.sql.TypeInfo;
+import com.speedment.api.config.Dbms;
+import com.speedment.util.sql.SqlTypeInfo;
 import java.util.function.BiFunction;
 
 /**
@@ -27,7 +27,7 @@ import java.util.function.BiFunction;
  * @author pemi
  * @since 2.0
  */
-public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, TypeInfo, Class<?>> {
+public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, SqlTypeInfo, Class<?>> {
 
     @Override
     default Class<SqlTypeMapperComponent> getComponentClass() {
@@ -42,6 +42,6 @@ public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, Type
      * @return the corresponding Java {@code Class}
      */
     @Override
-    Class<?> apply(Dbms dbms, TypeInfo typeInfo);
+    Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo);
 
 }

@@ -17,7 +17,7 @@
 package com.speedment.core.field.reference;
 
 import com.speedment.core.field.BaseFunction;
-import com.speedment.core.field.Field;
+import com.speedment.api.field.Field;
 import com.speedment.core.field.FunctionBuilder;
 
 /**

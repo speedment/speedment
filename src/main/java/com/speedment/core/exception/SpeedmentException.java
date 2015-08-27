@@ -16,7 +16,7 @@
  */
 package com.speedment.core.exception;
 
-import com.speedment.core.annotations.Api;
+import com.speedment.api.annotation.Api;
 
 /**
  * {@code SpeedmentException} is the superclass of those exceptions that can be

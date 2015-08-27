@@ -16,29 +16,29 @@
  */
 package com.speedment.core.db.impl;
 
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
-import com.speedment.core.config.model.Index;
-import com.speedment.core.config.model.IndexColumn;
-import com.speedment.core.config.model.PrimaryKeyColumn;
-import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.core.config.model.parameters.OrderType;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.ForeignKeyColumn;
+import com.speedment.api.config.Index;
+import com.speedment.api.config.IndexColumn;
+import com.speedment.api.config.PrimaryKeyColumn;
+import com.speedment.api.config.Schema;
+import com.speedment.api.config.Table;
+import com.speedment.api.config.parameters.DbmsType;
+import com.speedment.api.config.parameters.OrderType;
 import com.speedment.core.manager.sql.SqlStatement;
 import com.speedment.core.manager.sql.SqlUpdateStatement;
 import com.speedment.core.db.AsynchronousQueryResult;
 import com.speedment.core.db.DbmsHandler;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.ConnectionPoolComponent;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
-import com.speedment.util.java.sql.TypeInfo;
-import static com.speedment.util.stream.OptionalUtil.unwrap;
+import com.speedment.util.sql.SqlTypeInfo;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -57,7 +57,21 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.util.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
+import static com.speedment.core.stream.OptionalUtil.unwrap;
 
 /**
  *
@@ -76,9 +90,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static final Boolean SHOW_METADATA = false;
 
-    private final Speedment speedment;
+    private final SpeedmentImpl speedment;
 
-    public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
+    public AbstractRelationalDbmsHandler(SpeedmentImpl speedment, Dbms dbms) {
         this.speedment = speedment;
         this.dbms = dbms;
         typeMapping = new ConcurrentHashMap<>();
@@ -131,7 +145,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final Map<String, Class<?>> result = new ConcurrentHashMap<>();
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
-                final TypeInfo typeInfo = TypeInfo.from(rs);
+                final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
                 final Class<?> mappedClass = speedment.get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
@@ -192,7 +206,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     } catch (SQLException sqlException) {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
-                    if (!dbms.getType().getSchemaExcludSet().contains(schemaName)) {
+                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = Schema.newSchema();
                         schema.setName(schemaName);
                         schema.setSchemaName(schemaName);
@@ -205,7 +219,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
-                    if (!dbms.getType().getSchemaExcludSet().contains(schemaName)) {
+                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = Schema.newSchema();
                         schema.setName(schemaName);
                         schemas.add(schema);

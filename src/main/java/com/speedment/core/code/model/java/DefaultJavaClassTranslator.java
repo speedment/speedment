@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.AnnotationUsage;
@@ -32,17 +33,17 @@ import com.speedment.codegen.lang.models.implementation.FileImpl;
 import com.speedment.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.codegen.lang.models.values.TextValue;
 import static com.speedment.core.code.model.java.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
-import com.speedment.core.config.model.Index;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Schema;
-import com.speedment.core.config.model.Table;
-import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.aspects.Enableable;
-import com.speedment.core.config.model.aspects.Node;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.ForeignKeyColumn;
+import com.speedment.api.config.Index;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Schema;
+import com.speedment.api.config.Table;
+import com.speedment.api.config.aspects.Child;
+import com.speedment.api.config.aspects.Enableable;
+import com.speedment.api.config.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,8 +70,10 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable,
 
     private final C configEntity;
     private final Generator codeGenerator;
+    private final Speedment speedment;
 
-    public DefaultJavaClassTranslator(Generator codeGenerator, C configEntity) {
+    public DefaultJavaClassTranslator(Speedment speedment, Generator codeGenerator, C configEntity) {
+        this.speedment = speedment;
         this.configEntity = configEntity;
         this.codeGenerator = codeGenerator;
     }
@@ -78,6 +81,10 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable,
     @Override
     public C getNode() {
         return configEntity;
+    }
+    
+    protected Speedment getSpeedment() {
+        return speedment;
     }
 
     protected AnnotationUsage generated() {

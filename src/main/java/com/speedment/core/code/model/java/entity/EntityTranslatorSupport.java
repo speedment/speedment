@@ -29,11 +29,11 @@ import static com.speedment.codegen.lang.models.constants.DefaultJavadocTag.SEE;
 import static com.speedment.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.codegen.lang.models.constants.DefaultType.VOID;
 import static com.speedment.codegen.util.Formatting.DOT;
-import com.speedment.core.config.model.Column;
-import com.speedment.core.config.model.ForeignKey;
-import com.speedment.core.config.model.ForeignKeyColumn;
-import com.speedment.core.config.model.Project;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Column;
+import com.speedment.api.config.ForeignKey;
+import com.speedment.api.config.ForeignKeyColumn;
+import com.speedment.api.config.Project;
+import com.speedment.api.config.Table;
 import com.speedment.core.exception.SpeedmentException;
 import com.speedment.core.field.reference.ComparableReferenceField;
 import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
@@ -41,12 +41,12 @@ import com.speedment.core.field.reference.ReferenceField;
 import com.speedment.core.field.reference.ReferenceForeignKeyField;
 import com.speedment.core.field.reference.string.StringReferenceField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
-import com.speedment.core.formatter.json.JsonFormatter;
+import com.speedment.core.encoder.JsonEncoder;
 import com.speedment.core.manager.metaresult.MetaResult;
 import com.speedment.util.Pluralis;
 import static com.speedment.util.Util.instanceNotAllowed;
-import com.speedment.util.java.JavaLanguage;
-import static com.speedment.util.java.JavaLanguage.javaTypeName;
+import com.speedment.util.JavaLanguage;
+import static com.speedment.util.JavaLanguage.javaTypeName;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -136,7 +136,7 @@ public class EntityTranslatorSupport {
     public static Method toJsonExtended(Type entityType) {
         final String paramName = "jsonFormatter";
         return Method.of("toJson", STRING)
-            .add(Field.of(paramName, Type.of(JsonFormatter.class)
+            .add(Field.of(paramName, Type.of(JsonEncoder.class)
                 .add(Generic.of().add(entityType))))
             .set(Javadoc.of(
                 "Returns a JSON representation of this Entity using the provided {@link JsonFormatter}."

@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -32,8 +33,8 @@ public class TableIntegerProperty extends TableProperty<Number> {
     private final TextField textfield;
     private final IntegerProperty property;
 
-    public TableIntegerProperty(String name, Number value) {
-        super(name);
+    public TableIntegerProperty(Speedment speedment, String name, Number value) {
+        super(speedment, name);
         textfield = new TextField();
 
         if (value == null) {

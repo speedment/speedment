@@ -16,7 +16,7 @@
  */
 package com.speedment.core.platform.component.impl;
 
-import com.speedment.core.config.model.parameters.DbmsType;
+import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.core.runtime.typemapping.JavaTypeMapping;
 import com.speedment.core.runtime.typemapping.StandardJavaTypeMapping;

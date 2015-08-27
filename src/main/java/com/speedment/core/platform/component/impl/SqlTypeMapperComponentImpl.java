@@ -16,9 +16,9 @@
  */
 package com.speedment.core.platform.component.impl;
 
-import com.speedment.core.config.model.Dbms;
+import com.speedment.api.config.Dbms;
 import com.speedment.core.platform.component.SqlTypeMapperComponent;
-import com.speedment.util.java.sql.TypeInfo;
+import com.speedment.util.sql.SqlTypeInfo;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -73,7 +73,7 @@ public class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
     }
 
     @Override
-    public Class<?> apply(Dbms dbms, TypeInfo typeInfo) {
+    public Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo) {
         final Optional<String> key = typeInfo.javaSqlTypeName();
         if (key.isPresent()) {
             return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), String.class);

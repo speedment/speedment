@@ -16,9 +16,9 @@
  */
 package com.speedment.core.db.impl.vendor;
 
-import com.speedment.core.config.model.Dbms;
+import com.speedment.api.config.Dbms;
 import com.speedment.core.db.impl.AbstractRelationalDbmsHandler;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no
@@ -29,7 +29,7 @@ import com.speedment.core.platform.Speedment;
  */
 public class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
-    public MySqlDbmsHandler(Speedment speedment, final Dbms dbms) {
+    public MySqlDbmsHandler(SpeedmentImpl speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
 

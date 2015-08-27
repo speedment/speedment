@@ -16,6 +16,7 @@
  */
 package com.speedment.gui.properties;
 
+import com.speedment.api.Speedment;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -29,8 +30,8 @@ public class TableBooleanProperty extends TableProperty<Boolean> {
 	
 	private final CheckBox checkbox;
 
-	public TableBooleanProperty(String name, Boolean value) {
-		super (name);
+	public TableBooleanProperty(Speedment speedment, String name, Boolean value) {
+		super (speedment, name);
 		checkbox = new CheckBox();
 		checkbox.setAlignment(Pos.CENTER);
 		

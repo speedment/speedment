@@ -16,7 +16,7 @@
  */
 package com.speedment.core.platform.component;
 
-import com.speedment.core.annotations.Api;
+import com.speedment.api.annotation.Api;
 
 /**
  * A Component represents the basic functionality for a Speedment Platform

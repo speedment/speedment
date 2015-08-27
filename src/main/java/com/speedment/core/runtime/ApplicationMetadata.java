@@ -23,7 +23,7 @@ package com.speedment.core.runtime;
  * @author pemi
  * @since 2.0
  */
-public abstract interface ApplicationMetadata {
+public interface ApplicationMetadata {
 
     /**
      * Returns the meta data as a String that shall be used to build up the

@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java;
 
+import com.speedment.api.Speedment;
 import com.speedment.codegen.util.Formatting;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.lang.models.ClassOrInterface;
@@ -23,7 +24,7 @@ import com.speedment.codegen.lang.models.Generic;
 import com.speedment.codegen.lang.models.Type;
 import com.speedment.codegen.lang.models.constants.DefaultType;
 import com.speedment.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.core.config.model.Table;
+import com.speedment.api.config.Table;
 import java.util.Optional;
 
 /**
@@ -79,9 +80,8 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
             GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
             GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
-    public BaseEntityAndManagerTranslator(Generator cg, Table configEntity) {
-        super(cg, configEntity);
-//        this.cg = cg;
+    public BaseEntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
+        super(speedment, cg, configEntity);
     }
 
     protected Type typeOfPK() {
@@ -103,38 +103,4 @@ public abstract class BaseEntityAndManagerTranslator<T extends ClassOrInterface<
             }
         }
     }
-    /*
-     protected abstract String getFileName();
-
-     @Override
-     public File get() {
-     final File file = new FileImpl(baseDirectoryName() + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
-     final T item = make(file);
-     item.set(getJavaDoc());
-     file.add(item);
-     file.call(new AutoImports(cg.getDependencyMgr()));
-     return file;
-     }
-
-     protected abstract T make(File file);
-
-     protected abstract String getJavadocRepresentText();
-
-     protected Javadoc getJavaDoc() {
-     return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-     .add(AUTHOR.setValue("Speedment"));
-     }
-
-     public CodeGenerator getCodeGenerator() {
-     return cg;
-     }
-
-     protected boolean isInImplPackage() {
-     return false;
-     } */
-
-//    @Override
-//    public String packagePath() {
-//        return super.packagePath() + "/" + table().getRelativeName(project());
-//    }
 }

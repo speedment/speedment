@@ -29,23 +29,24 @@ import java.util.stream.Stream;
  * @author pemi
  */
 public final class Trees {
-    
+
     /**
      * The TraversalType can control how a tree is walked.
      * <p>
-     * <a href="http://en.wikipedia.org/wiki/Tree_traversal">Wikipedia article</a>
+     * <a href="http://en.wikipedia.org/wiki/Tree_traversal">Wikipedia
+     * article</a>
      */
-    public static enum TraversalOrder {
-        DEPTH_FIRST_PRE, 
-        /*DEPTH_FIRST_IN, Supported only for left/right trees*/ 
-        DEPTH_FIRST_POST, 
+    public enum TraversalOrder {
+        DEPTH_FIRST_PRE,
+        /*DEPTH_FIRST_IN, Supported only for left/right trees*/
+        DEPTH_FIRST_POST,
         BREADTH_FIRST;
     }
-    
+
     /**
      * The walking order of the tree.
      */
-    public static enum WalkingOrder {
+    public enum WalkingOrder {
         FORWARD, BACKWARD;
     }
 
@@ -140,5 +141,7 @@ public final class Trees {
     /**
      * Utility classes should not be instantiated.
      */
-    private Trees() { instanceNotAllowed(getClass()); }
+    private Trees() {
+        instanceNotAllowed(getClass());
+    }
 }

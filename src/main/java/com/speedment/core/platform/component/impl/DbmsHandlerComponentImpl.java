@@ -16,11 +16,11 @@
  */
 package com.speedment.core.platform.component.impl;
 
-import com.speedment.core.config.model.Dbms;
-import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.core.config.model.parameters.StandardDbmsType;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.config.parameters.DbmsType;
+import com.speedment.core.config.dbms.StandardDbmsType;
 import com.speedment.core.db.DbmsHandler;
-import com.speedment.core.platform.Speedment;
+import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.Map;
 import java.util.Optional;
@@ -35,9 +35,9 @@ public class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
     private final Map<Dbms, DbmsHandler> map;
-    private final Speedment speedment;
+    private final SpeedmentImpl speedment;
 
-    public DbmsHandlerComponentImpl(Speedment speedment) {
+    public DbmsHandlerComponentImpl(SpeedmentImpl speedment) {
         this.dbmsTypes = new ConcurrentHashMap<>();
         this.map = new ConcurrentHashMap<>();
         this.speedment = speedment;

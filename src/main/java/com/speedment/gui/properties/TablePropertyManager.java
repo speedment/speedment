@@ -14,23 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.gui.properties;
 
-import com.speedment.core.config.model.External;
-import com.speedment.core.config.model.aspects.Child;
-import com.speedment.core.config.model.impl.utils.MethodsParser;
-import static com.speedment.core.config.model.impl.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
-import com.speedment.core.config.model.parameters.DbmsType;
-import com.speedment.util.java.JavaLanguage;
+import com.speedment.api.Speedment;
+import com.speedment.api.annotation.External;
+import com.speedment.api.config.aspects.Child;
+import com.speedment.core.config.impl.utils.MethodsParser;
+import static com.speedment.core.config.impl.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
+import com.speedment.api.config.parameters.DbmsType;
+import com.speedment.util.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -46,10 +40,12 @@ import javafx.scene.control.TreeView;
  */
 public class TablePropertyManager {
 
+    private final Speedment speedment;
     private final TreeView<Child<?>> tree;
 
-    public TablePropertyManager(TreeView<Child<?>> view) {
-        tree = view;
+    public TablePropertyManager(Speedment speedment, TreeView<Child<?>> view) {
+        this.speedment = speedment;
+        this.tree      = view;
     }
 
 	@SuppressWarnings("unchecked")
@@ -180,32 +176,32 @@ public class TablePropertyManager {
     }
 
     private TableProperty<Boolean> createBooleanProperty(String label, List<Child<?>> nodes, Function<Child<?>, Boolean> selector, BiConsumer<Child<?>, Boolean> updater) {
-        return createProperty(label, nodes, TableBooleanProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TableBooleanProperty(speedment, a, b), selector, updater);
     }
 
     private TableProperty<String> createStringProperty(String label, List<Child<?>> nodes, Function<Child<?>, String> selector, BiConsumer<Child<?>, String> updater) {
-        return createProperty(label, nodes, TableStringProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TableStringProperty(speedment, a, b), selector, updater);
     }
 
     private TableProperty<String> createPasswordProperty(String label, List<Child<?>> nodes, Function<Child<?>, String> selector, BiConsumer<Child<?>, String> updater) {
-        return createProperty(label, nodes, TablePasswordProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TablePasswordProperty(speedment, a, b), selector, updater);
     }
 
 	@SuppressWarnings("rawtypes")
     private TableProperty<Class> createClassProperty(String label, List<Child<?>> nodes, Function<Child<?>, Class> selector, BiConsumer<Child<?>, Class> updater) {
-        return createProperty(label, nodes, TableClassProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TableClassProperty(speedment, a, b), selector, updater);
     }
 
     private TableProperty<Number> createNumberProperty(String label, List<Child<?>> nodes, Function<Child<?>, Number> selector, BiConsumer<Child<?>, Number> updater) {
-        return createProperty(label, nodes, TableIntegerProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TableIntegerProperty(speedment, a, b), selector, updater);
     }
 
     private TableProperty<DbmsType> createDbmsTypeProperty(String label, List<Child<?>> nodes, Function<Child<?>, DbmsType> selector, BiConsumer<Child<?>, DbmsType> updater) {
-        return createProperty(label, nodes, TableDbmsTypeProperty::new, selector, updater);
+        return createProperty(label, nodes, (a, b) -> new TableDbmsTypeProperty(speedment, a, b), selector, updater);
     }
 
     private <V extends Enum<V>> TableProperty<V> createEnumProperty(String label, List<Child<?>> nodes, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater, V defaultValue) {
-        return createProperty(label, nodes, TableEnumProperty::new, selector, updater, defaultValue);
+        return createProperty(label, nodes, (a, b) -> new TableEnumProperty(speedment, a, b), selector, updater, defaultValue);
     }
 
     private <V> TableProperty<V> createProperty(String label, List<Child<?>> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater) {
