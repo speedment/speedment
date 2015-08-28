@@ -16,15 +16,17 @@
  */
 package com.speedment.codegen.java.views;
 
-import static com.speedment.codegen.util.Formatting.*;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
 import com.speedment.codegen.lang.interfaces.HasName;
 import com.speedment.codegen.lang.models.Constructor;
-import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
 import com.speedment.codegen.util.Formatting;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.speedment.codegen.util.CodeCombiner.joinIfNotEmpty;
+import static com.speedment.codegen.util.Formatting.*;
 
 /**
  * Transforms from a {@link Constructor} to java code.

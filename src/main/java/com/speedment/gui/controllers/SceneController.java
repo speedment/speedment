@@ -319,7 +319,7 @@ public final class SceneController implements Initializable {
             populatePropertyTable(
                 propertyMgr.propertiesFor(
                     l.getList().stream()
-                    .map(TreeItem::getValue)
+                    .map(ti -> ti.getValue())
                     .collect(Collectors.toList())
                 )
             )
