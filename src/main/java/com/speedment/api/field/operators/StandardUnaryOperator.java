@@ -14,26 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.api.field;
+package com.speedment.api.field.operators;
 
 import com.speedment.api.annotation.Api;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
- * A Field is the most basic representation of an Entity field. Because Field
- * has a generic type of its Entity, we can prevent applications from applying a
- * field from another Entity type.
  *
  * @author pemi
- * @param <ENTITY> The entity type
  */
 @Api(version = "2.1")
-public interface Field<ENTITY> {
+public enum StandardUnaryOperator implements UnaryOperator {
 
-    /**
-     * Returns the column name that corresponds to this Field.
-     *
-     * @return the name
-     */
-    String getColumnName();
+    IS_NULL(Objects::isNull),
+    IS_NOT_NULL(Objects::nonNull);
 
+    private final Predicate<Object> predicate;
+
+    StandardUnaryOperator(Predicate<Object> predicate) {
+        this.predicate = Objects.requireNonNull(predicate);
+    }
+
+    @Override
+    public Predicate<Object> getUnaryFilter() {
+        return predicate;
+    }
 }

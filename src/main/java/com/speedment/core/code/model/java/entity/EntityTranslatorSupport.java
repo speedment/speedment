@@ -35,10 +35,10 @@ import com.speedment.api.config.ForeignKeyColumn;
 import com.speedment.api.config.Project;
 import com.speedment.api.config.Table;
 import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.field.reference.ComparableReferenceField;
-import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
-import com.speedment.core.field.reference.ReferenceField;
-import com.speedment.core.field.reference.ReferenceForeignKeyField;
+import com.speedment.core.field.ReferenceComparableFieldImpl;
+import com.speedment.core.field.newimpl.ComparableReferenceForeignKeyField;
+import com.speedment.core.field.ReferenceFieldImpl;
+import com.speedment.core.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.core.field.reference.string.StringReferenceField;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
 import com.speedment.core.encoder.JsonEncoder;
@@ -94,7 +94,7 @@ public class EntityTranslatorSupport {
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
                 } else {
-                    t = Type.of(ReferenceForeignKeyField.class)
+                    t = Type.of(ReferenceForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
@@ -108,11 +108,11 @@ public class EntityTranslatorSupport {
                 return Type.of(StringReferenceField.class)
                     .add(Generic.of().add(entityType));
             } else if (Comparable.class.isAssignableFrom(mapping)) {
-                return Type.of(ComparableReferenceField.class)
+                return Type.of(ReferenceComparableFieldImpl.class)
                     .add(Generic.of().add(entityType))
                     .add(Generic.of().add(Type.of(mapping)));
             } else {
-                return Type.of(ReferenceField.class)
+                return Type.of(ReferenceFieldImpl.class)
                     .add(Generic.of().add(entityType))
                     .add(Generic.of().add(Type.of(mapping)));
             }

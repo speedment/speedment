@@ -19,9 +19,9 @@ package com.speedment.core.encoder;
 import com.speedment.core.field.doubles.DoubleField;
 import com.speedment.core.field.ints.IntField;
 import com.speedment.core.field.longs.LongField;
-import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
-import com.speedment.core.field.reference.ReferenceField;
-import com.speedment.core.field.reference.ReferenceForeignKeyField;
+import com.speedment.core.field.newimpl.ComparableReferenceForeignKeyField;
+import com.speedment.core.field.ReferenceFieldImpl;
+import com.speedment.core.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -55,7 +55,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    <T> R put(ReferenceField<ENTITY, T> field);
+    <T> R put(ReferenceFieldImpl<ENTITY, T> field);
 
     /**
      * Adds this Integer Field to the output renderer. The field will be
@@ -97,7 +97,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param fkFormatter the foreign key {@code JsonFormatter<FK_ENTITY>}
      * @return a reference to a resulting JsonFormatter
      */
-    <T, FK_ENTITY> R put(ReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, Encoder<FK_ENTITY, ?, OUTPUT_TYPE> fkFormatter);
+    <T, FK_ENTITY> R put(ReferenceForeignKeyFieldImpl<ENTITY, T, FK_ENTITY> field, Encoder<FK_ENTITY, ?, OUTPUT_TYPE> fkFormatter);
 
     /**
      * Adds this ComparableReferenceForeignKeyField to the output renderer. The
@@ -253,6 +253,6 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param field to add to the renderer
      * @return a reference to a resulting JsonFormatter
      */
-    <T> R remove(ReferenceField<ENTITY, T> field);
+    <T> R remove(ReferenceFieldImpl<ENTITY, T> field);
 
 }

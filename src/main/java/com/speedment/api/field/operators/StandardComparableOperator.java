@@ -14,26 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.api.field;
+package com.speedment.api.field.operators;
 
 import com.speedment.api.annotation.Api;
+import java.util.Objects;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 /**
- * A Field is the most basic representation of an Entity field. Because Field
- * has a generic type of its Entity, we can prevent applications from applying a
- * field from another Entity type.
  *
  * @author pemi
- * @param <ENTITY> The entity type
  */
 @Api(version = "2.1")
-public interface Field<ENTITY> {
+public enum StandardComparableOperator implements ComparableOperator {
 
-    /**
-     * Returns the column name that corresponds to this Field.
-     *
-     * @return the name
-     */
-    String getColumnName();
+    EQUAL(i -> i == 0),
+    NOT_EQUAL(i -> i != 0),
+    LESS_THAN(i -> i < 0),
+    LESS_OR_EQUAL(i -> i <= 0),
+    GREATER_THAN(i -> i > 0),
+    GREATER_OR_EQUAL(i -> i >= 0);
 
+    private final IntPredicate comparator;
+
+    StandardComparableOperator(IntPredicate comparator) {
+        this.comparator = Objects.requireNonNull(comparator);
+    }
+
+    @Override
+    public IntPredicate getComparator() {
+        return comparator;
+    }
 }

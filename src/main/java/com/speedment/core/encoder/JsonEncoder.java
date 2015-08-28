@@ -22,9 +22,9 @@ import com.speedment.api.field.Field;
 import com.speedment.core.field.doubles.DoubleField;
 import com.speedment.core.field.ints.IntField;
 import com.speedment.core.field.longs.LongField;
-import com.speedment.core.field.reference.ComparableReferenceForeignKeyField;
-import com.speedment.core.field.reference.ReferenceField;
-import com.speedment.core.field.reference.ReferenceForeignKeyField;
+import com.speedment.core.field.newimpl.ComparableReferenceForeignKeyField;
+import com.speedment.core.field.ReferenceFieldImpl;
+import com.speedment.core.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.core.field.reference.string.StringReferenceForeignKeyField;
 import com.speedment.api.Manager;
 import static com.speedment.util.JavaLanguage.javaVariableName;
@@ -38,6 +38,18 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
@@ -63,7 +75,7 @@ public class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>,
 
     // Fields
     @Override
-    public <T> JsonEncoder<ENTITY> put(ReferenceField<ENTITY, T> field) {
+    public <T> JsonEncoder<ENTITY> put(ReferenceFieldImpl<ENTITY, T> field) {
         return put(jsonField(field), field::getFrom);
     }
 
@@ -84,7 +96,7 @@ public class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>,
 
     // Foreign key fields.
     @Override
-    public <T, FK_ENTITY> JsonEncoder<ENTITY> put(ReferenceForeignKeyField<ENTITY, T, FK_ENTITY> field, Encoder<FK_ENTITY, ?, String> builder) {
+    public <T, FK_ENTITY> JsonEncoder<ENTITY> put(ReferenceForeignKeyFieldImpl<ENTITY, T, FK_ENTITY> field, Encoder<FK_ENTITY, ?, String> builder) {
         return put(jsonField(field), field::findFrom, builder);
     }
 
@@ -151,7 +163,7 @@ public class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>,
     }
 
     @Override
-    public <T> JsonEncoder<ENTITY> remove(ReferenceField<ENTITY, T> field) {
+    public <T> JsonEncoder<ENTITY> remove(ReferenceFieldImpl<ENTITY, T> field) {
         getters.remove(jsonField(field));
         return this;
     }

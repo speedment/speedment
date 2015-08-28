@@ -19,9 +19,8 @@ package com.speedment.core.manager.sql;
 import com.speedment.codegen.base.Generator;
 import com.speedment.core.manager.sql.generator.SQLGenerator;
 import com.speedment.core.db.AsynchronousQueryResult;
-import com.speedment.core.field.BinaryPredicateBuilder;
-import com.speedment.core.field.CombinedBasePredicate.AndCombinedBasePredicate;
-import com.speedment.core.field.PredicateBuilder;
+import com.speedment.core.field.builders.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
+import com.speedment.api.field.builders.PredicateBuilder;
 import com.speedment.util.Cast;
 import com.speedment.core.stream.builder.action.Action;
 import static com.speedment.core.stream.builder.action.Property.SIZE;
@@ -41,6 +40,10 @@ import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.joining;
+import com.speedment.api.field.builders.ComparablePredicateBuilder;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -92,10 +95,10 @@ public class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
         @SuppressWarnings("rawtypes")
         final List<Object> values = predicateBuilders.stream()
-            .map(pb -> Cast.cast(pb, BinaryPredicateBuilder.class))
+            .map(pb -> Cast.cast(pb, ComparablePredicateBuilder.class))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(BinaryPredicateBuilder::getValueAsObject)
+            .map(ComparablePredicateBuilder::getValueAsObject)
             .collect(toList());
 
         qr.setSql(sql);

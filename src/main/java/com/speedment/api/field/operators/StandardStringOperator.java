@@ -14,26 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.api.field;
+package com.speedment.api.field.operators;
 
 import com.speedment.api.annotation.Api;
+import java.util.Objects;
+import java.util.function.BiPredicate;
 
 /**
- * A Field is the most basic representation of an Entity field. Because Field
- * has a generic type of its Entity, we can prevent applications from applying a
- * field from another Entity type.
  *
  * @author pemi
- * @param <ENTITY> The entity type
  */
 @Api(version = "2.1")
-public interface Field<ENTITY> {
+public enum StandardStringOperator implements StringOperator {
 
-    /**
-     * Returns the column name that corresponds to this Field.
-     *
-     * @return the name
-     */
-    String getColumnName();
+    STARTS_WITH(String::startsWith),
+    ENDS_WITH(String::endsWith),
+    CONTAINS(String::contains),
+    EQUAL_IGNORE_CASE(String::equalsIgnoreCase),
+    NOT_EQUAL_IGNORE_CASE((s0, s1) -> !s0.equalsIgnoreCase(s1));
 
+    private final BiPredicate<String, String> biPredicate;
+
+    StandardStringOperator(BiPredicate<String, String> biPredicate) {
+        this.biPredicate = Objects.requireNonNull(biPredicate);
+    }
+
+    @Override
+    public BiPredicate<String, String> getStringFilter() {
+        return biPredicate;
+    }
 }

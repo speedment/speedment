@@ -18,10 +18,10 @@ package com.speedment.core.manager.sql.generator;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.core.field.StandardUnaryOperator;
-import static com.speedment.core.field.StandardUnaryOperator.IS_NOT_NULL;
-import static com.speedment.core.field.StandardUnaryOperator.IS_NULL;
-import com.speedment.core.field.UnaryPredicateBuilder;
+import com.speedment.api.field.operators.StandardUnaryOperator;
+import static com.speedment.api.field.operators.StandardUnaryOperator.IS_NOT_NULL;
+import static com.speedment.api.field.operators.StandardUnaryOperator.IS_NULL;
+import com.speedment.api.field.builders.UnaryPredicateBuilder;
 
 import java.util.Optional;
 

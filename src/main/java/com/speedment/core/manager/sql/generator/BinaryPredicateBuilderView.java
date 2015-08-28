@@ -18,18 +18,18 @@ package com.speedment.core.manager.sql.generator;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.core.field.BinaryPredicateBuilder;
-import com.speedment.core.field.StandardBinaryOperator;
+import com.speedment.api.field.operators.StandardComparableOperator;
 import java.util.Optional;
+import com.speedment.api.field.builders.ComparablePredicateBuilder;
 
 /**
  *
  * @author Emil Forslund
  */
 @SuppressWarnings("rawtypes")
-public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuilder, String> {
+public class BinaryPredicateBuilderView implements Transform<ComparablePredicateBuilder, String> {
 
-    protected String render(StandardBinaryOperator op) {
+    protected String render(StandardComparableOperator op) {
         switch (op) {
             case EQUAL:
                 return " = ";
@@ -51,11 +51,11 @@ public class BinaryPredicateBuilderView implements Transform<BinaryPredicateBuil
     }
 
     @Override
-    public Optional<String> transform(Generator gen, BinaryPredicateBuilder model) {
-        if (model.getOperator() instanceof StandardBinaryOperator) {
+    public Optional<String> transform(Generator gen, ComparablePredicateBuilder model) {
+        if (model.getOperator() instanceof StandardComparableOperator) {
             return Optional.of("("
                 + model.getField().getColumnName()
-                + render((StandardBinaryOperator) model.getOperator())
+                + render((StandardComparableOperator) model.getOperator())
                 + "?)"
             );
         } else {

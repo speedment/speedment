@@ -14,26 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.api.field;
+package com.speedment.api.field.operators;
 
 import com.speedment.api.annotation.Api;
+import java.util.function.IntPredicate;
 
 /**
- * A Field is the most basic representation of an Entity field. Because Field
- * has a generic type of its Entity, we can prevent applications from applying a
- * field from another Entity type.
+ * Marker interface for a BinaryOperator. A BinaryOperator takes two arguments.
  *
- * @author pemi
- * @param <ENTITY> The entity type
+ * @author Emil Forslund
  */
 @Api(version = "2.1")
-public interface Field<ENTITY> {
-
-    /**
-     * Returns the column name that corresponds to this Field.
-     *
-     * @return the name
-     */
-    String getColumnName();
-
+public interface ComparableOperator {
+    
+    IntPredicate getComparator();
 }

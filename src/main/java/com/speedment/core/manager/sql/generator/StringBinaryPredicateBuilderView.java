@@ -18,7 +18,7 @@ package com.speedment.core.manager.sql.generator;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.base.Transform;
-import com.speedment.core.field.StandardStringBinaryOperator;
+import com.speedment.api.field.operators.StandardStringOperator;
 import com.speedment.core.field.reference.string.StringBinaryPredicateBuilder;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ import java.util.Optional;
 @SuppressWarnings("rawtypes")
 public class StringBinaryPredicateBuilderView implements Transform<StringBinaryPredicateBuilder, String> {
 
-    protected String render(StandardStringBinaryOperator op, String columnName) {
+    protected String render(StandardStringOperator op, String columnName) {
         switch (op) {
             case CONTAINS:
                 return columnName + " LIKE BINARY CONCAT('%', ? ,'%')";

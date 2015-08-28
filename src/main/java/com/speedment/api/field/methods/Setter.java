@@ -14,26 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.api.field;
+package com.speedment.api.field.methods;
 
 import com.speedment.api.annotation.Api;
+import java.util.function.BiFunction;
 
 /**
- * A Field is the most basic representation of an Entity field. Because Field
- * has a generic type of its Entity, we can prevent applications from applying a
- * field from another Entity type.
- *
- * @author pemi
- * @param <ENTITY> The entity type
+ * @author Emil Forslund
+ * @param <ENTITY> the entity
+ * @param <V> the type of the value to return
  */
 @Api(version = "2.1")
-public interface Field<ENTITY> {
-
-    /**
-     * Returns the column name that corresponds to this Field.
-     *
-     * @return the name
-     */
-    String getColumnName();
-
-}
+public interface Setter<ENTITY, V> extends BiFunction<ENTITY, V, ENTITY> {}
