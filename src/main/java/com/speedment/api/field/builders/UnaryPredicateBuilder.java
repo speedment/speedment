@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  */
 @Api(version = "2.1")
-public interface UnaryPredicateBuilder<ENTITY> 
+public interface UnaryPredicateBuilder<ENTITY>
     extends PredicateBuilder<ENTITY>, Predicate<ENTITY> {
-    
+
     UnaryOperator getUnaryOperator();
 }

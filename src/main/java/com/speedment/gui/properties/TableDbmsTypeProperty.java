@@ -17,8 +17,8 @@
 package com.speedment.gui.properties;
 
 import com.speedment.api.Speedment;
+import com.speedment.api.config.Dbms;
 import com.speedment.api.config.parameters.DbmsType;
-import com.speedment.core.config.dbms.StandardDbmsType;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,7 +62,6 @@ public class TableDbmsTypeProperty extends TableProperty<DbmsType> {
 			@Override
 			public DbmsType fromString(String string) {
 				return supportedDbmsTypes()
-					.map(e -> (DbmsType) e)
 					.filter(e -> e.getName().equalsIgnoreCase(string))
 					.findAny().orElse(null);
 			}

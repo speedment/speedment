@@ -59,6 +59,7 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, C
      * supplied by the default factory. To change implementation, please use the
      * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
+     * @param speedment instance to use
      * @return the new instance
      */
     static Project newProject(Speedment speedment) {
@@ -86,8 +87,8 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, C
      * Creates and adds a new {@link Dbms} as a child to this node in the
      * configuration tree.
      *
-     * @param speedment  the {@link Speedment} instance
-     * @return           the newly added child
+     * @param speedment the {@link Speedment} instance
+     * @return the newly added child
      */
     default Dbms addNewDbms(Speedment speedment) {
         final Dbms e = Dbms.newDbms(speedment);

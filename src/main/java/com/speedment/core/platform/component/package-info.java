@@ -16,7 +16,7 @@
  */
 /**
  * This package contains the {@link com.speedment.core.platform.component.Component Components}
- * of the {@link com.speedment.Speedment Speedment} platform. It also contains
+ * of the {@link com.speedment.api.Speedment Speedment} platform. It also contains
  * all default implementation of the Components.
  */
 package com.speedment.core.platform.component;

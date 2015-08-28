@@ -22,11 +22,11 @@ import java.util.Optional;
 /**
  *
  * @author pemi
- * @param <ENTITY>
- * @param <R>
+ * @param <ENTITY> the entity type
+ * @param <R> return type
  */
 public interface SqlMetaResult<ENTITY, R extends SqlMetaResult<ENTITY, R>> extends MetaResult<ENTITY> {
-    
+
     String getQuery();
 
     R setQuery(String query);
@@ -34,7 +34,7 @@ public interface SqlMetaResult<ENTITY, R extends SqlMetaResult<ENTITY, R>> exten
     List<Object> getParameters();
 
     R setParameters(List<Object> parameters);
-    
+
     Optional<Throwable> getThrowable();
 
     R setThrowable(Throwable throwable);

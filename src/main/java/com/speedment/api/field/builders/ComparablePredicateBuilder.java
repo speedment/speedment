@@ -24,7 +24,7 @@ import com.speedment.api.field.operators.ComparableOperator;
  *
  * @author pemi
  * @param <ENTITY> The entity type
- * @param <V> the value type
+ * @param <V> the field value type
  */
 @Api(version = "2.1")
 public interface ComparablePredicateBuilder<ENTITY, V extends Comparable<? super V>> extends PredicateBuilder<ENTITY>, Predicate<ENTITY> {

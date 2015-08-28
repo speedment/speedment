@@ -23,13 +23,13 @@ import java.util.function.Predicate;
 /**
  *
  * @author pemi
- * @param <ENTITY>
+ * @param <ENTITY> the entity type
  */
 @Api(version = "2.1")
-public interface StringPredicateBuilder<ENTITY> 
+public interface StringPredicateBuilder<ENTITY>
     extends PredicateBuilder<ENTITY>, Predicate<ENTITY> {
 
     StringOperator getStringOperator();
-    
+
     String getValue();
 }

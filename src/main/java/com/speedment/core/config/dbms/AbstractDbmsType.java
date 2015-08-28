@@ -20,6 +20,7 @@ import com.speedment.api.Speedment;
 import com.speedment.api.config.Dbms;
 import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.api.db.DbmsHandler;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -29,7 +30,7 @@ import java.util.function.BiFunction;
  * @author pemi
  */
 public class AbstractDbmsType implements DbmsType {
-    
+
     private final String name;
     private final String driverManagerName;
     private final int defaultPort;
@@ -44,31 +45,31 @@ public class AbstractDbmsType implements DbmsType {
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
 
     protected AbstractDbmsType(
-        String name, 
-        String driverManagerName, 
-        int defaultPort, 
-        String schemaTableDelimiter, 
-        String dbmsNameMeaning, 
-        String driverName, 
-        String defaultConnectorParameters, 
-        String jdbcConnectorName, 
-        String fieldEncloserStart, 
-        String fieldEncloserEnd, 
-        Set<String> schemaExcludeSet, 
+        String name,
+        String driverManagerName,
+        int defaultPort,
+        String schemaTableDelimiter,
+        String dbmsNameMeaning,
+        String driverName,
+        String defaultConnectorParameters,
+        String jdbcConnectorName,
+        String fieldEncloserStart,
+        String fieldEncloserEnd,
+        Set<String> schemaExcludeSet,
         BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper) {
-        
-        this.name = name;
-        this.driverManagerName = driverManagerName;
+
+        this.name = Objects.requireNonNull(name);
+        this.driverManagerName = Objects.requireNonNull(driverManagerName);
         this.defaultPort = defaultPort;
-        this.schemaTableDelimiter = schemaTableDelimiter;
-        this.dbmsNameMeaning = dbmsNameMeaning;
-        this.driverName = driverName;
-        this.defaultConnectorParameters = defaultConnectorParameters;
-        this.jdbcConnectorName = jdbcConnectorName;
-        this.fieldEncloserStart = fieldEncloserStart;
-        this.fieldEncloserEnd = fieldEncloserEnd;
-        this.schemaExcludeSet = schemaExcludeSet;
-        this.dbmsMapper = dbmsMapper;
+        this.schemaTableDelimiter = Objects.requireNonNull(schemaTableDelimiter);
+        this.dbmsNameMeaning = Objects.requireNonNull(dbmsNameMeaning);
+        this.driverName = Objects.requireNonNull(driverName);
+        this.defaultConnectorParameters = Objects.requireNonNull(defaultConnectorParameters);
+        this.jdbcConnectorName = Objects.requireNonNull(jdbcConnectorName);
+        this.fieldEncloserStart = Objects.requireNonNull(fieldEncloserStart);
+        this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
+        this.schemaExcludeSet = Objects.requireNonNull(schemaExcludeSet);
+        this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class AbstractDbmsType implements DbmsType {
     public String getFieldEncloserEnd() {
         return fieldEncloserEnd;
     }
-    
+
     @Override
     public String getDbmsNameMeaning() {
         return dbmsNameMeaning;
@@ -145,7 +146,7 @@ public class AbstractDbmsType implements DbmsType {
     public boolean isSupported() {
         return true;
     }
-    
+
     private String escapeIfQuote(String item, boolean isWithinQuotes) {
         if (isWithinQuotes && "\"".equals(item)) {
             return "\\" + item;

@@ -22,7 +22,7 @@ import com.speedment.api.field.Field;
 /**
  *
  * @author pemi
- * @param <ENTITY> Entity type
+ * @param <ENTITY> the entity type
  */
 @Api(version = "2.1")
 public interface PredicateBuilder<ENTITY> {

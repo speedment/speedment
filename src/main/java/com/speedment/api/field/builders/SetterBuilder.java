@@ -23,12 +23,13 @@ import java.util.function.Function;
 /**
  *
  * @author pemi
- * @param <ENTITY>
- * @param <V>
+ * @param <ENTITY> the entity type
+ * @param <V> the field type
  */
 @Api(version = "2.1")
 public interface SetterBuilder<ENTITY, V> extends Function<ENTITY, ENTITY> {
-    
+
     Field<ENTITY> getField();
+
     V getValue();
 }

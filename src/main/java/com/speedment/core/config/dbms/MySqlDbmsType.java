@@ -16,15 +16,23 @@
  */
 package com.speedment.core.config.dbms;
 
-import java.util.Arrays;
+import com.speedment.api.Speedment;
+import com.speedment.api.config.Dbms;
+import com.speedment.api.db.DbmsHandler;
+import com.speedment.core.db.MySqlDbmsHandler;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class MySqlDbmsType extends AbstractDbmsType {
+public class MySqlDbmsType extends AbstractDbmsType {
+
+    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new;
 
     public MySqlDbmsType() {
 
@@ -39,8 +47,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
             "mysql",
             "`",
             "`",
-            Collections.unmodifiableSet(new HashSet<>(Arrays.asList("MySQL", "information_schema"))),
-            MySqlDbmsHandler::new
+            Stream.of("MySQL", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
+            DBMS_MAPPER
         );
     }
 
