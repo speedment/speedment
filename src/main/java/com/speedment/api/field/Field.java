@@ -23,8 +23,8 @@ import com.speedment.api.annotation.Api;
  * has a generic type of its Entity, we can prevent applications from applying a
  * field from another Entity type.
  *
- * @author pemi
- * @param <ENTITY> The entity type
+ * @author          pemi, Emil Forslund
+ * @param <ENTITY>  The entity type
  */
 @Api(version = "2.1")
 public interface Field<ENTITY> {

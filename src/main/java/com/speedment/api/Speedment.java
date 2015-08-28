@@ -18,7 +18,7 @@ package com.speedment.api;
 
 import com.speedment.core.platform.component.Component;
 import com.speedment.api.annotation.Api;
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.exception.SpeedmentException;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system

@@ -17,15 +17,14 @@
 package com.speedment.api.config;
 
 import com.speedment.api.annotation.Api;
-import com.speedment.core.config.impl.utils.ConfigUtil;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Parent;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.TableImpl;
 import com.speedment.api.config.aspects.ColumnCompressionTypeable;
 import com.speedment.api.config.aspects.FieldStorageTypeable;
 import com.speedment.api.config.aspects.StorageEngineTypeable;
+import com.speedment.core.config.TableImpl;
 import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -145,10 +144,7 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * @param c Closure
      * @return the new Column
      */
-    // DO NOT REMOVE, CALLED VIA REFLECTION
-    default Column column(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewColumn);
-    }
+    Column column(Closure<?> c);
 
     /**
      * Creates and returns a new Index.
@@ -158,10 +154,7 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * @param c Closure
      * @return the new Index
      */
-    // DO NOT REMOVE, CALLED VIA REFLECTION
-    default Index index(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndex);
-    }
+    Index index(Closure<?> c);
 
     /**
      * Creates and returns a new ForeignKey.
@@ -171,10 +164,7 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * @param c Closure
      * @return the new ForeignKey
      */
-    // DO NOT REMOVE, CALLED VIA REFLECTION
-    default ForeignKey foreignKey(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
-    }
+    ForeignKey foreignKey(Closure<?> c);
 
     /**
      * Creates and returns a new PrimaryKeyColumn.

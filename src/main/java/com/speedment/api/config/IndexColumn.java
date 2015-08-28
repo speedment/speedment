@@ -21,8 +21,8 @@ import com.speedment.api.annotation.Api;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Columnable;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.IndexColumnImpl;
 import com.speedment.api.config.aspects.OrderTypeable;
+import com.speedment.core.config.IndexColumnImpl;
 import java.util.function.Supplier;
 
 /**

@@ -18,13 +18,12 @@ package com.speedment.api.config;
 
 import com.speedment.api.Speedment;
 import com.speedment.api.annotation.Api;
-import com.speedment.core.config.impl.utils.ConfigUtil;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Parent;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Enableable;
 import com.speedment.api.config.aspects.DbmsTypeable;
-import com.speedment.core.config.impl.DbmsImpl;
+import com.speedment.core.config.DbmsImpl;
 import groovy.lang.Closure;
 import java.util.Optional;
 import java.util.function.Function;
@@ -57,7 +56,7 @@ public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Pa
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
      * @param speedment  the {@link Speedment} instance
      * @return           the new instance

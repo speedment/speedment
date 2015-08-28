@@ -18,7 +18,7 @@ package com.speedment.core.stream;
 
 import com.speedment.logging.Logger;
 import com.speedment.logging.LoggerManager;
-import com.speedment.core.encoder.JsonEncoder;
+import com.speedment.core.field.encoder.JsonEncoder;
 import static com.speedment.util.Util.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -19,8 +19,8 @@ package com.speedment.gui.properties;
 import com.speedment.api.Speedment;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Child;
-import com.speedment.core.config.impl.utils.MethodsParser;
-import static com.speedment.core.config.impl.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
+import com.speedment.core.config.utils.MethodsParser;
+import static com.speedment.core.config.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.util.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
@@ -201,7 +201,7 @@ public class TablePropertyManager {
     }
 
     private <V extends Enum<V>> TableProperty<V> createEnumProperty(String label, List<Child<?>> nodes, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater, V defaultValue) {
-        return createProperty(label, nodes, (a, b) -> new TableEnumProperty(speedment, a, b), selector, updater, defaultValue);
+        return createProperty(label, nodes, (a, b) -> new TableEnumProperty<>(speedment, a, b), selector, updater, defaultValue);
     }
 
     private <V> TableProperty<V> createProperty(String label, List<Child<?>> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater) {

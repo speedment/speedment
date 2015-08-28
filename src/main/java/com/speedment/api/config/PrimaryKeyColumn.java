@@ -21,7 +21,7 @@ import com.speedment.api.annotation.Api;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Columnable;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.PrimaryKeyColumnImpl;
+import com.speedment.core.config.PrimaryKeyColumnImpl;
 import java.util.function.Supplier;
 
 /**

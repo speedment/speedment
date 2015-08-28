@@ -19,12 +19,11 @@ package com.speedment.api.config;
 import com.speedment.api.HasSpeedment;
 import com.speedment.api.Speedment;
 import com.speedment.api.annotation.Api;
-import com.speedment.core.config.impl.utils.ConfigUtil;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Parent;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.ProjectImpl;
+import com.speedment.core.config.ProjectImpl;
 import groovy.lang.Closure;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -58,7 +57,7 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, C
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
      * @return the new instance
      */

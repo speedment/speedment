@@ -22,7 +22,7 @@
 package com.speedment.core.platform.component;
 
 import com.speedment.api.annotation.Api;
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.exception.SpeedmentException;
 import com.speedment.core.platform.SpeedmentImpl;
 import java.util.Optional;
 

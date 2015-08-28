@@ -18,7 +18,7 @@ package com.speedment.api.config.aspects;
 
 import com.speedment.api.config.Node;
 import com.speedment.api.annotation.Api;
-import com.speedment.core.config.impl.ChildHolder;
+import com.speedment.core.config.ChildHolder;
 import java.util.Optional;
 import java.util.stream.Stream;
 

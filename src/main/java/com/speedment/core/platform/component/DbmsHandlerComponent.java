@@ -18,7 +18,7 @@ package com.speedment.core.platform.component;
 
 import com.speedment.api.config.Dbms;
 import com.speedment.api.config.parameters.DbmsType;
-import com.speedment.core.db.DbmsHandler;
+import com.speedment.api.db.DbmsHandler;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -35,7 +35,7 @@ public interface DbmsHandlerComponent extends Component {
     
     /**
      * Installs a new {@link DbmsType} so that handlers can be created using the
-     * {@link #make(com.speedment.core.config.model.Dbms)} method.
+     * {@link #make(com.speedment.api.config.Dbms)} method.
      * <p>
      * The type will be indexed by its name as returned by 
      * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name, 

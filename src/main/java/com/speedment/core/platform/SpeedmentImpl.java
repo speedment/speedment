@@ -19,7 +19,7 @@ package com.speedment.core.platform;
 import com.speedment.api.Speedment;
 import com.speedment.core.platform.component.Component;
 import com.speedment.api.annotation.Api;
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.exception.SpeedmentException;
 import com.speedment.api.Manager;
 import com.speedment.core.platform.component.ManagerComponent;
 import com.speedment.core.platform.component.impl.ConnectionPoolComponentImpl;

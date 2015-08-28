@@ -16,12 +16,12 @@
  */
 package com.speedment.api;
 
+import com.speedment.api.db.MetaResult;
 import com.speedment.api.annotation.Api;
 import com.speedment.api.config.Column;
 import com.speedment.api.config.Table;
-import com.speedment.core.exception.SpeedmentException;
-import com.speedment.core.lifecycle.Lifecyclable;
-import com.speedment.core.manager.metaresult.MetaResult;
+import com.speedment.api.exception.SpeedmentException;
+import com.speedment.core.runtime.Lifecyclable;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 

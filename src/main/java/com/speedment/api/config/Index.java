@@ -17,12 +17,11 @@
 package com.speedment.api.config;
 
 import com.speedment.api.annotation.Api;
-import com.speedment.core.config.impl.utils.ConfigUtil;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Parent;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.IndexImpl;
+import com.speedment.core.config.IndexImpl;
 import groovy.lang.Closure;
 import java.util.function.Supplier;
 

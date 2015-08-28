@@ -18,7 +18,7 @@ package com.speedment.gui.util;
 
 import com.speedment.api.Speedment;
 import com.speedment.api.config.Project;
-import com.speedment.core.config.impl.utils.GroovyParser;
+import com.speedment.core.config.utils.GroovyParser;
 import com.speedment.util.Settings;
 import com.speedment.gui.controllers.AlertController;
 import com.speedment.gui.controllers.SceneController;

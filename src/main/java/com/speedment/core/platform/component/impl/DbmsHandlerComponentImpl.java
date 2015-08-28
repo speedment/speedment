@@ -19,7 +19,7 @@ package com.speedment.core.platform.component.impl;
 import com.speedment.api.config.Dbms;
 import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.core.config.dbms.StandardDbmsType;
-import com.speedment.core.db.DbmsHandler;
+import com.speedment.api.db.DbmsHandler;
 import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import java.util.Map;

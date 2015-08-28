@@ -28,7 +28,7 @@ import com.speedment.api.config.PrimaryKeyColumn;
 import com.speedment.api.config.Project;
 import com.speedment.api.config.Schema;
 import com.speedment.api.config.Table;
-import com.speedment.core.config.impl.ProjectImpl;
+import com.speedment.core.config.ProjectImpl;
 import com.speedment.core.platform.SpeedmentImpl;
 import org.junit.Before;
 

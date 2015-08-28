@@ -16,6 +16,7 @@
  */
 package com.speedment.core.code.model.java.entity;
 
+import com.speedment.core.code.entity.EntityTranslator;
 import com.speedment.api.Speedment;
 import com.speedment.codegen.base.Generator;
 import com.speedment.codegen.java.JavaGenerator;

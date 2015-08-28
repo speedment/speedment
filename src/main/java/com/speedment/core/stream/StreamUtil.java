@@ -21,7 +21,7 @@
  */
 package com.speedment.core.stream;
 
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.exception.SpeedmentException;
 import static com.speedment.util.Util.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;

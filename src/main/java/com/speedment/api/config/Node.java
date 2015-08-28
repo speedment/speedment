@@ -21,6 +21,7 @@ import com.speedment.api.config.aspects.Enableable;
 import com.speedment.api.config.aspects.Nameable;
 import com.speedment.api.config.aspects.Parent;
 import com.speedment.api.annotation.Api;
+import com.speedment.api.config.aspects.Ordinable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;

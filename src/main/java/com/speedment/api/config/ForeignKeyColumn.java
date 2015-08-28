@@ -22,8 +22,8 @@ import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Columnable;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.ForeignKeyColumnImpl;
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.core.config.ForeignKeyColumnImpl;
+import com.speedment.api.exception.SpeedmentException;
 import java.util.function.Supplier;
 
 /**

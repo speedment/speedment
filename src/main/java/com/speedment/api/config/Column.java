@@ -21,7 +21,7 @@ import com.speedment.api.annotation.Api;
 import com.speedment.api.annotation.External;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.aspects.Enableable;
-import com.speedment.core.config.impl.ColumnImpl;
+import com.speedment.core.config.ColumnImpl;
 import com.speedment.api.config.aspects.ColumnCompressionTypeable;
 import com.speedment.api.config.aspects.FieldStorageTypeable;
 import java.util.Optional;

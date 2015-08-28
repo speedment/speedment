@@ -22,6 +22,7 @@ import com.speedment.api.field.operators.StandardUnaryOperator;
 import static com.speedment.api.field.operators.StandardUnaryOperator.IS_NOT_NULL;
 import static com.speedment.api.field.operators.StandardUnaryOperator.IS_NULL;
 import com.speedment.api.field.builders.UnaryPredicateBuilder;
+import com.speedment.api.field.operators.UnaryOperator;
 
 import java.util.Optional;
 
@@ -47,10 +48,18 @@ public abstract class UnaryPredicateBuilderView implements Transform<UnaryPredic
 
     @Override
     public Optional<String> transform(Generator gen, UnaryPredicateBuilder model) {
-        return Optional.of("("
-            + model.getField().getColumnName()
-            + render(model.getOperator())
-            + ")"
-        );
+        final UnaryOperator uo = model.getUnaryOperator();
+        if (uo instanceof StandardUnaryOperator) {
+            
+            @SuppressWarnings("unchecked")
+            final StandardUnaryOperator suo = (StandardUnaryOperator) uo;
+            
+            return Optional.of("("
+                + model.getField().getColumnName()
+                + render(suo)
+                + ")"
+            );
+            
+        } else return Optional.empty();
     }
 }

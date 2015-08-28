@@ -16,7 +16,7 @@
  */
 package com.speedment.util;
 
-import com.speedment.core.manager.metaresult.MetaResult;
+import com.speedment.api.db.MetaResult;
 import static com.speedment.util.Util.instanceNotAllowed;
 import java.util.function.Consumer;
 

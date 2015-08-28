@@ -16,6 +16,7 @@
  */
 package com.speedment.core.manager.metaresult;
 
+import com.speedment.api.db.MetaResult;
 import java.util.Optional;
 
 /**

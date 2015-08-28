@@ -18,7 +18,7 @@ package com.speedment.core.manager.sql;
 
 import com.speedment.codegen.base.Generator;
 import com.speedment.core.manager.sql.generator.SQLGenerator;
-import com.speedment.core.db.AsynchronousQueryResult;
+import com.speedment.api.db.AsynchronousQueryResult;
 import com.speedment.core.field.builders.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
 import com.speedment.api.field.builders.PredicateBuilder;
 import com.speedment.util.Cast;
@@ -38,11 +38,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.joining;
 import com.speedment.api.field.builders.ComparablePredicateBuilder;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -98,7 +95,7 @@ public class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             .map(pb -> Cast.cast(pb, ComparablePredicateBuilder.class))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(ComparablePredicateBuilder::getValueAsObject)
+            .map(ComparablePredicateBuilder::getValue)
             .collect(toList());
 
         qr.setSql(sql);

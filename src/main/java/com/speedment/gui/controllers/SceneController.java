@@ -17,7 +17,7 @@
 package com.speedment.gui.controllers;
 
 import com.speedment.api.Speedment;
-import com.speedment.core.code.model.java.MainGenerator;
+import com.speedment.core.code.MainGenerator;
 import com.speedment.api.config.Project;
 import com.speedment.api.config.aspects.Child;
 import com.speedment.api.config.Node;

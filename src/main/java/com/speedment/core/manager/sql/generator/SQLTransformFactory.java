@@ -18,8 +18,8 @@ package com.speedment.core.manager.sql.generator;
 
 import com.speedment.codegen.base.DefaultTransformFactory;
 import com.speedment.api.field.builders.UnaryPredicateBuilder;
-import com.speedment.core.field.reference.string.StringBinaryPredicateBuilder;
 import com.speedment.api.field.builders.ComparablePredicateBuilder;
+import com.speedment.api.field.builders.StringPredicateBuilder;
 
 /**
  *
@@ -30,7 +30,7 @@ public class SQLTransformFactory extends DefaultTransformFactory {
     public SQLTransformFactory() {
         super(SQLTransformFactory.class.getSimpleName());
         install(UnaryPredicateBuilder.class, UnaryPredicateBuilderView.class);
-		install(ComparablePredicateBuilder.class, BinaryPredicateBuilderView.class);
-		install(StringBinaryPredicateBuilder.class, StringBinaryPredicateBuilderView.class);
+		install(ComparablePredicateBuilder.class, ComparablePredicateBuilderView.class);
+		install(StringPredicateBuilder.class, StringPredicateBuilderView.class);
     }
 }

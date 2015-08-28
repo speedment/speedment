@@ -23,16 +23,15 @@ import com.speedment.api.config.Schema;
 import com.speedment.api.config.Table;
 import com.speedment.api.config.parameters.DbmsType;
 import com.speedment.core.manager.AbstractManager;
-import com.speedment.core.manager.metaresult.MetaResult;
-import com.speedment.core.manager.metaresult.SqlMetaResult;
-import com.speedment.core.db.AsynchronousQueryResult;
-import com.speedment.core.db.DbmsHandler;
-import com.speedment.core.db.impl.SqlFunction;
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.db.MetaResult;
+import com.speedment.core.manager.metaresult.SqlMetaResultImpl;
+import com.speedment.api.db.AsynchronousQueryResult;
+import com.speedment.api.db.DbmsHandler;
+import com.speedment.api.db.SqlFunction;
+import com.speedment.api.exception.SpeedmentException;
 import com.speedment.core.platform.SpeedmentImpl;
 import com.speedment.core.platform.component.DbmsHandlerComponent;
 import com.speedment.core.platform.component.JavaTypeMapperComponent;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
 import com.speedment.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.core.stream.builder.pipeline.BasePipeline;
 import java.math.BigDecimal;
@@ -58,20 +57,6 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
-import static com.speedment.core.stream.OptionalUtil.unwrap;
 import static com.speedment.core.stream.OptionalUtil.unwrap;
 
 /**
@@ -233,9 +218,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Consumer<MetaResult<ENTITY>> listener
     ) throws SpeedmentException {
-        SqlMetaResult<ENTITY> meta = null;
+        SqlMetaResultImpl<ENTITY> meta = null;
         if (listener != null) {
-            meta = new SqlMetaResult<ENTITY>().setQuery(sql).setParameters(values);
+            meta = new SqlMetaResultImpl<ENTITY>().setQuery(sql).setParameters(values);
         }
         try {
             executeUpdate(entity, sql, values, generatedKeyconsumer);

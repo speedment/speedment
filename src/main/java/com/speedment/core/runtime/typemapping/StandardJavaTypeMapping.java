@@ -16,7 +16,7 @@
  */
 package com.speedment.core.runtime.typemapping;
 
-import com.speedment.core.exception.SpeedmentException;
+import com.speedment.api.exception.SpeedmentException;
 import static com.speedment.core.runtime.typemapping.JavaTypeMapping.unableToMapLong;
 import static com.speedment.core.runtime.typemapping.JavaTypeMapping.unableToMapString;
 import com.speedment.util.LongUtil;

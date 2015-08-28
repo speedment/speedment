@@ -19,7 +19,7 @@ package com.speedment.api.config.parameters;
 import com.speedment.api.Speedment;
 import com.speedment.api.annotation.Api;
 import com.speedment.api.config.Dbms;
-import com.speedment.core.db.DbmsHandler;
+import com.speedment.api.db.DbmsHandler;
 import java.util.Optional;
 import java.util.Set;
 
