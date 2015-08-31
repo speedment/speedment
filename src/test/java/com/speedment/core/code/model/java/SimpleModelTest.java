@@ -21,15 +21,15 @@
  */
 package com.speedment.core.code.model.java;
 
-import com.speedment.api.Speedment;
-import com.speedment.api.config.Column;
-import com.speedment.api.config.Dbms;
-import com.speedment.api.config.PrimaryKeyColumn;
-import com.speedment.api.config.Project;
-import com.speedment.api.config.Schema;
-import com.speedment.api.config.Table;
-import com.speedment.core.config.ProjectImpl;
-import com.speedment.core.platform.SpeedmentImpl;
+import com.speedment.Speedment;
+import com.speedment.config.Column;
+import com.speedment.config.Dbms;
+import com.speedment.config.PrimaryKeyColumn;
+import com.speedment.config.Project;
+import com.speedment.config.Schema;
+import com.speedment.config.Table;
+import com.speedment.internal.core.config.ProjectImpl;
+import com.speedment.internal.core.platform.SpeedmentImpl;
 import org.junit.Before;
 
 /**

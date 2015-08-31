@@ -211,6 +211,7 @@
                 <configuration>
 <!--                    <verbose>true</verbose>-->
                     <docfilessubdirs>true</docfilessubdirs>
+                    <excludePackageNames>com.speedment.internal.*</excludePackageNames>
                 </configuration>
                 <executions>
                     <execution>

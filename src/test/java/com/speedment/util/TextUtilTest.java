@@ -21,6 +21,7 @@
  */
 package com.speedment.util;
 
+import com.speedment.internal.util.TextUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;

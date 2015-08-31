@@ -21,6 +21,7 @@
  */
 package com.speedment.core.runtime.typemapping;
 
+import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

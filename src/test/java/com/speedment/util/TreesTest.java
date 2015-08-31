@@ -21,9 +21,10 @@
  */
 package com.speedment.util;
 
-import static com.speedment.util.Trees.TraversalOrder.BREADTH_FIRST;
-import static com.speedment.util.Trees.TraversalOrder.DEPTH_FIRST_POST;
-import static com.speedment.util.Trees.TraversalOrder.DEPTH_FIRST_PRE;
+import com.speedment.internal.util.Trees;
+import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
+import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_POST;
+import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_PRE;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -67,13 +68,15 @@ public class TreesTest {
     public void testTraverse() {
         System.out.println("traverse");
 
+        final Node nodeE = new Node("E");
+        
         // http://en.wikipedia.org/wiki/Tree_traversal
         final Node f = new Node("F",
                 new Node("B",
                         new Node("A"),
                         new Node("D",
                                 new Node("C"),
-                                new Node("E")
+                                nodeE
                         )
                 ),
                 new Node("G",
@@ -86,8 +89,8 @@ public class TreesTest {
         test(f, DEPTH_FIRST_POST, "A,C,E,D,B,H,I,G,F");
         test(f, BREADTH_FIRST, "F,B,G,A,D,I,C,E,H");
 
-        Stream.of(Trees.TraversalOrder.values()).forEach(to -> {
-            test(null, to, "");
+        Stream.of(Trees.TraversalOrder.values()).forEach(traversalOrder -> {
+            test(nodeE, traversalOrder, "E");
         });
 
     }

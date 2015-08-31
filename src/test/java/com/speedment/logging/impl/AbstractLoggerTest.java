@@ -21,9 +21,10 @@
  */
 package com.speedment.logging.impl;
 
-import com.speedment.logging.Level;
-import com.speedment.logging.LoggerEventListener;
-import com.speedment.logging.LoggerFormatter;
+import com.speedment.internal.logging.impl.AbstractLogger;
+import com.speedment.internal.logging.Level;
+import com.speedment.internal.logging.LoggerEventListener;
+import com.speedment.internal.logging.LoggerFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -179,7 +180,7 @@ public class AbstractLoggerTest {
         Optional<Throwable> throwable = null;
         Supplier<String> supplier = null;
         AbstractLogger instance = null;
-        instance.log(msgLevel, throwable, supplier);
+        //instance.log(msgLevel, throwable, supplier);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -196,8 +197,8 @@ public class AbstractLoggerTest {
         Optional<Throwable> throwable = null;
         AbstractLogger instance = null;
         String expResult = "";
-        String result = instance.fixMessage(level, msg, throwable);
-        assertEquals(expResult, result);
+        //String result = instance.fixMessage(level, msg, throwable);
+        //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -308,7 +309,8 @@ public class AbstractLoggerTest {
         private final List<String> output;
 
         public AbstractLoggerTestImpl() {
-            super("", null);
+            super("", (Level level1, String name1, String message) -> message 
+            );
             output = new ArrayList<>();
         }
 

@@ -16,9 +16,9 @@
  */
 package com.speedment.core.code.model.java;
 
-import com.speedment.core.code.MainGenerator;
-import com.speedment.api.Speedment;
-import com.speedment.core.platform.SpeedmentImpl;
+import com.speedment.internal.core.code.MainGenerator;
+import com.speedment.Speedment;
+import com.speedment.internal.core.platform.SpeedmentImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 

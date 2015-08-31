@@ -21,6 +21,8 @@
  */
 package com.speedment.util.tuple;
 
+import com.speedment.internal.util.tuple.Tuple2OfNullables;
+import com.speedment.internal.util.tuple.Tuples;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

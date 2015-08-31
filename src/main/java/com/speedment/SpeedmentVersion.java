@@ -16,7 +16,7 @@
  */
 package com.speedment;
 
-import static com.speedment.util.Util.instanceNotAllowed;
+import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * This class holds the parameters normally held in the JAR MANIFEST. By holding

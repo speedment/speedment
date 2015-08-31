@@ -18,7 +18,7 @@
 package com.speedment.core.runtime;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.core.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
