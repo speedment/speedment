@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.core.code.model.java;
+package com.speedment.internal.core.code.model.java;
 
 import com.speedment.Speedment;
 import com.speedment.config.Column;

@@ -22,9 +22,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -70,7 +71,7 @@ public final class MethodsParser {
     private static Set<Method> getMethods(Class<?> clazz, Predicate<Method> filter) {
         requireNonNull(clazz);
         requireNonNull(filter);
-        return addMethods(new HashSet<>(), clazz, filter);
+        return new HashSet<>(addMethods(new HashMap<>(), clazz, filter).values());
     }
 
     private static boolean isExternal(Method method) {
@@ -152,16 +153,27 @@ public final class MethodsParser {
             .isPresent();
     }
 
-    private static Set<Method> addMethods(Set<Method> methods, Class<?> clazz, Predicate<Method> filter) {
+    private static Map<String, Method> addMethods(Map<String, Method> methods, Class<?> clazz, Predicate<Method> filter) {
         requireNonNull(methods);
         requireNonNull(filter);
+        // clazz nullable (why?)
         if (clazz == Object.class) {
+            return methods;
+        }
+        if (clazz == null) {
             return methods;
         }
         Stream.of(clazz.getDeclaredMethods())
             .filter(filter)
-            .forEach(methods::add);
+            .forEach(m->{
+                methods.putIfAbsent(m.getName(), m); // Put only the most recent concrete version of the method
+            });
         addMethods(methods, clazz.getSuperclass(), filter); // Recursively add the superclass methods
+        Stream.of(clazz.getInterfaces()).forEach(i-> {
+            addMethods(methods, i, filter); // Recursively add the extended interfaces (because they can contain default methods)
+        });
         return methods;
     }
+    
+    
 }

@@ -139,7 +139,7 @@ public final class SceneController implements Initializable {
         this.speedment = requireNonNull(speedment);
         this.stage     = requireNonNull(stage);
         this.project   = requireNonNull(project);
-        this.savedFile = requireNonNull(savedFile);
+        this.savedFile = savedFile; // Nullable
     }
 
     /**
@@ -150,7 +150,7 @@ public final class SceneController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        requireNonNulls(url, rb);
+        requireNonNull(url);
         propertyMgr = new TablePropertyManager(speedment, treeHierarchy);
 
         populateTree(project);
@@ -304,7 +304,7 @@ public final class SceneController implements Initializable {
      * @return           a reference to this controller
      */
     public SceneController setLastSaved(File savedFile) {
-        this.savedFile = requireNonNull(savedFile);
+        this.savedFile = savedFile;
         return this;
     }
 
@@ -329,7 +329,8 @@ public final class SceneController implements Initializable {
 
             @Override
             protected void updateItem(Child<?> item, boolean empty) {
-                super.updateItem(requireNonNull(item), requireNonNull(empty));
+                // item nullable
+                super.updateItem(item, requireNonNull(empty));
 
                 if (item == null || empty) {
                     setGraphic(null);

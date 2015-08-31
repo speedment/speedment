@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.core.runtime.typemapping;
+package com.speedment.internal.core.runtime.typemapping;
 
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import org.junit.After;

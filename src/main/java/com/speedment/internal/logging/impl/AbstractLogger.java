@@ -103,7 +103,7 @@ public abstract class AbstractLogger implements Logger {
         final StringBuilder sb = new StringBuilder(formatter.apply(level, name, msg));
         throwable.ifPresent(t -> {
             final StringWriter writer = new StringWriter();
-            final PrintWriter pipe = new PrintWriter(new StringWriter());
+            final PrintWriter pipe = new PrintWriter(writer);
             t.printStackTrace(pipe);
             sb.append("\n").append(writer.toString());
         });

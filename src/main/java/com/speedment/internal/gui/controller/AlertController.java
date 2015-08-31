@@ -69,7 +69,6 @@ public final class AlertController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         requireNonNull(url);
-        requireNonNull(rb);
         title.setText(strTitle);
         message.setText(strMessage);
         buttonClose.setOnAction(ev -> dialog.close());

@@ -69,7 +69,6 @@ public final class AboutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         requireNonNull(url);
-        requireNonNull(rb);
         close.setOnAction(ev -> popup.close());
         version.setText(SpeedmentVersion.getImplementationVersion());
         external.setText(

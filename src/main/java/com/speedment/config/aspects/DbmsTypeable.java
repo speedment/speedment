@@ -32,7 +32,7 @@ public interface DbmsTypeable extends HasSpeedment {
 
     void setType(DbmsType dbmsType);
     
-    @External(type = DbmsType.class)
+    @External(type = String.class)
     String getTypeName();
     
     /**
@@ -41,6 +41,6 @@ public interface DbmsTypeable extends HasSpeedment {
      * @throws      IllegalArgumentException if a DbmsType for the given 
      *              dbmsTypeName could not be found
      */
-    @External(type = DbmsType.class)
+    @External(type = String.class)
     void setTypeName(String name);
 }

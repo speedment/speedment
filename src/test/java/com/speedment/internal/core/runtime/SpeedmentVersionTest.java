@@ -15,7 +15,7 @@
  * the License.
  */
 
-package com.speedment.core.runtime;
+package com.speedment.internal.core.runtime;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;

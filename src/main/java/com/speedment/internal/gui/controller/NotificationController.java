@@ -86,7 +86,7 @@ public final class NotificationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        requireNonNulls(url, rb);
+        requireNonNull(url);
         message.setText(text);
         message.setStyle("background:" + type.getBackgroundColor());
         

@@ -75,5 +75,10 @@ public interface Speedment {
      * @throws SpeedmentException if no Manager exists for the given entityClass
      */
     <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException;
+    
+    /**
+     * Stops the Speedment instance and deallocates any allocated resources.
+     */
+    public void stop();
 
 }

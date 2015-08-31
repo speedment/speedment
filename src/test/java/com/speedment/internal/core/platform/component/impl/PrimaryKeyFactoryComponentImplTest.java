@@ -19,11 +19,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.core.platform.component.impl;
+package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent;
-import com.speedment.util.AssertUtil;
+import com.speedment.internal.util.AssertUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

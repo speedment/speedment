@@ -84,7 +84,6 @@ public final class ActionChoiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         requireNonNull(url);
-        requireNonNull(rb);
         createHoverEffect(imgGenerate, labelGenerate, GENERATE_ORIGINAL, 
             GENERATE_HOVER, onGenerate);
         

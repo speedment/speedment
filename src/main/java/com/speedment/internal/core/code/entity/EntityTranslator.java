@@ -29,7 +29,6 @@ import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.THROWS;
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
@@ -147,8 +146,10 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-//                final Type fieldClassType = Type.of(Formatting.packageName(fu.getEmt().ENTITY.getType().getName()).get() + "." + typeName(fu.getTable()) + "Field");
-//                file.add(Import.of(fieldClassType));
+                file.add(Import.of(fu.getForeignEmt().ENTITY.getType()));
+//                Import imp = Import.of(fu.getEmt().ENTITY.getType());
+//                System.out.println("imp=" + imp.getType().getName());
+//                file.add(imp);
                 fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
                 // Record for later use in the construction of aggregate streamers
@@ -244,151 +245,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
             }
         });
 
-        // Requred for persist() et. al
-//        file.add(Import.of(Type.of(Platform.class)));
-//        file.add(Import.of(Type.of(ManagerComponent.class)));
-//        file.add(Import.of(Type.of(Optional.class)));
-
-        /*
-
-        iface
-            //.add(entityAnnotation(file))
-            //.add(builder())
-            //.add(toBuilder())
-            .add(toJson())
-            .add(EntityTranslatorSupport.toJsonExtended(ENTITY.getType()).default_().add("return jsonFormatter.apply(this);"))
-            //.add(stream())
-            .add(persist())
-            .add(update())
-            .add(remove())
-            .add(persistWithListener())
-            .add(updateWithListener())
-            .add(removeWithListener());
-//                .add(manager()); */
         return iface;
-    }
-
-//    private Optional<ForeignKeyColumn> getForeignKey(Column column) {
-//        return table().streamOf(ForeignKey.class)
-//            .filter(ForeignKey::isEnabled)
-//            .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
-//            .filter(ForeignKeyColumn::isEnabled)
-//            .filter(fkc -> fkc.getColumn().equals(column))
-//            .findFirst();
-//
-//    }
-//    private Method manager() {
-//        return Method.of("manager", MANAGER.getType()).static_()
-//                .add("return Platform.get().get(ManagerComponent.class).manager(" + MANAGER.getName() + ".class);");
-//    }
-    private Method persist() {
-        return EntityTranslatorSupport.persist(ENTITY.getType())
-            .set(persistJavadoc("")
-            );
-
-    }
-
-    private Method update() {
-        return EntityTranslatorSupport.update(ENTITY.getType())
-            .set(updateJavadoc("")
-            );
-    }
-
-    private Method remove() {
-        return EntityTranslatorSupport.remove(ENTITY.getType())
-            .set(removeJavadoc(""));
-    }
-
-    private Javadoc persistJavadoc(String extraInfo) {
-        return Javadoc.of("Persists the provided entity to the underlying database and returns a "
-            + "potentially updated entity.If the persistence fails for any reason, an "
-            + "unchecked {@link SpeedmentException} is thrown. "
-            + " <p> "
-            + extraInfo
-            + "It is unspecified if the returned updated entity is the same provided "
-            + "entity instance or another entity instance. It is erroneous to assume "
-            + "either, so you should use only the returned entity after the method has "
-            + "been called. However, it is guaranteed that the provided entity is "
-            + "untouched if an exception is thrown. "
-            + " <p> "
-            + "The fields of returned entity instance may differ from the provided "
-            + "entity fields due to auto generated column(s) or because of any other "
-            + "modification that the underlying database imposed on the persisted "
-            + "entity."
-        )
-            .add(RETURN.setText("an entity reflecting the result of the persisted entity"))
-            .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
-
-    }
-
-    private Javadoc updateJavadoc(String extraInfo) {
-        return Javadoc.of("Updates the provided entity in the underlying database and returns a "
-            + "potentially updated entity.If the update fails for any reason, an "
-            + "unchecked {@link SpeedmentException} is thrown. "
-            + " <p> "
-            + extraInfo
-            + "It is unspecified if the returned updated entity is the same provided "
-            + "entity instance or another entity instance. It is erroneous to assume "
-            + "either, so you should use only the returned entity after the method has "
-            + "been called. However, it is guaranteed that the provided entity is "
-            + "untouched if an exception is thrown. "
-            + " <p> "
-            + "The fields of returned entity instance may differ from the provided "
-            + "entity fields due to auto generated column(s) or because of any other "
-            + "modification that the underlying database imposed on the persisted "
-            + "entity."
-            + " <p> "
-            + "Entities are uniquely identified by their primary key(s)."
-        )
-            .add(RETURN.setText("an entity reflecting the result of the updated entity"))
-            .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
-
-    }
-
-    private Javadoc removeJavadoc(String extraInfo) {
-        return Javadoc.of("Removes the provided entity from the underlying database and returns the "
-            + "provided entity instance.  If the deletion fails for any reason, an "
-            + "unchecked {@link SpeedmentException} is thrown. "
-            + " <p> "
-            + extraInfo
-            + "Entities are uniquely identified by their primary key(s)."
-        )
-            .add(RETURN.setText("the provided entity instance"))
-            .add(THROWS.setText("SpeedmentException if the underlying database throws an exception (e.g. SQLException)"));
-    }
-
-    private Method persistWithListener() {
-        return EntityTranslatorSupport.persistWithListener(ENTITY.getType())
-            .set(addConsumerResult(updateJavadoc(
-                "The {@link MetaResult} {@link Consumer} provided will be called, with meta data regarding the underlying "
-                + "database transaction, after the persistence was attempted."
-                + " <p> "
-            )
-            ));
-    }
-
-    private Method updateWithListener() {
-        return EntityTranslatorSupport.updateWithListener(ENTITY.getType())
-            .set(addConsumerResult(updateJavadoc(
-                "The {@link MetaResult} {@link Consumer} provided will be called, with meta data regarding the underlying "
-                + "database transaction, after the update was attempted."
-                + " <p> "
-            )
-            ));
-    }
-
-    private Method removeWithListener() {
-        return EntityTranslatorSupport.removeWithListener(ENTITY.getType())
-            .set(addConsumerResult(removeJavadoc(
-                "The {@link MetaResult} {@link Consumer} provided will be called, with meta data regarding the underlying "
-                + "database transaction, after the removal was attempted."
-                + " <p> "
-            ))
-            );
-    }
-
-    private Javadoc addConsumerResult(Javadoc javadoc) {
-        return javadoc.add(PARAM.setValue(EntityTranslatorSupport.CONSUMER_NAME).setText("the {@link MetaResult} {@link Consumer} to use"));
     }
 
     @Override

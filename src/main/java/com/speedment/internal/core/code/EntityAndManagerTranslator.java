@@ -80,8 +80,8 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
 
     public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
             GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
-            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType()),
-            GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
+            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType());
+            //GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
 
     public EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);

@@ -116,4 +116,8 @@ public final class SpeedmentImpl extends DefaultClassMapper<Component> implement
         return get(ManagerComponent.class).managerOf(entityClass);
     }
 
+    @Override
+    public void stop() {
+        // do nothing yet!
+    }
 }

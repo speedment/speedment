@@ -22,11 +22,13 @@ import static com.speedment.internal.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.internal.util.JavaLanguage;
 import com.speedment.SpeedmentVersion;
 import com.speedment.Speedment;
+import com.speedment.config.Dbms;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import static java.util.Objects.requireNonNull;
@@ -68,6 +70,11 @@ public class GroovyParser {
             .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                 .ifPresent(t -> sb.add(indent(indentLevel) + t))
             );
+
+//        if (node instanceof Dbms) {
+//            System.out.println("found DBMS:");
+//            MethodsParser.streamOfExternalNoneSecretGetters(node.getClass()).map(Method::toString).forEach(System.out::println);
+//        }
 
         Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
             -> n.stream().forEach(c -> {

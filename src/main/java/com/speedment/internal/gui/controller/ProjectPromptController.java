@@ -98,7 +98,7 @@ public final class ProjectPromptController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        requireNonNulls(url, rb);
+        requireNonNull(url);
         try {
             if (Settings.inst().get("hide_open_option", true)) {
                 container.getChildren().remove(openContainer);

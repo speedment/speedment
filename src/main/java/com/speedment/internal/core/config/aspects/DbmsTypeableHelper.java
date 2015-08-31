@@ -16,9 +16,8 @@
  */
 package com.speedment.internal.core.config.aspects;
 
-import com.speedment.config.aspects.DbmsTypeable;
-import com.speedment.config.parameters.DbmsType;
 import com.speedment.annotation.External;
+import com.speedment.config.aspects.DbmsTypeable;
 import com.speedment.internal.core.platform.component.DbmsHandlerComponent;
 import static java.util.Objects.requireNonNull;
 
@@ -28,7 +27,6 @@ import static java.util.Objects.requireNonNull;
  */
 public interface DbmsTypeableHelper extends DbmsTypeable {
 
-    @External(type = DbmsType.class)
     @Override
     default String getTypeName() {
         return getType().getName();
@@ -40,7 +38,6 @@ public interface DbmsTypeableHelper extends DbmsTypeable {
      * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
      * could not be found
      */
-    @External(type = DbmsType.class)
     @Override
     default void setTypeName(String name) {
         requireNonNull(name);

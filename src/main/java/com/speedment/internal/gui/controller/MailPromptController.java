@@ -72,7 +72,7 @@ public final class MailPromptController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        requireNonNulls(url, rb);
+        requireNonNull(url);
         fieldMail.textProperty().addListener((ov, o, n) -> {
             buttonOkey.setDisable(IS_INVALID_MAIL.test(n));
         });

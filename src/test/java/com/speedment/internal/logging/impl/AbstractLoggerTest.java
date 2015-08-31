@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.logging.impl;
+package com.speedment.internal.logging.impl;
 
 import com.speedment.internal.logging.impl.AbstractLogger;
 import com.speedment.internal.logging.Level;
@@ -83,16 +83,16 @@ public class AbstractLoggerTest {
      * Test of log method, of class AbstractLogger.
      */
     @Test
-    @Ignore
     public void testLog_3args_1() {
         System.out.println("log");
-        Level level = null;
-        Optional<Throwable> throwable = null;
-        String message = "";
-        AbstractLogger instance = null;
-        instance.log(Level.ERROR, throwable, message);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Level level = Level.ERROR;
+        Optional<Throwable> throwable = Optional.of(new IllegalArgumentException("Olle"));
+        String message = "Stor Stina";
+        instance.log(level, throwable, message);
+
+        List<String> output = instance.getOutput();
+        assertEquals(1, output.size());
+        assertTrue(output.get(0).contains("Olle"));
     }
 
     /**
@@ -309,7 +309,7 @@ public class AbstractLoggerTest {
         private final List<String> output;
 
         public AbstractLoggerTestImpl() {
-            super("", (Level level1, String name1, String message) -> message 
+            super("", (Level level1, String name1, String message) -> message
             );
             output = new ArrayList<>();
         }

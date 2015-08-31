@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.gui.util;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -30,39 +29,44 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class FadeAnimation {
-	
-	public final static double SLOW = 1000, NORMAL = 500, FAST = 200;
-	
-	public static <T extends Node> T fadeOut(T node) {
+
+    public final static double SLOW = 1000, NORMAL = 500, FAST = 200;
+
+    public static <T extends Node> T fadeOut(T node) {
         requireNonNull(node);
-		return fadeOut(node, null);
-	}
-	
-	public static <T extends Node> T fadeIn(T node) {
+        return fadeOut(node, null);
+    }
+
+    public static <T extends Node> T fadeIn(T node) {
         requireNonNull(node);
-		return fadeIn(node, null);
-	}
-	
-	public static <T extends Node> T fadeOut(T node, EventHandler<ActionEvent> onFinished) {
-        requireNonNulls(node, onFinished);
-		return fade(node, 1.0, 0.0, FAST, onFinished);
-	}
-	
-	public static <T extends Node> T fadeIn(T node, EventHandler<ActionEvent> onFinished) {
-        requireNonNulls(node, onFinished);
-		return fade(node, 0.0, 1.0, FAST, onFinished);
-	}
-	
-	private static <T extends Node> T fade(T node, double from, double to, double duration, EventHandler<ActionEvent> onFinished) {
-        requireNonNulls(node, onFinished);
-		node.setOpacity(from);
-		final FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
-		ft.setFromValue(from);
-		ft.setToValue(to);
-		ft.play();
-		ft.setOnFinished(onFinished);
-		return node;
-	}
-    
-    private FadeAnimation() {instanceNotAllowed(getClass());}
+        return fadeIn(node, null);
+    }
+
+    public static <T extends Node> T fadeOut(T node, EventHandler<ActionEvent> onFinished) {
+        requireNonNull(node);
+        //onFinished nullable
+        return fade(node, 1.0, 0.0, FAST, onFinished);
+    }
+
+    public static <T extends Node> T fadeIn(T node, EventHandler<ActionEvent> onFinished) {
+        requireNonNull(node);
+        //onFinished nullable
+        return fade(node, 0.0, 1.0, FAST, onFinished);
+    }
+
+    private static <T extends Node> T fade(T node, double from, double to, double duration, EventHandler<ActionEvent> onFinished) {
+        requireNonNull(node);
+        //onFinished nullable
+        node.setOpacity(from);
+        final FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
+        ft.setFromValue(from);
+        ft.setToValue(to);
+        ft.play();
+        ft.setOnFinished(onFinished);
+        return node;
+    }
+
+    private FadeAnimation() {
+        instanceNotAllowed(getClass());
+    }
 }

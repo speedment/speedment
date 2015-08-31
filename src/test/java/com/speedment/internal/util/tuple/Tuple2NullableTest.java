@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.util.tuple;
+package com.speedment.internal.util.tuple;
 
 import com.speedment.internal.util.tuple.Tuple2OfNullables;
 import com.speedment.internal.util.tuple.Tuples;

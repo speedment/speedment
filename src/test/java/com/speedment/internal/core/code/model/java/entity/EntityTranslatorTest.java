@@ -14,14 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.core.code.model.java.entity;
+package com.speedment.internal.core.code.model.java.entity;
 
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.core.code.model.java.SimpleModelTest;
+import com.speedment.internal.core.code.model.java.SimpleModelTest;
 import com.speedment.config.Table;
 import java.util.Optional;
 import org.junit.Test;
