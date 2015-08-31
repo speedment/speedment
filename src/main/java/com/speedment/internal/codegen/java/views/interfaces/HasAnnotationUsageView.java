@@ -21,7 +21,7 @@ import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.interfaces.HasAnnotationUsage;
-import com.speedment.internal.codegen.util.CodeCombiner;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -44,6 +44,6 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
      */
     default String renderAnnotations(Generator gen, M model) {
         return gen.onEach(model.getAnnotations())
-            .collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl()));
+            .collect(joinIfNotEmpty(nl(), EMPTY, nl()));
     }
 }

@@ -21,8 +21,8 @@ import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.DependencyManager;
 import com.speedment.internal.codegen.base.Transform;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import java.util.Optional;
-import com.speedment.internal.codegen.util.CodeCombiner;
 import java.util.Collections;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
@@ -64,7 +64,7 @@ public final class TypeView implements Transform<Type, String> {
         
 		return Optional.of(
 			name + gen.onEach(model.getGenerics()).collect(
-				CodeCombiner.joinIfNotEmpty(
+				joinIfNotEmpty(
 					COMMA_SPACE, 
 					SS, 
 					SE

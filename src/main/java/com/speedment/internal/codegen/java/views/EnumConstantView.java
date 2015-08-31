@@ -20,8 +20,8 @@ import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.models.EnumConstant;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import java.util.Optional;
-import com.speedment.internal.codegen.util.CodeCombiner;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -43,7 +43,7 @@ public final class EnumConstantView implements Transform<EnumConstant, String> {
 			model.getName() + 
 			(model.getValues().isEmpty() ? EMPTY : SPACE) +
 			gen.onEach(model.getValues()).collect(
-				CodeCombiner.joinIfNotEmpty(
+				joinIfNotEmpty(
 					COMMA_SPACE, 
 					PS, 
 					PE

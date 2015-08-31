@@ -18,11 +18,13 @@ package com.speedment.internal.codegen.java.views;
 
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Initalizer;
-import com.speedment.internal.codegen.util.CodeCombiner;
-import java.util.Optional;
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Transform;
+
+import java.util.Optional;
+
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 
 /**
  * Transforms from an {@link Initalizer} to java code.
@@ -40,7 +42,7 @@ public final class InitalizerView implements Transform<Initalizer, String> {
         requireNonNull(model);
         
         return Optional.of(
-            gen.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+            gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
             block(model.getCode().stream())
         );
     }

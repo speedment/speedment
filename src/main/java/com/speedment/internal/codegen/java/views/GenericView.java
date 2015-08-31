@@ -21,8 +21,8 @@ import java.util.Optional;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.util.CodeCombiner;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 
 /**
  * Transforms from a {@link Generic} to java code.
@@ -49,7 +49,7 @@ public final class GenericView implements Transform<Generic, String> {
 		} else {
 			return Optional.of(
 				model.getLowerBound().orElse(EMPTY) +
-				gen.onEach(model.getUpperBounds()).collect(CodeCombiner.joinIfNotEmpty(AND, 
+				gen.onEach(model.getUpperBounds()).collect(joinIfNotEmpty(AND, 
 						model.getLowerBound().isPresent() ? 
 							model.getBoundType() == Generic.BoundType.EXTENDS ?
 							EXTENDS_STRING : SUPER_STRING

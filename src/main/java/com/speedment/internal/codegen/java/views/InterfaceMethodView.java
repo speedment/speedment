@@ -29,7 +29,7 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.models.InterfaceMethod;
 import static com.speedment.internal.codegen.lang.models.modifiers.Modifier.*;
-import com.speedment.internal.codegen.util.CodeCombiner;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,7 +53,7 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
         
 		return Optional.of(ifelse(gen.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
             
-            gen.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
+            gen.onEach(model.getAnnotations()).collect(joinIfNotEmpty(nl(), EMPTY, nl())) +
 					
 			// The only modifiers allowed are default and static
 			(model.getModifiers().contains(DEFAULT) ? gen.on(DEFAULT).orElse(EMPTY) + SPACE : EMPTY) +
@@ -65,7 +65,7 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
 				Collectors.joining(COMMA_SPACE, PS, PE)
 			) +
             
-            gen.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, EMPTY)) +
+            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(COMMA_SPACE, THROWS, EMPTY)) +
 					
 			// Append body only if it is either default or static.
 			(model.getModifiers().contains(DEFAULT) 
