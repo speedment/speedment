@@ -19,7 +19,6 @@ package com.speedment.field.operators;
 import com.speedment.annotation.Api;
 import java.util.Objects;
 import java.util.function.IntPredicate;
-import java.util.function.Predicate;
 
 /**
  *

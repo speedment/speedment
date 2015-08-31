@@ -146,10 +146,12 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
             // Add streamers from back pointing FK:s
             .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                file.add(Import.of(fu.getForeignEmt().ENTITY.getType()));
-//                Import imp = Import.of(fu.getEmt().ENTITY.getType());
-//                System.out.println("imp=" + imp.getType().getName());
-//                file.add(imp);
+                file.add(Import.of(fu.getEmt().ENTITY.getType()));
+
+                Import imp = Import.of(fu.getEmt().ENTITY.getType());
+                System.out.println("imp=" + imp.getType().getName());
+                file.add(imp);
+                
                 fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
                 // Record for later use in the construction of aggregate streamers
