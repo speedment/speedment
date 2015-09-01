@@ -3,6 +3,7 @@ package com.speedment.internal.core.stream;
 import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
  */
 public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     
-    private final Stream<Map.Entry<K, V>> inner;
+    private Stream<Map.Entry<K, V>> inner;
     
     public static <K, V> MapStream<K, V> of(Map.Entry<K, V> entry) {
         return new MapStream<>(Stream.of(entry));
@@ -62,7 +63,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     @Override
     public MapStream<K, V> filter(Predicate<? super Map.Entry<K, V>> predicate) {
-        inner.filter(predicate);
+        inner = inner.filter(predicate);
         return this;
     }
     
@@ -94,6 +95,30 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
                 e.getKey(), 
                 mapper.apply(e.getKey(), e.getValue())
             )
+        ));
+    }
+    
+    public <R> MapStream<R, V> flatMapKey(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
+        return new MapStream<>(inner.flatMap(e -> 
+            mapper.apply(e.getKey(), e.getValue())
+                .map(k ->
+                    new AbstractMap.SimpleEntry<>(
+                        k,
+                        e.getValue()
+                    )
+                )
+        ));
+    }
+    
+    public <R> MapStream<K, R> flatMapValue(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
+        return new MapStream<>(inner.flatMap(e -> 
+            mapper.apply(e.getKey(), e.getValue())
+                .map(v ->
+                    new AbstractMap.SimpleEntry<>(
+                        e.getKey(), 
+                        v
+                    )
+                )
         ));
     }
 
@@ -162,24 +187,24 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     @Override
     public MapStream<K, V> distinct() {
-        inner.distinct();
+        inner = inner.distinct();
         return this;
     }
 
     @Override
     public MapStream<K, V> sorted() {
-        inner.sorted();
+        inner = inner.sorted();
         return this;
     }
 
     @Override
     public MapStream<K, V> sorted(Comparator<? super Map.Entry<K, V>> comparator) {
-        inner.sorted(comparator);
+        inner = inner.sorted(comparator);
         return this;
     }
 
     public MapStream<K, V> sorted(ToIntBiFunction<? super K, ? super V> comparator) {
-        inner.sorted((e1, e2) -> 
+        inner = inner.sorted((e1, e2) -> 
             comparator.applyAsInt(e1.getKey(), e1.getValue()) -
             comparator.applyAsInt(e2.getKey(), e2.getValue())
         );
@@ -188,24 +213,24 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     @Override
     public MapStream<K, V> peek(Consumer<? super Map.Entry<K, V>> action) {
-        inner.peek(action);
+        inner = inner.peek(action);
         return this;
     }
     
     public MapStream<K, V> peek(BiConsumer<? super K, ? super V> action) {
-        inner.peek(e -> action.accept(e.getKey(), e.getValue()));
+        inner = inner.peek(e -> action.accept(e.getKey(), e.getValue()));
         return this;
     }
 
     @Override
     public MapStream<K, V> limit(long maxSize) {
-        inner.limit(maxSize);
+        inner = inner.limit(maxSize);
         return this;
     }
 
     @Override
     public MapStream<K, V> skip(long n) {
-        inner.skip(n);
+        inner = inner.skip(n);
         return this;
     }
 
@@ -260,6 +285,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     @Override
     public <R, A> R collect(Collector<? super Map.Entry<K, V>, A, R> collector) {
         return inner.collect(collector);
+    }
+    
+    public <K2> MapStream<K2, List<V>> groupBy(Function<V, K2> grouper) {
+        return inner.map(Map.Entry::getValue)
+            .collect(CollectorUtil.groupBy(grouper));
     }
 
     @Override
@@ -345,25 +375,25 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     @Override
     public MapStream<K, V> sequential() {
-        inner.sequential();
+        inner = inner.sequential();
         return this;
     }
 
     @Override
     public MapStream<K, V> parallel() {
-        inner.parallel();
+        inner = inner.parallel();
         return this;
     }
 
     @Override
     public MapStream<K, V> unordered() {
-        inner.unordered();
+        inner = inner.unordered();
         return this;
     }
 
     @Override
     public MapStream<K, V> onClose(Runnable closeHandler) {
-        inner.onClose(closeHandler);
+        inner = inner.onClose(closeHandler);
         return this;
     }
 
