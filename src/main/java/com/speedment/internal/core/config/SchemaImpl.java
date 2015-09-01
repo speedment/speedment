@@ -120,7 +120,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Dbms.class);
+        this.parent = Cast.castOrFail(parent, Dbms.class);
     }
 
     @Override

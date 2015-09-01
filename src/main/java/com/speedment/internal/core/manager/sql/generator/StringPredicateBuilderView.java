@@ -23,6 +23,7 @@ import com.speedment.field.operators.StandardStringOperator;
 import com.speedment.field.operators.StringOperator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

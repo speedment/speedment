@@ -114,7 +114,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
     @SuppressWarnings("unchecked")
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Schema.class);
+        this.parent = Cast.castOrFail(parent, Schema.class);
     }
 
     @Override

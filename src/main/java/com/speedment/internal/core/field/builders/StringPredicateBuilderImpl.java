@@ -21,6 +21,7 @@ import java.util.Objects;
 import com.speedment.field.builders.StringPredicateBuilder;
 import com.speedment.field.operators.StringOperator;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -64,7 +65,7 @@ public final class StringPredicateBuilderImpl<ENTITY>
     }
 
     @Override
-    public String getValue() {
+    public String getOperand() {
         return value;
     }
 

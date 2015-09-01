@@ -16,24 +16,14 @@
  */
 package com.speedment.field.builders;
 
-import com.speedment.annotation.Api;
-import java.util.function.Predicate;
-import com.speedment.field.operators.ComparableOperator;
-
 /**
+ * Indicates that a certain interface has a value that can be obtained using a
+ * getValue() method.
  *
  * @author pemi
- * @param <ENTITY> The entity type
- * @param <V> the field value type
+ * @param <T> the value type
  */
-@Api(version = "2.1")
-public interface ComparablePredicateBuilder<ENTITY, V extends Comparable<? super V>> extends
-    PredicateBuilder<ENTITY>,
-    Predicate<ENTITY>,
-    HasOperand<V> {
+public interface HasOperand<T> {
 
-    ComparableOperator getComparableOperator();
-
-    @Override
-    V getOperand();
+    T getOperand();
 }

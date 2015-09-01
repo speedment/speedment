@@ -46,11 +46,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import com.speedment.internal.core.platform.SpeedmentImpl;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 
 /**
  *
@@ -58,12 +57,13 @@ import static com.speedment.internal.codegen.util.Formatting.nl;
  */
 public final class EntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
-    private static final Speedment SPEEDMENT = new SpeedmentImpl(); // default values from here.. Todo: Make pluggable later
+    private final Speedment speedment;
     
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
 
     public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);
+        this.speedment =  SpeedmentFactory.newSpeedmentInstance(); // default values from here.. Todo: Make pluggable later
     }
 
     @Override
@@ -158,7 +158,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
-        final JavaTypeMapperComponent mapperComponent = SPEEDMENT.get(JavaTypeMapperComponent.class);
+        final JavaTypeMapperComponent mapperComponent = speedment.get(JavaTypeMapperComponent.class);
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         columns().forEachOrdered(c -> {

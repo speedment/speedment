@@ -64,7 +64,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, ForeignKey.class);
+        this.parent = Cast.castOrFail(parent, ForeignKey.class);
     }
 
     @Override

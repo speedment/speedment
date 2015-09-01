@@ -22,6 +22,7 @@ import java.util.Objects;
 import com.speedment.field.builders.ComparablePredicateBuilder;
 import com.speedment.field.operators.ComparableOperator;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -52,7 +53,7 @@ public final class ComparablePredicateBuilderImpl<ENTITY, V extends Comparable<?
 
     @Override
     public boolean test(final ENTITY entity) {
-        return test(Objects.compare(field.get(entity), getValue(), entityComparator));
+        return test(Objects.compare(field.get(entity), getOperand(), entityComparator));
     }
 
     public boolean test(final int compare) {
@@ -65,7 +66,7 @@ public final class ComparablePredicateBuilderImpl<ENTITY, V extends Comparable<?
     }
 
     @Override
-    public V getValue() {
+    public V getOperand() {
         return value;
     }
 

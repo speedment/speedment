@@ -29,7 +29,7 @@ import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.internal.core.config.ProjectImpl;
-import com.speedment.internal.core.platform.SpeedmentImpl;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import org.junit.Before;
 
 /**
@@ -50,7 +50,7 @@ public abstract class SimpleModelTest {
 
     @Before
     public void setUp() {
-        speedment = new SpeedmentImpl();
+        speedment = SpeedmentFactory.newSpeedmentInstance();
         project = new ProjectImpl(speedment);
         dbms = project.addNewDbms(speedment);
         schema = dbms.addNewSchema();

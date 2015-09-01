@@ -17,7 +17,7 @@
 package com.speedment.internal.gui;
 
 import com.speedment.Speedment;
-import com.speedment.internal.core.platform.SpeedmentImpl;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.gui.controller.MailPromptController;
 import com.speedment.internal.gui.controller.ProjectPromptController;
@@ -39,7 +39,7 @@ public final class MainApp extends Application {
     private final Speedment speedment;
 
     public MainApp() {
-        speedment = new SpeedmentImpl();
+        speedment = SpeedmentFactory.newSpeedmentInstance();
     }
 
     @Override

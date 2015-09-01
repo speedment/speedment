@@ -38,7 +38,7 @@ public final class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Table.class);
+        this.parent = Cast.castOrFail(parent, Table.class);
     }
 
     @Override

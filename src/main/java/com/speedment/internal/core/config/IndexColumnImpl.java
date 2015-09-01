@@ -50,7 +50,7 @@ public final class IndexColumnImpl extends AbstractOrdinalConfigEntity implement
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Index.class);
+        this.parent = Cast.castOrFail(parent, Index.class);
     }
 
     @Override

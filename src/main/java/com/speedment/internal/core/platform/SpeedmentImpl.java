@@ -46,9 +46,9 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
+final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
-    public SpeedmentImpl() {
+    SpeedmentImpl() {
         add(new ManagerComponentImpl());
         add(new ProjectComponentImpl());
         add(new PrimaryKeyFactoryComponentImpl());

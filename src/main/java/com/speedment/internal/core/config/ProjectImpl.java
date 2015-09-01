@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -84,7 +85,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, ProjectManager.class);
+        this.parent = Cast.castOrFail(parent, ProjectManager.class);
     }
 
     @Override

@@ -27,9 +27,12 @@ import java.util.function.Predicate;
  */
 @Api(version = "2.1")
 public interface StringPredicateBuilder<ENTITY>
-    extends PredicateBuilder<ENTITY>, Predicate<ENTITY> {
+    extends PredicateBuilder<ENTITY>,
+    Predicate<ENTITY>,
+    HasOperand<String> {
 
     StringOperator getStringOperator();
 
-    String getValue();
+    @Override
+    String getOperand();
 }

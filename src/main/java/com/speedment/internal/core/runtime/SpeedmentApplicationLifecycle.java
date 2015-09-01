@@ -27,7 +27,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.platform.SpeedmentImpl;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.platform.component.JavaTypeMapperComponent;
 import com.speedment.internal.core.platform.component.ManagerComponent;
 import com.speedment.internal.core.platform.component.ProjectComponent;
@@ -77,7 +77,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     public SpeedmentApplicationLifecycle() {
         super();
-        speedment = new SpeedmentImpl();
+        speedment = SpeedmentFactory.newSpeedmentInstance();
         configPath = null;
         withsNamed = newList();
         withsAll = newList();

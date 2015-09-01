@@ -84,7 +84,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             }
             rs = ps.executeQuery();
         } catch (SQLException sqle) {
-            LOGGER.error("Error executing " + getSql(), sqle);
+            LOGGER.error("Error executing " + getSql() + ", values=" + getValues(), sqle);
             throw new SpeedmentException(sqle);
         }
         setState(State.OPEN);

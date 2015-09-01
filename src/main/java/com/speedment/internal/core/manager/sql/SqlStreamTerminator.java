@@ -40,6 +40,9 @@ import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import com.speedment.field.builders.ComparablePredicateBuilder;
+import com.speedment.field.builders.HasOperand;
+import com.speedment.field.builders.StringPredicateBuilder;
+import static com.speedment.internal.util.Cast.cast;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -95,16 +98,16 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
         @SuppressWarnings("rawtypes")
         final List<Object> values = predicateBuilders.stream()
-            .map(pb -> Cast.cast(pb, ComparablePredicateBuilder.class))
+            .map(pb -> Cast.cast(pb, HasOperand.class))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(ComparablePredicateBuilder::getValue)
+            .map(HasOperand::getOperand)
             .collect(toList());
 
         qr.setSql(sql);
         qr.setValues(values);
     }
-
+    
     @SuppressWarnings({"unchecked", "rawtypes"})
     private List<PredicateBuilder<?>> andPredicateBuilders(FilterAction<ENTITY> action) {
         requireNonNull(action);

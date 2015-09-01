@@ -44,7 +44,7 @@ public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements F
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Table.class);
+        this.parent = Cast.castOrFail(parent, Table.class);
     }
 
     @Override

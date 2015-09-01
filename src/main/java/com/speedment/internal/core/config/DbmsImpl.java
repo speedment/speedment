@@ -30,6 +30,7 @@ import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -111,7 +112,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.orFail(parent, Project.class);
+        this.parent = Cast.castOrFail(parent, Project.class);
     }
 
     @Override

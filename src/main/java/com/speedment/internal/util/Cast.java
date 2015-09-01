@@ -19,8 +19,8 @@ package com.speedment.internal.util;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.util.NoSuchElementException;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 
 /**
  *
@@ -28,6 +28,15 @@ import java.util.Optional;
  */
 public final class Cast {
 
+    /**
+     * Casts and returns the provided object if it is assignable from the given
+     * class, otherwise returns an Optional.empty().
+     *
+     * @param <T> the type to return
+     * @param object to cast
+     * @param clazz to cast to
+     * @return An Optional of the casted element or Optional.empty()
+     */
     public static <T> Optional<T> cast(Object object, Class<T> clazz) {
         requireNonNulls(object, clazz);
         if (clazz.isAssignableFrom(object.getClass())) {
@@ -47,7 +56,7 @@ public final class Cast {
      * @throws NoSuchElementException if the object could not be casted to the
      * provided class
      */
-    public static <T> T orFail(Object object, Class<T> clazz) {
+    public static <T> T castOrFail(Object object, Class<T> clazz) {
         requireNonNulls(object, clazz);
         return Optional.ofNullable(object)
             .filter(o -> clazz.isAssignableFrom(o.getClass()))
