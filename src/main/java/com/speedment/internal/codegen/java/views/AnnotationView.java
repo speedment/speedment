@@ -24,49 +24,45 @@ import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.java.views.interfaces.HasAnnotationUsageView;
 import com.speedment.internal.codegen.java.views.interfaces.HasJavadocView;
 import com.speedment.internal.codegen.java.views.interfaces.HasNameView;
-import com.speedment.internal.codegen.util.CodeCombiner;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from an {@link Annotation} to java code.
- * 
+ *
  * @author Emil Forslund
  */
-public final class AnnotationView implements Transform<Annotation, String>, 
-    HasJavadocView<Annotation>, HasAnnotationUsageView<Annotation>, 
+public final class AnnotationView implements Transform<Annotation, String>,
+    HasJavadocView<Annotation>, HasAnnotationUsageView<Annotation>,
     HasNameView<Annotation> {
-	
-    private final static String 
-		INTERFACE_STRING = "@interface ",
-		DEFAULT_STRING = " default ";
-	
+
+    private final static String INTERFACE_STRING = "@interface ",
+        DEFAULT_STRING = " default ";
+
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Optional<String> transform(Generator gen, Annotation model) {
+    @Override
+    public Optional<String> transform(Generator gen, Annotation model) {
         requireNonNull(gen);
         requireNonNull(model);
-        
-		return Optional.of(
-			renderAnnotations(gen, model) +
-			renderAnnotations(gen, model) +
-			INTERFACE_STRING + 
-            renderName(gen, model) +
-			block(
-				model.getFields().stream().map(f -> 
-					// Field javadoc (optional)
-					ifelse(gen.on(f.getJavadoc()), jd -> nl() + jd + nl(), EMPTY) +
-					
-					// Field declaration
-					gen.on(f.getType()) + SPACE + f.getName() + PS + PE +
-						
-					// Default value (optional)
-					ifelse(gen.on(f.getValue()), v -> (DEFAULT_STRING + v), EMPTY) +
-							
-					SC
-				).collect(CodeCombiner.joinIfNotEmpty(nl()))
-			)
-		);
-	}
+
+        return Optional.of(
+            renderAnnotations(gen, model)
+            + renderAnnotations(gen, model)
+            + INTERFACE_STRING
+            + renderName(gen, model)
+            + block(
+                model.getFields().stream().map(f
+                    -> // Field javadoc (optional)
+                    ifelse(gen.on(f.getJavadoc()), jd -> nl() + jd + nl(), EMPTY)
+                    + // Field declaration
+                    gen.on(f.getType()) + SPACE + f.getName() + PS + PE
+                    + // Default value (optional)
+                    ifelse(gen.on(f.getValue()), v -> (DEFAULT_STRING + v), EMPTY)
+                    + SC
+                ).collect(joinIfNotEmpty(nl()))
+            )
+        );
+    }
 }

@@ -19,7 +19,7 @@ package com.speedment.internal.codegen.java.views;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Enum;
-import com.speedment.internal.codegen.util.CodeCombiner;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -64,7 +64,7 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
         
 		return model.getConstants().stream()
 			.map(c -> gen.on(c).get()).collect(
-				CodeCombiner.joinIfNotEmpty(
+				joinIfNotEmpty(
 					(!model.getConstants().isEmpty()
 					&& !model.getConstants().get(0).getValues().isEmpty())
 					? cnl() : COMMA_SPACE, 

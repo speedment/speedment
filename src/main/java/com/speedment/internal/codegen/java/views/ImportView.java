@@ -21,10 +21,10 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Type;
-import com.speedment.internal.codegen.util.CodeCombiner;
 
 import java.util.Optional;
 
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 
@@ -48,7 +48,7 @@ public final class ImportView implements Transform<Import, String> {
         if (shouldImport(gen, model.getType())) {
             return Optional.of(
                 IMPORT_STRING
-                + gen.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE))
+                + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE))
                 + model.getType().getName()
                 + model.getStaticMember().map(str -> DOT + str).orElse(EMPTY)
                 + SC

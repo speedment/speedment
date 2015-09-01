@@ -17,10 +17,10 @@
 package com.speedment.internal.codegen.java.views;
 
 import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.util.CodeCombiner;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,15 +44,15 @@ public final class MethodView implements Transform<Method, String> {
         
 		return Optional.of(
 			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
-			gen.onEach(model.getAnnotations()).collect(CodeCombiner.joinIfNotEmpty(nl(), EMPTY, nl())) +
-			gen.onEach(model.getModifiers()).collect(CodeCombiner.joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
-			gen.onEach(model.getGenerics()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE)) +
+			gen.onEach(model.getAnnotations()).collect(joinIfNotEmpty(nl(), EMPTY, nl())) +
+			gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+			gen.onEach(model.getGenerics()).collect(joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE)) +
 			ifelse(gen.on(model.getType()), s -> s + SPACE, EMPTY) +
 			model.getName() +
 			gen.onEach(model.getFields()).collect(
 				Collectors.joining(COMMA_SPACE, PS, PE)
 			) + SPACE + 
-            gen.onEach(model.getExceptions()).collect(CodeCombiner.joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
+            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
             block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())

@@ -21,44 +21,43 @@ import java.util.Optional;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.util.CodeCombiner;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
 /**
  * Transforms from an {@link AnnotationUsage} to java code.
- * 
+ *
  * @author Emil Forslund
  */
 public final class AnnotationUsageView implements Transform<AnnotationUsage, String> {
-    
-	private final static String 
-		PSTART = "(", 
-		EQUALS = " = ";
+
+    private final static String PSTART = "(",
+            EQUALS = " = ";
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Optional<String> transform(Generator gen, AnnotationUsage model) {
+    @Override
+    public Optional<String> transform(Generator gen, AnnotationUsage model) {
         requireNonNull(gen);
         requireNonNull(model);
-        
+
         final Optional<String> value = gen.on(model.getValue());
         final Stream<String> valueStream = value.isPresent() ? Stream.of(value.get()) : Stream.empty();
-        
-		return Optional.of(
-			AT + gen.on(model.getType()).get() +
-            Stream.of(
-                model.getValues().stream().map(e -> e.getKey() + gen.on(e.getValue()).map(s -> EQUALS + s).orElse(EMPTY)),
-                valueStream
-            ).flatMap(s -> s).collect(
-                CodeCombiner.joinIfNotEmpty(
-						cnl() + tab() + tab(),
-						PSTART,
-						PE
-				)
-            )
-		);
-	}
+
+        return Optional.of(
+                AT + gen.on(model.getType()).get()
+                + Stream.of(
+                        model.getValues().stream().map(e -> e.getKey() + gen.on(e.getValue()).map(s -> EQUALS + s).orElse(EMPTY)),
+                        valueStream
+                ).flatMap(s -> s).collect(
+                joinIfNotEmpty(
+                        cnl() + tab() + tab(),
+                        PSTART,
+                        PE
+                )
+        )
+        );
+    }
 }
