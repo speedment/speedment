@@ -42,7 +42,10 @@ public final class OptionalUtil {
     }
 
     public static <T> T unwrap(Optional<T> optional) {
-        requireNonNull(optional);
+        // optional can be null. If it is, null shall be returned
+        if (optional == null) {
+            return null;
+        }
         return optional.orElse(null);
     }
 
