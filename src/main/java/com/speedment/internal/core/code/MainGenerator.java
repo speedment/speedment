@@ -104,7 +104,7 @@ public final class MainGenerator implements Consumer<Project> {
                     Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
                     fileCounter++;
                 } catch (IOException ex) {
-                    LOGGER.error("Failed to create file " + fname, ex);
+                    LOGGER.error(ex, "Failed to create file " + fname);
                 }
 
                 LOGGER.info("done");
@@ -149,7 +149,7 @@ public final class MainGenerator implements Consumer<Project> {
                     content.get().getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException ex) {
-                LOGGER.error("Failed to create file " + fname, ex);
+                LOGGER.error(ex, "Failed to create file " + fname);
             }
 
             LOGGER.info("done");

@@ -108,7 +108,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
 //            pwProtectedProperties.put(PASSWORD, PASSWORD_PROTECTED);
             final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\", user = " + user + ", password = " + PASSWORD_PROTECTED;
-            LOGGER.error(msg, sqle);
+            LOGGER.error(sqle, msg);
             throw new SpeedmentException(msg, sqle);
         }
         return conn;
@@ -162,7 +162,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 return schemas.stream();
             }
         } catch (SQLException sqle) {
-            LOGGER.error("Unable to read from " + dbms.toString(), sqle);
+            LOGGER.error(sqle, "Unable to read from " + dbms.toString());
             return Stream.empty();
         }
     }
@@ -174,7 +174,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 return schemas(connection);
             }
         } catch (SQLException sqle) {
-            LOGGER.error("Unable to read from " + dbms.toString(), sqle);
+            LOGGER.error(sqle, "Unable to read from " + dbms.toString());
             return Stream.empty();
         }
     }
@@ -436,7 +436,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
             return streamBuilder.build();
         } catch (SQLException sqle) {
-            LOGGER.error("Error querying " + sql, sqle);
+            LOGGER.error(sqle, "Error querying " + sql);
             throw new SpeedmentException(sqle);
         }
     }
@@ -509,8 +509,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             } catch (SQLException sqlEx) {
                 LOGGER.error("SqlStatementList: " + sqlStatementList);
                 LOGGER.error("SQL: " + lastSqlStatement);
-                LOGGER.error(sqlEx.getMessage(), sqlEx);
-                String sqlState = sqlEx.getSQLState();
+                LOGGER.error(sqlEx, sqlEx.getMessage());
+                final String sqlState = sqlEx.getSQLState();
 
                 if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
                     retryCount--;
@@ -536,7 +536,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         // pretty serious is going on, so we better
                         // pass it up the stack, rather than just
                         // logging it. . .
-                        LOGGER.error("Rollback error! connection:" + sqlEx.getMessage(), sqlEx);
+                        LOGGER.error(sqlEx, "Rollback error! connection:" + sqlEx.getMessage());
                         throw sqlEx;
                     }
                 }

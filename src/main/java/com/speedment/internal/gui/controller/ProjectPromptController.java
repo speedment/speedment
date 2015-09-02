@@ -275,7 +275,7 @@ public final class ProjectPromptController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
-            LOGGER.error(ex);
+            LOGGER.error(ex, "showIn error.");
             throw new RuntimeException(ex);
         }
     }

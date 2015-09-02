@@ -33,9 +33,6 @@ import com.speedment.config.Project;
 import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -82,7 +79,8 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A Speedment Application Metadata class for the {@link com.speedment.core.config.model.Project}. This class contains the meta data present at code generation time.";
+        return "A {@link " + ApplicationMetadata.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + "."
+            + " This class contains the meta data present at code generation time.";
     }
 
     @Override

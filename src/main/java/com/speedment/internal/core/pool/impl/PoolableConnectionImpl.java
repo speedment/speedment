@@ -20,6 +20,7 @@ import com.speedment.internal.core.pool.PoolableConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
@@ -27,6 +28,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class PoolableConnectionImpl extends PoolableConnectionDelegator implements PoolableConnection {
 
+    private static final AtomicLong ID_GENERATOR = new AtomicLong();
+    private final long id;
     private final String user;
     private final String password;
     private final String uri;
@@ -36,11 +39,17 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
 
     public PoolableConnectionImpl(String uri, String user, String password, Connection connection, long expires) {
         super(connection);
+        this.id = ID_GENERATOR.getAndIncrement();
         this.uri = requireNonNull(uri);
         this.user = user; // Nullable
         this.password = password; //nullable
         this.created = System.currentTimeMillis();
-        this.expires = expires;        
+        this.expires = expires;
+    }
+
+    @Override
+    public long getId() {
+        return id;
     }
 
     @Override
