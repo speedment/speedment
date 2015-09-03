@@ -76,7 +76,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
         requireNonNull(mapper);
         return new ReferenceStreamBuilder<R>(pipeline, streamTerminator).append(new MapAction<>(mapper));
-        //return new ReferenceStreamBuilder<R>(optimizer, actions).append(new Action<>((Stream<T> t) -> t.map(mapper), Stream.class));
     }
 
     @Override
