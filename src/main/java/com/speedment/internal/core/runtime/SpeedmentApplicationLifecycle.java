@@ -52,6 +52,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -380,8 +381,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             SpeedmentVersion.getImplementationTitle()
             + " (" + SpeedmentVersion.getImplementationVersion() + ")"
             + " by " + SpeedmentVersion.getImplementationVendor() + " started."
+            + " API version is " + SpeedmentVersion.getSpecificationVersion()
         );
-        LOGGER.warn("This is a BETA version that is NOT INTEDNED FOR PRODUCTION USE!");
+        if (!SpeedmentVersion.isProductionMode()) {
+            LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
+        }
         return super.start();
     }
 

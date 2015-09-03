@@ -38,25 +38,34 @@ public interface Speedment {
     /**
      * Gets a {@link Speedment} {@link Component} based on its interface class.
      * <p>
-     * The supported standard interfaces are:
+     * The supported standard interfaces types are:
      * <ul>
-     * <li>{@link com.speedment.internal.core.platform.component.EntityManager}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.DbmsHandlerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ManagerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ProjectComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.SqlTypeMapperComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.LoggerFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.JavaTypeMapperComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.EntityManager EntityManager}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.DbmsHandlerComponent DbmsHandlerComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.ManagerComponent ManagerComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.ProjectComponent ProjectComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.LoggerFactoryComponent LoggerFactoryComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
+     * <li>{@link com.speedment.internal.core.platform.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
-     * @param iface The interface class of the intended return type
+     * @param interfaceClass The interface class of the intended return type
      * @return The currently mapped instance
      */
-    <R extends Component> R get(Class<R> iface);
+    <R extends Component> R get(Class<R> interfaceClass);
 
-    Component add(Component item);
+    /**
+     * Puts a new Component in the Speedment platform and returns the previous
+     * Compoment (if any) with the same interface class.
+     *
+     * @param item the new Component to put
+     * @return the previous Component registered using that interface class, or
+     * null of no one existed before
+     */
+    Component put(Component item);
 
     /**
      * Obtains and returns the currently associated {@link Manager}
@@ -75,9 +84,11 @@ public interface Speedment {
      * @throws SpeedmentException if no Manager exists for the given entityClass
      */
     <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException;
-    
+
     /**
      * Stops the Speedment instance and deallocates any allocated resources.
+     * After stop() has been called, the Speedment instance can not be called
+     * any more.
      */
     public void stop();
 

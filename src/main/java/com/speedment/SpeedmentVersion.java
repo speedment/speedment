@@ -27,14 +27,24 @@ import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
  * @since 2.0
  */
 public final class SpeedmentVersion {
-    
+
     private static final String IMPLEMENTATION_TITLE = "Speedment";
     private static final String IMPLEMENTATION_VENDOR = "Speedment Inc."; // "Speedment, Inc." difficult to enter into POM because of ','
-    private static final String IMPLEMENTATION_VERSION = "2.1.0-SNAPSHOT";
+    private static final String IMPLEMENTATION_VERSION = "2.1.0";
+    private static final boolean PRODUCTION_MODE = true;
 
 //    private static final String SPECIFICATION_TITLE = "Speedment";
 //    private static final String SPECIFICATION_VENDOR = "Speedment Inc.";
     private static final String SPECIFICATION_VERSION = "2.1";
+
+    /**
+     * Returns if this version is intended for production use.
+     *
+     * @return if this version is intended for production use
+     */
+    public static boolean isProductionMode() {
+        return PRODUCTION_MODE;
+    }
 
     /**
      * Returns the non-null title of the Speedment framework.
@@ -91,9 +101,11 @@ public final class SpeedmentVersion {
     public static String getSpecificationVersion() {
         return SPECIFICATION_VERSION;
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */
-    private SpeedmentVersion() { instanceNotAllowed(getClass()); }
+    private SpeedmentVersion() {
+        instanceNotAllowed(getClass());
+    }
 }

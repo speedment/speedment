@@ -34,82 +34,32 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import static java.util.Objects.requireNonNull;
 
-/**
- * <img src="{@docRoot}/doc-files/hare.png" alt="Hare">
- *
- * The {@code Platform} class acts as a generic holder of different system
- * {@link Component Components}. Using its pluggable architecture, one can
- * replace existing default implementations of existing Components or plug in
- * custom made implementation of any Interface.
- * <p>
- * Pluggable instances must implement the {@link Component} interface.
- *
- * @author pemi
- */
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
     SpeedmentImpl() {
-        add(new ManagerComponentImpl());
-        add(new ProjectComponentImpl());
-        add(new PrimaryKeyFactoryComponentImpl());
-        add(new DbmsHandlerComponentImpl(this));
-        add(new SqlTypeMapperComponentImpl());
-        add(new JavaTypeMapperComponentImpl());
-        add(new EntityManagerImpl(this));
-        add(new LoggerFactoryComponentImpl());
-        add(new ConnectionPoolComponentImpl());
+        put(new ManagerComponentImpl());
+        put(new ProjectComponentImpl());
+        put(new PrimaryKeyFactoryComponentImpl());
+        put(new DbmsHandlerComponentImpl(this));
+        put(new SqlTypeMapperComponentImpl());
+        put(new JavaTypeMapperComponentImpl());
+        put(new EntityManagerImpl(this));
+        put(new LoggerFactoryComponentImpl());
+        put(new ConnectionPoolComponentImpl());
     }
 
-    /**
-     * Gets a {@link SpeedmentImpl} {@link Component} based on its interface
-     * class.
-     * <p>
-     * The supported standard interfaces are:
-     * <ul>
-     * <li>{@link com.speedment.internal.core.platform.component.EntityManager}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.DbmsHandlerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ManagerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ProjectComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.SqlTypeMapperComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.LoggerFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.JavaTypeMapperComponent}</li>
-     * </ul>
-     *
-     * @param <R> The intended return type
-     * @param iface The non-null interface class of the intended return type
-     * @return The currently mapped instance
-     */
-    @Api(version = "2.0")
     @Override
     public <R extends Component> R get(Class<R> iface) {
         requireNonNull(iface);
         return super.get(iface);
     }
 
-    @Api(version = "2.0")
     @Override
-    public Component add(Component item) {
+    public Component put(Component item) {
         requireNonNull(item);
-        return add(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
+        return put(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
     }
 
-    /**
-     * Obtains and returns the currently associated {@link Manager}
-     * implementation for the given Entity interface Class. If no Manager exists
-     * for the given entityClass, a SpeedmentException will be thrown.
-     * <p>
-     * N.B.This conveniency method is a pure delegator to the ManagerComponent
-     * and is exactly equivalent to the code:
-     * <p>
-     * {@code get(ManagerComponent.class).managerOf(entityClass) }
-     *
-     * @param <ENTITY> the Entity interface type
-     * @param entityClass the Entity interface {@code Class}
-     * @return the currently associated {@link Manager} implementation for the
-     * given Entity interface Class
-     * @throws SpeedmentException if no Manager exists for the given entityClass
-     */
     @Override
     public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException {
         requireNonNull(entityClass);

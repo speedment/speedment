@@ -54,6 +54,8 @@ import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * FXML Controller class for the prompt that lets the user either load an

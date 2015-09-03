@@ -40,7 +40,7 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
 
     private Logger logger;
 
-    private final long DEFAULT_MAX_AGE = 100;
+    private final long DEFAULT_MAX_AGE = 30_000;
     private final int DEFAULT_MAX_POOL_SIZE_PER_DB = 32;
 
     private long maxAge;

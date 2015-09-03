@@ -19,6 +19,7 @@ package com.speedment;
 import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ReferenceField;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import java.util.function.Consumer;
 
@@ -26,8 +27,8 @@ import java.util.function.Consumer;
  * This interface contains the common methods that are the same for all
  * entities. Do not assume that an entity must implement this interface.
  *
- * @author          pemi, Emil Forslund
- * @param <ENTITY>  type
+ * @author pemi, Emil Forslund
+ * @param <ENTITY> type
  */
 @Api(version = "2.1")
 public interface Entity<ENTITY> {

@@ -18,7 +18,6 @@
 package com.speedment.internal.core.runtime;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -34,6 +33,9 @@ import static org.junit.Assert.*;
  * @author pemi
  */
 public class SpeedmentVersionTest {
+    
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.1.0";
+    private static final String EXPECTED_SPECIFICATION_VERSION = "2.1";
 
     public SpeedmentVersionTest() {
     }
@@ -97,10 +99,18 @@ public class SpeedmentVersionTest {
 //        String expResult2 = getFromManifest("ImplementationVersion");
 
         // Todo: Implement a real test. Like extract version from POM or MANIFEST.MF
-        String expResult = "2.1.0-SNAPSHOT";
         String result = SpeedmentVersion.getImplementationVersion();
+        assertEquals(EXPECTED_IMPLEMENTATION_VERSION, result);
+    }
+    
+    @Test
+    public void testGetSpecificationVersion() {
+        System.out.println("getSpecificationVersion");
+        String expResult = EXPECTED_SPECIFICATION_VERSION;
+        String result = SpeedmentVersion.getSpecificationVersion();
         assertEquals(expResult, result);
     }
+    
 //
 //    @Test
 //    public void testGetSpecificationTitle() {
@@ -120,13 +130,7 @@ public class SpeedmentVersionTest {
 //        assertEquals(expResult, result);
 //    }
 //
-//    @Test
-//    public void testGetSpecificationVersion() {
-//        System.out.println("getSpecificationVersion");
-//        String expResult = getPackage().getSpecificationVendor();
-//        System.out.println(expResult);
-//        String result = SpeedmentVersion.getSpecificationVendor();
-//        assertEquals(expResult, result);
-//    }
+
+    
 
 }

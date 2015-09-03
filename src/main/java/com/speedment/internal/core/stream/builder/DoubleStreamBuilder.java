@@ -134,7 +134,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -152,7 +152,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -170,7 +170,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -187,7 +187,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -205,7 +205,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -219,7 +219,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -235,7 +235,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -252,7 +252,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -265,7 +265,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -278,7 +278,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -295,7 +295,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -308,7 +308,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -321,7 +321,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -339,7 +339,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -356,7 +356,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -373,7 +373,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -386,7 +386,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -399,7 +399,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      * @return an iterator of primitive doubles
      */
@@ -413,7 +413,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      * @return an spliterator of primitive doubles
      */
