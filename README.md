@@ -59,7 +59,7 @@ Hare harry = hares.newInstance()
     .setColor("Gray")
     .setAge(3);
 
-<Hare dbHarry = EntityManager.get(speedment).persist(harry);
+Hare dbHarry = EntityManager.get(speedment).persist(harry);
 ```
 
     
