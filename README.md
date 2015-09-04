@@ -52,16 +52,14 @@ Hare dbHarry = hares.newInstance()
     .persist();
 ```
 
-###### JPA-style persistance if you prefer that over the "Active Record Pattern"
-.
-
+###### JPA-style persistance if you prefer that over the "Active Record Pattern".
 ```java
 Hare harry = hares.newInstance()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3);
 
-<Hare dbHarry = EntityManager.get().persist(harry);
+<Hare dbHarry = EntityManager.get(speedment).persist(harry);
 ```
 
     
@@ -73,8 +71,7 @@ Optional<Carrot> carrot = hares.stream()
     .flatMap(Hare::findCarrots) // Carrot is a foreign key table.
     .findAny();
 ```
-    
-   
+
 ###### Convert to JSON
 ```java
 // List all hares in JSON format
@@ -83,14 +80,12 @@ hares.stream()
     .forEach(System.out::println);
 ```
 
-
 ###### Easy initialization
 ```java
 // A HareApplication class is generated from the database.
 Speedment speedment = new HareApplication().withPassword("myPwd729").build();
 Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
- 
 
 Database centric
 ----------------
