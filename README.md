@@ -28,7 +28,7 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy querying using standard Java 8 predicates
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
-List<Hare> oldHares = hares
+List<Hare> oldHares = hares.stream()
     .filter(h -> h.getAge() > 8)
     .collect(toList());
 ```
@@ -86,7 +86,7 @@ hares.stream()
 
 ###### Easy initialization
 ```java
-// A HareApplication-class is generated from the database.
+// A HareApplication class is generated from the database.
 Speedment speedment = new HareApplication().withPassword("myPwd729").build();
 Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
