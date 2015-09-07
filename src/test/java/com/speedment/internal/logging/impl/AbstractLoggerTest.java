@@ -21,10 +21,10 @@
  */
 package com.speedment.internal.logging.impl;
 
-import com.speedment.internal.logging.impl.AbstractLogger;
 import com.speedment.internal.logging.Level;
 import com.speedment.internal.logging.LoggerEventListener;
 import com.speedment.internal.logging.LoggerFormatter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +93,24 @@ public class AbstractLoggerTest {
         List<String> output = instance.getOutput();
         assertEquals(1, output.size());
         assertTrue(output.get(0).contains("Olle"));
+        assertTrue(output.get(0).contains(AbstractLoggerTest.class.getName())); // Check that there is a stack trace.
+    }
+
+    /**
+     * Test of log method, of class AbstractLogger.
+     */
+    @Test
+    public void reproduceProblem() {
+        System.out.println("reproduceProblem");
+        Level level = Level.ERROR;
+        Throwable throwable = new SQLException("Unable to get connection");
+        String message = "Stor Stina";
+        instance.error(throwable, message);
+
+        List<String> output = instance.getOutput();
+        assertEquals(1, output.size());
+        assertTrue(output.get(0).contains("connection"));
+        assertTrue(output.get(0).contains(AbstractLoggerTest.class.getName())); // Check that there is a stack trace.
     }
 
     /**
@@ -304,13 +322,14 @@ public class AbstractLoggerTest {
         fail("The test case is a prototype.");
     }
 
+    private static final LoggerFormatter FORMATTER = (Level level1, String name1, String message) -> level1 + "::" + name1 + "::" + message;
+
     public class AbstractLoggerTestImpl extends AbstractLogger {
 
         private final List<String> output;
 
         public AbstractLoggerTestImpl() {
-            super("", (Level level1, String name1, String message) -> message
-            );
+            super(AbstractLogger.class.getName(), FORMATTER);
             output = new ArrayList<>();
         }
 

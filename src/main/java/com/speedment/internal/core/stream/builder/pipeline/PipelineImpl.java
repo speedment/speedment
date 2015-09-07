@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <E> The type element that the last BaseStream holds
+ * @param <E> The type element that the last PipelineImpl holds
  *
  */
 public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, IntPipeline, LongPipeline, DoublePipeline {

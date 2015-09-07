@@ -27,6 +27,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.StringConverter;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

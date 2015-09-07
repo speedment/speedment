@@ -146,7 +146,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -164,7 +164,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -182,7 +182,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -199,7 +199,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -217,7 +217,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -231,7 +231,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -247,7 +247,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -264,7 +264,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -277,7 +277,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -290,7 +290,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -307,7 +307,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -320,7 +320,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -333,7 +333,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -351,7 +351,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -369,7 +369,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -387,7 +387,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -400,7 +400,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -413,7 +413,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      * @return iterator
      */
@@ -427,7 +427,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      * @return spliterator
      */

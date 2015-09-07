@@ -238,7 +238,7 @@ public final class SceneController implements Initializable {
                     instance.getFilesCreated(), 
                     false
                 );
-                LOGGER.error("Error! Failed to generate code.", ex);
+                LOGGER.error(ex, "Error! Failed to generate code.");
             }
             
             removeArrow();
@@ -551,7 +551,7 @@ public final class SceneController implements Initializable {
                 "'-------------------------------------------------'</pre>"
             );
         } catch (UnsupportedTemporalTypeException ex) {
-            LOGGER.error("Could not parse time correctly.", ex);
+            LOGGER.error(ex, "Could not parse time correctly.");
             writeToLog("<span style=\"background:lightpink;\">Time parsing failed unexpectedly.</span>");
         }
     }

@@ -54,6 +54,8 @@ import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * FXML Controller class for the prompt that lets the user either load an
@@ -275,7 +277,7 @@ public final class ProjectPromptController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
-            LOGGER.error(ex);
+            LOGGER.error(ex, "showIn error.");
             throw new RuntimeException(ex);
         }
     }

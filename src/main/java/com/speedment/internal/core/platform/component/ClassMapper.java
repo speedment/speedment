@@ -36,10 +36,11 @@ public interface ClassMapper<V> {
      * @param item to add
      * @return the previous mapping that existed, or null
      */
-    V add(V item);
+    V put(V item);
 
     /**
-     * Returns the mapping for the given class, or null if no mapping exists.
+     * Puts a new mapping and returns the mapping for the given class, or null
+     * if no mapping exists.
      *
      * @param <R> The class type
      * @param clazz the class to use

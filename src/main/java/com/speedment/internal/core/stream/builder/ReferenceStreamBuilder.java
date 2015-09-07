@@ -76,7 +76,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
         requireNonNull(mapper);
         return new ReferenceStreamBuilder<R>(pipeline, streamTerminator).append(new MapAction<>(mapper));
-        //return new ReferenceStreamBuilder<R>(optimizer, actions).append(new Action<>((Stream<T> t) -> t.map(mapper), Stream.class));
     }
 
     @Override
@@ -159,7 +158,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -177,7 +176,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -195,7 +194,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -208,7 +207,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -222,7 +221,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -237,7 +236,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -251,7 +250,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -267,7 +266,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -283,7 +282,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -297,7 +296,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -311,7 +310,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -325,7 +324,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -339,7 +338,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -353,7 +352,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -367,7 +366,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -381,7 +380,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -394,7 +393,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -407,7 +406,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override
@@ -420,7 +419,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      *
      * <p>
      * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminating action is performed.
+     * closes the stream automatically when a terminal operation is performed.
      *
      */
     @Override

@@ -53,26 +53,27 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         return sharedJasonFormatter.apply(entity);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Optional<Object> find(ENTITY entity, Column column) {
-        requireNonNull(entity);
-        requireNonNull(column);
-        return getTable()
-            .streamOf(ForeignKey.class)
-            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
-            .map(oFkc -> {
-                Table fkTable = oFkc.getForeignTable();
-                Column fkColumn = oFkc.getForeignColumn();
-
-                @SuppressWarnings("rawtypes")
-                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
-
-                Object key = get(entity, column);
-
-                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
-            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
-    }
+//    @Override
+//    @SuppressWarnings("unchecked")
+//    public Optional<Object> find(ENTITY entity, Column column) {
+//        requireNonNull(entity);
+//        requireNonNull(column);
+//        return getTable()
+//            .streamOf(ForeignKey.class)
+//            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
+//            .map(oFkc -> {
+//                Table fkTable = oFkc.getForeignTable();
+//                Column fkColumn = oFkc.getForeignColumn();
+//
+//                @SuppressWarnings("rawtypes")
+//                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
+//
+//                Object key = get(entity, column);
+//
+//                // This is an O(n) operation. We must use our short curcuit Fields...
+//                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
+//            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
+//    }
 
     @Override
     public Manager<ENTITY> initialize() {

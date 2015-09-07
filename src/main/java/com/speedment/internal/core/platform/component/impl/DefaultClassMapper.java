@@ -18,12 +18,11 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.internal.core.platform.component.ClassMapper;
 import java.util.Map;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -41,14 +40,14 @@ public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
         this.map = new ConcurrentHashMap<>();
     }
 
-    protected <T extends V> T add(T newItem, Function<V, Class<?>> keyMapper) {
+    protected <T extends V> T put(T newItem, Function<V, Class<?>> keyMapper) {
         requireNonNull(newItem);
         requireNonNull(keyMapper);
-        return add(newItem, NOTHING, NOTHING, keyMapper);
+        return put(newItem, NOTHING, NOTHING, keyMapper);
 
     }
 
-    protected <T extends V> T add(T newItem, Consumer<V> added, Consumer<V> removed, Function<V, Class<?>> keyMapper) {
+    protected <T extends V> T put(T newItem, Consumer<V> added, Consumer<V> removed, Function<V, Class<?>> keyMapper) {
         requireNonNull(newItem);
         requireNonNull(added);
         requireNonNull(removed);

@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
+ * A fully concurrent implementation of a connection pool.
  *
  * @author pemi
  */
@@ -39,18 +40,20 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
 
     private Logger logger;
 
-    private final long DEFAULT_MAX_AGE = 5_000;
+    private final long DEFAULT_MAX_AGE = 30_000;
     private final int DEFAULT_MAX_POOL_SIZE_PER_DB = 32;
 
     private long maxAge;
     private int poolSize;
 
+    private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
     public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
         poolSize = DEFAULT_MAX_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
+        leasedConnections = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -62,19 +65,31 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
         final Deque<PoolableConnection> q = acquireDeque(key);
         final PoolableConnection reusedConnection = pollValidOrNull(q);
         if (reusedConnection != null) {
-            return reusedConnection;
+            return lease(reusedConnection);
         } else {
             final Connection newRawConnection = DriverManager.getConnection(uri, user, password);
             final PoolableConnection newConnection = new PoolableConnectionImpl(uri, user, password, newRawConnection, System.currentTimeMillis() + getMaxAge());
+//            getLogger().info("Created connection " + newConnection.getId() + " (" + leasedConnections.size() + ")");
             newConnection.setOnClose(() -> returnConnection(newConnection));
-            return newConnection;
+            return lease(newConnection);
         }
 
+    }
+
+    private PoolableConnection lease(PoolableConnection poolableConnection) {
+        leasedConnections.put(poolableConnection.getId(), poolableConnection);
+        return poolableConnection;
+    }
+
+    private PoolableConnection leaseReturn(PoolableConnection poolableConnection) {
+        leasedConnections.remove(poolableConnection.getId());
+        return poolableConnection;
     }
 
     @Override
     public void returnConnection(PoolableConnection connection) {
         requireNonNull(connection);
+        leaseReturn(connection);
         if (!isValidOrNull(connection)) {
             discard(connection);
         } else {
@@ -92,6 +107,7 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
         requireNonNull(connection);
         try {
             connection.rawClose();
+//            getLogger().info("Discarded connection " + connection.getId() + " (" + leasedConnections.size() + ")");
         } catch (SQLException sqle) {
             getLogger().error(sqle, "Error closing a connection.");
         }
@@ -111,6 +127,7 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
         requireNonNull(q);
         PoolableConnection pc = q.pollLast();
         while (!isValidOrNull(pc)) {
+            discard(pc); // If we discover an old connection, we discard it from the queue. Otherwise it will not be closed
             pc = q.pollLast();
         }
         return pc;

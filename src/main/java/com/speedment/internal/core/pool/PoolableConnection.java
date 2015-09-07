@@ -25,6 +25,8 @@ import java.sql.SQLException;
  */
 public interface PoolableConnection extends Connection {
 
+    long getId();
+    
     void rawClose() throws SQLException;
 
     long getCreated();

@@ -50,6 +50,8 @@ import java.util.stream.Stream;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.platform.SpeedmentFactory;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
 
 /**
  *

@@ -33,7 +33,7 @@ public final class OptionalUtil {
     }
 
     public static Object unwrap(Object potentiallyOptional) {
-        requireNonNull(potentiallyOptional);
+        // potentiallyOptional can be null. If it is, null shall be returned
         if (potentiallyOptional instanceof Optional<?>) {
             return unwrap((Optional<?>) potentiallyOptional);
         } else {
@@ -42,7 +42,10 @@ public final class OptionalUtil {
     }
 
     public static <T> T unwrap(Optional<T> optional) {
-        requireNonNull(optional);
+        // optional can be null. If it is, null shall be returned
+        if (optional == null) {
+            return null;
+        }
         return optional.orElse(null);
     }
 

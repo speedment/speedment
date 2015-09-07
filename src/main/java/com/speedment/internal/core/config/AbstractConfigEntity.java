@@ -104,7 +104,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     }
 
     @Override
-    public <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> childMapper) {
+    public <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> nameMapper) {
         Objects.requireNonNull(from);
         final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
         final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
@@ -114,10 +114,10 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
                 add = true;
             }
             if (add) {
-                sj.add(childMapper.apply(parent.getName()));
+                sj.add(nameMapper.apply(parent.getName()));
             }
         }
-        return sj.toString() + childMapper.apply(getName());
+        return sj.toString() + nameMapper.apply(getName());
     }
 
     @Override

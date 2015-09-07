@@ -84,7 +84,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             }
             rs = ps.executeQuery();
         } catch (SQLException sqle) {
-            LOGGER.error("Error executing " + getSql() + ", values=" + getValues(), sqle);
+            LOGGER.error(sqle, "Error executing " + getSql() + ", values=" + getValues());
             throw new SpeedmentException(sqle);
         }
         setState(State.OPEN);
@@ -105,7 +105,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
                 closeable.close();
             }
         } catch (Exception e) {
-            LOGGER.error("Error closing " + closeable, e);
+            LOGGER.error(e, "Error closing " + closeable);
             // Just log the error. No re-throw
         }
     }

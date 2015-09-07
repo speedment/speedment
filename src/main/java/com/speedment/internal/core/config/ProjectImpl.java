@@ -29,9 +29,9 @@ import groovy.lang.Closure;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -47,7 +47,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     public ProjectImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children  = new ChildHolder();
+        this.children = new ChildHolder();
     }
 
     @Override
@@ -108,9 +108,11 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
         return speedment;
     }
 
+    private static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
+
     @Override
     public Table findTableByName(String fullName) {
-        final String[] parts = fullName.split("\\.");
+        final String[] parts = SPLIT_PATTERN.split(fullName);
 
         if (parts.length != 3) {
             throw new IllegalArgumentException(
@@ -122,7 +124,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
         final String dbmsName = parts[0],
             schemaName = parts[1],
             tableName = parts[2];
-
+       
         return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find dbms: '" + dbmsName + "'."))
@@ -133,7 +135,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find table: '" + tableName + "'."));
     }
-    
+
     @Override
     public Dbms dbms(Closure<?> c) {
         return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms(getSpeedment()));

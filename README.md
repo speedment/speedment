@@ -28,7 +28,7 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy querying using standard Java 8 predicates
 ```java
 // Large quantities of data can be reduced in-memory using predicates.
-List<Hare> oldHares = Hare.stream()
+List<Hare> oldHares = hares
     .filter(h -> h.getAge() > 8)
     .collect(toList());
 ```
@@ -36,41 +36,41 @@ List<Hare> oldHares = Hare.stream()
 ###### Optimised predicate short-circuit
 ```java
 // Searches are optimized in the background!
-Optional<Hare> harry = Hare.stream()
+Optional<Hare> harry = hares.stream()
     .filter(NAME.equal("Harry").and(AGE.lessThan(5)))
     .findAny();
 ```
 
 ###### Easy persistence
 ```java
-// A Builder-pattern can be used to create an entity in a database
+// Entities can be persisted in a database
 // using the "Active Record Pattern"
-Optional<Hare> dbHarry = Hare.builder()
+Hare dbHarry = hares.newInstance()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3)
     .persist();
 ```
 
-The `.persist()` method above is just a convenience delegator short-cut for the following:
+###### JPA-style persistance if you prefer that over the "Active Record Pattern"
+.
 
 ```java
-Hare harry = Hare.builder()
+Hare harry = hares.newInstance()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3);
 
-// The EntityManager is still responsible for persistence
-Optional<Hare> dbHarry = EntityManager.get().persist(harry);
+<Hare dbHarry = EntityManager.get().persist(harry);
 ```
 
     
 ###### Entities are linked
 ```java
 // Different tables form a traversable graph in memory. No need for joins!
-Optional<Carrot> carrot = Hare.stream()
+Optional<Carrot> carrot = hares.stream()
     .filter(NAME.equal("Harry"))
-    .flatMap(Hare::carrots) // Carrot is a foreign key table.
+    .flatMap(Hare::findCarrots) // Carrot is a foreign key table.
     .findAny();
 ```
     
@@ -78,7 +78,7 @@ Optional<Carrot> carrot = Hare.stream()
 ###### Convert to JSON
 ```java
 // List all hares in JSON format
-Hare.stream()
+hares.stream()
     .map(Hare::toJson)
     .forEach(System.out::println);
 ```
@@ -86,8 +86,9 @@ Hare.stream()
 
 ###### Easy initialization
 ```java
-// A configuration-class is generated from the database.
-new HareApplication().withPassword("myPwd729").start();
+// A HareApplication-class is generated from the database.
+Speedment speedment = new HareApplication().withPassword("myPwd729").build();
+Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
  
 
@@ -101,8 +102,8 @@ Speedment inspects your database and can automatically generate code that reflec
 
 Development Status
 ------------------
-Speedment is still very early and we are currently moving in large blocks from the existing closed source product. 
-We will be adding new cool stuff like transactions, caching and support for more database types in coming releases. We will also add JavaDocs that are missing in the current release.
+Speedment is still early and we are currently moving in large blocks from the existing closed source product. 
+We will be adding new cool stuff like transactions, reactor, caching and support for more database types in coming releases. 
 
 
 Using Maven

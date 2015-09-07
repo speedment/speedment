@@ -38,9 +38,6 @@ import com.speedment.config.Project;
 import com.speedment.config.Table;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -92,7 +89,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A Speedment Application Lifecycle class for the {@link com.speedment.core.config.model.Project}.";
+        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + ".";
     }
 
     @Override

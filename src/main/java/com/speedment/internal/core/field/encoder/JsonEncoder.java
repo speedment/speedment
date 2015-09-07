@@ -136,7 +136,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     }
 
     protected static String jsonValue(Object in) {
-        requireNonNull(in);
+        // in is nullable, a field can certainly be null
         final String value;
 
         if (in instanceof Optional<?>) {
