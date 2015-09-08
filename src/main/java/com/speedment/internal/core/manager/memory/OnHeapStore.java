@@ -18,6 +18,8 @@ package com.speedment.internal.core.manager.memory;
 
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ReferenceComparableField;
+import com.speedment.field.builders.ComparablePredicateBuilder;
+import com.speedment.field.operators.ComparableOperator;
 import com.speedment.field.operators.StandardComparableOperator;
 import com.speedment.internal.core.stream.MapStream;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
@@ -90,6 +92,31 @@ public class OnHeapStore<ENTITY> {
         requireNonNull(entity);
         MapStream.of(stores)
             .forEach((field, store) -> removeEntity(field, store, entity));
+    }
+    
+    /**
+     * Returns a stream of subsets of this store based on the specified field,
+     * operator and value. If no entities match, an empty stream will be
+     * returned. None of the in parameters can be {@code null}.
+     * 
+     * @param <V>       the type of the value
+     * @param predicate the predicate to use
+     * @return          a stream of matching entities
+     */
+    public <V extends Comparable<V>> Stream<ENTITY> where(
+        ComparablePredicateBuilder predicate) {
+        
+        final ReferenceComparableField field = predicate.getField();
+        final V value = (V) predicate.getOperand();
+        final ComparableOperator operator = predicate.getComparableOperator();
+        
+        if (operator instanceof StandardComparableOperator) {
+            return where(field, (StandardComparableOperator) operator, value);
+        } else {
+            throw new UnsupportedOperationException(
+                "Only standard operators are supported at this moment."
+            );
+        }
     }
 
     /**
