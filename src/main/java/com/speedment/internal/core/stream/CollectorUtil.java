@@ -183,6 +183,15 @@ public final class CollectorUtil {
         return Optional.ofNullable(str).filter(s -> !s.isEmpty());
     }
 
+    /**
+     * Returns a new {@link MapStream} where the elements have been grouped together using
+     * the specified function.
+     * 
+     * @param <T>      the stream element type
+     * @param <C>      the type of the key to group by
+     * @param grouper  the function to use for grouping
+     * @return         a {@link MapStream} grouped by key
+     */
     public static <T, C> Collector<T, ?, MapStream<C, List<T>>> groupBy(Function<T, C> grouper) {
         return new CollectorImpl<>(
             () -> new GroupHolder<>(grouper),
