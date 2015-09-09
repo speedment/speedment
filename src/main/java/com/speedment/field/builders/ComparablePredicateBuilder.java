@@ -17,6 +17,8 @@
 package com.speedment.field.builders;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.Field;
+import com.speedment.field.ReferenceComparableField;
 import java.util.function.Predicate;
 import com.speedment.field.operators.ComparableOperator;
 
@@ -36,4 +38,7 @@ public interface ComparablePredicateBuilder<ENTITY, V extends Comparable<? super
 
     @Override
     V getOperand();
+
+    @Override
+    ReferenceComparableField<ENTITY, V> getField();
 }

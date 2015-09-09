@@ -39,6 +39,7 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongBiFunction;
 import java.util.function.ToLongFunction;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -200,6 +201,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public DoubleStream flatMapToDouble(BiFunction<? super K, ? super V, ? extends DoubleStream> mapper) {
         return inner.flatMapToDouble(e -> mapper.apply(e.getKey(), e.getValue()));
     }
+    
+    public Stream<K> keys() {
+        return inner.map(Map.Entry::getKey);
+    }
+    
+    public Stream<V> values() {
+        return inner.map(Map.Entry::getValue);
+    }
 
     @Override
     public MapStream<K, V> distinct() {
@@ -209,7 +218,22 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     @Override
     public MapStream<K, V> sorted() {
-        inner = inner.sorted();
+        final Comparator<K> c = (a, b) -> {
+            if (a == null && b == null) {
+                return 0;
+            } else if (a != null && b != null) {
+                if (a instanceof Comparable<?>) {
+                    @SuppressWarnings("unchecked")
+                    final Comparable<K> ac = (Comparable<K>) a;
+
+                    return ac.compareTo(b);
+                }
+            }
+            
+            throw new UnsupportedOperationException("Can only sort keys that implement Comparable.");
+        };
+
+        inner = inner.sorted((a, b) -> c.compare(a.getKey(), b.getKey()));
         return this;
     }
 
@@ -416,6 +440,17 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     @Override
     public void close() {
         inner.close();
+    }
+    
+    public Map<K, V> toMap() {
+        return inner.collect(Collectors.toMap(
+            Map.Entry::getKey, 
+            Map.Entry::getValue
+        ));
+    }
+    
+    public List<Map.Entry<K, V>> toList() {
+        return inner.collect(Collectors.toList());
     }
     
     private MapStream(Stream<Map.Entry<K, V>> inner) {
