@@ -26,10 +26,26 @@ public interface Logger {
     static final String NO_EXCEPTION_TEXT = "";
 
     /**
-     * Logs a <tt>message</tt> at the given {@link com.speedment.internal.logging.Level}.
-     * A present {@link Throwable} will also be logged.
+     * Returns the current log level.
      *
-     * @param level the non-null {@link com.speedment.internal.logging.Level} to use
+     * @return the current log level
+     */
+    public Level getLevel();
+
+    /**
+     * Sets the current log level.
+     *
+     * @param level the new current log level
+     */
+    public void setLevel(Level level);
+
+    /**
+     * Logs a <tt>message</tt> at the given
+     * {@link com.speedment.internal.logging.Level}. A present {@link Throwable}
+     * will also be logged.
+     *
+     * @param level the non-null {@link com.speedment.internal.logging.Level} to
+     * use
      * @param throwable the {@link Throwable} to log (if any)
      * @param message the non-null message to log
      */
@@ -775,7 +791,7 @@ public interface Logger {
      * <tt>message</tt> is null
      */
     default void error(String message) {
-        log(Level.FATAL, Optional.empty(), message);
+        log(Level.ERROR, Optional.empty(), message);
     }
 
     /**

@@ -16,11 +16,13 @@
  */
 package com.speedment.internal.logging.impl;
 
+import com.speedment.internal.logging.Level;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerEventListener;
 import com.speedment.internal.logging.LoggerFactory;
 import com.speedment.internal.logging.LoggerFormatter;
 import com.speedment.internal.logging.impl.formatter.StandardFormatters;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,6 +52,11 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
     @Override
     public Logger create(Class<?> binding) {
         requireNonNull(binding);
+        return acquireLogger(makeNameFrom(binding));
+    }
+
+    protected String makeNameFrom(Class<?> binding) {
+        requireNonNull(binding);
         final String[] tokens = binding.getName().split("\\.");
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tokens.length; i++) {
@@ -59,7 +66,7 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
                 sb.append(tokens[i].charAt(0)).append('.');
             }
         }
-        return acquireLogger(sb.toString());
+        return sb.toString();
     }
 
     @Override
@@ -115,6 +122,24 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
     @Override
     public Stream<Entry<String, Logger>> loggers() {
         return loggers.entrySet().stream();
+    }
+
+    @Override
+    public void setLevel(String path, Level level) {
+        requireNonNulls(path, level);
+        loggers()
+            .filter(e
+                -> e.getKey().startsWith(path)
+            )
+            .map(Entry::getValue).forEach((Logger l)
+            -> l.setLevel(level)
+        );
+    }
+
+    @Override
+    public void setLevel(Class<?> binding, Level level) {
+        requireNonNulls(binding, level);
+        setLevel(makeNameFrom(binding), level);
     }
 
 }
