@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.1.0";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.1.1";
     private static final String EXPECTED_SPECIFICATION_VERSION = "2.1";
 
     public SpeedmentVersionTest() {

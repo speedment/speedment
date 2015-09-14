@@ -245,11 +245,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         return this;
     }
 
-    public MapStream<K, V> sorted(ToIntBiFunction<? super K, ? super V> comparator) {
-        inner = inner.sorted((e1, e2)
-            -> comparator.applyAsInt(e1.getKey(), e1.getValue())
-            - comparator.applyAsInt(e2.getKey(), e2.getValue())
-        );
+    public MapStream<K, V> sortedByKey(Comparator<K> comparator) {
+        inner = inner.sorted(byKeyOnly(comparator));
+        return this;
+    }
+    
+    public MapStream<K, V> sortedByValue(Comparator<V> comparator) {
+        inner = inner.sorted(byValueOnly(comparator));
         return this;
     }
 
@@ -338,12 +340,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public Optional<Map.Entry<K, V>> min(Comparator<? super Map.Entry<K, V>> comparator) {
         return inner.min(comparator);
     }
-
-    public Optional<Map.Entry<K, V>> min(ToIntBiFunction<? super K, ? super V> comparator) {
-        return inner.min((e1, e2)
-            -> comparator.applyAsInt(e1.getKey(), e1.getValue())
-            - comparator.applyAsInt(e2.getKey(), e2.getValue())
-        );
+    
+    public Optional<Map.Entry<K, V>> minByKey(Comparator<K> comparator) {
+        return inner.min(byKeyOnly(comparator));
+    }
+    
+    public Optional<Map.Entry<K, V>> minByValue(Comparator<V> comparator) {
+        return inner.min(byValueOnly(comparator));
     }
 
     @Override
@@ -351,11 +354,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         return inner.max(comparator);
     }
 
-    public Optional<Map.Entry<K, V>> max(ToIntBiFunction<? super K, ? super V> comparator) {
-        return inner.max((e1, e2)
-            -> comparator.applyAsInt(e1.getKey(), e1.getValue())
-            - comparator.applyAsInt(e2.getKey(), e2.getValue())
-        );
+    public Optional<Map.Entry<K, V>> maxByKey(Comparator<K> comparator) {
+        return inner.max(byKeyOnly(comparator));
+    }
+    
+    public Optional<Map.Entry<K, V>> maxByValue(Comparator<V> comparator) {
+        return inner.max(byValueOnly(comparator));
     }
 
     @Override
@@ -457,5 +461,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     private MapStream(Stream<Map.Entry<K, V>> inner) {
         this.inner = inner;
+    }
+    
+    private static <K, V> Comparator<Map.Entry<K, V>> byKeyOnly(Comparator<K> comparator) {
+        return (a, b) -> comparator.compare(a.getKey(), b.getKey());
+    }
+    
+    private static <K, V> Comparator<Map.Entry<K, V>> byValueOnly(Comparator<V> comparator) {
+        return (a, b) -> comparator.compare(a.getValue(), b.getValue());
     }
 }

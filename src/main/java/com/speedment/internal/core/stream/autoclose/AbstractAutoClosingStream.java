@@ -208,8 +208,10 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
 
         @Override
-        public void close() throws Exception {
-            r.run();
+        public void close() {
+
+                r.run();
+
         }
 
     }
