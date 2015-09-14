@@ -21,7 +21,6 @@ import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.internal.core.platform.component.EntityManager;
 import com.speedment.internal.core.platform.component.ManagerComponent;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 

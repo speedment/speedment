@@ -64,7 +64,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         final Function<ResultSet, T> rsMapper,
         Supplier<Connection> connectionSupplier
     ) {
-        setSql(sql);
+        setSql(sql); // requireNonNull in setter
         setValues(values);
         setRsMapper(rsMapper);
         this.connectionSupplier = requireNonNull(connectionSupplier);
@@ -82,6 +82,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             for (final Object o : getValues()) {
                 ps.setObject(i++, o);
             }
+            LOGGER.debug("sql:%s, values:%s", getSql(), getValues());
             rs = ps.executeQuery();
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Error executing " + getSql() + ", values=" + getValues());
