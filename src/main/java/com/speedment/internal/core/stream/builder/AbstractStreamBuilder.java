@@ -98,7 +98,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         if (!closed) {
             closed = true;
             try {
-                AbstractAutoClosingStream.composedRunnable(closeHandlers); // Run this stream's close handlers
+                if (!closeHandlers.isEmpty()) {
+                    AbstractAutoClosingStream.composedRunnable(closeHandlers); // Run this stream's close handlers
+                }
             } catch (Exception e) {
                 throw new SpeedmentException(e);
             } finally {

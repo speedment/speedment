@@ -17,6 +17,7 @@
 package com.speedment.internal.core.stream.autoclose;
 
 import com.speedment.exception.SpeedmentException;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import com.speedment.internal.util.holder.Holder;
 import java.util.Collection;
 import java.util.HashSet;
@@ -156,25 +157,26 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
     @SafeVarargs // Creating a Stream of an array is safe.
     @SuppressWarnings({"unchecked", "varargs"})
     public static <T extends AutoCloseable> void composedClose(T... closeables) {
-        final Holder<Exception> eHolder = new Holder<>();
-        Stream.of(closeables).forEachOrdered(s -> {
+        requireNonNulls(closeables);
+        Exception exception = null;
+
+        for (final T closable : closeables) {
             try {
-                s.close();
+                closable.close();
             } catch (Exception e) {
-                final Exception exisitingException = eHolder.get();
-                if (exisitingException == null) {
-                    eHolder.set(e);
+                if (exception == null) {
+                    exception = e;
                 } else {
                     try {
-                        exisitingException.addSuppressed(e);
+                        exception.addSuppressed(e);
                     } catch (Exception ignored) {
                     }
                 }
             }
-        });
-        final Exception e = eHolder.get();
-        if (e != null) {
-            throw new SpeedmentException(e);
+        }
+
+        if (exception != null) {
+            throw new SpeedmentException(exception);
         }
     }
 
@@ -188,12 +190,13 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
      * an exception
      */
     public static void composedRunnable(Collection<Runnable> runnables) {
-        composedClose(
-            runnables.stream()
-            .map(CloseImpl::new)
-            .toArray(s -> new CloseImpl[s])
-        );
-
+        requireNonNulls(runnables);
+        final AutoCloseable[] closables = new AutoCloseable[runnables.size()];
+        int i = 0;
+        for (final Runnable r : runnables) {
+            closables[i++] = new CloseImpl(r);
+        }
+        composedClose(closables);
     }
 
     private static class CloseImpl implements AutoCloseable {
