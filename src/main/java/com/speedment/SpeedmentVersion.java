@@ -28,14 +28,13 @@ import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
  */
 public final class SpeedmentVersion {
 
-    private static final String IMPLEMENTATION_TITLE = "Speedment";
-    private static final String IMPLEMENTATION_VENDOR = "Speedment Inc."; // "Speedment, Inc." difficult to enter into POM because of ','
-    private static final String IMPLEMENTATION_VERSION = "2.1.0";
-    private static final boolean PRODUCTION_MODE = true;
+    private static final String
+        IMPLEMENTATION_TITLE   = "Speedment",
+        IMPLEMENTATION_VENDOR  = "Speedment Inc.",  // "Speedment, Inc." difficult to enter into POM because of ','
+        IMPLEMENTATION_VERSION = "2.1.1",
+        SPECIFICATION_VERSION  = "2.1";
 
-//    private static final String SPECIFICATION_TITLE = "Speedment";
-//    private static final String SPECIFICATION_VENDOR = "Speedment Inc.";
-    private static final String SPECIFICATION_VERSION = "2.1";
+    private static final boolean PRODUCTION_MODE = true;
 
     /**
      * Returns if this version is intended for production use.
@@ -80,14 +79,6 @@ public final class SpeedmentVersion {
         return IMPLEMENTATION_VERSION;
     }
 
-//    public static String getSpecificationTitle() {
-//        return SPECIFICATION_TITLE;
-//    }
-//
-//    public static String getSpecificationVendor() {
-//        return SPECIFICATION_VENDOR;
-//    }
-//
     /**
      * Returns the non-null version number of the specification that this
      * Speedment implements. This version string must be a sequence of
