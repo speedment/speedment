@@ -17,12 +17,15 @@
 package com.speedment.internal.codegen.java;
 
 import com.speedment.internal.codegen.base.DefaultDependencyManager;
-import com.speedment.internal.codegen.base.TransformFactory;
 import com.speedment.internal.codegen.base.DefaultGenerator;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import com.speedment.internal.codegen.base.TransformFactory;
+
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 
 /**
  * A hook to the generator that can be passed to various stages in the pipeline.
@@ -36,7 +39,7 @@ import java.util.stream.Stream;
  */
 public class JavaGenerator extends DefaultGenerator {
     
-	private final static Pattern[] IGNORED = Stream.of(
+	private final static Pattern[] IGNORED = compileAll(
         "^void$",
 		"^byte$",
         "^short$",
@@ -47,9 +50,7 @@ public class JavaGenerator extends DefaultGenerator {
         "^float$",
         "^double$",
         "^java\\.lang\\."
-    ).map(Pattern::compile)
-        .collect(Collectors.toSet())
-        .toArray(new Pattern[0]);
+    );
     
     /**
      * Instantiates the JavaGenerator.
@@ -70,4 +71,12 @@ public class JavaGenerator extends DefaultGenerator {
 	public JavaGenerator(TransformFactory... factories) {
 		super(new DefaultDependencyManager(IGNORED), requireNonNulls(factories));
 	}
+
+    private static Pattern[] compileAll(String... regexp) {
+        final Set<Pattern> patterns = Stream.of(regexp)
+            .map(Pattern::compile)
+            .collect(Collectors.toSet());
+
+        return patterns.toArray(new Pattern[patterns.size()]);
+    }
 }

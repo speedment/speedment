@@ -17,8 +17,11 @@
 package com.speedment.internal.codegen.lang.controller;
 
 import com.speedment.internal.codegen.lang.interfaces.HasMethods;
-import static java.util.Objects.requireNonNull;
+import com.speedment.internal.codegen.lang.models.modifiers.Keyword;
+
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control makes sure all method parameters in the specified model is set
@@ -38,7 +41,7 @@ public final class FinalParameters<T extends HasMethods<T>> implements Consumer<
 	public void accept(T model) {
 		requireNonNull(model).getMethods()
             .forEach(m -> m.getFields()
-                .forEach(p -> p.final_())
+                .forEach(Keyword.final_::final_)
             );
 	}
 }

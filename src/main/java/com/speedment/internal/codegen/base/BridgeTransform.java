@@ -18,9 +18,10 @@ package com.speedment.internal.codegen.base;
 
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A transform that uses a series of transforms to complete the transformation.
@@ -93,7 +94,7 @@ public class BridgeTransform<A, B> implements Transform<A, B> {
                 final Transform<Object, ?> step2 = (Transform<Object, ?>) step;
                 
                 o = gen.transform(step2, o, factory)
-                    .map(m -> m.getResult())
+                    .map(Meta::getResult)
                     .orElse(null);
             }
         }

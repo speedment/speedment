@@ -16,16 +16,18 @@
  */
 package com.speedment.internal.codegen.java.views;
 
-import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.DependencyManager;
+import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
-import java.util.Optional;
+import com.speedment.internal.codegen.lang.models.Type;
+
 import java.util.Collections;
-import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.speedment.internal.codegen.util.Formatting.*;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from a {@link Type} to java code.
@@ -102,10 +104,7 @@ public final class TypeView implements Transform<Type, String> {
         }
         
         final Optional<String> current = mgr.getCurrentPackage();
-        if (current.isPresent() && type.getName().startsWith(current.get())) {
-            return true;
-        }
-        
-        return false;
-    }
+		return current.isPresent() && type.getName().startsWith(current.get());
+
+	}
 }

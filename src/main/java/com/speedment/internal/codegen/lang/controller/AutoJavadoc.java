@@ -16,22 +16,18 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.lang.interfaces.HasClasses;
-import com.speedment.internal.codegen.lang.interfaces.HasConstructors;
-import com.speedment.internal.codegen.lang.interfaces.HasJavadoc;
-import com.speedment.internal.codegen.lang.interfaces.HasFields;
-import com.speedment.internal.codegen.lang.interfaces.HasGenerics;
-import com.speedment.internal.codegen.lang.interfaces.HasMethods;
+import com.speedment.internal.codegen.lang.interfaces.*;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.JavadocTag;
 import com.speedment.internal.codegen.lang.models.Method;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Consumer;
+
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.*;
+import static com.speedment.internal.codegen.util.Formatting.SE;
+import static com.speedment.internal.codegen.util.Formatting.SS;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control generates javadoc stubs for all models descending from the
@@ -107,19 +103,19 @@ public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 		if (model instanceof HasConstructors) {
             // Generate javadoc for each constructor.
 			((HasConstructors<?>) model).getConstructors()
-				.forEach(m -> createJavadoc(m));
+				.forEach(AutoJavadoc::createJavadoc);
 		}
 
 		if (model instanceof HasMethods) {
             // Generate javadoc for each method.
 			((HasMethods<?>) model).getMethods()
-				.forEach(m -> createJavadoc(m));
+				.forEach(AutoJavadoc::createJavadoc);
 		}
         
         if (model instanceof HasClasses) {
             // Generate javadoc for each subclass.
             ((HasClasses<?>) model).getClasses()
-                .forEach(m -> createJavadoc(m));
+                .forEach(AutoJavadoc::createJavadoc);
         }
 	}
 	

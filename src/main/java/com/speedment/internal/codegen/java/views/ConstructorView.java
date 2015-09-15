@@ -76,14 +76,12 @@ public final class ConstructorView implements Transform<Constructor, String> {
 	private static Optional<String> renderName(Generator gen, Constructor model) {
         requireNonNull(gen);
         requireNonNull(model);
-        
-		Optional<String> result = gen.getRenderStack()
+
+        return gen.getRenderStack()
             .fromTop(HasName.class)
             .filter(n -> model != n)
-            .map(HasName<?>::getName)
+            .map(HasName::getName)
             .map(Formatting::shortName)
             .findFirst();
-        
-        return result;
 	}
 }

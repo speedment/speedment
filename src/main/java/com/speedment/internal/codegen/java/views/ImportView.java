@@ -86,12 +86,9 @@ public final class ImportView implements Transform<Import, String> {
         
         // TODO: Inner classes might still be imported explicitly.
 
-        if (current.isPresent()
-        &&  suggested.isPresent()
-        &&  current.get().equals(suggested.get())) {
-            return false;
-        }
+        return !(current.isPresent()
+            && suggested.isPresent()
+            && current.get().equals(suggested.get()));
 
-        return true;
     }
 }

@@ -19,10 +19,11 @@ package com.speedment.internal.codegen.base;
 import java.util.AbstractMap;
 import java.util.HashSet;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link TransformFactory} interface.
@@ -78,7 +79,11 @@ public class DefaultTransformFactory implements TransformFactory {
 		return new HashSet<>(transforms.entrySet()).stream()
 			.filter(e -> e.getKey().isAssignableFrom(model))
             .flatMap(e -> e.getValue().stream())
-            .map(e -> (Map.Entry<Class<?>, T>) new AbstractMap.SimpleEntry<>(e.getKey(), (T) TransformFactory.create(e.getValue())))
+            .map(e -> toEntry(e.getKey(), (T) TransformFactory.create(e.getValue())))
             .collect(Collectors.toSet());
 	}
+
+    private static <A, T extends Transform<A, ?>> Map.Entry<Class<?>, T> toEntry(Class<?> key, T value) {
+        return new AbstractMap.SimpleEntry<>(key, value);
+    }
 }

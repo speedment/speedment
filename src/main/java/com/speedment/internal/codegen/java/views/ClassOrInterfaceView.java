@@ -16,23 +16,16 @@
  */
 package com.speedment.internal.codegen.java.views;
 
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.java.views.interfaces.HasAnnotationUsageView;
-import com.speedment.internal.codegen.java.views.interfaces.HasClassesView;
-import com.speedment.internal.codegen.java.views.interfaces.HasFieldsView;
-import com.speedment.internal.codegen.java.views.interfaces.HasJavadocView;
-import com.speedment.internal.codegen.java.views.interfaces.HasGenericsView;
-import com.speedment.internal.codegen.java.views.interfaces.HasInitalizersView;
-import com.speedment.internal.codegen.java.views.interfaces.HasImplementsView;
-import com.speedment.internal.codegen.java.views.interfaces.HasMethodsView;
-import com.speedment.internal.codegen.java.views.interfaces.HasModifiersView;
-import com.speedment.internal.codegen.java.views.interfaces.HasNameView;
+import com.speedment.internal.codegen.java.views.interfaces.*;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.speedment.internal.codegen.util.Formatting.*;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -154,7 +147,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements
 	private String separate(Object... strings) {
         requireNonNulls(strings);
 		return Stream.of(strings)
-			.map(o -> o.toString())
+			.map(Object::toString)
 			.filter(s -> s.length() > 0)
 			.collect(joining(dnl()));
 	}

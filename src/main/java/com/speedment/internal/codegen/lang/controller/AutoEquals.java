@@ -16,26 +16,20 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.lang.interfaces.HasFields;
-import com.speedment.internal.codegen.lang.interfaces.HasMethods;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.Method;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.*;
+import com.speedment.internal.codegen.lang.interfaces.*;
+import com.speedment.internal.codegen.lang.models.*;
+
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
-import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.lang.interfaces.HasImports;
-import com.speedment.internal.codegen.lang.interfaces.HasName;
-import com.speedment.internal.codegen.lang.interfaces.HasSupertype;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Type;
+import java.util.stream.Collectors;
+
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.*;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -143,7 +137,7 @@ implements Consumer<T> {
             })
             .add(tab() + ".filter(o -> getClass().equals(o.getClass()))")
             .add(tab() + ".map(o -> (" + model.getName() + ") o)")
-            .add(tab() + model.getFields().stream().map(f -> compare(f)).collect(
+            .add(tab() + model.getFields().stream().map(this::compare).collect(
                     Collectors.joining(nl() + tab())
                 ))
             .add(tab() + ".isPresent();")
@@ -173,7 +167,7 @@ implements Consumer<T> {
             .add(OVERRIDE)
             .add("int hash = 7;")
             .add(model.getFields().stream()
-                .map(f -> hash(f))
+                .map(this::hash)
                 .collect(Collectors.joining(nl()))
             )
             .add("return hash;")

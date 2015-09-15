@@ -16,25 +16,18 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import static com.speedment.internal.codegen.util.Formatting.DOT;
 import com.speedment.internal.codegen.base.DependencyManager;
-import com.speedment.internal.codegen.lang.interfaces.HasAnnotationUsage;
-import com.speedment.internal.codegen.lang.interfaces.HasClasses;
-import com.speedment.internal.codegen.lang.interfaces.HasConstructors;
-import com.speedment.internal.codegen.lang.interfaces.HasThrows;
-import com.speedment.internal.codegen.lang.interfaces.HasFields;
-import com.speedment.internal.codegen.lang.interfaces.HasGenerics;
-import com.speedment.internal.codegen.lang.interfaces.HasImplements;
-import com.speedment.internal.codegen.lang.interfaces.HasMethods;
-import com.speedment.internal.codegen.lang.interfaces.HasSupertype;
-import com.speedment.internal.codegen.lang.interfaces.HasType;
+import com.speedment.internal.codegen.lang.interfaces.*;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.implementation.ImportImpl;
+
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+
+import static com.speedment.internal.codegen.util.Formatting.DOT;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports
@@ -64,9 +57,9 @@ public final class AutoImports implements Consumer<File> {
      */
 	@Override
 	public void accept(File file) {
-		findTypesIn(requireNonNull(file)).forEach((s, t) -> {
-			file.add(new ImportImpl(t));
-		});
+		findTypesIn(requireNonNull(file)).forEach(
+			(s, t) -> file.add(new ImportImpl(t))
+		);
 	}
 	
     /**
@@ -96,7 +89,7 @@ public final class AutoImports implements Consumer<File> {
 	private void findTypesIn(Object model, Map<String, Type> types) {
         requireNonNull(model);
         requireNonNull(types);
-        
+
 		if (HasSupertype.class.isAssignableFrom(model.getClass())) {
 			((HasSupertype<?>) model).getSupertype().ifPresent(t -> addType(t, types));
 		}

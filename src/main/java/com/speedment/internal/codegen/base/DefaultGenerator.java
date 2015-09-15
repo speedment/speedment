@@ -16,11 +16,13 @@
  */
 package com.speedment.internal.codegen.base;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -92,8 +94,8 @@ public class DefaultGenerator implements Generator {
             BridgeTransform.create(factory, from.getClass(), to)
             .map(t -> (Transform<A, B>) t)
             .map(t -> transform(t, from, factory))
-            .filter(o -> o.isPresent())
-            .map(o -> o.get())
+            .filter(Optional::isPresent)
+            .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
         );
     }
 

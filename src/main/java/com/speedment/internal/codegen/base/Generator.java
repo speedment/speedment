@@ -112,7 +112,7 @@ public interface Generator {
      * @see Meta
      */
     default <A> Stream<Meta<A, String>> metaOn(Collection<A> models) {
-        return models.stream().map(model -> metaOn(model)).flatMap(m -> m);
+        return models.stream().map(this::metaOn).flatMap(m -> m);
     }
     
     /**
@@ -171,7 +171,7 @@ public interface Generator {
             }
         }
         
-        return metaOn(model).map(c -> c.getResult()).findAny();
+        return metaOn(model).map(Meta::getResult).findAny();
     }
 
     /**
@@ -182,7 +182,7 @@ public interface Generator {
      * @return        a stream of meta objects
      */
     default <M> Stream<String> onEach(Collection<M> models) {
-        return metaOn(models).map(c -> c.getResult());
+        return metaOn(models).map(Meta::getResult);
     }
     
     /**
