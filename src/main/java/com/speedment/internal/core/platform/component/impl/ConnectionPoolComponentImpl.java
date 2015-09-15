@@ -24,34 +24,35 @@ import com.speedment.internal.logging.LoggerManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.
  *
  * @author pemi
  */
-public final class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
+public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
-    private Logger logger;
+    private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
     private final long DEFAULT_MAX_AGE = 30_000;
-    private final int DEFAULT_MAX_POOL_SIZE_PER_DB = 32;
+    private final int DEFAULT_MIN_POOL_SIZE_PER_DB = 32;
 
     private long maxAge;
-    private int poolSize;
+    private int maxRetainSize;
 
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
     public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
-        poolSize = DEFAULT_MAX_POOL_SIZE_PER_DB;
+        maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
     }
@@ -61,29 +62,22 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
         requireNonNull(uri);
         // user nullable
         // password nullable
+        logger.debug("getConnection(" + uri + ", " + user);
         final String key = makeKey(uri, user, password);
         final Deque<PoolableConnection> q = acquireDeque(key);
         final PoolableConnection reusedConnection = pollValidOrNull(q);
         if (reusedConnection != null) {
+            logger.debug("Reuse Connection:" + reusedConnection);
             return lease(reusedConnection);
         } else {
-            final Connection newRawConnection = DriverManager.getConnection(uri, user, password);
+            final Connection newRawConnection = newConnection(uri, user, password);
             final PoolableConnection newConnection = new PoolableConnectionImpl(uri, user, password, newRawConnection, System.currentTimeMillis() + getMaxAge());
 //            getLogger().info("Created connection " + newConnection.getId() + " (" + leasedConnections.size() + ")");
             newConnection.setOnClose(() -> returnConnection(newConnection));
+            logger.debug("New Connection:" + newConnection);
             return lease(newConnection);
         }
 
-    }
-
-    private PoolableConnection lease(PoolableConnection poolableConnection) {
-        leasedConnections.put(poolableConnection.getId(), poolableConnection);
-        return poolableConnection;
-    }
-
-    private PoolableConnection leaseReturn(PoolableConnection poolableConnection) {
-        leasedConnections.remove(poolableConnection.getId());
-        return poolableConnection;
     }
 
     @Override
@@ -95,22 +89,39 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
         } else {
             final String key = makeKey(connection);
             final Deque<PoolableConnection> q = acquireDeque(key);
-            if (q.size() >= getPoolSize()) {
+            if (q.size() >= getMaxRetainSize()) {
                 discard(connection);
             } else {
+                logger.debug("Recycled:" + connection);
                 q.addFirst(connection);
             }
         }
     }
 
+    @Override
+    public Connection newConnection(String uri, String user, String password) throws SQLException {
+        return DriverManager.getConnection(uri, user, password);
+    }
+
     private void discard(PoolableConnection connection) {
         requireNonNull(connection);
+        logger.debug("Discard:" + connection);
         try {
             connection.rawClose();
 //            getLogger().info("Discarded connection " + connection.getId() + " (" + leasedConnections.size() + ")");
         } catch (SQLException sqle) {
             getLogger().error(sqle, "Error closing a connection.");
         }
+    }
+
+    private PoolableConnection lease(PoolableConnection poolableConnection) {
+        leasedConnections.put(poolableConnection.getId(), poolableConnection);
+        return poolableConnection;
+    }
+
+    private PoolableConnection leaseReturn(PoolableConnection poolableConnection) {
+        leasedConnections.remove(poolableConnection.getId());
+        return poolableConnection;
     }
 
     private boolean isValidOrNull(PoolableConnection connection) {
@@ -151,6 +162,20 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
     }
 
     @Override
+    public int poolSize() {
+        return pools
+            .values()
+            .stream()
+            .mapToInt(Collection::size)
+            .sum();
+    }
+
+    @Override
+    public int leaseSize() {
+        return leasedConnections.size();
+    }
+
+    @Override
     public long getMaxAge() {
         return maxAge;
     }
@@ -161,19 +186,16 @@ public final class ConnectionPoolComponentImpl implements ConnectionPoolComponen
     }
 
     @Override
-    public int getPoolSize() {
-        return poolSize;
+    public int getMaxRetainSize() {
+        return maxRetainSize;
     }
 
     @Override
-    public void setPoolSize(int poolSize) {
-        this.poolSize = poolSize;
+    public void setMaxRetainSize(int maxRetainSize) {
+        this.maxRetainSize = maxRetainSize;
     }
 
     private Logger getLogger() {
-        if (logger == null) {
-            logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
-        }
         return logger;
     }
 

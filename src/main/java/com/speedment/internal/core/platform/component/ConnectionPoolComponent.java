@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.internal.core.pool.PoolableConnection;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -25,9 +26,9 @@ import java.sql.SQLException;
  * being used by Speedment.
  *
  * @author pemi
- * @since 2.0
+ * @since 2.1
  */
-@Api(version = "2.0")
+@Api(version = "2.1")
 public interface ConnectionPoolComponent extends Component {
 
     @Override
@@ -43,7 +44,7 @@ public interface ConnectionPoolComponent extends Component {
      * @param uri the connection URI for the connector
      * @param user the user for the connector
      * @param password the password for the connector
-     * @return a {link Connection} from this connection pool
+     * @return a {@link PoolableConnection} from this connection pool
      * @throws java.sql.SQLException if a connection can neither be obtained
      * from the pool nor created.
      */
@@ -58,12 +59,69 @@ public interface ConnectionPoolComponent extends Component {
      */
     void returnConnection(PoolableConnection connection);
 
-    int getPoolSize();
+    /**
+     * Creates and returns a new {@link Connection} for the given parameters.
+     * This method is called whenever the pool needs to allocate a new
+     * Connection.
+     *
+     * @param uri the connection URI for the connector
+     * @param user the user for the connector
+     * @param password the password for the connector
+     * @return a new {@link Connection} for the given parameters
+     * @throws SQLException if a new connection cannot be created
+     */
+    Connection newConnection(String uri, String user, String password) throws SQLException;
 
-    void setPoolSize(int size);
+    /**
+     * Returns the current number of idle connections in the pool.
+     *
+     * @return the current number of idle connections in the pool
+     */
+    int poolSize();
 
+    /**
+     * Returns the current number of leased connections from the pool.
+     *
+     * @return the current number of leased connections from the pool
+     */
+    int leaseSize();
+
+    /**
+     * Returns the maximum number of connection this pool will retain when
+     * connections are returned. If the number of connections in the pool
+     * exceeds this number of connections, a connection that is returned will be
+     * discarded and will not be recycled.
+     *
+     * @return the maximum number of connection this pool will retain when
+     * connections are returned
+     */
+    int getMaxRetainSize();
+
+    /**
+     * Sets the maximum number of connection this pool will retain when
+     * connections are returned. If the number of connections in the pool
+     * exceeds this number of connections, a connection that is returned will be
+     * discarded and will not recycled.
+     *
+     * @param size is the maximum number of connection this pool will retain
+     * when connections are returned
+     */
+    void setMaxRetainSize(int size);
+
+    /**
+     * Returns the maximum age for recyclable connections. Connections older
+     * that this age will be discarded.
+     *
+     * @return the maximum age for recyclable connections
+     */
     long getMaxAge();
 
+    /**
+     * Sets the maximum age for recyclable connections. Connections older that
+     * this age will be discarded.
+     *
+     * @param maxAge the maximum age for recyclable connections
+     */
     void setMaxAge(long maxAge);
 
 }

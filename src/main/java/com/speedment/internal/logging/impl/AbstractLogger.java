@@ -110,10 +110,12 @@ public abstract class AbstractLogger implements Logger {
         return sb.toString();
     }
 
+    @Override
     public Level getLevel() {
         return level;
     }
 
+    @Override
     public void setLevel(Level level) {
         this.level = requireNonNull(level);
     }

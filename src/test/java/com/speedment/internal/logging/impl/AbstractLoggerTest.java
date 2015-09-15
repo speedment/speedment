@@ -22,6 +22,12 @@
 package com.speedment.internal.logging.impl;
 
 import com.speedment.internal.logging.Level;
+import static com.speedment.internal.logging.Level.DEBUG;
+import static com.speedment.internal.logging.Level.ERROR;
+import static com.speedment.internal.logging.Level.FATAL;
+import static com.speedment.internal.logging.Level.INFO;
+import static com.speedment.internal.logging.Level.TRACE;
+import static com.speedment.internal.logging.Level.WARN;
 import com.speedment.internal.logging.LoggerEventListener;
 import com.speedment.internal.logging.LoggerFormatter;
 import java.sql.SQLException;
@@ -29,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -100,7 +107,7 @@ public class AbstractLoggerTest {
      * Test of log method, of class AbstractLogger.
      */
     @Test
-    public void reproduceProblem() {
+    public void reproduceThrowableProblem() {
         System.out.println("reproduceProblem");
         Level level = Level.ERROR;
         Throwable throwable = new SQLException("Unable to get connection");
@@ -111,6 +118,32 @@ public class AbstractLoggerTest {
         assertEquals(1, output.size());
         assertTrue(output.get(0).contains("connection"));
         assertTrue(output.get(0).contains(AbstractLoggerTest.class.getName())); // Check that there is a stack trace.
+    }
+
+    /**
+     * Test of log method, of class AbstractLogger.
+     */
+    @Test
+    public void reproduceSetLevelProblem() {
+
+        instance.setLevel(TRACE);
+
+        instance.trace(TRACE.toString().toLowerCase());
+        instance.debug(DEBUG.toString().toLowerCase());
+        instance.info(INFO.toString().toLowerCase());
+        instance.warn(WARN.toString().toLowerCase());
+        instance.error(ERROR.toString().toLowerCase());
+        instance.fatal(FATAL.toString().toLowerCase());
+
+        List<String> output = instance.getOutput();
+        assertEquals(6, output.size());
+
+        String text = output.stream().collect(Collectors.joining(", "));
+
+        for (Level level : Level.values()) {
+            assertTrue(text.contains(level.toString())); // Is the level as such in the text
+            assertTrue(text.contains(level.toString().toLowerCase())); // Is the message in the text
+        }
     }
 
     /**
@@ -328,9 +361,13 @@ public class AbstractLoggerTest {
 
         private final List<String> output;
 
-        public AbstractLoggerTestImpl() {
-            super(AbstractLogger.class.getName(), FORMATTER);
+        public AbstractLoggerTestImpl(String name) {
+            super(name, FORMATTER);
             output = new ArrayList<>();
+        }
+
+        public AbstractLoggerTestImpl() {
+            this(AbstractLogger.class.getName());
         }
 
         @Override

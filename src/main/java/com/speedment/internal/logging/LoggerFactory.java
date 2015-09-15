@@ -97,4 +97,20 @@ public interface LoggerFactory {
      */
     public Stream<LoggerEventListener> listeners();
 
+    /**
+     * Sets the log level for Loggers that fits the initial path.
+     *
+     * @param path the start of the logger name that is to be changed
+     * @param level the new log level
+     */
+    void setLevel(String path, Level level);
+
+    /**
+     * Sets the log level for the specified class logger.
+     *
+     * @param clazz of the class logger
+     * @param level the new log level
+     */
+    void setLevel(Class<?> clazz, Level level);
+
 }

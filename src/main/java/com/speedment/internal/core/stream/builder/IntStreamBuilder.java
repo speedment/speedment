@@ -38,6 +38,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.IntBinaryOperator;
@@ -49,6 +50,7 @@ import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -60,8 +62,13 @@ import java.util.stream.Stream;
  */
 public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuilder, IntPipeline> implements IntStream {
 
+    IntStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
+        super(pipeline, streamTerminator, streamSet);
+        streamSet.add(this); // Add this new stream to the streamSet so it may be closed later
+    }
+
     public IntStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator) {
-        super(pipeline, streamTerminator);
+        this(pipeline, streamTerminator, newStreamSet());
     }
 
     @Override
@@ -79,19 +86,19 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
         requireNonNull(mapper);
-        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new IntMapToObjAction<>(mapper));
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator, streamSet).append(new IntMapToObjAction<>(mapper));
     }
 
     @Override
     public LongStream mapToLong(IntToLongFunction mapper) {
         requireNonNull(mapper);
-        return new LongStreamBuilder(pipeline, streamTerminator).append(new IntMapToLongAction(mapper));
+        return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntMapToLongAction(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
         requireNonNull(mapper);
-        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new IntMapToDoubleAction(mapper));
+        return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntMapToDoubleAction(mapper));
     }
 
     @Override
@@ -128,17 +135,17 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
 
     @Override
     public LongStream asLongStream() {
-        return new LongStreamBuilder(pipeline, streamTerminator).append(new IntAsLongAction());
+        return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntAsLongAction());
     }
 
     @Override
     public DoubleStream asDoubleStream() {
-        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new IntAsDoubleAction());
+        return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntAsDoubleAction());
     }
 
     @Override
     public Stream<Integer> boxed() {
-        return new ReferenceStreamBuilder<Integer>(pipeline, streamTerminator).append(new IntBoxedAction());
+        return new ReferenceStreamBuilder<Integer>(pipeline, streamTerminator, streamSet).append(new IntBoxedAction());
     }
 
     /**
@@ -223,7 +230,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(streamTerminator.reduce(pipeline(), op));
+        return finallyClose(() -> streamTerminator.reduce(pipeline(), op));
     }
 
     /**
@@ -239,7 +246,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -252,11 +259,8 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public int sum() {
-        try {
-            return streamTerminator.sum(pipeline());
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.sum(pipeline()));
+
     }
 
     /**
@@ -269,7 +273,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt min() {
-        return finallyClose(streamTerminator.min(pipeline()));
+        return finallyClose(() -> streamTerminator.min(pipeline()));
     }
 
     /**
@@ -282,7 +286,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt max() {
-        return finallyClose(streamTerminator.max(pipeline()));
+        return finallyClose(() -> streamTerminator.max(pipeline()));
     }
 
     /**
@@ -295,11 +299,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public long count() {
-        try {
-            return streamTerminator.count(pipeline());
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -312,7 +312,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalDouble average() {
-        return finallyClose(streamTerminator.average(pipeline()));
+        return finallyClose(() -> streamTerminator.average(pipeline()));
     }
 
     /**
@@ -325,7 +325,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public IntSummaryStatistics summaryStatistics() {
-        return finallyClose(streamTerminator.summaryStatistics(pipeline()));
+        return finallyClose(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
@@ -339,11 +339,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        try {
-            return streamTerminator.anyMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -357,11 +353,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        try {
-            return streamTerminator.allMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -375,11 +367,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean noneMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        try {
-            return streamTerminator.noneMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -392,7 +380,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findFirst() {
-        return finallyClose(streamTerminator.findFirst(pipeline()));
+        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -405,35 +393,38 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findAny() {
-        return finallyClose(streamTerminator.findAny(pipeline()));
+        return finallyClose(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
      * @return iterator
      */
     @Override
     public PrimitiveIterator.OfInt iterator() {
-        return finallyClose(streamTerminator.iterator(pipeline()));
+        return streamTerminator.iterator(pipeline());
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
-     * @return spliterator
      */
     @Override
     public Spliterator.OfInt spliterator() {
-        return finallyClose(streamTerminator.spliterator(pipeline()));
+        return streamTerminator.spliterator(pipeline());
     }
 
 }

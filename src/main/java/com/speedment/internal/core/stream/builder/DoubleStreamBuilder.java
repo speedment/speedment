@@ -35,6 +35,7 @@ import java.util.DoubleSummaryStatistics;
 import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.PrimitiveIterator;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleBinaryOperator;
@@ -46,6 +47,7 @@ import java.util.function.DoubleToLongFunction;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.ObjDoubleConsumer;
 import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -57,8 +59,13 @@ import java.util.stream.Stream;
  */
 public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStreamBuilder, DoublePipeline> implements DoubleStream {
 
+    DoubleStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
+        super(pipeline, streamTerminator, streamSet);
+        streamSet.add(this); // Add this new stream to the streamSet so it may be closed later
+    }
+
     public DoubleStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator) {
-        super(pipeline, streamTerminator);
+        this(pipeline, streamTerminator, newStreamSet());
     }
 
     @Override
@@ -76,19 +83,19 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
         requireNonNull(mapper);
-        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator).append(new DoubleMapToObjAction<>(mapper));
+        return new ReferenceStreamBuilder<U>(pipeline, streamTerminator, streamSet).append(new DoubleMapToObjAction<>(mapper));
     }
 
     @Override
     public IntStream mapToInt(DoubleToIntFunction mapper) {
         requireNonNull(mapper);
-        return new IntStreamBuilder(pipeline, streamTerminator).append(new DoubleMapToIntAction(mapper));
+        return new IntStreamBuilder(pipeline, streamTerminator, streamSet).append(new DoubleMapToIntAction(mapper));
     }
 
     @Override
     public LongStream mapToLong(DoubleToLongFunction mapper) {
         requireNonNull(mapper);
-        return new LongStreamBuilder(pipeline, streamTerminator).append(new DoubleMapToLongAction(mapper));
+        return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new DoubleMapToLongAction(mapper));
     }
 
     @Override
@@ -126,7 +133,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
 
     @Override
     public Stream<Double> boxed() {
-        return new ReferenceStreamBuilder<Double>(pipeline, streamTerminator).append(new DoubleBoxedAction());
+        return new ReferenceStreamBuilder<Double>(pipeline, streamTerminator, streamSet).append(new DoubleBoxedAction());
     }
 
     /**
@@ -211,7 +218,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(streamTerminator.reduce(pipeline(), op));
+        return finallyClose(() -> streamTerminator.reduce(pipeline(), op));
     }
 
     /**
@@ -227,7 +234,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -240,11 +247,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public double sum() {
-        try {
-            return streamTerminator.sum(pipeline());
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.sum(pipeline()));
     }
 
     /**
@@ -257,7 +260,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble min() {
-        return finallyClose(streamTerminator.min(pipeline()));
+        return finallyClose(() -> streamTerminator.min(pipeline()));
     }
 
     /**
@@ -270,7 +273,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble max() {
-        return finallyClose(streamTerminator.max(pipeline()));
+        return finallyClose(() -> streamTerminator.max(pipeline()));
     }
 
     /**
@@ -283,11 +286,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public long count() {
-        try {
-            return streamTerminator.count(pipeline());
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -300,7 +299,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble average() {
-        return finallyClose(streamTerminator.average(pipeline()));
+        return finallyClose(() -> streamTerminator.average(pipeline()));
     }
 
     /**
@@ -313,7 +312,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
-        return finallyClose(streamTerminator.summaryStatistics(pipeline()));
+        return finallyClose(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
@@ -327,11 +326,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
         requireNonNull(predicate);
-        try {
-            return streamTerminator.anyMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -344,11 +339,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean allMatch(DoublePredicate predicate) {
-        try {
-            return streamTerminator.allMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -361,11 +352,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
-        try {
-            return streamTerminator.noneMatch(pipeline(), predicate);
-        } finally {
-            close();
-        }
+        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -378,7 +365,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findFirst() {
-        return finallyClose(streamTerminator.findFirst(pipeline()));
+        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -391,35 +378,37 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findAny() {
-        return finallyClose(streamTerminator.findAny(pipeline()));
+        return finallyClose(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
-     * @return an iterator of primitive doubles
      */
     @Override
     public PrimitiveIterator.OfDouble iterator() {
-        return finallyClose(streamTerminator.iterator(pipeline()));
+        return streamTerminator.iterator(pipeline());
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
-     * @return an spliterator of primitive doubles
      */
     @Override
     public Spliterator.OfDouble spliterator() {
-        return finallyClose(streamTerminator.spliterator(pipeline()));
+        return streamTerminator.spliterator(pipeline());
     }
 
 }

@@ -33,6 +33,10 @@ public interface LoggerManager {
         Holder.INST.defaultFactory = newFactory;
     }
 
+    static LoggerFactory gettFactory() {
+        return Holder.INST.defaultFactory;
+    }
+
     /**
      * Creates and returns a new <tt>Logger</tt> bound to the given
      * <tt>binding</tt> type using
@@ -54,4 +58,26 @@ public interface LoggerManager {
     static Logger getLogger(String binding) {
         return Holder.INST.defaultFactory.create(binding);
     }
+
+    /**
+     * Sets the log level for Loggers that fits the initial path. Note that
+     * class name are in the form "c.s.i.c.p.c.i.ConnectionPoolComponentImpl"
+     *
+     * @param path the start of the logger name that is to be changed
+     * @param level the new log level
+     */
+    static void setLevel(String path, Level level) {
+        Holder.INST.defaultFactory.setLevel(path, level);
+    }
+
+    /**
+     * Sets the log level for the specified class logger.
+     *
+     * @param clazz of the class logger
+     * @param level the new log level
+     */
+    static void setLevel(Class<?> clazz, Level level) {
+        Holder.INST.defaultFactory.setLevel(clazz, level);
+    }
+
 }

@@ -37,6 +37,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -49,6 +50,7 @@ import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.stream.BaseStream;
 import java.util.stream.Collector;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -62,10 +64,15 @@ import java.util.stream.Stream;
  */
 public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<ReferenceStreamBuilder<T>, ReferencePipeline<T>> implements Stream<T> {
 
-    public ReferenceStreamBuilder(PipelineImpl<?> pipeline, final StreamTerminator streamTerminator) {
-        super(pipeline, streamTerminator);
+    ReferenceStreamBuilder(PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
+        super(pipeline, streamTerminator, streamSet);
+        streamSet.add(this); // Add this new stream to the streamSet so it may be closed later
     }
 
+    public ReferenceStreamBuilder(PipelineImpl<?> pipeline, final StreamTerminator streamTerminator) {
+        this(pipeline, streamTerminator, newStreamSet());
+    }
+    
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
         requireNonNull(predicate);
@@ -75,49 +82,49 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
         requireNonNull(mapper);
-        return new ReferenceStreamBuilder<R>(pipeline, streamTerminator).append(new MapAction<>(mapper));
+        return new ReferenceStreamBuilder<R>(pipeline, streamTerminator, streamSet).append(new MapAction<>(mapper));
     }
 
     @Override
     public IntStream mapToInt(ToIntFunction<? super T> mapper) {
         requireNonNull(mapper);
-        return new IntStreamBuilder(pipeline, streamTerminator).append(new MapToIntAction<>(mapper));
+        return new IntStreamBuilder(pipeline, streamTerminator, streamSet).append(new MapToIntAction<>(mapper));
     }
 
     @Override
     public LongStream mapToLong(ToLongFunction<? super T> mapper) {
         requireNonNull(mapper);
-        return new LongStreamBuilder(pipeline, streamTerminator).append(new MapToLongAction<>(mapper));
+        return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new MapToLongAction<>(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(ToDoubleFunction<? super T> mapper) {
         requireNonNull(mapper);
-        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new MapToDoubleAction<>(mapper));
+        return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new MapToDoubleAction<>(mapper));
     }
 
     @Override
     public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
         requireNonNull(mapper);
-        return new ReferenceStreamBuilder<R>(pipeline, streamTerminator).append(new FlatMapAction<>(mapper));
+        return new ReferenceStreamBuilder<R>(pipeline, streamTerminator, streamSet).append(new FlatMapAction<>(mapper));
     }
 
     @Override
     public IntStream flatMapToInt(Function<? super T, ? extends IntStream> mapper) {
         requireNonNull(mapper);
-        return new IntStreamBuilder(pipeline, streamTerminator).append(new FlatMapToIntAction<>(mapper));
+        return new IntStreamBuilder(pipeline, streamTerminator, streamSet).append(new FlatMapToIntAction<>(mapper));
     }
 
     @Override
     public LongStream flatMapToLong(Function<? super T, ? extends LongStream> mapper) {
         requireNonNull(mapper);
-        return new LongStreamBuilder(pipeline, streamTerminator).append(new FlatMapToLongAction<>(mapper));
+        return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new FlatMapToLongAction<>(mapper));
     }
 
     @Override
     public DoubleStream flatMapToDouble(Function<? super T, ? extends DoubleStream> mapper) {
         requireNonNull(mapper);
-        return new DoubleStreamBuilder(pipeline, streamTerminator).append(new FlatMapToDoubleAction<>(mapper));
+        return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new FlatMapToDoubleAction<>(mapper));
     }
 
     @Override
@@ -164,11 +171,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public void forEach(Consumer<? super T> action) {
         requireNonNull(action);
-        try {
-            streamTerminator.forEach(pipeline(), action);
-        } finally {
-            close();
-        }
+        finallyClose(() -> streamTerminator.forEach(pipeline(), action));
     }
 
     /**
@@ -182,11 +185,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public void forEachOrdered(Consumer<? super T> action) {
         requireNonNull(action);
-        try {
-            streamTerminator.forEachOrdered(pipeline(), action);
-        } finally {
-            close();
-        }
+        finallyClose(() -> streamTerminator.forEachOrdered(pipeline(), action));
     }
 
     /**
@@ -199,7 +198,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Object[] toArray() {
-        return finallyClose(streamTerminator.toArray(pipeline()));
+        return finallyClose(() -> streamTerminator.toArray(pipeline()));
     }
 
     /**
@@ -213,7 +212,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
         requireNonNull(generator);
-        return finallyClose(streamTerminator.toArray(pipeline(), generator));
+        return finallyClose(() -> streamTerminator.toArray(pipeline(), generator));
     }
 
     /**
@@ -228,7 +227,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public T reduce(T identity, BinaryOperator<T> accumulator) {
         requireNonNull(identity);
         requireNonNull(accumulator);
-        return finallyClose(streamTerminator.reduce(pipeline(), identity, accumulator));
+        return finallyClose(() -> streamTerminator.reduce(pipeline(), identity, accumulator));
     }
 
     /**
@@ -242,7 +241,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
         requireNonNull(accumulator);
-        return finallyClose(streamTerminator.reduce(pipeline(), accumulator));
+        return finallyClose(() -> streamTerminator.reduce(pipeline(), accumulator));
     }
 
     /**
@@ -258,7 +257,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         requireNonNull(identity);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(streamTerminator.reduce(pipeline(), identity, accumulator, combiner));
+        return finallyClose(() -> streamTerminator.reduce(pipeline(), identity, accumulator, combiner));
     }
 
     /**
@@ -274,7 +273,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -288,7 +287,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
         requireNonNull(collector);
-        return finallyClose(streamTerminator.collect(pipeline(), collector));
+        return finallyClose(() -> streamTerminator.collect(pipeline(), collector));
     }
 
     /**
@@ -302,7 +301,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> min(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return finallyClose(streamTerminator.min(pipeline(), comparator));
+        return finallyClose(() -> streamTerminator.min(pipeline(), comparator));
     }
 
     /**
@@ -316,7 +315,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> max(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return finallyClose(streamTerminator.max(pipeline(), comparator));
+        return finallyClose(() -> streamTerminator.max(pipeline(), comparator));
     }
 
     /**
@@ -329,7 +328,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public long count() {
-        return finallyClose(streamTerminator.count(pipeline()));
+        return finallyClose(() -> streamTerminator.count(pipeline()));
 
     }
 
@@ -344,7 +343,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(streamTerminator.anyMatch(pipeline(), predicate));
+        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -358,7 +357,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(streamTerminator.allMatch(pipeline(), predicate));
+        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -372,7 +371,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(streamTerminator.noneMatch(pipeline(), predicate));
+        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -385,7 +384,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Optional<T> findFirst() {
-        return finallyClose(streamTerminator.findFirst(pipeline()));
+        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -398,33 +397,39 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Optional<T> findAny() {
-        return finallyClose(streamTerminator.findAny(pipeline()));
+        return finallyClose(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
      */
     @Override
     public Iterator<T> iterator() {
-        return finallyClose(streamTerminator.iterator(pipeline()));
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        //return streamTerminator.iterator(pipeline());
     }
 
     /**
      * {@inheritDoc}
      *
      * <p>
-     * N.B. This method may short-circuit operations in the Stream pipeline and
-     * closes the stream automatically when a terminal operation is performed.
+     * N.B. This method may short-circuit operations in the Stream pipeline.
+     * <p>
+     * If you call this method, you <em>must</em> ensure to call the stream's 
+     * {@link #close() } method or else resources may not be released properly.
      *
      */
     @Override
     public Spliterator<T> spliterator() {
-        return finallyClose(streamTerminator.spliterator(pipeline()));
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        //return streamTerminator.spliterator(pipeline());
     }
 
 }

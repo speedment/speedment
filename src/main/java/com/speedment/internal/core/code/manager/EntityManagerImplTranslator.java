@@ -47,10 +47,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 
 /**
@@ -60,12 +59,12 @@ import static com.speedment.internal.codegen.util.Formatting.nl;
 public final class EntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
     private final Speedment speedment;
-    
+
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
 
     public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);
-        this.speedment =  SpeedmentFactory.newSpeedmentInstance(); // default values from here.. Todo: Make pluggable later
+        this.speedment = SpeedmentFactory.newSpeedmentInstance(); // default values from here.. Todo: Make pluggable later
     }
 
     @Override
@@ -85,7 +84,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             //                    ".class).getProject().findTableByName(getTableName());"))
 
             .call(i -> file.add(Import.of(ENTITY.getImplType())))
-//            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
+            //            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
             .add(Constructor.of()
                 .public_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
@@ -173,10 +172,15 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
             final String getterName = "get" + mapping.getResultSetMethodName(dbms());
 
-            if (Stream.of(ResultSet.class.getMethods())
+            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
                 .map(java.lang.reflect.Method::getName)
-                .anyMatch(getterName::equals)
-                && !c.isNullable()) {
+                .anyMatch(getterName::equals);
+
+            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
+                .filter(m -> m.getName().equals(getterName))
+                .anyMatch(m -> m.getReturnType().isPrimitive());
+
+            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
                 sb
                     .append("resultSet.")
                     .append("get")
@@ -192,6 +196,11 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             sb.append(");");
             streamBuilder.add(sb.toString());
 
+//            if (isResultSetMethod && c.isNullable() && isResultSetMethodReturnsPrimitive) {
+//                streamBuilder.add("if (resultSet.wasNull()) {");
+//                streamBuilder.add(indent("entity.set"+typeName(c)+"(null);"));
+//                streamBuilder.add("}");
+//            }
         });
 
         method
