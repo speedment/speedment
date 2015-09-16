@@ -22,7 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.Spliterator;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -75,6 +77,23 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public static <K, V> MapStream<K, V> of(Stream<Map.Entry<K, V>> stream) {
         return new MapStream<>(stream);
     }
+    
+    public static <K, V> MapStream<K, V> fromKeys(Stream<K> keys, Function<K, V> valueFromKey) {
+        return new MapStream<>(keys.map(k -> new AbstractMap.SimpleEntry<>(k, valueFromKey.apply(k))));
+    }
+    
+    public static <K, V> MapStream<K, V> fromValues(Stream<V> values, Function<V, K> keyFromValue) {
+        return new MapStream<>(values.map(v -> new AbstractMap.SimpleEntry<>(keyFromValue.apply(v), v)));
+    }
+    
+    public static <E, K, V> MapStream<K, V> fromStream(Stream<E> stream, Function<E, K> keyMapper, Function<E, V> valueMapper) {
+        return new MapStream<>(stream.map(
+            e -> new AbstractMap.SimpleEntry<>(
+                keyMapper.apply(e), 
+                valueMapper.apply(e)
+            )
+        ));
+    }
 
     public static <K, V> MapStream<K, V> empty() {
         return new MapStream<>(Stream.empty());
@@ -107,12 +126,30 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
+    
+    public <R> MapStream<R, V> mapKey(Function<? super K, ? extends R> mapper) {
+        return new MapStream<>(inner.map(e
+            -> new AbstractMap.SimpleEntry<>(
+                mapper.apply(e.getKey()),
+                e.getValue()
+            )
+        ));
+    }
 
     public <R> MapStream<K, R> mapValue(BiFunction<? super K, ? super V, ? extends R> mapper) {
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
                 e.getKey(),
                 mapper.apply(e.getKey(), e.getValue())
+            )
+        ));
+    }
+    
+    public <R> MapStream<K, R> mapValue(Function<? super V, ? extends R> mapper) {
+        return new MapStream<>(inner.map(e
+            -> new AbstractMap.SimpleEntry<>(
+                e.getKey(),
+                mapper.apply(e.getValue())
             )
         ));
     }
@@ -128,10 +165,34 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
+    
+    public <R> MapStream<R, V> flatMapKey(Function<? super K, ? extends Stream<? extends R>> mapper) {
+        return new MapStream<>(inner.flatMap(e
+            -> mapper.apply(e.getKey())
+            .map(k
+                -> new AbstractMap.SimpleEntry<>(
+                    k,
+                    e.getValue()
+                )
+            )
+        ));
+    }
 
     public <R> MapStream<K, R> flatMapValue(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getKey(), e.getValue())
+            .map(v
+                -> new AbstractMap.SimpleEntry<>(
+                    e.getKey(),
+                    v
+                )
+            )
+        ));
+    }
+    
+    public <R> MapStream<K, R> flatMapValue(Function<? super V, ? extends Stream<? extends R>> mapper) {
+        return new MapStream<>(inner.flatMap(e
+            -> mapper.apply(e.getValue())
             .map(v
                 -> new AbstractMap.SimpleEntry<>(
                     e.getKey(),
@@ -454,9 +515,47 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             Map.Entry::getValue
         ));
     }
-
+    
+    public SortedMap<K, V> toSortedMap() {
+        return inner.collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            throwingMerger(),
+            TreeMap::new
+        ));
+    }
+    
+    public SortedMap<K, V> toSortedMap(Comparator<K> keyComparator) {
+        return inner.collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            throwingMerger(),
+            () -> new TreeMap(keyComparator)
+        ));
+    }
+    
     public List<Map.Entry<K, V>> toList() {
         return inner.collect(Collectors.toList());
+    }
+    
+    public static <K> Comparator<K> comparing(Function<K, ? extends Comparable<?>>... methods) {
+        return (a, b) -> {
+            for (Function<K, ? extends Comparable<?>> method : methods) {
+                @SuppressWarnings(value = "unchecked")
+                final Function<K, ? extends Comparable<Object>> m = 
+                    (Function<K, ? extends Comparable<Object>>) method;
+                
+                final Comparable<Object> ac = m.apply(a);
+                final Comparable<Object> bc = m.apply(b);
+                final int c = ac.compareTo(bc);
+                
+                if (c != 0) {
+                    return c;
+                }
+            }
+            
+            return 0;
+        };
     }
 
     private MapStream(Stream<Map.Entry<K, V>> inner) {
@@ -469,5 +568,19 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     
     private static <K, V> Comparator<Map.Entry<K, V>> byValueOnly(Comparator<V> comparator) {
         return (a, b) -> comparator.compare(a.getValue(), b.getValue());
+    }
+    
+    /**
+     * Returns a merge function, suitable for use in
+     * {@link Map#merge(Object, Object, BiFunction) Map.merge()} or
+     * {@link #toMap(Function, Function, BinaryOperator) toMap()}, which always
+     * throws {@code IllegalStateException}.  This can be used to enforce the
+     * assumption that the elements being collected are distinct.
+     *
+     * @param <T> the type of input arguments to the merge function
+     * @return a merge function which always throw {@code IllegalStateException}
+     */
+    private static <T> BinaryOperator<T> throwingMerger() {
+        return (u,v) -> { throw new IllegalStateException(String.format("Duplicate key %s", u)); };
     }
 }
