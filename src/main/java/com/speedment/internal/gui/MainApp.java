@@ -47,7 +47,8 @@ public final class MainApp extends Application {
         requireNonNull(stage);
         app = this;
 
-        stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
+        //stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
+        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
 
         AnalyticsUtil.notify(GUI_STARTED);
 

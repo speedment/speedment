@@ -77,19 +77,19 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public static <K, V> MapStream<K, V> of(Stream<Map.Entry<K, V>> stream) {
         return new MapStream<>(stream);
     }
-    
+
     public static <K, V> MapStream<K, V> fromKeys(Stream<K> keys, Function<K, V> valueFromKey) {
         return new MapStream<>(keys.map(k -> new AbstractMap.SimpleEntry<>(k, valueFromKey.apply(k))));
     }
-    
+
     public static <K, V> MapStream<K, V> fromValues(Stream<V> values, Function<V, K> keyFromValue) {
         return new MapStream<>(values.map(v -> new AbstractMap.SimpleEntry<>(keyFromValue.apply(v), v)));
     }
-    
+
     public static <E, K, V> MapStream<K, V> fromStream(Stream<E> stream, Function<E, K> keyMapper, Function<E, V> valueMapper) {
         return new MapStream<>(stream.map(
             e -> new AbstractMap.SimpleEntry<>(
-                keyMapper.apply(e), 
+                keyMapper.apply(e),
                 valueMapper.apply(e)
             )
         ));
@@ -126,7 +126,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
-    
+
     public <R> MapStream<R, V> mapKey(Function<? super K, ? extends R> mapper) {
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
@@ -144,7 +144,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
-    
+
     public <R> MapStream<K, R> mapValue(Function<? super V, ? extends R> mapper) {
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
@@ -165,7 +165,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
-    
+
     public <R> MapStream<R, V> flatMapKey(Function<? super K, ? extends Stream<? extends R>> mapper) {
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getKey())
@@ -189,7 +189,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             )
         ));
     }
-    
+
     public <R> MapStream<K, R> flatMapValue(Function<? super V, ? extends Stream<? extends R>> mapper) {
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getValue())
@@ -310,7 +310,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         inner = inner.sorted(byKeyOnly(comparator));
         return this;
     }
-    
+
     public MapStream<K, V> sortedByValue(Comparator<V> comparator) {
         inner = inner.sorted(byValueOnly(comparator));
         return this;
@@ -401,11 +401,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public Optional<Map.Entry<K, V>> min(Comparator<? super Map.Entry<K, V>> comparator) {
         return inner.min(comparator);
     }
-    
+
     public Optional<Map.Entry<K, V>> minByKey(Comparator<K> comparator) {
         return inner.min(byKeyOnly(comparator));
     }
-    
+
     public Optional<Map.Entry<K, V>> minByValue(Comparator<V> comparator) {
         return inner.min(byValueOnly(comparator));
     }
@@ -418,7 +418,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public Optional<Map.Entry<K, V>> maxByKey(Comparator<K> comparator) {
         return inner.max(byKeyOnly(comparator));
     }
-    
+
     public Optional<Map.Entry<K, V>> maxByValue(Comparator<V> comparator) {
         return inner.max(byValueOnly(comparator));
     }
@@ -515,7 +515,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             Map.Entry::getValue
         ));
     }
-    
+
     public SortedMap<K, V> toSortedMap() {
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
@@ -524,36 +524,38 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
             TreeMap::new
         ));
     }
-    
+
     public SortedMap<K, V> toSortedMap(Comparator<K> keyComparator) {
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
             throwingMerger(),
-            () -> new TreeMap(keyComparator)
+            () -> new TreeMap<>(keyComparator)
         ));
     }
-    
+
     public List<Map.Entry<K, V>> toList() {
         return inner.collect(Collectors.toList());
     }
-    
+
+    @SuppressWarnings("varargs")
+    @SafeVarargs // Iterating over an array is safe.
     public static <K> Comparator<K> comparing(Function<K, ? extends Comparable<?>>... methods) {
         return (a, b) -> {
             for (Function<K, ? extends Comparable<?>> method : methods) {
                 @SuppressWarnings(value = "unchecked")
-                final Function<K, ? extends Comparable<Object>> m = 
-                    (Function<K, ? extends Comparable<Object>>) method;
-                
+                final Function<K, ? extends Comparable<Object>> m
+                    = (Function<K, ? extends Comparable<Object>>) method;
+
                 final Comparable<Object> ac = m.apply(a);
                 final Comparable<Object> bc = m.apply(b);
                 final int c = ac.compareTo(bc);
-                
+
                 if (c != 0) {
                     return c;
                 }
             }
-            
+
             return 0;
         };
     }
@@ -561,26 +563,28 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     private MapStream(Stream<Map.Entry<K, V>> inner) {
         this.inner = inner;
     }
-    
+
     private static <K, V> Comparator<Map.Entry<K, V>> byKeyOnly(Comparator<K> comparator) {
         return (a, b) -> comparator.compare(a.getKey(), b.getKey());
     }
-    
+
     private static <K, V> Comparator<Map.Entry<K, V>> byValueOnly(Comparator<V> comparator) {
         return (a, b) -> comparator.compare(a.getValue(), b.getValue());
     }
-    
+
     /**
      * Returns a merge function, suitable for use in
      * {@link Map#merge(Object, Object, BiFunction) Map.merge()} or
      * {@link #toMap(Function, Function, BinaryOperator) toMap()}, which always
-     * throws {@code IllegalStateException}.  This can be used to enforce the
+     * throws {@code IllegalStateException}. This can be used to enforce the
      * assumption that the elements being collected are distinct.
      *
      * @param <T> the type of input arguments to the merge function
      * @return a merge function which always throw {@code IllegalStateException}
      */
     private static <T> BinaryOperator<T> throwingMerger() {
-        return (u,v) -> { throw new IllegalStateException(String.format("Duplicate key %s", u)); };
+        return (u, v) -> {
+            throw new IllegalStateException(String.format("Duplicate key %s", u));
+        };
     }
 }

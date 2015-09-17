@@ -69,7 +69,8 @@ public enum SpeedmentIcon {
 	SPEEDMENT_LOGO ("pics/dialog/speedment_logo.png"),
 	SPEEDMENT_LOGO_100 ("pics/dialog/speedment_logo100.png"),
 	WALKING_MAN ("pics/dialog/walking_man.gif"),
-	WALKING_MAN_SMALL ("pics/dialog/walking_man_small.png");
+	WALKING_MAN_SMALL ("pics/dialog/walking_man_small.png"),
+	SPIRE ("images/logo.png");
 
 	private final static String FOLDER = "/";
 	private final String icon;
