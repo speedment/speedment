@@ -15,8 +15,7 @@
  * the License.
  */
 /**
- * This package contains the {@link com.speedment.core.platform.component.Component Components}
- * of the {@link com.speedment.api.Speedment Speedment} platform. It also contains
- * all default implementation of the Components.
+ * This package contains the {@link com.speedment.component.Component Components}
+ * of the {@link com.speedment.Speedment Speedment} platform.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;

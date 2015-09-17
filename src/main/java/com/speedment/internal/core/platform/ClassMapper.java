@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.internal.core.platform;
 
 import java.util.Map;
 import java.util.stream.Stream;

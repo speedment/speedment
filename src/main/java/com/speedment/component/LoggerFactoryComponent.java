@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
+import com.speedment.annotation.Api;
 import com.speedment.internal.logging.LoggerFactory;
 
 /**
@@ -24,6 +25,7 @@ import com.speedment.internal.logging.LoggerFactory;
  *
  * @author pemi
  */
+@Api(version = "2.1")
 public interface LoggerFactoryComponent extends Component {
 
     @Override

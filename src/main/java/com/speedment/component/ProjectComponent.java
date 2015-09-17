@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Project;
@@ -26,7 +26,7 @@ import com.speedment.config.Project;
  * @author Emil Forslund
  * @since 2.0
  */
-@Api(version = "2.0")
+@Api(version = "2.1")
 public interface ProjectComponent extends Component {
 
     @Override

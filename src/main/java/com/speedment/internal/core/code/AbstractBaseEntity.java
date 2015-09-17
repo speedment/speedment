@@ -20,7 +20,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import com.speedment.Manager;
 import com.speedment.db.MetaResult;
-import com.speedment.internal.core.platform.component.ManagerComponent;
+import com.speedment.component.ManagerComponent;
 import java.util.function.Consumer;
 import com.speedment.Entity;
 import com.speedment.Speedment;

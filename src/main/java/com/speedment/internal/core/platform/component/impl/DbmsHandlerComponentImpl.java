@@ -21,7 +21,7 @@ import com.speedment.config.Dbms;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
-import com.speedment.internal.core.platform.component.DbmsHandlerComponent;
+import com.speedment.component.DbmsHandlerComponent;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

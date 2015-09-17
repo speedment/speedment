@@ -34,8 +34,8 @@ import com.speedment.config.Column;
 import com.speedment.config.Dbms;
 import com.speedment.config.Table;
 import com.speedment.internal.core.manager.sql.SqlManager;
-import com.speedment.internal.core.platform.component.ManagerComponent;
-import com.speedment.internal.core.platform.component.ProjectComponent;
+import com.speedment.component.ManagerComponent;
+import com.speedment.component.ProjectComponent;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

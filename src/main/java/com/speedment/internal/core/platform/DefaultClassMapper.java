@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component.impl;
+package com.speedment.internal.core.platform;
 
-import com.speedment.internal.core.platform.component.ClassMapper;
+import com.speedment.internal.core.platform.ClassMapper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;

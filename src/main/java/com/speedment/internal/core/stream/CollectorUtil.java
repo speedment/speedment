@@ -44,6 +44,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.StringJoiner;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

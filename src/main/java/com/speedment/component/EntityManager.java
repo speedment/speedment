@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.0")
+@Api(version = "2.1")
 public interface EntityManager extends Component {
 
     @Override

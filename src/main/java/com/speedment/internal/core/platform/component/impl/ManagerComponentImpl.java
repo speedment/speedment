@@ -19,7 +19,7 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.config.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
-import com.speedment.internal.core.platform.component.ManagerComponent;
+import com.speedment.component.ManagerComponent;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

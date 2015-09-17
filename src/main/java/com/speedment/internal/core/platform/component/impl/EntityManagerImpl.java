@@ -19,8 +19,8 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.Speedment;
-import com.speedment.internal.core.platform.component.EntityManager;
-import com.speedment.internal.core.platform.component.ManagerComponent;
+import com.speedment.component.EntityManager;
+import com.speedment.component.ManagerComponent;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 

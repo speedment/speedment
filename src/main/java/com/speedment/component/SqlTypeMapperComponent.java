@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import java.util.function.BiFunction;
@@ -27,6 +28,7 @@ import java.util.function.BiFunction;
  * @author pemi
  * @since 2.0
  */
+@Api(version = "2.1")
 public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, SqlTypeInfo, Class<?>> {
 
     @Override

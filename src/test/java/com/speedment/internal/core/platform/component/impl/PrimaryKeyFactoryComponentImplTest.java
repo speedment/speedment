@@ -22,7 +22,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
-import com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent;
+import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.internal.util.AssertUtil;
 import java.util.ArrayList;
 import java.util.Arrays;

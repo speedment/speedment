@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
@@ -25,41 +26,43 @@ import java.util.stream.Stream;
 /**
  * This class is a pluggable factory that produces
  * {@link DbmsHandler DbmsHandlers} for a given Dbms. The DbmsHandler is
- * obtained via the #get() method and if an existing DbmsHandler can not be
- * found, the #make() method is called to provide a new instance.
+ * obtained via the {@link #get(com.speedment.config.Dbms) } method and if an
+ * existing DbmsHandler can not be found, the {@link #make(com.speedment.config.Dbms)
+ * } method is called to provide a new instance.
  *
  * @author pemi
  * @since 2.0
  */
+@Api(version = "2.1")
 public interface DbmsHandlerComponent extends Component {
-    
+
     /**
      * Installs a new {@link DbmsType} so that handlers can be created using the
-     * {@link #make(com.speedment.api.config.Dbms)} method.
+     * {@link #make(com.speedment.config.Dbms) } method.
      * <p>
-     * The type will be indexed by its name as returned by 
-     * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name, 
+     * The type will be indexed by its name as returned by
+     * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name,
      * only the most recently installed will be saved.
-     * 
-     * @param dbmsType  the type to install
+     *
+     * @param dbmsType the type to install
      */
     void install(DbmsType dbmsType);
-    
+
     /**
-     * Returns a stream of all {@link DbmsType DbmsTypes} that has been 
+     * Returns a stream of all {@link DbmsType DbmsTypes} that has been
      * installed in this component.
-     * 
-     * @return  a stream of installed DbmsTypes.
+     *
+     * @return a stream of installed DbmsTypes.
      */
     Stream<DbmsType> supportedDbmsTypes();
-    
+
     /**
      * Searches for the specified {@link DbmsType} by its name as defined by
-     * {@link DbmsType#getName()}. If none is found, an {@code empty} is 
+     * {@link DbmsType#getName()}. If none is found, an {@code empty} is
      * returned.
-     * 
-     * @param dbmsTypeName  the name to search for
-     * @return              the {@link DbmsType} found or {@code empty}
+     *
+     * @param dbmsTypeName the name to search for
+     * @return the {@link DbmsType} found or {@code empty}
      */
     Optional<DbmsType> findByName(String dbmsTypeName);
 

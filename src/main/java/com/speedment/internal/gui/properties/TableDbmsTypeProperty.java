@@ -18,7 +18,7 @@ package com.speedment.internal.gui.properties;
 
 import com.speedment.Speedment;
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.internal.core.platform.component.DbmsHandlerComponent;
+import com.speedment.component.DbmsHandlerComponent;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

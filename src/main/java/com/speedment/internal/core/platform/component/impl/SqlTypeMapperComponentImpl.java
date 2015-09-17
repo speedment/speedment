@@ -17,7 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.config.Dbms;
-import com.speedment.internal.core.platform.component.SqlTypeMapperComponent;
+import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import java.math.BigDecimal;
 import java.sql.Blob;

@@ -16,7 +16,7 @@
  */
 package com.speedment;
 
-import com.speedment.internal.core.platform.component.Component;
+import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 
@@ -40,15 +40,15 @@ public interface Speedment {
      * <p>
      * The supported standard interfaces types are:
      * <ul>
-     * <li>{@link com.speedment.internal.core.platform.component.EntityManager EntityManager}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.DbmsHandlerComponent DbmsHandlerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ManagerComponent ManagerComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ProjectComponent ProjectComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.LoggerFactoryComponent LoggerFactoryComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
-     * <li>{@link com.speedment.internal.core.platform.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
+     * <li>{@link com.speedment.component.EntityManager EntityManager}</li>
+     * <li>{@link com.speedment.component.DbmsHandlerComponent DbmsHandlerComponent}</li>
+     * <li>{@link com.speedment.component.ManagerComponent ManagerComponent}</li>
+     * <li>{@link com.speedment.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
+     * <li>{@link com.speedment.component.ProjectComponent ProjectComponent}</li>
+     * <li>{@link com.speedment.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
+     * <li>{@link com.speedment.component.LoggerFactoryComponent LoggerFactoryComponent}</li>
+     * <li>{@link com.speedment.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
+     * <li>{@link com.speedment.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type

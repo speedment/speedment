@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 
@@ -27,6 +28,7 @@ import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
  * @author pemi
  * @since 2.0
  */
+@Api(version = "2.1")
 public interface JavaTypeMapperComponent extends Component {
 
     @Override

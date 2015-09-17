@@ -33,6 +33,8 @@ import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
+import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A store for a particular type of entity. The store can be used to retreive

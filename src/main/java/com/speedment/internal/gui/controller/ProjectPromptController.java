@@ -23,7 +23,7 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.platform.component.DbmsHandlerComponent;
+import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.internal.gui.MainApp;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.logging.Logger;

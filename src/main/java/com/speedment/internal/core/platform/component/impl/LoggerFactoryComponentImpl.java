@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.internal.core.platform.component.LoggerFactoryComponent;
+import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.internal.logging.LoggerFactory;
 import com.speedment.internal.logging.impl.SystemOutLoggerFactory;
 import java.util.Objects;

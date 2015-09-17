@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.internal.core.platform.component.PrimaryKeyFactoryComponent;
+import com.speedment.component.PrimaryKeyFactoryComponent;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;

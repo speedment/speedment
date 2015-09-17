@@ -17,7 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.internal.core.platform.component.JavaTypeMapperComponent;
+import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.internal.util.tuple.Tuple2;

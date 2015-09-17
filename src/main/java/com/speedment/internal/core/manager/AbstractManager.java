@@ -23,7 +23,7 @@ import com.speedment.config.ForeignKey;
 import com.speedment.config.Table;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import com.speedment.internal.core.runtime.Lifecyclable;
-import com.speedment.internal.core.platform.component.ManagerComponent;
+import com.speedment.component.ManagerComponent;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

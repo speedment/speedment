@@ -17,14 +17,13 @@
 package com.speedment.internal.core.platform;
 
 import com.speedment.Speedment;
-import com.speedment.internal.core.platform.component.Component;
+import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
-import com.speedment.internal.core.platform.component.ManagerComponent;
+import com.speedment.component.ManagerComponent;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
-import com.speedment.internal.core.platform.component.impl.DefaultClassMapper;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;

@@ -14,11 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component;
+package com.speedment.component;
 
 import com.speedment.config.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
+import com.speedment.annotation.Api;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +30,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.0
  */
+@Api(version = "2.1")
 public interface ManagerComponent extends Component {
 
     @Override

@@ -392,7 +392,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         return inner.collect(collector);
     }
 
-    public <K2> MapStream<K2, List<V>> groupBy(Function<V, K2> grouper) {
+    public <K2> MapStream<K2, List<V>> groupingBy(Function<V, K2> grouper) {
         return inner.map(Map.Entry::getValue)
             .collect(CollectorUtil.groupBy(grouper));
     }
