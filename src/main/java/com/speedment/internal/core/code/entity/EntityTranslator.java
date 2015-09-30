@@ -151,7 +151,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                 Import imp = Import.of(fu.getEmt().ENTITY.getType());
                 System.out.println("imp=" + imp.getType().getName());
                 file.add(imp);
-                
+
                 fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
                 // Record for later use in the construction of aggregate streamers
@@ -171,6 +171,8 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                     + "<p>\n"
                     + "Using this method, you may \"walk the graph\" and jump "
                     + "directly between referencing Entities without using {@code JOIN}s."
+                    + "<p>\n"
+                    + "N.B. The current implementation supports lazy-loading of the referencing Entities."
                 )
                     .add(RETURN.setText(
                         "a {@link Stream} of all "
@@ -199,8 +201,12 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
 
                 final String returns = "the foreign key Entity {@link " + typeName(fu.getForeignTable()) + "} referenced "
                     + "by the field that can be obtained using {@link " + ENTITY.getName() + "#get" + typeName(fu.getColumn()) + "()}";
+
                 method.set(Javadoc.of(
                     "Finds and returns " + returns + "."
+                    + "<p>\n"
+                    + "N.B. The current implementation only supports lazy-loading of the referenced Entities. This means that if you "
+                    + "traverse N " + ENTITY.getName() + " entities and call this method for each one, there will be N SQL-queries executed."
                 ).add(RETURN.setText(returns)
                 ));
 
@@ -236,6 +242,8 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                     + "<p>\n"
                     + "Using this method, you may \"walk the graph\" and jump "
                     + "directly between referencing Entities without using {@code JOIN}s."
+                    + "<p>\n"
+                    + "N.B. The current implementation supports lazy-loading of the referencing Entities."
                 )
                     .add(RETURN.setText(
                         "a <em>distinct</em> {@link Stream} of all {@link " + typeName(referencingTable) + "} "
