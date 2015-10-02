@@ -21,6 +21,7 @@ import com.speedment.annotation.Api;
 /**
  *
  * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface ReadBuilder extends SelectiveBuilder<Read, ReadBuilder>, JoinableBuilder<Read, ReadBuilder> {}

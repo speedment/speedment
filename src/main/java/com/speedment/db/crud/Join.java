@@ -21,7 +21,8 @@ import com.speedment.config.Table;
 
 /**
  *
- * @author Emil
+ * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface Join {

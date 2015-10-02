@@ -23,6 +23,7 @@ import com.speedment.annotation.Api;
  * @author Emil Forslund
  * @param <OPERATION> the type of the selective operation being built
  * @param <BUILDER>   the type of the implementing builder class
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface JoinableBuilder<OPERATION extends CrudOperation & Selective, BUILDER extends SelectiveBuilder<OPERATION, BUILDER>> extends CrudOperationBuilder<OPERATION> {

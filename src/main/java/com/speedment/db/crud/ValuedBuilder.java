@@ -24,6 +24,7 @@ import java.util.Map;
  * @author Emil Forslund
  * @param <OPERATION>  the type of the valued operation being built
  * @param <BUILDER>    the type of the implementing builder class
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface ValuedBuilder<OPERATION extends CrudOperation & Valued, BUILDER extends ValuedBuilder<OPERATION, BUILDER>> extends CrudOperationBuilder<OPERATION> {

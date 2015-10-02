@@ -23,6 +23,7 @@ import java.util.Optional;
 
 /**
  * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface Selector {

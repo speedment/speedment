@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface Valued {

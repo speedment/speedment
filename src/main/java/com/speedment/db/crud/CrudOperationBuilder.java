@@ -22,6 +22,7 @@ import com.speedment.config.Table;
 /**
  * @author Emil Forslund
  * @param <T> the type of the operation being built
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface CrudOperationBuilder<T extends CrudOperation> {

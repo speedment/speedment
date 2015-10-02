@@ -21,6 +21,7 @@ import com.speedment.annotation.Api;
 /**
  *
  * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface UpdateBuilder extends ValuedBuilder<Update, UpdateBuilder>, SelectiveBuilder<Update, UpdateBuilder> {}

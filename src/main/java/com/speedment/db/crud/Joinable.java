@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
+ * @since 2.2
  */
 @Api(version = "2.2")
 public interface Joinable {
