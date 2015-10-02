@@ -99,7 +99,7 @@ public interface CrudHandlerComponent extends Component {
     
     /**
      * Sets the method to use when 
-     * {@link #delete(com.speedment.db.crud.Delete, java.util.function.Function)} 
+     * {@link #delete(com.speedment.db.crud.Delete)} 
      * is called.
      * 
      * @param deleter  to use
@@ -109,7 +109,7 @@ public interface CrudHandlerComponent extends Component {
     
     /**
      * Sets the method to use when 
-     * {@link #executeDelete(com.speedment.db.crud.Read, java.util.function.Function)} 
+     * {@link #read(com.speedment.db.crud.Read, java.util.function.Function)} 
      * is called.
      * 
      * @param reader  to use
