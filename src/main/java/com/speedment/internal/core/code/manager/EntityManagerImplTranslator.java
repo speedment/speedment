@@ -87,7 +87,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                 .call(method -> file.add(Import.of(ENTITY.getImplType())))
             )
             
-            .add(newInstance(file))
+            .add(newInstance())
 
             .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY))
                 .public_().add(OVERRIDE)
@@ -137,12 +137,10 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         }
     }
 
-    private Method newInstance(File file) {
-
-        file.add(Import.of(Type.of(SpeedmentException.class)));
+    private Method newInstance() {
 
         final Method method = Method.of("newInstance", ENTITY.getType())
-            .protected_()
+            .protected_().add(OVERRIDE)
             .add(Field.of("result", Type.of(Result.class)))
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
