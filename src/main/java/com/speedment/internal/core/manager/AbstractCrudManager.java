@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * Abstract base implementation of a Manager that translates all persist,
  * update and remove operations into their corresponding CRUD operations and
@@ -49,7 +47,6 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY> {
     
     private final CrudHandlerComponent handler;
-    private final Table table;
     private final Column primaryKeyColumn;
     
     /**
@@ -57,15 +54,11 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * {@link CrudHandlerComponent} has been loaded!
      * 
      * @param speedment  the speedment instance
-     * @param table      the table to manage
      */
-    protected AbstractCrudManager(Speedment speedment, Table table) {
+    protected AbstractCrudManager(Speedment speedment) {
         super(speedment);
-        requireNonNull(table);
-        
         this.handler          = speedment.get(CrudHandlerComponent.class);
-        this.table            = table;
-        this.primaryKeyColumn = findColumnOfPrimaryKey(table);
+        this.primaryKeyColumn = findColumnOfPrimaryKey(getTable());
     }
     
     /**
@@ -76,7 +69,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @param result
      * @return 
      */
-    protected abstract ENTITY instantiate(Result result);
+    protected abstract ENTITY newInstance(Result result);
     
     /**
      * {@inheritDoc} 
@@ -84,9 +77,9 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
     @Override
     public final Stream<ENTITY> stream() {
         return handler.read(
-            new ReadImpl.Builder(table)
+            new ReadImpl.Builder(getTable())
                 .build(),
-            this::instantiate
+            this::newInstance
         );
     }
 
@@ -96,10 +89,10 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
     @Override
     public final ENTITY persist(ENTITY entity) throws SpeedmentException {
         return handler.create(
-            new CreateImpl.Builder(table)
+            new CreateImpl.Builder(getTable())
                 .with(valuesFor(entity))
                 .build(), 
-            this::instantiate
+            this::newInstance
         );
     }
 
@@ -109,11 +102,11 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
     @Override
     public final ENTITY update(ENTITY entity) throws SpeedmentException {
         return handler.update(
-            new UpdateImpl.Builder(table)
+            new UpdateImpl.Builder(getTable())
                 .with(valuesFor(entity))
                 .where(selectorFor(entity))
                 .build(), 
-            this::instantiate
+            this::newInstance
         );
     }
 
@@ -123,7 +116,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
     @Override
     public final ENTITY remove(ENTITY entity) throws SpeedmentException {
         handler.delete(
-            new DeleteImpl.Builder(table)
+            new DeleteImpl.Builder(getTable())
                 .where(selectorFor(entity))
                 .build()
         );
@@ -177,7 +170,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return        values mapped to column names
      */
     private Map<String, Object> valuesFor(ENTITY entity) {
-        return MapStream.fromStream(table.streamOf(Column.class), 
+        return MapStream.fromStream(getTable().streamOf(Column.class), 
             col -> col.getName(), 
             col -> get(entity, col)
         ).toMap();

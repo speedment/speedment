@@ -36,21 +36,18 @@ import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER
 import com.speedment.config.Column;
 import com.speedment.config.Dbms;
 import com.speedment.config.Table;
-import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.ProjectComponent;
+import com.speedment.db.crud.Result;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
+import com.speedment.internal.core.manager.AbstractCrudManager;
 
 /**
  *
@@ -60,11 +57,12 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     private final Speedment speedment;
 
-    private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
+    private static final String 
+        SPEEDMENT_METHOD = "speedment()";
 
     public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);
-        this.speedment = SpeedmentFactory.newSpeedmentInstance(); // default values from here.. Todo: Make pluggable later
+        this.speedment = speedment;
     }
 
     @Override
@@ -72,63 +70,53 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
         return new ClassBuilder(MANAGER.getImplName()).build()
             .public_()
-            .setSupertype(Type.of(AbstractSqlManager.class)
+            .setSupertype(Type.of(AbstractCrudManager.class)
                 .add(Generic.of().add(ENTITY.getType()))
             )
-            // .add(MANAGER.getType())
-            //            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-            //            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            //            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-            //                .add("return " + Platform.class.getSimpleName() + 
-            //                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-            //                    ".class).getProject().findTableByName(getTableName());"))
 
-            .call(i -> file.add(Import.of(ENTITY.getImplType())))
-            //            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
+            .call(clazz -> file.add(Import.of(ENTITY.getImplType())))
             .add(Constructor.of()
                 .public_()
-                .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
-                .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
-                .add("setSqlEntityMapper(this::defaultReadEntity);"))
-            //            .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
-            //                .add("return new " + ENTITY.getImplName() + "();"))
-            //            .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
-            //                .add(Field.of("prototype", ENTITY.getType()))
-            //                .add("return new " + ENTITY.getImplName() + "(prototype);"))
-
-            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-                .add("return " + ENTITY.getName() + ".class;"))
-            .add(generateGet(file))
-            .add(generateSet(file))
-            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-                .add("return " + SPEEDMENT_VARIABLE_NAME
-                    + ".get(" + ProjectComponent.class.getSimpleName()
-                    + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
-            .call($ -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            //.call(i -> file.add(Import.of(Type.of(Stream.class))))
-            //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-            //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
-
-            //                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-            //                        .add(Field.of("entity", ENTITY.getType()))
-            //                        .add("return entity;")) //TODO MUST BE FIXED!
-
-            //                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-            //                        .add(Field.of("entity", ENTITY.getType()))
-            //                        .add("return entity;")) //TODO MUST BE FIXED!
-            .
-            add(defaultReadEntity(file))
+                .add(Field.of("speedment", Type.of(Speedment.class)))
+                .add("super(speedment);")
+            )
+            
             .add(Method.of("newInstance", ENTITY.getType())
                 .public_().add(OVERRIDE)
-                .add("return new " + Formatting.shortName(ENTITY.getImplType().getName()) + "(" + SPEEDMENT_VARIABLE_NAME + ");")
-                .call($ -> file.add(Import.of(ENTITY.getImplType())))
+                .add("return new " + Formatting.shortName(ENTITY.getImplType().getName()) + "(" + SPEEDMENT_METHOD + ");")
+                .call(method -> file.add(Import.of(ENTITY.getImplType())))
             )
+            
+            .add(newInstance(file))
+
+            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY))
+                .public_().add(OVERRIDE)
+                .add("return " + ENTITY.getName() + ".class;")
+            )
+            
+            .add(generateGet(file))
+            .add(generateSet(file))
+            
+            .call(clazz -> file.add(Import.of(Type.of(ProjectComponent.class))))
+            .add(Method.of("getTable", Type.of(Table.class))
+                .public_().add(OVERRIDE)
+                .add("return " + SPEEDMENT_METHOD
+                    + ".get(" + ProjectComponent.class.getSimpleName()
+                    + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");")
+            )
+
             .add(generatePrimaryKeyFor(file));
     }
 
     private static enum Primitive {
-        BYTE("byte"), SHORT("short"), INT("int"), LONG("long"), FLOAT("float"),
-        DOUBLE("double"), BOOLEAN("boolean");
+        
+        BYTE    ("byte"), 
+        SHORT   ("short"), 
+        INT     ("int"), 
+        LONG    ("long"), 
+        FLOAT   ("float"),
+        DOUBLE  ("double"), 
+        BOOLEAN ("boolean");
 
         private final String javaName;
 
@@ -149,14 +137,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         }
     }
 
-    private Method defaultReadEntity(File file) {
+    private Method newInstance(File file) {
 
-        file.add(Import.of(Type.of(SQLException.class)));
         file.add(Import.of(Type.of(SpeedmentException.class)));
 
-        final Method method = Method.of("defaultReadEntity", ENTITY.getType())
+        final Method method = Method.of("newInstance", ENTITY.getType())
             .protected_()
-            .add(Field.of("resultSet", Type.of(ResultSet.class)))
+            .add(Field.of("result", Type.of(Result.class)))
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
         final JavaTypeMapperComponent mapperComponent = speedment.get(JavaTypeMapperComponent.class);
@@ -172,17 +159,17 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
             final String getterName = "get" + mapping.getResultSetMethodName(dbms());
 
-            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
+            final boolean isResultSetMethod = Stream.of(Result.class.getMethods())
                 .map(java.lang.reflect.Method::getName)
                 .anyMatch(getterName::equals);
 
-            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
+            final boolean isResultSetMethodReturnsPrimitive = Stream.of(Result.class.getMethods())
                 .filter(m -> m.getName().equals(getterName))
                 .anyMatch(m -> m.getReturnType().isPrimitive());
 
             if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
                 sb
-                    .append("resultSet.")
+                    .append("result.")
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
                     .append("(\"").append(c.getName()).append("\")");
@@ -190,25 +177,15 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                 sb
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
-                    .append("(resultSet, ")
+                    .append("(result, ")
                     .append("\"").append(c.getName()).append("\")");
             }
             sb.append(");");
             streamBuilder.add(sb.toString());
-
-//            if (isResultSetMethod && c.isNullable() && isResultSetMethodReturnsPrimitive) {
-//                streamBuilder.add("if (resultSet.wasNull()) {");
-//                streamBuilder.add(indent("entity.set"+typeName(c)+"(null);"));
-//                streamBuilder.add("}");
-//            }
         });
-
-        method
-            .add("try " + block(streamBuilder.build()))
-            .add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
-                "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
-            ))
-            .add("return entity;");
+        
+        streamBuilder.build().forEachOrdered(method::add);
+        method.add("return entity;");
 
         return method;
     }

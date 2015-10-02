@@ -18,62 +18,26 @@ package com.speedment.internal.core.manager;
 
 import com.speedment.Manager;
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.Table;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import com.speedment.internal.core.runtime.Lifecyclable;
-import com.speedment.component.ManagerComponent;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
- *
  * @param <ENTITY> Entity type for this Manager
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    protected final Speedment speedment;
-
+    private final Speedment speedment;
+    private final JsonEncoder<ENTITY> sharedJasonFormatter;
     private Lifecyclable.State state;
 
-    private final JsonEncoder<ENTITY> sharedJasonFormatter;
-
     public AbstractManager(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-        state = Lifecyclable.State.CREATED;
-        sharedJasonFormatter = JsonEncoder.allOf(this);
+        this.speedment            = requireNonNull(speedment);
+        this.state                = Lifecyclable.State.CREATED;
+        this.sharedJasonFormatter = JsonEncoder.allOf(this);
     }
-
-    @Override
-    public String toJson(ENTITY entity) {
-        requireNonNull(entity);
-        return sharedJasonFormatter.apply(entity);
-    }
-
-//    @Override
-//    @SuppressWarnings("unchecked")
-//    public Optional<Object> find(ENTITY entity, Column column) {
-//        requireNonNull(entity);
-//        requireNonNull(column);
-//        return getTable()
-//            .streamOf(ForeignKey.class)
-//            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
-//            .map(oFkc -> {
-//                Table fkTable = oFkc.getForeignTable();
-//                Column fkColumn = oFkc.getForeignColumn();
-//
-//                @SuppressWarnings("rawtypes")
-//                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
-//
-//                Object key = get(entity, column);
-//
-//                // This is an O(n) operation. We must use our short curcuit Fields...
-//                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
-//            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
-//    }
 
     @Override
     public Manager<ENTITY> initialize() {
@@ -103,5 +67,20 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     public Lifecyclable.State getState() {
         return state;
     }
+    
+    @Override
+    public String toJson(ENTITY entity) {
+        requireNonNull(entity);
+        return sharedJasonFormatter.apply(entity);
+    }
 
+    /**
+     * Returns the speedment instance used when creating this manager. This can
+     * for an example be used to navigate to other runtime components.
+     * 
+     * @return  the speedment instance
+     */
+    protected final Speedment speedment() {
+        return speedment;
+    }
 }
