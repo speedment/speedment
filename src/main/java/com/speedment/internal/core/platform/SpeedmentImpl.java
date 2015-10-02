@@ -18,12 +18,11 @@ package com.speedment.internal.core.platform;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
-import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
+import com.speedment.internal.core.platform.component.impl.CrudHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
@@ -32,13 +31,6 @@ import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComp
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
@@ -46,12 +38,12 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(new ManagerComponentImpl());
         put(new ProjectComponentImpl());
         put(new PrimaryKeyFactoryComponentImpl());
-        put(new DbmsHandlerComponentImpl(this));
         put(new SqlTypeMapperComponentImpl());
         put(new JavaTypeMapperComponentImpl());
         put(new EntityManagerImpl(this));
         put(new LoggerFactoryComponentImpl());
         put(new ConnectionPoolComponentImpl());
+        put(new CrudHandlerComponentImpl());
     }
 
     @Override

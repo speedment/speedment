@@ -21,9 +21,9 @@ import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.db.DbmsHandler;
 import com.speedment.internal.gui.MainApp;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.logging.Logger;
@@ -50,10 +50,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.internal.gui.controller.AlertController.showAlert;
 import static com.speedment.internal.gui.util.ProjectUtil.createOpenProjectHandler;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.function.Supplier;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 

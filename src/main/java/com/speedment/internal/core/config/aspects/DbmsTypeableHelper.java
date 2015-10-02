@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.config.aspects;
 
-import com.speedment.annotation.External;
-import com.speedment.config.aspects.DbmsTypeable;
 import com.speedment.component.DbmsHandlerComponent;
-import static java.util.Objects.requireNonNull;
+import com.speedment.config.aspects.DbmsTypeable;
 import static java.util.Objects.requireNonNull;
 
 /**

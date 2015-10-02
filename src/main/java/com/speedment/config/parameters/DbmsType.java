@@ -19,6 +19,7 @@ package com.speedment.config.parameters;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
+import com.speedment.db.CrudHandler;
 import com.speedment.db.DbmsHandler;
 import java.util.Optional;
 import java.util.Set;
@@ -202,4 +203,14 @@ public interface DbmsType {
      * @return a new {@code DbmsHandler} instance for the given database
      */
     DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms);
+    
+    /**
+     * Creates and returns a new {@code CrudHandler} instance for the given
+     * database.
+     *
+     * @param speedment instance to use
+     * @param dbms the Dbms configuration to use
+     * @return a new {@code CrudHandler} instance for the given database
+     */
+    CrudHandler makeCrudHandler(Speedment speedment, Dbms dbms);
 }

@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.dbms;
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.config.parameters.DbmsType;
+import com.speedment.db.CrudHandler;
 import com.speedment.db.DbmsHandler;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public abstract class AbstractDbmsType implements DbmsType {
     private final String fieldEncloserEnd;
     private final Set<String> schemaExcludeSet;
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
+    private final BiFunction<Speedment, Dbms, CrudHandler> crudMapper;
 
     protected AbstractDbmsType(
         String name,
@@ -56,7 +58,8 @@ public abstract class AbstractDbmsType implements DbmsType {
         String fieldEncloserStart,
         String fieldEncloserEnd,
         Set<String> schemaExcludeSet,
-        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper) {
+        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
+        BiFunction<Speedment, Dbms, CrudHandler> crudMapper) {
 
         this.name = Objects.requireNonNull(name);
         this.driverManagerName = Objects.requireNonNull(driverManagerName);
@@ -70,6 +73,7 @@ public abstract class AbstractDbmsType implements DbmsType {
         this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
         this.schemaExcludeSet = Objects.requireNonNull(schemaExcludeSet);
         this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
+        this.crudMapper = Objects.requireNonNull(crudMapper);
     }
 
     @Override
@@ -136,10 +140,15 @@ public abstract class AbstractDbmsType implements DbmsType {
     public Set<String> getSchemaExcludeSet() {
         return schemaExcludeSet;
     }
-
+    
     @Override
     public DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms) {
         return dbmsMapper.apply(speedment, dbms);
+    }
+
+    @Override
+    public CrudHandler makeCrudHandler(Speedment speedment, Dbms dbms) {
+        return crudMapper.apply(speedment, dbms);
     }
 
     @Override
