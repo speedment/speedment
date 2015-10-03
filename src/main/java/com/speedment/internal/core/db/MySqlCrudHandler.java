@@ -41,7 +41,6 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
@@ -53,25 +52,23 @@ import java.util.stream.StreamSupport;
 public final class MySqlCrudHandler extends AbstractCrudHandler {
 
     private static final Logger LOGGER = LoggerManager.getLogger(MySqlCrudHandler.class);
-    private final Dbms dbms;
     
     public MySqlCrudHandler(Speedment speedment, Dbms dbms) {
-        super(speedment);
-        this.dbms = requireNonNull(dbms);
+        super(speedment, dbms);
     }
 
     @Override
-    protected <T> T create(Create create, Function<Result, T> mapper) throws SpeedmentException {
+    public <T> T create(Create create, Function<Result, T> mapper) throws SpeedmentException {
         return executeUpdate(create, mapper);
     }
 
     @Override
-    protected <T> T update(Update update, Function<Result, T> mapper) throws SpeedmentException {
+    public <T> T update(Update update, Function<Result, T> mapper) throws SpeedmentException {
         return executeUpdate(update, mapper);
     }
 
     @Override
-    protected void delete(Delete delete) throws SpeedmentException {
+    public void delete(Delete delete) throws SpeedmentException {
         final PreparedStatement statement = SqlWriter.prepare(getConnection(), delete);
         
         try {
@@ -84,7 +81,7 @@ public final class MySqlCrudHandler extends AbstractCrudHandler {
     }
 
     @Override
-    protected <T> Stream<T> read(Read read, Function<Result, T> mapper) throws SpeedmentException {
+    public <T> Stream<T> read(Read read, Function<Result, T> mapper) throws SpeedmentException {
         final PreparedStatement statement = SqlWriter.prepare(getConnection(), read);
         try (final ResultSet set = statement.executeQuery()) {
             return StreamSupport.stream(
@@ -142,15 +139,15 @@ public final class MySqlCrudHandler extends AbstractCrudHandler {
         final Connection conn;
         
         final String url      = getUrl();
-        final String user     = dbms.getUsername().orElse(null);
-        final String password = dbms.getPassword().orElse(null);
+        final String user     = getDbms().getUsername().orElse(null);
+        final String password = getDbms().getPassword().orElse(null);
         
         try {
             conn = speedment().get(ConnectionPoolComponent.class)
                 .getConnection(url, user, password);
             
         } catch (SQLException sqle) {
-            final String msg = "Unable to get connection for " + dbms + " using url \"" + url + "\", user = " + user + ".";
+            final String msg = "Unable to get connection for " + getDbms() + " using url \"" + url + "\", user = " + user + ".";
             LOGGER.error(sqle, msg);
             throw new SpeedmentException(msg, sqle);
         }
@@ -159,15 +156,15 @@ public final class MySqlCrudHandler extends AbstractCrudHandler {
     }
 
     private String getUrl() {
-        final DbmsType dbmsType    = dbms.getType();
+        final DbmsType dbmsType    = getDbms().getType();
         final StringBuilder result = new StringBuilder();
         
         result.append("jdbc:");
         result.append(dbmsType.getJdbcConnectorName());
         result.append("://");
         
-        dbms.getIpAddress().ifPresent(ip -> result.append(ip));
-        dbms.getPort().ifPresent(port -> result.append(":").append(port));
+        getDbms().getIpAddress().ifPresent(ip -> result.append(ip));
+        getDbms().getPort().ifPresent(port -> result.append(":").append(port));
         
         result.append("/");
 
