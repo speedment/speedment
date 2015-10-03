@@ -40,6 +40,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import com.speedment.db.crud.CrudOperation;
+import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -58,7 +59,8 @@ public final class SqlWriter {
      */
     public static PreparedStatement prepare(Connection con, CrudOperation operation) {
         try {
-            return con.prepareStatement(toSql(operation));
+            final String sql = toSql(operation);
+            return con.prepareStatement(sql);
         } catch (SQLException ex) {
             throw new SpeedmentException("Failed to parse SQL string into a PreparedStatement.", ex);
         }
@@ -233,7 +235,7 @@ public final class SqlWriter {
                 formatColumnName(sel.getColumnName()) +
                 formatComparableOperator(sel.getOperator())
             )
-            .collect(joining(" AND ", " WHERE ", ""));
+            .collect(joinIfNotEmpty(" AND ", " WHERE ", ""));
     }
 
     /**
@@ -242,12 +244,12 @@ public final class SqlWriter {
      * @param selective  the operation
      * @return           the limit part
      */
-    private static Optional<String> buildLimit(Selective selective) {
+    private static String buildLimit(Selective selective) {
         final long limit = selective.getLimit();
 
         if (limit > 0 && limit != Long.MAX_VALUE) {
-            return Optional.of(" LIMIT " + limit);
-        } else return Optional.empty();
+            return " LIMIT " + limit;
+        } else return "";
     }
 
     /**

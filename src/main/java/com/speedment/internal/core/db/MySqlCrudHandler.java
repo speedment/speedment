@@ -106,7 +106,7 @@ public final class MySqlCrudHandler extends AbstractCrudHandler {
             
         } catch (SQLException ex) {
             throw new SpeedmentException(
-                "Could not delete entity", ex
+                "Could not read entity", ex
             );
         }
     }
