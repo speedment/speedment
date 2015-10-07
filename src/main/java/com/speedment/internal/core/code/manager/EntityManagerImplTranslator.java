@@ -87,25 +87,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             //            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
             .add(Constructor.of()
                 .public_()
-<<<<<<< HEAD
-                .add(Field.of("speedment", Type.of(Speedment.class)))
-                .add("super(speedment);")
-            )
-            
-            .add(Method.of("newInstance", ENTITY.getType())
-                .public_().add(OVERRIDE)
-                .add("return new " + Formatting.shortName(ENTITY.getImplType().getName()) + "(" + SPEEDMENT_METHOD + ");")
-                .call(method -> file.add(Import.of(ENTITY.getImplType())))
-            )
-            
-            .add(newInstance())
-
-            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY))
-                .public_().add(OVERRIDE)
-                .add("return " + ENTITY.getName() + ".class;")
-            )
-            
-=======
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setSqlEntityMapper(this::defaultReadEntity);"))
@@ -117,7 +98,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
             .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
                 .add("return " + ENTITY.getName() + ".class;"))
->>>>>>> parent of 641a832... Update code generator to support CRUD operations
             .add(generateGet(file))
             .add(generateSet(file))
             .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
@@ -169,13 +149,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         }
     }
 
-<<<<<<< HEAD
-    private Method newInstance() {
-
-        final Method method = Method.of("newInstance", ENTITY.getType())
-            .protected_().add(OVERRIDE)
-            .add(Field.of("result", Type.of(Result.class)))
-=======
     private Method defaultReadEntity(File file) {
 
         file.add(Import.of(Type.of(SQLException.class)));
@@ -184,7 +157,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final Method method = Method.of("defaultReadEntity", ENTITY.getType())
             .protected_()
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
->>>>>>> parent of 641a832... Update code generator to support CRUD operations
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
         final JavaTypeMapperComponent mapperComponent = speedment.get(JavaTypeMapperComponent.class);
