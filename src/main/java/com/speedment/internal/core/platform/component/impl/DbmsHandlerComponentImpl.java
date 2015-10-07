@@ -27,21 +27,21 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
+public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
     private final Map<Dbms, DbmsHandler> map;
-    private final Speedment speedment;
 
     public DbmsHandlerComponentImpl(Speedment speedment) {
+        super(speedment);
         this.dbmsTypes = new ConcurrentHashMap<>();
         this.map = new ConcurrentHashMap<>();
-        this.speedment = requireNonNull(speedment);
         StandardDbmsType.stream().forEach(this::install);
     }
 
@@ -53,7 +53,7 @@ public final class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
     @Override
     public DbmsHandler make(final Dbms dbms) {
         requireNonNull(dbms);
-        return dbms.getType().makeDbmsHandler(speedment, dbms);
+        return dbms.getType().makeDbmsHandler(getSpeedment(), dbms);
     }
 
     @Override

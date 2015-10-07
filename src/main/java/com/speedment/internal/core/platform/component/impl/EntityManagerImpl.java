@@ -23,17 +23,16 @@ import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EntityManagerImpl implements EntityManager {
-
-    private final Speedment speedment;
+public final class EntityManagerImpl extends Apache2AbstractComponent implements EntityManager {
 
     public EntityManagerImpl(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
+        super(speedment);
     }
 
     @Override
@@ -56,7 +55,7 @@ public final class EntityManagerImpl implements EntityManager {
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
         requireNonNull(entity);
-        final ManagerComponent managerComponent = speedment.get(ManagerComponent.class);
+        final ManagerComponent managerComponent = getSpeedment().get(ManagerComponent.class);
         @SuppressWarnings("rawtypes")
         final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
         if (manager.isPresent()) {

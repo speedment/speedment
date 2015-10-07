@@ -16,16 +16,18 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.internal.logging.LoggerFactory;
 import com.speedment.internal.logging.impl.SystemOutLoggerFactory;
 import java.util.Objects;
 
-public final class LoggerFactoryComponentImpl implements LoggerFactoryComponent {
+public final class LoggerFactoryComponentImpl extends Apache2AbstractComponent implements LoggerFactoryComponent {
 
     private LoggerFactory loggerFactory;
 
-    public LoggerFactoryComponentImpl() {
+    public LoggerFactoryComponentImpl(Speedment speedment) {
+        super(speedment);
         setLoggerFactory(new SystemOutLoggerFactory());
     }
 

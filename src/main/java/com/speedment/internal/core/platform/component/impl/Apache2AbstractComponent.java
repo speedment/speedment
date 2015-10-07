@@ -17,25 +17,27 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.Project;
-import com.speedment.component.ProjectComponent;
-import static java.util.Objects.requireNonNull;
+import com.speedment.SpeedmentVersion;
+import com.speedment.internal.core.platform.Apache2License;
 
-public final class ProjectComponentImpl extends Apache2AbstractComponent implements ProjectComponent {
+/**
+ *
+ * @author pemi
+ */
+public abstract class Apache2AbstractComponent extends AbstractComponent {
 
-    private Project project;
-
-    public ProjectComponentImpl(Speedment speedment) {
+    public Apache2AbstractComponent(Speedment speedment) {
         super(speedment);
     }
 
     @Override
-    public Project getProject() {
-        return project;
+    public Apache2License getLicense() {
+        return Apache2License.INSTANCE;
     }
 
     @Override
-    public void setProject(Project project) {
-        this.project = requireNonNull(project);
+    public String getVersion() {
+        return SpeedmentVersion.getImplementationVersion();
     }
+
 }

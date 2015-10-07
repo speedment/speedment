@@ -21,6 +21,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.pool.PoolableConnection;
 import java.sql.Array;
 import java.sql.Blob;
@@ -73,7 +74,7 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        instance = new ConnectionPoolComponentImpl() {
+        instance = new ConnectionPoolComponentImpl(SpeedmentFactory.newSpeedmentInstance()) {
 
             @Override
             public Connection newConnection(String uri, String user, String password) throws SQLException {

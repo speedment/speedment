@@ -16,26 +16,29 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Manager;
 import com.speedment.Speedment;
-import com.speedment.config.Project;
-import com.speedment.component.ProjectComponent;
-import static java.util.Objects.requireNonNull;
+import com.speedment.component.StreamSupplierComponent;
+import java.util.stream.Stream;
 
-public final class ProjectComponentImpl extends Apache2AbstractComponent implements ProjectComponent {
+/**
+ *
+ * @author pemi
+ */
+public class NativeStreamSupplierComponentImpl extends Apache2AbstractComponent implements StreamSupplierComponent {
 
-    private Project project;
-
-    public ProjectComponentImpl(Speedment speedment) {
+    public NativeStreamSupplierComponentImpl(Speedment speedment) {
         super(speedment);
     }
 
     @Override
-    public Project getProject() {
-        return project;
+    public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass) {
+        return getSpeedment().managerOf(entityClass).nativeStream();
     }
 
     @Override
-    public void setProject(Project project) {
-        this.project = requireNonNull(project);
+    public <ENTITY> Stream<ENTITY> stream(Manager<ENTITY> manager) {
+        return manager.nativeStream();
     }
+
 }

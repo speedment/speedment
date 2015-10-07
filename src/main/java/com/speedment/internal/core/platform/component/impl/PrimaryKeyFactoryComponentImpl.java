@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -35,7 +36,11 @@ import java.util.function.UnaryOperator;
  *
  * @author pemi
  */
-public final class PrimaryKeyFactoryComponentImpl implements PrimaryKeyFactoryComponent {
+public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractComponent implements PrimaryKeyFactoryComponent {
+
+    public PrimaryKeyFactoryComponentImpl(Speedment speedment) {
+        super(speedment);
+    }
 
     @Override
     public <K0, K1> List<?> make(K0 k0, K1 k1) {
@@ -85,6 +90,7 @@ public final class PrimaryKeyFactoryComponentImpl implements PrimaryKeyFactoryCo
     }
 
     /**
+     * @param <E> Element types
      * @serial include
      */
     protected static class UnmodifiableArrayList<E> extends AbstractList<E> implements RandomAccess, java.io.Serializable {

@@ -19,6 +19,7 @@ package com.speedment;
 import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
+import java.util.stream.Stream;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -32,7 +33,7 @@ import com.speedment.exception.SpeedmentException;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Speedment {
 
     /**
@@ -49,6 +50,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.LoggerFactoryComponent LoggerFactoryComponent}</li>
      * <li>{@link com.speedment.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
      * <li>{@link com.speedment.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
+     * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
@@ -84,6 +86,13 @@ public interface Speedment {
      * @throws SpeedmentException if no Manager exists for the given entityClass
      */
     <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException;
+
+    /**
+     * Creates and returns a new Stream of all installed Components.
+     *
+     * @return a new Stream of all installed Components
+     */
+    Stream<Component> components();
 
     /**
      * Stops the Speedment instance and deallocates any allocated resources.

@@ -222,6 +222,24 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      */
     Stream<ENTITY> stream();
 
+    /**
+     * Creates and returns a new {@link Stream} over all entities in the
+     * underlying database, by-passing any cache,in-memory or middle layers.
+     * This operation is guaranteed to operate on a dataset directly retrieved
+     * from the underlying database.
+     * <p>
+     *
+     * @return a new stream over all entities in this table
+     * @throws SpeedmentException if an error occurs during a Terminal Operation
+     * (e.g. an SqlException is thrown by the underlying database)
+     * @see java.util.stream
+     * @see Stream
+     */
+    Stream<ENTITY> nativeStream();
+    
+    // TBI: Shall we expose this method in the API?
+    
+
     // Persistence
     /**
      * Persists the provided entity to the underlying database and returns a

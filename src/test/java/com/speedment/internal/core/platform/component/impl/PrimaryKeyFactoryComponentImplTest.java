@@ -21,8 +21,8 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.component.PrimaryKeyFactoryComponent;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.util.AssertUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
  */
 public class PrimaryKeyFactoryComponentImplTest {
 
-    private final PrimaryKeyFactoryComponentImpl instance = new PrimaryKeyFactoryComponentImpl();
+    private final PrimaryKeyFactoryComponentImpl instance = new PrimaryKeyFactoryComponentImpl(SpeedmentFactory.newSpeedmentInstance());
     private final Integer k0 = 1;
     private final String k1 = "Arne";
     private final String k2 = "Sven";

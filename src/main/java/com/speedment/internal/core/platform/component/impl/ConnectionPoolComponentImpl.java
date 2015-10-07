@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.internal.core.pool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
@@ -37,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
+public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implements ConnectionPoolComponent {
 
     private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
@@ -50,7 +51,8 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
-    public ConnectionPoolComponentImpl() {
+    public ConnectionPoolComponentImpl(Speedment speedment) {
+        super(speedment);
         maxAge = DEFAULT_MAX_AGE;
         maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();

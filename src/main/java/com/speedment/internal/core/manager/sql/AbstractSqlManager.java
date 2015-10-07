@@ -78,7 +78,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     @Override
-    public Stream<ENTITY> stream() {
+    public Stream<ENTITY> nativeStream() {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap());
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> asynchronousQueryResult.stream();

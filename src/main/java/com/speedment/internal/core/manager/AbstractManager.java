@@ -18,14 +18,11 @@ package com.speedment.internal.core.manager;
 
 import com.speedment.Manager;
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.Table;
+import com.speedment.component.StreamSupplierComponent;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import com.speedment.internal.core.runtime.Lifecyclable;
-import com.speedment.component.ManagerComponent;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
@@ -53,6 +50,11 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         return sharedJasonFormatter.apply(entity);
     }
 
+    @Override
+    public Stream<ENTITY> stream() {
+        return speedment.get(StreamSupplierComponent.class).stream(getEntityClass());
+    }
+
 //    @Override
 //    @SuppressWarnings("unchecked")
 //    public Optional<Object> find(ENTITY entity, Column column) {
@@ -74,7 +76,6 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 //                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
 //            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
 //    }
-
     @Override
     public Manager<ENTITY> initialize() {
         state = State.INIITIALIZED;

@@ -18,7 +18,6 @@ package com.speedment.internal.core.platform;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.component.ManagerComponent;
@@ -28,30 +27,29 @@ import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
+import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
+import java.util.Map.Entry;
+import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
     SpeedmentImpl() {
-        put(new ManagerComponentImpl());
-        put(new ProjectComponentImpl());
-        put(new PrimaryKeyFactoryComponentImpl());
-        put(new DbmsHandlerComponentImpl(this));
-        put(new SqlTypeMapperComponentImpl());
-        put(new JavaTypeMapperComponentImpl());
-        put(new EntityManagerImpl(this));
-        put(new LoggerFactoryComponentImpl());
-        put(new ConnectionPoolComponentImpl());
+        put(ManagerComponentImpl::new);
+        put(ProjectComponentImpl::new);
+        put(PrimaryKeyFactoryComponentImpl::new);
+        put(DbmsHandlerComponentImpl::new);
+        put(SqlTypeMapperComponentImpl::new);
+        put(JavaTypeMapperComponentImpl::new);
+        put(EntityManagerImpl::new);
+        put(LoggerFactoryComponentImpl::new);
+        put(ConnectionPoolComponentImpl::new);
+        put(NativeStreamSupplierComponentImpl::new);
     }
 
     @Override
@@ -60,10 +58,20 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         return super.get(iface);
     }
 
+    public Component put(Function<Speedment, Component> mapper) {
+        requireNonNull(mapper);
+        return put(mapper.apply(this));
+    }
+
     @Override
     public Component put(Component item) {
         requireNonNull(item);
-        return put(item, Component::onAdd, Component::onRemove, Component::getComponentClass);
+        return put(item, Component::getComponentClass);
+    }
+
+    @Override
+    public Stream<Component> components() {
+        return super.stream().map(Entry::getValue);
     }
 
     @Override
@@ -76,4 +84,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     public void stop() {
         // do nothing yet!
     }
+
+    @Override
+    public String toString() {
+        return SpeedmentImpl.class.getSimpleName() + " " + components().map(c -> c.getTitle() + "-" + c.getVersion()).collect(joining(", ", "[", "]"));
+    }
+
 }

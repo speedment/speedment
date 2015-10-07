@@ -14,28 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform.component.impl;
+package com.speedment.internal.core.platform;
 
-import com.speedment.Speedment;
-import com.speedment.config.Project;
-import com.speedment.component.ProjectComponent;
-import static java.util.Objects.requireNonNull;
+import com.speedment.License;
 
-public final class ProjectComponentImpl extends Apache2AbstractComponent implements ProjectComponent {
+/**
+ *
+ * @author pemi
+ */
+public enum Apache2License implements License {
 
-    private Project project;
+    INSTANCE;
 
-    public ProjectComponentImpl(Speedment speedment) {
-        super(speedment);
+    @Override
+    public String getName() {
+        return "Apache License, Version 2.0";
     }
 
     @Override
-    public Project getProject() {
-        return project;
+    public boolean isCommercial() {
+        return false;
     }
 
-    @Override
-    public void setProject(Project project) {
-        this.project = requireNonNull(project);
-    }
 }
