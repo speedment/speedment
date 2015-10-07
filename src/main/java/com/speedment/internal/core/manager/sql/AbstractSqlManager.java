@@ -23,19 +23,17 @@ import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.config.parameters.DbmsType;
+import com.speedment.internal.core.manager.AbstractManager;
 import com.speedment.db.MetaResult;
+import com.speedment.internal.core.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.JavaTypeMapperComponent;
-
-import com.speedment.internal.core.manager.AbstractManager;
-import com.speedment.internal.core.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
-
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -59,8 +57,9 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
@@ -89,6 +88,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     public <T> Stream<T> synchronousStreamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
+        //LOGGER.debug(sql + " <- " + values);
         requireNonNull(sql);
         requireNonNull(values);
         requireNonNull(rsMapper);
@@ -189,7 +189,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected DbmsHandler dbmsHandler() {
-        return speedment().get(DbmsHandlerComponent.class).get(getDbms());
+        return speedment.get(DbmsHandlerComponent.class).get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters
@@ -310,7 +310,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                         .forEachOrdered(column -> {
                             // Cast from Long to the column target type
 
-                            final Object val = speedment()
+                            final Object val = speedment
                                 .get(JavaTypeMapperComponent.class)
                                 .apply(column.getMapping())
                                 .parse(
