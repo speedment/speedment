@@ -37,6 +37,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
+
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
     SpeedmentImpl() {
