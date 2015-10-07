@@ -17,11 +17,10 @@
 package com.speedment.internal.core.manager;
 
 import com.speedment.Speedment;
+import com.speedment.component.CrudHandlerComponent;
 import com.speedment.config.Column;
-import com.speedment.config.Dbms;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Table;
-import com.speedment.db.CrudHandler;
 import com.speedment.db.MetaResult;
 import com.speedment.db.crud.Result;
 import com.speedment.db.crud.Selector;
@@ -47,7 +46,7 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY> {
     
-    private final CrudHandler handler;
+    private final CrudHandlerComponent handler;
     private final Column primaryKeyColumn;
     
     /**
@@ -58,12 +57,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      */
     protected AbstractCrudManager(Speedment speedment) {
         super(speedment);
-        
-        final Dbms dbms = getTable().ancestor(Dbms.class).orElseThrow(
-            () -> new SpeedmentException("Can not instantiate an entity manager without a Dbms.")
-        );
-        
-        this.handler          = dbms.getType().makeCrudHandler(speedment, dbms);
+        this.handler          = speedment.get(CrudHandlerComponent.class);
         this.primaryKeyColumn = findColumnOfPrimaryKey(getTable());
     }
     
