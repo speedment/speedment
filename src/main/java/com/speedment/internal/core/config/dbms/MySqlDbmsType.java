@@ -18,9 +18,7 @@ package com.speedment.internal.core.config.dbms;
 
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
-import com.speedment.db.CrudHandler;
 import com.speedment.db.DbmsHandler;
-import com.speedment.internal.core.db.MySqlCrudHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import java.util.Collections;
 import java.util.function.BiFunction;
@@ -35,7 +33,6 @@ import java.util.stream.Stream;
 public final class MySqlDbmsType extends AbstractDbmsType {
 
     private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
-    private static final BiFunction<Speedment, Dbms, CrudHandler> CRUD_MAPPER = MySqlCrudHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
 
     public MySqlDbmsType() {
 
@@ -51,8 +48,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
             "`",
             "`",
             Stream.of("MySQL", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
-            DBMS_MAPPER,
-            CRUD_MAPPER
+            DBMS_MAPPER
         );
     }
 

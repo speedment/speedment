@@ -92,7 +92,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
             new CreateImpl.Builder(getTable())
                 .with(valuesFor(entity))
                 .build(), 
-            result -> addGeneratedValuesTo(entity, result)
+            this::newInstance
         );
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
                 .with(valuesFor(entity))
                 .where(selectorFor(entity))
                 .build(), 
-            result -> addGeneratedValuesTo(entity, result)
+            this::newInstance
         );
     }
 
@@ -174,20 +174,6 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
             col -> col.getName(), 
             col -> get(entity, col)
         ).toMap();
-    }
-    
-    /**
-     * Changes the primary key value in the specified entity by reading from the
-     * specified result.
-     * 
-     * @param entity  the entity to change
-     * @param result  the result to load the foreign key value from
-     * @return        the same entity as inputed
-     */
-    private ENTITY addGeneratedValuesTo(ENTITY entity, Result result) {
-        final Column pk = findColumnOfPrimaryKey(getTable());
-        set(entity, pk, result.get(pk.getName(), pk.getMapping()));
-        return entity;
     }
     
     /**
