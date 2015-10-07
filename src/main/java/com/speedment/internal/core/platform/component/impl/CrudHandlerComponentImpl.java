@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.db.crud.Create;
 import com.speedment.db.crud.Delete;
 import com.speedment.db.crud.Read;
@@ -31,12 +32,16 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class CrudHandlerComponentImpl implements CrudHandlerComponent {
-    
+public final class CrudHandlerComponentImpl extends Apache2AbstractComponent implements CrudHandlerComponent {
+
     private CreateMethod creator;
     private UpdateMethod updater;
     private DeleteMethod deleter;
     private ReadMethod reader;
+
+    public CrudHandlerComponentImpl(Speedment speedment) {
+        super(speedment);
+    }
 
     @Override
     public CrudHandlerComponent setCreator(CreateMethod creator) {
@@ -65,7 +70,7 @@ public final class CrudHandlerComponentImpl implements CrudHandlerComponent {
     @Override
     public <T> T create(Create operation, Function<Result, T> mapper) throws SpeedmentException {
         return creator.apply(
-            requireNonNull(operation), 
+            requireNonNull(operation),
             requireNonNull(mapper)
         );
     }
@@ -73,7 +78,7 @@ public final class CrudHandlerComponentImpl implements CrudHandlerComponent {
     @Override
     public <T> T update(Update operation, Function<Result, T> mapper) throws SpeedmentException {
         return updater.apply(
-            requireNonNull(operation), 
+            requireNonNull(operation),
             requireNonNull(mapper)
         );
     }
@@ -86,7 +91,7 @@ public final class CrudHandlerComponentImpl implements CrudHandlerComponent {
     @Override
     public <T> Stream<T> read(Read operation, Function<Result, T> mapper) throws SpeedmentException {
         return reader.apply(
-            requireNonNull(operation), 
+            requireNonNull(operation),
             requireNonNull(mapper)
         );
     }
