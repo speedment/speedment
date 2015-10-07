@@ -22,7 +22,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
-import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
@@ -40,11 +39,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(new PrimaryKeyFactoryComponentImpl());
         put(new SqlTypeMapperComponentImpl());
         put(new JavaTypeMapperComponentImpl());
+        put(new EntityManagerImpl(this));
         put(new LoggerFactoryComponentImpl());
         put(new ConnectionPoolComponentImpl());
-        
-        put(new EntityManagerImpl(this));
-        put(new DbmsHandlerComponentImpl(this));
     }
 
     @Override
