@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field.encoder;
+package com.speedment.field.encoder;
 
 import com.speedment.field.Encoder;
 import com.speedment.config.Column;

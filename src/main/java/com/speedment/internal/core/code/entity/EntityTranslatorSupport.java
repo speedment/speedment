@@ -46,7 +46,7 @@ import com.speedment.internal.core.field.ReferenceComparableForeignKeyStringFiel
 import com.speedment.internal.core.field.ReferenceComparableStringFieldImpl;
 import com.speedment.internal.core.field.ReferenceFieldImpl;
 import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+import com.speedment.field.encoder.JsonEncoder;
 import com.speedment.db.MetaResult;
 import com.speedment.internal.util.Pluralis;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;

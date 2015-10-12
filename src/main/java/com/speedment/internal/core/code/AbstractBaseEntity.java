@@ -17,7 +17,7 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+import com.speedment.field.encoder.JsonEncoder;
 import com.speedment.Manager;
 import com.speedment.db.MetaResult;
 import com.speedment.component.ManagerComponent;

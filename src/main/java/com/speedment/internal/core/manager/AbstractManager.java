@@ -19,7 +19,7 @@ package com.speedment.internal.core.manager;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.StreamSupplierComponent;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+import com.speedment.field.encoder.JsonEncoder;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;

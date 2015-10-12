@@ -20,7 +20,7 @@ import com.speedment.annotation.Api;
 import com.speedment.stream.MapStream;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+import com.speedment.field.encoder.JsonEncoder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
