@@ -16,11 +16,11 @@
  */
 package com.speedment.internal.core.stream;
 
+import com.speedment.stream.MapStream;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -38,12 +38,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
-import static java.util.stream.Collector.Characteristics.CONCURRENT;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.StringJoiner;
-import static java.util.stream.Collectors.joining;
+
+import static java.util.stream.Collector.Characteristics.CONCURRENT;
+import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
