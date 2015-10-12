@@ -20,7 +20,7 @@ import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.models.EnumConstant;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 

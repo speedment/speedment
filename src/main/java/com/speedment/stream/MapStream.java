@@ -16,7 +16,7 @@
  */
 package com.speedment.stream;
 
-import com.speedment.internal.core.stream.CollectorUtil;
+import com.speedment.util.CollectorUtil;
 import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.Iterator;

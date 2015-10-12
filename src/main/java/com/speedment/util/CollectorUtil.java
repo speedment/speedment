@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream;
+package com.speedment.util;
 
+import com.speedment.annotation.Api;
 import com.speedment.stream.MapStream;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -49,30 +50,77 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
- *
+ * Utility methods for collecting Speedment streams in various ways.
+ * 
  * @author pemi
+ * @author Emil Forslund
+ * @since 2.1
  */
+@Api(version = "2.1")
 public final class CollectorUtil {
 
     private final static Logger LOGGER = LoggerManager.getLogger(CollectorUtil.class);
     private static final String NULL_TEXT = " must not be null";
 
+    /**
+     * Returns a collector that calls the {@link #toJson(java.lang.Object)} method
+     * for each element in the stream and joins the resuling stream separated
+     * by commas and surrounded by square brackets. 
+     * <p>
+     * The result of the stream:
+     * <pre>    a b c</pre> 
+     * would be:
+     * <pre>    ['a', 'b', 'c']</pre> 
+     * 
+     * @param <T>  the type of the stream
+     * @return     the json string
+     */
     public static <T> Collector<T, ?, String> toJson() {
         return new Parser<>(CollectorUtil::toJson, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
 
-    public static <T> Collector<T, ?, String> toJson(JsonEncoder<T> formatter) {
-        requireNonNull(formatter);
-        return new Parser<>(formatter::apply, l -> "[" + l.stream().collect(joining(", ")) + "]");
+    /**
+     * Returns a collector that calls the specified encoder for each element in 
+     * the stream and joins the resuling stream separated by commas and 
+     * surrounded by square brackets. 
+     * <p>
+     * The result of the stream:
+     * <pre>    a b c</pre> 
+     * would be:
+     * <pre>    ['a', 'b', 'c']</pre> 
+     * 
+     * @param <T>      the type of the stream
+     * @param encoder  the enocder to use
+     * @return         the json string
+     */
+    public static <T> Collector<T, ?, String> toJson(JsonEncoder<T> encoder) {
+        requireNonNull(encoder);
+        return new Parser<>(encoder::apply, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
 
+    /**
+     * If the specified object has a method called {@code toJson}, execute it
+     * and cast the result into a {@code String}. If something goes wrong, an
+     * error is logged and {@code null} is returned.
+     * 
+     * @param <T>     the type of the entity
+     * @param entity  the entity to enocde
+     * @return        the encoded string or {@code null}
+     */
     @SuppressWarnings("unchecked")
     public static <T> String toJson(T entity) {
         requireNonNull(entity);
+        
         try {
             final Method m = entity.getClass().getMethod("toJson");
             return (String) m.invoke(entity);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            
+        } catch (NoSuchMethodException | 
+                 SecurityException | 
+                 IllegalAccessException | 
+                 IllegalArgumentException | 
+                 InvocationTargetException | 
+                 ClassCastException ex) {
 
             LOGGER.error(
                 ex,
@@ -129,6 +177,7 @@ public final class CollectorUtil {
         }
     }
 
+    
     @SafeVarargs
     @SuppressWarnings({"unchecked", "varargs"})
     public static <T> T of(Supplier<T> supplier, Consumer<T> modifier, Consumer<T>... additionalModifiers) {
@@ -166,10 +215,22 @@ public final class CollectorUtil {
         return Stream.of(items).collect(toUnmodifiableSet());
     }
 
+    
     public static Collector<String, ?, String> joinIfNotEmpty(String delimiter) {
         return joinIfNotEmpty(delimiter, "", "");
     }
 
+    /**
+     * Similair to the 
+     * {@link #Collectors.joining(java.lang.String,java.lang.String,java.lang.String)} 
+     * method except that this method surrounds the result with the specified
+     * {@code prefix} and {@code suffix} even if the stream is empty.
+     * 
+     * @param delimiter  the delimiter to separate the strings
+     * @param prefix     the prefix to put before the result
+     * @param suffix     the suffix to put after the result
+     * @return           a collector for joining string elements
+     */
     public static Collector<String, ?, String> joinIfNotEmpty(String delimiter, String prefix, String suffix) {
         return new CollectorImpl<>(
             () -> new StringJoiner(delimiter),
@@ -182,6 +243,13 @@ public final class CollectorUtil {
         );
     }
 
+    /**
+     * Returns the specified string wrapped as an Optional. If the string was
+     * null or empty, the Optional will be empty.
+     * 
+     * @param str  the string to wrap
+     * @return     the string wrapped as an optional
+     */
     public static Optional<String> ifEmpty(String str) {
         return Optional.ofNullable(str).filter(s -> !s.isEmpty());
     }

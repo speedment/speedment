@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.speedment.internal.codegen.util.Formatting.*;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 
 /**
