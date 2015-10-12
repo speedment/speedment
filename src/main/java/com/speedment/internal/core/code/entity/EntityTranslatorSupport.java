@@ -33,30 +33,27 @@ import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Project;
 import com.speedment.config.Table;
-import com.speedment.field.ReferenceComparableField;
-import com.speedment.field.ReferenceComparableForeignKeyField;
-import com.speedment.field.ReferenceComparableForeignKeyStringField;
-import com.speedment.field.ReferenceComparableStringField;
-import com.speedment.field.ReferenceField;
-import com.speedment.field.ReferenceForeignKeyField;
+import com.speedment.field2.ComparableField;
+import com.speedment.field2.ComparableForeignKeyField;
+import com.speedment.field2.StringForeignKeyField;
+import com.speedment.field2.StringField;
+import com.speedment.field2.ReferenceField;
+import com.speedment.field2.ReferenceForeignKeyField;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.field.ReferenceComparableFieldImpl;
-import com.speedment.internal.core.field.ReferenceComparableForeignKeyFieldImpl;
-import com.speedment.internal.core.field.ReferenceComparableForeignKeyStringFieldImpl;
-import com.speedment.internal.core.field.ReferenceComparableStringFieldImpl;
-import com.speedment.internal.core.field.ReferenceFieldImpl;
-import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
+import com.speedment.internal.core.field2.ComparableFieldImpl;
+import com.speedment.internal.core.field2.ComparableForeignKeyFieldImpl;
+import com.speedment.internal.core.field2.StringForeignKeyFieldImpl;
+import com.speedment.internal.core.field2.StringFieldImpl;
+import com.speedment.internal.core.field2.ReferenceFieldImpl;
+import com.speedment.internal.core.field2.ReferenceForeignKeyFieldImpl;
 import com.speedment.internal.core.field.encoder.JsonEncoder;
 import com.speedment.db.MetaResult;
 import com.speedment.internal.util.Pluralis;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguage;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -110,20 +107,20 @@ public final class EntityTranslatorSupport {
                 file.add(Import.of(fkType));
 
                 if (String.class.equals(mapping)) {
-                    type = Type.of(ReferenceComparableForeignKeyStringField.class)
+                    type = Type.of(StringForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(fkType));
 
-                    implType = Type.of(ReferenceComparableForeignKeyStringFieldImpl.class)
+                    implType = Type.of(StringForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(fkType));
                 } else if (Comparable.class.isAssignableFrom(mapping)) {
-                    type = Type.of(ReferenceComparableForeignKeyField.class)
+                    type = Type.of(ComparableForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
 
-                    implType = Type.of(ReferenceComparableForeignKeyFieldImpl.class)
+                    implType = Type.of(ComparableForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
@@ -146,17 +143,17 @@ public final class EntityTranslatorSupport {
             final Type type, implType;
 
             if (String.class.equals(mapping)) {
-                type = Type.of(ReferenceComparableStringField.class)
+                type = Type.of(StringField.class)
                     .add(Generic.of().add(entityType));
 
-                implType = Type.of(ReferenceComparableStringFieldImpl.class)
+                implType = Type.of(StringFieldImpl.class)
                     .add(Generic.of().add(entityType));
             } else if (Comparable.class.isAssignableFrom(mapping)) {
-                type = Type.of(ReferenceComparableField.class)
+                type = Type.of(ComparableField.class)
                     .add(Generic.of().add(entityType))
                     .add(Generic.of().add(Type.of(mapping)));
 
-                implType = Type.of(ReferenceComparableFieldImpl.class)
+                implType = Type.of(ComparableFieldImpl.class)
                     .add(Generic.of().add(entityType))
                     .add(Generic.of().add(Type.of(mapping)));
             } else {
