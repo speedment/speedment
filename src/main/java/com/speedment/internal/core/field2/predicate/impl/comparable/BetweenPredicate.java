@@ -17,9 +17,11 @@
 package com.speedment.internal.core.field2.predicate.impl.comparable;
 
 import com.speedment.field2.Inclusion;
-import static com.speedment.internal.core.field2.predicate.PredicateType.BETWEEN;
+import static com.speedment.field2.predicate.PredicateType.BETWEEN;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.iface.type.QuaternaryInclusionOperation;
 import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
 
@@ -31,14 +33,14 @@ import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
  */
 public class BetweenPredicate<ENTITY, V extends Comparable<? super V>>
     extends SpeedmentPredicateImpl<ENTITY, V>
-    implements SpeedmentPredicate<ENTITY, V>, QuaternaryInclusionOperation<V, V> {
+    implements SpeedmentPredicate<ENTITY, V>, QuaternaryInclusionOperation<V, V>, ComparableSpeedmentPredicate<ENTITY, V> {
 
     private final V operand0;
     private final V operand1;
     private final Inclusion operand2;
 
-    public BetweenPredicate(Getter<ENTITY, V> getter, V start, V end, Inclusion inclusion) {
-        super(BETWEEN, getter);
+    public BetweenPredicate(FieldTrait field, Getter<ENTITY, V> getter, V start, V end, Inclusion inclusion) {
+        super(BETWEEN, field, getter);
         this.operand0 = start;
         this.operand1 = end;
         this.operand2 = inclusion;

@@ -14,17 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate.iface;
+package com.speedment.field2.predicate;
 
-import com.speedment.field2.methods.Getter;
+import com.speedment.field2.trait.FieldTrait;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> entity type
- * @param <V> value type
  */
-public interface HasGetter<ENTITY, V> {
+public interface HasFieldTrait {
 
-    Getter<ENTITY, V> getter();
+    FieldTrait getField();
 }

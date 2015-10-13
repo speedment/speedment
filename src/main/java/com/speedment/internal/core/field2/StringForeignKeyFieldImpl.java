@@ -27,15 +27,17 @@ import com.speedment.internal.core.field2.trait.StringFieldTraitImpl;
 import com.speedment.field2.methods.Finder;
 import com.speedment.field2.methods.Getter;
 import com.speedment.field2.methods.Setter;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.field2.trait.ComparableFieldTrait;
 import com.speedment.field2.trait.FieldTrait;
 import com.speedment.field2.trait.ReferenceFieldTrait;
 import com.speedment.field2.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.field2.trait.StringFieldTrait;
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
-import java.util.function.Predicate;
+import com.speedment.field2.predicate.StringSpeedmentPredicate;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -63,7 +65,7 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
         comparableField = new ComparableFieldTraitImpl<>(field, requireNonNull(getter));
-        stringField = new StringFieldTraitImpl<>(requireNonNull(getter));
+        stringField = new StringFieldTraitImpl<>(field, requireNonNull(getter));
         referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
     }
 
@@ -88,12 +90,12 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
     }
 
     @Override
-    public Predicate<ENTITY> isNull() {
+    public SpeedmentPredicate<ENTITY, String> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
+    public SpeedmentPredicate<ENTITY, String> isNotNull() {
         return referenceField.isNotNull();
     }
 
@@ -113,87 +115,87 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
     }
 
     @Override
-    public Predicate<ENTITY> equal(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> equal(String value) {
         return comparableField.equal(value);
     }
 
     @Override
-    public Predicate<ENTITY> notEqual(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> notEqual(String value) {
         return comparableField.notEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> lessThan(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> lessThan(String value) {
         return comparableField.lessThan(value);
     }
 
     @Override
-    public Predicate<ENTITY> lessOrEqual(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> lessOrEqual(String value) {
         return comparableField.lessOrEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterThan(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> greaterThan(String value) {
         return comparableField.greaterThan(value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterOrEqual(String value) {
+    public ComparableSpeedmentPredicate<ENTITY, String> greaterOrEqual(String value) {
         return comparableField.greaterOrEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> between(String start, String end) {
+    public ComparableSpeedmentPredicate<ENTITY, String> between(String start, String end) {
         return comparableField.between(start, end);
     }
 
     @Override
-    public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+    public ComparableSpeedmentPredicate<ENTITY, String> between(String start, String end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
     }
 
     @Override
-    public Predicate<ENTITY> in(String... values) {
+    public ComparableSpeedmentPredicate<ENTITY, String> in(String... values) {
         return comparableField.in(values);
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<String> values) {
+    public ComparableSpeedmentPredicate<ENTITY, String> in(Set<String> values) {
         return comparableField.in(values);
     }
 
     @Override
-    public Predicate<ENTITY> equalIgnoreCase(String value) {
+    public StringSpeedmentPredicate<ENTITY> equalIgnoreCase(String value) {
         return stringField.equalIgnoreCase(value);
     }
 
     @Override
-    public Predicate<ENTITY> notEqualIgnoreCase(String value) {
+    public StringSpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value) {
         return stringField.notEqualIgnoreCase(value);
     }
 
     @Override
-    public Predicate<ENTITY> startsWith(String value) {
+    public StringSpeedmentPredicate<ENTITY> startsWith(String value) {
         return stringField.startsWith(value);
     }
 
     @Override
-    public Predicate<ENTITY> endsWith(String value) {
+    public StringSpeedmentPredicate<ENTITY> endsWith(String value) {
         return stringField.endsWith(value);
     }
 
     @Override
-    public Predicate<ENTITY> contains(String value) {
+    public StringSpeedmentPredicate<ENTITY> contains(String value) {
         return stringField.contains(value);
     }
 
     @Override
-    public Predicate<ENTITY> isEmpty() {
+    public StringSpeedmentPredicate<ENTITY> isEmpty() {
         return stringField.isEmpty();
     }
 
     @Override
-    public Predicate<ENTITY> isNotEmpty() {
+    public StringSpeedmentPredicate<ENTITY> isNotEmpty() {
         return stringField.isNotEmpty();
     }
 

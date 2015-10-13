@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author pemi
  */
-public class StringFieldTest extends FieldTest {
+public class StringFieldTest extends BaseFieldTest {
 
     @Test
     public void equalIgnoreCase() throws Exception {
@@ -45,14 +45,13 @@ public class StringFieldTest extends FieldTest {
         final List<Entity> result = collect(NAME.notEqualIgnoreCase("abcdef"));
 
         assertEquals(expected, result);
-        assertEquals(4, collect(NAME.equalIgnoreCase(null)).size());
+        assertEquals(25, collect(NAME.notEqualIgnoreCase(null)).size());
     }
 
     @Test
     public void startsWith() throws Exception {
 
-        assertTrue(STARTS_WITH_PREDICATE.test("abc", "ab"));
-
+        //assertTrue(STARTS_WITH_PREDICATE.test("ab", "abc"));
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().startsWith("abc"));
         //final List<Entity> result = collect(e -> e.getName() != null && STARTS_WITH_PREDICATE.test(e.getName(), "abc"));
         final List<Entity> result = collect(NAME.startsWith("abc"));
@@ -67,7 +66,7 @@ public class StringFieldTest extends FieldTest {
     @Test
     public void endsWith() throws Exception {
 
-        assertTrue(ENDS_WITH_PREDICATE.test("abcdEf", "f"));
+        assertTrue(ENDS_WITH_PREDICATE.test("f", "abcdEf"));
 
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().endsWith("f"));
         final List<Entity> result = collect(NAME.endsWith("f"));

@@ -21,7 +21,7 @@ import static com.speedment.internal.codegen.util.Formatting.SPACE;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
 import com.speedment.internal.codegen.lang.interfaces.HasImplements;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**
  * A trait with the functionality to render models with the trait 

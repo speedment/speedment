@@ -31,12 +31,14 @@ import static java.util.Comparator.comparing;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+import static org.junit.Assert.assertEquals;
+import static java.util.Comparator.comparing;
 
 /**
  *
  * @author pemi
  */
-public class ComparableFieldTest extends FieldTest {
+public class ComparableFieldTest extends BaseFieldTest {
 
     @Test
     public void testReferenceFieldComparatorNullFieldsFirst() throws Exception {

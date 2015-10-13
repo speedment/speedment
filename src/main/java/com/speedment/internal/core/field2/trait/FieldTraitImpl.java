@@ -35,4 +35,9 @@ public class FieldTraitImpl implements FieldTrait {
         return columnName;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " {columnName: '" + getColumnName() + "'}";
+    }
+
 }

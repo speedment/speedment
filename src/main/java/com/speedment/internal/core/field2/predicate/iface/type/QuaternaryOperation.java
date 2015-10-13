@@ -19,13 +19,10 @@ package com.speedment.internal.core.field2.predicate.iface.type;
 /**
  *
  * @author pemi
+ * @param <T0> type 0
+ * @param <T1> type 1
+ * @param <T2> type 2
  */
-public interface QuaternaryOperation<T0, T1, T2> {
-
-    T0 getOperand0();
-
-    T1 getOperand1();
-
-    T2 getOperand2();
+public interface QuaternaryOperation<T0, T1, T2> extends HasOperand0<T0>, HasOperand1<T1>, HasOperand2<T2> {
 
 }

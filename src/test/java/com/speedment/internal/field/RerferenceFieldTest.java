@@ -25,12 +25,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
  * @author pemi
  */
-public class RerferenceFieldTest extends FieldTest {
+public class RerferenceFieldTest extends BaseFieldTest {
 
     @Test
     public void testGetter() throws Exception {

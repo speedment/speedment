@@ -19,8 +19,7 @@ package com.speedment;
 import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.field.ReferenceField;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+import com.speedment.encoder.JsonEncoder;
 import java.util.function.Consumer;
 
 /**

@@ -16,11 +16,13 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.string;
 
-import com.speedment.internal.core.field2.predicate.PredicateType;
+import com.speedment.field2.predicate.PredicateType;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
+import com.speedment.field2.predicate.StringSpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 
 /**
  *
@@ -28,17 +30,18 @@ import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  */
 public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String>, StringSpeedmentPredicate<ENTITY> {
 
     private final String operand0;
     private final BiStringPredicate innerPredicate;
 
     public BaseStringPredicate(PredicateType predicateType,
+        FieldTrait field,
         Getter<ENTITY, String> getter,
         String operand0,
         BiStringPredicate innerPredicate
     ) {
-        super(predicateType, getter);
+        super(predicateType, field, getter);
         this.operand0 = operand0;
         this.innerPredicate = innerPredicate;
     }
@@ -50,7 +53,7 @@ public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, 
 
     @Override
     public boolean testField(String fieldValue) {
-        return innerPredicate.test(fieldValue, operand0);
+        return innerPredicate.test(operand0, fieldValue);
     }
 
     @FunctionalInterface
@@ -60,18 +63,18 @@ public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, 
     }
 
     public static final BiStringPredicate EQUALS_IGNORE_CASE_PREDICATE
-        = (s0, s1) -> (s0 == s1) || (s0 != null && s0.equalsIgnoreCase(s1));
+        = (v, f) -> (v == f) || (f != null && f.equalsIgnoreCase(v));
 
     public static final BiStringPredicate NOT_EQUALS_IGNORE_CASE_PREDICATE
-        = (s0, s1) -> !EQUALS_IGNORE_CASE_PREDICATE.test(s0, s1);
+        = (v, f) -> !EQUALS_IGNORE_CASE_PREDICATE.test(v, f);
 
     public static final BiStringPredicate STARTS_WITH_PREDICATE
-        = (s0, s1) ->(s0 != null && s1 != null) && (s0.startsWith(s1));
+        = (v, f) -> (v != null && f != null) && (f.startsWith(v));
 
     public static final BiStringPredicate ENDS_WITH_PREDICATE
-        = (s0, s1) -> (s0 != null && s1 != null) && (s0.endsWith(s1));
+        = (v, f) -> (v != null && f != null) && (f.endsWith(v));
 
     public static final BiStringPredicate CONTAINS_PREDICATE
-        = (s0, s1) -> (s0 != null && s1 != null) && (s0.contains(s1));
+        = (v, f) -> (v != null && f != null) && (f.contains(v));
 
 }

@@ -16,10 +16,11 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.comparable;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.EQUAL;
+import static com.speedment.field2.predicate.PredicateType.EQUAL;
 import com.speedment.field2.methods.Getter;
 import java.util.Objects;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
@@ -28,9 +29,9 @@ import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class EqualPredicate<ENTITY, V> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class EqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public EqualPredicate(Getter<ENTITY, V> getter, V operand0) {
-        super(EQUAL, getter, operand0, (a, b) -> Objects.equals(a, b));
+    public EqualPredicate(FieldTrait field, Getter<ENTITY, V> getter, V operand0) {
+        super(EQUAL, field, getter, operand0, (a, b) -> Objects.equals(a, b));
     }
 }

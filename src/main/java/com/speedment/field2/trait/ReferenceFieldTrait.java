@@ -24,6 +24,7 @@ package com.speedment.field2.trait;
 import com.speedment.field2.methods.FieldSetter;
 import com.speedment.field2.methods.Getter;
 import com.speedment.field2.methods.Setter;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -86,7 +87,7 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is {@code null}
      */
-    Predicate<ENTITY> isNull();
+    SpeedmentPredicate<ENTITY, V> isNull();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -95,6 +96,6 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not</em> {@code null}
      */
-    Predicate<ENTITY> isNotNull();
+    SpeedmentPredicate<ENTITY, V> isNotNull();
 
 }

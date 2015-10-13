@@ -14,17 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.manager.sql.generator;
-
-import com.speedment.internal.codegen.base.DefaultGenerator;
+package com.speedment.field2.predicate;
 
 /**
  *
- * @author Emil Forslund
+ * @author pemi
  */
-public final class SQLGenerator extends DefaultGenerator {
+public interface HasPredicateType {
 
-	public SQLGenerator() {
-		super (new SQLTransformFactory());
-	}
+    PredicateType getPredicateType();
+
 }

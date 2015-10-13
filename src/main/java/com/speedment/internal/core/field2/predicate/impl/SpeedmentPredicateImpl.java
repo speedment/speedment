@@ -16,9 +16,15 @@
  */
 package com.speedment.internal.core.field2.predicate.impl;
 
-import com.speedment.internal.core.field2.predicate.PredicateType;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.PredicateType;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.field2.methods.Getter;
+import com.speedment.field2.trait.FieldTrait;
+import com.speedment.internal.core.field2.predicate.AbstractBasePredicate;
+import com.speedment.internal.core.field2.predicate.iface.type.HasOperand0;
+import com.speedment.internal.core.field2.predicate.iface.type.HasOperand1;
+import com.speedment.internal.core.field2.predicate.iface.type.HasOperand2;
+import com.speedment.internal.util.Cast;
 
 /**
  *
@@ -26,32 +32,55 @@ import com.speedment.field2.methods.Getter;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
-public abstract class SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V> {
+public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, V> {
 
+    private final FieldTrait field;
     private final PredicateType predicateType;
     private final Getter<ENTITY, V> getter;
-//    private final Predicate<V> fieldPredicate;
 
-    public SpeedmentPredicateImpl(PredicateType predicateType, Getter<ENTITY, V> getter/*, Predicate<V> fieldPredicate*/) {
+    protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, Getter<ENTITY, V> getter/*, Predicate<V> fieldPredicate*/) {
         this.predicateType = predicateType;
+        this.field = field;
         this.getter = getter;
-//        this.fieldPredicate = fieldPredicate;
     }
 
     @Override
-    public PredicateType getPredicateType() {
+    public final PredicateType getPredicateType() {
         return predicateType;
     }
 
     @Override
-    public Getter<ENTITY, V> getter() {
+    public final Getter<ENTITY, V> getter() {
         return getter;
     }
 
     public abstract boolean testField(V fieldValue);
 
     @Override
-    public boolean test(ENTITY t) {
-        return testField(getter.apply(t));
+    public final boolean test(ENTITY t) {
+        return testField(getter.apply(t)) ^ isNegated();
     }
+
+    @Override
+    public FieldTrait getField() {
+        return field;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName())
+            .append(" {")
+            .append("field: ").append(field)
+            .append(", type: '").append(predicateType);
+
+        Cast.cast(this, HasOperand0.class).map(HasOperand0<?>::getOperand0).ifPresent(o -> sb.append(", operand0: '").append(o));
+        Cast.cast(this, HasOperand1.class).map(HasOperand1<?>::getOperand1).ifPresent(o -> sb.append(", operand1: '").append(o));
+        Cast.cast(this, HasOperand2.class).map(HasOperand2<?>::getOperand2).ifPresent(o -> sb.append(", operand2: '").append(o));
+        
+        sb.append("', negated: ").append(isNegated())
+            .append("}");
+        return sb.toString();
+    }
+
 }

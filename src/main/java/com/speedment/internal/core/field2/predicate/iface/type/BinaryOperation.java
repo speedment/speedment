@@ -19,9 +19,8 @@ package com.speedment.internal.core.field2.predicate.iface.type;
 /**
  *
  * @author pemi
+ * @param <T0> type
  */
-public interface BinaryOperation<T0> {
-
-    T0 getOperand0();
+public interface BinaryOperation<T0> extends HasOperand0<T0> {
 
 }

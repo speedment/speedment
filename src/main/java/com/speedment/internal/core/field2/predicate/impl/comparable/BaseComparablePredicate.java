@@ -16,10 +16,12 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.comparable;
 
-import com.speedment.internal.core.field2.predicate.PredicateType;
-import static com.speedment.internal.core.field2.predicate.PredicateType.EQUAL;
+import com.speedment.field2.predicate.PredicateType;
+import static com.speedment.field2.predicate.PredicateType.EQUAL;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
@@ -29,18 +31,20 @@ import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class BaseComparablePredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class BaseComparablePredicate<ENTITY, V extends Comparable<? super V>> extends SpeedmentPredicateImpl<ENTITY, V> implements
+    SpeedmentPredicate<ENTITY, V>, BinaryOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
 
     private final V operand0;
     private final BiPredicate<V> innerPredicate;
 
     public BaseComparablePredicate(
         PredicateType predicateType,
+        FieldTrait field,
         Getter<ENTITY, V> getter,
         V operand0,
         BiPredicate<V> innerPredicate
     ) {
-        super(EQUAL, getter);
+        super(EQUAL, field, getter);
         this.operand0 = operand0;
         this.innerPredicate = innerPredicate;
     }

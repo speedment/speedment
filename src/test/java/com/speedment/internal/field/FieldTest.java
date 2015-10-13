@@ -18,12 +18,6 @@ package com.speedment.internal.field;
 
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -31,42 +25,12 @@ import static org.junit.Assert.assertEquals;
  *
  * @author pemi
  */
-public class FieldTest {
-
-    protected List<String> names;
-    protected List<Entity> entities;
-
-    public FieldTest() {
-    }
-
-    @Before
-    public void setUp() {
-        names = Stream.of(null, "a", "a", "a", null, "b", "c", "d", "e", "f", "g", "h", null, "i", "j", null,
-            "ab", "abc", "abcd", "abcde", "abcdef", "abcdefg",
-            "Ab", "AbC", "AbCd", "AbCdE", "AbCdEf", "AbCdEfG",
-            ""
-        ).collect(toList());
-
-        final AtomicInteger id = new AtomicInteger();
-        entities = names.stream().map(name -> new EntityImpl(id.getAndIncrement(), name)).collect(toList());
-    }
+public class FieldTest extends BaseFieldTest {
 
     @Test
     public void testField() throws Exception {
         assertEquals("id", ID.getColumnName());
         assertEquals("name", NAME.getColumnName());
-    }
-
-    protected List<Entity> collect(Predicate<Entity> predicate) {
-        return entities.stream()
-            .filter(predicate)
-            .sorted(ID.comparator().thenComparing(NAME.comparatorNullFieldsFirst()))
-            .collect(toList());
-    }
-
-    protected <T> void printList(String header, List<T> list) {
-        System.out.println("*** " + header + " ***");
-        list.forEach(System.out::println);
     }
 
 }

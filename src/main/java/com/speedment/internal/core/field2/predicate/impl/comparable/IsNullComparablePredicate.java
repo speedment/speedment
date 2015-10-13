@@ -14,28 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate.impl;
+package com.speedment.internal.core.field2.predicate.impl.comparable;
 
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
 import com.speedment.field2.methods.Getter;
-import static com.speedment.internal.core.field2.predicate.PredicateType.ALWAYS_TRUE;
-import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
+import static com.speedment.field2.predicate.PredicateType.IS_NULL;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
+import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> entity type
+ * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class AlwaysTruePredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
+public class IsNullComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public AlwaysTruePredicate(Getter<ENTITY, V> getter) {
-        super(ALWAYS_TRUE, getter);
+    public IsNullComparablePredicate(FieldTrait field, Getter<ENTITY, V> getter) {
+        super(IS_NULL, field, getter, null, (o, f) -> f == null);
     }
-
-    @Override
-    public boolean testField(V fieldValue) {
-        return true;
-    }
-
 }

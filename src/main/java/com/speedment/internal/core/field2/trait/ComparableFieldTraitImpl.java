@@ -17,27 +17,27 @@
 package com.speedment.internal.core.field2.trait;
 
 import com.speedment.field2.Inclusion;
-import com.speedment.internal.core.field2.predicate.impl.AlwaysFalsePredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.BetweenPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.EqualPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.GreaterOrEqualPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.GreaterThanPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.InPredicate;
-import com.speedment.internal.core.field2.predicate.impl.reference.IsNotNullPredicate;
-import com.speedment.internal.core.field2.predicate.impl.reference.IsNullPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.LessOrEqualPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.LessThanPredicate;
 import com.speedment.internal.core.field2.predicate.impl.comparable.NotEqualPredicate;
 import com.speedment.field2.methods.Getter;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
 import com.speedment.internal.comparator.impl.NullOrder;
 import com.speedment.internal.comparator.impl.SpeedmentComparatorImpl;
 import java.util.Comparator;
 import java.util.Set;
-import java.util.function.Predicate;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import com.speedment.field2.trait.ComparableFieldTrait;
 import com.speedment.field2.trait.FieldTrait;
+import com.speedment.internal.core.field2.predicate.impl.comparable.AlwaysFalseComparablePredicate;
+import com.speedment.internal.core.field2.predicate.impl.comparable.IsNotNullComparablePredicate;
+import com.speedment.internal.core.field2.predicate.impl.comparable.IsNullComparablePredicate;
 
 /**
  * @param <ENTITY> the entity type
@@ -48,16 +48,16 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
 
     private final FieldTrait field;
     private final Getter<ENTITY, V> getter;
-    private final AlwaysFalsePredicate<ENTITY, V> alwaysFalsePredicate;
-    private final IsNullPredicate<ENTITY, V> isNullPredicate;
-    private final IsNotNullPredicate<ENTITY, V> isNotNullPredicate;
+    private final ComparableSpeedmentPredicate<ENTITY, V> alwaysFalsePredicate;
+    private final ComparableSpeedmentPredicate<ENTITY, V> isNullPredicate;
+    private final ComparableSpeedmentPredicate<ENTITY, V> isNotNullPredicate;
 
     public ComparableFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter) {
         this.field = field;
         this.getter = getter;
-        this.alwaysFalsePredicate = new AlwaysFalsePredicate<>(getter);
-        this.isNullPredicate = new IsNullPredicate<>(getter);
-        this.isNotNullPredicate = new IsNotNullPredicate<>(getter);
+        this.alwaysFalsePredicate = new AlwaysFalseComparablePredicate<>(field, getter);
+        this.isNullPredicate =  new IsNullComparablePredicate<>(field, getter);
+        this.isNotNullPredicate = new IsNotNullComparablePredicate<>(field, getter);
     }
 
     @Override
@@ -76,55 +76,55 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
     }
 
     @Override
-    public Predicate<ENTITY> equal(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> equal(V value) {
         if (value == null) {
             return isNullPredicate;
         }
-        return new EqualPredicate<>(getter, value);
+        return new EqualPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> notEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> notEqual(V value) {
         if (value == null) {
             return isNotNullPredicate;
         }
-        return new NotEqualPredicate<>(getter, value);
+        return new NotEqualPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> lessThan(V value) {
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new LessThanPredicate<>(getter, value);
+        return new LessThanPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> lessOrEqual(V value) {
         if (value == null) {
             return isNullPredicate;
         }
-        return new LessOrEqualPredicate<>(getter, value);
+        return new LessOrEqualPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> greaterThan(V value) {
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new GreaterThanPredicate<>(getter, value);
+        return new GreaterThanPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> greaterOrEqual(V value) {
         if (value == null) {
             return isNullPredicate;
         }
-        return new GreaterOrEqualPredicate<>(getter, value);
+        return new GreaterOrEqualPredicate<>(field, getter, value);
     }
 
     @Override
-    public Predicate<ENTITY> between(V start, V end, Inclusion inclusion) {
+    public ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end, Inclusion inclusion) {
         // First, take a look at the case when either or both start or/and end are null
         if (start == null || end == null) {
             switch (inclusion) {
@@ -160,7 +160,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(getter, end);
+                    return new EqualPredicate<>(field, getter, end);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -170,7 +170,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
 
             case START_INCLUSIVE_END_EXCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(getter, start);
+                    return new EqualPredicate<>(field, getter, start);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -179,7 +179,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(getter, start);
+                    return new EqualPredicate<>(field, getter, start);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -188,31 +188,31 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
         }
         // Normal case:
-        return new BetweenPredicate<>(getter, start, end, inclusion);
+        return new BetweenPredicate<>(field, getter, start, end, inclusion);
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a stream from an array is safe
     @Override
-    public final Predicate<ENTITY> in(V... values) {
+    public final ComparableSpeedmentPredicate<ENTITY, V> in(V... values) {
         if (values.length == 0) {
             return alwaysFalsePredicate;
         }
         if (values.length == 1) {
-            return new EqualPredicate<>(getter, values[0]);
+            return new EqualPredicate<>(field, getter, values[0]);
         }
         return in(Stream.of(values).collect(toSet()));
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<V> values) {
+    public ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values) {
         if (values.isEmpty()) {
             return alwaysFalsePredicate;
         }
         if (values.size() == 1) {
-            return new EqualPredicate<>(getter, values.stream().findAny().get());
+            return new EqualPredicate<>(field, getter, values.stream().findAny().get());
         }
-        return new InPredicate<>(getter, values);
+        return new InPredicate<>(field, getter, values);
     }
 
 }

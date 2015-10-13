@@ -16,10 +16,11 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.comparable;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.NOT_EQUAL;
+import static com.speedment.field2.predicate.PredicateType.NOT_EQUAL;
 import com.speedment.field2.methods.Getter;
 import java.util.Objects;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
@@ -28,10 +29,10 @@ import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class NotEqualPredicate<ENTITY, V> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class NotEqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public NotEqualPredicate(Getter<ENTITY, V> getter, V operand0) {
-        super(NOT_EQUAL, getter, operand0, (a, b) -> !Objects.equals(a, b));
+    public NotEqualPredicate(FieldTrait field, Getter<ENTITY, V> getter, V operand0) {
+        super(NOT_EQUAL, field, getter, operand0, (a, b) -> !Objects.equals(a, b));
     }
 
 }

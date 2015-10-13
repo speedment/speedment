@@ -30,12 +30,13 @@ import com.speedment.internal.core.db.crud.DeleteImpl;
 import com.speedment.internal.core.db.crud.ReadImpl;
 import com.speedment.internal.core.db.crud.SelectorImpl;
 import com.speedment.internal.core.db.crud.UpdateImpl;
-import com.speedment.internal.core.stream.MapStream;
+import com.speedment.stream.MapStream;
 
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

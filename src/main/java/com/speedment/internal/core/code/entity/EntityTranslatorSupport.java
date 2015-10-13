@@ -40,14 +40,16 @@ import com.speedment.field2.StringField;
 import com.speedment.field2.ReferenceField;
 import com.speedment.field2.ReferenceForeignKeyField;
 import com.speedment.exception.SpeedmentException;
+
 import com.speedment.internal.core.field2.ComparableFieldImpl;
 import com.speedment.internal.core.field2.ComparableForeignKeyFieldImpl;
 import com.speedment.internal.core.field2.StringForeignKeyFieldImpl;
 import com.speedment.internal.core.field2.StringFieldImpl;
 import com.speedment.internal.core.field2.ReferenceFieldImpl;
 import com.speedment.internal.core.field2.ReferenceForeignKeyFieldImpl;
-import com.speedment.internal.core.field.encoder.JsonEncoder;
+
 import com.speedment.db.MetaResult;
+import com.speedment.encoder.JsonEncoder;
 import com.speedment.internal.util.Pluralis;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguage;

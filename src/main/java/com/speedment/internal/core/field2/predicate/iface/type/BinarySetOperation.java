@@ -16,14 +16,11 @@
  */
 package com.speedment.internal.core.field2.predicate.iface.type;
 
-import java.util.Set;
-
 /**
  *
  * @author pemi
+ * @param <T0> Set type
  */
-public interface BinarySetOperation<T0> {
-
-    Set<T0> getOperand0();
+public interface BinarySetOperation<T0> extends HasSetOperand0<T0> {
 
 }

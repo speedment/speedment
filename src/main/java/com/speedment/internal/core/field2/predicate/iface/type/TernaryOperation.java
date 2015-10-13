@@ -20,10 +20,6 @@ package com.speedment.internal.core.field2.predicate.iface.type;
  *
  * @author pemi
  */
-public interface TernaryOperation<T0, T1> {
-
-    T0 getOperand0();
-
-    T1 getOperand1();
+public interface TernaryOperation<T0, T1> extends HasOperand0<T0>, HasOperand1<T1> {
 
 }

@@ -14,16 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate.iface;
-
-import java.util.function.Predicate;
+package com.speedment.field2.predicate;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> Entity type
- * @param <V> Value type
  */
-public interface SpeedmentPredicate<ENTITY, V> extends HasGetter<ENTITY, V>, HasPredicateType, Predicate<ENTITY> {
+public enum PredicateType {
+
+    // Constants
+    ALWAYS_TRUE,
+    ALWAYS_FALSE,
+    // Reference
+    IS_NULL,
+    IS_NOT_NULL,
+    // Comparable
+    EQUAL,
+    NOT_EQUAL,
+    GREATER_THAN,
+    GREATER_OR_EQUAL,
+    LESS_THAN,
+    LESS_OR_EQUAL,
+    BETWEEN,
+    IN,
+    // String
+    EQUAL_IGNORE_CASE,
+    NOT_EQUAL_IGNORE_CASE,
+    STARTS_WITH,
+    ENDS_WITH,
+    CONTAINS,
+    IS_EMPTY,
+    IS_NOT_EMPTY;
 
 }

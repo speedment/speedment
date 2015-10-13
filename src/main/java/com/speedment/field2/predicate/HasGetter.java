@@ -14,38 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate;
+package com.speedment.field2.predicate;
+
+import com.speedment.field2.methods.Getter;
 
 /**
  *
  * @author pemi
+ * @param <ENTITY> entity type
+ * @param <V> value type
  */
-public enum PredicateType {
+public interface HasGetter<ENTITY, V> {
 
-    // Constants
-    ALWAYS_TRUE,
-    ALWAYS_FALSE,
-    // Reference
-    IS_NULL,
-    IS_NOT_NULL,
-    // Comparable
-    EQUAL,
-    NOT_EQUAL,
-    GREATER_THAN,
-    GREATER_OR_EQUAL,
-    LESS_THAN,
-    LESS_OR_EQUAL,
-    BETWEEN,
-    IN,
-    // String
-    EQUAL_IGNORE_CASE,
-    NOT_EQUAL_IGNORE_CASE,
-    STARTS_WITH,
-    ENDS_WITH,
-    CONTAINS,
-    IS_EMPTY,
-    IS_NOT_EMPTY;
-
-;
-
+    Getter<ENTITY, V> getter();
 }

@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.reference;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.IS_NULL;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import static com.speedment.field2.predicate.PredicateType.IS_NULL;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.field2.methods.Getter;
+import com.speedment.field2.trait.FieldTrait;
 import java.util.Objects;
 import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
@@ -30,8 +31,8 @@ import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
  */
 public class IsNullPredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
 
-    public IsNullPredicate(Getter<ENTITY, V> getter) {
-        super(IS_NULL, getter);
+    public IsNullPredicate(FieldTrait field, Getter<ENTITY, V> getter) {
+        super(IS_NULL, field, getter);
     }
 
     @Override

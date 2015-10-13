@@ -14,16 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate.iface;
 
-import com.speedment.internal.core.field2.predicate.PredicateType;
+package com.speedment.internal.core.field2.predicate.iface.type;
 
 /**
  *
  * @author pemi
  */
-public interface HasPredicateType {
+public interface HasOperand1<T> {
 
-    PredicateType getPredicateType();
-
+    T getOperand1();
 }

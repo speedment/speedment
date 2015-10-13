@@ -21,6 +21,7 @@ import com.speedment.internal.core.field2.predicate.impl.reference.IsNotNullPred
 import com.speedment.internal.core.field2.predicate.impl.reference.IsNullPredicate;
 import com.speedment.field2.methods.Getter;
 import com.speedment.field2.methods.Setter;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.field2.trait.FieldTrait;
 import java.util.function.Predicate;
 import com.speedment.field2.trait.ReferenceFieldTrait;
@@ -39,15 +40,15 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
     private final Setter<ENTITY, V> setter;
 
     // These are UnaryPredicate and thus, do not change
-    private final Predicate<ENTITY> isNullPredicate;
-    private final Predicate<ENTITY> isNotNullPredicate;
+    private final SpeedmentPredicate<ENTITY, V> isNullPredicate;
+    private final SpeedmentPredicate<ENTITY, V> isNotNullPredicate;
 
     public ReferenceFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
         this.field = requireNonNull(field);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
-        this.isNullPredicate = new IsNullPredicate<>(getter);
-        this.isNotNullPredicate = new IsNotNullPredicate<>(getter);
+        this.isNullPredicate = new IsNullPredicate<>(field, getter);
+        this.isNotNullPredicate = new IsNotNullPredicate<>(field, getter);
     }
 
     @Override
@@ -66,12 +67,12 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
     }
 
     @Override
-    public Predicate<ENTITY> isNull() {
+    public SpeedmentPredicate<ENTITY, V> isNull() {
         return isNullPredicate;
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
+    public SpeedmentPredicate<ENTITY, V> isNotNull() {
         return isNotNullPredicate;
     }
 

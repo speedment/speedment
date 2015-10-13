@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.string;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
+import static com.speedment.field2.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
@@ -29,8 +30,8 @@ import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 public class NotEqualIgnoreCasePredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public NotEqualIgnoreCasePredicate(Getter<ENTITY, String> getter, String operand0) {
-        super(NOT_EQUAL_IGNORE_CASE, getter, operand0, NOT_EQUALS_IGNORE_CASE_PREDICATE);
+    public NotEqualIgnoreCasePredicate(FieldTrait field, Getter<ENTITY, String> getter, String operand0) {
+        super(NOT_EQUAL_IGNORE_CASE, field, getter, operand0, NOT_EQUALS_IGNORE_CASE_PREDICATE);
     }
 
 }

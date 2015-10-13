@@ -24,6 +24,7 @@ import com.speedment.internal.core.field2.trait.ReferenceForeignKeyFieldTraitImp
 import com.speedment.field2.methods.Finder;
 import com.speedment.field2.methods.Getter;
 import com.speedment.field2.methods.Setter;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import java.util.function.Predicate;
 import com.speedment.field2.trait.FieldTrait;
 import com.speedment.field2.trait.ReferenceFieldTrait;
@@ -76,12 +77,12 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceFor
     }
 
     @Override
-    public Predicate<ENTITY> isNull() {
+    public SpeedmentPredicate<ENTITY, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
+    public SpeedmentPredicate<ENTITY, V> isNotNull() {
         return referenceField.isNotNull();
     }
 

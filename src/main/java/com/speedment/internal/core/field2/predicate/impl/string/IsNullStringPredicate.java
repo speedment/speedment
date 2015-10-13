@@ -14,28 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field2.predicate.impl;
+package com.speedment.internal.core.field2.predicate.impl.string;
 
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
 import com.speedment.field2.methods.Getter;
-import static com.speedment.internal.core.field2.predicate.PredicateType.ALWAYS_TRUE;
-import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
+import static com.speedment.field2.predicate.PredicateType.IS_NULL;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
+import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> entity type
- * @param <V> value type
+ * @param <ENTITY> the entity type
  */
-public class AlwaysFalsePredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
+public class IsNullStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
+    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public AlwaysFalsePredicate(Getter<ENTITY, V> getter) {
-        super(ALWAYS_TRUE, getter);
-    }
-
-    @Override
-    public boolean testField(V fieldValue) {
-        return false;
+    public IsNullStringPredicate(FieldTrait field, Getter<ENTITY, String> getter) {
+        super(IS_NULL, field, getter, null, (o, f) -> f == null);
     }
 
 }

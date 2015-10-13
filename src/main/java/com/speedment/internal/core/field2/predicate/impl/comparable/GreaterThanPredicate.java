@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.comparable;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.GREATER_THAN;
+import static com.speedment.field2.predicate.PredicateType.GREATER_THAN;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 import com.speedment.internal.core.field2.predicate.iface.type.BinaryOperation;
 
 /**
@@ -31,8 +32,8 @@ public class GreaterThanPredicate<ENTITY, V extends Comparable<? super V>>
     extends BaseComparablePredicate<ENTITY, V>
     implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public GreaterThanPredicate(Getter<ENTITY, V> getter, V operand0) {
-        super(GREATER_THAN, getter, operand0, GreaterThanPredicate::test);
+    public GreaterThanPredicate(FieldTrait field, Getter<ENTITY, V> getter, V operand0) {
+        super(GREATER_THAN, field, getter, operand0, GreaterThanPredicate::test);
     }
 
     private static <V extends Comparable<? super V>> boolean test(V a, V b) {

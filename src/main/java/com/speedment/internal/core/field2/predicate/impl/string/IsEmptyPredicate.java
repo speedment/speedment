@@ -16,11 +16,13 @@
  */
 package com.speedment.internal.core.field2.predicate.impl.string;
 
-import static com.speedment.internal.core.field2.predicate.PredicateType.IS_EMPTY;
+import static com.speedment.field2.predicate.PredicateType.IS_EMPTY;
 import com.speedment.field2.methods.Getter;
-import com.speedment.internal.core.field2.predicate.iface.SpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.field2.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
+import com.speedment.field2.predicate.StringSpeedmentPredicate;
+import com.speedment.field2.trait.FieldTrait;
 
 /**
  *
@@ -28,10 +30,10 @@ import com.speedment.internal.core.field2.predicate.iface.type.UnaryOperation;
  * @param <ENTITY> the entity type
  */
 public class IsEmptyPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
-    implements SpeedmentPredicate<ENTITY, String>, UnaryOperation {
+    implements SpeedmentPredicate<ENTITY, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY> {
 
-    public IsEmptyPredicate(Getter<ENTITY, String> getter) {
-        super(IS_EMPTY, getter);
+    public IsEmptyPredicate(FieldTrait field, Getter<ENTITY, String> getter) {
+        super(IS_EMPTY, field, getter);
     }
 
     @Override

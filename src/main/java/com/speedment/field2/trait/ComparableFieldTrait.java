@@ -18,9 +18,9 @@ package com.speedment.field2.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.field2.Inclusion;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
 import java.util.Comparator;
 import java.util.Set;
-import java.util.function.Predicate;
 
 /**
  *
@@ -68,7 +68,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>equal</em> to the given value
      */
-    Predicate<ENTITY> equal(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> equal(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -79,7 +79,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not equal</em> to the given value
      */
-    Predicate<ENTITY> notEqual(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> notEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -90,7 +90,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than</em> the given value
      */
-    Predicate<ENTITY> lessThan(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> lessThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -101,7 +101,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than or equal</em> to the given value
      */
-    Predicate<ENTITY> lessOrEqual(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> lessOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -112,7 +112,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than</em> the given value
      */
-    Predicate<ENTITY> greaterThan(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> greaterThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -123,7 +123,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than or equal</em> to the given value
      */
-    Predicate<ENTITY> greaterOrEqual(V value);
+    ComparableSpeedmentPredicate<ENTITY, V> greaterOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -139,7 +139,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * this Field is <em>between</em> the given values (inclusive the start
      * value but exclusive the end value)
      */
-    default Predicate<ENTITY> between(V start, V end) {
+    default ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end) {
         return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
@@ -162,7 +162,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * parameter into account when determining if either of the end points shall
      * be included in the Field range or not
      */
-    Predicate<ENTITY> between(V start, V end, Inclusion inclusion);
+    ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -177,7 +177,7 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * this Field is <em>in</em> the set of given values
      */
     @SuppressWarnings("unchecked")
-    Predicate<ENTITY> in(V... values);
+    ComparableSpeedmentPredicate<ENTITY, V> in(V... values);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -190,6 +190,6 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>in</em> the given Set
      */
-    Predicate<ENTITY> in(Set<V> values);
+    ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values);
 
 }

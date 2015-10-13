@@ -17,7 +17,7 @@
 package com.speedment.db.crud;
 
 import com.speedment.annotation.Api;
-import com.speedment.field.operators.ComparableOperator;
+import com.speedment.field2.predicate.PredicateType;
 
 import java.util.Optional;
 
@@ -40,11 +40,11 @@ public interface Selector {
      *
      * @return  the operator
      */
-    ComparableOperator getOperator();
+    PredicateType getPredicateType();
 
     /**
      * Returns the operand (if any) that this selector compares with. If the 
-     * operator specified by {@link #getOperator()} does not require any 
+     * operator specified by {@link #getPredicateType()} does not require any 
      * operands, this will be {@code empty}.
      *
      * @return  the operand if any and {@code empty} otherwise

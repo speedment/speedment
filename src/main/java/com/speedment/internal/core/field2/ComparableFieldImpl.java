@@ -23,9 +23,10 @@ import com.speedment.internal.core.field2.trait.ReferenceFieldTraitImpl;
 import com.speedment.field2.methods.Getter;
 import com.speedment.field2.methods.Setter;
 import java.util.Set;
-import java.util.function.Predicate;
 import com.speedment.field2.ComparableField;
 import com.speedment.field2.methods.FieldSetter;
+import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field2.predicate.SpeedmentPredicate;
 import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import com.speedment.field2.trait.ComparableFieldTrait;
@@ -77,12 +78,12 @@ public class ComparableFieldImpl<ENTITY, V extends Comparable<? super V>> implem
     }
 
     @Override
-    public Predicate<ENTITY> isNull() {
+    public SpeedmentPredicate<ENTITY, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
+    public SpeedmentPredicate<ENTITY, V> isNotNull() {
         return referenceField.isNotNull();
     }
 
@@ -102,54 +103,54 @@ public class ComparableFieldImpl<ENTITY, V extends Comparable<? super V>> implem
     }
 
     @Override
-    public Predicate<ENTITY> equal(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> equal(V value) {
         return comparableField.equal(value);
     }
 
     @Override
-    public Predicate<ENTITY> notEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> notEqual(V value) {
         return comparableField.notEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> lessThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> lessThan(V value) {
         return comparableField.lessThan(value);
     }
 
     @Override
-    public Predicate<ENTITY> lessOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> lessOrEqual(V value) {
         return comparableField.lessOrEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> greaterThan(V value) {
         return comparableField.greaterThan(value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, V> greaterOrEqual(V value) {
         return comparableField.greaterOrEqual(value);
     }
 
     @Override
-    public Predicate<ENTITY> between(V start, V end) {
+    public ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end) {
         return comparableField.between(start, end);
     }
 
     @Override
-    public Predicate<ENTITY> between(V start, V end, Inclusion inclusion) {
+    public ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs") // delegator is safe
     @Override
-    public final Predicate<ENTITY> in(V... values) {
+    public final ComparableSpeedmentPredicate<ENTITY, V> in(V... values) {
         return comparableField.in(values);
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<V> values) {
+    public ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values) {
         return comparableField.in(values);
     }
 
