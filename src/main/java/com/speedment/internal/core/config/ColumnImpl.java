@@ -19,8 +19,10 @@ package com.speedment.internal.core.config;
 import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
+import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.util.Cast;
 import java.util.Optional;
 
@@ -37,6 +39,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private Class<?> mapping;
+    private Class<? extends TypeMapper<?, ?>> typeMapper;
 
     @Override
     protected void setDefaults() {
@@ -45,6 +48,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
         setMapping(String.class);
+        setTypeMapper(StringIdentityMapper.class);
     }
 
     @Override
@@ -115,5 +119,15 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     @Override
     public void setAutoincrement(Boolean autoincrement) {
         this.autoincrement = autoincrement;
+    }
+
+    @Override
+    public Class<? extends TypeMapper<?, ?>> getTypeMapper() {
+        return typeMapper;
+    }
+
+    @Override
+    public void setTypeMapper(Class<? extends TypeMapper<?, ?>> mapper) {
+        this.typeMapper = mapper;
     }
 }

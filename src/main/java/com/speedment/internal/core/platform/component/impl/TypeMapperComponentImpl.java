@@ -59,7 +59,7 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
     }
 
     @Override
-    public final <DB_TYPE, JAVA_TYPE> void install(Supplier<TypeMapper<DB_TYPE, JAVA_TYPE>> typeMapperConstructor) {
+    public final void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
         final TypeMapper mapper = typeMapperConstructor.get();
         mappers.put(mapper.getClass().getName(), mapper);
     }

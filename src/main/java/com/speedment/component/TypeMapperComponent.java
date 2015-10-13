@@ -33,29 +33,23 @@ public interface TypeMapperComponent extends Component {
     /**
      * Installs the specified type mapper in this component.
      * 
-     * @param <DB_TYPE>           the database type
-     * @param <JAVA_TYPE>         the java type
      * @param typeMapperSupplier  the constructor for a mapper to install
      */
-    <DB_TYPE, JAVA_TYPE> void install(Supplier<TypeMapper<DB_TYPE, JAVA_TYPE>> typeMapperSupplier);
+    void install(Supplier<TypeMapper<?, ?>> typeMapperSupplier);
     
     /**
      * Streams over all the type mappers installed in this component.
      * 
-     * @param <DB_TYPE>    the database type
-     * @param <JAVA_TYPE>  the java type
-     * @return             all mappers
+     * @return  all mappers
      */
-    <DB_TYPE, JAVA_TYPE> Stream<TypeMapper<DB_TYPE, JAVA_TYPE>> stream();
+    Stream<TypeMapper<?, ?>> stream();
     
     /**
      * Retreive and return the type mapper with the specified absolute class
      * name. If it is not installed, return an empty optional.
      * 
-     * @param <DB_TYPE>           the database type
-     * @param <JAVA_TYPE>         the java type
-     * @param absoluteClassName   the name as returned by {@code Class.getName()}
-     * @return                    the type mapper or empty
+     * @param absoluteClassName  the name as returned by {@code Class.getName()}
+     * @return                   the type mapper or empty
      */
-    <DB_TYPE, JAVA_TYPE> Optional<TypeMapper<DB_TYPE, JAVA_TYPE>> get(String absoluteClassName);
+    Optional<TypeMapper<?, ?>> get(String absoluteClassName);
 }

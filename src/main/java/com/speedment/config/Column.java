@@ -24,6 +24,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ColumnImpl;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
+import com.speedment.config.mapper.TypeMapper;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -170,4 +171,26 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      */
     @External(type = Class.class)
     void setMapping(Class<?> mappedClass);
+    
+    /**
+     * Returns the mapper class that will be used to generate a java 
+     * representation of the database types.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  the mapper class
+     */
+    @External(type = Class.class)
+    Class<? extends TypeMapper<?, ?>> getTypeMapper();
+
+    /**
+     * Sets the mapper class that will be used to generate a java 
+     * representation of the database types.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param mapper  the new mapper class
+     */
+    @External(type = Class.class)
+    void setTypeMapper(Class<? extends TypeMapper<?, ?>> mapper);
 }
