@@ -51,7 +51,7 @@ public class SqlPredicateFragment {
     }
 
     public SqlPredicateFragment addAll(Collection<Object> objects) {
-        objects.addAll(objects);
+        this.objects.addAll(objects);
         return this;
     }
 

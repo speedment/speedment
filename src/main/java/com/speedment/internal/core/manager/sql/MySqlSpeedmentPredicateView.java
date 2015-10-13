@@ -33,11 +33,15 @@ import static java.util.stream.Collectors.joining;
 @SuppressWarnings("rawtypes")
 public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
 
+    // TODO: Get from DbmsType
+    private static final String OPENING_FIELD_QUOTE = "`";
+    private static final String CLOSING_FIELD_QUOTE = "`";
+
     @Override
     protected SqlPredicateFragment renderUninverted(SpeedmentPredicate model) {
         requireNonNull(model);
         final PredicateType pt = model.getPredicateType();
-        final String cn = model.getField().getColumnName();
+        final String cn = OPENING_FIELD_QUOTE + model.getField().getColumnName() + CLOSING_FIELD_QUOTE;
         switch (pt) {
             // Constants
             case ALWAYS_FALSE:
@@ -82,7 +86,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
             }
             case IN: {
                 final Set<?> set = setOper0(model);
-                return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + ")").addAll(set.stream().collect(toList()));
+                return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))").addAll(set.stream().collect(toList()));
             }
             case EQUAL_IGNORE_CASE:
                 return of("(UPPER(" + cn + ") = UPPER(?))").add(oper0(model));

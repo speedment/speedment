@@ -24,6 +24,9 @@ import com.speedment.field.Inclusion;
  * @param <T0> first type
  * @param <T1> second type
  */
-public interface QuaternaryInclusionOperation<T0, T1> extends QuaternaryOperation<T0, T1, Inclusion> {
+public interface QuaternaryInclusionOperation<T0, T1> extends QuaternaryOperation<T0, T1, Inclusion>, HasInclusionOperand2 {
+
+    @Override
+    public Inclusion getOperand2();
 
 }

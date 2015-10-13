@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.internal.codegen.base.Generator;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.internal.util.Cast;
 import com.speedment.internal.core.stream.builder.action.Action;

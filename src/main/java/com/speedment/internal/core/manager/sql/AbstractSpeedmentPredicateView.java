@@ -79,6 +79,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     }
 
     public static Inclusion inclusionOper2(SpeedmentPredicate<?, ?> p) {
+        //QuaternaryInclusionOperation
         return Cast.castOrFail(p, HasInclusionOperand2.class).getOperand2();
     }
 
