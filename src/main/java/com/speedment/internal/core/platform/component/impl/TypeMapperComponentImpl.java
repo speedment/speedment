@@ -19,10 +19,27 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
+import com.speedment.internal.core.config.mapper.identity.ArrayIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.BigDecimalIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.BlobIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.BooleanIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.ByteIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.ClobIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.DateIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.DoubleIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.FloatIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.IntegerIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.LongIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.NClobIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.ObjectIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.RefIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.RowIdIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.ShortIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.SQLXMLIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.TimeIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.TimestampIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.URLIdentityMapper;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,10 +74,27 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         super(speedment);
         this.mappers = new ConcurrentHashMap<>();
         
+        install(ArrayIdentityMapper::new);
+        install(BigDecimalIdentityMapper::new);
+        install(BlobIdentityMapper::new);
+        install(BooleanIdentityMapper::new);
+        install(ByteIdentityMapper::new);
+        install(ClobIdentityMapper::new);
+        install(DateIdentityMapper::new);
+        install(DoubleIdentityMapper::new);
+        install(FloatIdentityMapper::new);
         install(IntegerIdentityMapper::new);
         install(LongIdentityMapper::new);
+        install(NClobIdentityMapper::new);
+        install(ObjectIdentityMapper::new);
+        install(RefIdentityMapper::new);
+        install(RowIdIdentityMapper::new);
+        install(ShortIdentityMapper::new);
+        install(SQLXMLIdentityMapper::new);
         install(StringIdentityMapper::new);
+        install(TimeIdentityMapper::new);
         install(TimestampIdentityMapper::new);
+        install(URLIdentityMapper::new);
     }
     
     @Override
