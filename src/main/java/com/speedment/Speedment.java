@@ -51,6 +51,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
      * <li>{@link com.speedment.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
+     * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
