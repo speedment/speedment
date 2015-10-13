@@ -19,6 +19,7 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
+import com.speedment.internal.core.config.dbms.timestamp.TimestampToLongMapper;
 import com.speedment.internal.core.config.mapper.identity.ArrayIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BigDecimalIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BlobIdentityMapper;
@@ -43,7 +44,6 @@ import com.speedment.internal.core.config.mapper.identity.URLIdentityMapper;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -55,15 +55,6 @@ import java.util.stream.Stream;
 public final class TypeMapperComponentImpl extends Apache2AbstractComponent implements TypeMapperComponent {
 
     private final Map<String, TypeMapper<?, ?>> mappers;
-    
-    public final static class TypeMapperProvider implements Function<Speedment, Stream<TypeMapper<?, ?>>> {
-
-        @Override
-        public Stream<TypeMapper<?, ?>> apply(Speedment speedment) {
-            return speedment.get(TypeMapperComponent.class).stream();
-        }
-        
-    }
 
     /**
      * Constructs the component.
@@ -74,6 +65,7 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         super(speedment);
         this.mappers = new ConcurrentHashMap<>();
         
+        // Identity mappers
         install(ArrayIdentityMapper::new);
         install(BigDecimalIdentityMapper::new);
         install(BlobIdentityMapper::new);
@@ -95,6 +87,9 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         install(TimeIdentityMapper::new);
         install(TimestampIdentityMapper::new);
         install(URLIdentityMapper::new);
+        
+        // Special timestamp mappers
+        install(TimestampToLongMapper::new);
     }
     
     @Override

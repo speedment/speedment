@@ -37,12 +37,12 @@ public final class TableTypeMapperProperty extends TableProperty<TypeMapper> {
 	
 	private final ComboBox<TypeMapper> combo;
 
-	public TableTypeMapperProperty(Speedment speedment, String name, TypeMapper value) {
+	public TableTypeMapperProperty(Speedment speedment, String name, TypeMapper initialValue) {
 		super (requireNonNull(speedment), requireNonNull(name));
         
         combo = new ComboBox<>(
             speedment.get(TypeMapperComponent.class).stream()
-                .filter(tm -> tm.getDatabaseType().equals(tm))
+                .filter(tm -> tm.getDatabaseType().equals(initialValue.getDatabaseType()))
                 .collect(Collectors.toCollection(
                     FXCollections::observableArrayList
                 ))
@@ -50,8 +50,8 @@ public final class TableTypeMapperProperty extends TableProperty<TypeMapper> {
         
         combo.setEditable(true);
 
-        if (value != null) {
-            combo.setValue(value);
+        if (initialValue != null) {
+            combo.setValue(initialValue);
         }
 
         combo.setConverter(new StringConverter<TypeMapper>() {
