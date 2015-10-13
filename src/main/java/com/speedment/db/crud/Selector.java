@@ -17,7 +17,7 @@
 package com.speedment.db.crud;
 
 import com.speedment.annotation.Api;
-import com.speedment.field2.predicate.PredicateType;
+import com.speedment.field.predicate.PredicateType;
 
 import java.util.Optional;
 

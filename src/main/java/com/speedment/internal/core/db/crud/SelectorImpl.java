@@ -17,9 +17,9 @@
 package com.speedment.internal.core.db.crud;
 
 import com.speedment.db.crud.Selector;
-import com.speedment.field2.predicate.ComparableSpeedmentPredicate;
-import com.speedment.field2.predicate.PredicateType;
-import com.speedment.field2.trait.FieldTrait;
+import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field.predicate.PredicateType;
+import com.speedment.field.trait.FieldTrait;
 
 import java.util.Optional;
 

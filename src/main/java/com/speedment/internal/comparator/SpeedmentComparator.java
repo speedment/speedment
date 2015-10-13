@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.comparator;
 
-import com.speedment.field2.trait.FieldTrait;
+import com.speedment.field.trait.FieldTrait;
 import java.util.Comparator;
 
 /**

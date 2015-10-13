@@ -17,9 +17,9 @@
 package com.speedment.encoder;
 
 import com.speedment.annotation.Api;
-import com.speedment.field2.trait.FieldTrait;
-import com.speedment.field2.trait.ReferenceFieldTrait;
-import com.speedment.field2.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import java.util.function.Function;
 import java.util.stream.Stream;
 

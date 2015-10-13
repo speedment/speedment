@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field.predicate.SpeedmentPredicate;
 
 /**
  *

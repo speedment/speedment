@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.field;
 
-import static com.speedment.field2.Inclusion.START_EXCLUSIVE_END_EXCLUSIVE;
-import static com.speedment.field2.Inclusion.START_EXCLUSIVE_END_INCLUSIVE;
-import static com.speedment.field2.Inclusion.START_INCLUSIVE_END_INCLUSIVE;
+import static com.speedment.field.Inclusion.START_EXCLUSIVE_END_EXCLUSIVE;
+import static com.speedment.field.Inclusion.START_EXCLUSIVE_END_INCLUSIVE;
+import static com.speedment.field.Inclusion.START_INCLUSIVE_END_INCLUSIVE;
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
 import static java.util.Comparator.nullsFirst;

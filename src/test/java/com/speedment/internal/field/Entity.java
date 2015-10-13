@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.field;
 
-import com.speedment.field2.ComparableField;
-import com.speedment.field2.StringField;
-import com.speedment.internal.core.field2.ComparableFieldImpl;
-import com.speedment.internal.core.field2.StringFieldImpl;
+import com.speedment.field.ComparableField;
+import com.speedment.field.StringField;
+import com.speedment.internal.core.field.ComparableFieldImpl;
+import com.speedment.internal.core.field.StringFieldImpl;
 
 /**
  *

@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.field;
 
-import com.speedment.field2.methods.Getter;
-import com.speedment.field2.methods.Setter;
+import com.speedment.field.methods.Getter;
+import com.speedment.field.methods.Setter;
 import static com.speedment.internal.field.Entity.NAME;
 import java.util.List;
 import org.junit.Test;

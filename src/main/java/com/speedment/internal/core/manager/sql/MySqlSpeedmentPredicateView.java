@@ -16,11 +16,11 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.field2.Inclusion;
-import com.speedment.field2.predicate.PredicateType;
-import static com.speedment.field2.predicate.PredicateType.IS_NOT_NULL;
-import static com.speedment.field2.predicate.PredicateType.IS_NULL;
-import com.speedment.field2.predicate.SpeedmentPredicate;
+import com.speedment.field.Inclusion;
+import com.speedment.field.predicate.PredicateType;
+import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
+import static com.speedment.field.predicate.PredicateType.IS_NULL;
+import com.speedment.field.predicate.SpeedmentPredicate;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;

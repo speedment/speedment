@@ -36,8 +36,8 @@ import java.util.Optional;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
-import com.speedment.field2.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field2.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.field2.Inclusion;
-import com.speedment.field2.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field2.predicate.iface.type.HasInclusionOperand2;
-import com.speedment.internal.core.field2.predicate.iface.type.HasOperand0;
-import com.speedment.internal.core.field2.predicate.iface.type.HasOperand1;
-import com.speedment.internal.core.field2.predicate.iface.type.HasOperand2;
-import com.speedment.internal.core.field2.predicate.iface.type.HasSetOperand0;
+import com.speedment.field.Inclusion;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.internal.core.field.predicate.iface.type.HasInclusionOperand2;
+import com.speedment.internal.core.field.predicate.iface.type.HasOperand0;
+import com.speedment.internal.core.field.predicate.iface.type.HasOperand1;
+import com.speedment.internal.core.field.predicate.iface.type.HasOperand2;
+import com.speedment.internal.core.field.predicate.iface.type.HasSetOperand0;
 import com.speedment.internal.util.Cast;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
