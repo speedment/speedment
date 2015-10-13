@@ -18,6 +18,8 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.mapper.TypeMapper;
+import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -31,11 +33,11 @@ public interface TypeMapperComponent extends Component {
     /**
      * Installs the specified type mapper in this component.
      * 
-     * @param <DB_TYPE>    the database type
-     * @param <JAVA_TYPE>  the java type
-     * @param typeMapper   the mapper to install
+     * @param <DB_TYPE>           the database type
+     * @param <JAVA_TYPE>         the java type
+     * @param typeMapperSupplier  the constructor for a mapper to install
      */
-    <DB_TYPE, JAVA_TYPE> void install(TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper);
+    <DB_TYPE, JAVA_TYPE> void install(Supplier<TypeMapper<DB_TYPE, JAVA_TYPE>> typeMapperSupplier);
     
     /**
      * Streams over all the type mappers installed in this component.
@@ -45,4 +47,15 @@ public interface TypeMapperComponent extends Component {
      * @return             all mappers
      */
     <DB_TYPE, JAVA_TYPE> Stream<TypeMapper<DB_TYPE, JAVA_TYPE>> stream();
+    
+    /**
+     * Retreive and return the type mapper with the specified absolute class
+     * name. If it is not installed, return an empty optional.
+     * 
+     * @param <DB_TYPE>           the database type
+     * @param <JAVA_TYPE>         the java type
+     * @param absoluteClassName   the name as returned by {@code Class.getName()}
+     * @return                    the type mapper or empty
+     */
+    <DB_TYPE, JAVA_TYPE> Optional<TypeMapper<DB_TYPE, JAVA_TYPE>> get(String absoluteClassName);
 }

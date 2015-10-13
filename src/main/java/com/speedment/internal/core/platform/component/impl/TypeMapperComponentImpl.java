@@ -19,9 +19,14 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
-import java.util.Collections;
-import java.util.Set;
+import com.speedment.internal.core.config.mapper.identity.IntegerIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.LongIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
+import com.speedment.internal.core.config.mapper.identity.TimestampIdentityMapper;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -31,7 +36,7 @@ import java.util.stream.Stream;
  */
 public final class TypeMapperComponentImpl extends Apache2AbstractComponent implements TypeMapperComponent {
 
-    private final Set<TypeMapper<?, ?>> mappers;
+    private final Map<String, TypeMapper<?, ?>> mappers;
 
     /**
      * Constructs the component.
@@ -40,21 +45,32 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
      */
     public TypeMapperComponentImpl(Speedment speedment) {
         super(speedment);
-        this.mappers = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        this.mappers = new ConcurrentHashMap<>();
+        
+        install(IntegerIdentityMapper::new);
+        install(LongIdentityMapper::new);
+        install(StringIdentityMapper::new);
+        install(TimestampIdentityMapper::new);
     }
     
     @Override
-    public Class<TypeMapperComponent> getComponentClass() {
+    public final Class<TypeMapperComponent> getComponentClass() {
         return TypeMapperComponent.class;
     }
 
     @Override
-    public <DB_TYPE, JAVA_TYPE> void install(TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper) {
-        mappers.add(typeMapper);
+    public final <DB_TYPE, JAVA_TYPE> void install(Supplier<TypeMapper<DB_TYPE, JAVA_TYPE>> typeMapperConstructor) {
+        final TypeMapper mapper = typeMapperConstructor.get();
+        mappers.put(mapper.getClass().getName(), mapper);
     }
 
     @Override
-    public Stream<TypeMapper<?, ?>> stream() {
-        return mappers.stream();
+    public final Stream<TypeMapper<?, ?>> stream() {
+        return mappers.values().stream();
+    }
+
+    @Override
+    public Optional<TypeMapper<?, ?>> get(String absoluteClassName) {
+        return Optional.ofNullable(mappers.get(absoluteClassName));
     }
 }
