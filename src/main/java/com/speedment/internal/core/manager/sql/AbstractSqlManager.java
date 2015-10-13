@@ -57,8 +57,6 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
@@ -312,7 +310,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
                             final Object val = speedment
                                 .get(JavaTypeMapperComponent.class)
-                                .apply(column.getMapping())
+                                .apply(column.getTypeMapper().getJavaType())
                                 .parse(
                                     l.get(cnt.getAndIncrement())
                                 );

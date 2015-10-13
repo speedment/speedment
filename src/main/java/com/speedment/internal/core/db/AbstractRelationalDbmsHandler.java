@@ -279,7 +279,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final String classMappingString = rs.getString("TYPE_NAME");
             final Class<?> mapping = typeMapping.get(classMappingString);
             if (mapping != null) {
-                column.setMapping(mapping);
                 
                 final TypeMapper<?, ?> typeMapper = speedment.get(TypeMapperComponent.class).stream()
                     .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))

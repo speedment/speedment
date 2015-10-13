@@ -98,7 +98,7 @@ public final class EntityTranslatorSupport {
         requireNonNull(column);
         requireNonNull(entityType);
 
-        final Class<?> mapping = column.getMapping();
+        final Class<?> mapping = column.getTypeMapper().getJavaType();
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.

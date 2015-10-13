@@ -149,28 +149,6 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      */
     @External(type = String.class)
     void setAlias(String alias);
-
-    /**
-     * Returns the mapping class that will be used to represent the column data
-     * in the generated code.
-     * <p>
-     * This property is editable in the GUI through reflection.
-     * 
-     * @return  the mapping class
-     */
-    @External(type = Class.class)
-    Class<?> getMapping();
-
-    /**
-     * Sets the mapping class that will be used to represent the column data
-     * in the generated code.
-     * <p>
-     * This property is editable in the GUI through reflection.
-     * 
-     * @param mappedClass  the new mapping class
-     */
-    @External(type = Class.class)
-    void setMapping(Class<?> mappedClass);
     
     /**
      * Returns the mapper class that will be used to generate a java 
@@ -193,4 +171,11 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      */
     @External(type = TypeMapper.class)
     void setTypeMapper(TypeMapper<?, ?> mapper);
+    
+    /**
+     * Constructs and sets the type mapper using it's default constructor.
+     * 
+     * @param mapper  the type mapper class to instantiate
+     */
+    void setTypeMapper(Class<?> mapper);
 }

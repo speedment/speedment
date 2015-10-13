@@ -163,7 +163,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
         columns().forEachOrdered(c -> {
 
-            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getMapping());
+            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getJavaType());
             final StringBuilder sb = new StringBuilder()
                 .append("entity.set")
                 .append(typeName(c))
@@ -250,8 +250,8 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
                 columns()
-                .peek(c -> file.add(Import.of(Type.of(c.getMapping()))))
-                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getMapping().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                .peek(c -> file.add(Import.of(Type.of(c.getTypeMapper().getJavaType()))))
+                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
             ));
     }

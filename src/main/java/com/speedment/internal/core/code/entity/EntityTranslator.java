@@ -66,11 +66,11 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                 if (c.isNullable()) {
                     retType = Type.of(Optional.class).add(
                         Generic.of().add(
-                            Type.of(c.getMapping())
+                            Type.of(c.getTypeMapper().getJavaType())
                         )
                     );
                 } else {
-                    retType = Type.of(c.getMapping());
+                    retType = Type.of(c.getTypeMapper().getJavaType());
                 }
                 i.add(
                     Method.of(GETTER_METHOD_PREFIX + typeName(c), retType)
@@ -84,7 +84,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
             // Setters
             .addColumnConsumer((i, c) -> {
                 i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), ENTITY.getType())
-                    .add(Field.of(variableName(c), Type.of(c.getMapping())))
+                    .add(Field.of(variableName(c), Type.of(c.getTypeMapper().getJavaType())))
                     .set(Javadoc.of(
                         "Sets the " + variableName(c) + " of this " + ENTITY.getName() + ". The " + variableName(c) + " field corresponds to the database column "
                         + c.getRelativeName(Dbms.class) + "."

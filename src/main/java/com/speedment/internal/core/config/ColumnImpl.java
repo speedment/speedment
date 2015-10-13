@@ -22,6 +22,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.util.Cast;
 import java.util.Optional;
@@ -38,7 +39,6 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     private Table parent;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
-    private Class<?> mapping;
     private TypeMapper<?, ?> typeMapper;
 
     @Override
@@ -47,7 +47,6 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
         setAutoincrement(false);
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
-        setMapping(String.class);
         setTypeMapper(new StringIdentityMapper());
     }
 
@@ -79,16 +78,6 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     @Override
     public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
         this.columnCompressionType = columnCompressionType;
-    }
-
-    @Override
-    public Class<?> getMapping() {
-        return mapping;
-    }
-
-    @Override
-    public void setMapping(Class<?> mappedClass) {
-        this.mapping = mappedClass;
     }
 
     @Override
@@ -129,5 +118,22 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     @Override
     public void setTypeMapper(TypeMapper<?, ?> mapper) {
         this.typeMapper = mapper;
+    }
+
+    @Override
+    public void setTypeMapper(Class<?> mapper) {
+        if (mapper == null) {
+            this.typeMapper = null;
+        } else {
+            try {
+                setTypeMapper((TypeMapper<?, ?>) mapper.newInstance());
+            } catch (InstantiationException | IllegalAccessException ex) {
+                throw new SpeedmentException(
+                    "Could not instantiate the specified mapper '" + 
+                    mapper.getName() + 
+                    "' using it's default constructor."
+                );
+            }
+        }
     }
 }

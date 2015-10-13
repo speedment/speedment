@@ -116,8 +116,8 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
                 columns()
-                .peek(c -> file.add(Import.of(Type.of(c.getMapping()))))
-                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getMapping().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                .peek(c -> file.add(Import.of(Type.of(c.getTypeMapper().getJavaType()))))
+                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
             ));
     }
