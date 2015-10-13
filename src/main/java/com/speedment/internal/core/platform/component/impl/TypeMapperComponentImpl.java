@@ -26,6 +26,7 @@ import com.speedment.internal.core.config.mapper.identity.TimestampIdentityMappe
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -37,6 +38,15 @@ import java.util.stream.Stream;
 public final class TypeMapperComponentImpl extends Apache2AbstractComponent implements TypeMapperComponent {
 
     private final Map<String, TypeMapper<?, ?>> mappers;
+    
+    public final static class TypeMapperProvider implements Function<Speedment, Stream<TypeMapper<?, ?>>> {
+
+        @Override
+        public Stream<TypeMapper<?, ?>> apply(Speedment speedment) {
+            return speedment.get(TypeMapperComponent.class).stream();
+        }
+        
+    }
 
     /**
      * Constructs the component.
@@ -60,7 +70,7 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
 
     @Override
     public final void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
-        final TypeMapper mapper = typeMapperConstructor.get();
+        final TypeMapper<?, ?> mapper = typeMapperConstructor.get();
         mappers.put(mapper.getClass().getName(), mapper);
     }
 

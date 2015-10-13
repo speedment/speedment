@@ -39,7 +39,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private Class<?> mapping;
-    private Class<? extends TypeMapper<?, ?>> typeMapper;
+    private TypeMapper<?, ?> typeMapper;
 
     @Override
     protected void setDefaults() {
@@ -48,7 +48,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
         setMapping(String.class);
-        setTypeMapper(StringIdentityMapper.class);
+        setTypeMapper(new StringIdentityMapper());
     }
 
     @Override
@@ -122,12 +122,12 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
     }
 
     @Override
-    public Class<? extends TypeMapper<?, ?>> getTypeMapper() {
+    public TypeMapper<?, ?> getTypeMapper() {
         return typeMapper;
     }
 
     @Override
-    public void setTypeMapper(Class<? extends TypeMapper<?, ?>> mapper) {
+    public void setTypeMapper(TypeMapper<?, ?> mapper) {
         this.typeMapper = mapper;
     }
 }

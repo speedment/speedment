@@ -37,6 +37,8 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.SqlTypeMapperComponent;
+import com.speedment.component.TypeMapperComponent;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -278,6 +280,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final Class<?> mapping = typeMapping.get(classMappingString);
             if (mapping != null) {
                 column.setMapping(mapping);
+                
+                final TypeMapper<?, ?> typeMapper = speedment.get(TypeMapperComponent.class).stream()
+                    .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
+                    .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
+                    .findFirst().orElseThrow(() -> new SpeedmentException(
+                        "Found no identity type mapper for mapping '" + mapping.getName() + "'."
+                    ));
+                
+                column.setTypeMapper(typeMapper);
+                
             } else {
                 LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
             }

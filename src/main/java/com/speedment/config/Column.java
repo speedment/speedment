@@ -180,8 +180,8 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      * 
      * @return  the mapper class
      */
-    @External(type = Class.class)
-    Class<? extends TypeMapper<?, ?>> getTypeMapper();
+    @External(type = TypeMapper.class)
+    TypeMapper<?, ?> getTypeMapper();
 
     /**
      * Sets the mapper class that will be used to generate a java 
@@ -191,6 +191,6 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      * 
      * @param mapper  the new mapper class
      */
-    @External(type = Class.class)
-    void setTypeMapper(Class<? extends TypeMapper<?, ?>> mapper);
+    @External(type = TypeMapper.class)
+    void setTypeMapper(TypeMapper<?, ?> mapper);
 }
