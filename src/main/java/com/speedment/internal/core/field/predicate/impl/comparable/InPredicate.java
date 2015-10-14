@@ -44,7 +44,7 @@ public class InPredicate<ENTITY, V extends Comparable<? super V>>
     }
 
     @Override
-    public Set<V> getOperand0() {
+    public Set<V> getFirstOperand() {
         return operand0;
     }
 

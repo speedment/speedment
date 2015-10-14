@@ -21,6 +21,6 @@ package com.speedment.internal.core.field.predicate.iface.type;
  * @author pemi
  * @param <T0> Set type
  */
-public interface BinarySetOperation<T0> extends HasSetOperand0<T0> {
+public interface BinarySetOperation<T0> extends HasFirstSetOperand<T0> {
 
 }

@@ -14,13 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.speedment.internal.core.field.predicate.iface.type;
 
 /**
  *
  * @author pemi
+ * @param <T>  the second operand type
  */
-public interface HasOperand0<T> {
+public interface HasSecondOperand<T> {
 
-    T getOperand0();
+    T getSecondOperand();
 }

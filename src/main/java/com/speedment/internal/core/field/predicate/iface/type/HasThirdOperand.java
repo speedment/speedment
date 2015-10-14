@@ -14,17 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field.predicate.iface.type;
 
-import java.util.Set;
+package com.speedment.internal.core.field.predicate.iface.type;
 
 /**
  *
  * @author pemi
+ * @param <T>  the third operand type
  */
-public interface HasSetOperand0<T> extends HasOperand0<Set<T>> {
+public interface HasThirdOperand<T> {
 
-    @Override
-    Set<T> getOperand0();
-
+    T getThirdOperand();
 }
