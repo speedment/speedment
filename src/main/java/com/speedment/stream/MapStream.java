@@ -110,6 +110,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         return filter(e -> predicate.test(e.getKey(), e.getValue()));
     }
 
+    public MapStream<K, V> filterKey(Predicate<? super K> predicate) {
+        return filter(e -> predicate.test(e.getKey()));
+    }
+    
+    public MapStream<K, V> filterValue(Predicate<? super V> predicate) {
+        return filter(e -> predicate.test(e.getValue()));
+    }
+    
     @Override
     public <R> Stream<R> map(Function<? super Map.Entry<K, V>, ? extends R> mapper) {
         return inner.map(mapper);
