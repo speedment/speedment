@@ -40,6 +40,8 @@ import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.ProjectComponent;
+import com.speedment.config.mapper.TypeMapper;
+import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,7 +71,24 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     @Override
     protected Class make(File file) {
 
-        return new ClassBuilder(MANAGER.getImplName()).build()
+        return new ClassBuilder(MANAGER.getImplName())
+            
+            .addColumnConsumer((i, c) -> {
+                
+                final TypeMapper<?, ?> mapper = c.getTypeMapper();
+                final java.lang.Class<?> javaType = mapper.getJavaType();
+                final java.lang.Class<?> dbType = mapper.getDatabaseType();
+                final Type mapperType = Type.of(TypeMapper.class).add(Generic.of().add(Type.of(dbType))).add(Generic.of().add(Type.of(javaType)));
+                
+                file.add(Import.of(Type.of(mapper.getClass())));
+                
+                i.add(Field.of(typeMapperName(c), mapperType)
+                    .private_().final_()
+                    .set(new ReferenceValue("new " + mapper.getClass().getSimpleName() + "()"))
+                );
+            })
+            
+            .build()
             .public_()
             .setSupertype(Type.of(AbstractSqlManager.class)
                 .add(Generic.of().add(ENTITY.getType()))
@@ -84,6 +103,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
             .call(i -> file.add(Import.of(ENTITY.getImplType())))
             //            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
+
             .add(Constructor.of()
                 .public_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
@@ -163,11 +183,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
         columns().forEachOrdered(c -> {
 
-            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getJavaType());
+            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getDatabaseType());
             final StringBuilder sb = new StringBuilder()
                 .append("entity.set")
                 .append(typeName(c))
-                .append("(");
+                .append("(")
+                .append(typeMapperName(c))
+                .append(".toJavaType(");
 
             final String getterName = "get" + mapping.getResultSetMethodName(dbms());
 
@@ -192,7 +214,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                     .append("(resultSet, ")
                     .append("\"").append(c.getName()).append("\")");
             }
-            sb.append(");");
+            sb.append("));");
             streamBuilder.add(sb.toString());
 
 //            if (isResultSetMethod && c.isNullable() && isResultSetMethodReturnsPrimitive) {
@@ -273,4 +295,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         return method;
     }
 
+    private String typeMapperName(Column c) {
+        return variableName(c) + "TypeMapper";
+    }
 }
