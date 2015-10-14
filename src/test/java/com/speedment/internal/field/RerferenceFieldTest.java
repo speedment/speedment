@@ -22,13 +22,6 @@ import static com.speedment.internal.field.Entity.NAME;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -65,5 +58,21 @@ public class RerferenceFieldTest extends BaseFieldTest {
         final List<Entity> expected = collect(e -> e.getName() != null);
         assertEquals(expected, result);
     }
+    
+    
+    
+    @Test
+    public void testIsNullNegated() throws Exception {
+        final List<Entity> result = collect(NAME.isNull().negate());
+        final List<Entity> expected = collect(e -> e.getName() != null);
+        assertEquals(expected, result);
+    }
+    
+    @Test
+    public void testIsNotNullNegated() throws Exception {
+        final List<Entity> result = collect(NAME.isNotNull().negate());
+        final List<Entity> expected = collect(e -> e.getName() == null);
+        assertEquals(expected, result);
+    }    
 
 }

@@ -16,6 +16,8 @@
  */
 package com.speedment.field.predicate;
 
+import java.util.Optional;
+
 /**
  *
  * @author pemi
@@ -36,6 +38,7 @@ public enum PredicateType {
     LESS_THAN,
     LESS_OR_EQUAL,
     BETWEEN,
+    //NOT_BETWEEN, // TO BE IMPLEMENTED
     IN,
     // String
     EQUAL_IGNORE_CASE,
@@ -45,5 +48,27 @@ public enum PredicateType {
     CONTAINS,
     IS_EMPTY,
     IS_NOT_EMPTY;
+
+    private Optional<PredicateType> complementType;
+
+    static {
+        associateComplimentTypes(ALWAYS_TRUE, ALWAYS_FALSE);
+        associateComplimentTypes(IS_NULL, IS_NOT_NULL);
+        associateComplimentTypes(EQUAL, NOT_EQUAL);
+        associateComplimentTypes(GREATER_THAN, LESS_OR_EQUAL);
+        associateComplimentTypes(GREATER_OR_EQUAL, LESS_THAN);
+        //associateComplimentTypes(BETWEEN, NOT_BETWEEN);
+        associateComplimentTypes(EQUAL_IGNORE_CASE, NOT_EQUAL_IGNORE_CASE);
+        associateComplimentTypes(IS_EMPTY, IS_NOT_EMPTY);
+    }
+
+    public Optional<PredicateType> getComplementType() {
+        return complementType;
+    }
+
+    private static void associateComplimentTypes(PredicateType a, PredicateType b) {
+        a.complementType = Optional.of(b);
+        b.complementType = Optional.of(a);
+    }
 
 }

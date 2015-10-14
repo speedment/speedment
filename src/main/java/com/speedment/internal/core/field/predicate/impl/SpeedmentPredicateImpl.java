@@ -38,14 +38,11 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
     private final FieldTrait field;
     private final ReferenceFieldTrait<ENTITY, V> referenceField;
     private final PredicateType predicateType;
-//    private final Getter<ENTITY, V> getter;
 
     protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*//*, Predicate<V> fieldPredicate*/) {
         this.predicateType = predicateType;
         this.field = field;
         this.referenceField = referenceField;
-//        this.getter = getter;
-
     }
 
     @Override
@@ -73,6 +70,12 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
     @Override
     public ReferenceFieldTrait<ENTITY, V> getReferenceField() {
         return referenceField;
+    }
+
+    @Override
+    public SpeedmentPredicateImpl<ENTITY, V> negate() {
+        super.negate();
+        return this;
     }
 
     @Override

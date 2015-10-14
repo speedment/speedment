@@ -38,16 +38,10 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
     private final Getter<ENTITY, V> getter;
     private final Setter<ENTITY, V> setter;
 
-    // These are UnaryPredicate and thus, do not change
-    private final SpeedmentPredicate<ENTITY, V> isNullPredicate;
-    private final SpeedmentPredicate<ENTITY, V> isNotNullPredicate;
-
     public ReferenceFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
         this.field = requireNonNull(field);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
-        this.isNullPredicate = new IsNullPredicate<>(field, this);
-        this.isNotNullPredicate = new IsNotNullPredicate<>(field, this);
     }
 
     @Override
@@ -67,12 +61,13 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
 
     @Override
     public SpeedmentPredicate<ENTITY, V> isNull() {
-        return isNullPredicate;
+        // Must create a new object each time because users may invoke .negate()
+        return new IsNullPredicate<>(field, this);
     }
 
     @Override
     public SpeedmentPredicate<ENTITY, V> isNotNull() {
-        return isNotNullPredicate;
+        return new IsNotNullPredicate<>(field, this);
     }
 
 }

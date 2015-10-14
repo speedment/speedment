@@ -50,8 +50,8 @@ public abstract class AbstractBasePredicate<T> implements HasNegated, Predicate<
     }
 
     @Override
-    public final AbstractBasePredicate<T> negate() {
-        setNegated(!isNegated());
+    public AbstractBasePredicate<T> negate() {
+        negated = !negated;
         return this;
     }
 
@@ -60,7 +60,4 @@ public abstract class AbstractBasePredicate<T> implements HasNegated, Predicate<
         return negated;
     }
 
-    public void setNegated(boolean negated) {
-        this.negated = negated;
-    }
 }

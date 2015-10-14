@@ -30,7 +30,7 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class AlwaysTrueStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public AlwaysTrueStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+    public AlwaysTrueStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
         super(ALWAYS_TRUE, field, referenceField, null, (a, b) -> true);
     }
 

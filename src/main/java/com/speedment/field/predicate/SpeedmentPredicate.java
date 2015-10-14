@@ -31,4 +31,9 @@ public interface SpeedmentPredicate<ENTITY, V> extends
     HasReferenceFieldTrait<ENTITY, V>,
     HasNegated,
     Predicate<ENTITY> {
+
+    @Override
+    SpeedmentPredicate<ENTITY, V> negate();
+    
+    
 }

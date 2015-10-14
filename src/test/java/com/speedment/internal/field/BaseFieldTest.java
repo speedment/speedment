@@ -24,8 +24,6 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *

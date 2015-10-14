@@ -23,12 +23,12 @@ import com.speedment.internal.core.field.predicate.impl.string.IsEmptyPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotEmptyPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.NotEqualIgnoreCasePredicate;
 import com.speedment.internal.core.field.predicate.impl.string.StartsWithPredicate;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.StringFieldTrait;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.string.AlwaysFalseStringPredicate;
+import com.speedment.internal.core.field.predicate.impl.string.AlwaysTrueStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotNullStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredicate;
 
@@ -100,6 +100,22 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     @Override
     public StringSpeedmentPredicate<ENTITY> isNotEmpty() {
         return new IsNotEmptyPredicate<>(field, referenceField);
+    }
+
+    private StringSpeedmentPredicate<ENTITY> newAlwaysFalsePredicate() {
+        return new AlwaysFalseStringPredicate<>(field, referenceField);
+    }
+
+    private StringSpeedmentPredicate<ENTITY> newAlwaysTruePredicate() {
+        return new AlwaysTrueStringPredicate<>(field, referenceField);
+    }
+
+    private StringSpeedmentPredicate<ENTITY> newIsNullPredicate() {
+        return new IsNullStringPredicate<>(field, referenceField);
+    }
+
+    private StringSpeedmentPredicate<ENTITY> newIsNotNullPredicate() {
+        return new IsNotNullStringPredicate<>(field, referenceField);
     }
 
 }
