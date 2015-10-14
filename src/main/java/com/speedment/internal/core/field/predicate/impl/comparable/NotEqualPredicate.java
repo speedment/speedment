@@ -17,7 +17,6 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import static com.speedment.field.predicate.PredicateType.NOT_EQUAL;
-import com.speedment.field.methods.Getter;
 import java.util.Objects;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;

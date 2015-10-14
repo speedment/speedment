@@ -42,11 +42,11 @@ public class PredicateUtil {
         return result;
     }
 
-    public static Set<?> GetSet0Raw(SpeedmentPredicate<?, ?> p) {
+    public static Set<?> getSet0Raw(SpeedmentPredicate<?, ?> p) {
         return Cast.castOrFail(p, HasSetOperand0.class).getOperand0();
     }
 
-    public static <ENTITY, V> Set<?> GetSet0(SpeedmentPredicate<ENTITY, V> p) {
+    public static <ENTITY, V> Set<V> getSet0(SpeedmentPredicate<ENTITY, V> p) {
         @SuppressWarnings("unchecked")
         final Set<V> result = (Set<V>) Cast.castOrFail(p, HasOperand0.class).getOperand0();
         return result;

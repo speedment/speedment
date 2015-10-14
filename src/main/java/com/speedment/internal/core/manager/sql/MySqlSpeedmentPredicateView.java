@@ -26,6 +26,12 @@ import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -86,7 +92,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
                 throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
             }
             case IN: {
-                final Set<?> set = GetSet0Raw(model);
+                final Set<?> set = getSet0Raw(model);
                 return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))").addAll(set.stream().collect(toList()));
             }
             case EQUAL_IGNORE_CASE:
