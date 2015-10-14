@@ -14,14 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.internal.core.field.predicate.iface.type;
+
+import java.util.Set;
 
 /**
  *
  * @author pemi
+ * @param <T>  the first operand type
  */
-public interface HasOperand2<T> {
+public interface HasFirstSetOperand<T> extends HasFirstOperand<Set<T>> {
 
-    T getOperand2();
+    @Override
+    Set<T> getFirstOperand();
+
 }

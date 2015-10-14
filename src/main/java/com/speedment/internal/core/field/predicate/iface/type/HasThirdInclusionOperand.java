@@ -22,9 +22,9 @@ import com.speedment.field.Inclusion;
  *
  * @author pemi
  */
-public interface HasInclusionOperand2 extends HasOperand2<Inclusion> {
+public interface HasThirdInclusionOperand extends HasThirdOperand<Inclusion> {
 
     @Override
-    public Inclusion getOperand2();
+    public Inclusion getThirdOperand();
 
 }

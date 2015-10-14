@@ -48,17 +48,17 @@ public class BetweenPredicate<ENTITY, V extends Comparable<? super V>>
     }
 
     @Override
-    public V getOperand0() {
+    public V getFirstOperand() {
         return operand0;
     }
 
     @Override
-    public V getOperand1() {
+    public V getSecondOperand() {
         return operand1;
     }
 
     @Override
-    public Inclusion getOperand2() {
+    public Inclusion getThirdOperand() {
         return operand2;
     }
 

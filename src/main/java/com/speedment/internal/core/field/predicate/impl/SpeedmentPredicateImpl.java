@@ -22,10 +22,10 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.AbstractBasePredicate;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand0;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand1;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand2;
 import com.speedment.internal.util.Cast;
+import com.speedment.internal.core.field.predicate.iface.type.HasFirstOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasSecondOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
 
 /**
  *
@@ -83,9 +83,9 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
             .append("field: ").append(field)
             .append(", type: '").append(predicateType).append("'");
 
-        Cast.cast(this, HasOperand0.class).map(HasOperand0<?>::getOperand0).ifPresent(o -> sb.append(", operand0: '").append(o).append("'"));
-        Cast.cast(this, HasOperand1.class).map(HasOperand1<?>::getOperand1).ifPresent(o -> sb.append(", operand1: '").append(o).append("'"));
-        Cast.cast(this, HasOperand2.class).map(HasOperand2<?>::getOperand2).ifPresent(o -> sb.append(", operand2: '").append(o).append("'"));
+        Cast.cast(this, HasFirstOperand.class).map(HasFirstOperand<?>::getFirstOperand).ifPresent(o -> sb.append(", operand0: '").append(o).append("'"));
+        Cast.cast(this, HasSecondOperand.class).map(HasSecondOperand<?>::getSecondOperand).ifPresent(o -> sb.append(", operand1: '").append(o).append("'"));
+        Cast.cast(this, HasThirdOperand.class).map(HasThirdOperand<?>::getThirdOperand).ifPresent(o -> sb.append(", operand2: '").append(o).append("'"));
 
         sb.append(", negated: ").append(isNegated())
             .append("}");

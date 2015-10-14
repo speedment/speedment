@@ -47,7 +47,7 @@ public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, 
     }
 
     @Override
-    public String getOperand0() {
+    public String getFirstOperand() {
         return operand0;
     }
 

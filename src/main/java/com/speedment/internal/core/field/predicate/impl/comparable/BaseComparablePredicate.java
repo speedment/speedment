@@ -49,7 +49,7 @@ public class BaseComparablePredicate<ENTITY, V extends Comparable<? super V>> ex
     }
 
     @Override
-    public V getOperand0() {
+    public V getFirstOperand() {
         return operand0;
     }
 

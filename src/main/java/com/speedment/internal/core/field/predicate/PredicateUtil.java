@@ -18,13 +18,13 @@ package com.speedment.internal.core.field.predicate;
 
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field.predicate.iface.type.HasInclusionOperand2;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand0;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand1;
-import com.speedment.internal.core.field.predicate.iface.type.HasOperand2;
-import com.speedment.internal.core.field.predicate.iface.type.HasSetOperand0;
 import com.speedment.internal.util.Cast;
 import java.util.Set;
+import com.speedment.internal.core.field.predicate.iface.type.HasFirstOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasFirstSetOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasSecondOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
+import com.speedment.internal.core.field.predicate.iface.type.HasThirdInclusionOperand;
 
 /**
  *
@@ -32,49 +32,49 @@ import java.util.Set;
  */
 public class PredicateUtil {
 
-    public static Object get0Raw(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand0.class).getOperand0();
+    public static Object getFirstOperandAsRaw(SpeedmentPredicate<?, ?> p) {
+        return Cast.castOrFail(p, HasFirstOperand.class).getFirstOperand();
     }
 
-    public static <ENTITY, V> V get0(SpeedmentPredicate<ENTITY, V> p) {
+    public static <ENTITY, V> V getFirstOperand(SpeedmentPredicate<ENTITY, V> p) {
         @SuppressWarnings("unchecked")
-        final V result = (V) Cast.castOrFail(p, HasOperand0.class).getOperand0();
+        final V result = (V) Cast.castOrFail(p, HasFirstOperand.class).getFirstOperand();
         return result;
     }
 
-    public static Set<?> GetSet0Raw(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasSetOperand0.class).getOperand0();
+    public static Set<?> getFirstOperandAsRawSet(SpeedmentPredicate<?, ?> p) {
+        return Cast.castOrFail(p, HasFirstSetOperand.class).getFirstOperand();
     }
 
-    public static <ENTITY, V> Set<?> GetSet0(SpeedmentPredicate<ENTITY, V> p) {
+    public static <ENTITY, V> Set<?> getFirstOperandAsSet(SpeedmentPredicate<ENTITY, V> p) {
         @SuppressWarnings("unchecked")
-        final Set<V> result = (Set<V>) Cast.castOrFail(p, HasOperand0.class).getOperand0();
+        final Set<V> result = (Set<V>) Cast.castOrFail(p, HasFirstOperand.class).getFirstOperand();
         return result;
     }
 
-    public static <ENTITY, V> V get1(SpeedmentPredicate<ENTITY, V> p) {
+    public static <ENTITY, V> V getSecondOperand(SpeedmentPredicate<ENTITY, V> p) {
         @SuppressWarnings("unchecked")
-        final V result = (V) Cast.castOrFail(p, HasOperand1.class).getOperand1();
+        final V result = (V) Cast.castOrFail(p, HasSecondOperand.class).getSecondOperand();
         return result;
     }
 
-    public static Object get1Raw(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand1.class).getOperand1();
+    public static Object getSecondOperandAsRaw(SpeedmentPredicate<?, ?> p) {
+        return Cast.castOrFail(p, HasSecondOperand.class).getSecondOperand();
     }
 
-    public static <ENTITY, V> V get2(SpeedmentPredicate<ENTITY, V> p) {
+    public static <ENTITY, V> V getThirdOperand(SpeedmentPredicate<ENTITY, V> p) {
         @SuppressWarnings("unchecked")
-        final V result = (V) Cast.castOrFail(p, HasOperand2.class).getOperand2();
+        final V result = (V) Cast.castOrFail(p, HasThirdOperand.class).getThirdOperand();
         return result;
     }
 
-    public static Object get2Raw(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand2.class).getOperand2();
+    public static Object getThirdOperandAsRaw(SpeedmentPredicate<?, ?> p) {
+        return Cast.castOrFail(p, HasThirdOperand.class).getThirdOperand();
     }
 
-    public static Inclusion getInclusion2(SpeedmentPredicate<?, ?> p) {
+    public static Inclusion getThirdOperandAsInclusion(SpeedmentPredicate<?, ?> p) {
         //QuaternaryInclusionOperation
-        return Cast.castOrFail(p, HasInclusionOperand2.class).getOperand2();
+        return Cast.castOrFail(p, HasThirdInclusionOperand.class).getThirdOperand();
     }
 
     private PredicateUtil() {
