@@ -31,6 +31,7 @@ import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierC
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
+import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
@@ -51,6 +52,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(LoggerFactoryComponentImpl::new);
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
+        put(TypeMapperComponentImpl::new);
     }
 
     @Override

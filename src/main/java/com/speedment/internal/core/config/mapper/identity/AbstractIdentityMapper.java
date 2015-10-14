@@ -14,36 +14,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.aspects;
+package com.speedment.internal.core.config.mapper.identity;
 
-import com.speedment.config.aspects.DbmsTypeable;
-import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.config.mapper.TypeMapper;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
+ * @param <T> type
  */
-public interface DbmsTypeableHelper extends DbmsTypeable {
-
-    @Override
-    default String getTypeName() {
-        return getType().getName();
+public abstract class AbstractIdentityMapper<T> implements TypeMapper<T, T> {
+    
+    private final Class<T> type;
+    
+    protected AbstractIdentityMapper(Class<T> type) {
+        this.type = requireNonNull(type);
     }
 
-    /**
-     *
-     * @param name the type name of the dbms
-     * @throws IllegalArgumentException if a DbmsType for the given dbmsTypeName
-     * could not be found
-     */
     @Override
-    default void setTypeName(String name) {
-        requireNonNull(name);
-        setType(getSpeedment()
-            .get(DbmsHandlerComponent.class)
-            .findByName(name)
-            .orElseThrow(IllegalArgumentException::new)
-        );
+    public final Class<T> getJavaType() {
+        return type;
+    }
+
+    @Override
+    public final Class<T> getDatabaseType() {
+        return type;
+    }
+
+    @Override
+    public final T toJavaType(T value) {
+        return value;
+    }
+
+    @Override
+    public final T toDatabaseType(T value) {
+        return value;
     }
 }

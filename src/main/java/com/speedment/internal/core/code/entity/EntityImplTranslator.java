@@ -75,10 +75,10 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                 final Type retType;
                 final String getter;
                 if (c.isNullable()) {
-                    retType = OPTIONAL.add(Generic.of().add(Type.of(c.getMapping())));
+                    retType = OPTIONAL.add(Generic.of().add(Type.of(c.getTypeMapper().getJavaType())));
                     getter = "Optional.ofNullable(" + variableName(c) + ")";
                 } else {
-                    retType = Type.of(c.getMapping());
+                    retType = Type.of(c.getTypeMapper().getJavaType());
                     getter = variableName(c);
                 }
                 cl
@@ -241,7 +241,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + typeName(c);
-            if (c.getMapping().isPrimitive()) {
+            if (c.getTypeMapper().getJavaType().isPrimitive()) {
                 method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
             } else {
                 method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
@@ -260,7 +260,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + typeName(c);
-            if (c.getMapping().isPrimitive()) {
+            if (c.getTypeMapper().getJavaType().isPrimitive()) {
                 //Todo: Optimize this to remove auto boxing
                 method.add("hash = 31 * hash + Objects.hash(" + getter + "());");
             } else {

@@ -262,7 +262,7 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(variableName(c), Type.of(c.getMapping()));
+        return Field.of(variableName(c), Type.of(c.getTypeMapper().getJavaType()));
     }
 
     public Constructor emptyConstructor() {

@@ -23,7 +23,6 @@ import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
