@@ -32,6 +32,7 @@ import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.JavaTypeMapperComponent;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import java.math.BigDecimal;
@@ -288,6 +289,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final Function<ENTITY, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
     };
 
+    private Object toDatabaseType(Column column, ENTITY entity) {
+        final Object javaValue = unwrap(get(entity, column));
+        final Object dbValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toDatabaseType(javaValue);
+        return dbValue;
+    }
+
     private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
@@ -296,7 +303,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" values ");
         sb.append("(").append(sqlColumnList(c -> "?")).append(")");
 
-        final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
+        final List<Object> values = table.streamOf(Column.class)
+            .map(c -> toDatabaseType(c, entity))
+            .collect(Collectors.toList());
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
@@ -316,7 +325,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                                 );
 
                             //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
-                            set(builder, column, val);
+                            final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
+                            set(builder, column, javaValue);
                         });
                 }
             };
@@ -335,7 +345,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = table.streamOf(Column.class).map(c -> unwrap(get(entity, c))).collect(Collectors.toList());
+        final List<Object> values = table.streamOf(Column.class)
+            .map(c -> toDatabaseType(c, entity))
+            .collect(Collectors.toList());
+        
         table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
@@ -348,7 +361,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append("delete from ").append(sqlTableReference());
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
-        final List<Object> values = table.streamOf(PrimaryKeyColumn.class).map(pk -> get(entity, pk.getColumn())).collect(Collectors.toList());
+        final List<Object> values = table.streamOf(PrimaryKeyColumn.class)
+            .map(pk -> toDatabaseType(pk.getColumn(), entity))
+            .collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
