@@ -40,22 +40,16 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
 
     private final FieldTrait field;
     private final ReferenceFieldTrait<ENTITY, String> referenceField;
-    private final StringSpeedmentPredicate<ENTITY> alwaysFalsePredicate;
-    private final StringSpeedmentPredicate<ENTITY> isNullPredicate;
-    private final StringSpeedmentPredicate<ENTITY> isNotNullPredicate;
 
     public StringFieldTraitImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
         this.field = field;
         this.referenceField = referenceField;
-        this.alwaysFalsePredicate = new AlwaysFalseStringPredicate<>(field, referenceField);
-        this.isNullPredicate = new IsNullStringPredicate<>(field, referenceField);
-        this.isNotNullPredicate = new IsNotNullStringPredicate<>(field, referenceField);
     }
 
     @Override
     public StringSpeedmentPredicate<ENTITY> equalIgnoreCase(String value) {
         if (value == null) {
-            return isNullPredicate;
+            return newIsNullPredicate();
         }
         return new EqualIgnoreCasePredicate<>(field, referenceField, value);
     }
@@ -63,7 +57,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     @Override
     public StringSpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value) {
         if (value == null) {
-            return isNotNullPredicate;
+            return newIsNotNullPredicate();
         }
         return new NotEqualIgnoreCasePredicate<>(field, referenceField, value);
     }
@@ -71,7 +65,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     @Override
     public StringSpeedmentPredicate<ENTITY> startsWith(String value) {
         if (value == null) {
-            return alwaysFalsePredicate;
+            return newAlwaysFalsePredicate();
         }
         return new StartsWithPredicate<>(field, referenceField, value);
     }
@@ -79,7 +73,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     @Override
     public StringSpeedmentPredicate<ENTITY> endsWith(String value) {
         if (value == null) {
-            return alwaysFalsePredicate;
+            return newAlwaysFalsePredicate();
         }
         return new EndsWithPredicate<>(field, referenceField, value);
     }
@@ -87,7 +81,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     @Override
     public StringSpeedmentPredicate<ENTITY> contains(String value) {
         if (value == null) {
-            return alwaysFalsePredicate;
+            return newAlwaysFalsePredicate();
         }
         return new ContainsPredicate<>(field, referenceField, value);
     }
