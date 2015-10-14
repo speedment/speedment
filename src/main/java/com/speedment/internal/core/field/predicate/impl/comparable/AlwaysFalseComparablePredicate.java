@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.ALWAYS_FALSE;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,7 +30,7 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  */
 public class AlwaysFalseComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public AlwaysFalseComparablePredicate(FieldTrait field, Getter<ENTITY, V> getter) {
-        super(ALWAYS_FALSE, field, getter, null, (a, b) -> false);
+    public AlwaysFalseComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+        super(ALWAYS_FALSE, field, referenceField, null, (a, b) -> false);
     }
 }

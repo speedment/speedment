@@ -17,9 +17,9 @@
 package com.speedment.internal.core.field.predicate.impl.string;
 
 import static com.speedment.field.predicate.PredicateType.CONTAINS;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,8 +30,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class ContainsPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public ContainsPredicate(FieldTrait field, Getter<ENTITY, String> getter, String operand0) {
-        super(CONTAINS, field, getter, operand0, CONTAINS_PREDICATE);
+    public ContainsPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+        super(CONTAINS, field, referenceField, operand0, CONTAINS_PREDICATE);
     }
 
 }

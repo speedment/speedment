@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.core.field.predicate.impl.string;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.ALWAYS_FALSE;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,8 +30,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class AlwaysFalseStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public AlwaysFalseStringPredicate(FieldTrait field, Getter<ENTITY, String> getter) {
-        super(ALWAYS_FALSE, field, getter, null, (a, b) -> false);
+    public AlwaysFalseStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+        super(ALWAYS_FALSE, field, referenceField, null, (a, b) -> false);
     }
 
 }

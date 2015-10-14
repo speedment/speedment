@@ -23,7 +23,6 @@ import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.function.Predicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import static java.util.Objects.requireNonNull;

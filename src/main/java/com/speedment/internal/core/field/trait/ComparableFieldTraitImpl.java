@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysFalseComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.IsNotNullComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.IsNullComparablePredicate;
@@ -47,32 +48,32 @@ import com.speedment.internal.core.field.predicate.impl.comparable.IsNullCompara
 public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> implements ComparableFieldTrait<ENTITY, V> {
 
     private final FieldTrait field;
-    private final Getter<ENTITY, V> getter;
+    private final ReferenceFieldTrait<ENTITY, V> referenceFieldTrait;
     private final ComparableSpeedmentPredicate<ENTITY, V> alwaysFalsePredicate;
     private final ComparableSpeedmentPredicate<ENTITY, V> isNullPredicate;
     private final ComparableSpeedmentPredicate<ENTITY, V> isNotNullPredicate;
 
-    public ComparableFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter) {
+    public ComparableFieldTraitImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceFieldTrait) {
         this.field = field;
-        this.getter = getter;
-        this.alwaysFalsePredicate = new AlwaysFalseComparablePredicate<>(field, getter);
-        this.isNullPredicate =  new IsNullComparablePredicate<>(field, getter);
-        this.isNotNullPredicate = new IsNotNullComparablePredicate<>(field, getter);
+        this.referenceFieldTrait = referenceFieldTrait;
+        this.alwaysFalsePredicate = new AlwaysFalseComparablePredicate<>(field, referenceFieldTrait);
+        this.isNullPredicate =  new IsNullComparablePredicate<>(field, referenceFieldTrait);
+        this.isNotNullPredicate = new IsNotNullComparablePredicate<>(field, referenceFieldTrait);
     }
 
     @Override
     public Comparator<ENTITY> comparator() {
-        return new SpeedmentComparatorImpl<>(field, getter, NullOrder.NONE);
+        return new SpeedmentComparatorImpl<>(field, referenceFieldTrait, NullOrder.NONE);
     }
 
     @Override
     public Comparator<ENTITY> comparatorNullFieldsFirst() {
-        return new SpeedmentComparatorImpl<>(field, getter, NullOrder.FIRST);
+        return new SpeedmentComparatorImpl<>(field, referenceFieldTrait, NullOrder.FIRST);
     }
 
     @Override
     public Comparator<ENTITY> comparatorNullFieldsLast() {
-        return new SpeedmentComparatorImpl<>(field, getter, NullOrder.LAST);
+        return new SpeedmentComparatorImpl<>(field, referenceFieldTrait, NullOrder.LAST);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return isNullPredicate;
         }
-        return new EqualPredicate<>(field, getter, value);
+        return new EqualPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return isNotNullPredicate;
         }
-        return new NotEqualPredicate<>(field, getter, value);
+        return new NotEqualPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new LessThanPredicate<>(field, getter, value);
+        return new LessThanPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return isNullPredicate;
         }
-        return new LessOrEqualPredicate<>(field, getter, value);
+        return new LessOrEqualPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -112,7 +113,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new GreaterThanPredicate<>(field, getter, value);
+        return new GreaterThanPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
         if (value == null) {
             return isNullPredicate;
         }
-        return new GreaterOrEqualPredicate<>(field, getter, value);
+        return new GreaterOrEqualPredicate<>(field, referenceFieldTrait, value);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(field, getter, end);
+                    return new EqualPredicate<>(field, referenceFieldTrait, end);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -170,7 +171,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
 
             case START_INCLUSIVE_END_EXCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(field, getter, start);
+                    return new EqualPredicate<>(field, referenceFieldTrait, start);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -179,7 +180,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
                 if (comparison == 0) {
-                    return new EqualPredicate<>(field, getter, start);
+                    return new EqualPredicate<>(field, referenceFieldTrait, start);
                 }
                 if (comparison < 0) {
                     return alwaysFalsePredicate;
@@ -188,7 +189,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             }
         }
         // Normal case:
-        return new BetweenPredicate<>(field, getter, start, end, inclusion);
+        return new BetweenPredicate<>(field, referenceFieldTrait, start, end, inclusion);
     }
 
     @SafeVarargs
@@ -199,7 +200,7 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             return alwaysFalsePredicate;
         }
         if (values.length == 1) {
-            return new EqualPredicate<>(field, getter, values[0]);
+            return new EqualPredicate<>(field, referenceFieldTrait, values[0]);
         }
         return in(Stream.of(values).collect(toSet()));
     }
@@ -210,9 +211,9 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             return alwaysFalsePredicate;
         }
         if (values.size() == 1) {
-            return new EqualPredicate<>(field, getter, values.stream().findAny().get());
+            return new EqualPredicate<>(field, referenceFieldTrait, values.stream().findAny().get());
         }
-        return new InPredicate<>(field, getter, values);
+        return new InPredicate<>(field, referenceFieldTrait, values);
     }
 
 }

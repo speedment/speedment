@@ -17,11 +17,10 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import com.speedment.field.predicate.PredicateType;
-import static com.speedment.field.predicate.PredicateType.EQUAL;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
@@ -40,11 +39,11 @@ public class BaseComparablePredicate<ENTITY, V extends Comparable<? super V>> ex
     public BaseComparablePredicate(
         PredicateType predicateType,
         FieldTrait field,
-        Getter<ENTITY, V> getter,
+        ReferenceFieldTrait<ENTITY, V> referenceField,
         V operand0,
         BiPredicate<V> innerPredicate
     ) {
-        super(EQUAL, field, getter);
+        super(predicateType, field, referenceField);
         this.operand0 = operand0;
         this.innerPredicate = innerPredicate;
     }

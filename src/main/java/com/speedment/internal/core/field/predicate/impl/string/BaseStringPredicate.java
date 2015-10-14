@@ -17,12 +17,12 @@
 package com.speedment.internal.core.field.predicate.impl.string;
 
 import com.speedment.field.predicate.PredicateType;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
  *
@@ -37,11 +37,11 @@ public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, 
 
     public BaseStringPredicate(PredicateType predicateType,
         FieldTrait field,
-        Getter<ENTITY, String> getter,
+        ReferenceFieldTrait<ENTITY, String> referenceField,
         String operand0,
         BiStringPredicate innerPredicate
     ) {
-        super(predicateType, field, getter);
+        super(predicateType, field, referenceField);
         this.operand0 = operand0;
         this.innerPredicate = innerPredicate;
     }

@@ -20,6 +20,7 @@ import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,8 +31,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class IsNotNullStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public IsNotNullStringPredicate(FieldTrait field, Getter<ENTITY, String> getter) {
-        super(IS_NULL, field, getter, null, (o, f) -> f != null);
+    public IsNotNullStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+        super(IS_NULL, field, referenceField, null, (o, f) -> f != null);
     }
 
 }

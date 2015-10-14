@@ -17,9 +17,9 @@
 package com.speedment.internal.core.field.predicate.impl.string;
 
 import static com.speedment.field.predicate.PredicateType.STARTS_WITH;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,8 +30,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class StartsWithPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public StartsWithPredicate(FieldTrait field, Getter<ENTITY, String> getter, String operand0) {
-        super(STARTS_WITH, field, getter, operand0, STARTS_WITH_PREDICATE);
+    public StartsWithPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+        super(STARTS_WITH, field, referenceField, operand0, STARTS_WITH_PREDICATE);
     }
 
 }

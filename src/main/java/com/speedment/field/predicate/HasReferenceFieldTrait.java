@@ -14,24 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.field.predicate.impl.string;
+package com.speedment.field.predicate;
 
-import static com.speedment.field.predicate.PredicateType.ENDS_WITH;
-import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> the entity type
+ * @param <ENTITY> entity type
+ * @param <V> value type
  */
-public class EndsWithPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public interface HasReferenceFieldTrait<ENTITY, V> {
 
-    public EndsWithPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
-        super(ENDS_WITH, field, referenceField, operand0, ENDS_WITH_PREDICATE);
-    }
-
+    ReferenceFieldTrait<ENTITY, V> getReferenceField();
 }

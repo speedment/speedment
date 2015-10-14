@@ -24,6 +24,11 @@ import java.util.function.Predicate;
  * @param <ENTITY> Entity type
  * @param <V> Value type
  */
-public interface SpeedmentPredicate<ENTITY, V> extends HasGetter<ENTITY, V>, HasPredicateType, HasFieldTrait, HasNegated, Predicate<ENTITY> {
-
+public interface SpeedmentPredicate<ENTITY, V> extends
+    HasGetter<ENTITY, V>,
+    HasPredicateType,
+    HasFieldTrait,
+    HasReferenceFieldTrait<ENTITY, V>,
+    HasNegated,
+    Predicate<ENTITY> {
 }

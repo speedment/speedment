@@ -25,7 +25,6 @@ import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.function.Predicate;
 
 /**
  * Indicates that an extending interface is related to a reference field.

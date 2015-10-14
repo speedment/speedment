@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,7 +30,7 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  */
 public class IsNullComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public IsNullComparablePredicate(FieldTrait field, Getter<ENTITY, V> getter) {
-        super(IS_NULL, field, getter, null, (o, f) -> f == null);
+    public IsNullComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+        super(IS_NULL, field, referenceField, null, (o, f) -> f == null);
     }
 }

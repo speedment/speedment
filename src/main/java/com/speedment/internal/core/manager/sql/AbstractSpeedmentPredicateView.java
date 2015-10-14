@@ -62,25 +62,6 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         return SqlPredicateFragment.of(sql, object);
     }
 
-    public static Object oper0(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand0.class).getOperand0();
-    }
 
-    public static Set<?> setOper0(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasSetOperand0.class).getOperand0();
-    }
-
-    public static Object oper1(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand1.class).getOperand1();
-    }
-
-    public static Object oper2(SpeedmentPredicate<?, ?> p) {
-        return Cast.castOrFail(p, HasOperand2.class).getOperand2();
-    }
-
-    public static Inclusion inclusionOper2(SpeedmentPredicate<?, ?> p) {
-        //QuaternaryInclusionOperation
-        return Cast.castOrFail(p, HasInclusionOperand2.class).getOperand2();
-    }
 
 }

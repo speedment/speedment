@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.comparator.impl;
 
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.comparator.SpeedmentComparator;
 import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
@@ -31,13 +31,13 @@ import static java.util.Objects.requireNonNull;
 public class SpeedmentComparatorImpl<ENTITY, V extends Comparable<? super V>> implements SpeedmentComparator<ENTITY, V> {
 
     private final FieldTrait field;
-    private final Getter<ENTITY, V> getter;
+    private final ReferenceFieldTrait<ENTITY, V> referenceField;
     private final NullOrder nullOrder;
     private boolean reversed;
 
-    public SpeedmentComparatorImpl(FieldTrait field, Getter<ENTITY, V> getter, NullOrder nullOrder) {
+    public SpeedmentComparatorImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, NullOrder nullOrder) {
         this.field = field;
-        this.getter = getter;
+        this.referenceField = referenceField;
         this.nullOrder = nullOrder;
     }
 
@@ -59,8 +59,8 @@ public class SpeedmentComparatorImpl<ENTITY, V extends Comparable<? super V>> im
 
     @Override
     public int compare(ENTITY o1, ENTITY o2) {
-        final V o1Value = getter.apply(requireNonNull(o1));
-        final V o2Value = getter.apply(requireNonNull(o2));
+        final V o1Value = referenceField.getter().apply(requireNonNull(o1));
+        final V o2Value = referenceField.getter().apply(requireNonNull(o2));
         if (o1Value == null && o2Value == null) {
             if (NullOrder.NONE == nullOrder) {
                 throw new NullPointerException("Both fields were null and null fields not allowed");

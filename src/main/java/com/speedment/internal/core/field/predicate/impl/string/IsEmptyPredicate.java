@@ -23,6 +23,7 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
  *
@@ -32,8 +33,8 @@ import com.speedment.field.trait.FieldTrait;
 public class IsEmptyPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
     implements SpeedmentPredicate<ENTITY, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY> {
 
-    public IsEmptyPredicate(FieldTrait field, Getter<ENTITY, String> getter) {
-        super(IS_EMPTY, field, getter);
+    public IsEmptyPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+        super(IS_EMPTY, field, referenceField);
     }
 
     @Override

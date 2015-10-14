@@ -20,6 +20,7 @@ import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.AbstractBasePredicate;
 import com.speedment.internal.core.field.predicate.iface.type.HasOperand0;
 import com.speedment.internal.core.field.predicate.iface.type.HasOperand1;
@@ -35,13 +36,16 @@ import com.speedment.internal.util.Cast;
 public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, V> {
 
     private final FieldTrait field;
+    private final ReferenceFieldTrait<ENTITY, V> referenceField;
     private final PredicateType predicateType;
-    private final Getter<ENTITY, V> getter;
+//    private final Getter<ENTITY, V> getter;
 
-    protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, Getter<ENTITY, V> getter/*, Predicate<V> fieldPredicate*/) {
+    protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*//*, Predicate<V> fieldPredicate*/) {
         this.predicateType = predicateType;
         this.field = field;
-        this.getter = getter;
+        this.referenceField = referenceField;
+//        this.getter = getter;
+
     }
 
     @Override
@@ -51,19 +55,24 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
 
     @Override
     public final Getter<ENTITY, V> getter() {
-        return getter;
+        return referenceField.getter();
     }
 
     public abstract boolean testField(V fieldValue);
 
     @Override
     public final boolean test(ENTITY t) {
-        return testField(getter.apply(t)) ^ isNegated();
+        return testField(getter().apply(t)) ^ isNegated();
     }
 
     @Override
     public FieldTrait getField() {
         return field;
+    }
+
+    @Override
+    public ReferenceFieldTrait<ENTITY, V> getReferenceField() {
+        return referenceField;
     }
 
     @Override

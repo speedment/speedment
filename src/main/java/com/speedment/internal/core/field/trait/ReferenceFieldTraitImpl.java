@@ -23,7 +23,6 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
-import java.util.function.Predicate;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.FieldSetterImpl;
 import static java.util.Objects.requireNonNull;
@@ -47,8 +46,8 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
         this.field = requireNonNull(field);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
-        this.isNullPredicate = new IsNullPredicate<>(field, getter);
-        this.isNotNullPredicate = new IsNotNullPredicate<>(field, getter);
+        this.isNullPredicate = new IsNullPredicate<>(field, this);
+        this.isNotNullPredicate = new IsNotNullPredicate<>(field, this);
     }
 
     @Override

@@ -18,8 +18,8 @@ package com.speedment.internal.core.field.predicate.impl.reference;
 
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import java.util.Objects;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
@@ -31,8 +31,8 @@ import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
  */
 public class IsNullPredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
 
-    public IsNullPredicate(FieldTrait field, Getter<ENTITY, V> getter) {
-        super(IS_NULL, field, getter);
+    public IsNullPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+        super(IS_NULL, field, referenceField);
     }
 
     @Override

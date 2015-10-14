@@ -21,6 +21,7 @@ import com.speedment.field.predicate.PredicateType;
 import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
+import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
@@ -55,49 +56,49 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
                 return of("(" + cn + " IS NOT NULL)");
             // Comparable
             case EQUAL:
-                return of("(" + cn + " = ?)").add(oper0(model));
+                return of("(" + cn + " = ?)").add(get0Raw(model));
             case NOT_EQUAL:
-                return of("(NOT " + cn + " = ?))").add(oper0(model));
+                return of("(NOT " + cn + " = ?))").add(get0Raw(model));
             case GREATER_THAN:
-                return of("(" + cn + " > ?)").add(oper0(model));
+                return of("(" + cn + " > ?)").add(get0Raw(model));
             case GREATER_OR_EQUAL:
-                return of("(" + cn + " >= ?)").add(oper0(model));
+                return of("(" + cn + " >= ?)").add(get0Raw(model));
             case LESS_THAN:
-                return of("(" + cn + " < ?)").add(oper0(model));
+                return of("(" + cn + " < ?)").add(get0Raw(model));
             case LESS_OR_EQUAL:
-                return of("(" + cn + " <= ?)").add(oper0(model));
+                return of("(" + cn + " <= ?)").add(get0Raw(model));
             case BETWEEN: {
-                final Inclusion inclusion = inclusionOper2(model);
+                final Inclusion inclusion = getInclusion2(model);
                 switch (inclusion) {
                     case START_EXCLUSIVE_END_EXCLUSIVE: {
-                        return of("(" + cn + " > ? AND " + cn + " < ?)").add(oper0(model)).add(oper1(model));
+                        return of("(" + cn + " > ? AND " + cn + " < ?)").add(get0Raw(model)).add(get1Raw(model));
                     }
                     case START_INCLUSIVE_END_EXCLUSIVE: {
-                        return of("(" + cn + " >= ? AND " + cn + " < ?)").add(oper0(model)).add(oper1(model));
+                        return of("(" + cn + " >= ? AND " + cn + " < ?)").add(get0Raw(model)).add(get1Raw(model));
                     }
                     case START_EXCLUSIVE_END_INCLUSIVE: {
-                        return of("(" + cn + " > ? AND " + cn + " <= ?)").add(oper0(model)).add(oper1(model));
+                        return of("(" + cn + " > ? AND " + cn + " <= ?)").add(get0Raw(model)).add(get1Raw(model));
                     }
                     case START_INCLUSIVE_END_INCLUSIVE: {
-                        return of("(" + cn + " >= ? AND " + cn + " <= ?)").add(oper0(model)).add(oper1(model));
+                        return of("(" + cn + " >= ? AND " + cn + " <= ?)").add(get0Raw(model)).add(get1Raw(model));
                     }
                 }
                 throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
             }
             case IN: {
-                final Set<?> set = setOper0(model);
+                final Set<?> set = GetSet0Raw(model);
                 return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))").addAll(set.stream().collect(toList()));
             }
             case EQUAL_IGNORE_CASE:
-                return of("(UPPER(" + cn + ") = UPPER(?))").add(oper0(model));
+                return of("(UPPER(" + cn + ") = UPPER(?))").add(get0Raw(model));
             case NOT_EQUAL_IGNORE_CASE:
-                return of("(NOT UPPER(" + cn + ") = UPPER(?))").add(oper0(model));
+                return of("(NOT UPPER(" + cn + ") = UPPER(?))").add(get0Raw(model));
             case STARTS_WITH:
-                return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))").add(oper0(model));
+                return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))").add(get0Raw(model));
             case ENDS_WITH:
-                return of("(" + cn + " LIKE BINARY CONCAT('%', ?))").add(oper0(model));
+                return of("(" + cn + " LIKE BINARY CONCAT('%', ?))").add(get0Raw(model));
             case CONTAINS:
-                return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))").add(oper0(model));
+                return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))").add(get0Raw(model));
             case IS_EMPTY:
                 return of("(" + cn + " = '')");
             case IS_NOT_EMPTY:

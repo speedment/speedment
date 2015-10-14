@@ -54,7 +54,7 @@ public class ComparableFieldImpl<ENTITY, V extends Comparable<? super V>> implem
     ) {
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
-        comparableField = new ComparableFieldTraitImpl<>(field, requireNonNull(getter));
+        comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
     }
 
     @Override

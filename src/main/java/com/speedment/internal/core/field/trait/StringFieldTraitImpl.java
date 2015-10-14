@@ -27,6 +27,7 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.StringFieldTrait;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.string.AlwaysFalseStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotNullStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredicate;
@@ -38,17 +39,17 @@ import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredi
 public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
 
     private final FieldTrait field;
-    private final Getter<ENTITY, String> getter;
+    private final ReferenceFieldTrait<ENTITY, String> referenceField;
     private final StringSpeedmentPredicate<ENTITY> alwaysFalsePredicate;
     private final StringSpeedmentPredicate<ENTITY> isNullPredicate;
     private final StringSpeedmentPredicate<ENTITY> isNotNullPredicate;
 
-    public StringFieldTraitImpl(FieldTrait field, Getter<ENTITY, String> getter) {
+    public StringFieldTraitImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
         this.field = field;
-        this.getter = getter;
-        this.alwaysFalsePredicate = new AlwaysFalseStringPredicate<>(field, getter);
-        this.isNullPredicate = new IsNullStringPredicate<>(field, getter);
-        this.isNotNullPredicate = new IsNotNullStringPredicate<>(field, getter);
+        this.referenceField = referenceField;
+        this.alwaysFalsePredicate = new AlwaysFalseStringPredicate<>(field, referenceField);
+        this.isNullPredicate = new IsNullStringPredicate<>(field, referenceField);
+        this.isNotNullPredicate = new IsNotNullStringPredicate<>(field, referenceField);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
         if (value == null) {
             return isNullPredicate;
         }
-        return new EqualIgnoreCasePredicate<>(field, getter, value);
+        return new EqualIgnoreCasePredicate<>(field, referenceField, value);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
         if (value == null) {
             return isNotNullPredicate;
         }
-        return new NotEqualIgnoreCasePredicate<>(field, getter, value);
+        return new NotEqualIgnoreCasePredicate<>(field, referenceField, value);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new StartsWithPredicate<>(field, getter, value);
+        return new StartsWithPredicate<>(field, referenceField, value);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new EndsWithPredicate<>(field, getter, value);
+        return new EndsWithPredicate<>(field, referenceField, value);
     }
 
     @Override
@@ -88,17 +89,17 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
         if (value == null) {
             return alwaysFalsePredicate;
         }
-        return new ContainsPredicate<>(field, getter, value);
+        return new ContainsPredicate<>(field, referenceField, value);
     }
 
     @Override
     public StringSpeedmentPredicate<ENTITY> isEmpty() {
-        return new IsEmptyPredicate<>(field, getter);
+        return new IsEmptyPredicate<>(field, referenceField);
     }
 
     @Override
     public StringSpeedmentPredicate<ENTITY> isNotEmpty() {
-        return new IsNotEmptyPredicate<>(field, getter);
+        return new IsNotEmptyPredicate<>(field, referenceField);
     }
 
 }

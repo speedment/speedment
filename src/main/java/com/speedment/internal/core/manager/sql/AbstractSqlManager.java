@@ -291,6 +291,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private Object toDatabaseType(Column column, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, column));
+        @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
@@ -325,6 +326,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                                 );
 
                             //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
+                            @SuppressWarnings("unchecked")
                             final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
                             set(builder, column, javaValue);
                         });

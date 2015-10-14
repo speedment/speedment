@@ -17,9 +17,9 @@
 package com.speedment.internal.core.field.predicate.impl.reference;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.ALWAYS_TRUE;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
@@ -31,8 +31,8 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
  */
 public class AlwaysFalsePredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
 
-    public AlwaysFalsePredicate(FieldTrait field, Getter<ENTITY, V> getter) {
-        super(ALWAYS_TRUE, field, getter);
+    public AlwaysFalsePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*/) {
+        super(ALWAYS_TRUE, field, referenceField);
     }
 
     @Override

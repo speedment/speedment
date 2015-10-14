@@ -60,7 +60,7 @@ public class ComparableForeignKeyFieldImpl<ENTITY, V extends Comparable<? super 
     ) {
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
-        comparableField = new ComparableFieldTraitImpl<>(field, requireNonNull(getter));
+        comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
     }
 

@@ -21,6 +21,7 @@ import com.speedment.field.methods.Getter;
 import java.util.Objects;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -31,8 +32,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  */
 public class NotEqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public NotEqualPredicate(FieldTrait field, Getter<ENTITY, V> getter, V operand0) {
-        super(NOT_EQUAL, field, getter, operand0, (a, b) -> !Objects.equals(a, b));
+    public NotEqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V operand0) {
+        super(NOT_EQUAL, field, referenceField, operand0, (a, b) -> !Objects.equals(a, b));
     }
 
 }

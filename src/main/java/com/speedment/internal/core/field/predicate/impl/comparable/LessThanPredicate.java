@@ -17,9 +17,9 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import static com.speedment.field.predicate.PredicateType.LESS_THAN;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -32,8 +32,8 @@ public class LessThanPredicate<ENTITY, V extends Comparable<? super V>>
     extends BaseComparablePredicate<ENTITY, V>
     implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
 
-    public LessThanPredicate(FieldTrait field, Getter<ENTITY, V> getter, V operand0) {
-        super(LESS_THAN, field, getter, operand0, LessThanPredicate::test);
+    public LessThanPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V operand0) {
+        super(LESS_THAN, field, referenceField, operand0, LessThanPredicate::test);
     }
 
     private static <V extends Comparable<? super V>> boolean test(V a, V b) {

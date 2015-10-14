@@ -20,6 +20,7 @@ import static com.speedment.field.predicate.PredicateType.EQUAL_IGNORE_CASE;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 
 /**
@@ -30,8 +31,8 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 public class EqualIgnoreCasePredicate<ENTITY> extends BaseStringPredicate<ENTITY>
     implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
 
-    public EqualIgnoreCasePredicate(FieldTrait field, Getter<ENTITY, String> getter, String operand0) {
-        super(EQUAL_IGNORE_CASE, field, getter, operand0, EQUALS_IGNORE_CASE_PREDICATE);
+    public EqualIgnoreCasePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+        super(EQUAL_IGNORE_CASE, field, referenceField, operand0, EQUALS_IGNORE_CASE_PREDICATE);
     }
 
 }

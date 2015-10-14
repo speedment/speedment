@@ -61,11 +61,10 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
         Setter<ENTITY, String> setter,
         Finder<ENTITY, FK> finder
     ) {
-
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
-        comparableField = new ComparableFieldTraitImpl<>(field, requireNonNull(getter));
-        stringField = new StringFieldTraitImpl<>(field, requireNonNull(getter));
+        comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
+        stringField = new StringFieldTraitImpl<>(field, referenceField);
         referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
     }
 

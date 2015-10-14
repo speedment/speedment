@@ -22,6 +22,7 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.QuaternaryInclusionOperation;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
@@ -39,8 +40,8 @@ public class BetweenPredicate<ENTITY, V extends Comparable<? super V>>
     private final V operand1;
     private final Inclusion operand2;
 
-    public BetweenPredicate(FieldTrait field, Getter<ENTITY, V> getter, V start, V end, Inclusion inclusion) {
-        super(BETWEEN, field, getter);
+    public BetweenPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V start, V end, Inclusion inclusion) {
+        super(BETWEEN, field, referenceField);
         this.operand0 = start;
         this.operand1 = end;
         this.operand2 = inclusion;

@@ -21,6 +21,7 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import java.util.Set;
 import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
@@ -37,8 +38,8 @@ public class InPredicate<ENTITY, V extends Comparable<? super V>>
 
     private final Set<V> operand0;
 
-    public InPredicate(FieldTrait field, Getter<ENTITY, V> getter, Set<V> values) {
-        super(IN, field, getter);
+    public InPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, Set<V> values) {
+        super(IN, field, referenceField);
         this.operand0 = values;
     }
 
