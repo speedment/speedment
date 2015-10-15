@@ -17,26 +17,22 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.db.AsynchronousQueryResult;
-import com.speedment.internal.util.Cast;
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.Property.SIZE;
 import static com.speedment.internal.core.stream.builder.action.Verb.PRESERVE;
-import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
 import com.speedment.internal.core.stream.builder.pipeline.DoublePipeline;
 import com.speedment.internal.core.stream.builder.pipeline.IntPipeline;
 import com.speedment.internal.core.stream.builder.pipeline.LongPipeline;
 import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
+import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -58,19 +54,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     @Override
     public <T extends Pipeline> T optimize(T initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = new ArrayList<>();
-
-        for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
-            @SuppressWarnings("rawtypes")
-            final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
-            if (oFilterAction.isPresent()) {
-                @SuppressWarnings("unchecked")
-                final List<SpeedmentPredicate<?, ?>> newAndPredicateBuilders = andPredicateBuilders(oFilterAction.get());
-                andPredicateBuilders.addAll(newAndPredicateBuilders);
-            } else {
-                break; // We can only do initial consecutive FilterAction(s)
-            }
-        }
+        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
 
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
@@ -106,30 +90,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         qr.setValues(values);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private List<SpeedmentPredicate<?, ?>> andPredicateBuilders(FilterAction<ENTITY> action) {
-        requireNonNull(action);
-        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = new ArrayList<>();
-        final Predicate<? super ENTITY> predicate = action.getPredicate();
-
-        final Optional<SpeedmentPredicate> oPredicateBuilder = Cast.cast(predicate, SpeedmentPredicate.class);
-        if (oPredicateBuilder.isPresent()) {
-            andPredicateBuilders.add(oPredicateBuilder.get()); // Just a top level predicate builder
-        } else {
-
-            final Optional<AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AndCombinedBasePredicate.class);
-            if (oAndCombinedBasePredicate.isPresent()) {
-
-                final AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
-                andCombinedBasePredicate.stream()
-                    .map(p -> Cast.cast(p, SpeedmentPredicate.class))
-                    .filter(p -> p.isPresent())
-                    .map(Optional::get)
-                    .forEachOrdered(andPredicateBuilders::add);
-            }
-        }
-        return andPredicateBuilders;
-    }
 
     @Override
     public long count(DoublePipeline pipeline) {
