@@ -66,6 +66,10 @@ public enum PredicateType {
         return complementType;
     }
 
+    public PredicateType effectiveType(boolean inverted) {
+        return complementType.orElse(this);
+    }
+
     private static void associateComplimentTypes(PredicateType a, PredicateType b) {
         a.complementType = Optional.of(b);
         b.complementType = Optional.of(a);

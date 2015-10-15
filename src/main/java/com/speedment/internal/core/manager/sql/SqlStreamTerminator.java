@@ -54,7 +54,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     @Override
     public <T extends Pipeline> T optimize(T initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
+        final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
 
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
@@ -62,7 +62,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return initialPipeline;
     }
 
-    public void modifySource(final List<SpeedmentPredicate<?, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+    public void modifySource(final List<SpeedmentPredicate<ENTITY, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
         if (predicateBuilders.isEmpty()) {
