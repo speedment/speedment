@@ -132,7 +132,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
 </dependencies>
 ```
 
-Make sure that you use the latest ${speedment.version} available.
+Make sure that you use the latest `${speedment.version}` available.
 
 
 ### Requirements
