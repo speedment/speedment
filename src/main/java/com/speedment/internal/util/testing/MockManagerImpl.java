@@ -22,6 +22,7 @@ import com.speedment.config.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -33,27 +34,58 @@ import java.util.stream.Stream;
 public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
-    private Supplier<Stream<ENTITY>> nativeStreamSupplier;
-
-    public MockManagerImpl(Manager<ENTITY> inner, Supplier<Stream<ENTITY>> nativeStreamSupplier) {
-        this.inner = inner;
-        this.nativeStreamSupplier = nativeStreamSupplier;
-    }
+    private Supplier<ENTITY> instanceSupplier;
+    private Supplier<Stream<ENTITY>> nativeStreamer;
+    private Supplier<Stream<ENTITY>> streamer;
+    private Function<ENTITY, ENTITY> persister;
+    private Function<ENTITY, ENTITY> updater;
+    Function<ENTITY, ENTITY> remover;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-        this.nativeStreamSupplier = inner::nativeStream;
+        this.instanceSupplier = inner::newInstance;
+        this.nativeStreamer = inner::nativeStream;
+        this.streamer = inner::stream;
+        this.persister = inner::persist;
+        this.updater = inner::update;
+        this.remover = inner::remove;
     }
 
     // MockManager
     @Override
-    public Supplier<Stream<ENTITY>> getNativeStreamSupplier() {
-        return nativeStreamSupplier;
+    public MockManager<ENTITY> setInstanceFactory(Supplier<ENTITY> factory) {
+        instanceSupplier = factory;
+        return this;
     }
 
     @Override
-    public void setNativeStreamSupplier(Supplier<Stream<ENTITY>> nativeStreamSupplier) {
-        this.nativeStreamSupplier = nativeStreamSupplier;
+    public MockManager<ENTITY> setNativeStreamer(Supplier<Stream<ENTITY>> nativeStreamer) {
+        this.nativeStreamer = nativeStreamer;
+        return this;
+    }
+
+    @Override
+    public MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer) {
+        this.streamer = streamer;
+        return this;
+    }
+
+    @Override
+    public MockManager<ENTITY> setPersister(Function<ENTITY, ENTITY> persister) {
+        this.persister = persister;
+        return this;
+    }
+
+    @Override
+    public MockManager<ENTITY> setUpdater(Function<ENTITY, ENTITY> updater) {
+        this.updater = updater;
+        return this;
+    }
+
+    @Override
+    public MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover) {
+        this.remover = remover;
+        return this;
     }
 
     // Manager
@@ -79,7 +111,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     @Override
     public ENTITY newInstance() {
-        return inner.newInstance();
+        return instanceSupplier.get();
     }
 
     @Override
@@ -94,27 +126,27 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     @Override
     public Stream<ENTITY> stream() {
-        return inner.stream();
+        return streamer.get();
     }
 
     @Override
     public Stream<ENTITY> nativeStream() {
-        return getNativeStreamSupplier().get();
+        return nativeStreamer.get();
     }
 
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
-        return inner.persist(entity);
+        return persister.apply(entity);
     }
 
     @Override
     public ENTITY update(ENTITY entity) throws SpeedmentException {
-        return inner.update(entity);
+        return updater.apply(entity);
     }
 
     @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
-        return inner.remove(entity);
+        return remover.apply(entity);
     }
 
     @Override

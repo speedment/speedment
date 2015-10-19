@@ -17,6 +17,7 @@
 package com.speedment.internal.util.testing;
 
 import com.speedment.Manager;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -27,16 +28,74 @@ import java.util.stream.Stream;
  */
 public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
-    Supplier<Stream<ENTITY>> getNativeStreamSupplier();
+    /**
+     * Sets the instance factory of this {@code MockManager}. The instance
+     * factory is invoked each time a Managers {@link Manager#newInstance() }
+     * method is called.
+     *
+     * @param factory the new instance factory to use
+     * @return this instance
+     */
+    MockManager<ENTITY> setInstanceFactory(Supplier<ENTITY> factory);
 
-    void setNativeStreamSupplier(Supplier<Stream<ENTITY>> nativeStreamSupplier);
+    /**
+     * Sets the native streamer of this {@code MockManager}.
+     *
+     * The native streamer is invoked each time a Managers {@link Manager#nativeStream() ()
+     * } method is called.
+     *
+     * @param nativeStreamer the new native streamer supplier
+     * @return this instance
+     */
+    MockManager<ENTITY> setNativeStreamer(Supplier<Stream<ENTITY>> nativeStreamer);
+
+    /**
+     * Sets the streamer of this {@code MockManager}.
+     *
+     * The streamer is invoked each time a Managers {@link Manager#stream() () ()
+     * } method is called.
+     *
+     * @param streamer the new streamer supplier
+     * @return this instance
+     */
+    MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer);
+
+    /**
+     * Sets the streamer of this {@code MockManager}.
+     *
+     * The streamer is invoked each time a Managers {@link Manager#persist(java.lang.Object) () ()
+     * } method is called.
+     *
+     * @param persister the new streamer supplier
+     * @return this instance
+     */
+    MockManager<ENTITY> setPersister(Function<ENTITY, ENTITY> persister);
+
+    /**
+     * Sets the updater of this {@code MockManager}.
+     *
+     * The updater is invoked each time a Managers {@link Manager#update(java.lang.Object) ()
+     * } method is called.
+     *
+     * @param updater the new streamer supplier
+     * @return this instance
+     */
+    MockManager<ENTITY> setUpdater(Function<ENTITY, ENTITY> updater);
+
+    /**
+     * Sets the remover of this {@code MockManager}.
+     *
+     * The remover is invoked each time a Managers {@link Manager#remove(java.lang.Object) ()
+     * } method is called.
+     *
+     * @param remover the new streamer supplier
+     * @return this instance
+     */
+    MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover);
 
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);
     }
 
-    static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager, Supplier<Stream<ENTITY>> nativeStreamSupplier) {
-        return new MockManagerImpl<>(manager, nativeStreamSupplier);
-    }
 
 }
