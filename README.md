@@ -25,15 +25,15 @@ Examples
 --------
 Here are a few examples of how you could use Speedment from your code:
 
-###### Easy querying using standard Java 8 predicates
+###### Easy initialization
+A `HareApplication` class is generated from the database.
 ```java
-// Large quantities of data can be reduced in-memory using predicates.
-List<Hare> oldHares = hares.stream()
-    .filter(h -> h.getAge() > 8)
-    .collect(toList());
+Speedment speedment = new HareApplication().withPassword("myPwd729").build();
+Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
 
 ###### Optimised predicate short-circuit
+Search for Hares by a certain age:
 ```java
 // Searches are optimized in the background!
 Optional<Hare> harry = hares.stream()
@@ -41,10 +41,17 @@ Optional<Hare> harry = hares.stream()
     .findAny();
 ```
 
+Results in the following SQL query:
+```sql
+SELECT * FROM `Hare` 
+    WHERE `Hare`.`name` = "Harry"
+    AND `Hare`.`age` < 5
+    LIMIT 1;
+```
+
 ###### Easy persistence
+Entities can be persisted in a database using the "Active Record Pattern"
 ```java
-// Entities can be persisted in a database
-// using the "Active Record Pattern"
 Hare dbHarry = hares.newInstance()
     .setName("Harry")
     .setColor("Gray")
@@ -62,10 +69,9 @@ Hare harry = hares.newInstance()
 Hare dbHarry = EntityManager.get(speedment).persist(harry);
 ```
 
-    
 ###### Entities are linked
+No need for complicated joins!
 ```java
-// Different tables form a traversable graph in memory. No need for joins!
 Optional<Carrot> carrot = hares.stream()
     .filter(NAME.equal("Harry"))
     .flatMap(Hare::findCarrots) // Carrot is a foreign key table.
@@ -80,25 +86,24 @@ hares.stream()
     .forEach(System.out::println);
 ```
 
-###### Easy initialization
-```java
-// A HareApplication class is generated from the database.
-Speedment speedment = new HareApplication().withPassword("myPwd729").build();
-Manager<Hare> hares = speedment.managerOf(Hare.class);
-```
+Features
+--------
+Here are some of the many features packed into the Speedment framework!
 
-Database centric
-----------------
+### Database centric
 Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
-Code generation
----------------
+### Code generation
 Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive GUI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-GUI) or programatically using your own code.
 
-Development Status
-------------------
-Speedment is still early and we are currently moving in large blocks from the existing closed source product. 
-We will be adding new cool stuff like transactions, reactor, caching and support for more database types in coming releases. 
+### Modular Design
+Speedment is built with the ambition to be completely modular! If you don't like the current implementation of a certain function, plug in you own! Do you have a suggestion for an alternative way of solving a complex problem? Share it with the community!
+
+### Type Safety
+When the database structure changes during development of a software there is always a risk that bugs sneak into the application. Thats why type-safety is such a big deal! With Speedment, you will notice if something is wrong seconds after you generate your code instead of weeks into the testing phase.
+
+### Null Protection
+Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
 
 
 Using Maven
@@ -130,9 +135,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
 Make sure that you use the latest ${speedment.version} available.
 
 
-Requirements
-------------
-
+### Requirements
 Speedment *will only work for Java 8 or later*. Make sure your IDE is using Java 8 as the default Java platform.
 Currently, Speedment only supports MySQL and MariaDB but support for more database types will come soon.
 
