@@ -136,8 +136,11 @@ Make sure that you use the latest `${speedment.version}` available.
 
 
 ### Requirements
-Speedment *will only work for Java 8 or later*. Make sure your IDE is using Java 8 as the default Java platform.
-Currently, Speedment only supports MySQL and MariaDB but support for more database types will come soon.
+Speedment comes with support for the following databases out-of-the-box:
+* MySQL
+* MariaDB
+
+Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
 
 License
 -------
@@ -147,7 +150,7 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 
 #### Copyright
 
-Copyright (c) 2008-2015, Speedment, Inc. All Rights Reserved.
+Copyright (c) 2015, Speedment, Inc. All Rights Reserved.
 
 Visit [www.speedment.org](http://www.speedment.org/) for more info.
 
