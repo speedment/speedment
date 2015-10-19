@@ -329,7 +329,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public long count() {
         return finallyClose(() -> streamTerminator.count(pipeline()));
-
     }
 
     /**
