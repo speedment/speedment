@@ -140,7 +140,7 @@ Speedment comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
 
-Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
+As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
 
 License
 -------
