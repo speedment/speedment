@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * @see Parent
  * @see Child
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Node extends Nameable, Enableable {
 
     /**

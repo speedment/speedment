@@ -72,6 +72,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     @Override
     public void setName(String name) {
         requireNonNull(name, "A name cannot be null");
+        // Todo: Allow . and " " in names. Changes in GodeGen
         if (name.contains(".")) {
             throw new IllegalArgumentException("A name can't contain a '.' character");
         } else if (name.contains(" ")) {

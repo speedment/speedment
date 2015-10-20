@@ -24,7 +24,7 @@ import com.speedment.config.parameters.FieldStorageType;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface FieldStorageTypeable {
 
     @External(type = FieldStorageType.class, isVisibleInGui = false)

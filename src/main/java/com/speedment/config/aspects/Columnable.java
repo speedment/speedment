@@ -24,7 +24,7 @@ import com.speedment.annotation.Api;
  *
  * @author Emil Forslund
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Columnable extends Node {
     Column getColumn();
 }

@@ -26,7 +26,7 @@ import com.speedment.config.Project;
  * @author Emil Forslund
  * @since 2.0
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface ProjectComponent extends Component {
 
     @Override

@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface IndexColumn extends Node, Enableable, Ordinable, OrderTypeable, 
     Columnable, Child<Index> {
 

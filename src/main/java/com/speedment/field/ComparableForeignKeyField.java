@@ -29,7 +29,7 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
  * @param <V> the field value type
  * @param <FK> the foreign entity type
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface ComparableForeignKeyField<ENTITY, V extends Comparable<? super V>, FK> extends
     FieldTrait,
     ReferenceFieldTrait<ENTITY, V>,

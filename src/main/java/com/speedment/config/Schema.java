@@ -34,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
     FieldStorageTypeable,
     ColumnCompressionTypeable,

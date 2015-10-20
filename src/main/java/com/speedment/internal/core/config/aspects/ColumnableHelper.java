@@ -27,7 +27,7 @@ import com.speedment.exception.SpeedmentException;
  *
  * @author Emil Forslund
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface ColumnableHelper extends Columnable {
     @Override
     default Column getColumn() {

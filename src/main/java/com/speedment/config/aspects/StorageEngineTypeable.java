@@ -24,7 +24,7 @@ import com.speedment.config.parameters.StorageEngineType;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface StorageEngineTypeable {
 
     @External(type = StorageEngineType.class, isVisibleInGui = false)

@@ -24,5 +24,5 @@ import java.util.function.BiFunction;
  * @param <ENTITY> the entity
  * @param <V> the type of the value to return
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Setter<ENTITY, V> extends BiFunction<ENTITY, V, ENTITY> {}
