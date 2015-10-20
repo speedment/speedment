@@ -16,8 +16,8 @@
  */
 package com.speedment.component;
 
-import com.speedment.Manager;
 import com.speedment.annotation.Api;
+import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 
 /**
@@ -39,14 +39,8 @@ public interface StreamSupplierComponent extends Component {
      *
      * @param <ENTITY> entity type
      * @param entityClass the entity class
+     * @param decorator decorates the stream before building it
      * @return a stream for the given entity class
      */
-    <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass);
-
-    // We would like to be able to model terminating operations and pipelines
-    // Like users.map(u->u.getId()).sort().count -> map.size()
-    // So this method would return different streams depending on the real source...
-    <ENTITY> Stream<ENTITY> stream(Manager<ENTITY> manager);
-
-    // Select one of the methods
+    <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
 }

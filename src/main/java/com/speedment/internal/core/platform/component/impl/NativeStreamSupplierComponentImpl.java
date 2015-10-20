@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.StreamSupplierComponent;
+import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 
 /**
@@ -32,13 +32,7 @@ public class NativeStreamSupplierComponentImpl extends Apache2AbstractComponent 
     }
 
     @Override
-    public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass) {
-        return getSpeedment().managerOf(entityClass).nativeStream();
+    public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {
+        return getSpeedment().managerOf(entityClass).nativeStream(decorator);
     }
-
-    @Override
-    public <ENTITY> Stream<ENTITY> stream(Manager<ENTITY> manager) {
-        return manager.nativeStream();
-    }
-
 }

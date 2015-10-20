@@ -17,6 +17,7 @@
 package com.speedment.internal.util.testing;
 
 import com.speedment.Manager;
+import com.speedment.stream.StreamDecorator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -47,7 +48,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param nativeStreamer the new native streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setNativeStreamer(Supplier<Stream<ENTITY>> nativeStreamer);
+    MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer);
 
     /**
      * Sets the streamer of this {@code MockManager}.
@@ -58,7 +59,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param streamer the new streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer);
+    MockManager<ENTITY> setStreamer(Function<StreamDecorator, Stream<ENTITY>> streamer);
 
     /**
      * Sets the streamer of this {@code MockManager}.

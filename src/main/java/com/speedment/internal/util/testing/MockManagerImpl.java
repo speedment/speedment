@@ -21,6 +21,7 @@ import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.stream.StreamDecorator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -35,8 +36,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
     private Supplier<ENTITY> instanceSupplier;
-    private Supplier<Stream<ENTITY>> nativeStreamer;
-    private Supplier<Stream<ENTITY>> streamer;
+    private Function<StreamDecorator, Stream<ENTITY>> nativeStreamer;
+    private Function<StreamDecorator, Stream<ENTITY>> streamer;
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     Function<ENTITY, ENTITY> remover;
@@ -59,13 +60,13 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public MockManager<ENTITY> setNativeStreamer(Supplier<Stream<ENTITY>> nativeStreamer) {
+    public MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer) {
         this.nativeStreamer = nativeStreamer;
         return this;
     }
 
     @Override
-    public MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer) {
+    public MockManager<ENTITY> setStreamer(Function<StreamDecorator, Stream<ENTITY>> streamer) {
         this.streamer = streamer;
         return this;
     }
@@ -125,13 +126,13 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Stream<ENTITY> stream() {
-        return streamer.get();
+    public Stream<ENTITY> stream(StreamDecorator decorator) {
+        return streamer.apply(decorator);
     }
 
     @Override
-    public Stream<ENTITY> nativeStream() {
-        return nativeStreamer.get();
+    public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
+        return nativeStreamer.apply(decorator);
     }
 
     @Override
