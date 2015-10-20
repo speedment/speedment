@@ -16,25 +16,19 @@
  */
 package com.speedment.field.predicate;
 
-import java.util.function.Predicate;
-
 /**
  *
  * @author pemi
- * @param <ENTITY> Entity type
- * @param <V> Value type
  */
-public interface SpeedmentPredicate<ENTITY, V> extends
-    HasGetter<ENTITY, V>,
-    HasPredicateType,
-    HasEffectivePredicateType,
-    HasFieldTrait,
-    HasReferenceFieldTrait<ENTITY, V>,
-    HasNegated,
-    Predicate<ENTITY> {
+public interface HasEffectivePredicateType {
 
-    @Override
-    SpeedmentPredicate<ENTITY, V> negate();
-    
-    
+    /**
+     * Returns the effective predicate type. The effective predicate type is the
+     * type that results when the isNegated() flag is considered. For example,
+     * EQUAL.negate() has an effective predicate of NOT_EQAUL.
+     *
+     * @return the effective predicate type
+     */
+    PredicateType getEffectivePredicateType();
+
 }

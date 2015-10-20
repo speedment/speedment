@@ -51,6 +51,11 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
     }
 
     @Override
+    public final PredicateType getEffectivePredicateType() {
+        return predicateType.effectiveType(isNegated());
+    }
+
+    @Override
     public final Getter<ENTITY, V> getter() {
         return referenceField.getter();
     }
