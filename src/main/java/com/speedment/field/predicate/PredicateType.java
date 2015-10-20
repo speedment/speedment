@@ -16,9 +16,9 @@
  */
 package com.speedment.field.predicate;
 
-import java.util.Optional;
-
 /**
+ * The PredicateType that exists for Speedment. A predicate type must always
+ * have a negated PredicateType that is the exact negation of itself.
  *
  * @author pemi
  */
@@ -38,41 +38,49 @@ public enum PredicateType {
     LESS_THAN,
     LESS_OR_EQUAL,
     BETWEEN,
-    //NOT_BETWEEN, // TO BE IMPLEMENTED
+    NOT_BETWEEN, // Currently not exposed in external predicates
     IN,
+    NOT_IN, // Currently not exposed in external predicates
     // String
     EQUAL_IGNORE_CASE,
     NOT_EQUAL_IGNORE_CASE,
     STARTS_WITH,
+    NOT_STARTS_WITH, // Currently not exposed in external predicates
     ENDS_WITH,
+    NOT_ENDS_WITH, // Currently not exposed in external predicates
     CONTAINS,
+    NOT_CONTAINS, // Currently not exposed in external predicates
     IS_EMPTY,
     IS_NOT_EMPTY;
 
-    private Optional<PredicateType> complementType;
+    private PredicateType negatedType;
 
     static {
-        associateComplimentTypes(ALWAYS_TRUE, ALWAYS_FALSE);
-        associateComplimentTypes(IS_NULL, IS_NOT_NULL);
-        associateComplimentTypes(EQUAL, NOT_EQUAL);
-        associateComplimentTypes(GREATER_THAN, LESS_OR_EQUAL);
-        associateComplimentTypes(GREATER_OR_EQUAL, LESS_THAN);
-        //associateComplimentTypes(BETWEEN, NOT_BETWEEN);
-        associateComplimentTypes(EQUAL_IGNORE_CASE, NOT_EQUAL_IGNORE_CASE);
-        associateComplimentTypes(IS_EMPTY, IS_NOT_EMPTY);
+        associateNegations(ALWAYS_TRUE, ALWAYS_FALSE);
+        associateNegations(IS_NULL, IS_NOT_NULL);
+        associateNegations(EQUAL, NOT_EQUAL);
+        associateNegations(GREATER_THAN, LESS_OR_EQUAL);
+        associateNegations(GREATER_OR_EQUAL, LESS_THAN);
+        associateNegations(BETWEEN, NOT_BETWEEN);
+        associateNegations(IN, NOT_IN);
+        associateNegations(EQUAL_IGNORE_CASE, NOT_EQUAL_IGNORE_CASE);
+        associateNegations(STARTS_WITH, NOT_STARTS_WITH);
+        associateNegations(ENDS_WITH, NOT_ENDS_WITH);
+        associateNegations(CONTAINS, NOT_CONTAINS);
+        associateNegations(IS_EMPTY, IS_NOT_EMPTY);
     }
 
-    public Optional<PredicateType> getComplementType() {
-        return complementType;
+    public PredicateType negate() {
+        return negatedType;
     }
 
-    public PredicateType effectiveType(boolean inverted) {
-        return complementType.orElse(this);
+    public PredicateType effectiveType(boolean negate) {
+        return negate ? negatedType : this;
     }
 
-    private static void associateComplimentTypes(PredicateType a, PredicateType b) {
-        a.complementType = Optional.of(b);
-        b.complementType = Optional.of(a);
+    private static void associateNegations(PredicateType a, PredicateType b) {
+        a.negatedType = b;
+        b.negatedType = a;
     }
 
 }
