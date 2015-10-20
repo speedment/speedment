@@ -95,6 +95,10 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
     protected abstract String getFileName();
 
     protected abstract J make(File file);
+    
+    protected void finializeFile(File file) {
+        // Do nothing
+    }
 
     @Override
     public File get() {
@@ -102,6 +106,7 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
         final J item = make(file);
         item.set(getJavaDoc());
         file.add(item);
+        finializeFile(file);
         file.call(new AutoImports(getCodeGenerator().getDependencyMgr()));
         return file;
     }

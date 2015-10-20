@@ -27,9 +27,6 @@ import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Import;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.BOOLEAN_PRIMITIVE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.INT_PRIMITIVE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.indent;
@@ -37,6 +34,13 @@ import com.speedment.config.Table;
 import com.speedment.internal.core.code.AbstractBaseEntity;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Speedment;
+import com.speedment.internal.codegen.lang.controller.AutoEquals;
+import com.speedment.internal.codegen.lang.models.Javadoc;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.BOOLEAN_PRIMITIVE;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.INT_PRIMITIVE;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import com.speedment.internal.util.JavaLanguage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -259,13 +263,42 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
             .add("int hash = 7;");
 
         columns().forEachOrdered(c -> {
-            final String getter = "get" + typeName(c);
-            if (c.getTypeMapper().getJavaType().isPrimitive()) {
-                //Todo: Optimize this to remove auto boxing
-                method.add("hash = 31 * hash + Objects.hash(" + getter + "());");
-            } else {
-                method.add("hash = 31 * hash + Objects.hash(" + getter + "());");
+            
+            final StringBuilder str = new StringBuilder();
+            str.append("hash = 31 * hash + ");
+
+            switch (c.getTypeMapper().getJavaType().getName()) {
+                case "byte":
+                    str.append("Byte");
+                    break;
+                case "short":
+                    str.append("Short");
+                    break;
+                case "int":
+                    str.append("Integer");
+                    break;
+                case "long":
+                    str.append("Long");
+                    break;
+                case "float":
+                    str.append("Float");
+                    break;
+                case "double":
+                    str.append("Double");
+                    break;
+                case "boolean":
+                    str.append("Boolean");
+                    break;
+                case "char":
+                    str.append("Character");
+                    break;
+                default:
+                    str.append("Objects");
+                    break;
             }
+            
+            str.append(".hashCode(get").append(typeName(c)).append("());");
+            method.add(str.toString());
         });
 
         method.add("return hash;");
