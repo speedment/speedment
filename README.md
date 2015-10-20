@@ -10,6 +10,8 @@ When you use Speedment for database querying, you do not have to learn a new API
 out of the box!
 </p>
 
+This site covers the Speedment Open Source project available under the [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). If you are interested in the enterprise product with support for commercial databases and in-memory acceleration, check out [www.speedment.org/enterprise!](http://speedment.org/enterprise/)
+
 Documentation
 -------------
 You can read the [the API quick start here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
