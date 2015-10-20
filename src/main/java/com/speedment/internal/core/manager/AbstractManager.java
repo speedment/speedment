@@ -21,6 +21,7 @@ import com.speedment.Speedment;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
@@ -51,8 +52,9 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Stream<ENTITY> stream() {
-        return speedment.get(StreamSupplierComponent.class).stream(getEntityClass());
+    public Stream<ENTITY> stream(StreamDecorator decorator) {
+        return speedment.get(StreamSupplierComponent.class)
+            .stream(getEntityClass(), decorator);
     }
 
 //    @Override
