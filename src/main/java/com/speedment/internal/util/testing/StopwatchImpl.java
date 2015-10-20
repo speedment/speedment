@@ -124,7 +124,7 @@ public final class StopwatchImpl implements Stopwatch {
             case MILLISECONDS:
                 return "ms";
             case MICROSECONDS:
-                return "μs";
+                return "us";
             case NANOSECONDS:
                 return "ns";
             default:
