@@ -25,7 +25,7 @@ import com.speedment.annotation.Api;
  * 
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Ordinable extends Node {
 
     final int ORDINAL_FIRST = 1, UNSET = -1;

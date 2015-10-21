@@ -34,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Table>>,
     FieldStorageTypeable,
     ColumnCompressionTypeable,

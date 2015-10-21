@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> The type that the ResultSet shall be mapped to
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface AsynchronousQueryResult<T> extends AutoCloseable {
 
     Stream<T> stream();

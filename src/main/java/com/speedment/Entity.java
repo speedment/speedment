@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  * @author pemi, Emil Forslund
  * @param <ENTITY> type
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Entity<ENTITY> {
 
     /**

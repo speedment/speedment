@@ -60,7 +60,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
 
     @Override
-    public Pipeline optimize(Pipeline initialPipeline) {
+    public <P extends Pipeline> P optimize(P initialPipeline) {
         requireNonNull(initialPipeline);
         final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
 

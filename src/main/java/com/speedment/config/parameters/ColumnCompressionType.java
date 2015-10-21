@@ -22,7 +22,7 @@ import com.speedment.annotation.Api;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public enum ColumnCompressionType {
     INHERIT, NONE, DEDUPLICATION;
 }

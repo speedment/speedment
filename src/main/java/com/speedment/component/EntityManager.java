@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface EntityManager extends Component {
 
     @Override

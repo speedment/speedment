@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, SqlTypeInfo, Class<?>> {
 
     @Override
