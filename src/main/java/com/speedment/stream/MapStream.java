@@ -445,7 +445,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -489,7 +489,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -531,7 +531,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -562,7 +562,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -594,7 +594,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -626,7 +626,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is an intermediate operation.
      *
-     * @apiNote
+     * <p>
      * The {@code flatMap()} operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
@@ -804,7 +804,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a stateful intermediate operation.
      *
-     * @apiNote
+     * <p>
      * Preserving stability for {@code distinct()} in parallel pipelines is
      * relatively expensive (requires that the operation act as a full barrier,
      * with substantial buffering overhead), and stability is often not needed.
@@ -928,7 +928,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * upstream operation.  If the action modifies shared state,
      * it is responsible for providing the required synchronization.
      *
-     * @apiNote This method exists mainly to support debugging, where you want
+     * <p> This method exists mainly to support debugging, where you want
      * to see the elements as they flow past a certain point in a pipeline:
      * <pre>{@code
      *     Stream.of("one", "two", "three", "four")
@@ -961,7 +961,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * upstream operation.  If the action modifies shared state,
      * it is responsible for providing the required synchronization.
      *
-     * @apiNote This method exists mainly to support debugging, where you want
+     * <p> This method exists mainly to support debugging, where you want
      * to see the elements as they flow past a certain point in a pipeline:
      * <pre>{@code
      *     Stream.of("one", "two", "three", "four")
@@ -987,7 +987,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting stateful intermediate operation.
      *
-     * @apiNote
+     * <p>
      * While {@code limit()} is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel pipelines,
      * especially for large values of {@code maxSize}, since {@code limit(n)}
@@ -1019,7 +1019,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a stateful intermediate operation.
      *
-     * @apiNote
+     * <p>
      * While {@code skip()} is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel pipelines,
      * especially for large values of {@code n}, since {@code skip(n)}
@@ -1142,7 +1142,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a terminal operation.
      *
-     * @apiNote
+     * <p>
      * The generator function takes an integer, which is the size of the
      * desired array, and produces an array of the desired size.  This can be
      * concisely expressed with an array constructor reference:
@@ -1185,7 +1185,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a terminal operation.
      *
-     * @apiNote Sum, min, max, average, and string concatenation are all special
+     * <p> Sum, min, max, average, and string concatenation are all special
      * cases of reduction. Summing a stream of numbers can be expressed as:
      *
      * <pre>{@code
@@ -1275,7 +1275,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a terminal operation.
      *
-     * @apiNote Many reductions using this form can be represented more simply
+     * <p> Many reductions using this form can be represented more simply
      * by an explicit combination of {@code map} and {@code reduce} operations.
      * The {@code accumulator} function acts as a fused mapper and accumulator,
      * which can sometimes be more efficient than separate mapping and reduction,
@@ -1317,7 +1317,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a terminal operation.
      *
-     * @apiNote There are many existing classes in the JDK whose signatures are
+     * <p> There are many existing classes in the JDK whose signatures are
      * well-suited for use with method references as arguments to {@code collect()}.
      * For example, the following will accumulate strings into an {@code ArrayList}:
      * <pre>{@code
@@ -1372,7 +1372,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * with non-thread-safe data structures (such as {@code ArrayList}), no
      * additional synchronization is needed for a parallel reduction.
      *
-     * @apiNote
+     * <p>
      * The following will accumulate strings into an ArrayList:
      * <pre>{@code
      *     List<String> asList = stringStream.collect(Collectors.toList());
@@ -1561,7 +1561,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>existential quantification</em> of the
      * predicate over the elements of the stream (for some x P(x)).
      *
@@ -1583,7 +1583,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>existential quantification</em> of the
      * predicate over the elements of the stream (for some x P(x)).
      *
@@ -1604,7 +1604,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>universal quantification</em> of the
      * predicate over the elements of the stream (for all x P(x)). If the
      * stream is empty, the quantification is said to be <em>vacuously
@@ -1629,7 +1629,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>universal quantification</em> of the
      * predicate over the elements of the stream (for all x P(x)).  If the
      * stream is empty, the quantification is said to be <em>vacuously
@@ -1653,7 +1653,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>universal quantification</em> of the
      * negated predicate over the elements of the stream (for all x ~P(x)).  If
      * the stream is empty, the quantification is said to be vacuously satisfied
@@ -1678,7 +1678,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * <p>
      * This is a short-circuiting terminal operation.
      *
-     * @apiNote
+     * <p>
      * This method evaluates the <em>universal quantification</em> of the
      * negated predicate over the elements of the stream (for all x ~P(x)).  If
      * the stream is empty, the quantification is said to be vacuously satisfied
@@ -1888,7 +1888,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link Object#equals(Object)}), the values are merged using the provided 
      * merging function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key.  The other forms of {@code toMap} simply use
      * a merge function that throws unconditionally, but you can easily write
@@ -1929,7 +1929,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * thrown when the collection operation is performed. If the mapped keys
      * may have duplicates, use {@link #toConcurrentMap(BinaryOperator)} instead.
      *
-     * @apiNote
+     * <p>
      * It is common for either the key or the value to be the input elements.
      * In this case, the utility method
      * {@link java.util.function.Function#identity()} may be helpful.
@@ -1958,7 +1958,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * each equal element, and the results are merged using the provided merging 
      * function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key.  The other forms of {@code toConcurrentMap} simply use
      * a merge function that throws unconditionally, but you can easily write
@@ -2055,7 +2055,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link Object#equals(Object)}), the values are merged using the provided 
      * merging function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key. The other forms of {@code toSortedMap} simply 
      * use a merge function that throws unconditionally, but you can easily 
@@ -2098,7 +2098,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link Object#equals(Object)}), the values are merged using the provided 
      * merging function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key. The other forms of {@code toSortedMap} simply 
      * use a merge function that throws unconditionally, but you can easily 
@@ -2201,7 +2201,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link Object#equals(Object)}), the values are merged using the provided 
      * merging function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key. The other forms of {@code toConcurrentNavigableMap} simply 
      * use a merge function that throws unconditionally, but you can easily 
@@ -2236,7 +2236,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link Object#equals(Object)}), the values are merged using the provided 
      * merging function.
      *
-     * @apiNote
+     * <p>
      * There are multiple ways to deal with collisions between multiple elements
      * mapping to the same key. The other forms of 
      * {@code toConcurrentNavigableMap} simply use a merge function that throws 
