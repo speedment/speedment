@@ -17,13 +17,18 @@
 package com.speedment.internal.gui;
 
 import com.speedment.Speedment;
+import com.speedment.config.Project;
+import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.gui.controller.MailPromptController;
 import com.speedment.internal.gui.controller.ProjectPromptController;
+import com.speedment.internal.gui.controller.SceneController;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
 import com.speedment.internal.util.analytics.AnalyticsUtil;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
+import java.io.File;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -52,10 +57,20 @@ public final class MainApp extends Application {
 
         AnalyticsUtil.notify(GUI_STARTED);
 
-        if (Settings.inst().has("user_mail")) {
-            ProjectPromptController.showIn(speedment, stage);
+        final Parameters parameters = getParameters();
+        final List<String> params = parameters.getRaw();
+        if (params.isEmpty()) {
+            if (Settings.inst().has("user_mail")) {
+                ProjectPromptController.showIn(speedment, stage);
+            } else {
+                MailPromptController.showIn(speedment, stage);
+            }
         } else {
-            MailPromptController.showIn(speedment, stage);
+            final Project project = Project.newProject(speedment);
+            final String filename = params.get(0).trim().replace("\\", "/");
+            final File file = new File(filename);
+            GroovyParser.fromGroovy(project, file.toPath());
+            SceneController.showIn(speedment, stage, project, file);
         }
 
         stage.show();
@@ -66,7 +81,7 @@ public final class MainApp extends Application {
         requireNonNull(url);
         app.getHostServices().showDocument(url);
     }
-
+    
     /**
      * @param args the command line arguments
      */
