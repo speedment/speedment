@@ -38,7 +38,7 @@
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </padding>
       </TextField>
-      <Label fx:id="labelLicense" maxWidth="1.7976931348623157E308" text="Speedment ORM is licensed under the Apache 2 license." />
+      <Label fx:id="labelLicense" maxWidth="1.7976931348623157E308" text="Speedment is licensed under the Apache 2 license." />
       <Button fx:id="buttonOkey" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, got it!">
          <padding>
             <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />

@@ -50,10 +50,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.internal.gui.controller.AlertController.showAlert;
 import static com.speedment.internal.gui.util.ProjectUtil.createOpenProjectHandler;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.function.Supplier;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
