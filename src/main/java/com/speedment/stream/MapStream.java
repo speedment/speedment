@@ -1860,7 +1860,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * may have duplicates, use {@link #toMap(BinaryOperator)}
      * instead.
      *
-     * @implNote
+     * <p>
      * The returned {@code Map} is not concurrent. For parallel stream
      * pipelines, the {@code combiner} function operates by merging the keys
      * from one map into another, which can be an expensive operation. If it is
@@ -1894,7 +1894,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * a merge function that throws unconditionally, but you can easily write
      * more flexible merge policies.
      *
-     * @implNote
+     * <p>
      * The returned {@code Map} is not concurrent. For parallel stream
      * pipelines, the {@code combiner} function operates by merging the keys
      * from one map into another, which can be an expensive operation. If it is
@@ -1996,9 +1996,9 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * {@link #toSortedMap(Comparator)} since it allows you to specify 
      * a comparator to use when comparing the keys.
      *
-     * @implNote
+     * <p>
      * The returned {@code Map} is not concurrent. For parallel stream
-     * pipelines, use {@link toConcurrentNavigableMap()} instead.
+     * pipelines, use {@link #toConcurrentNavigableMap()} instead.
      * 
      * @return  a {@code Map} whose keys and values are identical to the entries
      *          of this stream
@@ -2026,9 +2026,9 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * may have duplicates, use {@link #toSortedMap(Comparator, BinaryOperator)}
      * instead.
      * 
-     * @implNote
+     * <p>
      * The returned {@code Map} is not concurrent. For parallel stream
-     * pipelines, use {@link toConcurrentNavigableMap()} instead.
+     * pipelines, use {@link #toConcurrentNavigableMap()} instead.
      * 
      * @param keyComparator  the comparator to use when sorting the keys
      * @return               a {@code SortedMap} whose keys and values are 
@@ -2061,7 +2061,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * use a merge function that throws unconditionally, but you can easily 
      * write more flexible merge policies.
      *
-     * @implNote
+     * <p>
      * The returned {@code SortedMap} is not concurrent. For parallel stream
      * pipelines, the {@code combiner} function operates by merging the keys
      * from one map into another, which can be an expensive operation. If it is
@@ -2104,7 +2104,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * use a merge function that throws unconditionally, but you can easily 
      * write more flexible merge policies.
      *
-     * @implNote
+     * <p>
      * The returned {@code SortedMap} is not concurrent. For parallel stream
      * pipelines, the {@code combiner} function operates by merging the keys
      * from one map into another, which can be an expensive operation. If it is
@@ -2267,7 +2267,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     /**
      * Accumulates all entries of this {@code MapStream} into a {@code List}.
      * 
-     * @implNote
+     * <p>
      * The returned {@code List} is not concurrent.
      * 
      * @return  a {@code List} that contains all the entities of the stream
