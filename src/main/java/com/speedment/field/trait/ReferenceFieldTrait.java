@@ -21,6 +21,7 @@
  */
 package com.speedment.field.trait;
 
+import com.speedment.annotation.Api;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
@@ -34,6 +35,7 @@ import com.speedment.field.predicate.SpeedmentPredicate;
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public interface ReferenceFieldTrait<ENTITY, V> {
 
     /**

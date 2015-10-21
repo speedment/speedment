@@ -16,10 +16,13 @@
  */
 package com.speedment.field.trait;
 
+import com.speedment.annotation.Api;
+
 /**
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public interface FieldTrait {
 
     String getColumnName();

@@ -21,6 +21,7 @@
  */
 package com.speedment.field.methods;
 
+import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import java.util.function.UnaryOperator;
 
@@ -30,6 +31,7 @@ import java.util.function.UnaryOperator;
  * @param <ENTITY> entity type
  * @param <V> column value type
  */
+@Api(version = "2.2")
 public interface FieldSetter<ENTITY, V> extends UnaryOperator<ENTITY> {
 
     FieldTrait getField();

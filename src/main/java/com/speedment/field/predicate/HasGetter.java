@@ -16,6 +16,7 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
 import com.speedment.field.methods.Getter;
 
 /**
@@ -24,6 +25,7 @@ import com.speedment.field.methods.Getter;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
+@Api(version = "2.2")
 public interface HasGetter<ENTITY, V> {
 
     Getter<ENTITY, V> getter();

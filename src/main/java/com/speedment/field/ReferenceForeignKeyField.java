@@ -32,5 +32,4 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 public interface ReferenceForeignKeyField<ENTITY, V, FK> extends
     FieldTrait,
     ReferenceFieldTrait<ENTITY, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK>
-{}
+    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}

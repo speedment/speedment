@@ -22,7 +22,10 @@ import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 
 /**
- *
+ * Decorator that is applied to a various part of the custom streams of 
+ * Speedment before execution. This can for an example be used to perform
+ * optimizations.
+ * 
  * @author Emil Forslund
  * @since 2.2
  */

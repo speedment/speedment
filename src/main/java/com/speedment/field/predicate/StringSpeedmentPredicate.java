@@ -16,10 +16,14 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
+
 /**
  *
  * @author pemi
+ * @param <T> the predicate type
  */
+@Api(version = "2.2")
 public interface StringSpeedmentPredicate<T> extends ComparableSpeedmentPredicate<T, String> {
 
 }

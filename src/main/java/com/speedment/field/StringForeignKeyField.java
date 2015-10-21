@@ -35,5 +35,4 @@ public interface StringForeignKeyField<ENTITY, FK> extends
     ReferenceFieldTrait<ENTITY, String>,
     ComparableFieldTrait<ENTITY, String>,
     StringFieldTrait<ENTITY>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK>
-{}
+    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}

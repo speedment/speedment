@@ -21,10 +21,13 @@
  */
 package com.speedment.field;
 
+import com.speedment.annotation.Api;
+
 /**
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public enum Inclusion {
 
     START_INCLUSIVE_END_INCLUSIVE(true, true),
@@ -46,5 +49,4 @@ public enum Inclusion {
     public boolean isEndInclusive() {
         return endInclusive;
     }
-
 }

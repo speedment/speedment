@@ -16,12 +16,15 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
+
 /**
  *
  * @author pemi
  * @param <T> type that the Predicate shall operate on
  * @param <V> field type
  */
+@Api(version = "2.2")
 public interface ComparableSpeedmentPredicate<T, V extends Comparable<? super V>> extends SpeedmentPredicate<T, V> {
 
 }

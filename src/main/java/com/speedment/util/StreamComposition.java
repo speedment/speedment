@@ -32,7 +32,8 @@ import java.util.stream.Stream;
 import static com.speedment.internal.util.NullUtil.requireNonNulls;
 
 /**
- *
+ * Utility methods for making sure composed streams are closed properly.
+ * 
  * @author pemi
  */
 @Api(version = "2.2")

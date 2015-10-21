@@ -16,6 +16,7 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
@@ -24,6 +25,7 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
+@Api(version = "2.2")
 public interface HasReferenceFieldTrait<ENTITY, V> {
 
     ReferenceFieldTrait<ENTITY, V> getReferenceField();
