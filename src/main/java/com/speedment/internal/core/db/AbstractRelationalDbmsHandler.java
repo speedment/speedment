@@ -366,6 +366,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             return connection.getMetaData().getImportedKeys(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName());
         };
         final SqlFunction<ResultSet, ForeignKey> mapper = rs -> {
+            
+            
+            final Map<String, ForeignKey> foo = foreignKeys;
+            
+            
             final String foreignKeyName = rs.getString("FK_NAME");
             final boolean exists = foreignKeys.containsKey(foreignKeyName);
             final ForeignKey foreignKey = foreignKeys.computeIfAbsent(foreignKeyName, n -> {

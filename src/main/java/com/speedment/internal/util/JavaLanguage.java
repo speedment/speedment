@@ -146,7 +146,7 @@ public final class JavaLanguage {
 
     public static String javaStaticFieldName(final String externalName) {
         requireNonNull(externalName);
-        return toUnderscoreSeparated(javaName(externalName, Character::toUpperCase)).toUpperCase();
+        return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
     }
 
     private static String javaName(final String externalName, Function<Character, Character> mutator) {
@@ -172,14 +172,7 @@ public final class JavaLanguage {
         requireNonNull(externalName);
         String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
 
-        if (externalName.contains(".")) {
-            int foo = 1;
-        }
-
-        result = Stream.of(replaceSeparatorsWithUnderstroke(result).replaceAll("([A-Z]+)", "_$1")
-            .split("[^A-Za-z0-9]"))
-            .map(String::toLowerCase)
-            .map(s -> ucfirst(s)).collect(Collectors.joining());
+        result = Stream.of(result.replaceAll("([A-Z]+)", "_$1").split("[^A-Za-z0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
 
 //        int underscoreIndex;
 //        for (String replacement : REPLACEMENT_STRING_SET) {
@@ -245,10 +238,13 @@ public final class JavaLanguage {
             final char c = input.charAt(i);
             if (result.length() == 0) {
                 result.append(Character.toLowerCase(c));
-            } else if (Character.isUpperCase(c)) {
-                result.append("_").append(Character.toLowerCase(c));
             } else {
-                result.append(c);
+                if (Character.isUpperCase(c)) {
+                    result.append("_").append(Character.toLowerCase(c));
+                } else {
+                    result.append(c);
+                }
+
             }
         }
         return result.toString();
@@ -263,23 +259,9 @@ public final class JavaLanguage {
             .map(String::toLowerCase)
             .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
     }
-
-    public static String replaceSeparatorsWithUnderstroke(String input) {
-        final StringBuilder sb = new StringBuilder();
-        for (char c : input.toCharArray()) {
-            if (c == '.' || c == ' ' || c == '$') {
-                sb.append('_');
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-
+    
     /**
      * Utility classes should not be instantiated.
      */
-    private JavaLanguage() {
-        instanceNotAllowed(getClass());
-    }
+    private JavaLanguage() { instanceNotAllowed(getClass()); }
 }
