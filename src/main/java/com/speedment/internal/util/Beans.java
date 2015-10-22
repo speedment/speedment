@@ -17,7 +17,7 @@
 package com.speedment.internal.util;
 
 import com.speedment.config.mapper.TypeMapper;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import static java.util.Objects.requireNonNull;

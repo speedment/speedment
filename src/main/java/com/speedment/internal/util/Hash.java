@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

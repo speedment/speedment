@@ -17,7 +17,7 @@
 package com.speedment.internal.util;
 
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.util.CollectorUtil.unmodifiableSetOf;

@@ -14,20 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util;
+package com.speedment.util;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
-import static groovy.json.internal.Chr.array;
+import com.speedment.annotation.Api;
+import com.speedment.internal.util.Pluralis;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public class NullUtil {
 
     /**
@@ -55,6 +54,7 @@ public class NullUtil {
      * Checks if this collection is non null and also that all members are
      * non-null. If a null is detected a NullPointerException is thrown.
      *
+     * @param <E> the inner type of the collection
      * @param <T> collection type
      * @param collection to check
      * @return the same collection instance as provided

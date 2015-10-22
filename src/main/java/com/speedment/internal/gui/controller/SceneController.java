@@ -76,7 +76,7 @@ import static javafx.animation.Animation.INDEFINITE;
 import static javafx.animation.Interpolator.EASE_BOTH;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import static javafx.util.Duration.ZERO;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
 import com.speedment.internal.gui.util.ProjectUtil;
 import static java.util.Objects.requireNonNull;

@@ -22,7 +22,7 @@
 package com.speedment.internal.core.stream;
 
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;

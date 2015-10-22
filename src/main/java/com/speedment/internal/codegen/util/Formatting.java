@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.util;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;

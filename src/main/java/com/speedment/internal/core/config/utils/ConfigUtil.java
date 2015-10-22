@@ -21,7 +21,7 @@ import com.speedment.config.Schema;
 import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;

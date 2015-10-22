@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.base;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Collections;

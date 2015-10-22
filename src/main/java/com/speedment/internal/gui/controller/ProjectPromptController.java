@@ -52,7 +52,7 @@ import static com.speedment.internal.gui.controller.AlertController.showAlert;
 import static com.speedment.internal.gui.util.ProjectUtil.createOpenProjectHandler;
 import java.util.Optional;
 import java.util.function.Supplier;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**

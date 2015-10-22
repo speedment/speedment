@@ -17,8 +17,8 @@
 package com.speedment.internal.util;
 
 import com.speedment.SpeedmentVersion;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeOut;
 import static com.speedment.internal.gui.util.TransitionAnimation.enterFromRight;
 import static java.util.Objects.requireNonNull;

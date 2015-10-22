@@ -23,7 +23,7 @@ import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.config.utils.MethodsParser;
 import static com.speedment.internal.core.config.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.config.parameters.DbmsType;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.internal.util.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

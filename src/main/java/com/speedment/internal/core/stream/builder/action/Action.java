@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;

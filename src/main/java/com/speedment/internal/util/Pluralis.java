@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
