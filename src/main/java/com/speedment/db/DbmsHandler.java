@@ -37,6 +37,8 @@ import java.util.stream.Stream;
  */
 @Api(version = "2.2")
 public interface DbmsHandler {
+    
+    static final Predicate<Schema> SCHEMA_NO_FILTER = s -> true;
 
     /**
      * Returns the {@link Dbms} node that is used by this {@code DbmsHandler}.
@@ -74,9 +76,22 @@ public interface DbmsHandler {
      * @return  a stream of populated {@link Schema Schemas} that are available 
      *          in this database
      */
-    public Stream<Schema> schemas();
+    default Stream<Schema> schemas() {
+        return schemas(SCHEMA_NO_FILTER);
+    }
 
-    public Stream<Schema> schemas(Predicate<Schema> filterCriteria);
+    /**
+     * Returns a Stream of populated {@link Schema Schemas} that are available 
+     * in this database. The schemas are populated by all their sub items such 
+     * as tables, columns etc. Schemas that are a part of the
+     * {@code getDbms().getType().getSchemaExcludSet()} or that does not match 
+     * the given filter will be excluded from the {@code Stream}.
+     *
+     * @param filterCriteria  criterias that schemas must complete
+     * @return                a stream of populated {@link Schema Schemas} that 
+     *                        are available in this database
+     */
+    Stream<Schema> schemas(Predicate<Schema> filterCriteria);
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the

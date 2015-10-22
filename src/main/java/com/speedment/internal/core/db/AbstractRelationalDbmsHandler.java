@@ -72,8 +72,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private static final String PASSWORD_PROTECTED = "********";
     private static final String USER = "user";
 
-    private static final Predicate<Schema> SCHEMA_NO_FILTER = s -> true;
-
     private final Dbms dbms;
     private transient Map<String, Class<?>> typeMapping;
 
@@ -141,11 +139,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
         }
         return result;
-    }
-
-    @Override
-    public Stream<Schema> schemas() {
-        return schemas(SCHEMA_NO_FILTER);
     }
 
     @Override
