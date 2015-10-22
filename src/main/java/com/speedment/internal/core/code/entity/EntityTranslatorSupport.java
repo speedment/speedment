@@ -50,7 +50,7 @@ import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
 
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
-import com.speedment.internal.util.Pluralis;
+import com.speedment.util.Pluralis;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguage;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;

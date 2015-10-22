@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util;
+package com.speedment.util;
 
+import com.speedment.internal.util.JavaLanguage;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.Arrays;

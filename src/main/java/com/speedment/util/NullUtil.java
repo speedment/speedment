@@ -17,7 +17,6 @@
 package com.speedment.util;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.util.Pluralis;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
