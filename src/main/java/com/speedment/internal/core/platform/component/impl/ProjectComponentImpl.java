@@ -16,14 +16,18 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.config.Project;
 import com.speedment.component.ProjectComponent;
 import static java.util.Objects.requireNonNull;
 
+public final class ProjectComponentImpl extends Apache2AbstractComponent implements ProjectComponent {
 
-public final class ProjectComponentImpl implements ProjectComponent {
-    
     private Project project;
+
+    public ProjectComponentImpl(Speedment speedment) {
+        super(speedment);
+    }
 
     @Override
     public Project getProject() {

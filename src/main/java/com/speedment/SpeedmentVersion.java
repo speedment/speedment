@@ -16,6 +16,7 @@
  */
 package com.speedment;
 
+import com.speedment.annotation.Api;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 
 /**
@@ -26,13 +27,14 @@ import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
  * @author pemi
  * @since 2.0
  */
+@Api(version = "2.2")
 public final class SpeedmentVersion {
 
     private static final String
         IMPLEMENTATION_TITLE   = "Speedment",
         IMPLEMENTATION_VENDOR  = "Speedment Inc.",  // "Speedment, Inc." difficult to enter into POM because of ','
-        IMPLEMENTATION_VERSION = "2.1.2",
-        SPECIFICATION_VERSION  = "2.1";
+        IMPLEMENTATION_VERSION = "2.2.0",
+        SPECIFICATION_VERSION  = "2.2";
 
     private static final boolean PRODUCTION_MODE = true;
 

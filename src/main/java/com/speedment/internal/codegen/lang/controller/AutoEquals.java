@@ -232,7 +232,7 @@ implements Consumer<T> {
             case "char":
                 return prefix + "Character" + suffix;
             default:
-                return prefix + "(this." + f.getName() + " == null) ? 0 : this." + f.getName() + ".hashCode();";
+                return prefix + "Objects" + suffix;
         }
     }
     

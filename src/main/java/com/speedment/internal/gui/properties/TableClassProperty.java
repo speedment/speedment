@@ -17,6 +17,8 @@
 package com.speedment.internal.gui.properties;
 
 import com.speedment.Speedment;
+import com.speedment.component.TypeMapperComponent;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
@@ -37,40 +39,55 @@ public final class TableClassProperty extends TableProperty<Class> {
 
 	public TableClassProperty(Speedment speedment, String name, Class value) {
 		super (requireNonNull(speedment), requireNonNull(name));
-        // value nullable
-		combo = new ComboBox<>(
-			StandardJavaTypeMapping.stream()
-				.map(v -> v.getJavaClass())
-				.collect(Collectors.toCollection(
-					FXCollections::observableArrayList
-				))
-		);
-		
-		combo.setEditable(true);
-		
-		if (value != null) {
-			combo.setValue(value);
-		}
-		
-		combo.setConverter(new StringConverter<Class>() {
-			@Override
-			public String toString(Class clazz) {
-				if (clazz == null) {
-					return "";
-				} else {
-					return clazz.getName();
-				}
-			}
+        
+        if (name.equalsIgnoreCase("mapping")) {
+            // value nullable
+            combo = new ComboBox<>(
+                StandardJavaTypeMapping.stream()
+                    .map(v -> v.getJavaClass())
+                    .collect(Collectors.toCollection(
+                        FXCollections::observableArrayList
+                    ))
+            );
+        } else if(name.equalsIgnoreCase("type mapper")) {
+            // value nullable
+            combo = new ComboBox<>(
+                speedment.get(TypeMapperComponent.class).stream()
+                    .filter(tm -> tm.getDatabaseType().equals(tm))
+                    .map(TypeMapper::getClass)
+                    .collect(Collectors.toCollection(
+                        FXCollections::observableArrayList
+                    ))
+            );
+        } else {
+            throw new UnsupportedOperationException("Unknown class type '" + name + "' can't be edited in the GUI.");
+        }
+        
+        combo.setEditable(true);
 
-			@Override
-			public Class fromString(String string) {
-				try {
-					return Class.forName(string);
-				} catch (ClassNotFoundException ex) {
-					return null;
-				}
-			}
-		});
+        if (value != null) {
+            combo.setValue(value);
+        }
+
+        combo.setConverter(new StringConverter<Class>() {
+            @Override
+            public String toString(Class clazz) {
+                if (clazz == null) {
+                    return "";
+                } else {
+                    return clazz.getName();
+                }
+            }
+
+            @Override
+            public Class fromString(String string) {
+                try {
+                    return Class.forName(string);
+                } catch (ClassNotFoundException ex) {
+                    return null;
+                }
+            }
+        });
 	}
 
 	@Override

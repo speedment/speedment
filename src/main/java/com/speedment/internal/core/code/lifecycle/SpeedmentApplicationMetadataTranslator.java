@@ -19,7 +19,6 @@ package com.speedment.internal.core.code.lifecycle;
 import com.speedment.Speedment;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
-import com.speedment.internal.codegen.lang.models.Constructor;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.Method;
@@ -30,6 +29,9 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.S
 import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.config.Project;
+import com.speedment.internal.codegen.lang.models.Field;
+import com.speedment.internal.codegen.lang.models.Initalizer;
+import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import static java.util.Objects.requireNonNull;
@@ -53,23 +55,30 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
         requireNonNull(file);
         final Method getMetadata = Method.of("getMetadata", STRING)
             .public_()
-            .add(OVERRIDE)
-            .add("return ");
-
+            .add(OVERRIDE);
+        
+        final Field metadataField = Field.of("METADATA", Type.of(StringBuilder.class))
+            .private_().final_().static_();
+        
+        final Initalizer initializer = Initalizer.of().static_();
+        
+        //final StringBuilder str = new StringBuilder();
         GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
-            getMetadata.add("        \"" + l.replace("\"", "\\\"") + "\\n\"+");
+            initializer.add("METADATA.append(\"" + l.replace("\"", "\\\"") + "\\n\");");
+            //str.append("METADATA.append(\"").append(l.replace("\"", "\\\"")).append("\\n\");\n");
         });
-        getMetadata.add("\"\";");  // Hack...
-
+        
+        metadataField.set(new ReferenceValue("new StringBuilder()"));
+        getMetadata.add("return METADATA.toString();");
+        
         //final Path path = project().getConfigPath();
         return Class.of(className)
             .public_()
+            .add(generated())
             .add(Type.of(ApplicationMetadata.class))
-            .add(Constructor.of()
-                .public_()
-            )
-            .add(getMetadata)
-            .add(generated());
+            .add(metadataField)
+            .add(initializer)
+            .add(getMetadata);
     }
 
     @Override

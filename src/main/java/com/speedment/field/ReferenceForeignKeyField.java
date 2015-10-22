@@ -17,30 +17,19 @@
 package com.speedment.field;
 
 import com.speedment.annotation.Api;
-import com.speedment.field.methods.Getter;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 
 /**
  *
- * @author          pemi, Emil Forslund
- * @param <ENTITY>  the entity type
- * @param <V>       the field value type
- * @param <FK>      the foreign entity type
+ * @author pemi, Emil Forslund
+ * @param <ENTITY> the entity type
+ * @param <V> the field value type
+ * @param <FK> the foreign entity type
  */
-@Api(version = "2.1")
-public interface ReferenceForeignKeyField<ENTITY, V, FK> extends ReferenceField<ENTITY, V> {
-    /**
-     * Returns a function that can find a foreign entity pointed out by this
-     * field.
-     * 
-     * @return  the finder
-     */
-    Getter<ENTITY, FK> finder();
-    
-    /**
-     * Finds and returns the foreign key Entity using the provided Entity.
-     *
-     * @param entity  to use when finding the foreign key Entity
-     * @return        the foreign key Entity
-     */
-    FK findFrom(ENTITY entity);
-}
+@Api(version = "2.2")
+public interface ReferenceForeignKeyField<ENTITY, V, FK> extends
+    FieldTrait,
+    ReferenceFieldTrait<ENTITY, V>,
+    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}

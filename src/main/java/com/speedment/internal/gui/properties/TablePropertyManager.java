@@ -19,6 +19,7 @@ package com.speedment.internal.gui.properties;
 import com.speedment.Speedment;
 import com.speedment.annotation.External;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.config.utils.MethodsParser;
 import static com.speedment.internal.core.config.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.config.parameters.DbmsType;
@@ -94,6 +95,11 @@ public final class TablePropertyManager {
                             return createClassProperty(propertyName, nodes,
                                     findGetter(node.getClass(), javaName, innerType, optional),
                                     findSetter(node.getClass(), javaName, Class.class)
+                            );
+                        } else if (TypeMapper.class.isAssignableFrom(innerType)) {
+                            return createTypeMapperProperty(propertyName, nodes,
+                                    findGetter(node.getClass(), javaName, innerType, optional),
+                                    findSetter(node.getClass(), javaName, TypeMapper.class)
                             );
                         } else if (Number.class.isAssignableFrom(innerType)) {
                             @SuppressWarnings("unchecked")
@@ -202,6 +208,13 @@ public final class TablePropertyManager {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableClassProperty(speedment, a, b), selector, updater);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private TableProperty<TypeMapper> createTypeMapperProperty(String label, List<Child<?>> nodes, Function<Child<?>, TypeMapper> selector, BiConsumer<Child<?>, TypeMapper> updater) {
+        requireNonNulls(label, selector, updater);
+        requireNonNulls(nodes);
+        return createProperty(label, nodes, (a, b) -> new TableTypeMapperProperty(speedment, a, b), selector, updater);
     }
 
     private TableProperty<Number> createNumberProperty(String label, List<Child<?>> nodes, Function<Child<?>, Number> selector, BiConsumer<Child<?>, Number> updater) {

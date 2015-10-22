@@ -22,13 +22,11 @@ import static com.speedment.internal.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.internal.util.JavaLanguage;
 import com.speedment.SpeedmentVersion;
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import static java.util.Objects.requireNonNull;
@@ -103,6 +101,19 @@ public class GroovyParser {
         fromGroovy(project, groovyFile);
         return project;
     }
+    
+    public static void fromGroovy(final Node node, final Path path) throws IOException {
+        requireNonNull(node);
+        requireNonNull(path);
+
+        final File file = path.toFile();
+        fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(file));
+        if (node instanceof Project) {
+            @SuppressWarnings("unchecked")
+            final Project project = (Project) node;
+            project.setConfigPath(path);
+        }
+    }
 
     private static void fromGroovy(final Node node, final FunctionThrowsException<GroovyShell, DelegatingScript> scriptMapper) throws IOException {
         requireNonNull(node);
@@ -130,19 +141,6 @@ public class GroovyParser {
 
         final Object value = script.run();
 
-    }
-
-    public static void fromGroovy(final Node node, final Path path) throws IOException {
-        requireNonNull(node);
-        requireNonNull(path);
-
-        final File file = path.toFile();
-        fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(file));
-        if (node instanceof Project) {
-            @SuppressWarnings("unchecked")
-            final Project project = (Project) node;
-            project.setConfigPath(path);
-        }
     }
 
     public static void fromGroovy(final Node node, final String script) throws IOException {

@@ -24,6 +24,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ColumnImpl;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
+import com.speedment.config.mapper.TypeMapper;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Column extends Node, Enableable, Ordinable, Child<Table>,
     FieldStorageTypeable, ColumnCompressionTypeable {
 
@@ -148,26 +149,33 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      */
     @External(type = String.class)
     void setAlias(String alias);
-
+    
     /**
-     * Returns the mapping class that will be used to represent the column data
-     * in the generated code.
+     * Returns the mapper class that will be used to generate a java 
+     * representation of the database types.
      * <p>
      * This property is editable in the GUI through reflection.
      * 
-     * @return  the mapping class
+     * @return  the mapper class
      */
-    @External(type = Class.class)
-    Class<?> getMapping();
+    @External(type = TypeMapper.class)
+    TypeMapper<?, ?> getTypeMapper();
 
     /**
-     * Sets the mapping class that will be used to represent the column data
-     * in the generated code.
+     * Sets the mapper class that will be used to generate a java 
+     * representation of the database types.
      * <p>
      * This property is editable in the GUI through reflection.
      * 
-     * @param mappedClass  the new mapping class
+     * @param mapper  the new mapper class
      */
-    @External(type = Class.class)
-    void setMapping(Class<?> mappedClass);
+    @External(type = TypeMapper.class)
+    void setTypeMapper(TypeMapper<?, ?> mapper);
+    
+    /**
+     * Constructs and sets the type mapper using it's default constructor.
+     * 
+     * @param mapper  the type mapper class to instantiate
+     */
+    void setTypeMapper(Class<?> mapper);
 }

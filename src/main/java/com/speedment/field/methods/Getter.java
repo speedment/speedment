@@ -24,5 +24,5 @@ import java.util.function.Function;
  * @param <ENTITY> the entity
  * @param <V> the type of the value to return
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Getter<ENTITY, V> extends Function<ENTITY, V> {}

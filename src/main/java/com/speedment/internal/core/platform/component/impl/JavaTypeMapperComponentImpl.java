@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
@@ -30,12 +31,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class JavaTypeMapperComponentImpl implements JavaTypeMapperComponent {
+public final class JavaTypeMapperComponentImpl extends Apache2AbstractComponent implements JavaTypeMapperComponent {
 
     private final Map<Class<?>, JavaTypeMapping<?>> map;
     private final Map<DbmsType, Map<Class<?>, JavaTypeMapping<?>>> dbmsTypeMap;
 
-    public JavaTypeMapperComponentImpl() {
+    public JavaTypeMapperComponentImpl(Speedment speedment) {
+        super(speedment);
         map = newConcurrentMap();
         dbmsTypeMap = newConcurrentMap();
         StandardJavaTypeMapping.stream().forEach(this::put);

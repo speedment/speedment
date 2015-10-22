@@ -21,8 +21,6 @@
  */
 package com.speedment.internal.util.tuple;
 
-import com.speedment.internal.util.tuple.Tuples;
-import com.speedment.internal.util.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;

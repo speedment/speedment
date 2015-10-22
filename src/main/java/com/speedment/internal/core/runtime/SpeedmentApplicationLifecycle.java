@@ -26,6 +26,7 @@ import com.speedment.internal.core.config.utils.MethodsParser;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.Manager;
 import com.speedment.Speedment;
+import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.JavaTypeMapperComponent;
@@ -46,7 +47,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -238,24 +238,53 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return self();
     }
 
+//    /**
+//     * Adds a (and replaces any existing) {@link Component} to the Speedment
+//     * runtime platform.
+//     *
+//     * @param component to add/replace
+//     * @return this instance
+//     */
+    // NOTE: SINCE Speedment is not available at this time, the method has been removed
+//    public T with(final Component component) {
+//        speedment.put(requireNonNull(component));
+//        return self();
+//    }
+    /**
+     * Adds a (and replaces any existing) {@link Component} to the Speedment
+     * runtime platform by applying the provided component mapper with the
+     * internal Speedment instance.
+     *
+     * @param componentMapper to use when adding/replacing a component
+     * @return this instance
+     */
+    public T with(final Function<Speedment, Component> componentMapper) {
+        speedment.put(requireNonNull(componentMapper).apply(speedment));
+        return self();
+    }
+
     @Override
     protected void onInit() {
         forEachManagerInSeparateThread(Manager::initialize);
+        forEachComponentInSeparateThread(Component::initialize);
     }
 
     @Override
     protected void onResolve() {
         forEachManagerInSeparateThread(Manager::resolve);
+        forEachComponentInSeparateThread(Component::resolve);
     }
 
     @Override
     protected void onStart() {
         forEachManagerInSeparateThread(Manager::start);
+        forEachComponentInSeparateThread(Component::start);
     }
 
     @Override
     protected void onStop() {
         forEachManagerInSeparateThread(Manager::stop);
+        forEachComponentInSeparateThread(Component::stop);
     }
 
     /**
@@ -411,16 +440,28 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void forEachManagerInSeparateThread(Consumer<Manager<?>> managerConsumer) {
         requireNonNull(managerConsumer);
         final ManagerComponent mc = speedment.get(ManagerComponent.class);
-        final List<Thread> threads = mc.stream().map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName())).collect(toList());
-        threads.forEach(t -> t.start());
-        threads.forEach(t -> {
-            try {
-                t.join();
-            } catch (InterruptedException ex) {
-                // ignore
-            }
-        });
+        final List<Thread> threads = mc.stream()
+            .map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName()))
+            .collect(toList());
+        threads.forEach(Thread::start);
+        threads.forEach(SpeedmentApplicationLifecycle::join);
+    }
 
+    protected void forEachComponentInSeparateThread(Consumer<Component> componentConsumer) {
+        requireNonNull(componentConsumer);
+        final List<Thread> threads = speedment.components()
+            .map(comp -> new Thread(() -> componentConsumer.accept(comp), comp.getTitle()))
+            .collect(toList());
+        threads.forEach(Thread::start);
+        threads.forEach(SpeedmentApplicationLifecycle::join);
+    }
+
+    private static void join(Thread t) {
+        try {
+            t.join();
+        } catch (InterruptedException ex) {
+            // ignore
+        }
     }
 
     private static <T> List<T> newList() {

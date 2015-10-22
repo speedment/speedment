@@ -24,7 +24,7 @@ import com.speedment.config.aspects.Parent;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface ProjectManager extends Node, Enableable, Parent<Project> {
 
     /**

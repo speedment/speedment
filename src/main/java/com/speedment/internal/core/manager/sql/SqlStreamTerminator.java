@@ -16,30 +16,24 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.core.manager.sql.generator.SQLGenerator;
 import com.speedment.db.AsynchronousQueryResult;
-import com.speedment.internal.core.field.builders.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
-import com.speedment.field.builders.PredicateBuilder;
-import com.speedment.internal.util.Cast;
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.Property.SIZE;
 import static com.speedment.internal.core.stream.builder.action.Verb.PRESERVE;
-import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
 import com.speedment.internal.core.stream.builder.pipeline.DoublePipeline;
 import com.speedment.internal.core.stream.builder.pipeline.IntPipeline;
 import com.speedment.internal.core.stream.builder.pipeline.LongPipeline;
 import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
-import com.speedment.field.builders.HasOperand;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
+import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -52,83 +46,60 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
     private final AbstractSqlManager<ENTITY> manager;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
-    private final Generator generator; // Todo: Static?
+    private final StreamDecorator decorator;
 
-    public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, final AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
-        this.manager = requireNonNull(manager);
+    public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, AsynchronousQueryResult<ENTITY> asynchronousQueryResult, StreamDecorator decorator) {
+        this.manager                 = requireNonNull(manager);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
-        this.generator = new SQLGenerator();
+        this.decorator               = requireNonNull(decorator);
     }
 
     @Override
-    public <T extends Pipeline> T optimize(T initialPipeline) {
-        requireNonNull(initialPipeline);
-        final List<PredicateBuilder<?>> andPredicateBuilders = new ArrayList<>();
+    public StreamDecorator getStreamDecorator() {
+        return decorator;
+    }
 
-        for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
-            @SuppressWarnings("rawtypes")
-            final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
-            if (oFilterAction.isPresent()) {
-                @SuppressWarnings("unchecked")
-                final List<PredicateBuilder<?>> newAndPredicateBuilders = andPredicateBuilders(oFilterAction.get());
-                andPredicateBuilders.addAll(newAndPredicateBuilders);
-            } else {
-                break; // We can only do initial consecutive FilterAction(s)
-            }
-        }
+    @Override
+    public <P extends Pipeline> P optimize(P initialPipeline) {
+        requireNonNull(initialPipeline);
+        final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
 
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
         }
-        return initialPipeline;
+        
+        
+        return getStreamDecorator().apply(initialPipeline);
     }
 
-    public void modifySource(final List<PredicateBuilder<?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+    public void modifySource(final List<SpeedmentPredicate<ENTITY, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
         if (predicateBuilders.isEmpty()) {
             // Nothing to do...
             return;
         }
-        final String sql = manager.sqlSelect(" where " + generator.onEach(predicateBuilders)
-            .collect(joining(" AND ")));
+
+        final SpeedmentPredicateView spv = new MySqlSpeedmentPredicateView();
+        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
+            .map(spv::transform)
+            .collect(toList());
+
+        final String sql = manager.sqlSelect(" where "
+            + fragments.stream()
+            .map(SqlPredicateFragment::getSql)
+            .collect(joining(" AND "))
+        );
 
         @SuppressWarnings("rawtypes")
-        final List<Object> values = predicateBuilders.stream()
-            .map(pb -> Cast.cast(pb, HasOperand.class))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(HasOperand::getOperand)
+        final List<Object> values = fragments.stream()
+            .flatMap(SqlPredicateFragment::objects)
             .collect(toList());
 
         qr.setSql(sql);
         qr.setValues(values);
     }
-    
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private List<PredicateBuilder<?>> andPredicateBuilders(FilterAction<ENTITY> action) {
-        requireNonNull(action);
-        final List<PredicateBuilder<?>> andPredicateBuilders = new ArrayList<>();
-        final Predicate<? super ENTITY> predicate = action.getPredicate();
 
-        final Optional<PredicateBuilder> oPredicateBuilder = Cast.cast(predicate, PredicateBuilder.class);
-        if (oPredicateBuilder.isPresent()) {
-            andPredicateBuilders.add(oPredicateBuilder.get()); // Just a top level predicate builder
-        } else {
-
-            final Optional<AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AndCombinedBasePredicate.class);
-            if (oAndCombinedBasePredicate.isPresent()) {
-
-                final AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
-                andCombinedBasePredicate.stream()
-                    .map(p -> Cast.cast(p, PredicateBuilder.class))
-                    .filter(p -> p.isPresent())
-                    .map(Optional::get)
-                    .forEachOrdered(andPredicateBuilders::add);
-            }
-        }
-        return andPredicateBuilders;
-    }
 
     @Override
     public long count(DoublePipeline pipeline) {

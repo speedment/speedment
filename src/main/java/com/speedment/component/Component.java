@@ -16,7 +16,10 @@
  */
 package com.speedment.component;
 
+import com.speedment.License;
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.internal.core.runtime.Lifecyclable;
 
 /**
  * A Component represents the basic functionality for a Speedment Platform
@@ -25,8 +28,8 @@ import com.speedment.annotation.Api;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.1")
-public interface Component {
+@Api(version = "2.2")
+public interface Component extends Lifecyclable<Component> {
 
     /**
      * Returns the Component interface Class this Component implements.
@@ -35,19 +38,37 @@ public interface Component {
      */
     Class<? extends Component> getComponentClass();
 
-    // Lifecycle operations for plugins
     /**
-     * This method is called whenever this Component is added to a Component
-     * manager.
+     * Returns the Speedment platform.
+     *
+     * @return the Returns the Speedment platform
      */
-    default void onAdd() {
-    }
+    Speedment getSpeedment();
 
     /**
-     * This method is called whenever this Component is removed from a Component
-     * manager.
+     * Returns the license for this Components.
+     *
+     * @return the license for this Components
      */
-    default void onRemove() {
-    }
+    License getLicense();
+
+    String getTitle();
+
+    String getVersion();
+
+    // Lifecycle operations for plugins
+//    /**
+//     * This method is called whenever this Component is added to a Component
+//     * manager.
+//     */
+//    default void onAdd() {
+//    }
+//
+//    /**
+//     * This method is called whenever this Component is removed from a Component
+//     * manager.
+//     */
+//    default void onRemove() {
+//    }
 
 }

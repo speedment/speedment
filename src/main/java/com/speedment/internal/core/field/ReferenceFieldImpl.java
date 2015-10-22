@@ -16,17 +16,15 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.field.ReferenceField;
+import com.speedment.field.methods.FieldSetter;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
-import com.speedment.field.ReferenceField;
-import com.speedment.field.operators.StandardUnaryOperator;
-import com.speedment.field.builders.UnaryPredicateBuilder;
-import com.speedment.internal.core.field.builders.SetterBuilderImpl;
-import com.speedment.internal.core.field.builders.UnaryPredicateBuilderImpl;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.field.builders.SetterBuilder;
-import static java.util.Objects.requireNonNull;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,49 +37,46 @@ import static java.util.Objects.requireNonNull;
  */
 public class ReferenceFieldImpl<ENTITY, V> implements ReferenceField<ENTITY, V> {
 
-    private final String columnName;
-    private final Getter<ENTITY, V> getter;
-    private final Setter<ENTITY, V> setter;
+    private final FieldTrait field;
+    private final ReferenceFieldTrait<ENTITY, V> referenceField;
 
-    public ReferenceFieldImpl(String columnName, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
-        this.columnName = requireNonNull(columnName);
-        this.getter = requireNonNull(getter);
-        this.setter = requireNonNull(setter);
+    public ReferenceFieldImpl(
+        String columnName,
+        Getter<ENTITY, V> getter,
+        Setter<ENTITY, V> setter
+    ) {
+        field = new FieldTraitImpl(requireNonNull(columnName));
+        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
     }
 
     @Override
     public String getColumnName() {
-        return columnName;
-    }
-
-    @Override
-    public UnaryPredicateBuilder<ENTITY> isNull() {
-        return new UnaryPredicateBuilderImpl<>(this, StandardUnaryOperator.IS_NULL);
-    }
-
-    @Override
-    public UnaryPredicateBuilder<ENTITY> isNotNull() {
-        return new UnaryPredicateBuilderImpl<>(this, StandardUnaryOperator.IS_NOT_NULL);
+        return field.getColumnName();
     }
 
     @Override
     public Setter<ENTITY, V> setter() {
-        return setter;
+        return referenceField.setter();
     }
 
     @Override
     public Getter<ENTITY, V> getter() {
-        return getter;
+        return referenceField.getter();
     }
 
     @Override
-    public SetterBuilder<ENTITY, V> set(V newValue) {
-        return new SetterBuilderImpl<>(this, newValue);
+    public FieldSetter<ENTITY, V> setTo(V value) {
+        return referenceField.setTo(value);
     }
 
     @Override
-    public V get(ENTITY entity) {
-        requireNonNull(entity);
-        return getter().apply(entity);
+    public SpeedmentPredicate<ENTITY, V> isNull() {
+        return referenceField.isNull();
     }
+
+    @Override
+    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+        return referenceField.isNotNull();
+    }
+
 }

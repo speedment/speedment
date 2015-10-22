@@ -29,7 +29,7 @@ import java.util.function.Function;
  * @param <T> Input type
  * @param <R> Result type
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 @FunctionalInterface
 public interface SqlFunction<T, R> {
 

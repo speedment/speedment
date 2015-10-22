@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface PrimaryKeyColumn extends Node, Enableable, Ordinable, 
     Columnable, Child<Table> {
 

@@ -28,7 +28,7 @@ import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface JavaTypeMapperComponent extends Component {
 
     @Override

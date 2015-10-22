@@ -33,7 +33,7 @@ import java.util.function.Function;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Dbms extends Node, Enableable, DbmsTypeable, Child<Project>, Parent<Schema> {
 
     /**

@@ -24,7 +24,7 @@ import com.speedment.config.parameters.ColumnCompressionType;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface ColumnCompressionTypeable {
 
     @External(type = ColumnCompressionType.class, isVisibleInGui = false)

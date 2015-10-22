@@ -16,39 +16,79 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.field.ReferenceForeignKeyField;
+import com.speedment.field.methods.FieldSetter;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
+import com.speedment.field.methods.Finder;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
-import com.speedment.field.ReferenceForeignKeyField;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import java.util.function.Predicate;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import static java.util.Objects.requireNonNull;
 
 /**
- * This class represents a Reference Field that is a Foreign key to another
- * table/column. A Reference Field is something that extends {@link Object}.
+ * This class represents a Reference Field. A Reference Field is something that
+ * extends {@link Object}.
  *
  * @author pemi
  * @param <ENTITY> The entity type
  * @param <V> The value type
- * @param <FK> The foreign entity type
  */
-public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK>
-    extends ReferenceFieldImpl<ENTITY, V>
-    implements ReferenceForeignKeyField<ENTITY, V, FK> {
+public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceForeignKeyField<ENTITY, V, FK> {
 
-    private final Getter<ENTITY, FK> finder;
+    private final FieldTrait field;
+    private final ReferenceFieldTrait<ENTITY, V> referenceField;
+    private final ReferenceForeignKeyFieldTrait<ENTITY, FK> referenceForeignKeyField;
 
-    public ReferenceForeignKeyFieldImpl(String columnName, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter, Getter<ENTITY, FK> finder) {
-        super(columnName, getter, setter);
-        this.finder = requireNonNull(finder);
+    public ReferenceForeignKeyFieldImpl(
+        String columnName,
+        Getter<ENTITY, V> getter,
+        Setter<ENTITY, V> setter,
+        Finder<ENTITY, FK> finder
+    ) {
+        field = new FieldTraitImpl(requireNonNull(columnName));
+        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
+        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
     }
 
     @Override
-    public FK findFrom(ENTITY entity) {
-        requireNonNull(entity);
-        return finder.apply(entity);
+    public String getColumnName() {
+        return field.getColumnName();
     }
 
     @Override
-    public Getter<ENTITY, FK> finder() {
-        return finder;
+    public Setter<ENTITY, V> setter() {
+        return referenceField.setter();
     }
+
+    @Override
+    public Getter<ENTITY, V> getter() {
+        return referenceField.getter();
+    }
+
+    @Override
+    public FieldSetter<ENTITY, V> setTo(V value) {
+        return referenceField.setTo(value);
+    }
+
+    @Override
+    public SpeedmentPredicate<ENTITY, V> isNull() {
+        return referenceField.isNull();
+    }
+
+    @Override
+    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+        return referenceField.isNotNull();
+    }
+
+    @Override
+    public Finder<ENTITY, FK> finder() {
+        return referenceForeignKeyField.finder();
+    }
+
 }

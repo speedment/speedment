@@ -21,7 +21,7 @@ import java.util.Optional;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Transform;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 

@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -24,17 +25,21 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
 
-public final class SqlTypeMapperComponentImpl implements SqlTypeMapperComponent {
+public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent implements SqlTypeMapperComponent {
 
     private static final Map<String, Class<?>> JAVA_TYPE_MAP = new HashMap<>();
     private static final Class<?> DEFAULT_MAPPING = String.class;
+
+    public SqlTypeMapperComponentImpl(Speedment speedment) {
+        super(speedment);
+    }
 
     private static void put(String key, Class<?> clazz) {
         JAVA_TYPE_MAP.put(normalize(key), clazz);

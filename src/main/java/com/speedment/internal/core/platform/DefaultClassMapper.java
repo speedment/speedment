@@ -44,7 +44,6 @@ public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
         requireNonNull(newItem);
         requireNonNull(keyMapper);
         return put(newItem, NOTHING, NOTHING, keyMapper);
-
     }
 
     protected <T extends V> T put(T newItem, Consumer<V> added, Consumer<V> removed, Function<V, Class<?>> keyMapper) {

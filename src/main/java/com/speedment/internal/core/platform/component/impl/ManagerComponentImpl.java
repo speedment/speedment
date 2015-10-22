@@ -19,6 +19,7 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.config.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
+import com.speedment.Speedment;
 import com.speedment.component.ManagerComponent;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -30,12 +31,13 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class ManagerComponentImpl implements ManagerComponent {
+public final class ManagerComponentImpl extends Apache2AbstractComponent implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?>> managersByEntity;
     private final Map<Table, Manager<?>> tableMap;
 
-    public ManagerComponentImpl() {
+    public ManagerComponentImpl(Speedment speedment) {
+        super(speedment);
         managersByEntity = new ConcurrentHashMap<>();
         tableMap = new ConcurrentHashMap<>();
     }

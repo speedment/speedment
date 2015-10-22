@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util;
 
+import com.speedment.config.mapper.TypeMapper;
 import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -67,6 +68,10 @@ public final class Beans {
 
         if (value instanceof Enum) {
             value = value.getClass().getSimpleName() + "." + ((Enum) value).name();
+        }
+        
+        if (value instanceof TypeMapper) {
+            value = ((TypeMapper) value).getClass().getName() + ".class";
         }
 
         return Optional.of(beanPropertyName(method) + " = " + quote + String.valueOf(value) + quote + ";");

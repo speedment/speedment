@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**
  * Transforms from an {@link Initalizer} to java code.
