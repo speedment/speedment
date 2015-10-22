@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -74,6 +75,8 @@ public interface DbmsHandler {
      *          in this database
      */
     public Stream<Schema> schemas();
+
+    public Stream<Schema> schemas(Predicate<Schema> filterCriteria);
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the

@@ -174,8 +174,7 @@ public final class ProjectPromptController implements Initializable {
 
                 try {
                     final DbmsHandler dh = dbmsType.makeDbmsHandler(speedment, dbms);
-                    dh.schemas()
-                        .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
+                    dh.schemas(s -> s.getName().equalsIgnoreCase(dbms.getName()))
                         .forEachOrdered(dbms::add);
 
                     Trees.traverse((Child) project, c -> c.asParent()
