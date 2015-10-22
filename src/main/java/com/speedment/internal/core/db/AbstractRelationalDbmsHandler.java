@@ -165,9 +165,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 });
             }
 
-        }catch (SQLException ex)
+        }catch (SQLException sqle)
         {
-
+            LOGGER.error(sqle, "Unable to read from " + dbms.toString());
         }
 
         return schemas.orElse(Collections.<Schema>emptyList()).stream();
@@ -216,7 +216,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
-                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
+                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName) && dbms.getName().equalsIgnoreCase(schemaName)) {
                         final Schema schema = Schema.newSchema();
                         schema.setName(schemaName);
                         schemas.add(schema);
