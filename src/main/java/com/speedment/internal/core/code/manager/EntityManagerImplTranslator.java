@@ -206,13 +206,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                     .append("resultSet.")
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
-                    .append("(\"").append(c.getName()).append("\")");
+                    .append("(").append(c.getOrdinalPosition()).append(")");
             } else {
                 sb
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
                     .append("(resultSet, ")
-                    .append("\"").append(c.getName()).append("\")");
+                    .append(c.getOrdinalPosition()).append(")");
             }
             sb.append("));");
             streamBuilder.add(sb.toString());
