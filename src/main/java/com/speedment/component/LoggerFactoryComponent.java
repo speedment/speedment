@@ -25,7 +25,7 @@ import com.speedment.internal.logging.LoggerFactory;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface LoggerFactoryComponent extends Component {
 
     @Override

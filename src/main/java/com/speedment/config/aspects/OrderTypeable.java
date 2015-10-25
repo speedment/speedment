@@ -24,7 +24,7 @@ import com.speedment.config.parameters.OrderType;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface OrderTypeable {
 
     @External(type = OrderType.class)

@@ -16,6 +16,7 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
 import java.util.function.Predicate;
 
 /**
@@ -24,6 +25,7 @@ import java.util.function.Predicate;
  * @param <ENTITY> Entity type
  * @param <V> Value type
  */
+@Api(version = "2.2")
 public interface SpeedmentPredicate<ENTITY, V> extends
     HasGetter<ENTITY, V>,
     HasPredicateType,
@@ -35,6 +37,4 @@ public interface SpeedmentPredicate<ENTITY, V> extends
 
     @Override
     SpeedmentPredicate<ENTITY, V> negate();
-    
-    
 }

@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @param <C>  the type of the children
  * @see        Child
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Parent<C extends Child<?>> extends Node {
     
     /**

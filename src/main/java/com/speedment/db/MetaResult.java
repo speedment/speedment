@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface MetaResult<ENTITY> {
 
     default Optional<? extends SqlMetaResult<ENTITY, ?>> getSqlMetaResult() {

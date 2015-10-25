@@ -34,7 +34,7 @@ import java.util.function.Function;
  *
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, Child<ProjectManager> {
 
     /**

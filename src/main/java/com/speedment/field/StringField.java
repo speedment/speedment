@@ -32,5 +32,4 @@ public interface StringField<ENTITY> extends
     FieldTrait,
     ReferenceFieldTrait<ENTITY, String>,
     ComparableFieldTrait<ENTITY, String>,
-    StringFieldTrait<ENTITY> 
-{}
+    StringFieldTrait<ENTITY> {}

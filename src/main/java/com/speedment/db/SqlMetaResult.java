@@ -16,6 +16,7 @@
  */
 package com.speedment.db;
 
+import com.speedment.annotation.Api;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ import java.util.Optional;
  * @param <ENTITY> the entity type
  * @param <R> return type
  */
+@Api(version = "2.2")
 public interface SqlMetaResult<ENTITY, R extends SqlMetaResult<ENTITY, R>> extends MetaResult<ENTITY> {
 
     String getQuery();

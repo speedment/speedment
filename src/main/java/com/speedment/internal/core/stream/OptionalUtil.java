@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;

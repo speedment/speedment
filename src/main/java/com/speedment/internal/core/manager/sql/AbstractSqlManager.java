@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.Optional;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -77,11 +78,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     @Override
-    public Stream<ENTITY> nativeStream() {
+    public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap());
-        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult);
+        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> asynchronousQueryResult.stream();
-        final Stream<ENTITY> result = new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator);
+        final Stream<ENTITY> result = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
         result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
         return result;
     }

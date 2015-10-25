@@ -24,8 +24,8 @@ import com.speedment.internal.gui.controller.AlertController;
 import com.speedment.internal.gui.controller.SceneController;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.File;
 import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -124,27 +124,7 @@ public final class ProjectUtil {
         AlertController.showAlert(stage, "Error!", message);
     }
 
-    private static boolean showSaveDialog(SceneController controller, Consumer<File> fileConsumer) {
-        requireNonNulls(controller, fileConsumer);
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Groovy File");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
-        getDefaultLocation(controller.getLastSaved())
-            .ifPresent(fileChooser::setInitialDirectory);
-        
-        File file = fileChooser.showSaveDialog(controller.getStage());
-        if (file != null) {
-            if (!file.getName().endsWith(".groovy")) {
-                file = new File(file.getAbsolutePath() + ".groovy");
-            }
-            
-            return saveGroovyFile(controller, file, fileConsumer);
-        }
-
-        return false;
-    }
-
-    private static boolean saveGroovyFile(SceneController controller, File target, Consumer<File> fileConsumer) {
+    public static boolean saveGroovyFile(SceneController controller, File target, Consumer<File> fileConsumer) {
         requireNonNulls(controller, target, fileConsumer);
         final Path parent = target.toPath().getParent();
 
@@ -165,6 +145,26 @@ public final class ProjectUtil {
             showAlert(controller.getStage(), ex.getMessage());
         }
         
+        return false;
+    }
+    
+    private static boolean showSaveDialog(SceneController controller, Consumer<File> fileConsumer) {
+        requireNonNulls(controller, fileConsumer);
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Groovy File");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+        getDefaultLocation(controller.getLastSaved())
+            .ifPresent(fileChooser::setInitialDirectory);
+        
+        File file = fileChooser.showSaveDialog(controller.getStage());
+        if (file != null) {
+            if (!file.getName().endsWith(".groovy")) {
+                file = new File(file.getAbsolutePath() + ".groovy");
+            }
+            
+            return saveGroovyFile(controller, file, fileConsumer);
+        }
+
         return false;
     }
 

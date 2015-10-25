@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
+import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -45,21 +46,30 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
     private final AbstractSqlManager<ENTITY> manager;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
+    private final StreamDecorator decorator;
 
-    public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, final AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
-        this.manager = requireNonNull(manager);
+    public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, AsynchronousQueryResult<ENTITY> asynchronousQueryResult, StreamDecorator decorator) {
+        this.manager                 = requireNonNull(manager);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
+        this.decorator               = requireNonNull(decorator);
     }
 
     @Override
-    public <T extends Pipeline> T optimize(T initialPipeline) {
+    public StreamDecorator getStreamDecorator() {
+        return decorator;
+    }
+
+    @Override
+    public <P extends Pipeline> P optimize(P initialPipeline) {
         requireNonNull(initialPipeline);
         final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
 
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
         }
-        return initialPipeline;
+        
+        
+        return getStreamDecorator().apply(initialPipeline);
     }
 
     public void modifySource(final List<SpeedmentPredicate<ENTITY, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {

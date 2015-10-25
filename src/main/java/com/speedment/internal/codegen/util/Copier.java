@@ -17,7 +17,7 @@
 package com.speedment.internal.codegen.util;
 
 import com.speedment.internal.codegen.lang.interfaces.Copyable;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;

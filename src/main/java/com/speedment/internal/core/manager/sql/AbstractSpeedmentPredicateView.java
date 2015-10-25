@@ -16,47 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.util.Cast;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
-import com.speedment.internal.core.field.predicate.iface.type.HasFirstOperand;
-import static java.util.Objects.requireNonNull;
-import com.speedment.internal.core.field.predicate.iface.type.HasFirstSetOperand;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.internal.core.field.predicate.iface.type.HasSecondOperand;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.internal.core.field.predicate.iface.type.HasThirdInclusionOperand;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -65,16 +26,8 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
 
-    protected abstract SqlPredicateFragment renderUninverted(SpeedmentPredicate<?, ?> model);
 
-    protected SqlPredicateFragment render(SpeedmentPredicate<?, ?> model) {
-        final SqlPredicateFragment unInverted = renderUninverted(model);
-        if (!model.isNegated()) {
-            return unInverted;
-        } else {
-            return unInverted.setSql("(NOT (" + unInverted.getSql() + ")");
-        }
-    }
+    protected abstract SqlPredicateFragment render(SpeedmentPredicate<?, ?> model);
 
     @Override
     public SqlPredicateFragment transform(SpeedmentPredicate<?, ?> model) {
@@ -85,14 +38,37 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         return SqlPredicateFragment.of(sql);
     }
 
-    public static SqlPredicateFragment of(String sql, Collection<Object> objects) {
-        return SqlPredicateFragment.of(sql, objects);
-    }
-
     public static SqlPredicateFragment of(String sql, Object object) {
         return SqlPredicateFragment.of(sql, object);
     }
 
+    public static SqlPredicateFragment of(String sql, Collection<Object> objects) {
+        return SqlPredicateFragment.of(sql, objects);
+    }
 
+    public static SqlPredicateFragment of(String sql, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))");
+        } else {
+            return of(sql);
+        }
+    }
+
+    public static SqlPredicateFragment of(String sql, Object object, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))", object);
+        } else {
+            return of(sql, object);
+        }
+    }
+
+    public static SqlPredicateFragment of(String sql, Collection<Object> objects, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))", objects);
+        } else {
+            return of(sql, objects);
+        }
+
+    }
 
 }

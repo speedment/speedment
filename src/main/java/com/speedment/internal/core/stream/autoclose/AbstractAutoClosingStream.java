@@ -17,7 +17,7 @@
 package com.speedment.internal.core.stream.autoclose;
 
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.internal.util.holder.Holder;
 import java.util.Collection;
 import java.util.HashSet;

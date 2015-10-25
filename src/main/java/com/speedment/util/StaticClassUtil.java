@@ -14,7 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util;
+package com.speedment.util;
+
+import com.speedment.annotation.Api;
 
 /**
  * Support class for classes that only contains static methods and fields.
@@ -22,6 +24,7 @@ package com.speedment.internal.util;
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public final class StaticClassUtil {
 
     /**

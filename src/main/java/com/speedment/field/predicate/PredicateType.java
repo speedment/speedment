@@ -16,12 +16,15 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
+
 /**
  * The PredicateType that exists for Speedment. A predicate type must always
  * have a negated PredicateType that is the exact negation of itself.
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public enum PredicateType {
 
     // Constants

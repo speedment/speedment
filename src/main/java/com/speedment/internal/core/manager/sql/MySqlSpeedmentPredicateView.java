@@ -22,14 +22,14 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 import java.util.Set;
 import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
+import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
+import static com.speedment.field.predicate.PredicateType.NOT_CONTAINS;
+import static com.speedment.field.predicate.PredicateType.NOT_ENDS_WITH;
+import static com.speedment.field.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
+import static com.speedment.field.predicate.PredicateType.NOT_IN;
+import static com.speedment.field.predicate.PredicateType.NOT_STARTS_WITH;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
 import static java.util.stream.Collectors.toList;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -41,20 +41,20 @@ import static java.util.stream.Collectors.joining;
 public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
 
     // TODO: Get from DbmsType
-    private static final String OPENING_FIELD_QUOTE = "`";
+    private static final String OPENING_FIELD_QUOTE =  "`";
     private static final String CLOSING_FIELD_QUOTE = "`";
 
     @Override
-    protected SqlPredicateFragment renderUninverted(SpeedmentPredicate model) {
+    protected SqlPredicateFragment render(SpeedmentPredicate model) {
         requireNonNull(model);
-        final PredicateType pt = model.getPredicateType();
+        final PredicateType pt = model.getEffectivePredicateType();
         final String cn = OPENING_FIELD_QUOTE + model.getField().getColumnName() + CLOSING_FIELD_QUOTE;
         switch (pt) {
             // Constants
-            case ALWAYS_FALSE:
-                return of("(FALSE)");
             case ALWAYS_TRUE:
                 return of("(TRUE)");
+            case ALWAYS_FALSE:
+                return of("(FALSE)");
             // Reference
             case IS_NULL:
                 return of("(" + cn + " IS NULL)");
@@ -73,42 +73,59 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
                 return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
             case LESS_OR_EQUAL:
                 return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
-            case BETWEEN: {
+
+            case BETWEEN:
+            case NOT_BETWEEN: {
+                final boolean negated = (pt == NOT_BETWEEN);
                 final Inclusion inclusion = getThirdOperandAsInclusion(model);
                 switch (inclusion) {
                     case START_EXCLUSIVE_END_EXCLUSIVE: {
-                        return of("(" + cn + " > ? AND " + cn + " < ?)").add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+                        return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
                     }
                     case START_INCLUSIVE_END_EXCLUSIVE: {
-                        return of("(" + cn + " >= ? AND " + cn + " < ?)").add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+                        return of("(" + cn + " >= ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
                     }
                     case START_EXCLUSIVE_END_INCLUSIVE: {
-                        return of("(" + cn + " > ? AND " + cn + " <= ?)").add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+                        return of("(" + cn + " > ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
                     }
                     case START_INCLUSIVE_END_INCLUSIVE: {
-                        return of("(" + cn + " >= ? AND " + cn + " <= ?)").add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+                        return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
                     }
                 }
                 throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
             }
-            case IN: {
+            case IN:
+            case NOT_IN: {
+                final boolean negated = (pt == NOT_IN);
                 final Set<?> set = getFirstOperandAsRawSet(model);
-                return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))").addAll(set.stream().collect(toList()));
+                return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))", negated).addAll(set.stream().collect(toList()));
             }
+
             case EQUAL_IGNORE_CASE:
-                return of("(UPPER(" + cn + ") = UPPER(?))").add(getFirstOperandAsRaw(model));
-            case NOT_EQUAL_IGNORE_CASE:
-                return of("(NOT UPPER(" + cn + ") = UPPER(?))").add(getFirstOperandAsRaw(model));
+            case NOT_EQUAL_IGNORE_CASE: {
+                final boolean negated = (pt == NOT_EQUAL_IGNORE_CASE);
+                return of("(UPPER(" + cn + ") = UPPER(?))", negated).add(getFirstOperandAsRaw(model));
+            }
+
             case STARTS_WITH:
-                return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))").add(getFirstOperandAsRaw(model));
+            case NOT_STARTS_WITH: {
+                final boolean negated = (pt == NOT_STARTS_WITH);
+                return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+            }
             case ENDS_WITH:
-                return of("(" + cn + " LIKE BINARY CONCAT('%', ?))").add(getFirstOperandAsRaw(model));
+            case NOT_ENDS_WITH: {
+                final boolean negated = (pt == NOT_ENDS_WITH);
+                return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
+            }
             case CONTAINS:
-                return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))").add(getFirstOperandAsRaw(model));
+            case NOT_CONTAINS: {
+                final boolean negated = (pt == NOT_CONTAINS);
+                return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+            }
             case IS_EMPTY:
                 return of("(" + cn + " = '')");
             case IS_NOT_EMPTY:
-                return of("(NOT (" + cn + " = ''))");
+                return of("(" + cn + " <> '')");
             default:
                 throw new UnsupportedOperationException(
                     "Unknown PredicateType  " + pt.name() + "."

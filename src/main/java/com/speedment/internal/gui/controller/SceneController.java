@@ -76,8 +76,9 @@ import static javafx.animation.Animation.INDEFINITE;
 import static javafx.animation.Interpolator.EASE_BOTH;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import static javafx.util.Duration.ZERO;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
+import com.speedment.internal.gui.util.ProjectUtil;
 import static java.util.Objects.requireNonNull;
 import static javafx.util.Duration.millis;
 
@@ -87,6 +88,8 @@ import static javafx.util.Duration.millis;
  * @author Emil Forslund
  */
 public final class SceneController implements Initializable {
+    
+    public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
     private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
     private final static String GITHUB_URL = "https://github.com/speedment/speedment";
@@ -224,6 +227,12 @@ public final class SceneController implements Initializable {
                     Instant.now(), 
                     instance.getFilesCreated(), 
                     true
+                );
+                
+                ProjectUtil.saveGroovyFile(
+                    this, 
+                    DEFAULT_GROOVY_LOCATION, 
+                    file -> {}
                 );
                 
                 showNotification(

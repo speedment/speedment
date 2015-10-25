@@ -16,12 +16,14 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 
 /**
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public interface HasFieldTrait {
 
     FieldTrait getField();

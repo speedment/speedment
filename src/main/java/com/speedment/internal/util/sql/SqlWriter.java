@@ -26,7 +26,7 @@ import static com.speedment.db.crud.CrudOperation.Type.UPDATE;
 import com.speedment.db.crud.Selective;
 import com.speedment.db.crud.Selector;
 import com.speedment.db.crud.Valued;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 
 import java.util.ArrayList;
 import java.util.List;

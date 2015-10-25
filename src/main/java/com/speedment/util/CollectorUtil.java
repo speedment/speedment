@@ -44,8 +44,8 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 import static java.util.stream.Collector.Characteristics.CONCURRENT;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -56,7 +56,7 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @since 2.1
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public final class CollectorUtil {
 
     private final static Logger LOGGER = LoggerManager.getLogger(CollectorUtil.class);

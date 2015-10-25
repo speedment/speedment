@@ -50,11 +50,9 @@ import java.util.stream.Stream;
 
 import static com.speedment.internal.gui.controller.AlertController.showAlert;
 import static com.speedment.internal.gui.util.ProjectUtil.createOpenProjectHandler;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.function.Supplier;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -174,8 +172,7 @@ public final class ProjectPromptController implements Initializable {
 
                 try {
                     final DbmsHandler dh = dbmsType.makeDbmsHandler(speedment, dbms);
-                    dh.schemas()
-                        .filter(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
+                    dh.schemas(s -> s.getName().equalsIgnoreCase(dbms.getName()))
                         .forEachOrdered(dbms::add);
 
                     Trees.traverse((Child) project, c -> c.asParent()

@@ -30,7 +30,7 @@ import java.util.Optional;
  * @param <P>  the type of the parent
  * @see        Parent
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface Child<P extends Parent<?>> extends Node {
 
     /**

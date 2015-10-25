@@ -18,11 +18,12 @@ package com.speedment;
 
 import com.speedment.annotation.Api;
 
-/**
- *
+/** 
+ * Trait for objects that contains a handle to the Speedment instance.
+ * 
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public interface HasSpeedment {
     Speedment getSpeedment();
 }

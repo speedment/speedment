@@ -22,20 +22,20 @@ import com.speedment.internal.core.stream.autoclose.AutoClosingDoubleStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingIntStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingLongStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingReferenceStream;
-import com.speedment.internal.util.StaticClassUtil;
 import java.util.function.Function;
 import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
- *
+ * Utility methods for making sure composed streams are closed properly.
+ * 
  * @author pemi
  */
-@Api(version = "2.1")
+@Api(version = "2.2")
 public class StreamComposition {
 
     /**

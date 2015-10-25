@@ -19,10 +19,11 @@ package com.speedment.encoder;
 import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.Manager;
+import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.util.JavaLanguage.javaVariableName;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,6 +40,7 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @param <ENTITY> Entity type
  */
+@Api(version = "2.2")
 public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>, String> {
 
     protected final Map<String, Function<ENTITY, String>> getters;

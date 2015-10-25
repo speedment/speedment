@@ -16,10 +16,13 @@
  */
 package com.speedment.field.predicate;
 
+import com.speedment.annotation.Api;
+
 /**
  *
  * @author pemi
  */
+@Api(version = "2.2")
 public interface HasEffectivePredicateType {
 
     /**
