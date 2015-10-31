@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Statistics {
 
-    private final static String PING_URL = "http://speedment.com:8081/Beacon";
+    private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
     private final static String VERSION = SpeedmentVersion.getImplementationVersion();
     private final static Settings SETTINGS = Settings.inst();
 
