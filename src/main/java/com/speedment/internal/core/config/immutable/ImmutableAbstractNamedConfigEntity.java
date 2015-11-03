@@ -14,31 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
-import com.speedment.internal.core.config.aspects.ParentHelper;
-import com.speedment.config.Project;
-import com.speedment.config.ProjectManager;
+import com.speedment.config.aspects.Nameable;
 
 /**
+ * Generic representation of a ConfigEntity.
+ *
+ * This class is thread safe.
  *
  * @author pemi
  */
-public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
-    
-    private final ChildHolder children;
+public abstract class ImmutableAbstractNamedConfigEntity extends ImmutableAbstractConfigEntity
+        implements Comparable<Nameable> {
 
-    public ProjectManagerImpl() {
-        children = new ChildHolderImpl();
+    public ImmutableAbstractNamedConfigEntity(String name, boolean enabled) {
+        super(name, enabled);
     }
 
     @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
-
-    @Override
-    public ChildHolder getChildren() {
-        return children;
+    public int compareTo(Nameable o) {
+        return compareNames(o);
     }
 }

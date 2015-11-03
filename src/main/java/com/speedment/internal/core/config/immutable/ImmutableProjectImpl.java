@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
+import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
@@ -23,39 +24,41 @@ import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 import java.util.regex.Pattern;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.immutableClassModification;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author pemi
  */
-public final class ProjectImpl extends AbstractNamedConfigEntity implements Project, ParentHelper<Dbms> {
+public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEntity implements Project, ParentHelper<Dbms> {
 
     private final Speedment speedment;
-    private ProjectManager parent;
+    private final Optional<ProjectManager> parent; // Rare occation of valid use of Optional as member
     private final ChildHolder children;
-    private String packageName, packageLocation;
-    private Path configPath;
+    private final String packageName, packageLocation;
+    private final Optional<Path> configPath;
 
-    public ProjectImpl(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolderImpl();
-    }
+    public ImmutableProjectImpl(ProjectManager parent, Project project) {
+        super(requireNonNull(project).getName(), project.isEnabled());
+        requireNonNull(parent);
+        this.speedment = project.getSpeedment();
+        this.packageName = project.getPackageName();
+        this.packageLocation = project.getPackageLocation();
+        this.configPath = project.getConfigPath();
+        this.parent = Optional.of(parent);
 
-    @Override
-    protected void setDefaults() {
-        setPackageLocation("src/main/java");
-        setPackageName("com.company.speedment.test");
-        //setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
-        setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
+        children = ImmutableChildHolderImpl.of(
+            project.stream()
+            .map(p -> new ImmutableDbmsImpl(this, p))
+            .collect(toList())
+        );
+
     }
 
     @Override
@@ -65,7 +68,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     @Override
     public void setPackageName(String packetName) {
-        this.packageName = Objects.requireNonNull(packetName).toLowerCase();
+        immutableClassModification();
     }
 
     @Override
@@ -75,7 +78,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     @Override
     public void setPackageLocation(String packetLocation) {
-        this.packageLocation = Objects.requireNonNull(packetLocation);
+        immutableClassModification();
     }
 
     @Override
@@ -85,22 +88,22 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, ProjectManager.class);
+        immutableClassModification();
     }
 
     @Override
     public Optional<ProjectManager> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
 
     @Override
     public Optional<Path> getConfigPath() {
-        return Optional.ofNullable(configPath);
+        return configPath;
     }
 
     @Override
     public void setConfigPath(Path configPath) {
-        this.configPath = configPath;
+        immutableClassModification();
     }
 
     @Override
@@ -124,7 +127,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
         final String dbmsName = parts[0],
             schemaName = parts[1],
             tableName = parts[2];
-       
+
         return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find dbms: '" + dbmsName + "'."))
@@ -138,6 +141,27 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     @Override
     public Dbms dbms(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms(getSpeedment()));
+        return immutableClassModification();
     }
+
+    @Override
+    public Optional<Dbms> add(Dbms child) {
+        return immutableClassModification();
+    }
+
+    @Override
+    public Dbms addNewDbms(Speedment speedment) {
+        return immutableClassModification();
+    }
+
+    @Override
+    public void setName(String name) {
+        immutableClassModification();
+    }
+
+    @Override
+    public void setEnabled(Boolean enabled) {
+        immutableClassModification();
+    }
+
 }
