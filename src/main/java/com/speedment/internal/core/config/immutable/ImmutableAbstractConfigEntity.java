@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
 import com.speedment.annotation.External;
 import com.speedment.config.Project;
@@ -25,12 +25,12 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.internal.util.Trees;
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.immutableClassModification;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -39,18 +39,20 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements Node, Enableable {
+public abstract class ImmutableAbstractConfigEntity implements Node, Enableable {
 
-    private boolean enabled;
-    private String name;
+    private final boolean enabled;
+    private final String name;
 
-    protected AbstractConfigEntity(String defaultName) {
-        this.enabled = true;
-        this.name = defaultName; // Can be null
+    protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
+        this.enabled = enabled;
+        this.name = name; // Can be null
         setDefaults();
     }
-    
-    protected abstract void setDefaults();
+
+    protected void setDefaults() {
+        // Do nothing
+    }
 
     @Override
     public Boolean isEnabled() {
@@ -59,7 +61,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
 
     @Override
     public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+        immutableClassModification();
     }
 
     @External(type = String.class)
@@ -71,15 +73,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     @External(type = String.class)
     @Override
     public void setName(String name) {
-        requireNonNull(name, "A name cannot be null");
-        // Todo: Allow . and " " in names. Changes in GodeGen
-        if (name.contains(".")) {
-            throw new IllegalArgumentException("A name can't contain a '.' character");
-        } else if (name.contains(" ")) {
-            throw new IllegalArgumentException("A name can't contain a space character");
-        }
-
-        this.name = name;
+        immutableClassModification();
     }
 
     @Override
@@ -125,7 +119,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     public String toString() {
         return getInterfaceMainClass().getSimpleName()
             + " '" + Optional.of(this)
-            .filter(AbstractConfigEntity::isChildInterface)
+            .filter(ImmutableAbstractConfigEntity::isChildInterface)
             .map(e -> (Child<?>) e)
             .flatMap(Child::getParent)
             .map(e -> getRelativeName(Project.class))

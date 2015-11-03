@@ -14,27 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
+import com.speedment.internal.core.config.*;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author pemi
  */
-public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
-    
+public final class ImmutableProjectManagerImpl extends ImmutableAbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
+
     private final ChildHolder children;
 
-    public ProjectManagerImpl() {
-        children = new ChildHolderImpl();
-    }
-
-    @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
+    public ImmutableProjectManagerImpl(ProjectManager projectManager) {
+        super(projectManager.getName(), true);
+        children = ImmutableChildHolderImpl.of(
+            projectManager.stream()
+                .map(p -> new ImmutableProjectImpl(this, p))
+                .collect(toList())
+        );
     }
 
     @Override

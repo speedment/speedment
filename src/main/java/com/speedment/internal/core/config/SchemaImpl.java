@@ -45,7 +45,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     private StorageEngineType storageEngineType;
 
     public SchemaImpl() {
-        children = new ChildHolder();
+        children = new ChildHolderImpl();
     }
 
     @Override
