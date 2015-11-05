@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
 import com.speedment.config.Column;
 import com.speedment.config.Table;
@@ -22,42 +22,43 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
-import com.speedment.internal.util.Cast;
 import java.util.Optional;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
+public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity implements Column {
 
-    private boolean nullable;
-    private boolean autoincrement;
-    private String alias;
-    private Table parent;
-    private FieldStorageType fieldStorageType;
-    private ColumnCompressionType columnCompressionType;
-    private TypeMapper<?, ?> typeMapper;
+    private final boolean nullable;
+    private final boolean autoincrement;
+    private final Optional<String> alias;
+    private final Optional<Table> parent;
+    private final FieldStorageType fieldStorageType;
+    private final ColumnCompressionType columnCompressionType;
+    private final TypeMapper<?, ?> typeMapper;
 
-    @Override
-    protected void setDefaults() {
-        setNullable(true);
-        setAutoincrement(false);
-        setFieldStorageType(FieldStorageType.INHERIT);
-        setColumnCompressionType(ColumnCompressionType.INHERIT);
-        setTypeMapper(new StringIdentityMapper());
+    public ImmutableColumn(Table parent, Column column) {
+        super(requireNonNull(column).getName(), column.isEnabled(), column.getOrdinalPosition());
+        this.nullable = column.isNullable();
+        this.autoincrement = column.isAutoincrement();
+        this.alias = column.getAlias();
+        this.parent = column.getParent();
+        this.fieldStorageType = column.getFieldStorageType();
+        this.columnCompressionType = column.getColumnCompressionType();
+        this.typeMapper = column.getTypeMapper();
     }
 
     @Override
     public Optional<String> getAlias() {
-        return Optional.ofNullable(alias);
+        return alias;
     }
 
     @Override
     public void setAlias(String alias) {
-        this.alias = alias;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -67,7 +68,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
 
     @Override
     public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        this.fieldStorageType = fieldStorageType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -77,17 +78,17 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
 
     @Override
     public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        this.columnCompressionType = columnCompressionType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, Table.class);
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
 
     @Override
@@ -97,7 +98,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
 
     @Override
     public void setNullable(Boolean nullable) {
-        this.nullable = nullable;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -107,7 +108,7 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
 
     @Override
     public void setAutoincrement(Boolean autoincrement) {
-        this.autoincrement = autoincrement;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -117,23 +118,11 @@ public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Col
 
     @Override
     public void setTypeMapper(TypeMapper<?, ?> mapper) {
-        this.typeMapper = mapper;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public void setTypeMapper(Class<?> mapper) {
-        if (mapper == null) {
-            this.typeMapper = null;
-        } else {
-            try {
-                setTypeMapper((TypeMapper<?, ?>) mapper.newInstance());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                throw new SpeedmentException(
-                    "Could not instantiate the specified mapper '" + 
-                    mapper.getName() + 
-                    "' using it's default constructor."
-                );
-            }
-        }
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 }

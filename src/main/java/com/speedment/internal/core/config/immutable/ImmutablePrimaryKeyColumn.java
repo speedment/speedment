@@ -14,35 +14,51 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
+import com.speedment.config.Column;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.aspects.ColumnableHelper;
-import com.speedment.internal.util.Cast;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity implements PrimaryKeyColumn, ColumnableHelper {
-    
-    private Table parent;
+public final class ImmutablePrimaryKeyColumn extends ImmutableAbstractOrdinalConfigEntity implements PrimaryKeyColumn, ColumnableHelper {
 
-    @Override
-    protected void setDefaults() {
-        setOrdinalPosition(UNSET);
+    private final Optional<Table> parent;
+    private Column column; // Which column is this PK refering to?
+
+    public ImmutablePrimaryKeyColumn(Table parent, PrimaryKeyColumn primaryKeyColumn) {
+        super(requireNonNull(primaryKeyColumn).getName(), primaryKeyColumn.isEnabled(), primaryKeyColumn.getOrdinalPosition());
+        requireNonNull(parent);
+        // Fields
+        this.parent = Optional.of(parent);
     }
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, Table.class);
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
+
+    @Override
+    public Column getColumn() {
+        return column;
+    }
+
+    @Override
+    public void resolve() {
+        column = ColumnableHelper.super.getColumn();
+    }
+
 }

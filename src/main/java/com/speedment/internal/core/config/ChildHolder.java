@@ -20,6 +20,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Child;
+import com.speedment.exception.SpeedmentException;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,15 +32,13 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @see com.speedment.config.Node
  */
-public interface  ChildHolder {
+public interface ChildHolder {
 
     /**
      * A comparator that uses the qualified class name to compare classes.
      */
-     final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b)
-        -> Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
-
-
+    final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b)
+            -> Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
 
     /**
      * Put the specified child into this holder, also setting its parent to the
@@ -56,7 +55,7 @@ public interface  ChildHolder {
      * @see Nameable
      * @see Ordinable
      */
-    public Optional<Child<?>> put(Child<?> child, Parent<?> parent);
+    Optional<Child<?>> put(Child<?> child, Parent<?> parent);
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder. The
@@ -67,7 +66,7 @@ public interface  ChildHolder {
      * @return a stream of all children
      * @see Nameable
      */
-    public Stream<Child<?>> stream();
+    Stream<Child<?>> stream();
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder with
@@ -81,6 +80,20 @@ public interface  ChildHolder {
      * @return a stream of children of the specified type
      */
     @SuppressWarnings("unchecked")
-    public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz);
-    
+    <C extends Child<?>> Stream<C> streamOf(Class<C> clazz);
+
+    /**
+     * Returns a child of the given childClass and with the given name. If no
+     * such child is present, a {@link SpeedmentException} is thrown. An
+     * implementing class may override this default method to provide a more
+     * optimized implementation, for example by using a look up map.
+     *
+     * @param <C> The type of the child to return
+     * @param childClass the class of the child to return
+     * @param name the name of the child
+     * @return a child of the given childClass and with the given name
+     * @throws SpeedmentException if no such child is present
+     */
+    <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException;
+
 }

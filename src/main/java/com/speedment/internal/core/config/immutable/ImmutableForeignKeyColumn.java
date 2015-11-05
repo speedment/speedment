@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
 import com.speedment.config.Column;
 import com.speedment.config.ForeignKey;
@@ -24,21 +24,30 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import com.speedment.internal.core.config.aspects.ColumnableHelper;
-import com.speedment.internal.util.Cast;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
  *
  * @author pemi
  */
-public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity implements ForeignKeyColumn, ColumnableHelper {
+public final class ImmutableForeignKeyColumn extends ImmutableAbstractOrdinalConfigEntity implements ForeignKeyColumn, ColumnableHelper {
 
-    private ForeignKey parent;
-    private String foreignColumnName;
-    private String foreignTableName;
+    private final Optional<ForeignKey> parent;
+    private final String foreignColumnName;
+    private final String foreignTableName;
+    private Column foreignColumn;
+    private Table foreignTable;
 
-    @Override
-    protected void setDefaults() {}
+    public ImmutableForeignKeyColumn(ForeignKey parent, ForeignKeyColumn fkc) {
+        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.getOrdinalPosition());
+        requireNonNull(parent);
+        // Fields
+        this.parent = Optional.of(parent);
+        this.foreignColumnName = fkc.getForeignColumnName();
+        this.foreignTableName = fkc.getForeignTableName();
+    }
 
     @Override
     public String getForeignColumnName() {
@@ -47,7 +56,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public void setForeignColumnName(String foreignColumnName) {
-        this.foreignColumnName = foreignColumnName;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -57,32 +66,39 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public void setForeignTableName(String foreignTableName) {
-        this.foreignTableName = foreignTableName;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, ForeignKey.class);
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<ForeignKey> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
 
     @Override
     public Column getForeignColumn() {
-        return getForeignTable().find(Column.class, getForeignColumnName());
+        return foreignColumn;
     }
 
     @Override
     public Table getForeignTable() {
-        return ancestor(Schema.class).orElseThrow(
+        return foreignTable;
+    }
+
+    @Override
+    public void resolve() {
+        foreignTable = ancestor(Schema.class).orElseThrow(
                 thereIsNo(
                         Table.class,
                         ForeignKeyColumn.class,
                         getForeignTableName()
                 )
         ).find(Table.class, getForeignTableName());
+        foreignColumn = foreignTable.find(Column.class, foreignColumnName);
     }
+
 }

@@ -18,22 +18,22 @@ package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
-import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.immutableClassModification;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity implements Dbms, DbmsTypeableHelper, ParentHelper<Schema> {
+public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity implements Dbms, DbmsTypeableHelper, ImmutableParentHelper<Schema> {
 
     private final Speedment speedment;
     private final Optional<Project> parent;
@@ -43,8 +43,10 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
     private final Optional<Integer> port;
     private final Optional<String> username, password;
 
-    public ImmutableDbmsImpl(Project parent, Dbms dbms) {
-        super(dbms.getName(), dbms.isEnabled());
+    public ImmutableDbms(Project parent, Dbms dbms) {
+        super(requireNonNull(dbms).getName(), dbms.isEnabled());
+        requireNonNull(parent);
+        // Members
         this.speedment = parent.getSpeedment();
         this.parent = Optional.of(parent);
         this.type = dbms.getType();
@@ -52,8 +54,8 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
         this.port = dbms.getPort();
         this.username = dbms.getUsername();
         this.password = dbms.getPassword();
-        // TODO: init children
-        this.children = new ChildHolderImpl();
+        // Children
+        children = childHolderOf(dbms.stream().map(p -> new ImmutableSchema(this, p)));
     }
 
     @Override
@@ -63,7 +65,7 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public void setType(DbmsType dbmsType) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -73,7 +75,7 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public void setIpAddress(String ipAddress) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -83,7 +85,7 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public void setPort(Integer port) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -93,7 +95,7 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public void setUsername(String name) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -103,12 +105,12 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public void setPassword(String password) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public void setParent(Parent<?> parent) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -123,7 +125,7 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public Schema addNewSchema() {
-        return immutableClassModification();
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -133,6 +135,6 @@ public final class ImmutableDbmsImpl extends ImmutableAbstractNamedConfigEntity 
 
     @Override
     public Schema schema(Closure<?> c) {
-        return immutableClassModification();
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

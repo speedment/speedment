@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
-import com.speedment.internal.core.config.aspects.ParentHelper;
+import com.speedment.internal.core.config.*;
 import com.speedment.config.Dbms;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
@@ -24,35 +24,53 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
+public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity implements Schema, ImmutableParentHelper<Table> {
 
-    private Dbms parent;
+    private final Optional<Dbms> parent;
     private final ChildHolder children;
-    private boolean defaultSchema;
-    private String schemaName;
-    private String catalogName;
-    private FieldStorageType fieldStorageType;
-    private ColumnCompressionType columnCompressionType;
-    private StorageEngineType storageEngineType;
+    private final boolean defaultSchema;
+    private final Optional<String> schemaName;
+    private final Optional<String> catalogName;
+    private final FieldStorageType fieldStorageType;
+    private final ColumnCompressionType columnCompressionType;
+    private final StorageEngineType storageEngineType;
 
-    public SchemaImpl() {
-        children = new ChildHolderImpl();
-    }
-
-    @Override
-    protected void setDefaults() {
-        setFieldStorageType(FieldStorageType.WRAPPER);
-        setColumnCompressionType(ColumnCompressionType.NONE);
-        setStorageEngineType(StorageEngineType.ON_HEAP);
+    public ImmutableSchema(Dbms parent, Schema schema) {
+        super(requireNonNull(schema).getName(), schema.isEnabled());
+        // Fields
+        this.parent = Optional.of(parent);
+        this.defaultSchema = schema.isDefaultSchema();
+        this.schemaName = schema.getSchemaName();
+        this.catalogName = schema.getCatalogName();
+        this.fieldStorageType = schema.getFieldStorageType();
+        this.columnCompressionType = schema.getColumnCompressionType();
+        this.storageEngineType = schema.getStorageEngineType();
+        //Children
+        children = childHolderOf(schema.stream().map(s -> new ImmutableTable(this, s)));
     }
 
     @Override
@@ -62,7 +80,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public void setDefaultSchema(Boolean defaultSchema) {
-        this.defaultSchema = defaultSchema;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -72,7 +90,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        this.fieldStorageType = fieldStorageType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -82,7 +100,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        this.columnCompressionType = columnCompressionType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -92,40 +110,37 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public void setStorageEngineType(StorageEngineType storageEngineType) {
-        this.storageEngineType = storageEngineType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<String> getCatalogName() {
-        return Optional.ofNullable(catalogName);
+        return catalogName;
     }
 
     @Override
     public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<String> getSchemaName() {
-        if (schemaName == null) {
-            return Optional.ofNullable(getName());
-        }
-        return Optional.of(schemaName);
+        return schemaName;
     }
 
     @Override
     public void setSchemaName(String schemaName) {
-        this.catalogName = schemaName;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, Dbms.class);
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<Dbms> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
 
     @Override
@@ -135,13 +150,11 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public Table addNewTable() {
-        final Table e = Table.newTable();
-        add(e);
-        return e;
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public Table table(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewTable);
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

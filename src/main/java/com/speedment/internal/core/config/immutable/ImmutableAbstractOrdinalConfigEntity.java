@@ -17,6 +17,8 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.config.aspects.Ordinable;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -28,7 +30,7 @@ import com.speedment.config.aspects.Ordinable;
 public abstract class ImmutableAbstractOrdinalConfigEntity extends ImmutableAbstractConfigEntity
         implements Ordinable, Comparable<Ordinable> {
 
-    private int ordinalPosition;
+    private final int ordinalPosition;
 
     public ImmutableAbstractOrdinalConfigEntity(String name, boolean enabled, int ordinalPosition) {
         super(name, enabled);
@@ -36,24 +38,22 @@ public abstract class ImmutableAbstractOrdinalConfigEntity extends ImmutableAbst
     }
 
     @Override
-    public int getOrdinalPosition() {
+    public final int getOrdinalPosition() {
         return ordinalPosition;
     }
 
     @Override
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
+    public final void setOrdinalPosition(int ordinalPosition) {
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public int compareTo(Ordinable that) {
-        if (that == null) {
-            return Ordinable.UNSET;
-        } else {
-            return Integer.compare(
+    public final int compareTo(Ordinable that) {
+        requireNonNull(that);
+        return Integer.compare(
                 this.getOrdinalPosition(),
                 that.getOrdinalPosition()
-            );
-        }
+        );
+
     }
 }

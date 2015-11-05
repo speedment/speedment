@@ -16,14 +16,9 @@
  */
 package com.speedment.internal.core.config.utils;
 
-import com.speedment.config.Dbms;
-import com.speedment.config.Schema;
-import com.speedment.config.Column;
-import com.speedment.config.Table;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
@@ -34,81 +29,6 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  */
 public final class ConfigUtil {
-
-    /**
-     * Locates the {@link Column} node in the specified {@link Table} with the
-     * specified name. If no column was found, a {@link SpeedmentException} is
-     * thrown.
-     *
-     * @param currentTable the table to look in
-     * @param columnName the column name to look for
-     * @return the column found
-     * @throws SpeedmentException if no column was found
-     */
-    public static Column findColumnByName(Table currentTable, String columnName)
-        throws SpeedmentException {
-        requireNonNull(currentTable);
-        requireNonNull(columnName);
-
-        return currentTable
-            .streamOf(Column.class)
-            .filter(c -> c.getName().equals(columnName))
-            .findAny()
-            .orElseThrow(thereIsNo(Column.class, Table.class, columnName));
-    }
-
-    /**
-     * Locates the {@link Table} node in the specified {@link Schema} with the
-     * specified name. If no table was found, a {@link SpeedmentException} is
-     * thrown.
-     *
-     * @param currentSchema the schema to look in
-     * @param tableName the table name to look for
-     * @return the table found
-     * @throws SpeedmentException if no table was found
-     */
-    public static Table findTableByName(Schema currentSchema, String tableName)
-        throws SpeedmentException {
-        requireNonNull(currentSchema);
-        requireNonNull(tableName);
-
-        final String[] paths = tableName.split("\\.");
-
-        switch (paths.length) {
-
-            case 1:
-                // Just the name of the table
-                return currentSchema
-                    .stream()
-                    .filter(c -> c.getName().equals(tableName))
-                    .findAny()
-                    .orElseThrow(thereIsNo(Table.class, Schema.class, tableName));
-
-            case 2:
-                // The name is like "schema.table"
-                final String schemaPart = paths[0];
-                final String tablePart = paths[1];
-
-                final Dbms dbms = currentSchema
-                    .ancestor(Dbms.class)
-                    .orElseThrow(thereIsNo(Dbms.class, Table.class, tablePart));
-
-                final Schema otherSchema = dbms
-                    .stream()
-                    .filter(t -> t.getName().equals(schemaPart))
-                    .findAny()
-                    .orElseThrow(thereIsNo(Schema.class, Dbms.class, schemaPart));
-
-                return otherSchema
-                    .stream()
-                    .filter(t -> t.getName().equals(tablePart))
-                    .findAny()
-                    .orElseThrow(thereIsNo(Table.class, Schema.class, tablePart));
-            default:
-                // Otherwise something is wrong with the input.
-                throw new SpeedmentException("Table name is malformed.");
-        }
-    }
 
     /**
      * Uses the specified {@code createAndAdder} to produce a new node and sets

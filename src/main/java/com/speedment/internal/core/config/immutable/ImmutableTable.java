@@ -14,9 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.internal.core.config.immutable;
 
-import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Column;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.Index;
@@ -28,44 +27,70 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.util.Cast;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.ChildHolder;
+import static com.speedment.internal.util.Cast.castOrFail;
 import groovy.lang.Closure;
 import java.util.Comparator;
 import java.util.Optional;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class TableImpl extends AbstractNamedConfigEntity implements Table, ParentHelper<Child<Table>> {
+public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity implements Table, ImmutableParentHelper<Child<Table>> {
 
-    private Schema parent;
+    private final Optional<Schema> parent;
     private final ChildHolder children;
-    private String tableName;
-    private FieldStorageType fieldStorageType;
-    private ColumnCompressionType columnCompressionType;
-    private StorageEngineType storageEngineType;
+    private final Optional<String> tableName;
+    private final FieldStorageType fieldStorageType;
+    private final ColumnCompressionType columnCompressionType;
+    private final StorageEngineType storageEngineType;
 
     private static int valueOfClass(Class<?> clazz) {
-        if (Column.class.equals(clazz)) return 0;
-        if (PrimaryKeyColumn.class.equals(clazz)) return 1;
-        if (Index.class.equals(clazz)) return 2;
-        if (ForeignKey.class.equals(clazz)) return 3;
+        if (Column.class.equals(clazz)) {
+            return 0;
+        }
+        if (PrimaryKeyColumn.class.equals(clazz)) {
+            return 1;
+        }
+        if (Index.class.equals(clazz)) {
+            return 2;
+        }
+        if (ForeignKey.class.equals(clazz)) {
+            return 3;
+        }
         return 4;
     }
-    
+
     private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
-    public TableImpl() {
-        children = new ChildHolderImpl(CLASS_COMPARATOR);
+    public ImmutableTable(Schema parent, Table table) {
+        super(requireNonNull(table).getName(), table.isEnabled());
+        requireNonNull(parent);
+        // Fields
+        this.parent = table.getParent();
+        this.tableName = table.getTableName();
+        this.fieldStorageType = table.getFieldStorageType();
+        this.columnCompressionType = table.getColumnCompressionType();
+        this.storageEngineType = table.getStorageEngineType();
+        // Children
+        children = childHolderOf(table.stream().map(this::toImmutable), CLASS_COMPARATOR);
     }
 
-    @Override
-    protected void setDefaults() {
-        setFieldStorageType(FieldStorageType.INHERIT);
-        setColumnCompressionType(ColumnCompressionType.INHERIT);
-        setStorageEngineType(StorageEngineType.INHERIT);
+    private Child<?> toImmutable(Child<?> child) {
+        if (child instanceof Column) {
+            return new ImmutableColumn(this, castOrFail(child, Column.class));
+        } else if (child instanceof PrimaryKeyColumn) {
+            return new ImmutablePrimaryKeyColumn(this, castOrFail(child, PrimaryKeyColumn.class));
+        } else if (child instanceof Index) {
+            return new ImmutableIndex(this, castOrFail(child, Index.class));
+        } else if (child instanceof ForeignKey) {
+            return new ImmutableForeignKey(this, castOrFail(child, ForeignKey.class));
+        }
+        throw new SpeedmentException("Unknown Table child type:" + child);
     }
 
     @Override
@@ -75,7 +100,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        this.fieldStorageType = fieldStorageType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -85,7 +110,8 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        this.columnCompressionType = columnCompressionType;
+        throwNewUnsupportedOperationExceptionImmutable();
+
     }
 
     @Override
@@ -95,26 +121,23 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public void setStorageEngineType(StorageEngineType storageEngineType) {
-        this.storageEngineType = storageEngineType;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<String> getTableName() {
-        if (tableName == null) {
-            return Optional.ofNullable(getName());
-        }
-        return Optional.of(tableName);
+        return tableName;
     }
 
     @Override
     public void setTableName(String tableName) {
-        this.tableName = tableName;
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, Schema.class);
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -124,54 +147,46 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public Optional<Schema> getParent() {
-        return Optional.ofNullable(parent);
+        return parent;
     }
-    
+
     @Override
     public Column addNewColumn() {
-        final Column e = Column.newColumn();
-        add(e);
-        return e;
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public  Index addNewIndex() {
-        final Index e = Index.newIndex();
-        add(e);
-        return e;
+    public Index addNewIndex() {
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public  PrimaryKeyColumn addNewPrimaryKeyColumn() {
-        final PrimaryKeyColumn e = PrimaryKeyColumn.newPrimaryKeyColumn();
-        add(e);
-        return e;
+    public PrimaryKeyColumn addNewPrimaryKeyColumn() {
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public  ForeignKey addNewForeignKey() {
-        final ForeignKey e = ForeignKey.newForeignKey();
-        add(e);
-        return e;
+    public ForeignKey addNewForeignKey() {
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public PrimaryKeyColumn primaryKeyColumn(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewPrimaryKeyColumn);
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public Column column(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewColumn);
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public Index index(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewIndex);
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public ForeignKey foreignKey(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, this::addNewForeignKey);
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

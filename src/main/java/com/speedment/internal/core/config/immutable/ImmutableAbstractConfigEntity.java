@@ -30,7 +30,7 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.immutableClassModification;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -47,59 +47,54 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
         this.enabled = enabled;
         this.name = name; // Can be null
-        setDefaults();
-    }
-
-    protected void setDefaults() {
-        // Do nothing
     }
 
     @Override
-    public Boolean isEnabled() {
+    public final Boolean isEnabled() {
         return enabled;
     }
 
     @Override
-    public void setEnabled(Boolean enabled) {
-        immutableClassModification();
+    public final void setEnabled(Boolean enabled) {
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @External(type = String.class)
     @Override
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
     @External(type = String.class)
     @Override
-    public void setName(String name) {
-        immutableClassModification();
+    public final void setName(String name) {
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public Stream<? extends Parent<?>> ancestors() {
+    public final Stream<? extends Parent<?>> ancestors() {
         return asChild()
-            .flatMap(c -> c.getParent())
-            .map(p -> (Parent<?>) p)
-            .map(parent -> Trees.walkOptional(
-                parent, (Parent<?> p) -> p.asChild()
                 .flatMap(c -> c.getParent())
-                .map(p2 -> (Parent<?>) p2),
-                Trees.WalkingOrder.BACKWARD
-            )).orElse(Stream.empty());
+                .map(p -> (Parent<?>) p)
+                .map(parent -> Trees.walkOptional(
+                        parent, (Parent<?> p) -> p.asChild()
+                        .flatMap(c -> c.getParent())
+                        .map(p2 -> (Parent<?>) p2),
+                        Trees.WalkingOrder.BACKWARD
+                )).orElse(Stream.empty());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <E extends Node> Optional<E> ancestor(final Class<E> clazz) {
+    public final <E extends Node> Optional<E> ancestor(final Class<E> clazz) {
         return ancestors()
-            .filter(p -> clazz.isAssignableFrom(p.getClass()))
-            .map(p -> (E) p)
-            .findFirst();
+                .filter(p -> clazz.isAssignableFrom(p.getClass()))
+                .map(p -> (E) p)
+                .findFirst();
     }
 
     @Override
-    public <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> nameMapper) {
+    public final <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> nameMapper) {
         Objects.requireNonNull(from);
         final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
         final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
@@ -116,14 +111,20 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return getInterfaceMainClass().getSimpleName()
-            + " '" + Optional.of(this)
-            .filter(ImmutableAbstractConfigEntity::isChildInterface)
-            .map(e -> (Child<?>) e)
-            .flatMap(Child::getParent)
-            .map(e -> getRelativeName(Project.class))
-            .orElse(getName())
-            + "'";
+                + " '" + Optional.of(this)
+                .filter(ImmutableAbstractConfigEntity::isChildInterface)
+                .map(e -> (Child<?>) e)
+                .flatMap(Child::getParent)
+                .map(e -> getRelativeName(Project.class))
+                .orElse(getName())
+                + "'";
     }
+
+    // This method is called when the entire tree is constructed
+    public void resolve() {
+//        System.out.println("resolve: " + toString());
+    }
+
 }

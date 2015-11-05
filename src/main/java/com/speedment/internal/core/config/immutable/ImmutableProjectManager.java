@@ -17,30 +17,27 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
-import static java.util.stream.Collectors.toList;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableProjectManagerImpl extends ImmutableAbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
+public final class ImmutableProjectManager extends ImmutableAbstractNamedConfigEntity implements ProjectManager, ImmutableParentHelper<Project> {
 
     private final ChildHolder children;
 
-    public ImmutableProjectManagerImpl(ProjectManager projectManager) {
-        super(projectManager.getName(), true);
-        children = ImmutableChildHolderImpl.of(
-            projectManager.stream()
-                .map(p -> new ImmutableProjectImpl(this, p))
-                .collect(toList())
-        );
+    public ImmutableProjectManager(ProjectManager projectManager) {
+        super(requireNonNull(projectManager).getName(), true);
+        // Children
+        children = childHolderOf(projectManager.stream().map(p -> new ImmutableProject(this, p)));
     }
 
     @Override
     public ChildHolder getChildren() {
         return children;
     }
+
 }

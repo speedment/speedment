@@ -18,47 +18,61 @@ package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
-import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
+import com.speedment.exception.SpeedmentException;
 import groovy.lang.Closure;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.regex.Pattern;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.immutableClassModification;
+import java.util.HashMap;
+import java.util.Map;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.util.Cast.cast;
+import static com.speedment.internal.util.Cast.castOrFail;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEntity implements Project, ParentHelper<Dbms> {
+public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity implements Project, ImmutableParentHelper<Dbms> {
 
     private final Speedment speedment;
     private final Optional<ProjectManager> parent; // Rare occation of valid use of Optional as member
     private final ChildHolder children;
     private final String packageName, packageLocation;
     private final Optional<Path> configPath;
+    private final Map<String, Table> tableNameMap;
 
-    public ImmutableProjectImpl(ProjectManager parent, Project project) {
+    public ImmutableProject(Project project) {
+        this(null, project);
+
+    }
+
+    public ImmutableProject(ProjectManager parent, Project project) {
         super(requireNonNull(project).getName(), project.isEnabled());
-        requireNonNull(parent);
+        // Menbers
         this.speedment = project.getSpeedment();
         this.packageName = project.getPackageName();
         this.packageLocation = project.getPackageLocation();
         this.configPath = project.getConfigPath();
-        this.parent = Optional.of(parent);
-
-        children = ImmutableChildHolderImpl.of(
-            project.stream()
-            .map(p -> new ImmutableDbmsImpl(this, p))
-            .collect(toList())
-        );
-
+        this.parent = Optional.ofNullable(parent);
+        // Children
+        children = childHolderOf(project.stream().map(p -> new ImmutableDbms(this, p)));
+        // Special
+        tableNameMap = new HashMap<>();
+        traverseOver(Table.class).forEach(t -> {
+            tableNameMap.put(t.getRelativeName(Dbms.class), t);
+        });
+        // resolve all dependencies that needs to be done post tree construction
+        traverse().forEach(node -> {
+            if (node instanceof ImmutableAbstractConfigEntity) {
+                castOrFail(node, ImmutableAbstractConfigEntity.class).resolve();
+            }
+        });
     }
 
     @Override
@@ -68,7 +82,7 @@ public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEnti
 
     @Override
     public void setPackageName(String packetName) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -78,7 +92,7 @@ public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEnti
 
     @Override
     public void setPackageLocation(String packetLocation) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -88,7 +102,7 @@ public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEnti
 
     @Override
     public void setParent(Parent<?> parent) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -103,7 +117,7 @@ public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEnti
 
     @Override
     public void setConfigPath(Path configPath) {
-        immutableClassModification();
+        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -111,57 +125,28 @@ public final class ImmutableProjectImpl extends ImmutableAbstractNamedConfigEnti
         return speedment;
     }
 
-    private static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
-
     @Override
     public Table findTableByName(String fullName) {
-        final String[] parts = SPLIT_PATTERN.split(fullName);
-
-        if (parts.length != 3) {
-            throw new IllegalArgumentException(
-                "fullName should consist of three parts separated by dots. "
-                + "These are dbms-name, schema-name and table-name."
-            );
+        final Table table = tableNameMap.get(fullName);
+        if (table == null) {
+            throw new SpeedmentException("Unable to find table " + fullName);
         }
-
-        final String dbmsName = parts[0],
-            schemaName = parts[1],
-            tableName = parts[2];
-
-        return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find dbms: '" + dbmsName + "'."))
-            .stream().filter(s -> schemaName.equals(s.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find schema: '" + schemaName + "'."))
-            .stream().filter(t -> tableName.equals(t.getName())).findAny()
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find table: '" + tableName + "'."));
+        return table;
     }
 
     @Override
     public Dbms dbms(Closure<?> c) {
-        return immutableClassModification();
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Optional<Dbms> add(Dbms child) {
-        return immutableClassModification();
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
     public Dbms addNewDbms(Speedment speedment) {
-        return immutableClassModification();
-    }
-
-    @Override
-    public void setName(String name) {
-        immutableClassModification();
-    }
-
-    @Override
-    public void setEnabled(Boolean enabled) {
-        immutableClassModification();
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 
 }

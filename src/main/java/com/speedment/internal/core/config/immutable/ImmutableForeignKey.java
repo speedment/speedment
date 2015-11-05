@@ -17,11 +17,13 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
+import com.speedment.config.ForeignKey;
+import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -30,53 +32,42 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity implements Index, ImmutableParentHelper<IndexColumn> {
-    
+public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntity implements ForeignKey, ImmutableParentHelper<ForeignKeyColumn> {
+
     private final Optional<Table> parent;
     private final ChildHolder children;
-    private final Boolean unique;
-    
-    public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isEnabled());
+
+    public ImmutableForeignKey(Table parent, ForeignKey fk) {
+        super(requireNonNull(fk).getName(), fk.isEnabled());
+        requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);
-        this.unique = index.isUnique();
         // Children
-        this.children = childHolderOf(index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
+        children = childHolderOf(fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
     }
-    
-    @Override
-    public Boolean isUnique() {
-        return unique;
-    }
-    
-    @Override
-    public void setUnique(Boolean unique) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-    
+
     @Override
     public void setParent(Parent<?> parent) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public Optional<Table> getParent() {
         return parent;
     }
-    
+
     @Override
     public ChildHolder getChildren() {
         return children;
     }
-    
+
     @Override
-    public IndexColumn addNewIndexColumn() {
+    public ForeignKeyColumn addNewForeignKeyColumn() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
-    public IndexColumn indexColumn(Closure<?> c) {
+    public ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

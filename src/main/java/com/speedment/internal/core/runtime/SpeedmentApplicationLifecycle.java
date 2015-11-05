@@ -32,6 +32,7 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
+import com.speedment.internal.core.config.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
@@ -422,6 +423,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         if (!isStarted()) {
             start();
         }
+        // Replace the metadata model with an immutable version (potentially much faster)
+        final Project project = speedment.get(ProjectComponent.class).getProject();
+        final Project immutableProject = new ImmutableProject(project);
+        speedment.get(ProjectComponent.class).setProject(immutableProject);
+        //
         return speedment;
     }
 

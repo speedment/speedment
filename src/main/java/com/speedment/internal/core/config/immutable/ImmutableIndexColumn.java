@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.internal.core.config.*;
+import com.speedment.config.Column;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
-import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
+import com.speedment.internal.core.config.aspects.ColumnableHelper;
+import com.speedment.config.parameters.OrderType;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -30,53 +30,48 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity implements Index, ImmutableParentHelper<IndexColumn> {
-    
-    private final Optional<Table> parent;
-    private final ChildHolder children;
-    private final Boolean unique;
-    
-    public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isEnabled());
+public final class ImmutableIndexColumn extends ImmutableAbstractOrdinalConfigEntity implements IndexColumn, ColumnableHelper {
+
+    private final Optional<Index> parent;
+    private final OrderType orderType;
+    private Column column;
+
+    public ImmutableIndexColumn(Index parent, IndexColumn indexColumn) {
+        super(requireNonNull(indexColumn).getName(), indexColumn.isEnabled(), indexColumn.getOrdinalPosition());
+        requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);
-        this.unique = index.isUnique();
-        // Children
-        this.children = childHolderOf(index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
+        this.orderType = indexColumn.getOrderType();
     }
-    
+
     @Override
-    public Boolean isUnique() {
-        return unique;
+    public OrderType getOrderType() {
+        return orderType;
     }
-    
+
     @Override
-    public void setUnique(Boolean unique) {
+    public void setOrderType(OrderType orderType) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public void setParent(Parent<?> parent) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
-    public Optional<Table> getParent() {
+    public Optional<Index> getParent() {
         return parent;
     }
-    
+
     @Override
-    public ChildHolder getChildren() {
-        return children;
+    public Column getColumn() {
+        return column;
     }
-    
+
     @Override
-    public IndexColumn addNewIndexColumn() {
-        return throwNewUnsupportedOperationExceptionImmutable();
+    public void resolve() {
+        this.column = ColumnableHelper.super.getColumn();
     }
-    
-    @Override
-    public IndexColumn indexColumn(Closure<?> c) {
-        return throwNewUnsupportedOperationExceptionImmutable();
-    }
+
 }
