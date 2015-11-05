@@ -189,7 +189,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected DbmsHandler dbmsHandler() {
-        return speedment.get(DbmsHandlerComponent.class).get(getDbms());
+        return speedment.getDbmsHandlerComponent().get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters
@@ -406,7 +406,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                             // Cast from Long to the column target type
 
                             final Object val = speedment
-                                .get(JavaTypeMapperComponent.class)
+                                .getJavaTypeMapperComponent()
                                 .apply(column.getTypeMapper().getJavaType())
                                 .parse(
                                     l.get(cnt.getAndIncrement())

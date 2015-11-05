@@ -226,7 +226,7 @@ public final class ProjectPromptController implements Initializable {
      */
     private Stream<DbmsType> getDbmsTypes() {
         return speedment
-            .get(DbmsHandlerComponent.class)
+            .getDbmsHandlerComponent()
             .supportedDbmsTypes();
     }
 
@@ -239,7 +239,7 @@ public final class ProjectPromptController implements Initializable {
     private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
         requireNonNull(dbmsTypeName);
         return speedment
-            .get(DbmsHandlerComponent.class)
+            .getDbmsHandlerComponent()
             .findByName(dbmsTypeName);
     }
 

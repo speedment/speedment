@@ -101,7 +101,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final String password = unwrap(dbms.getPassword());
         try {
             //conn = DriverManager.getConnection(url, user, password);
-            conn = speedment.get(ConnectionPoolComponent.class).getConnection(url, user, password);
+            conn = speedment.getConnectionPoolComponent().getConnection(url, user, password);
         } catch (SQLException sqle) {
 //            final Properties pwProtectedProperties = new Properties();
 //            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
@@ -134,7 +134,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
-                final Class<?> mappedClass = speedment.get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
+                final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }
@@ -279,7 +279,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final Class<?> mapping = typeMapping.get(classMappingString);
             if (mapping != null) {
                 
-                final TypeMapper<?, ?> typeMapper = speedment.get(TypeMapperComponent.class).stream()
+                final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
                     .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
                     .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
                     .findFirst().orElseThrow(() -> new SpeedmentException(
