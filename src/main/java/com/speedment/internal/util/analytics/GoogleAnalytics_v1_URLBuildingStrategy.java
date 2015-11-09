@@ -23,7 +23,7 @@ import java.util.*;
 public final class GoogleAnalytics_v1_URLBuildingStrategy implements URLBuildingStrategy {
 
     private final String googleAnalyticsTrackingCode;
-    private String refererURL = "http://www.BoxySystems.com";
+    private String refererURL = "http://www.speedment.org";
 
     private static final String TRACKING_URL_PREFIX = "http://www.google-analytics.com/__utm.gif";
 
@@ -59,7 +59,7 @@ public final class GoogleAnalytics_v1_URLBuildingStrategy implements URLBuilding
         url.append("&utmje=1"); //java enabled
         url.append("&utmfl=9.0%20%20r28"); //flash
         url.append("&utmcr=1"); //carriage return
-        url.append("&utmdt=").append(focusPoint.getContentTitle()); //The optimum keyword density //document title
+        url.append("&utmdt=").append(focusPoint.getEventName()); //The optimum keyword density //document title
         url.append("&utmhn=").append(HOST_NAME);//document hostname
         url.append("&utmr=").append(refererURL); //referer URL
         url.append("&utmp=").append(focusPoint.getContentURI());//document page URL
