@@ -17,6 +17,12 @@
 package com.speedment.internal.util;
 
 import com.speedment.SpeedmentVersion;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.util.analytics.AnalyticsUtil;
+import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
+import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
+import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
+import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.DataOutputStream;
@@ -28,6 +34,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
 
@@ -37,22 +44,29 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Statistics {
 
+    private final static String ENCODING = "UTF-8";
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
     private final static String VERSION = SpeedmentVersion.getImplementationVersion();
     private final static Settings SETTINGS = Settings.inst();
 
     public static void onGuiStarted() {
-        notifyEvent("gui-started",
-            new Param("mail", SETTINGS.get("user_mail", "no-mail-specified"))
-        );
+        notifyEvent("gui-started", includeMail());
+        AnalyticsUtil.notify(GUI_STARTED);
+    }
+    
+    public static void onGuiProjectLoaded() {
+        notifyEvent("gui-project-loaded", includeMail());
+        AnalyticsUtil.notify(GUI_PROJECT_LOADED);
     }
 
     public static void onGenerate() {
-        notifyEvent("generate");
+        notifyEvent("generate", includeMail());
+        AnalyticsUtil.notify(GENERATE);
     }
 
     public static void onNodeStarted() {
         notifyEvent("node-started");
+        AnalyticsUtil.notify(APP_STARTED);
     }
 
     private static void notifyEvent(String event, Param... params) {
@@ -64,18 +78,23 @@ public final class Statistics {
         all[all.length - 1] = new Param("event", event);
         sendPostRequest(all);
     }
+    
+    private static Param includeMail() {
+        return new Param("mail", SETTINGS.get("user_mail", "no-mail-specified"));
+    }
 
     private static void sendPostRequest(Param... params) {
         requireNonNulls(params);
-        new Thread(() -> {
+        
+        CompletableFuture.runAsync(() -> {
             final URL url = createRequestURL(params);
 
             try {
                 final HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
                 con.setDoOutput(true);
-                con.setRequestMethod("GET");
-
+                con.setRequestMethod("POST");
+                
                 try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
                     wr.writeBytes("ping");
                     wr.flush();
@@ -85,23 +104,23 @@ public final class Statistics {
             } catch (IOException ex) {
                 // Silent.
             }
-        }).start();
+        });
     }
 
     private static URL createRequestURL(Param... params) {
         requireNonNull(params);
         try {
-            return new URL(PING_URL + "?"
-                + Stream.of(params)
-                .map(Param::encode)
-                .collect(joining("&"))
+            return new URL(PING_URL + "?" +
+                Stream.of(params)
+                    .map(Param::encode)
+                    .collect(joining("&"))
             );
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
         }
     }
 
-    private static class Param {
+    private final static class Param {
 
         private final String key, value;
 
@@ -110,20 +129,12 @@ public final class Statistics {
             this.value = requireNonNull(value);
         }
 
-        public String getKey() {
-            return key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
         public String encode() {
             try {
-                return URLEncoder.encode(getKey(), "UTF-8") + "="
-                    + URLEncoder.encode(getValue(), "UTF-8");
+                return URLEncoder.encode(key, ENCODING) + "="
+                     + URLEncoder.encode(value, ENCODING);
             } catch (UnsupportedEncodingException ex) {
-                throw new RuntimeException("Encoding 'UTF-8' is not supported.");
+                throw new SpeedmentException("Encoding '" + ENCODING + "' is not supported.", ex);
             }
         }
     }

@@ -29,6 +29,7 @@ public final class FocusPoint {
     public static final FocusPoint CORE = new FocusPoint(TITLE);
     public static final FocusPoint CORE_WITH_VERSION = new FocusPoint(VERSION, CORE);
 	public static final FocusPoint GUI_STARTED = new FocusPoint("GuiStarted", CORE_WITH_VERSION);
+    public static final FocusPoint GUI_PROJECT_LOADED = new FocusPoint("ProjectLoaded", CORE_WITH_VERSION);
 	public static final FocusPoint APP_STARTED = new FocusPoint("AppStarted", CORE_WITH_VERSION);
     public static final FocusPoint GENERATE = new FocusPoint("Generate", CORE_WITH_VERSION);
 

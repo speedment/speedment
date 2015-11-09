@@ -38,8 +38,6 @@ import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import static com.speedment.internal.util.Beans.beanPropertyName;
 import com.speedment.internal.util.Trees;
-import com.speedment.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
@@ -404,7 +402,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     @Override
     public T start() {
-        AnalyticsUtil.notify(APP_STARTED);
         Statistics.onNodeStarted();
 
         LOGGER.info(
