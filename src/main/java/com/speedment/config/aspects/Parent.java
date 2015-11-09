@@ -20,8 +20,6 @@ import com.speedment.config.Node;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.ChildHolder;
-import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
