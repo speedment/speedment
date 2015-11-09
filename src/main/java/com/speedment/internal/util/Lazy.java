@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.util;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 /**
@@ -30,17 +29,14 @@ import java.util.function.Supplier;
 public class Lazy<T> {
 
     private T value;
-    private final AtomicBoolean initialized;
+    private boolean initialized;
 
-    public Lazy() {
-        this.initialized = new AtomicBoolean();
-    }
-
-    public T getOrCompute(Supplier<T> supplier) {
-        if (initialized.compareAndSet(false, true)) {
-            value = supplier.get();
+    public synchronized T getOrCompute(Supplier<T> supplier) {
+        if (initialized) {
+            return value;
         }
-        return value;
+        initialized = true;
+        return value = supplier.get();
     }
 
 }

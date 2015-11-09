@@ -23,10 +23,14 @@ import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
 import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -44,12 +48,16 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Statistics {
 
+
     private final static String ENCODING = "UTF-8";
+    private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
+
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
     private final static String VERSION = SpeedmentVersion.getImplementationVersion();
     private final static Settings SETTINGS = Settings.inst();
 
     public static void onGuiStarted() {
+
         notifyEvent("gui-started", includeMail());
         AnalyticsUtil.notify(GUI_STARTED);
     }
@@ -99,10 +107,18 @@ public final class Statistics {
                     wr.writeBytes("ping");
                     wr.flush();
                 }
+                int responseCode = con.getResponseCode();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    final StringBuffer response = new StringBuffer();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    LOGGER.info(Integer.toString(responseCode)+" -> "+response.length()+" bytes");
+                }
 
-                con.getResponseCode();
             } catch (IOException ex) {
-                // Silent.
+                LOGGER.error(ex);
             }
         });
     }
@@ -110,8 +126,9 @@ public final class Statistics {
     private static URL createRequestURL(Param... params) {
         requireNonNull(params);
         try {
-            return new URL(PING_URL + "?" +
-                Stream.of(params)
+
+            return new URL(PING_URL + "?"
+                    + Stream.of(params)
                     .map(Param::encode)
                     .collect(joining("&"))
             );
@@ -131,6 +148,7 @@ public final class Statistics {
 
         public String encode() {
             try {
+
                 return URLEncoder.encode(key, ENCODING) + "="
                      + URLEncoder.encode(value, ENCODING);
             } catch (UnsupportedEncodingException ex) {
@@ -138,9 +156,11 @@ public final class Statistics {
             }
         }
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */
-    private Statistics() { instanceNotAllowed(getClass()); }
+    private Statistics() {
+        instanceNotAllowed(getClass());
+    }
 }
