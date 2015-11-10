@@ -36,7 +36,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -47,7 +51,6 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class Statistics {
-
 
     private final static String ENCODING = "UTF-8";
     private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
@@ -61,7 +64,7 @@ public final class Statistics {
         notifyEvent("gui-started", includeMail());
         AnalyticsUtil.notify(GUI_STARTED);
     }
-    
+
     public static void onGuiProjectLoaded() {
         notifyEvent("gui-project-loaded", includeMail());
         AnalyticsUtil.notify(GUI_PROJECT_LOADED);
@@ -77,44 +80,53 @@ public final class Statistics {
         AnalyticsUtil.notify(APP_STARTED);
     }
 
-    private static void notifyEvent(String event, Param... params) {
+    private static void notifyEvent(String event) {
+        notifyEvent(event, Collections.emptyList());
+    }
+
+    private static void notifyEvent(String event, Param param) {
+        notifyEvent(event, Collections.singletonList(requireNonNull(param)));
+    }
+
+    private static void notifyEvent(String event, Collection<Param> params) {
         requireNonNull(event);
         requireNonNulls(params);
-        final Param[] all = Arrays.copyOf(params, params.length + 3);
-        all[all.length - 3] = new Param("project-key", Hash.md5(System.getProperty("user.dir")));
-        all[all.length - 2] = new Param("version", VERSION);
-        all[all.length - 1] = new Param("event", event);
-        sendPostRequest(all);
+        final List<Param> allParams = new ArrayList<>(params);
+        allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
+        allParams.add(new Param("version", VERSION));
+        allParams.add(new Param("event", event));
+        sendPostRequest(allParams);
     }
-    
+
     private static Param includeMail() {
         return new Param("mail", SETTINGS.get("user_mail", "no-mail-specified"));
     }
 
-    private static void sendPostRequest(Param... params) {
+    private static void sendPostRequest(Collection<Param> params) {
         requireNonNulls(params);
-        
+
         CompletableFuture.runAsync(() -> {
             final URL url = createRequestURL(params);
 
             try {
                 final HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-                con.setDoOutput(true);
-                con.setRequestMethod("POST");
-                
-                try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-                    wr.writeBytes("ping");
-                    wr.flush();
-                }
-                int responseCode = con.getResponseCode();
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                //con.setDoOutput(true);
+                //con.setRequestMethod("POST");
+
+                //try (final DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+                    //wr.writeBytes("ping");
+                //    wr.flush();
+                //}
+                final int responseCode = con.getResponseCode();
+                final String responseMessage = con.getResponseMessage();
+                try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                     final StringBuffer response = new StringBuffer();
                     String inputLine;
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
                     }
-                    LOGGER.info(Integer.toString(responseCode)+" -> "+response.length()+" bytes");
+                    LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
                 }
 
             } catch (IOException ex) {
@@ -123,12 +135,12 @@ public final class Statistics {
         });
     }
 
-    private static URL createRequestURL(Param... params) {
+    private static URL createRequestURL(Collection<Param> params) {
         requireNonNull(params);
         try {
 
             return new URL(PING_URL + "?"
-                    + Stream.of(params)
+                    + params.stream()
                     .map(Param::encode)
                     .collect(joining("&"))
             );
@@ -150,7 +162,7 @@ public final class Statistics {
             try {
 
                 return URLEncoder.encode(key, ENCODING) + "="
-                     + URLEncoder.encode(value, ENCODING);
+                        + URLEncoder.encode(value, ENCODING);
             } catch (UnsupportedEncodingException ex) {
                 throw new SpeedmentException("Encoding '" + ENCODING + "' is not supported.", ex);
             }
