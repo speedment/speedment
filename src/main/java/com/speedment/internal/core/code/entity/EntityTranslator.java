@@ -149,7 +149,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                 file.add(Import.of(fu.getEmt().ENTITY.getType()));
 
                 Import imp = Import.of(fu.getEmt().ENTITY.getType());
-                System.out.println("imp=" + imp.getType().getName());
+                //System.out.println("imp=" + imp.getType().getName());
                 file.add(imp);
 
                 fu.imports().forEachOrdered(file::add);
