@@ -19,9 +19,11 @@ package com.speedment.internal.core.config.immutable;
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
+import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import groovy.lang.Closure;
@@ -32,12 +34,13 @@ import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity implements Project, ImmutableParentHelper<Dbms> {
+public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity implements Project, ImmutableParentHelper<Child<Project>> {
 
     private final Speedment speedment;
     private final Optional<ProjectManager> parent; // Rare occation of valid use of Optional as member
@@ -48,24 +51,32 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
 
     public ImmutableProject(Project project) {
         this(null, project);
-
     }
 
     public ImmutableProject(ProjectManager parent, Project project) {
         super(requireNonNull(project).getName(), project.isEnabled());
+        
         // Menbers
         this.speedment = project.getSpeedment();
         this.packageName = project.getPackageName();
         this.packageLocation = project.getPackageLocation();
         this.configPath = project.getConfigPath();
         this.parent = Optional.ofNullable(parent);
+        
         // Children
-        children = childHolderOf(project.stream().map(p -> new ImmutableDbms(this, p)));
+        this.children = childHolderOf(
+            Stream.concat(
+                project.streamOf(Dbms.class).map(p -> new ImmutableDbms(this, p)),
+                project.streamOf(PluginData.class).map(pd -> new ImmutablePluginData(this, pd))
+            )
+        );
+        
         // Special
-        tableNameMap = new HashMap<>();
+        this.tableNameMap = new HashMap<>();
         traverseOver(Table.class).forEach(t -> {
             tableNameMap.put(t.getRelativeName(Dbms.class), t);
         });
+        
         // resolve all dependencies that needs to be done post tree construction
         traverse().forEach(node -> {
             if (node instanceof ImmutableAbstractConfigEntity) {
@@ -137,9 +148,14 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     public Dbms dbms(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
+    
+    @Override
+    public PluginData pluginData(Closure<?> c) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 
     @Override
-    public Optional<Dbms> add(Dbms child) {
+    public Optional<Child<Project>> add(Child<Project> child) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
@@ -148,4 +164,8 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
+    @Override
+    public PluginData addNewPluginData(Speedment speedment) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 }

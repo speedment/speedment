@@ -18,7 +18,7 @@ package com.speedment.internal.core.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.PluginData;
-import com.speedment.config.PluginManager;
+import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.aspects.ParentHelper;
@@ -34,12 +34,12 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     
     private final Speedment speedment;
     private final ChildHolder children;
-    private PluginManager parent;
+    private Project parent;
     private String pluginName;
 
     public PluginDataImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolderImpl();
+        this.children  = new ChildHolderImpl();
     }
 
     @Override
@@ -64,11 +64,11 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     
     @Override
     public void setParent(Parent<?> parent) {
-        this.parent = Cast.castOrFail(parent, PluginManager.class);
+        this.parent = Cast.castOrFail(parent, Project.class);
     }
 
     @Override
-    public Optional<PluginManager> getParent() {
+    public Optional<Project> getParent() {
         return Optional.ofNullable(parent);
     }
 

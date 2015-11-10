@@ -108,6 +108,7 @@ public class GroovyParser {
 
         final File file = path.toFile();
         fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(file));
+        
         if (node instanceof Project) {
             @SuppressWarnings("unchecked")
             final Project project = (Project) node;

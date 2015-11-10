@@ -19,9 +19,11 @@ package com.speedment.internal.core.config;
 import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
+import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
@@ -37,7 +39,7 @@ import java.util.regex.Pattern;
  *
  * @author pemi
  */
-public final class ProjectImpl extends AbstractNamedConfigEntity implements Project, ParentHelper<Dbms> {
+public final class ProjectImpl extends AbstractNamedConfigEntity implements Project, ParentHelper<Child<Project>> {
 
     private final Speedment speedment;
     private ProjectManager parent;
@@ -125,7 +127,9 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
             schemaName = parts[1],
             tableName = parts[2];
        
-        return stream().filter(d -> dbmsName.equals(d.getName())).findAny()
+        return streamOf(Dbms.class)
+            .filter(d -> dbmsName.equals(d.getName()))
+            .findAny()
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find dbms: '" + dbmsName + "'."))
             .stream().filter(s -> schemaName.equals(s.getName())).findAny()
@@ -139,5 +143,10 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
     @Override
     public Dbms dbms(Closure<?> c) {
         return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms(getSpeedment()));
+    }
+    
+    @Override
+    public PluginData pluginData(Closure<?> c) {
+        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewPluginData(getSpeedment()));
     }
 }

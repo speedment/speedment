@@ -24,7 +24,6 @@ import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
 import com.speedment.config.Node;
 import com.speedment.config.PluginData;
-import com.speedment.config.PluginManager;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
@@ -44,16 +43,21 @@ import static java.util.Objects.requireNonNull;
  */
 public enum SpeedmentIcon {
     
+    // Big buttons
     BIG_GENERATE ("images/icon-generate.png"),
     BIG_CONFIGURE ("images/icon-configure.png"),
     BIG_GENERATE_HOVER ("images/icon-generate-hover.png"),
     BIG_CONFIGURE_HOVER ("images/icon-configure-hover.png"),
+    
+    // Toolbar
 	NEW_PROJECT ("pics/newProject.png"),
 	NEW_PROJECT_24 ("pics/newProject24.png"),
 	OPEN_PROJECT ("pics/openProject.png"),
 	OPEN_PROJECT_24 ("pics/openProject24.png"),
 	RUN_PROJECT ("pics/runProject.png"),
 	RUN_PROJECT_24 ("pics/runProject24.png"),
+    
+    // Metadata Tree
 	COLUMN ("pics/dbentity/column.png"),
 	DBMS ("pics/dbentity/dbms.png"),
 	FOREIGN_KEY ("pics/dbentity/foreignkey.png"),
@@ -67,8 +71,9 @@ public enum SpeedmentIcon {
 	PROJECT_MANAGER ("pics/dbentity/projectmanager.png"),
 	SCHEMA ("pics/dbentity/schema.png"),
 	TABLE ("pics/dbentity/table.png"),
-    PLUGIN_MANAGER (SilkIcon.BRICKS.getFileName()),
     PLUGIN_DATA (node -> ((PluginData) node).findPlugin().getIconPath()),
+    
+    // Menu icons
 	ADD_DBMS_TRANS ("pics/dialog/add_dbms_trans.png"),
 	OPEN_FILE ("pics/dialog/openFile.png"),
 	QUESTION ("pics/dialog/question.png"),
@@ -76,6 +81,8 @@ public enum SpeedmentIcon {
 	SPEEDMENT_LOGO_100 ("pics/dialog/speedment_logo100.png"),
 	WALKING_MAN ("pics/dialog/walking_man.gif"),
 	WALKING_MAN_SMALL ("pics/dialog/walking_man_small.png"),
+    
+    // Logotype
 	SPIRE ("images/logo.png");
 
 	private final static String FOLDER = "/";
@@ -95,7 +102,6 @@ public enum SpeedmentIcon {
 		NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
 		NODE_ICONS.put(Project.class, PROJECT);
 		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
-        NODE_ICONS.put(PluginManager.class, PLUGIN_MANAGER);
 	}
     
     public Image load() {

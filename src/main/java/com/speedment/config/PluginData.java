@@ -17,6 +17,7 @@
 package com.speedment.config;
 
 import com.speedment.HasSpeedment;
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
 import com.speedment.component.PluginComponent;
@@ -25,6 +26,9 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.plugin.Plugin;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.PluginDataImpl;
+import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  *
@@ -32,8 +36,38 @@ import com.speedment.exception.SpeedmentException;
  * @since 2.3
  */
 @Api(version = "2.3")
-public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child<PluginData>>, Child<PluginManager> {
+public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child<PluginData>>, Child<Project> {
 
+    /**
+     * Factory holder.
+     */
+    enum Holder {
+        HOLDER;
+        private Function<Speedment, PluginData> provider = PluginDataImpl::new;
+    }
+
+    /**
+     * Sets the instantiation method used to create new instances of this
+     * interface.
+     *
+     * @param provider the new constructor
+     */
+    static void setSupplier(Function<Speedment, PluginData> provider) {
+        Holder.HOLDER.provider = requireNonNull(provider);
+    }
+
+    /**
+     * Creates a new instance implementing this interface by using the class
+     * supplied by the default factory. To change implementation, please use the
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
+     *
+     * @param speedment instance to use
+     * @return the new instance
+     */
+    static PluginData newPluginData(Speedment speedment) {
+        return Holder.HOLDER.provider.apply(speedment);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -47,8 +81,8 @@ public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child
      * {@inheritDoc}
      */
     @Override
-    default Class<PluginManager> getParentInterfaceMainClass() {
-        return PluginManager.class;
+    default Class<Project> getParentInterfaceMainClass() {
+        return Project.class;
     }
     
     /**
