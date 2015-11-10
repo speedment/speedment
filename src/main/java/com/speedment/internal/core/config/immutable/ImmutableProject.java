@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static com.speedment.internal.util.Cast.cast;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static java.util.Objects.requireNonNull;
 

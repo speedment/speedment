@@ -26,6 +26,7 @@ import com.speedment.component.EntityManager;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
@@ -39,6 +40,7 @@ import com.speedment.internal.core.platform.component.impl.JavaTypeMapperCompone
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
+import com.speedment.internal.core.platform.component.impl.PluginComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
@@ -64,6 +66,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private ConnectionPoolComponent connectionPoolComponent;
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
+    private PluginComponent pluginComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -77,6 +80,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
+        put(PluginComponentImpl::new);
     }
 
     @Override
@@ -93,6 +97,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public Component put(Component item) {
         requireNonNull(item);
+
         if (unmodifiable) {
             throwNewUnsupportedOperationExceptionImmutable();
         }
@@ -128,6 +133,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof TypeMapperComponent) {
             typeMapperComponent = castOrFail(item, TypeMapperComponent.class);
+        }
+        if (item instanceof PluginComponent) {
+            pluginComponent = castOrFail(item, PluginComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -211,4 +219,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         return typeMapperComponent;
     }
 
+    @Override
+    public PluginComponent getPluginComponent() {
+        return pluginComponent;
+    }
 }

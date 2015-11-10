@@ -14,25 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.config;
+package com.speedment.config.plugin;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
-import com.speedment.config.aspects.Parent;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
+ * @since 2.3
  */
-@Api(version = "2.2")
-public interface ProjectManager extends Node, Enableable, Parent<Child<ProjectManager>> {
-
+@Api(version = "2.3")
+public interface Plugin {
+    
     /**
-     * {@inheritDoc}
+     * Returns the name of this plugin as declared in the groovy file.
+     * 
+     * @return  the unique name
      */
-    @Override
-    default Class<ProjectManager> getInterfaceMainClass() {
-        return ProjectManager.class;
-    }
+    String getName();
+    
+    /**
+     * Returns the label of this plugin as shown visible to the user in
+     * the GUI.
+     * 
+     * @return  the label
+     */
+    String getLabel();
+    
+    /**
+     * Returns the path of the icon to use for this node in the GUI.
+     * 
+     * @return  the icon path
+     */
+    String getIconPath();
 }

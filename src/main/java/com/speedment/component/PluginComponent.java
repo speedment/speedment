@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.plugin.Plugin;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -25,36 +25,36 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
- * @since 2.2
+ * @since 2.3
  */
-@Api(version="2.2")
-public interface TypeMapperComponent extends Component {
+@Api(version = "2.3")
+public interface PluginComponent extends Component {
     
     @Override
-    default Class<TypeMapperComponent> getComponentClass() {
-        return TypeMapperComponent.class;
+    default Class<PluginComponent> getComponentClass() {
+        return PluginComponent.class;
     }
     
     /**
-     * Installs the specified type mapper in this component.
+     * Installs the specified plugin in this component.
      * 
-     * @param typeMapperSupplier  the constructor for a mapper to install
+     * @param constructor  the constructor for a plugin to install
      */
-    void install(Supplier<TypeMapper<?, ?>> typeMapperSupplier);
+    void install(Supplier<Plugin> constructor);
     
     /**
-     * Streams over all the type mappers installed in this component.
+     * Streams over all the plugins installed in this component.
      * 
-     * @return  all mappers
+     * @return  all plugins
      */
-    Stream<TypeMapper<?, ?>> stream();
+    Stream<Plugin> stream();
     
     /**
-     * Retreive and return the type mapper with the specified absolute class
-     * name. If it is not installed, return an empty optional.
+     * Retreive and return the plugin with the specified name. If it is 
+     * not installed, return an empty optional.
      * 
-     * @param absoluteClassName  the name as returned by {@code Class.getName()}
-     * @return                   the type mapper or empty
+     * @param pluginName  the name as returned by {@code Plugin#getName()}
+     * @return            the installed plugin or empty
      */
-    Optional<TypeMapper<?, ?>> get(String absoluteClassName);
+    Optional<Plugin> get(String pluginName);
 }

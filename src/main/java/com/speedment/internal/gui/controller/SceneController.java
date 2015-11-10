@@ -81,6 +81,10 @@ import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
 import com.speedment.internal.gui.util.ProjectUtil;
 import static java.util.Objects.requireNonNull;
 import static javafx.util.Duration.millis;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
+import static java.util.Objects.requireNonNull;
+import static javafx.util.Duration.millis;
 
 /**
  * FXML Controller class for the main window of the GUI.
@@ -365,7 +369,7 @@ public final class SceneController implements Initializable {
      */
     private ImageView iconFor(Node node) {
         requireNonNull(node);
-        final SpeedmentIcon icon = SpeedmentIcon.forNodeType(node.getInterfaceMainClass());
+        final SpeedmentIcon icon = SpeedmentIcon.forNode(node);
 
         if (icon == null) {
             
@@ -373,9 +377,9 @@ public final class SceneController implements Initializable {
                 "Unknown node type '" + node.getInterfaceMainClass().getName() + "'."
             ));
             
-            return SpeedmentIcon.QUESTION.view();
+            return SpeedmentIcon.QUESTION.view(node);
         } else {
-            return icon.view();
+            return icon.view(node);
         }
     }
 

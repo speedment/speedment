@@ -1032,7 +1032,7 @@ public enum SilkIcon {
 	ZOOM_IN ("zoom_in.png"),
 	ZOOM_OUT ("zoom_out.png");
 
-	private final static String ICONS_DIRECTORY = "/com/famfamfam/silk/";
+	private final static String ICONS_DIRECTORY = "com/famfamfam/silk/";
 	private final String icon;
 	
 	private SilkIcon(String icon) {
@@ -1040,11 +1040,11 @@ public enum SilkIcon {
 	}
 	
 	public String getFileName() {
-		return icon;
+		return ICONS_DIRECTORY + icon;
 	}
 	
 	public InputStream getFileInputStream() {
-		return getClass().getResourceAsStream(ICONS_DIRECTORY + icon);
+		return getClass().getResourceAsStream("/" + getFileName());
 	}
 	
 	public Image load() {

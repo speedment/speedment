@@ -17,14 +17,14 @@
 package com.speedment.internal.core.config;
 
 import com.speedment.internal.core.config.aspects.ParentHelper;
-import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
+import com.speedment.config.aspects.Child;
 
 /**
  *
  * @author pemi
  */
-public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
+public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Child<ProjectManager>> {
     
     private final ChildHolder children;
 
