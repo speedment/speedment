@@ -23,7 +23,7 @@ import static com.speedment.internal.core.stream.builder.action.Property.STREAM_
 import static com.speedment.internal.core.stream.builder.action.Property.TYPE;
 import static com.speedment.internal.core.stream.builder.action.Verb.PRESERVE;
 import static com.speedment.internal.core.stream.builder.action.Verb.SET;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.stream.Stream;
 
 

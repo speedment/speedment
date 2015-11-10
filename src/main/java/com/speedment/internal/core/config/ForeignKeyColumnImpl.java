@@ -22,8 +22,6 @@ import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
-import static com.speedment.internal.core.config.utils.ConfigUtil.findColumnByName;
-import static com.speedment.internal.core.config.utils.ConfigUtil.findTableByName;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import com.speedment.internal.core.config.aspects.ColumnableHelper;
 import com.speedment.internal.util.Cast;
@@ -74,23 +72,17 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public Column getForeignColumn() {
-        return findColumnByName(
-            getForeignTable(), 
-            getForeignColumnName()
-        );
+        return getForeignTable().find(Column.class, getForeignColumnName());
     }
 
     @Override
     public Table getForeignTable() {
-        return findTableByName(
-            ancestor(Schema.class).orElseThrow(
+        return ancestor(Schema.class).orElseThrow(
                 thereIsNo(
-                    Table.class, 
-                    ForeignKeyColumn.class, 
-                    getForeignTableName()
+                        Table.class,
+                        ForeignKeyColumn.class,
+                        getForeignTableName()
                 )
-            ), 
-            getForeignTableName()
-        );
+        ).find(Table.class, getForeignTableName());
     }
 }

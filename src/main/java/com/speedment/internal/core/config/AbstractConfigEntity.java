@@ -49,7 +49,7 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         this.name = defaultName; // Can be null
         setDefaults();
     }
-
+    
     protected abstract void setDefaults();
 
     @Override

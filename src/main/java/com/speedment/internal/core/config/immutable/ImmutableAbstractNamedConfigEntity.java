@@ -14,22 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util;
+package com.speedment.internal.core.config.immutable;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.config.aspects.Nameable;
 
 /**
+ * Generic representation of a ConfigEntity.
  *
- * @author Emil Forslund
+ * This class is thread safe.
+ *
+ * @author pemi
  */
-public final class CollectorUtil {
-    
-    
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private CollectorUtil() {
-        instanceNotAllowed(getClass());
+public abstract class ImmutableAbstractNamedConfigEntity extends ImmutableAbstractConfigEntity
+        implements Comparable<Nameable> {
+
+    public ImmutableAbstractNamedConfigEntity(String name, boolean enabled) {
+        super(name, enabled);
+    }
+
+    @Override
+    public int compareTo(Nameable o) {
+        return compareNames(o);
     }
 }

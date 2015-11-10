@@ -171,4 +171,13 @@ public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractBase
         }
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder("{type=")
+            .append(type.name())
+            .append(", predicates=")
+            .append(predicates.toString())
+            .append("}")
+            .toString();
+    }
 }

@@ -47,7 +47,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     public DbmsImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolder();
+        this.children = new ChildHolderImpl();
     }
 
     @Override
@@ -135,7 +135,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
     public Speedment getSpeedment() {
         return speedment;
     }
-    
+
     @Override
     public Schema schema(Closure<?> c) {
         return ConfigUtil.groovyDelegatorHelper(c, this::addNewSchema);

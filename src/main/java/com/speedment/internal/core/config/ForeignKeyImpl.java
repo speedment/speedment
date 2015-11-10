@@ -36,7 +36,7 @@ public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements F
     private final ChildHolder children;
     
     public ForeignKeyImpl() {
-        children = new ChildHolder();
+        children = new ChildHolderImpl();
     }
     
     @Override

@@ -32,13 +32,12 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
+import com.speedment.internal.core.config.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import static com.speedment.internal.util.Beans.beanPropertyName;
 import com.speedment.internal.util.Trees;
-import com.speedment.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
@@ -311,7 +310,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                             final External external = MethodsParser.getExternalFor(method, clazz);
                             final Class<?> targetJavaType = external.type();
                             final Object val = speedment
-                                .get(JavaTypeMapperComponent.class)
+                                .getJavaTypeMapperComponent()
                                 .apply(targetJavaType)
                                 .parse(propString);
                             //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
@@ -350,7 +349,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                     .forEachOrdered(consumer::accept);
             });
 
-            speedment.get(ProjectComponent.class).setProject(project);
+            speedment.getProjectComponent().setProject(project);
 
         } catch (IOException ioe) {
             throw new SpeedmentException("Failed to read config file", ioe);
@@ -358,7 +357,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     protected <ENTITY> void put(Manager<ENTITY> manager) {
-        speedment.get(ManagerComponent.class).put(manager);
+        speedment.getManagerComponent().put(manager);
     }
 
     /**
@@ -403,7 +402,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     @Override
     public T start() {
-        AnalyticsUtil.notify(APP_STARTED);
         Statistics.onNodeStarted();
 
         LOGGER.info(
@@ -422,6 +420,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         if (!isStarted()) {
             start();
         }
+        // Replace the metadata model with an immutable version (potentially much faster)
+        final Project project = speedment.getProjectComponent().getProject();
+        final Project immutableProject = new ImmutableProject(project);
+        speedment.getProjectComponent().setProject(immutableProject);
+        //
         return speedment;
     }
 
@@ -439,7 +442,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     protected void forEachManagerInSeparateThread(Consumer<Manager<?>> managerConsumer) {
         requireNonNull(managerConsumer);
-        final ManagerComponent mc = speedment.get(ManagerComponent.class);
+        final ManagerComponent mc = speedment.getManagerComponent();
         final List<Thread> threads = mc.stream()
             .map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName()))
             .collect(toList());

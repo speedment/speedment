@@ -53,7 +53,12 @@ public final class ManagerComponentImpl extends Apache2AbstractComponent impleme
     @SuppressWarnings("unchecked")
     public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
         requireNonNull(entityClass);
-        return (Manager<E>) Optional.ofNullable(managersByEntity.get(entityClass)).orElseThrow(() -> new SpeedmentException("No manager exists for " + entityClass));
+        @SuppressWarnings("unchecked")
+        final Manager<E> manager = (Manager<E>)managersByEntity.get(entityClass);
+        if (manager==null) {
+            throw new SpeedmentException("No manager exists for " + entityClass);
+        }
+        return manager;
     }
 
     @Override

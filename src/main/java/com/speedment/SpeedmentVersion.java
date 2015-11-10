@@ -17,7 +17,7 @@
 package com.speedment;
 
 import com.speedment.annotation.Api;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * This class holds the parameters normally held in the JAR MANIFEST. By holding
@@ -33,7 +33,7 @@ public final class SpeedmentVersion {
     private static final String
         IMPLEMENTATION_TITLE   = "Speedment",
         IMPLEMENTATION_VENDOR  = "Speedment Inc.",  // "Speedment, Inc." difficult to enter into POM because of ','
-        IMPLEMENTATION_VERSION = "2.2.0",
+        IMPLEMENTATION_VERSION = "2.2.1",
         SPECIFICATION_VERSION  = "2.2";
 
     private static final boolean PRODUCTION_MODE = true;

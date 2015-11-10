@@ -58,7 +58,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
     private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
     public TableImpl() {
-        children = new ChildHolder(CLASS_COMPARATOR);
+        children = new ChildHolderImpl(CLASS_COMPARATOR);
     }
 
     @Override

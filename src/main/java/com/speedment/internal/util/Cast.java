@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.util;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  *

@@ -17,7 +17,7 @@
 package com.speedment.internal.core.config.utils;
 
 import com.speedment.annotation.External;
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;

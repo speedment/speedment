@@ -22,7 +22,7 @@ import com.speedment.internal.logging.LoggerEventListener;
 import com.speedment.internal.logging.LoggerFactory;
 import com.speedment.internal.logging.LoggerFormatter;
 import com.speedment.internal.logging.impl.formatter.StandardFormatters;
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;

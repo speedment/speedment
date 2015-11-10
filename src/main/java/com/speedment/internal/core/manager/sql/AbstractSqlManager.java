@@ -189,7 +189,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected DbmsHandler dbmsHandler() {
-        return speedment.get(DbmsHandlerComponent.class).get(getDbms());
+        return speedment.getDbmsHandlerComponent().get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters
@@ -277,6 +277,92 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
     }
 
+        // Null safe RS getters (int), must have the same name as ResultSet getters
+    protected Object getObject(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition));
+    }
+
+    protected Boolean getBoolean(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBoolean(ordinalPosition));
+    }
+
+    protected Byte getByte(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getByte(ordinalPosition));
+    }
+
+    protected Short getShort(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getShort(ordinalPosition));
+    }
+
+    protected Integer getInt(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getInt(ordinalPosition));
+    }
+
+    protected Long getLong(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getLong(ordinalPosition));
+    }
+
+    protected Float getFloat(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getFloat(ordinalPosition));
+    }
+
+    protected Double getDouble(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDouble(ordinalPosition));
+    }
+
+    protected String getString(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getString(ordinalPosition));
+    }
+
+    protected Date getDate(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDate(ordinalPosition));
+    }
+
+    protected Time getTime(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTime(ordinalPosition));
+    }
+
+    protected Timestamp getTimestamp(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTimestamp(ordinalPosition));
+    }
+
+    protected BigDecimal getBigDecimal(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(ordinalPosition));
+    }
+
+    protected Blob getBlob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBlob(ordinalPosition));
+    }
+
+    protected Clob getClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getClob(ordinalPosition));
+    }
+
+    protected Array getArray(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getArray(ordinalPosition));
+    }
+
+    protected Ref getRef(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRef(ordinalPosition));
+    }
+
+    protected URL getURL(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getURL(ordinalPosition));
+    }
+
+    protected RowId getRowId(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRowId(ordinalPosition));
+    }
+
+    protected NClob getNClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getNClob(ordinalPosition));
+    }
+
+    protected SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
+    }
+
+    
     private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);
         if (rs.wasNull()) {
@@ -320,7 +406,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                             // Cast from Long to the column target type
 
                             final Object val = speedment
-                                .get(JavaTypeMapperComponent.class)
+                                .getJavaTypeMapperComponent()
                                 .apply(column.getTypeMapper().getJavaType())
                                 .parse(
                                     l.get(cnt.getAndIncrement())

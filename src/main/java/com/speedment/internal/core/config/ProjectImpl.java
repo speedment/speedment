@@ -47,7 +47,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     public ProjectImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolder();
+        this.children = new ChildHolderImpl();
     }
 
     @Override

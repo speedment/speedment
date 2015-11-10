@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.analytics;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -32,11 +32,6 @@ public final class AnalyticsUtil {
         final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
         tracker.setLoggingAdapter(new LoggingAdapterImpl());
         tracker.trackAsynchronously(focusPoint);
-    }
-
-    public static void notify(final String focusPointName) {
-        requireNonNull(focusPointName);
-        notify(new FocusPoint(focusPointName));
     }
 
     /**

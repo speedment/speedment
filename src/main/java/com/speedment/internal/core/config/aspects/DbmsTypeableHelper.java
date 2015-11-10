@@ -41,7 +41,7 @@ public interface DbmsTypeableHelper extends DbmsTypeable {
     default void setTypeName(String name) {
         requireNonNull(name);
         setType(getSpeedment()
-            .get(DbmsHandlerComponent.class)
+            .getDbmsHandlerComponent()
             .findByName(name)
             .orElseThrow(IllegalArgumentException::new)
         );

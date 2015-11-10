@@ -37,7 +37,7 @@ public final class IndexImpl extends AbstractNamedConfigEntity implements Index,
     private boolean unique;
 
     public IndexImpl() {
-        this.children = new ChildHolder();
+        this.children = new ChildHolderImpl();
     }
 
     @Override

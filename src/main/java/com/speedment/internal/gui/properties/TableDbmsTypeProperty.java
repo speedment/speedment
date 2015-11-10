@@ -81,6 +81,6 @@ public final class TableDbmsTypeProperty extends TableProperty<DbmsType> {
 	}
     
     private Stream<DbmsType> supportedDbmsTypes() {
-        return getSpeedment().get(DbmsHandlerComponent.class).supportedDbmsTypes();
+        return getSpeedment().getDbmsHandlerComponent().supportedDbmsTypes();
     }
 }

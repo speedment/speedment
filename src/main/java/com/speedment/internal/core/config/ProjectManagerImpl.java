@@ -29,7 +29,7 @@ public final class ProjectManagerImpl extends AbstractNamedConfigEntity implemen
     private final ChildHolder children;
 
     public ProjectManagerImpl() {
-        children = new ChildHolder();
+        children = new ChildHolderImpl();
     }
 
     @Override

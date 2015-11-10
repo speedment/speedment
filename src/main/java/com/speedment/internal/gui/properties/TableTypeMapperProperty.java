@@ -41,7 +41,7 @@ public final class TableTypeMapperProperty extends TableProperty<TypeMapper> {
 		super (requireNonNull(speedment), requireNonNull(name));
         
         combo = new ComboBox<>(
-            speedment.get(TypeMapperComponent.class).stream()
+            speedment.getTypeMapperComponent().stream()
                 .filter(tm -> tm.getDatabaseType().equals(initialValue.getDatabaseType()))
                 .collect(Collectors.toCollection(
                     FXCollections::observableArrayList
@@ -66,7 +66,7 @@ public final class TableTypeMapperProperty extends TableProperty<TypeMapper> {
 
             @Override
             public TypeMapper fromString(String string) {
-                return speedment.get(TypeMapperComponent.class).get(string).orElseThrow(
+                return speedment.getTypeMapperComponent().get(string).orElseThrow(
                     () -> new SpeedmentException("Could not find type mapper '" + string + "'.")
                 );
             }

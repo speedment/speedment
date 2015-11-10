@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.lang.interfaces;
 
-import static com.speedment.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Collections;
 import java.util.List;
 

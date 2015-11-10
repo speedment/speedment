@@ -42,6 +42,8 @@ import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
+
+import javax.swing.text.html.Option;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -49,15 +51,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
+
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
@@ -104,7 +101,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final String password = unwrap(dbms.getPassword());
         try {
             //conn = DriverManager.getConnection(url, user, password);
-            conn = speedment.get(ConnectionPoolComponent.class).getConnection(url, user, password);
+            conn = speedment.getConnectionPoolComponent().getConnection(url, user, password);
         } catch (SQLException sqle) {
 //            final Properties pwProtectedProperties = new Properties();
 //            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));
@@ -137,7 +134,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
-                final Class<?> mappedClass = speedment.get(SqlTypeMapperComponent.class).apply(dbms, typeInfo);
+                final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }
@@ -145,14 +142,14 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public Stream<Schema> schemas() {
+    public Stream<Schema> schemas(Predicate<Schema> filterCriteria)  {
+        Optional<List<Schema>> schemas =  Optional.empty();
         try {
             try (final Connection connection = getConnection()) {
-                final List<Schema> schemas = schemas(connection).collect(toList());
-                schemas.forEach(schema -> {
+                schemas = Optional.ofNullable(schemas(connection).filter(filterCriteria).collect(toList()));
+                schemas.orElse(Collections.<Schema>emptyList()).forEach(schema -> {
                     final List<Table> tables = tables(connection, schema).collect(toList());
                     tables.forEach(table -> {
-
                         columns(connection, schema, table).forEachOrdered(table::add);
                         primaryKeyColumns(connection, schema, table).forEachOrdered(table::add);
                         indexes(connection, schema, table).forEachOrdered(table::add);
@@ -161,12 +158,14 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         schema.add(table);
                     });
                 });
-                return schemas.stream();
             }
-        } catch (SQLException sqle) {
+
+        }catch (SQLException sqle){
             LOGGER.error(sqle, "Unable to read from " + dbms.toString());
-            return Stream.empty();
         }
+
+        return schemas.orElse(Collections.<Schema>emptyList()).stream();
+
     }
 
     @Override
@@ -280,7 +279,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final Class<?> mapping = typeMapping.get(classMappingString);
             if (mapping != null) {
                 
-                final TypeMapper<?, ?> typeMapper = speedment.get(TypeMapperComponent.class).stream()
+                final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
                     .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
                     .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
                     .findFirst().orElseThrow(() -> new SpeedmentException(

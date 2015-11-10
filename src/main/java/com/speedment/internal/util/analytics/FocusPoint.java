@@ -17,78 +17,47 @@
 package com.speedment.internal.util.analytics;
 
 import com.speedment.SpeedmentVersion;
+import com.speedment.internal.util.Settings;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
-public final class FocusPoint {
+public enum FocusPoint {
+    
+    GUI_STARTED        ("GuiStarted"),
+    GUI_PROJECT_LOADED ("ProjectLoaded"),
+    APP_STARTED        ("AppStarted"),
+    GENERATE           ("Generate");
 
-    public static final String VERSION = SpeedmentVersion.getImplementationVersion();
-    public static final String TITLE = SpeedmentVersion.getImplementationTitle();
-
-    public static final FocusPoint CORE = new FocusPoint(TITLE);
-    public static final FocusPoint CORE_WITH_VERSION = new FocusPoint(VERSION, CORE);
-	public static final FocusPoint GUI_STARTED = new FocusPoint("GuiStarted", CORE_WITH_VERSION);
-	public static final FocusPoint APP_STARTED = new FocusPoint("AppStarted", CORE_WITH_VERSION);
-    public static final FocusPoint GENERATE = new FocusPoint("Generate", CORE_WITH_VERSION);
-
-    private final String name;
-    private final FocusPoint parentFocusPoint;
-    private static final String URI_SEPARATOR = "/";
-    private static final String TITLE_SEPARATOR = "-";
-
-    public FocusPoint(String name) {
-        this(name, null);
+    private static final String 
+        ENCODING  = "UTF-8",
+        SEPARATOR = "/";
+    
+    private final String eventName;
+    
+    private FocusPoint(String name) {
+        this.eventName = name;
     }
-
-    public FocusPoint(String name, FocusPoint parentFocusPoint) {
-        this.name = requireNonNull(name,"Name must be non-null. ");
-        this.parentFocusPoint = parentFocusPoint; // nullable
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public FocusPoint getParentFocusPoint() {
-        return parentFocusPoint;
+    
+    public String getEventName() {
+        return eventName;
     }
 
     public String getContentURI() {
-        final StringBuilder contentURIBuffer = new StringBuilder();
-        getContentURI(contentURIBuffer, this);
-        return contentURIBuffer.toString();
+        return Stream.of(
+            SpeedmentVersion.getImplementationTitle(),
+            SpeedmentVersion.getImplementationVersion(),
+            eventName,
+            Settings.inst().get("user_mail", "no-mail-specified")
+        ).collect(joining(SEPARATOR));
     }
 
-    public String getContentTitle() {
-        final StringBuilder titleBuffer = new StringBuilder();
-        getContentTitle(titleBuffer, this);
-        return titleBuffer.toString();
-    }
-
-    private void getContentURI(StringBuilder contentURIBuffer, FocusPoint focusPoint) {
-        final FocusPoint parentFP = focusPoint.getParentFocusPoint();
-        if (parentFP != null) {
-            getContentURI(contentURIBuffer, parentFP);
-        }
-        contentURIBuffer.append(URI_SEPARATOR);
-        contentURIBuffer.append(encode(focusPoint.getName()));
-    }
-
-    private String encode(String name) {
+    private static String encode(String name) {
         try {
-            return URLEncoder.encode(name, "UTF-8");
+            return URLEncoder.encode(name, ENCODING);
         } catch (UnsupportedEncodingException e) {
             return name;
         }
-    }
-
-    private void getContentTitle(StringBuilder titleBuffer, FocusPoint focusPoint) {
-        final FocusPoint parentFP = focusPoint.getParentFocusPoint();
-        if (parentFP != null) {
-            getContentTitle(titleBuffer, parentFP);
-            titleBuffer.append(TITLE_SEPARATOR);
-        }
-        titleBuffer.append(encode(focusPoint.getName()));
     }
 }

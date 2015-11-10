@@ -62,7 +62,7 @@ public final class JGoogleAnalyticsTracker {
      * application module load, user actions, error events etc.
      */
     public void trackSynchronously(FocusPoint focusPoint) {
-        logMessage("JGoogleAnalytics: Tracking synchronously focusPoint=" + focusPoint.getContentTitle());
+        logMessage("JGoogleAnalytics: Tracking synchronously focusPoint=" + focusPoint.getEventName());
         httpRequest.request(urlBuildingStrategy.buildURL(focusPoint));
     }
 
@@ -73,7 +73,7 @@ public final class JGoogleAnalyticsTracker {
      * application module load, user actions, error events etc.
      */
     public void trackAsynchronously(FocusPoint focusPoint) {
-        logMessage("JGoogleAnalytics: Tracking Asynchronously focusPoint=" + focusPoint.getContentTitle());
+        logMessage("JGoogleAnalytics: Tracking Asynchronously focusPoint=" + focusPoint.getEventName());
         new TrackingThread(focusPoint).start();
     }
 

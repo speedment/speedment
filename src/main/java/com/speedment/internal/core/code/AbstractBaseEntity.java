@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 import com.speedment.Entity;
 import com.speedment.Speedment;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -96,7 +95,7 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     }
 
     protected <T> Manager<T> managerOf_(Class<T> entityClass) {
-        return getSpeedment_().get(ManagerComponent.class).managerOf(requireNonNull(entityClass));
+        return getSpeedment_().managerOf(requireNonNull(entityClass));
     }
         
 }

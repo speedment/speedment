@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util;
 
-import static com.speedment.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import static java.util.Objects.requireNonNull;

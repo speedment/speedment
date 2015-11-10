@@ -52,7 +52,7 @@ public final class TableClassProperty extends TableProperty<Class> {
         } else if(name.equalsIgnoreCase("type mapper")) {
             // value nullable
             combo = new ComboBox<>(
-                speedment.get(TypeMapperComponent.class).stream()
+                speedment.getTypeMapperComponent().stream()
                     .filter(tm -> tm.getDatabaseType().equals(tm))
                     .map(TypeMapper::getClass)
                     .collect(Collectors.toCollection(

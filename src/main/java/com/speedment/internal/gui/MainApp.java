@@ -25,8 +25,7 @@ import com.speedment.internal.gui.controller.MailPromptController;
 import com.speedment.internal.gui.controller.ProjectPromptController;
 import com.speedment.internal.gui.controller.SceneController;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
-import com.speedment.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
+import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -55,7 +54,7 @@ public final class MainApp extends Application {
         //stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
 
-        AnalyticsUtil.notify(GUI_STARTED);
+        Statistics.onGuiStarted();
 
         final Parameters parameters = getParameters();
         final List<String> params = parameters.getRaw();
