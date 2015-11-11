@@ -27,6 +27,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.plugin.Plugin;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.PluginDataImpl;
+import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
@@ -116,10 +117,20 @@ public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child
      */
     default Plugin findPlugin() throws SpeedmentException {
         return getSpeedment()
-            .get(PluginComponent.class)
+            .getPluginComponent()
             .get(getPluginName())
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find plugin '" + getPluginName() + "'."
             ));
     }
+    
+    /**
+     * Creates and returns a new child to PluginData.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new child
+     */
+    Child<PluginData> metadata(Closure<?> c);
 }

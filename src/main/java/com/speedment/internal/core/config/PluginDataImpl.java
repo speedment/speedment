@@ -21,8 +21,11 @@ import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
+import com.speedment.config.plugin.Plugin;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.internal.util.Cast;
+import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -75,5 +78,18 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     @Override
     public ChildHolder getChildren() {
         return children;
+    }
+
+    @Override
+    public Child<PluginData> metadata(Closure<?> c) {
+        final String name = (String) c.getProperty("pluginName");
+        final Plugin plugin = getSpeedment()
+            .getPluginComponent()
+            .get(name)
+            .orElseThrow(() -> new SpeedmentException(
+                "Could not find plugin '" + name + "'."
+            ));
+        
+        return plugin.newChildToPluginData(c, this);
     }
 }

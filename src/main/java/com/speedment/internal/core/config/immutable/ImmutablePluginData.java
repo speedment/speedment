@@ -24,6 +24,7 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import java.util.Optional;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
@@ -79,5 +80,10 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     @Override
     public Speedment getSpeedment() {
         return speedment;
+    }
+
+    @Override
+    public Child<PluginData> metadata(Closure<?> c) {
+        return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

@@ -17,6 +17,9 @@
 package com.speedment.config.plugin;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.PluginData;
+import com.speedment.config.aspects.Child;
+import groovy.lang.Closure;
 
 /**
  *
@@ -47,4 +50,14 @@ public interface Plugin {
      * @return  the icon path
      */
     String getIconPath();
+    
+    /**
+     * Method that will be invoked by groovy parser if a child to the
+     * {@link PluginData} closure is detected.
+     * 
+     * @param closure  the groovy closure
+     * @param parent   the parent
+     * @return         a new child node
+     */
+    Child<PluginData> newChildToPluginData(Closure<?> closure, PluginData parent);
 }
