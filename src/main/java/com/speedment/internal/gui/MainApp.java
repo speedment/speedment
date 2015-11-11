@@ -25,12 +25,14 @@ import com.speedment.internal.gui.controller.MailPromptController;
 import com.speedment.internal.gui.controller.ProjectPromptController;
 import com.speedment.internal.gui.controller.SceneController;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -38,18 +40,24 @@ import javafx.stage.Stage;
  */
 public final class MainApp extends Application {
 
-    private static MainApp app;
-
-    private final Speedment speedment;
-
-    public MainApp() {
-        speedment = SpeedmentFactory.newSpeedmentInstance();
+    private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
+    private static Speedment SPEEDMENT;
+    private static MainApp APP;
+    
+    public static void setSpeedment(Speedment speedment) {
+        MainApp.SPEEDMENT = requireNonNull(speedment);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         requireNonNull(stage);
-        app = this;
+        
+        if (SPEEDMENT == null) {
+            LOGGER.info("Creating new Speedment instance for GUI session.");
+            SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
+        }
+        
+        APP = this;
 
         //stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
@@ -60,16 +68,16 @@ public final class MainApp extends Application {
         final List<String> params = parameters.getRaw();
         if (params.isEmpty()) {
             if (Settings.inst().has("user_mail")) {
-                ProjectPromptController.showIn(speedment, stage);
+                ProjectPromptController.showIn(SPEEDMENT, stage);
             } else {
-                MailPromptController.showIn(speedment, stage);
+                MailPromptController.showIn(SPEEDMENT, stage);
             }
         } else {
-            final Project project = Project.newProject(speedment);
+            final Project project = Project.newProject(SPEEDMENT);
             final String filename = params.get(0).trim().replace("\\", "/");
             final File file = new File(filename);
             GroovyParser.fromGroovy(project, file.toPath());
-            SceneController.showIn(speedment, stage, project, file);
+            SceneController.showIn(SPEEDMENT, stage, project, file);
         }
 
         stage.show();
@@ -78,7 +86,7 @@ public final class MainApp extends Application {
 
     public static void showWebsite(String url) {
         requireNonNull(url);
-        app.getHostServices().showDocument(url);
+        APP.getHostServices().showDocument(url);
     }
     
     /**

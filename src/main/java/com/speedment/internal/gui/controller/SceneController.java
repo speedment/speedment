@@ -21,6 +21,7 @@ import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.Node;
+import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.gui.MainApp;
 import com.speedment.internal.gui.controller.NotificationController.Notification;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
@@ -29,6 +30,7 @@ import com.speedment.internal.gui.properties.TableProperty;
 import com.speedment.internal.gui.properties.TablePropertyManager;
 import com.speedment.internal.gui.properties.TablePropertyRow;
 import com.speedment.internal.gui.util.FadeAnimation;
+import com.speedment.internal.gui.util.ProjectUtil;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
@@ -78,7 +80,6 @@ import static javafx.scene.control.SelectionMode.MULTIPLE;
 import static javafx.util.Duration.ZERO;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
-import com.speedment.internal.gui.util.ProjectUtil;
 import static java.util.Objects.requireNonNull;
 import static javafx.util.Duration.millis;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -328,6 +329,9 @@ public final class SceneController implements Initializable {
      */
     private void populateTree(Project project) {
         requireNonNull(project);
+        
+        speedment.getEventComponent().notify(new ProjectLoaded(project));
+        
         final ListChangeListener<? super TreeItem<Child<?>>> change = l ->
             populatePropertyTable(
                 propertyMgr.propertiesFor(
@@ -369,18 +373,7 @@ public final class SceneController implements Initializable {
      */
     private ImageView iconFor(Node node) {
         requireNonNull(node);
-        final SpeedmentIcon icon = SpeedmentIcon.forNode(node);
-
-        if (icon == null) {
-            
-            LOGGER.error("Internal error.", new RuntimeException(
-                "Unknown node type '" + node.getInterfaceMainClass().getName() + "'."
-            ));
-            
-            return SpeedmentIcon.QUESTION.view(node);
-        } else {
-            return icon.view(node);
-        }
+        return SpeedmentIcon.forNode(node);
     }
 
     /**

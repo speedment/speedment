@@ -14,19 +14,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.component;
+package com.speedment.event;
 
-import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.config.Project;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author     Emil Forslund
- * @param <C>  the component type to build
- * @since      2.3
+ * @author Emil Forslund
+ * @since 2.3
  */
 @Api(version="2.3")
-public interface ComponentBuilder<C extends Component> {
-    ComponentBuilder<C> withSpeedment(Speedment speedment);
-    C build();
+public final class ProjectLoaded implements Event {
+    
+    private final static String NAME = "PROJECT_LOADED";
+    private final Project project;
+    
+    public static ProjectLoaded EVENT = new ProjectLoaded();
+    
+    private ProjectLoaded() {
+        this.project = null;
+    }
+    
+    public ProjectLoaded(Project project) {
+        this.project = requireNonNull(project);
+    }
+
+    @Override
+    public String name() {
+        return NAME;
+    }
+    
+    public Project project() {
+        return project;
+    }
 }

@@ -24,6 +24,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.plugin.Plugin;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.aspects.ParentHelper;
+import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
@@ -38,7 +39,6 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     private final Speedment speedment;
     private final ChildHolder children;
     private Project parent;
-    private String pluginName;
 
     public PluginDataImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
@@ -56,16 +56,6 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     }
 
     @Override
-    public void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
-
-    @Override
-    public String getPluginName() {
-        return pluginName;
-    }
-    
-    @Override
     public void setParent(Parent<?> parent) {
         this.parent = Cast.castOrFail(parent, Project.class);
     }
@@ -82,7 +72,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
 
     @Override
     public Child<PluginData> metadata(Closure<?> c) {
-        final String name = (String) c.getProperty("pluginName");
+        final String name = (String) c.getProperty("name");
         final Plugin plugin = getSpeedment()
             .getPluginComponent()
             .get(name)
@@ -90,6 +80,10 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
                 "Could not find plugin '" + name + "'."
             ));
         
-        return plugin.newChildToPluginData(c, this);
+        return ConfigUtil.groovyDelegatorHelper(c, () -> {
+            final Child<PluginData> child = plugin.newChildToPluginData(c, this);
+            children.put(child, this);
+            return child;
+        });
     }
 }

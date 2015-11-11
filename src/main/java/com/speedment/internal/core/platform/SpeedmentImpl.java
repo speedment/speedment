@@ -23,6 +23,7 @@ import com.speedment.Manager;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
+import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
@@ -36,6 +37,7 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
+import com.speedment.internal.core.platform.component.impl.EventComponentImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
@@ -67,6 +69,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
     private PluginComponent pluginComponent;
+    private EventComponent eventComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -81,6 +84,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
         put(PluginComponentImpl::new);
+        put(EventComponentImpl::new);
     }
 
     @Override
@@ -136,6 +140,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof PluginComponent) {
             pluginComponent = castOrFail(item, PluginComponent.class);
+        }
+        if (item instanceof EventComponent) {
+            eventComponent = castOrFail(item, EventComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -222,5 +229,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public PluginComponent getPluginComponent() {
         return pluginComponent;
+    }
+    
+    @Override
+    public EventComponent getEventComponent() {
+        return eventComponent;
     }
 }

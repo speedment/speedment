@@ -32,8 +32,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 import java.util.regex.Pattern;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,6 +58,20 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
         setPackageName("com.company.speedment.test");
         //setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
         setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
+    }
+    
+    @Override
+    public Dbms addNewDbms(Speedment speedment) {
+        final Dbms e = Dbms.newDbms(speedment);
+        add(e);
+        return e;
+    }
+
+    @Override
+    public PluginData addNewPluginData(Speedment speedment) {
+        final PluginData e = PluginData.newPluginData(speedment);
+        add(e);
+        return e;
     }
 
     @Override

@@ -14,19 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.component;
+package com.speedment.event;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 
 /**
  *
- * @author     Emil Forslund
- * @param <C>  the component type to build
- * @since      2.3
+ * @author Emil Forslund
+ * @since 2.3
  */
 @Api(version="2.3")
-public interface ComponentBuilder<C extends Component> {
-    ComponentBuilder<C> withSpeedment(Speedment speedment);
-    C build();
+public interface Event {
+    
+    String name();
+    
+    default void publish(Speedment speedment) {
+        speedment.getEventComponent().notify(this);
+    }
 }

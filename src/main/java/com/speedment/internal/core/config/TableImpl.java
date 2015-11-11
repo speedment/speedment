@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Column;
 import com.speedment.config.ForeignKey;
@@ -28,11 +29,16 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
+import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Comparator;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -40,6 +46,7 @@ import java.util.Optional;
  */
 public final class TableImpl extends AbstractNamedConfigEntity implements Table, ParentHelper<Child<Table>> {
 
+    private final Speedment speedment;
     private Schema parent;
     private final ChildHolder children;
     private String tableName;
@@ -57,8 +64,9 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
     
     private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
-    public TableImpl() {
-        children = new ChildHolderImpl(CLASS_COMPARATOR);
+    public TableImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children  = new ChildHolderImpl(CLASS_COMPARATOR);
     }
 
     @Override
@@ -136,7 +144,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public  Index addNewIndex() {
-        final Index e = Index.newIndex();
+        final Index e = Index.newIndex(speedment);
         add(e);
         return e;
     }
@@ -150,7 +158,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
 
     @Override
     public  ForeignKey addNewForeignKey() {
-        final ForeignKey e = ForeignKey.newForeignKey();
+        final ForeignKey e = ForeignKey.newForeignKey(speedment);
         add(e);
         return e;
     }

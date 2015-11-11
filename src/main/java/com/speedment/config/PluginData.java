@@ -19,7 +19,6 @@ package com.speedment.config;
 import com.speedment.HasSpeedment;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
-import com.speedment.annotation.External;
 import com.speedment.component.PluginComponent;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -87,30 +86,8 @@ public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child
     }
     
     /**
-     * Sets the name of the {@link Plugin} that should be used to manage
-     * this node.
-     * <p>
-     * This property is editable in the GUI through reflection.
-     *
-     * @param pluginName the name as returned by {@link Plugin#getName()}
-     */
-    @External(type = String.class)
-    void setPluginName(String pluginName);
-    
-    /**
-     * Returns the name of the {@link Plugin} that should be used to manage
-     * this node.
-     * <p>
-     * This property is editable in the GUI through reflection.
-     *
-     * @return  the name as returned by {@link Plugin#getName()}
-     */
-    @External(type = String.class)
-    String getPluginName();
-    
-    /**
      * Contacts the {@link PluginComponent} to find a {@link Plugin} that
-     * matches the name specified by {@link #getPluginName()}.
+     * matches the name specified by {@link #getName()}.
      * 
      * @return                     the plugin 
      * @throws SpeedmentException  if the plugin could not be found
@@ -118,9 +95,9 @@ public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child
     default Plugin findPlugin() throws SpeedmentException {
         return getSpeedment()
             .getPluginComponent()
-            .get(getPluginName())
+            .get(getName())
             .orElseThrow(() -> new SpeedmentException(
-                "Could not find plugin '" + getPluginName() + "'."
+                "Could not find plugin '" + getName() + "'."
             ));
     }
     

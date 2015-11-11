@@ -29,13 +29,15 @@ import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  *
@@ -71,7 +73,7 @@ public enum SpeedmentIcon {
 	PROJECT_MANAGER ("/pics/dbentity/projectmanager.png"),
 	SCHEMA ("/pics/dbentity/schema.png"),
 	TABLE ("/pics/dbentity/table.png"),
-    PLUGIN_DATA (node -> ((PluginData) node).findPlugin().getIconPath()),
+    PLUGIN_DATA (SilkIcon.PLUGIN.getFileName()),
     
     // Menu icons
 	ADD_DBMS_TRANS ("/pics/dialog/add_dbms_trans.png"),
@@ -85,8 +87,9 @@ public enum SpeedmentIcon {
     // Logotype
 	SPIRE ("/images/logo.png");
 
-	private final Function<Node, String> getIconName;
+	private final String filename;
 	
+    private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentIcon.class);
 	private static final Map<Class<?>, SpeedmentIcon> NODE_ICONS = new ConcurrentHashMap<>();
 	
 	static {
@@ -101,6 +104,7 @@ public enum SpeedmentIcon {
 		NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
 		NODE_ICONS.put(Project.class, PROJECT);
 		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
+        NODE_ICONS.put(PluginData.class, PLUGIN_DATA);
 	}
     
     public Image load() {
@@ -119,18 +123,35 @@ public enum SpeedmentIcon {
 		return new ImageView(load(node));
 	}
 	
-	public static SpeedmentIcon forNode(Node node) {
+	public static ImageView forNode(Node node) {
         requireNonNull(node);
-		return NODE_ICONS.get(node.getInterfaceMainClass());
+        
+        final Optional<String> path = node.getIconPath();
+        if (path.isPresent()) {
+            final InputStream stream = SpeedmentIcon.class.getResourceAsStream(path.get());
+            if (stream != null) {
+                return new ImageView(new Image(stream));
+            } else {
+                LOGGER.error(
+                    "Config node '" + node.getClass().getSimpleName() + 
+                    "' specified a custom icon '" + path.get() + "' that could not be loaded."
+                );
+            }
+        }
+        
+        final SpeedmentIcon icon = NODE_ICONS.get(node.getInterfaceMainClass());
+        if (icon != null) {
+            return icon.view();
+        } else {
+            LOGGER.error("Found no predefined icon for node type '" + node.getClass().getSimpleName() + "'.");
+        }
+        
+		return SilkIcon.HELP.view();
 	}
     
-    private SpeedmentIcon(String icon) {
-        requireNonNull(icon);
-		getIconName = node -> icon;
-	}
-    
-    private SpeedmentIcon(Function<Node, String> icon) {
-		getIconName = requireNonNull(icon);
+    private SpeedmentIcon(String filename) {
+        requireNonNull(filename);
+		this.filename = filename;
 	}
     
     private InputStream getFileInputStream() {
@@ -138,11 +159,10 @@ public enum SpeedmentIcon {
     }
 
     private InputStream getFileInputStream(Node node) {
-        final String iconName = getIconName.apply(node);
-		final InputStream stream = getClass().getResourceAsStream(iconName);
+		final InputStream stream = getClass().getResourceAsStream(filename);
 		
 		if (stream == null) {
-			throw new RuntimeException("Could not find icon: '" + iconName + "'.");
+			throw new RuntimeException("Could not find icon: '" + filename + "'.");
 		}
 		
 		return stream;

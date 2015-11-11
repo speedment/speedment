@@ -91,11 +91,7 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Child<Pr
      * @param speedment the {@link Speedment} instance
      * @return the newly added child
      */
-    default Dbms addNewDbms(Speedment speedment) {
-        final Dbms e = Dbms.newDbms(speedment);
-        add(e);
-        return e;
-    }
+    Dbms addNewDbms(Speedment speedment);
     
     /**
      * Creates and adds a new {@link PluginData} as a child to this node in the
@@ -104,11 +100,7 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Child<Pr
      * @param speedment the {@link Speedment} instance
      * @return the newly added child
      */
-    default PluginData addNewPluginData(Speedment speedment) {
-        final PluginData e = PluginData.newPluginData(speedment);
-        add(e);
-        return e;
-    }
+    PluginData addNewPluginData(Speedment speedment);
 
     /**
      * Returns the name of the generated package where this project will be

@@ -198,7 +198,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
                     if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
-                        final Schema schema = Schema.newSchema();
+                        final Schema schema = Schema.newSchema(speedment);
                         schema.setName(schemaName);
                         schema.setSchemaName(schemaName);
                         schema.setCatalogName(catalogName);
@@ -211,7 +211,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
                     if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
-                        final Schema schema = Schema.newSchema();
+                        final Schema schema = Schema.newSchema(speedment);
                         schema.setName(schemaName);
                         schemas.add(schema);
                     }
@@ -248,7 +248,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
                         }
                     }
-                    final Table table = Table.newTable();
+                    final Table table = Table.newTable(speedment);
                     final String tableName = rsTable.getString("TABLE_NAME");
                     table.setName(tableName);
                     tables.add(table);
@@ -331,7 +331,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final boolean notUnique = rs.getBoolean("NON_UNIQUE");
             final boolean exists = indexes.containsKey(indexName);
             final Index index = indexes.computeIfAbsent(indexName, n -> {
-                final Index newIndex = Index.newIndex();
+                final Index newIndex = Index.newIndex(speedment);
                 newIndex.setName(n);
                 newIndex.setUnique(!notUnique); // !
                 return newIndex;
@@ -373,7 +373,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final String foreignKeyName = rs.getString("FK_NAME");
             final boolean exists = foreignKeys.containsKey(foreignKeyName);
             final ForeignKey foreignKey = foreignKeys.computeIfAbsent(foreignKeyName, n -> {
-                final ForeignKey newforeigKey = ForeignKey.newForeignKey();
+                final ForeignKey newforeigKey = ForeignKey.newForeignKey(speedment);
                 newforeigKey.setName(n);
                 return newforeigKey;
             });

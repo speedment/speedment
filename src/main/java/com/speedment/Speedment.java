@@ -21,6 +21,7 @@ import com.speedment.annotation.Api;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
+import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
@@ -65,6 +66,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.component.PluginComponent PluginComponent}</li>
+     * <li>{@link com.speedment.component.EventComponent EventComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
@@ -161,5 +163,9 @@ public interface Speedment {
     
     default PluginComponent getPluginComponent() {
         return get(PluginComponent.class);
+    }
+    
+    default EventComponent getEventComponent() {
+        return get(EventComponent.class);
     }
 }

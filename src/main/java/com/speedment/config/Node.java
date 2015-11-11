@@ -159,4 +159,15 @@ public interface Node extends Nameable, Enableable {
      * @return the main interface class
      */
     Class<?> getInterfaceMainClass();
+    
+    /**
+     * Returns a path to the icon to use for this node in the GUI. If empty, the
+     * gui will attempt to load one of the predefined icons. Make sure that any
+     * returned path exists in the context the application is running in!
+     * 
+     * @return  the path to the icon to load or empty to use a predefined one
+     */
+    default Optional<String> getIconPath() {
+        return Optional.empty();
+    }
 }

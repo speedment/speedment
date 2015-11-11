@@ -37,7 +37,6 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     private final Speedment speedment;
     private final Optional<Project> parent;
     private final ChildHolder children;
-    private final String pluginName;
 
     public ImmutablePluginData(Project parent, PluginData prototype) {
         super(requireNonNull(prototype).getName(), prototype.isEnabled());
@@ -46,7 +45,6 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
         // Members
         this.speedment  = parent.getSpeedment();
         this.parent     = Optional.of(parent);
-        this.pluginName = prototype.getPluginName();
         
         // Children
         this.children = childHolderOf(Stream.empty());
@@ -60,16 +58,6 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     @Override
     public Optional<Project> getParent() {
         return parent;
-    }
-    
-    @Override
-    public void setPluginName(String pluginName) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-    
-    @Override
-    public String getPluginName() {
-        return pluginName;
     }
 
     @Override
