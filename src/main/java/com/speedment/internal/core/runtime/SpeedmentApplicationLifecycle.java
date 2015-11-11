@@ -302,36 +302,36 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             // Apply overridden values from the system properties (if any)
             final Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
             Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
-                .forEach((Node node) -> {
-                    final Class<?> clazz = node.getClass();
-                    MethodsParser.streamOfExternalSetters(clazz).forEach(method -> {
-                        final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
-                        Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
-                            final External external = MethodsParser.getExternalFor(method, clazz);
-                            final Class<?> targetJavaType = external.type();
-                            final Object val = speedment
-                                .getJavaTypeMapperComponent()
-                                .apply(targetJavaType)
-                                .parse(propString);
-                            //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
-                            try {
-                                method.invoke(node, val);
-                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                                throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
-                            }
-                        });
-                    }
-                    );
-                });
+                    .forEach((Node node) -> {
+                        final Class<?> clazz = node.getClass();
+                        MethodsParser.streamOfExternalSetters(clazz).forEach(method -> {
+                            final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
+                            Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
+                                final External external = MethodsParser.getExternalFor(method, clazz);
+                                final Class<?> targetJavaType = external.type();
+                                final Object val = speedment
+                                        .getJavaTypeMapperComponent()
+                                        .apply(targetJavaType)
+                                        .parse(propString);
+                                //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
+                                try {
+                                    method.invoke(node, val);
+                                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                                    throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
+                                }
+                            });
+                        }
+                        );
+                    });
 
             // Apply overidden item (if any) for all ConfigEntities of a given class
             withsAll.forEach(t2 -> {
                 final Class<? extends Node> clazz = t2.get0();
                 final Consumer<Node> consumer = t2.get1();
                 project.traverse()
-                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                    .map(Node.class::cast)
-                    .forEachOrdered(consumer::accept);
+                        .filter(c -> clazz.isAssignableFrom(c.getClass()))
+                        .map(Node.class::cast)
+                        .forEachOrdered(consumer::accept);
             });
 
             // Apply a named overidden item (if any) for all ConfigEntities of a given class
@@ -343,10 +343,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 final Consumer<Node> consumer = (Consumer<Node>) t3.get2();
 
                 project.traverse()
-                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                    .map(Node.class::cast)
-                    .filter(c -> name.equals(c.getRelativeName(Project.class)))
-                    .forEachOrdered(consumer::accept);
+                        .filter(c -> clazz.isAssignableFrom(c.getClass()))
+                        .map(Node.class::cast)
+                        .filter(c -> name.equals(c.getRelativeName(Project.class)))
+                        .forEachOrdered(consumer::accept);
             });
 
             speedment.getProjectComponent().setProject(project);
@@ -404,12 +404,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public T start() {
         Statistics.onNodeStarted();
 
-        LOGGER.info(
-            SpeedmentVersion.getImplementationTitle()
-            + " (" + SpeedmentVersion.getImplementationVersion() + ")"
-            + " by " + SpeedmentVersion.getImplementationVendor() + " started."
-            + " API version is " + SpeedmentVersion.getSpecificationVersion()
-        );
+        LOGGER.info(SpeedmentVersion.getWelcomeMessage());
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
         }
@@ -444,8 +439,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         requireNonNull(managerConsumer);
         final ManagerComponent mc = speedment.getManagerComponent();
         final List<Thread> threads = mc.stream()
-            .map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName()))
-            .collect(toList());
+                .map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName()))
+                .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);
     }
@@ -453,8 +448,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void forEachComponentInSeparateThread(Consumer<Component> componentConsumer) {
         requireNonNull(componentConsumer);
         final List<Thread> threads = speedment.components()
-            .map(comp -> new Thread(() -> componentConsumer.accept(comp), comp.getTitle()))
-            .collect(toList());
+                .map(comp -> new Thread(() -> componentConsumer.accept(comp), comp.getTitle()))
+                .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);
     }

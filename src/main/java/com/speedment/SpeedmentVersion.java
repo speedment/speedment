@@ -95,6 +95,13 @@ public final class SpeedmentVersion {
         return SPECIFICATION_VERSION;
     }
 
+    public static String getWelcomeMessage() {
+        return getImplementationTitle()
+            + " (" + getImplementationVersion() + ")"
+            + " by " + getImplementationVendor() + " started."
+            + " API version is " + getSpecificationVersion();
+    }
+    
     /**
      * Utility classes should not be instantiated.
      */
