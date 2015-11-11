@@ -60,19 +60,30 @@ public enum SpeedmentIcon {
 	RUN_PROJECT_24 ("/pics/runProject24.png"),
     
     // Metadata Tree
-	COLUMN ("/pics/dbentity/column.png"),
-	DBMS ("/pics/dbentity/dbms.png"),
-	FOREIGN_KEY ("/pics/dbentity/foreignkey.png"),
-	FOREIGN_KEY_COLUMN ("/pics/dbentity/foreignkeycolumn.png"),
-	INDEX ("/pics/dbentity/index.png"),
-	INDEX_COLUMN ("/pics/dbentity/indexcolumn.png"),
-	MANAGER ("/pics/dbentity/manager.png"),
-	PRIMARY_KEY ("/pics/dbentity/primarykey.png"),
-	PRIMARY_KEY_COLUMN ("/pics/dbentity/primarykeycolumn.png"),
-	PROJECT ("/pics/dbentity/project.png"),
-	PROJECT_MANAGER ("/pics/dbentity/projectmanager.png"),
-	SCHEMA ("/pics/dbentity/schema.png"),
-	TABLE ("/pics/dbentity/table.png"),
+	COLUMN (SilkIcon.SCRIPT.getFileName()),
+	DBMS (SilkIcon.BUILDING_KEY.getFileName()),
+	FOREIGN_KEY (SilkIcon.TABLE_LINK.getFileName()),
+	FOREIGN_KEY_COLUMN (SilkIcon.SCRIPT_LINK.getFileName()),
+	INDEX (SilkIcon.TABLE_LIGHTNING.getFileName()),
+	INDEX_COLUMN (SilkIcon.SCRIPT_LIGHTNING.getFileName()),
+	PRIMARY_KEY (SilkIcon.TABLE_KEY.getFileName()),
+	PRIMARY_KEY_COLUMN (SilkIcon.SCRIPT_KEY.getFileName()),
+	PROJECT (SilkIcon.APPLICATION_SIDE_LIST.getFileName()),
+	SCHEMA (SilkIcon.DATABASE.getFileName()),
+	TABLE (SilkIcon.TABLE_RELATIONSHIP.getFileName()),
+//	COLUMN ("/pics/dbentity/column.png"),
+//	DBMS ("/pics/dbentity/dbms.png"),
+//	FOREIGN_KEY ("/pics/dbentity/foreignkey.png"),
+//	FOREIGN_KEY_COLUMN ("/pics/dbentity/foreignkeycolumn.png"),
+//	INDEX ("/pics/dbentity/index.png"),
+//	INDEX_COLUMN ("/pics/dbentity/indexcolumn.png"),
+//	MANAGER ("/pics/dbentity/manager.png"),
+//	PRIMARY_KEY ("/pics/dbentity/primarykey.png"),
+//	PRIMARY_KEY_COLUMN ("/pics/dbentity/primarykeycolumn.png"),
+//	PROJECT ("/pics/dbentity/project.png"),
+//	PROJECT_MANAGER ("/pics/dbentity/projectmanager.png"),
+//	SCHEMA ("/pics/dbentity/schema.png"),
+//	TABLE ("/pics/dbentity/table.png"),
     PLUGIN_DATA (SilkIcon.PLUGIN.getFileName()),
     
     // Menu icons
@@ -103,7 +114,7 @@ public enum SpeedmentIcon {
 		NODE_ICONS.put(ForeignKeyColumn.class, FOREIGN_KEY_COLUMN);
 		NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
 		NODE_ICONS.put(Project.class, PROJECT);
-		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
+//		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
         NODE_ICONS.put(PluginData.class, PLUGIN_DATA);
 	}
     
