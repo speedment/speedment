@@ -33,7 +33,7 @@ requests. Some of the main code style features includes:
 * Keep classes short (yeah, we failed on this on some occasions)
 * Use Java 8's fetures like lambdas, ```Function```, ```Supplier```, etc 
 * Break up method parameters on separate lines if you have more than three parameters
-* Never return null values, use Optional or empty Collections instead
+* Never return ```null``` values, use ```Optional``` or empty ```Collections``` instead
 * Favor composition over inheritance
 * Write JavaDoc to your methods and classes
 * Add Unit Tests to your code
