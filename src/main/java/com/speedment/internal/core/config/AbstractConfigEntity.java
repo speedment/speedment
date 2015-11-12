@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -62,13 +61,12 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         this.enabled = enabled;
     }
 
-    @External(type = String.class)
+    
     @Override
     public String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
     public void setName(String name) {
         requireNonNull(name, "A name cannot be null");

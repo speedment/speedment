@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -59,13 +58,11 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
-    @External(type = String.class)
     @Override
     public final String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
     public final void setName(String name) {
         throwNewUnsupportedOperationExceptionImmutable();
