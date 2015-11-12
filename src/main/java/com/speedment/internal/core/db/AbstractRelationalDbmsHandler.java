@@ -35,15 +35,11 @@ import com.speedment.internal.core.manager.sql.SqlUpdateStatement;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.component.ConnectionPoolComponent;
-import com.speedment.component.SqlTypeMapperComponent;
-import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 
-import javax.swing.text.html.Option;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
