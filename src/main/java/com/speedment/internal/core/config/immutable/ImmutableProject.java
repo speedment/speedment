@@ -54,7 +54,7 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     }
 
     public ImmutableProject(ProjectManager parent, Project project) {
-        super(requireNonNull(project).getName(), project.isEnabled());
+        super(requireNonNull(project).getName(), project.isExpanded(), project.isEnabled());
         
         // Menbers
         this.speedment = project.getSpeedment();

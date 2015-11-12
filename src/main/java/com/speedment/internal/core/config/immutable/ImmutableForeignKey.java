@@ -36,7 +36,7 @@ public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntit
     private final ChildHolder children;
 
     public ImmutableForeignKey(Table parent, ForeignKey fk) {
-        super(requireNonNull(fk).getName(), fk.isEnabled());
+        super(requireNonNull(fk).getName(), fk.isExpanded(), fk.isEnabled());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);

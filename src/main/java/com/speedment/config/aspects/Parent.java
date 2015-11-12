@@ -81,7 +81,6 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @see ChildHolder
      */
-    @SuppressWarnings("unchecked")
     Optional<C> add(final C child);
 
     /**
@@ -92,7 +91,6 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @return a <code>Stream</code> of all children
      */
-    @SuppressWarnings("unchecked")
     Stream<? extends C> stream();
 
     /**

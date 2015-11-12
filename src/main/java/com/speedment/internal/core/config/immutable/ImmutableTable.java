@@ -68,7 +68,7 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity imp
     private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
     public ImmutableTable(Schema parent, Table table) {
-        super(requireNonNull(table).getName(), table.isEnabled());
+        super(requireNonNull(table).getName(), table.isExpanded(), table.isEnabled());
         requireNonNull(parent);
         // Fields
         this.parent = table.getParent();

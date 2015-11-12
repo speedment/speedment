@@ -76,7 +76,7 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
     }
 
     @Override
-    public default <T extends C> T find(Class<T> childClass, String name) throws SpeedmentException {
+    default <T extends C> T find(Class<T> childClass, String name) throws SpeedmentException {
         return getChildren().find(childClass, name);
     }
 

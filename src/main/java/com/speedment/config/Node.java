@@ -170,4 +170,20 @@ public interface Node extends Nameable, Enableable {
     default Optional<String> getIconPath() {
         return Optional.empty();
     }
+    
+    /**
+     * Sets whether or not this node should be expanded by default in the
+     * GUI.
+     * 
+     * @param expanded  {@code true} if this node is supposed to be expanded
+     */
+    void setExpanded(Boolean expanded);
+    
+    /**
+     * Returns whether or not this node should be expanded by default in the
+     * GUI.
+     * 
+     * @return  {@code true} if this node is supposed to be expanded
+     */
+    Boolean isExpanded();
 }

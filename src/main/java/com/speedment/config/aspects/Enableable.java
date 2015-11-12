@@ -17,7 +17,6 @@
 package com.speedment.config.aspects;
 
 import com.speedment.annotation.Api;
-import com.speedment.annotation.External;
 
 /**
  * A trait-like interface for nodes that can be enabled and disabled.
@@ -33,7 +32,6 @@ public interface Enableable {
      * 
      * @param enabled  <code>true</code> if this node is to be enabled.
      */
-    @External(type = Boolean.class)
     void setEnabled(Boolean enabled);
     
     /**
@@ -41,6 +39,5 @@ public interface Enableable {
      * 
      * @return <code>true</code> if this node is enabled.
      */
-    @External(type = Boolean.class)
     Boolean isEnabled();
 }

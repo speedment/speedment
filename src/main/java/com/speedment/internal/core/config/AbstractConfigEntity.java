@@ -43,33 +43,37 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
 
     private boolean enabled;
     private String name;
-
+    private boolean expanded;
+    
     protected AbstractConfigEntity(String defaultName) {
-        this.enabled = true;
-        this.name = defaultName; // Can be null
+        this.enabled  = true;
+        this.name     = defaultName; // Can be null
+        this.expanded = true;
         setDefaults();
     }
     
     protected abstract void setDefaults();
 
     @Override
+    @External(type = Boolean.class)
     public Boolean isEnabled() {
         return enabled;
     }
 
     @Override
+    @External(type = Boolean.class)
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    @External(type = String.class)
     @Override
+    @External(type = String.class)
     public String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
+    @External(type = String.class)
     public void setName(String name) {
         requireNonNull(name, "A name cannot be null");
         // Todo: Allow . and " " in names. Changes in GodeGen
@@ -80,6 +84,18 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         }
 
         this.name = name;
+    }
+
+    @Override
+    @External(type = Boolean.class, isVisibleInGui = false)
+    public void setExpanded(Boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    @Override
+    @External(type = Boolean.class, isVisibleInGui = false)
+    public Boolean isExpanded() {
+        return expanded;
     }
 
     @Override
@@ -120,6 +136,8 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         }
         return sj.toString() + nameMapper.apply(getName());
     }
+    
+    
 
     @Override
     public String toString() {

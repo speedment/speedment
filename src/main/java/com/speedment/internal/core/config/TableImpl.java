@@ -29,15 +29,11 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
-import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -74,6 +70,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
         setStorageEngineType(StorageEngineType.INHERIT);
+        setExpanded(false);
     }
 
     @Override

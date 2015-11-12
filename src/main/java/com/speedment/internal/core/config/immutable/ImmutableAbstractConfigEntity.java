@@ -43,10 +43,12 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
 
     private final boolean enabled;
     private final String name;
+    private final boolean expanded;
 
-    protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
-        this.enabled = enabled;
-        this.name = name; // Can be null
+    protected ImmutableAbstractConfigEntity(String name, boolean enabled, boolean expanded) {
+        this.enabled  = enabled;
+        this.name     = name; // Can be null
+        this.expanded = expanded;
     }
 
     @Override
@@ -59,15 +61,27 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
-    @External(type = String.class)
     @Override
+    @External(type = String.class)
     public final String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
+    @External(type = String.class)
     public final void setName(String name) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+    
+    @Override
+    @External(type = Boolean.class, isVisibleInGui = false)
+    public Boolean isExpanded() {
+        return expanded;
+    }
+
+    @Override
+    @External(type = Boolean.class, isVisibleInGui = false)
+    public void setExpanded(Boolean expanded) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
 

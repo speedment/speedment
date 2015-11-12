@@ -81,10 +81,7 @@ import static javafx.util.Duration.ZERO;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
 import static java.util.Objects.requireNonNull;
-import static javafx.util.Duration.millis;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
-import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
 import static javafx.util.Duration.millis;
 
 /**
@@ -161,7 +158,7 @@ public final class SceneController implements Initializable {
         requireNonNull(url);
         propertyMgr = new TablePropertyManager(speedment, treeHierarchy);
 
-        populateTree(project);
+        runLater(() -> populateTree(project));
         arrow.setOpacity(0);
 
         mbNew.setGraphic(SpeedmentIcon.NEW_PROJECT.view());
@@ -386,7 +383,14 @@ public final class SceneController implements Initializable {
     private TreeItem<Child<?>> branch(Child<?> node) {
         requireNonNull(node);
         final TreeItem<Child<?>> branch = new TreeItem<>(node);
-        branch.setExpanded(true);
+
+        branch.setExpanded(node.isExpanded());
+        branch.expandedProperty().set(node.isExpanded());
+
+        branch.expandedProperty().addListener((ob, o, n) -> {
+            LOGGER.info("Expanded node '" + node.getName() + "' to '" + n + "'.");
+            node.setExpanded(n);
+        });
 
         node.asParent().ifPresent(p ->
             p.stream().map(this::branch).forEachOrdered(

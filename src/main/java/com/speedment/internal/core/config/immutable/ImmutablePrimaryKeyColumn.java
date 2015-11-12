@@ -35,7 +35,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableAbstractOrdinalCon
     private Column column; // Which column is this PK refering to?
 
     public ImmutablePrimaryKeyColumn(Table parent, PrimaryKeyColumn primaryKeyColumn) {
-        super(requireNonNull(primaryKeyColumn).getName(), primaryKeyColumn.isEnabled(), primaryKeyColumn.getOrdinalPosition());
+        super(requireNonNull(primaryKeyColumn).getName(), primaryKeyColumn.isEnabled(), primaryKeyColumn.isExpanded(), primaryKeyColumn.getOrdinalPosition());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);

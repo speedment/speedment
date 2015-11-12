@@ -39,7 +39,7 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     private final ChildHolder children;
 
     public ImmutablePluginData(Project parent, PluginData prototype) {
-        super(requireNonNull(prototype).getName(), prototype.isEnabled());
+        super(requireNonNull(prototype).getName(), prototype.isExpanded(), prototype.isEnabled());
         requireNonNull(parent);
         
         // Members
