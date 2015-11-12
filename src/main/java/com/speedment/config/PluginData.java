@@ -110,4 +110,10 @@ public interface PluginData extends Node, Enableable, HasSpeedment, Parent<Child
      * @return the new child
      */
     Child<PluginData> metadata(Closure<?> c);
+    
+    /**
+     * The name of the metadata node in the configuration files. This should correspond
+     * with the name of the {@link #metadata(groovy.lang.Closure)} method.
+     */
+    public final static String METADATA_NODE_NAME = "metadata";
 }

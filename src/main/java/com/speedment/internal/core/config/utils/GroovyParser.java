@@ -71,7 +71,7 @@ public class GroovyParser {
 
         Optional.of(node).flatMap(Node::asParent).ifPresent(n
             -> n.stream().forEach(c -> {
-                sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName()) + " {");
+                sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.nodeTypeName()) + " {");
                 toGroovyLines(sb, c, indentLevel + 1);
                 sb.add(indent(indentLevel) + "}");
             })

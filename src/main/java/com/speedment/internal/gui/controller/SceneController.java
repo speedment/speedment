@@ -388,7 +388,6 @@ public final class SceneController implements Initializable {
         branch.expandedProperty().set(node.isExpanded());
 
         branch.expandedProperty().addListener((ob, o, n) -> {
-            LOGGER.info("Expanded node '" + node.getName() + "' to '" + n + "'.");
             node.setExpanded(n);
         });
 

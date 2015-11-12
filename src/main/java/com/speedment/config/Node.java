@@ -186,4 +186,16 @@ public interface Node extends Nameable, Enableable {
      * @return  {@code true} if this node is supposed to be expanded
      */
     Boolean isExpanded();
+    
+    /**
+     * Returns the name that should be used to describe this node in persisted
+     * files. This is almost always the same as the interface simple name, but
+     * in the case of anonymous nodes this value might need to be specified
+     * explicitly.
+     * 
+     * @return  the node type name
+     */
+    default String nodeTypeName() {
+        return getInterfaceMainClass().getSimpleName();
+    }
 }
