@@ -18,36 +18,13 @@ package com.speedment.event;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Project;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  * @since 2.3
  */
-@Api(version="2.3")
-public final class BeforeGenerate implements ProjectEvent {
-    
-    private final static String NAME = "BEFORE_GENERATE";
-    private final Project project;
-    
-    public static BeforeGenerate EVENT = new BeforeGenerate();
-    
-    private BeforeGenerate() {
-        this.project = null;
-    }
-    
-    public BeforeGenerate(Project project) {
-        this.project = requireNonNull(project);
-    }
-
-    @Override
-    public String name() {
-        return NAME;
-    }
-    
-    @Override
-    public Project project() {
-        return project;
-    }
+@Api(version = "2.3")
+public interface ProjectEvent extends Event {
+    Project project();
 }

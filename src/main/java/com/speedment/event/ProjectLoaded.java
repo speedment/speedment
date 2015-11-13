@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  * @since 2.3
  */
 @Api(version="2.3")
-public final class ProjectLoaded implements Event {
+public final class ProjectLoaded implements ProjectEvent {
     
     private final static String NAME = "PROJECT_LOADED";
     private final Project project;
@@ -46,6 +46,7 @@ public final class ProjectLoaded implements Event {
         return NAME;
     }
     
+    @Override
     public Project project() {
         return project;
     }

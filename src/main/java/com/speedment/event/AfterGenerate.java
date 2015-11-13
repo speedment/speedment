@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  * @since 2.3
  */
 @Api(version="2.3")
-public final class AfterGenerate implements Event {
+public final class AfterGenerate implements ProjectEvent {
     
     private final static String NAME = "AFTER_GENERATE";
     private final Project project;
@@ -46,6 +46,7 @@ public final class AfterGenerate implements Event {
         return NAME;
     }
     
+    @Override
     public Project project() {
         return project;
     }
