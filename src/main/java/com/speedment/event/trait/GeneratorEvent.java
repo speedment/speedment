@@ -14,10 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.event;
+package com.speedment.event.trait;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.event.Event;
+import com.speedment.internal.codegen.base.Generator;
 
 /**
  *
@@ -25,6 +26,6 @@ import com.speedment.config.Project;
  * @since 2.3
  */
 @Api(version = "2.3")
-public interface ProjectEvent extends Event {
-    Project project();
+public interface GeneratorEvent extends Event {
+    Generator generator();
 }

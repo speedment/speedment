@@ -16,8 +16,11 @@
  */
 package com.speedment.event;
 
+import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
 import com.speedment.config.Project;
+import com.speedment.event.trait.GeneratorEvent;
+import com.speedment.internal.codegen.base.Generator;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -26,19 +29,23 @@ import static java.util.Objects.requireNonNull;
  * @since 2.3
  */
 @Api(version="2.3")
-public final class BeforeGenerate implements ProjectEvent {
+public final class BeforeGenerate implements ProjectEvent, GeneratorEvent {
     
     private final static String NAME = "BEFORE_GENERATE";
     private final Project project;
+    private final Generator generator;
     
     public static BeforeGenerate EVENT = new BeforeGenerate();
     
     private BeforeGenerate() {
-        this.project = null;
+        this.project   = null;
+        this.generator = null;
     }
     
-    public BeforeGenerate(Project project) {
-        this.project = requireNonNull(project);
+    public BeforeGenerate(Project project, Generator generator) {
+        this.project   = requireNonNull(project);
+        this.generator = requireNonNull(generator);
+        
     }
 
     @Override
@@ -49,5 +56,10 @@ public final class BeforeGenerate implements ProjectEvent {
     @Override
     public Project project() {
         return project;
+    }
+
+    @Override
+    public Generator generator() {
+        return generator;
     }
 }

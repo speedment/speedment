@@ -14,41 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.event;
+package com.speedment.event.trait;
 
-import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
 import com.speedment.config.Project;
-import static java.util.Objects.requireNonNull;
+import com.speedment.event.Event;
 
 /**
  *
  * @author Emil Forslund
  * @since 2.3
  */
-@Api(version="2.3")
-public final class ProjectLoaded implements ProjectEvent {
-    
-    private final static String NAME = "PROJECT_LOADED";
-    private final Project project;
-    
-    public static ProjectLoaded EVENT = new ProjectLoaded();
-    
-    private ProjectLoaded() {
-        this.project = null;
-    }
-    
-    public ProjectLoaded(Project project) {
-        this.project = requireNonNull(project);
-    }
-
-    @Override
-    public String name() {
-        return NAME;
-    }
-    
-    @Override
-    public Project project() {
-        return project;
-    }
+@Api(version = "2.3")
+public interface ProjectEvent extends Event {
+    Project project();
 }
