@@ -29,6 +29,8 @@ import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTr
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.config.Project;
 import com.speedment.config.Table;
+import com.speedment.event.AfterGenerate;
+import com.speedment.event.BeforeGenerate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 
@@ -66,6 +68,8 @@ public final class MainGenerator implements Consumer<Project> {
     public void accept(Project project) {
         requireNonNull(project);
         Statistics.onGenerate();
+        
+        speedment.getEventComponent().notify(new BeforeGenerate(project));
         
         fileCounter = 0;
 
@@ -120,6 +124,8 @@ public final class MainGenerator implements Consumer<Project> {
             writeToFile(project, gen, meta);
             fileCounter++;
         });
+        
+        speedment.getEventComponent().notify(new AfterGenerate(project));
     }
 
     public int getFilesCreated() {
