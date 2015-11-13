@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -39,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements Node, Enableable {
+public abstract class AbstractConfigEntity implements Node {
 
     private boolean enabled;
     private String name;
@@ -55,25 +54,21 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     protected abstract void setDefaults();
 
     @Override
-    @External(type = Boolean.class)
     public Boolean isEnabled() {
         return enabled;
     }
 
     @Override
-    @External(type = Boolean.class)
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
     @Override
-    @External(type = String.class)
     public String getName() {
         return name;
     }
 
     @Override
-    @External(type = String.class)
     public void setName(String name) {
         requireNonNull(name, "A name cannot be null");
         // Todo: Allow . and " " in names. Changes in GodeGen
@@ -87,13 +82,11 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
     }
 
     @Override
-    @External(type = Boolean.class, isVisibleInGui = false)
     public void setExpanded(Boolean expanded) {
         this.expanded = expanded;
     }
 
     @Override
-    @External(type = Boolean.class, isVisibleInGui = false)
     public Boolean isExpanded() {
         return expanded;
     }

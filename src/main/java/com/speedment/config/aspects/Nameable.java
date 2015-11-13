@@ -17,6 +17,7 @@
 package com.speedment.config.aspects;
 
 import com.speedment.annotation.Api;
+import com.speedment.annotation.External;
 
 /**
  * A trait-like interface for nodes that have a name.
@@ -33,6 +34,7 @@ public interface Nameable {
      * 
      * @param name the new name
      */
+    @External(type = String.class)
     void setName(String name);
 
     /**
@@ -40,6 +42,7 @@ public interface Nameable {
      * 
      * @return the name
      */
+    @External(type = String.class)
     String getName();
 
     /**

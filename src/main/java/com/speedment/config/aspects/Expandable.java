@@ -20,27 +20,28 @@ import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
 
 /**
- * A trait-like interface for nodes that can be enabled and disabled.
- * 
+ *
  * @author Emil Forslund
+ * @since 2.3
  */
-@Api(version = "2.2")
-public interface Enableable {
+@Api(version="2.3")
+public interface Expandable {
     
     /**
-     * Enable or disable this node. This will have no effect if the node is
-     * already in the desired state.
+     * Sets whether or not this node should be expanded by default in the
+     * GUI.
      * 
-     * @param enabled  <code>true</code> if this node is to be enabled.
+     * @param expanded  {@code true} if this node is supposed to be expanded
      */
-    @External(type = Boolean.class)
-    void setEnabled(Boolean enabled);
+    @External(type = Boolean.class, isVisibleInGui = false)
+    void setExpanded(Boolean expanded);
     
     /**
-     * Returns whether or not this node is enabled.
+     * Returns whether or not this node should be expanded by default in the
+     * GUI.
      * 
-     * @return <code>true</code> if this node is enabled.
+     * @return  {@code true} if this node is supposed to be expanded
      */
-    @External(type = Boolean.class)
-    Boolean isEnabled();
+    @External(type = Boolean.class, isVisibleInGui = false)
+    Boolean isExpanded();
 }

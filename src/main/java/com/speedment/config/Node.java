@@ -21,6 +21,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.annotation.Api;
+import com.speedment.config.aspects.Expandable;
 import com.speedment.config.aspects.Ordinable;
 import java.util.Optional;
 import java.util.function.Function;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
  * @see Child
  */
 @Api(version = "2.2")
-public interface Node extends Nameable, Enableable {
+public interface Node extends Nameable, Enableable, Expandable {
 
     /**
      * If this node implements the {@link Child} interface, it is returned
@@ -170,22 +171,6 @@ public interface Node extends Nameable, Enableable {
     default Optional<String> getIconPath() {
         return Optional.empty();
     }
-    
-    /**
-     * Sets whether or not this node should be expanded by default in the
-     * GUI.
-     * 
-     * @param expanded  {@code true} if this node is supposed to be expanded
-     */
-    void setExpanded(Boolean expanded);
-    
-    /**
-     * Returns whether or not this node should be expanded by default in the
-     * GUI.
-     * 
-     * @return  {@code true} if this node is supposed to be expanded
-     */
-    Boolean isExpanded();
     
     /**
      * Returns the name that should be used to describe this node in persisted

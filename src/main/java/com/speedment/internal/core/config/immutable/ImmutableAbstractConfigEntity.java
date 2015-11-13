@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -39,7 +38,7 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
  *
  * @author pemi
  */
-public abstract class ImmutableAbstractConfigEntity implements Node, Enableable {
+public abstract class ImmutableAbstractConfigEntity implements Node {
 
     private final boolean enabled;
     private final String name;
@@ -62,25 +61,21 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     }
 
     @Override
-    @External(type = String.class)
     public final String getName() {
         return name;
     }
 
     @Override
-    @External(type = String.class)
     public final void setName(String name) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
     
     @Override
-    @External(type = Boolean.class, isVisibleInGui = false)
     public Boolean isExpanded() {
         return expanded;
     }
 
     @Override
-    @External(type = Boolean.class, isVisibleInGui = false)
     public void setExpanded(Boolean expanded) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
