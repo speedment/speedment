@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static com.speedment.internal.util.Cast.cast;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static java.util.Objects.requireNonNull;
 
@@ -42,7 +41,7 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
 
     private final Speedment speedment;
     private final Optional<ProjectManager> parent; // Rare occation of valid use of Optional as member
-    private final ChildHolder children;
+    private final ChildHolder<Dbms> children;
     private final String packageName, packageLocation;
     private final Optional<Path> configPath;
     private final Map<String, Table> tableNameMap;
@@ -61,7 +60,7 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
         this.configPath = project.getConfigPath();
         this.parent = Optional.ofNullable(parent);
         // Children
-        children = childHolderOf(project.stream().map(p -> new ImmutableDbms(this, p)));
+        children = childHolderOf(Dbms.class, project.stream().map(p -> new ImmutableDbms(this, p)));
         // Special
         tableNameMap = new HashMap<>();
         traverseOver(Table.class).forEach(t -> {
@@ -96,7 +95,7 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Dbms> getChildren() {
         return children;
     }
 

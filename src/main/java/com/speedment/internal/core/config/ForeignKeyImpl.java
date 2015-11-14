@@ -33,10 +33,10 @@ import java.util.Optional;
 public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements ForeignKey, ParentHelper<ForeignKeyColumn> {
 
     private Table parent;
-    private final ChildHolder children;
+    private final ChildHolder<ForeignKeyColumn> children;
     
     public ForeignKeyImpl() {
-        children = new ChildHolderImpl();
+        children = new ChildHolderImpl<>(ForeignKeyColumn.class);
     }
     
     @Override
@@ -53,7 +53,7 @@ public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements F
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
     }
 

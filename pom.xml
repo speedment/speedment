@@ -57,16 +57,24 @@
     
     <developers>
         <developer>
-            <id>permin</id>
+            <id>minborg</id>
             <name>Per Ake Minborg</name>
             <email>minborg@speedment.com</email>
+            <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
-            <id>emifor</id>
+            <id>Pycnic</id>
             <name>Emil Forslund</name>
             <email>emil@speedment.com</email>
+            <timezone>America/Los_Angeles</timezone>
         </developer>
     </developers>
+    
+    <contributors>
+        <contributor>
+            <name>Fatih Dirlikli</name>
+        </contributor>
+    </contributors>
 
     <issueManagement>
         <system>Github</system>

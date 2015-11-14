@@ -72,7 +72,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public Column getForeignColumn() {
-        return getForeignTable().find(Column.class, getForeignColumnName());
+        return getForeignTable().findColumn(getForeignColumnName());
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
         return ancestor(Schema.class).orElseThrow(
                 thereIsNo(
                         Table.class,
-                        ForeignKeyColumn.class,
+                        Schema.class,
                         getForeignTableName()
                 )
         ).find(Table.class, getForeignTableName());

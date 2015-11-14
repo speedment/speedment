@@ -33,11 +33,11 @@ import java.util.Optional;
 public final class IndexImpl extends AbstractNamedConfigEntity implements Index, ParentHelper<IndexColumn> {
 
     private Table parent;
-    private final ChildHolder children;
+    private final ChildHolder<IndexColumn> children;
     private boolean unique;
 
     public IndexImpl() {
-        this.children = new ChildHolderImpl();
+        this.children = new ChildHolderImpl<>(IndexColumn.class);
     }
 
     @Override
@@ -66,7 +66,7 @@ public final class IndexImpl extends AbstractNamedConfigEntity implements Index,
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
     }
 

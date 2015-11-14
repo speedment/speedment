@@ -22,15 +22,13 @@ import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Child;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
+import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.JavaLanguage;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -38,36 +36,40 @@ import java.util.stream.Stream;
  * A container class for children to a node in the database model tree.
  *
  * @author Emil Forslund
+ * @param <T> Child type
  * @see com.speedment.config.Node
  */
-public final class ChildHolderImpl implements ChildHolder {
+public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T> {
 
-    private final Map<Class<?>, Map<String, Child<?>>> children;
-    private final Map<Class<?>, AtomicInteger> ordinalNumbers;
-    private final Map<Class<?>, AtomicInteger> nameNumbers;
+    private final List<T> children; // cannot be a Map because children may get a new name after they are added
+    private final AtomicInteger ordinalNumber;
+    private final AtomicInteger nameNumber;
+    private final Class<T> childClass;
 
-    /**
-     * ChildHolder constructor. This will use the name of the qualified name of
-     * the children's implementation class to determine the order.
-     */
-    public ChildHolderImpl() {
-        this(CLASS_COMPARATOR);
-    }
-
+//    /**
+//     * ChildHolder constructor. This will use the name of the qualified name of
+//     * the children's implementation class to determine the order.
+//     */
+//    public ChildHolderImpl() {
+//        this(CLASS_COMPARATOR);
+//    }
     /**
      * ChildHolder constructor.
      *
-     * @param comparator the comparator to use when determining the order of the
-     * children.
+     * // * @param comparator the comparator to use when determining the order
+     * of the // * children.
+     *
+     * @param childClass type
      */
-    public ChildHolderImpl(Comparator<Class<?>> comparator) {
-        children = new ConcurrentSkipListMap<>(requireNonNull(comparator));
-        ordinalNumbers = new ConcurrentHashMap<>();
-        nameNumbers = new ConcurrentHashMap<>();
+    public ChildHolderImpl(Class<T> childClass/*Comparator<Class<?>> comparator*/) {
+        children = new ArrayList<>();
+        ordinalNumber = new AtomicInteger(Ordinable.ORDINAL_FIRST);
+        nameNumber = new AtomicInteger(Nameable.NAMEABLE_FIRST);
+        this.childClass = childClass;
     }
 
     @Override
-    public Optional<Child<?>> put(Child<?> child, Parent<?> parent) {
+    public Optional<T> put(T child, Parent<? super T> parent) {
         requireNonNull(child);
         requireNonNull(parent);
         child.getParent().ifPresent(c -> {
@@ -76,60 +78,62 @@ public final class ChildHolderImpl implements ChildHolder {
                     + child + ", parent=" + child.getParent().get()
             );
         });
-
+        
         child.setParent(parent);
 
-        Optional.of(child)
-                .filter(c -> c.isOrdinable())
-                .map(c -> (Ordinable) c)
-                .filter(o -> o.getOrdinalPosition() == Ordinable.UNSET)
-                .ifPresent(o -> {
-                    o.setOrdinalPosition(ordinalNumbers.computeIfAbsent(
-                            child.getInterfaceMainClass(),
-                            m -> new AtomicInteger(Ordinable.ORDINAL_FIRST)
-                    ).getAndIncrement());
-                });
+        if (child.isOrdinable()) {
+            Ordinable ordinable = Cast.castOrFail(child, Ordinable.class);
+            if (ordinable.getOrdinalPosition() == Ordinable.UNSET) {
+                ordinable.setOrdinalPosition(ordinalNumber.getAndIncrement());
+            }
+        }
 
-        Optional.of(child)
-                .filter(c -> !c.hasName())
-                .ifPresent(c -> c.setName(
-                        JavaLanguage.toUnderscoreSeparated(
-                                c.getInterfaceMainClass().getSimpleName()) + "_"
-                        + nameNumbers.computeIfAbsent(
-                                child.getInterfaceMainClass(),
-                                m -> new AtomicInteger(Nameable.NAMEABLE_FIRST)
-                        ).getAndIncrement()
-                ));
+        if (!child.hasName()) {
+            child.setName(
+                    JavaLanguage.toUnderscoreSeparated(
+                            child.getInterfaceMainClass().getSimpleName()
+                    ) + "_" + nameNumber.getAndIncrement()
+            );
+        }
 
-        return Optional.ofNullable(children.computeIfAbsent(
-                child.getInterfaceMainClass(),
-                m -> new ConcurrentSkipListMap<>()
-        ).put(child.getName(), child));
+        final String name = child.getName();
+        final Optional<T> existing = childByName(name);
+        if (existing.isPresent()) {
+            children.removeIf(c -> c.getName().equals(name));
+        }
+        children.add(child);
+        return existing;
     }
 
     @Override
-    public Stream<Child<?>> stream() {
-        return children.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .flatMap(i -> i.values().stream().sorted());
+    public Stream<T> stream() {
+        return children.stream().sorted();
     }
 
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
+//        requireNonNull(clazz);
+//        return children.getOrDefault(clazz, Collections.emptyMap())
+//                .values().stream().map(c -> (C) c).sorted();
+//    }
     @Override
-    public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
-        requireNonNull(clazz);
-        return children.getOrDefault(clazz, Collections.emptyMap())
-                .values().stream().map(c -> (C) c).sorted();
-    }
-
-    @Override
-    public <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException {
-        Objects.requireNonNull(childClass);
+    public T find(/*Class<C> childClass,*/String name) throws SpeedmentException {
+        //Objects.requireNonNull(childClass);
         Objects.requireNonNull(name);
-        return streamOf(childClass)
-                .filter(c -> name.equals(c.getName()))
-                .findAny()
-                .orElseThrow(thereIsNo(childClass, this.getClass(), name));
+        return childByName(name)
+                .orElseThrow(thereIsNo(Child.class, this.getClass(), name));
+    }
+
+    private Optional<T> childByName(String name) {
+        return children.stream()
+                .filter(c->name.equals(c.getName()))
+                .findAny();
+    }
+    
+    @Override
+    public Class<T> getChildClass() {
+        return childClass;
     }
 
 }

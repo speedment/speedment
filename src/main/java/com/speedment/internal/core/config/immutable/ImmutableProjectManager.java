@@ -25,18 +25,20 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public final class ImmutableProjectManager extends ImmutableAbstractNamedConfigEntity implements ProjectManager, ImmutableParentHelper<Project> {
+public final class ImmutableProjectManager extends ImmutableAbstractNamedConfigEntity 
+        implements ProjectManager, ImmutableParentHelper<Project> {
 
-    private final ChildHolder children;
+    private final ChildHolder<Project> children;
 
     public ImmutableProjectManager(ProjectManager projectManager) {
         super(requireNonNull(projectManager).getName(), true);
         // Children
-        children = childHolderOf(projectManager.stream().map(p -> new ImmutableProject(this, p)));
+         
+        children = childHolderOf(Project.class, projectManager.stream().map(p -> new ImmutableProject(this, p)));
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Project> getChildren() {
         return children;
     }
 

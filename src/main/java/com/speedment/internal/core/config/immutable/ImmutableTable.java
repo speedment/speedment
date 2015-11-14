@@ -31,41 +31,34 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.ChildHolder;
 import static com.speedment.internal.util.Cast.castOrFail;
 import groovy.lang.Closure;
-import java.util.Comparator;
 import java.util.Optional;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity implements Table, ImmutableParentHelper<Child<Table>> {
+public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
+        implements Table, ImmutableParentHelper<Child<Table>> {
 
     private final Optional<Schema> parent;
-    private final ChildHolder children;
+    private final ChildHolder<Column> columns;
+    private final ChildHolder<PrimaryKeyColumn> primaryKeyColumns;
+    private final ChildHolder<Index> indexes;
+    private final ChildHolder<ForeignKey> foreignKeys;
+
     private final Optional<String> tableName;
     private final FieldStorageType fieldStorageType;
     private final ColumnCompressionType columnCompressionType;
     private final StorageEngineType storageEngineType;
 
-    private static int valueOfClass(Class<?> clazz) {
-        if (Column.class.equals(clazz)) {
-            return 0;
-        }
-        if (PrimaryKeyColumn.class.equals(clazz)) {
-            return 1;
-        }
-        if (Index.class.equals(clazz)) {
-            return 2;
-        }
-        if (ForeignKey.class.equals(clazz)) {
-            return 3;
-        }
-        return 4;
-    }
-
-    private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
+    /// Optimized 
+    private final List<Child<Table>> streamList;
 
     public ImmutableTable(Schema parent, Table table) {
         super(requireNonNull(table).getName(), table.isEnabled());
@@ -77,20 +70,31 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity imp
         this.columnCompressionType = table.getColumnCompressionType();
         this.storageEngineType = table.getStorageEngineType();
         // Children
-        children = childHolderOf(table.stream().map(this::toImmutable), CLASS_COMPARATOR);
+        columns = ImmutableChildHolder.of(Column.class, table.streamOfColumns().map(this::toImmutable).collect(toList()));
+        primaryKeyColumns = ImmutableChildHolder.of(PrimaryKeyColumn.class, table.streamOfPrimaryKeyColumns().map(this::toImmutable).collect(toList()));
+        indexes = ImmutableChildHolder.of(Index.class, table.streamOfIndexes().map(this::toImmutable).collect(toList()));
+        foreignKeys = ImmutableChildHolder.of(ForeignKey.class, table.streamOfForeignKeys().map(this::toImmutable).collect(toList()));
+
+        streamList = Stream.of(columns, primaryKeyColumns, indexes, foreignKeys)
+                .flatMap(ChildHolder::stream)
+                .collect(toList());
+        //streamColumnList = columns.stream().collect(toList());
     }
 
-    private Child<?> toImmutable(Child<?> child) {
-        if (child instanceof Column) {
-            return new ImmutableColumn(this, castOrFail(child, Column.class));
-        } else if (child instanceof PrimaryKeyColumn) {
-            return new ImmutablePrimaryKeyColumn(this, castOrFail(child, PrimaryKeyColumn.class));
-        } else if (child instanceof Index) {
-            return new ImmutableIndex(this, castOrFail(child, Index.class));
-        } else if (child instanceof ForeignKey) {
-            return new ImmutableForeignKey(this, castOrFail(child, ForeignKey.class));
-        }
-        throw new SpeedmentException("Unknown Table child type:" + child);
+    private Column toImmutable(Column child) {
+        return new ImmutableColumn(this, castOrFail(child, Column.class));
+    }
+
+    private PrimaryKeyColumn toImmutable(PrimaryKeyColumn child) {
+        return new ImmutablePrimaryKeyColumn(this, castOrFail(child, PrimaryKeyColumn.class));
+    }
+
+    private Index toImmutable(Index child) {
+        return new ImmutableIndex(this, castOrFail(child, Index.class));
+    }
+
+    private ForeignKey toImmutable(ForeignKey child) {
+        return new ImmutableForeignKey(this, castOrFail(child, ForeignKey.class));
     }
 
     @Override
@@ -141,8 +145,8 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity imp
     }
 
     @Override
-    public ChildHolder getChildren() {
-        return children;
+    public ChildHolder<Child<Table>> getChildren() {
+        throw new IllegalStateException(Table.class.getSimpleName() + " has several child types");
     }
 
     @Override
@@ -189,4 +193,101 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity imp
     public ForeignKey foreignKey(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
+
+    @Override
+    public Stream<? extends Child<Table>> stream() {
+        return streamList.stream();
+    }
+
+    @Override
+    public <T extends Child<Table>> Stream<T> streamOf(Class<T> childClass) {
+        if (Column.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) columns.stream();
+            return result;
+        }
+        if (PrimaryKeyColumn.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) primaryKeyColumns.stream();
+            return result;
+        }
+        if (Index.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) indexes.stream();
+            return result;
+        }
+        if (Column.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) foreignKeys.stream();
+            return result;
+        }
+        return Stream.empty();
+    }
+
+    @Override
+    public <T extends Child<Table>> T find(Class<T> childClass, String name) throws SpeedmentException {
+        if (Column.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) columns.find(name);
+            return result;
+        }
+        if (PrimaryKeyColumn.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) primaryKeyColumns.find(name);
+            return result;
+        }
+        if (Index.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) indexes.find(name);
+            return result;
+        }
+        if (Column.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) foreignKeys.find(name);
+            return result;
+        }
+        throw thereIsNo(childClass, this.getClass(), name).get();
+    }
+
+    // Optimized methods
+    @Override
+    public Stream<Column> streamOfColumns() {
+        return columns.stream();
+    }
+
+    @Override
+    public Stream<PrimaryKeyColumn> streamOfPrimaryKeyColumns() {
+        return primaryKeyColumns.stream();
+    }
+
+    @Override
+    public Stream<Index> streamOfIndexes() {
+        return indexes.stream();
+    }
+
+    @Override
+    public Stream<ForeignKey> streamOfForeignKeys() {
+        return foreignKeys.stream();
+    }
+
+    @Override
+    public Column findColumn(String name) throws SpeedmentException {
+        return columns.find(name);
+    }
+
+    @Override
+    public PrimaryKeyColumn findPrimaryKeyColumn(String name) throws SpeedmentException {
+        return primaryKeyColumns.find(name);
+    }
+
+    @Override
+    public Index findIndex(String name) throws SpeedmentException {
+        return indexes.find(name);
+    }
+
+    @Override
+    public ForeignKey findForeignKey(String name) throws SpeedmentException {
+        return foreignKeys.find(name);
+    }
+
 }

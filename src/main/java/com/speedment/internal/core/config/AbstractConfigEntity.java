@@ -130,4 +130,9 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
             .orElse(getName())
             + "'";
     }
+
+    @Override
+    public boolean isImmutable() {
+        return false;
+    }
 }

@@ -64,7 +64,7 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @return the children
      */
-    ChildHolder getChildren();
+    ChildHolder<C> getChildren();
 
     /**
      * Add the node as a child to this node. This will set this node as the
@@ -88,7 +88,7 @@ public interface Parent<C extends Child<?>> extends Node {
      * Returns a <code>Stream</code> over all the children of this node. The
      * elements in the stream is sorted primarily on (i) the class name of the
      * type returned by {@link Child#getInterfaceMainClass()} and secondly (ii)
-     * on the node name returned by {@link Child#getName()}.
+     * on the nodes' natural order.
      *
      * @return a <code>Stream</code> of all children
      */
@@ -99,8 +99,7 @@ public interface Parent<C extends Child<?>> extends Node {
      * Returns a <code>Stream</code> over all the children to this node with the
      * specified interface main class. The inputted class should correspond to
      * the one returned by {@link Child#getInterfaceMainClass()}. The stream
-     * will be sorted based on the node name returned by
-     * {@link Child#getName()}.
+     * will be sorted based on the nodes' natural order.
      *
      * @param <T> the type of the children to return
      * @param childClass the class to search for amongst the children
