@@ -48,6 +48,9 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Utility methods for collecting Speedment streams in various ways.

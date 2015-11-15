@@ -275,7 +275,7 @@ public final class SceneController implements Initializable {
         );
         
         // Send statistics.
-        Statistics.onGuiStarted();
+        Statistics.onGuiProjectLoaded();
     }
 
     /**

@@ -30,8 +30,6 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.component.DbmsHandlerComponent;
-import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
@@ -60,6 +58,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.Optional;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.internal.util.Lazy;
 import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 
@@ -72,9 +71,13 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
     private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
+    private final Lazy<String> sqlColumnList;
+    private final Lazy<String> sqlColumnListQuestionMarks;
 
     public AbstractSqlManager(Speedment speedment) {
         super(speedment);
+        sqlColumnList = new Lazy<>();
+        sqlColumnListQuestionMarks = new Lazy<>();
     }
 
     @Override
@@ -95,26 +98,42 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
+    private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
+    
     public String sqlColumnList() {
-        return sqlColumnList(Function.identity());
+        if (getTable().isImmutable()) {
+            return sqlColumnList.getOrCompute(columnListSupplier);
+        } else {
+            return columnListSupplier.get();
+        }
     }
 
-    public String sqlColumnList(Function<String, String> postMapper) {
+    private final Supplier<String> columnListWithQuestionMarkSupplier = () -> sqlColumnList(c -> "?");
+    
+    public String sqlColumnListWithQuestionMarks() {
+        if (getTable().isImmutable()) {
+            return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
+        } else {
+            return columnListWithQuestionMarkSupplier.get();
+        }
+    }
+
+    private String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
-        return getTable().streamOf(Column.class)
-            .map(Column::getName)
-            .map(this::quoteField)
-            .map(postMapper)
-            .collect(Collectors.joining(","));
+        return getTable().streamOfColumns()
+                .map(Column::getName)
+                .map(this::quoteField)
+                .map(postMapper)
+                .collect(Collectors.joining(","));
     }
 
     public String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
-        return getTable().streamOf(PrimaryKeyColumn.class)
-            .map(PrimaryKeyColumn::getName)
-            .map(this::quoteField)
-            .map(postMapper)
-            .collect(Collectors.joining(" AND "));
+        return getTable().streamOfPrimaryKeyColumns()
+                .map(PrimaryKeyColumn::getName)
+                .map(this::quoteField)
+                .map(postMapper)
+                .collect(Collectors.joining(" AND "));
     }
 
     public String sqlTableReference() {
@@ -189,7 +208,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected DbmsHandler dbmsHandler() {
-        return speedment.get(DbmsHandlerComponent.class).get(getDbms());
+        return speedment.getDbmsHandlerComponent().get(getDbms());
     }
 
     // Null safe RS getters, must have the same name as ResultSet getters
@@ -277,6 +296,91 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
     }
 
+    // Null safe RS getters (int), must have the same name as ResultSet getters
+    protected Object getObject(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition));
+    }
+
+    protected Boolean getBoolean(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBoolean(ordinalPosition));
+    }
+
+    protected Byte getByte(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getByte(ordinalPosition));
+    }
+
+    protected Short getShort(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getShort(ordinalPosition));
+    }
+
+    protected Integer getInt(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getInt(ordinalPosition));
+    }
+
+    protected Long getLong(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getLong(ordinalPosition));
+    }
+
+    protected Float getFloat(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getFloat(ordinalPosition));
+    }
+
+    protected Double getDouble(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDouble(ordinalPosition));
+    }
+
+    protected String getString(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getString(ordinalPosition));
+    }
+
+    protected Date getDate(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getDate(ordinalPosition));
+    }
+
+    protected Time getTime(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTime(ordinalPosition));
+    }
+
+    protected Timestamp getTimestamp(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getTimestamp(ordinalPosition));
+    }
+
+    protected BigDecimal getBigDecimal(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(ordinalPosition));
+    }
+
+    protected Blob getBlob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBlob(ordinalPosition));
+    }
+
+    protected Clob getClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getClob(ordinalPosition));
+    }
+
+    protected Array getArray(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getArray(ordinalPosition));
+    }
+
+    protected Ref getRef(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRef(ordinalPosition));
+    }
+
+    protected URL getURL(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getURL(ordinalPosition));
+    }
+
+    protected RowId getRowId(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getRowId(ordinalPosition));
+    }
+
+    protected NClob getNClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getNClob(ordinalPosition));
+    }
+
+    protected SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
+    }
+
     private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);
         if (rs.wasNull()) {
@@ -303,34 +407,34 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append("insert into ").append(sqlTableReference());
         sb.append(" (").append(sqlColumnList()).append(")");
         sb.append(" values ");
-        sb.append("(").append(sqlColumnList(c -> "?")).append(")");
+        sb.append("(").append(sqlColumnListWithQuestionMarks()).append(")");
 
-        final List<Object> values = table.streamOf(Column.class)
-            .map(c -> toDatabaseType(c, entity))
-            .collect(Collectors.toList());
+        final List<Object> values = table.streamOfColumns()
+                .map(c -> toDatabaseType(c, entity))
+                .collect(Collectors.toList());
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
-                    table.streamOf(Column.class)
-                        .filter(Column::isAutoincrement)
-                        .forEachOrdered(column -> {
-                            // Cast from Long to the column target type
+                    table.streamOfColumns()
+                            .filter(Column::isAutoincrement)
+                            .forEachOrdered(column -> {
+                                // Cast from Long to the column target type
 
-                            final Object val = speedment
-                                .get(JavaTypeMapperComponent.class)
-                                .apply(column.getTypeMapper().getJavaType())
-                                .parse(
-                                    l.get(cnt.getAndIncrement())
-                                );
+                                final Object val = speedment
+                                        .getJavaTypeMapperComponent()
+                                        .apply(column.getTypeMapper().getJavaType())
+                                        .parse(
+                                                l.get(cnt.getAndIncrement())
+                                        );
 
-                            //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
-                            @SuppressWarnings("unchecked")
-                            final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
-                            set(builder, column, javaValue);
-                        });
+                                //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
+                                @SuppressWarnings("unchecked")
+                                final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
+                                set(builder, column, javaValue);
+                            });
                 }
             };
         };
@@ -348,11 +452,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = table.streamOf(Column.class)
-            .map(c -> toDatabaseType(c, entity))
-            .collect(Collectors.toList());
-        
-        table.streamOf(PrimaryKeyColumn.class).map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
+        final List<Object> values = table.streamOfColumns()
+                .map(c -> toDatabaseType(c, entity))
+                .collect(Collectors.toList());
+
+        table.streamOfPrimaryKeyColumns().map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
@@ -364,20 +468,20 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append("delete from ").append(sqlTableReference());
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
-        final List<Object> values = table.streamOf(PrimaryKeyColumn.class)
-            .map(pk -> toDatabaseType(pk.getColumn(), entity))
-            .collect(Collectors.toList());
+        final List<Object> values = table.streamOfPrimaryKeyColumns()
+                .map(pk -> toDatabaseType(pk.getColumn(), entity))
+                .collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
     }
 
     private void executeUpdate(
-        final ENTITY entity,
-        final String sql,
-        final List<Object> values,
-        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
-        final Optional<Consumer<MetaResult<ENTITY>>> listener
+            final ENTITY entity,
+            final String sql,
+            final List<Object> values,
+            final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
+            final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
         requireNonNull(entity);
         requireNonNull(sql);
@@ -406,10 +510,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     private void executeUpdate(
-        final ENTITY entity,
-        final String sql,
-        final List<Object> values,
-        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
+            final ENTITY entity,
+            final String sql,
+            final List<Object> values,
+            final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
     ) throws SQLException {
         //final ENTITY builder = toBuilder(entity);
         dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));

@@ -20,7 +20,18 @@ import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
+import com.speedment.component.ConnectionPoolComponent;
+import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.component.EntityManager;
+import com.speedment.component.JavaTypeMapperComponent;
+import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PrimaryKeyFactoryComponent;
+import com.speedment.component.ProjectComponent;
+import com.speedment.component.SqlTypeMapperComponent;
+import com.speedment.component.StreamSupplierComponent;
+import com.speedment.component.TypeMapperComponent;
+import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
@@ -32,14 +43,27 @@ import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComp
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
+import static com.speedment.internal.util.Cast.castOrFail;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
-
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
+
+    private boolean unmodifiable;
+    private ManagerComponent managerComponent;
+    private ProjectComponent projectComponent;
+    private PrimaryKeyFactoryComponent primaryKeyFactoryComponent;
+    private DbmsHandlerComponent dbmsHandlerComponent;
+    private SqlTypeMapperComponent sqlTypeMapperComponent;
+    private JavaTypeMapperComponent javaTypeMapperComponent;
+    private EntityManager entityManager;
+    private LoggerFactoryComponent loggerFactoryComponent;
+    private ConnectionPoolComponent connectionPoolComponent;
+    private StreamSupplierComponent streamSupplierComponent;
+    private TypeMapperComponent typeMapperComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -69,6 +93,42 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public Component put(Component item) {
         requireNonNull(item);
+        if (unmodifiable) {
+            throwNewUnsupportedOperationExceptionImmutable();
+        }
+        if (item instanceof ManagerComponent) {
+            managerComponent = castOrFail(item, ManagerComponent.class);
+        }
+        if (item instanceof ProjectComponent) {
+            projectComponent = castOrFail(item, ProjectComponent.class);
+        }
+        if (item instanceof PrimaryKeyFactoryComponent) {
+            primaryKeyFactoryComponent = castOrFail(item, PrimaryKeyFactoryComponent.class);
+        }
+        if (item instanceof DbmsHandlerComponent) {
+            dbmsHandlerComponent = castOrFail(item, DbmsHandlerComponent.class);
+        }
+        if (item instanceof SqlTypeMapperComponent) {
+            sqlTypeMapperComponent = castOrFail(item, SqlTypeMapperComponent.class);
+        }
+        if (item instanceof JavaTypeMapperComponent) {
+            javaTypeMapperComponent = castOrFail(item, JavaTypeMapperComponent.class);
+        }
+        if (item instanceof EntityManager) {
+            entityManager = castOrFail(item, EntityManager.class);
+        }
+        if (item instanceof LoggerFactoryComponent) {
+            loggerFactoryComponent = castOrFail(item, LoggerFactoryComponent.class);
+        }
+        if (item instanceof ConnectionPoolComponent) {
+            connectionPoolComponent = castOrFail(item, ConnectionPoolComponent.class);
+        }
+        if (item instanceof StreamSupplierComponent) {
+            streamSupplierComponent = castOrFail(item, StreamSupplierComponent.class);
+        }
+        if (item instanceof TypeMapperComponent) {
+            typeMapperComponent = castOrFail(item, TypeMapperComponent.class);
+        }
         return put(item, Component::getComponentClass);
     }
 
@@ -79,8 +139,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
 
     @Override
     public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException {
-        requireNonNull(entityClass);
-        return get(ManagerComponent.class).managerOf(entityClass);
+        return getManagerComponent().managerOf(entityClass);
     }
 
     @Override
@@ -91,6 +150,65 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public String toString() {
         return SpeedmentImpl.class.getSimpleName() + " " + components().map(c -> c.getTitle() + "-" + c.getVersion()).collect(joining(", ", "[", "]"));
+    }
+
+    public void setUnmodifiable() {
+        unmodifiable = true;
+    }
+
+    @Override
+    public ManagerComponent getManagerComponent() {
+        return managerComponent;
+    }
+
+    @Override
+    public ProjectComponent getProjectComponent() {
+        return projectComponent;
+    }
+
+    @Override
+    public PrimaryKeyFactoryComponent getPrimaryKeyFactoryComponent() {
+        return primaryKeyFactoryComponent;
+    }
+
+    @Override
+    public DbmsHandlerComponent getDbmsHandlerComponent() {
+        return dbmsHandlerComponent;
+    }
+
+    @Override
+    public SqlTypeMapperComponent getSqlTypeMapperComponent() {
+        return sqlTypeMapperComponent;
+    }
+
+    @Override
+    public JavaTypeMapperComponent getJavaTypeMapperComponent() {
+        return javaTypeMapperComponent;
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    @Override
+    public LoggerFactoryComponent getLoggerFactoryComponent() {
+        return loggerFactoryComponent;
+    }
+
+    @Override
+    public ConnectionPoolComponent getConnectionPoolComponent() {
+        return connectionPoolComponent;
+    }
+
+    @Override
+    public StreamSupplierComponent getStreamSupplierComponent() {
+        return streamSupplierComponent;
+    }
+
+    @Override
+    public TypeMapperComponent getTypeMapperComponent() {
+        return typeMapperComponent;
     }
 
 }

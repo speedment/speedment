@@ -172,7 +172,7 @@ public final class ProjectPromptController implements Initializable {
 
                 try {
                     final DbmsHandler dh = dbmsType.makeDbmsHandler(speedment, dbms);
-                    dh.schemas(s -> s.getName().equalsIgnoreCase(dbms.getName()))
+                    dh.schemas(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
                         .forEachOrdered(dbms::add);
 
                     Trees.traverse((Child) project, c -> c.asParent()
@@ -226,7 +226,7 @@ public final class ProjectPromptController implements Initializable {
      */
     private Stream<DbmsType> getDbmsTypes() {
         return speedment
-            .get(DbmsHandlerComponent.class)
+            .getDbmsHandlerComponent()
             .supportedDbmsTypes();
     }
 
@@ -239,7 +239,7 @@ public final class ProjectPromptController implements Initializable {
     private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
         requireNonNull(dbmsTypeName);
         return speedment
-            .get(DbmsHandlerComponent.class)
+            .getDbmsHandlerComponent()
             .findByName(dbmsTypeName);
     }
 

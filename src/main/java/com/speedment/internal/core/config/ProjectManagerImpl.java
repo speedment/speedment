@@ -24,12 +24,13 @@ import com.speedment.config.ProjectManager;
  *
  * @author pemi
  */
-public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
+public final class ProjectManagerImpl extends AbstractNamedConfigEntity 
+        implements ProjectManager, ParentHelper<Project> {
     
-    private final ChildHolder children;
+    private final ChildHolder<Project> children;
 
     public ProjectManagerImpl() {
-        children = new ChildHolder();
+        children = new ChildHolderImpl<>(Project.class);
     }
 
     @Override
@@ -38,7 +39,8 @@ public final class ProjectManagerImpl extends AbstractNamedConfigEntity implemen
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Project> getChildren() {
         return children;
     }
+    
 }

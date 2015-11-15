@@ -36,7 +36,7 @@ import java.util.Optional;
 public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
 
     private Dbms parent;
-    private final ChildHolder children;
+    private final ChildHolder<Table> children;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
@@ -45,7 +45,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     private StorageEngineType storageEngineType;
 
     public SchemaImpl() {
-        children = new ChildHolder();
+        children = new ChildHolderImpl<>(Table.class);
     }
 
     @Override
@@ -129,7 +129,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Table> getChildren() {
         return children;
     }
 

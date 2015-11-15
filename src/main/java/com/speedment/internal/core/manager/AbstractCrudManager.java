@@ -38,6 +38,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Abstract base implementation of a Manager that translates all persist,
@@ -178,7 +180,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return        values mapped to column names
      */
     private Map<String, Object> valuesFor(ENTITY entity) {
-        return MapStream.fromStream(table.streamOf(Column.class), 
+        return MapStream.fromStream(table.streamOfColumns(), 
             col -> col.getName(), 
             col -> get(entity, col)
         ).toMap();
@@ -193,7 +195,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return       the column of the primary key
      */
     private static Column findColumnOfPrimaryKey(Table table) {
-        return table.streamOf(PrimaryKeyColumn.class).findFirst()
+        return table.streamOfPrimaryKeyColumns().findFirst()
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find any primary key in table '" + table.getName() + "'."
             )).getColumn();

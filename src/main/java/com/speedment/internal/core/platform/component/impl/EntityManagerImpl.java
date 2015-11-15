@@ -54,7 +54,7 @@ public final class EntityManagerImpl extends Apache2AbstractComponent implements
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
         requireNonNull(entity);
-        final ManagerComponent managerComponent = getSpeedment().get(ManagerComponent.class);
+        final ManagerComponent managerComponent = getSpeedment().getManagerComponent();
         @SuppressWarnings("rawtypes")
         final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
         if (manager.isPresent()) {

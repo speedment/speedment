@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.config.Column;
+import com.speedment.config.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.Property.SIZE;
@@ -32,8 +34,10 @@ import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.stream.StreamDecorator;
+import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -43,35 +47,34 @@ import static java.util.stream.Collectors.joining;
  * @param <ENTITY> the entity type
  */
 public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
-
+    
     private final AbstractSqlManager<ENTITY> manager;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
     private final StreamDecorator decorator;
-
+    
     public SqlStreamTerminator(AbstractSqlManager<ENTITY> manager, AsynchronousQueryResult<ENTITY> asynchronousQueryResult, StreamDecorator decorator) {
-        this.manager                 = requireNonNull(manager);
+        this.manager = requireNonNull(manager);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
-        this.decorator               = requireNonNull(decorator);
+        this.decorator = requireNonNull(decorator);
     }
-
+    
     @Override
     public StreamDecorator getStreamDecorator() {
         return decorator;
     }
-
+    
     @Override
     public <P extends Pipeline> P optimize(P initialPipeline) {
         requireNonNull(initialPipeline);
         final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
-
+        
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
         }
         
-        
         return getStreamDecorator().apply(initialPipeline);
     }
-
+    
     public void modifySource(final List<SpeedmentPredicate<ENTITY, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
@@ -79,52 +82,72 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             // Nothing to do...
             return;
         }
-
+        
+        final List<Column> columns = predicateBuilders
+                .stream()
+                .map(SpeedmentPredicate::getField)
+                .map(FieldTrait::getColumnName)
+                .map(this::findColumn)
+                .collect(toList());
+        
         final SpeedmentPredicateView spv = new MySqlSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(spv::transform)
-            .collect(toList());
-
+                .map(spv::transform)
+                .collect(toList());
+        
         final String sql = manager.sqlSelect(" where "
-            + fragments.stream()
-            .map(SqlPredicateFragment::getSql)
-            .collect(joining(" AND "))
+                + fragments.stream()
+                .map(SqlPredicateFragment::getSql)
+                .collect(joining(" AND "))
         );
 
-        @SuppressWarnings("rawtypes")
-        final List<Object> values = fragments.stream()
-            .flatMap(SqlPredicateFragment::objects)
-            .collect(toList());
-
+//        @SuppressWarnings("rawtypes")
+//        final List<Object> values = fragments.stream()
+//            .flatMap(SqlPredicateFragment::objects)
+//            .collect(toList());
+        final List<Object> values = new ArrayList<>();
+        for (int i = 0; i < fragments.size(); i++) {
+            @SuppressWarnings("unchecked")
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).getTypeMapper();
+            fragments.get(i).objects()
+                    .map(tm::toDatabaseType)
+                    .forEach(values::add);
+        }
+        
         qr.setSql(sql);
         qr.setValues(values);
     }
-
-
+    
+    private Column findColumn(String name) {
+        return manager.getTable().streamOfColumns()
+                .filter(c -> name.equals(c.getName()))
+                .findAny().get();
+    }
+    
     @Override
     public long count(DoublePipeline pipeline) {
         requireNonNull(pipeline);
         return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
-
+    
     @Override
     public <T> long count(IntPipeline pipeline) {
         requireNonNull(pipeline);
         return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
-
+    
     @Override
     public long count(LongPipeline pipeline) {
         requireNonNull(pipeline);
         return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
-
+    
     @Override
     public <T> long count(ReferencePipeline<T> pipeline) {
         requireNonNull(pipeline);
         return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
-
+    
     private static final Predicate<Action<?, ?>> CHECK_RETAIN_SIZE = action -> action.is(PRESERVE, SIZE);
 
     /**
@@ -143,5 +166,5 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         }
         return fallbackSupplier.getAsLong();
     }
-
+    
 }

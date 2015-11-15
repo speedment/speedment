@@ -33,8 +33,6 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 
 import com.speedment.internal.util.Statistics;
-import com.speedment.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -67,7 +65,6 @@ public final class MainGenerator implements Consumer<Project> {
     @Override
     public void accept(Project project) {
         requireNonNull(project);
-        AnalyticsUtil.notify(GENERATE);
         Statistics.onGenerate();
         
         fileCounter = 0;

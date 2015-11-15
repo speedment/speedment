@@ -34,11 +34,6 @@ public final class AnalyticsUtil {
         tracker.trackAsynchronously(focusPoint);
     }
 
-    public static void notify(final String focusPointName) {
-        requireNonNull(focusPointName);
-        notify(new FocusPoint(focusPointName));
-    }
-
     /**
      * Utility classes should not be instantiated.
      */

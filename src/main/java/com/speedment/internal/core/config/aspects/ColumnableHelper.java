@@ -18,7 +18,6 @@ package com.speedment.internal.core.config.aspects;
 
 import com.speedment.config.aspects.Columnable;
 import com.speedment.config.Column;
-import static com.speedment.internal.core.config.utils.ConfigUtil.findColumnByName;
 import com.speedment.config.Table;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
@@ -29,15 +28,15 @@ import com.speedment.exception.SpeedmentException;
  */
 @Api(version = "2.2")
 public interface ColumnableHelper extends Columnable {
+
     @Override
     default Column getColumn() {
-        return findColumnByName(
-            ancestor(Table.class)
+
+        return ancestor(Table.class)
                 .orElseThrow(() -> new SpeedmentException(
-                    "Found no ancestor table from this " + 
-                    getClass().getSimpleName() + "."
-                )), 
-            getName()
-        );
+                        "Found no ancestor table from this "
+                        + getClass().getSimpleName() + "."
+                )).findColumn(getName());
+
     }
 }

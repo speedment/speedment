@@ -23,6 +23,7 @@ Tutorials
 * [Tutorial 3 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
 * [Tutorial 4 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
 * [Tutorial 5 - Using Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
+* [Tutorial 6 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
 
 Examples
 --------
@@ -159,4 +160,4 @@ Visit [www.speedment.org](http://www.speedment.org/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
 
-[![Beacon](http://speedment.com:8081/Beacon?site=GitHub&path=main)](https://some-site.com)
+[![Beacon](http://stat.speedment.com:8081/Beacon?site=GitHub&path=main)](https://some-site.com)

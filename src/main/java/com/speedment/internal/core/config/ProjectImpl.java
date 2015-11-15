@@ -41,13 +41,13 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     private final Speedment speedment;
     private ProjectManager parent;
-    private final ChildHolder children;
+    private final ChildHolder<Dbms> children;
     private String packageName, packageLocation;
     private Path configPath;
 
     public ProjectImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolder();
+        this.children = new ChildHolderImpl<>(Dbms.class);
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Dbms> getChildren() {
         return children;
     }
 

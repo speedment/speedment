@@ -53,7 +53,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @Override
     public Stream<ENTITY> stream(StreamDecorator decorator) {
-        return speedment.get(StreamSupplierComponent.class)
+        return speedment.getStreamSupplierComponent()
             .stream(getEntityClass(), decorator);
     }
 

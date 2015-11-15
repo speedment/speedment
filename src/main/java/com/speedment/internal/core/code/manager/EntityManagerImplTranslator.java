@@ -39,7 +39,6 @@ import com.speedment.config.Table;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
-import com.speedment.component.ProjectComponent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
@@ -121,9 +120,9 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(generateSet(file))
             .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
                 .add("return " + SPEEDMENT_VARIABLE_NAME
-                    + ".get(" + ProjectComponent.class.getSimpleName()
-                    + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
-            .call($ -> file.add(Import.of(Type.of(ProjectComponent.class))))
+                    + ".getProjectComponent()"
+                    + ".getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
+            //.call($ -> file.add(Import.of(Type.of(ProjectComponent.class))))
             //.call(i -> file.add(Import.of(Type.of(Stream.class))))
             //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
             //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
@@ -178,7 +177,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
             .add("final " + ENTITY.getName() + " entity = newInstance();");
 
-        final JavaTypeMapperComponent mapperComponent = speedment.get(JavaTypeMapperComponent.class);
+        final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         columns().forEachOrdered(c -> {

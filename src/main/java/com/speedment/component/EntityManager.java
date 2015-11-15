@@ -80,6 +80,6 @@ public interface EntityManager extends Component {
      */
     public static EntityManager get(Speedment speedment) {
         requireNonNull(speedment);
-        return speedment.get(EntityManager.class);
+        return speedment.getEntityManager();
     }
 }
