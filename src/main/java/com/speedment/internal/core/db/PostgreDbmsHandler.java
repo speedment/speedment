@@ -14,24 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 
 /**
- * Specific MySQL implementation of a DbmsHandler. Currently, there are no
- * specific implementations for MySQL.
- *
- * @author pemi
- * @since 2.0
+ * Created by fdirlikl on 11/15/2015.
  */
-public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
+public class PostgreDbmsHandler extends AbstractRelationalDbmsHandler {
+    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEM";
 
-    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
-
-    public MySqlDbmsHandler(Speedment speedment, final Dbms dbms) {
+    public PostgreDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
-
 }

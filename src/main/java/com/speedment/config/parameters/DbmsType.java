@@ -22,6 +22,7 @@ import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -202,4 +203,10 @@ public interface DbmsType {
      * @return a new {@code DbmsHandler} instance for the given database
      */
     DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms);
+
+    //FMDTODO: Add comment
+    String getResultSetTableSchema();
+
+    Function<Dbms, String> getConnectionUrlGenerator();
+
 }

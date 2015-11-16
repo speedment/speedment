@@ -20,52 +20,52 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
+import com.speedment.internal.core.db.PostgreDbmsHandler;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
-/**
- *
- * @author pemi
- */
-public final class MySqlDbmsType extends AbstractDbmsType {
+import static java.util.stream.Collectors.toSet;
 
-    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
-    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
-    private static final String JDBC_CONNECTOR_NAME = "mysql";
+/**
+ * Created by fdirlikl on 11/13/2015.
+ */
+public final class PostgreDbmsType extends AbstractDbmsType {
+    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = PostgreDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
+    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEM";
+    private static final String JDBC_CONNECTOR_NAME = "postgresql";
     private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.of("useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
     private static final Function<Dbms,String> CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder();
         result.append("jdbc:").append(JDBC_CONNECTOR_NAME).append("://");
         dbms.getIpAddress().ifPresent(ip -> result.append(ip));
         dbms.getPort().ifPresent(p -> result.append(":").append(p));
-        result.append("/");
+        result.append("/").append(dbms.getName());
         DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
         return result.toString();
     };
 
-    public MySqlDbmsType() {
+    public PostgreDbmsType() {
 
         super(
-            "MySQL",
-            "MySQL-AB JDBC Driver",
-            3306,
-            ".",
-            "Just a name",
-            "com.mysql.jdbc.Driver",
-            DEFAULT_CONNECTOR_PARAMS.get(),
-            JDBC_CONNECTOR_NAME,
-            "`",
-            "`",
-            Stream.of("MySQL", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
-            DBMS_MAPPER,
-            RESULTSET_TABLE_SCHEMA,
-            CONNECTION_URL_GENERATOR
+                "Postgres",
+                "Postgres-AB JDBC Driver",
+                5432,
+                ".",
+                "Just a name",
+                "org.postgresql.Driver",
+                "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+                "postgresql",
+                "\"",
+                "\"",
+                Stream.of("pg_catalog", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
+                DBMS_MAPPER,
+                RESULTSET_TABLE_SCHEMA,
+                CONNECTION_URL_GENERATOR
         );
     }
-
 }

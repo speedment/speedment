@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  *
@@ -43,6 +44,8 @@ public abstract class AbstractDbmsType implements DbmsType {
     private final String fieldEncloserEnd;
     private final Set<String> schemaExcludeSet;
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
+    private final String resultSetTableSchema;
+    private final Function<Dbms,String> connectionUrlGenerator;
 
     protected AbstractDbmsType(
         String name,
@@ -56,7 +59,9 @@ public abstract class AbstractDbmsType implements DbmsType {
         String fieldEncloserStart,
         String fieldEncloserEnd,
         Set<String> schemaExcludeSet,
-        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper) {
+        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
+        String resultSetTableSchema,
+        Function<Dbms,String> connectionUrlGenerator) {
 
         this.name = Objects.requireNonNull(name);
         this.driverManagerName = Objects.requireNonNull(driverManagerName);
@@ -70,6 +75,8 @@ public abstract class AbstractDbmsType implements DbmsType {
         this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
         this.schemaExcludeSet = Objects.requireNonNull(schemaExcludeSet);
         this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
+        this.resultSetTableSchema = Objects.requireNonNull(resultSetTableSchema);
+        this.connectionUrlGenerator = connectionUrlGenerator;
     }
 
     @Override
@@ -152,5 +159,13 @@ public abstract class AbstractDbmsType implements DbmsType {
             return "\\" + item;
         }
         return item;
+    }
+
+    public String getResultSetTableSchema() {
+        return resultSetTableSchema;
+    }
+
+    public Function<Dbms, String> getConnectionUrlGenerator() {
+        return connectionUrlGenerator;
     }
 }

@@ -112,18 +112,18 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     public String getUrl() {
-        final DbmsType dbmsType = getDbms().getType();
-        final StringBuilder result = new StringBuilder();
+        return getDbms().getType().getConnectionUrlGenerator().apply(getDbms());
+        /*final StringBuilder result = new StringBuilder();
         result.append("jdbc:");
         result.append(dbmsType.getJdbcConnectorName());
         result.append("://");
         getDbms().getIpAddress().ifPresent(ip -> result.append(ip));
         getDbms().getPort().ifPresent(p -> result.append(":").append(p));
-        result.append("/");
+        result.append("/test");
 
         dbmsType.getDefaultConnectorParameters().ifPresent(d -> result.append("?").append(d));
 
-        return result.toString();
+        return result.toString();*/
     }
 
     protected Map<String, Class<?>> readTypeMapFromDB(Connection connection) throws SQLException {
@@ -186,7 +186,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             typeMapping = readTypeMapFromDB(connection);
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
-                    final String schemaName = rs.getString("TABLE_SCHEMA");
+                    final String schemaName = rs.getString(getDbms().getType().getResultSetTableSchema());
                     String catalogName = "";
                     try {
                         // This column is not there for Oracle so handle it
