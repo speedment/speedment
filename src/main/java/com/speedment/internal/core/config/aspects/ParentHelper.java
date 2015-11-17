@@ -51,6 +51,18 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
         requireNonNull(childClass);
         return getChildren().streamOf(childClass);
     }
+    
+    @Override
+    default int count() {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) stream().count();
+    }
+    
+    @Override
+    default int countOf(Class<? extends C> type) {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) streamOf(type).count();
+    }
 
     @Override
     default Stream<Node> traverse() {

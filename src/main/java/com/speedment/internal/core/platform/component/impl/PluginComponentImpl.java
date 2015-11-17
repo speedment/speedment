@@ -53,4 +53,16 @@ public final class PluginComponentImpl extends Apache2AbstractComponent implemen
     public Optional<Plugin> get(String pluginName) {
         return Optional.ofNullable(plugins.get(pluginName));
     }
+
+    @Override
+    public AbstractComponent initialize() {
+        return super.initialize(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AbstractComponent resolve() {
+        return super.resolve(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

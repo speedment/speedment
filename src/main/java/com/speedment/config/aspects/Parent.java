@@ -65,6 +65,21 @@ public interface Parent<C extends Child<?>> extends Node {
      * @return the children
      */
     ChildHolder getChildren();
+    
+    /**
+     * Returns the number of children that this node has.
+     * 
+     * @return  the total number of children.
+     */
+    int count();
+    
+    /**
+     * Returns the number of children of a particular type that this node has.
+     * 
+     * @param childType  the type to include
+     * @return           the number of children.
+     */
+    int countOf(Class<? extends C> childType);
 
     /**
      * Add the node as a child to this node. This will set this node as the

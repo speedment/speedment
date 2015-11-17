@@ -22,14 +22,10 @@ import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
-import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
