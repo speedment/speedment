@@ -37,61 +37,83 @@ import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.config.Project;
 import com.speedment.config.Table;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
+import static com.speedment.internal.util.JavaLanguage.javaTypeName;
+import com.speedment.stream.MapStream;
+import java.util.List;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import java.util.Set;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *
  * @author pemi
  */
 public final class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
-
+    
     private final String className = typeName(project()) + "Application";
-
+    
     public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
         super(speedment, cg, configEntity);
     }
-
+    
     @Override
     protected Class make(File file) {
         requireNonNull(file);
+        
+        final Map<String, List<Table>> nameMap = project().traverseOver(Table.class)
+                .filter(Table::isEnabled)
+                .collect(Collectors.groupingBy(Table::getName));
+        
+        final Set<String> ambigousNames = MapStream.of(nameMap)
+                .filterValue(l -> l.size() > 1)
+                .keys()
+                .collect(toSet());
+        
         final Method onInit = Method.of("onInit", VOID)
-            .protected_()
-            .add(OVERRIDE)
-            .add("loadAndSetProject();");
-
+                .protected_()
+                .add(OVERRIDE)
+                .add("loadAndSetProject();");
+        
         project().traverseOver(Table.class)
-            .filter(Table::isEnabled)
-            .forEachOrdered(t -> {
-                EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
-                final Type managerType = entityManagerImplTranslator.getImplType();
-                file.add(Import.of(managerType));
-                onInit.add("put(new " + managerType.getName() + "(speedment));");
-            });
-
+                .filter(Table::isEnabled)
+                .forEachOrdered(t -> {
+                    EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
+                    final Type managerType = entityManagerImplTranslator.getImplType();
+                    if (ambigousNames.contains(t.getName())) {
+                        onInit.add("put(new " + managerType.getName() + "(speedment));");
+                    } else {
+                        file.add(Import.of(managerType));
+                        onInit.add("put(new " + entityManagerImplTranslator.managerTypeName() + "Impl(speedment));");
+                    }
+                    
+                });
+        
         onInit.add("super.onInit();");
 
         //final Path path = project().getConfigPath();
         return Class.of(className)
-            .public_()
-            .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
-            .add(Constructor.of()
                 .public_()
-                .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
-            )
-            .add(onInit)
-            .add(generated());
+                .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
+                .add(Constructor.of()
+                        .public_()
+                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
+                )
+                .add(onInit)
+                .add(generated());
     }
-
+    
     @Override
     protected Javadoc getJavaDoc() {
         return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE).add(AUTHOR.setValue("Speedment"));
     }
-
+    
     @Override
     protected String getJavadocRepresentText() {
         return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + ".";
     }
-
+    
     @Override
     protected String getFileName() {
         return className;
