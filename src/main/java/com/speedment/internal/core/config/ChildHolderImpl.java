@@ -31,6 +31,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A container class for children to a node in the database model tree.

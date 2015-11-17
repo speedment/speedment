@@ -30,6 +30,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A component that can translate a {@link Node} into something else. This 

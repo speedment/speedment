@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
