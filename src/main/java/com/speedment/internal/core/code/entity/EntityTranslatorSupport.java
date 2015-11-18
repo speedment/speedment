@@ -57,6 +57,7 @@ import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -77,7 +78,7 @@ public final class EntityTranslatorSupport {
 
         return Type.of(
             project.getPackageName().toLowerCase() + DOT
-            + table.getRelativeName(Project.class) + DOT
+            + table.getRelativeName(Project.class, JavaLanguage::javaPacketName) + DOT
             + javaTypeName(table.getName())
         );
     }

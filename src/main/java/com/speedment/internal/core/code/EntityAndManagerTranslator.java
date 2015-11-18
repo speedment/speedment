@@ -91,10 +91,11 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
         final long pks = primaryKeyColumns().count();
 
         if (pks == 0) {
-            throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
+            return DefaultType.list(DefaultType.WILDCARD);
+            //throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
 
-        final Class<?> first = primaryKeyColumns().findAny().get().getColumn().getTypeMapper().getJavaType();
+        final Class<?> first = primaryKeyColumns().findFirst().get().getColumn().getTypeMapper().getJavaType();
 
         if (pks == 1) {
             return Type.of(first);

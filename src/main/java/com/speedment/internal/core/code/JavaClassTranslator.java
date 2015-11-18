@@ -21,6 +21,7 @@ import com.speedment.config.Project;
 import com.speedment.config.Node;
 import com.speedment.internal.util.JavaLanguage;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.
@@ -207,7 +208,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
         if (getNode() instanceof Project) {
             return packName + project().getName();
         } else {
-            return packName + getNode().getRelativeName(Project.class);
+            return packName + getNode().getRelativeName(Project.class, JavaLanguage::javaPacketName);
         }
     }
 

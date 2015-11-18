@@ -36,6 +36,8 @@ import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
