@@ -22,17 +22,22 @@ import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
+import com.speedment.config.Node;
+import com.speedment.config.PluginData;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import java.io.InputStream;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  *
@@ -40,41 +45,62 @@ import javafx.scene.image.ImageView;
  */
 public enum SpeedmentIcon {
     
-    BIG_GENERATE ("images/icon-generate.png"),
-    BIG_CONFIGURE ("images/icon-configure.png"),
-    BIG_GENERATE_HOVER ("images/icon-generate-hover.png"),
-    BIG_CONFIGURE_HOVER ("images/icon-configure-hover.png"),
-	NEW_PROJECT ("pics/newProject.png"),
-	NEW_PROJECT_24 ("pics/newProject24.png"),
-	OPEN_PROJECT ("pics/openProject.png"),
-	OPEN_PROJECT_24 ("pics/openProject24.png"),
-	RUN_PROJECT ("pics/runProject.png"),
-	RUN_PROJECT_24 ("pics/runProject24.png"),
-	COLUMN ("pics/dbentity/column.png"),
-	DBMS ("pics/dbentity/dbms.png"),
-	FOREIGN_KEY ("pics/dbentity/foreignkey.png"),
-	FOREIGN_KEY_COLUMN ("pics/dbentity/foreignkeycolumn.png"),
-	INDEX ("pics/dbentity/index.png"),
-	INDEX_COLUMN ("pics/dbentity/indexcolumn.png"),
-	MANAGER ("pics/dbentity/manager.png"),
-	PRIMARY_KEY ("pics/dbentity/primarykey.png"),
-	PRIMARY_KEY_COLUMN ("pics/dbentity/primarykeycolumn.png"),
-	PROJECT ("pics/dbentity/project.png"),
-	PROJECT_MANAGER ("pics/dbentity/projectmanager.png"),
-	SCHEMA ("pics/dbentity/schema.png"),
-	TABLE ("pics/dbentity/table.png"),
-	ADD_DBMS_TRANS ("pics/dialog/add_dbms_trans.png"),
-	OPEN_FILE ("pics/dialog/openFile.png"),
-	QUESTION ("pics/dialog/question.png"),
-	SPEEDMENT_LOGO ("pics/dialog/speedment_logo.png"),
-	SPEEDMENT_LOGO_100 ("pics/dialog/speedment_logo100.png"),
-	WALKING_MAN ("pics/dialog/walking_man.gif"),
-	WALKING_MAN_SMALL ("pics/dialog/walking_man_small.png"),
-	SPIRE ("images/logo.png");
+    // Big buttons
+    BIG_GENERATE ("/images/icon-generate.png"),
+    BIG_CONFIGURE ("/images/icon-configure.png"),
+    BIG_GENERATE_HOVER ("/images/icon-generate-hover.png"),
+    BIG_CONFIGURE_HOVER ("/images/icon-configure-hover.png"),
+    
+    // Toolbar
+	NEW_PROJECT ("/pics/newProject.png"),
+	NEW_PROJECT_24 ("/pics/newProject24.png"),
+	OPEN_PROJECT ("/pics/openProject.png"),
+	OPEN_PROJECT_24 ("/pics/openProject24.png"),
+	RUN_PROJECT ("/pics/runProject.png"),
+	RUN_PROJECT_24 ("/pics/runProject24.png"),
+    
+    // Metadata Tree
+	COLUMN (SilkIcon.SCRIPT.getFileName()),
+	DBMS (SilkIcon.BUILDING_KEY.getFileName()),
+	FOREIGN_KEY (SilkIcon.TABLE_LINK.getFileName()),
+	FOREIGN_KEY_COLUMN (SilkIcon.SCRIPT_LINK.getFileName()),
+	INDEX (SilkIcon.TABLE_LIGHTNING.getFileName()),
+	INDEX_COLUMN (SilkIcon.SCRIPT_LIGHTNING.getFileName()),
+	PRIMARY_KEY (SilkIcon.TABLE_KEY.getFileName()),
+	PRIMARY_KEY_COLUMN (SilkIcon.SCRIPT_KEY.getFileName()),
+	PROJECT (SilkIcon.APPLICATION_SIDE_LIST.getFileName()),
+	SCHEMA (SilkIcon.DATABASE.getFileName()),
+	TABLE (SilkIcon.TABLE_RELATIONSHIP.getFileName()),
+//	COLUMN ("/pics/dbentity/column.png"),
+//	DBMS ("/pics/dbentity/dbms.png"),
+//	FOREIGN_KEY ("/pics/dbentity/foreignkey.png"),
+//	FOREIGN_KEY_COLUMN ("/pics/dbentity/foreignkeycolumn.png"),
+//	INDEX ("/pics/dbentity/index.png"),
+//	INDEX_COLUMN ("/pics/dbentity/indexcolumn.png"),
+//	MANAGER ("/pics/dbentity/manager.png"),
+//	PRIMARY_KEY ("/pics/dbentity/primarykey.png"),
+//	PRIMARY_KEY_COLUMN ("/pics/dbentity/primarykeycolumn.png"),
+//	PROJECT ("/pics/dbentity/project.png"),
+//	PROJECT_MANAGER ("/pics/dbentity/projectmanager.png"),
+//	SCHEMA ("/pics/dbentity/schema.png"),
+//	TABLE ("/pics/dbentity/table.png"),
+    PLUGIN_DATA (SilkIcon.PLUGIN.getFileName()),
+    
+    // Menu icons
+	ADD_DBMS_TRANS ("/pics/dialog/add_dbms_trans.png"),
+	OPEN_FILE ("/pics/dialog/openFile.png"),
+	QUESTION ("/pics/dialog/question.png"),
+	SPEEDMENT_LOGO ("/pics/dialog/speedment_logo.png"),
+	SPEEDMENT_LOGO_100 ("/pics/dialog/speedment_logo100.png"),
+	WALKING_MAN ("/pics/dialog/walking_man.gif"),
+	WALKING_MAN_SMALL ("/pics/dialog/walking_man_small.png"),
+    
+    // Logotype
+	SPIRE ("/images/logo.png");
 
-	private final static String FOLDER = "/";
-	private final String icon;
+	private final String filename;
 	
+    private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentIcon.class);
 	private static final Map<Class<?>, SpeedmentIcon> NODE_ICONS = new ConcurrentHashMap<>();
 	
 	static {
@@ -88,37 +114,68 @@ public enum SpeedmentIcon {
 		NODE_ICONS.put(ForeignKeyColumn.class, FOREIGN_KEY_COLUMN);
 		NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
 		NODE_ICONS.put(Project.class, PROJECT);
-		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
+//		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
+        NODE_ICONS.put(PluginData.class, PLUGIN_DATA);
 	}
-	
-	private SpeedmentIcon(String icon) {
-		this.icon = requireNonNull(icon);
-	}
-	
-	public String getFileName() {
-		return icon;
-	}
-	
-	public InputStream getFileInputStream() {
-		final InputStream stream = getClass().getResourceAsStream(FOLDER + icon);
-		
-		if (stream == null) {
-			throw new RuntimeException("Could not find icon: '" + FOLDER + icon + "'.");
-		}
-		
-		return stream;
-	}
-	
-	public Image load() {
+    
+    public Image load() {
 		return new Image(getFileInputStream());
 	}
-	
-	public ImageView view() {
+
+    public Image load(Node node) {
+		return new Image(getFileInputStream(node));
+	}
+    
+    public ImageView view() {
 		return new ImageView(load());
 	}
 	
-	public static SpeedmentIcon forNodeType(Class<?> clazz) {
-        requireNonNull(clazz);
-		return NODE_ICONS.get(clazz);
+	public ImageView view(Node node) {
+		return new ImageView(load(node));
 	}
+	
+	public static ImageView forNode(Node node) {
+        requireNonNull(node);
+        
+        final Optional<String> path = node.getIconPath();
+        if (path.isPresent()) {
+            final InputStream stream = SpeedmentIcon.class.getResourceAsStream(path.get());
+            if (stream != null) {
+                return new ImageView(new Image(stream));
+            } else {
+                LOGGER.error(
+                    "Config node '" + node.getClass().getSimpleName() + 
+                    "' specified a custom icon '" + path.get() + "' that could not be loaded."
+                );
+            }
+        }
+        
+        final SpeedmentIcon icon = NODE_ICONS.get(node.getInterfaceMainClass());
+        if (icon != null) {
+            return icon.view();
+        } else {
+            LOGGER.error("Found no predefined icon for node type '" + node.getClass().getSimpleName() + "'.");
+        }
+        
+		return SilkIcon.HELP.view();
+	}
+    
+    private SpeedmentIcon(String filename) {
+        requireNonNull(filename);
+		this.filename = filename;
+	}
+    
+    private InputStream getFileInputStream() {
+        return getFileInputStream(null);
+    }
+
+    private InputStream getFileInputStream(Node node) {
+		final InputStream stream = getClass().getResourceAsStream(filename);
+		
+		if (stream == null) {
+			throw new RuntimeException("Could not find icon: '" + filename + "'.");
+		}
+		
+		return stream;
+    }
 }

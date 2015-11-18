@@ -45,7 +45,7 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
     private final StorageEngineType storageEngineType;
 
     public ImmutableSchema(Dbms parent, Schema schema) {
-        super(requireNonNull(schema).getName(), schema.isEnabled());
+        super(requireNonNull(schema).getName(), schema.isExpanded(), schema.isEnabled());
         // Fields
         this.parent = Optional.of(parent);
         this.defaultSchema = schema.isDefaultSchema();

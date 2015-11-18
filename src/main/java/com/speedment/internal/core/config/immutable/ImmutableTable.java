@@ -61,24 +61,25 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
     private final List<Child<Table>> streamList;
 
     public ImmutableTable(Schema parent, Table table) {
-        super(requireNonNull(table).getName(), table.isEnabled());
+        super(requireNonNull(table).getName(), table.isExpanded(), table.isEnabled());
         requireNonNull(parent);
+        
         // Fields
-        this.parent = table.getParent();
-        this.tableName = table.getTableName();
-        this.fieldStorageType = table.getFieldStorageType();
+        this.parent                = table.getParent();
+        this.tableName             = table.getTableName();
+        this.fieldStorageType      = table.getFieldStorageType();
         this.columnCompressionType = table.getColumnCompressionType();
-        this.storageEngineType = table.getStorageEngineType();
+        this.storageEngineType     = table.getStorageEngineType();
+        
         // Children
-        columns = ImmutableChildHolder.of(Column.class, table.streamOfColumns().map(this::toImmutable).collect(toList()));
-        primaryKeyColumns = ImmutableChildHolder.of(PrimaryKeyColumn.class, table.streamOfPrimaryKeyColumns().map(this::toImmutable).collect(toList()));
-        indexes = ImmutableChildHolder.of(Index.class, table.streamOfIndexes().map(this::toImmutable).collect(toList()));
-        foreignKeys = ImmutableChildHolder.of(ForeignKey.class, table.streamOfForeignKeys().map(this::toImmutable).collect(toList()));
+        this.columns           = ImmutableChildHolder.of(Column.class, table.streamOfColumns().map(this::toImmutable).collect(toList()));
+        this.primaryKeyColumns = ImmutableChildHolder.of(PrimaryKeyColumn.class, table.streamOfPrimaryKeyColumns().map(this::toImmutable).collect(toList()));
+        this.indexes           = ImmutableChildHolder.of(Index.class, table.streamOfIndexes().map(this::toImmutable).collect(toList()));
+        this.foreignKeys       = ImmutableChildHolder.of(ForeignKey.class, table.streamOfForeignKeys().map(this::toImmutable).collect(toList()));
 
-        streamList = Stream.of(columns, primaryKeyColumns, indexes, foreignKeys)
-                .flatMap(ChildHolder::stream)
-                .collect(toList());
-        //streamColumnList = columns.stream().collect(toList());
+        this.streamList = Stream.of(columns, primaryKeyColumns, indexes, foreignKeys)
+            .flatMap(ChildHolder::stream)
+            .collect(toList());
     }
 
     private Column toImmutable(Column child) {

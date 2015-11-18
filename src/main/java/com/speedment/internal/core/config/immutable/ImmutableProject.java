@@ -19,9 +19,11 @@ package com.speedment.internal.core.config.immutable;
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
+import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import groovy.lang.Closure;
@@ -30,42 +32,56 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
+import com.speedment.internal.util.Cast;
 import static com.speedment.internal.util.Cast.castOrFail;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity implements Project, ImmutableParentHelper<Dbms> {
+public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity implements Project, ImmutableParentHelper<Child<Project>> {
 
     private final Speedment speedment;
     private final Optional<ProjectManager> parent; // Rare occation of valid use of Optional as member
-    private final ChildHolder<Dbms> children;
+    private final ChildHolder<Dbms> dbmsChildren;
+    private final ChildHolder<PluginData> pluginDataChildren;
     private final String packageName, packageLocation;
     private final Optional<Path> configPath;
     private final Map<String, Table> tableNameMap;
 
     public ImmutableProject(Project project) {
         this(null, project);
-
     }
 
     public ImmutableProject(ProjectManager parent, Project project) {
-        super(requireNonNull(project).getName(), project.isEnabled());
+        super(requireNonNull(project).getName(), project.isExpanded(), project.isEnabled());
+        
         // Menbers
         this.speedment = project.getSpeedment();
         this.packageName = project.getPackageName();
         this.packageLocation = project.getPackageLocation();
         this.configPath = project.getConfigPath();
         this.parent = Optional.ofNullable(parent);
+        
         // Children
-        children = childHolderOf(Dbms.class, project.stream().map(p -> new ImmutableDbms(this, p)));
+        dbmsChildren = (ChildHolder<Dbms>) (ChildHolder) childHolderOf(
+            (Class<Child<Project>>) (Class) Dbms.class, 
+            project.streamOf(Dbms.class).map(p -> new ImmutableDbms(this, p)));
+        
+        pluginDataChildren = (ChildHolder<PluginData>) (ChildHolder) childHolderOf(
+            (Class<Child<Project>>) (Class) PluginData.class, 
+            project.streamOf(PluginData.class).map(p -> new ImmutablePluginData(this, p)));
+        
         // Special
-        tableNameMap = new HashMap<>();
+        this.tableNameMap = new HashMap<>();
         traverseOver(Table.class).forEach(t -> {
             tableNameMap.put(t.getRelativeName(Dbms.class), t);
         });
+        
         // resolve all dependencies that needs to be done post tree construction
         traverse().forEach(node -> {
             if (node instanceof ImmutableAbstractConfigEntity) {
@@ -95,8 +111,8 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     }
 
     @Override
-    public ChildHolder<Dbms> getChildren() {
-        return children;
+    public ChildHolder<Child<Project>> getChildren() {
+        throw new IllegalStateException(Project.class.getSimpleName() + " has several child types");
     }
 
     @Override
@@ -123,7 +139,45 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     public Speedment getSpeedment() {
         return speedment;
     }
-
+    
+    @Override
+    public Stream<? extends Child<Project>> stream() {
+        return Stream.of(dbmsChildren, pluginDataChildren)
+            .flatMap(ChildHolder::stream);
+    }
+    
+    @Override
+    public <T extends Child<Project>> Stream<T> streamOf(Class<T> childClass) {
+        if (Dbms.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) dbmsChildren.stream();
+            return result;
+        } else if (PluginData.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) pluginDataChildren.stream();
+            return result;
+        } else {
+            throw new SpeedmentException(
+                "'" + childClass.getName() + 
+                "' is not a child to '" + 
+                getClass().getSimpleName() + "'."
+            );
+        }
+    }
+    
+    @Override
+    public <T extends Child<Project>> T find(Class<T> childClass, String name) throws SpeedmentException {
+        if (Dbms.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) dbmsChildren.find(name);
+            return result;
+        } else if (PluginData.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) pluginDataChildren.find(name);
+            return result;
+        } else throw thereIsNo(childClass, this.getClass(), name).get();
+    }
+    
     @Override
     public Table findTableByName(String fullName) {
         final Table table = tableNameMap.get(fullName);
@@ -137,9 +191,14 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     public Dbms dbms(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
+    
+    @Override
+    public PluginData pluginData(Closure<?> c) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 
     @Override
-    public Optional<Dbms> add(Dbms child) {
+    public Optional<Child<Project>> add(Child<Project> child) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
@@ -148,4 +207,8 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
+    @Override
+    public PluginData addNewPluginData(Speedment speedment) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 }

@@ -38,14 +38,16 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
  *
  * @author pemi
  */
-public abstract class ImmutableAbstractConfigEntity implements Node, Enableable {
+public abstract class ImmutableAbstractConfigEntity implements Node {
 
     private final boolean enabled;
     private final String name;
+    private final boolean expanded;
 
-    protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
-        this.enabled = enabled;
-        this.name = name; // Can be null
+    protected ImmutableAbstractConfigEntity(String name, boolean enabled, boolean expanded) {
+        this.enabled  = enabled;
+        this.name     = name; // Can be null
+        this.expanded = expanded;
     }
 
     @Override
@@ -65,6 +67,16 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
 
     @Override
     public final void setName(String name) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+    
+    @Override
+    public Boolean isExpanded() {
+        return expanded;
+    }
+
+    @Override
+    public void setExpanded(Boolean expanded) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
 

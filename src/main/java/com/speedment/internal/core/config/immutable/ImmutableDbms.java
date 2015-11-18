@@ -44,7 +44,7 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
     private final Optional<String> username, password;
 
     public ImmutableDbms(Project parent, Dbms dbms) {
-        super(requireNonNull(dbms).getName(), dbms.isEnabled());
+        super(requireNonNull(dbms).getName(), dbms.isExpanded(), dbms.isEnabled());
         requireNonNull(parent);
         // Members
         this.speedment = parent.getSpeedment();

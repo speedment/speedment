@@ -42,7 +42,7 @@ public final class ImmutableForeignKeyColumn extends ImmutableAbstractOrdinalCon
     private Table foreignTable;
 
     public ImmutableForeignKeyColumn(ForeignKey parent, ForeignKeyColumn fkc) {
-        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.getOrdinalPosition());
+        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.isExpanded(), fkc.getOrdinalPosition());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);

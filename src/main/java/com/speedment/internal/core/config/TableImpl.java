@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Column;
 import com.speedment.config.ForeignKey;
@@ -33,6 +34,7 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -41,33 +43,25 @@ import java.util.stream.Stream;
  * @author pemi
  */
 public final class TableImpl extends AbstractNamedConfigEntity implements Table, ParentHelper<Child<Table>> {
-    
-    private Schema parent;
+
+    private final Speedment speedment;
     private final ChildHolder<Column> columns;
     private final ChildHolder<PrimaryKeyColumn> primaryKeyColumns;
     private final ChildHolder<Index> indexes;
     private final ChildHolder<ForeignKey> foreignKeys;
     
+    private Schema parent;
     private String tableName;
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
-//
-//    private static int valueOfClass(Class<?> clazz) {
-//        if (Column.class.equals(clazz)) return 0;
-//        if (PrimaryKeyColumn.class.equals(clazz)) return 1;
-//        if (Index.class.equals(clazz)) return 2;
-//        if (ForeignKey.class.equals(clazz)) return 3;
-//        return 4;
-//    }
-//    
-//    private final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b) -> Integer.compare(valueOfClass(a), valueOfClass(b));
 
-    public TableImpl() {
-        columns = new ChildHolderImpl<>(Column.class);
-        primaryKeyColumns = new ChildHolderImpl<>(PrimaryKeyColumn.class);
-        indexes = new ChildHolderImpl<>(Index.class);
-        foreignKeys = new ChildHolderImpl<>(ForeignKey.class);
+    public TableImpl(Speedment speedment) {
+        this.speedment         = requireNonNull(speedment);
+        this.columns           = new ChildHolderImpl<>(Column.class);
+        this.primaryKeyColumns = new ChildHolderImpl<>(PrimaryKeyColumn.class);
+        this.indexes           = new ChildHolderImpl<>(Index.class);
+        this.foreignKeys       = new ChildHolderImpl<>(ForeignKey.class);
     }
     
     @Override
@@ -75,6 +69,7 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
         setStorageEngineType(StorageEngineType.INHERIT);
+        setExpanded(false);
     }
     
     @Override
@@ -144,8 +139,8 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
     }
     
     @Override
-    public Index addNewIndex() {
-        final Index e = Index.newIndex();
+    public  Index addNewIndex() {
+        final Index e = Index.newIndex(speedment);
         add(e);
         return e;
     }
@@ -158,8 +153,8 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
     }
     
     @Override
-    public ForeignKey addNewForeignKey() {
-        final ForeignKey e = ForeignKey.newForeignKey();
+    public  ForeignKey addNewForeignKey() {
+        final ForeignKey e = ForeignKey.newForeignKey(speedment);
         add(e);
         return e;
     }
@@ -196,23 +191,25 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
             @SuppressWarnings("unchecked")
             final Stream<T> result = (Stream<T>) columns.stream();
             return result;
-        }
-        if (PrimaryKeyColumn.class.equals(childClass)) {
+        } else if (PrimaryKeyColumn.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final Stream<T> result = (Stream<T>) primaryKeyColumns.stream();
             return result;
-        }
-        if (Index.class.equals(childClass)) {
+        } else if (Index.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final Stream<T> result = (Stream<T>) indexes.stream();
             return result;
-        }
-        if (ForeignKey.class.equals(childClass)) {
+        } else if (ForeignKey.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final Stream<T> result = (Stream<T>) foreignKeys.stream();
             return result;
+        } else {
+            throw new SpeedmentException(
+                "'" + childClass.getName() + 
+                "' is not a child to '" + 
+                getClass().getSimpleName() + "'."
+            );
         }
-        return Stream.empty();
     }
     
     @Override
@@ -221,53 +218,47 @@ public final class TableImpl extends AbstractNamedConfigEntity implements Table,
             @SuppressWarnings("unchecked")
             final T result = (T) columns.find(name);
             return result;
-        }
-        if (PrimaryKeyColumn.class.equals(childClass)) {
+        } else if (PrimaryKeyColumn.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final T result = (T) primaryKeyColumns.find(name);
             return result;
-        }
-        if (Index.class.equals(childClass)) {
+        } else if (Index.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final T result = (T) indexes.find(name);
             return result;
-        }
-        if (ForeignKey.class.equals(childClass)) {
+        } else if (ForeignKey.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
             final T result = (T) foreignKeys.find(name);
             return result;
-        }
-        throw thereIsNo(childClass, this.getClass(), name).get();
+        } else throw thereIsNo(childClass, this.getClass(), name).get();
     }
     
     @Override
     public Optional<Child<Table>> add(Child<Table> child) {
         if (Column.class.equals(child.getInterfaceMainClass())) {
-            Optional<Column> result = columns.put(Cast.castOrFail(child, Column.class), this);
+            final Optional<Column> result = columns.put(Cast.castOrFail(child, Column.class), this);
             @SuppressWarnings("unchecked")
-            Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional) result;
+            final Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional<?>) result;
             return castedResult;
-        }
-        if (PrimaryKeyColumn.class.equals(child.getInterfaceMainClass())) {
-            Optional<PrimaryKeyColumn> result = primaryKeyColumns.put(Cast.castOrFail(child, PrimaryKeyColumn.class), this);
+        } else if (PrimaryKeyColumn.class.equals(child.getInterfaceMainClass())) {
+            final Optional<PrimaryKeyColumn> result = primaryKeyColumns.put(Cast.castOrFail(child, PrimaryKeyColumn.class), this);
             @SuppressWarnings("unchecked")
-            Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional) result;
+            final Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional<?>) result;
             return castedResult;
-        }
-        if (Index.class.equals(child.getInterfaceMainClass())) {
-            Optional<Index> result = indexes.put(Cast.castOrFail(child, Index.class), this);
+        } else if (Index.class.equals(child.getInterfaceMainClass())) {
+            final Optional<Index> result = indexes.put(Cast.castOrFail(child, Index.class), this);
             @SuppressWarnings("unchecked")
-            Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional) result;
+            final Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional<?>) result;
             return castedResult;
-        }
-        if (ForeignKey.class.equals(child.getInterfaceMainClass())) {
-            Optional<ForeignKey> result = foreignKeys.put(Cast.castOrFail(child, ForeignKey.class), this);
+        } else if (ForeignKey.class.equals(child.getInterfaceMainClass())) {
+            final Optional<ForeignKey> result = foreignKeys.put(Cast.castOrFail(child, ForeignKey.class), this);
             @SuppressWarnings("unchecked")
-            Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional) result;
+            final Optional<Child<Table>> castedResult = (Optional<Child<Table>>) (Optional<?>) result;
             return castedResult;
-        }
-        throw new IllegalArgumentException("Cannot add a " + child.getParentInterfaceMainClass());
-        
+        } else throw new IllegalArgumentException(
+            "Cannot add a '" + child.getParentInterfaceMainClass() + 
+            "' to a '" + getClass().getSimpleName() + "'."
+        );
     }
     
 }

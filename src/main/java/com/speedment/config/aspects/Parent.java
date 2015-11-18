@@ -81,7 +81,6 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @see ChildHolder
      */
-    @SuppressWarnings("unchecked")
     Optional<C> add(final C child);
 
     /**
@@ -92,8 +91,22 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @return a <code>Stream</code> of all children
      */
-    @SuppressWarnings("unchecked")
     Stream<? extends C> stream();
+    
+    /**
+     * Returns the number of children that this node has.
+     * 
+     * @return  the total number of children.
+     */
+    int count();
+    
+    /**
+     * Returns the number of children of a particular type that this node has.
+     * 
+     * @param childType  the type to include
+     * @return           the number of children.
+     */
+    int countOf(Class<? extends C> childType);
 
     /**
      * Returns a <code>Stream</code> over all the children to this node with the

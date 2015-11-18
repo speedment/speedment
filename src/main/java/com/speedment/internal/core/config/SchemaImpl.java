@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
 import com.speedment.config.Schema;
@@ -28,6 +29,7 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -35,8 +37,9 @@ import java.util.Optional;
  */
 public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
 
-    private Dbms parent;
+    private final Speedment speedment;
     private final ChildHolder<Table> children;
+    private Dbms parent;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
@@ -44,8 +47,9 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
 
-    public SchemaImpl() {
-        children = new ChildHolderImpl<>(Table.class);
+    public SchemaImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children  = new ChildHolderImpl<>(Table.class);
     }
 
     @Override
@@ -135,7 +139,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     @Override
     public Table addNewTable() {
-        final Table e = Table.newTable();
+        final Table e = Table.newTable(speedment);
         add(e);
         return e;
     }

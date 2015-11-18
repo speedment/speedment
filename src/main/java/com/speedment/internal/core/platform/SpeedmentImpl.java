@@ -23,9 +23,11 @@ import com.speedment.Manager;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
+import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
@@ -35,10 +37,12 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
+import com.speedment.internal.core.platform.component.impl.EventComponentImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
+import com.speedment.internal.core.platform.component.impl.PluginComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
@@ -64,6 +68,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private ConnectionPoolComponent connectionPoolComponent;
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
+    private PluginComponent pluginComponent;
+    private EventComponent eventComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -77,6 +83,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
+        put(PluginComponentImpl::new);
+        put(EventComponentImpl::new);
     }
 
     @Override
@@ -93,6 +101,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public Component put(Component item) {
         requireNonNull(item);
+
         if (unmodifiable) {
             throwNewUnsupportedOperationExceptionImmutable();
         }
@@ -128,6 +137,12 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof TypeMapperComponent) {
             typeMapperComponent = castOrFail(item, TypeMapperComponent.class);
+        }
+        if (item instanceof PluginComponent) {
+            pluginComponent = castOrFail(item, PluginComponent.class);
+        }
+        if (item instanceof EventComponent) {
+            eventComponent = castOrFail(item, EventComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -211,4 +226,13 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         return typeMapperComponent;
     }
 
+    @Override
+    public PluginComponent getPluginComponent() {
+        return pluginComponent;
+    }
+    
+    @Override
+    public EventComponent getEventComponent() {
+        return eventComponent;
+    }
 }

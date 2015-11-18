@@ -28,8 +28,8 @@ import com.speedment.config.aspects.Nameable;
 public abstract class ImmutableAbstractNamedConfigEntity extends ImmutableAbstractConfigEntity
         implements Comparable<Nameable> {
 
-    public ImmutableAbstractNamedConfigEntity(String name, boolean enabled) {
-        super(name, enabled);
+    public ImmutableAbstractNamedConfigEntity(String name, boolean enabled, boolean expanded) {
+        super(name, enabled, expanded);
     }
 
     @Override

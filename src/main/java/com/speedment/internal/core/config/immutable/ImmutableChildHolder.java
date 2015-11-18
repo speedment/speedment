@@ -48,8 +48,8 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
     // Optimized structures
     private final List<T> sortedChildren;
 
-    public static <T extends Child<?>> ChildHolder<T> ofNone(Class<T> childClass) {
-        return new EmptyChildHolder<>(childClass);
+    public static ChildHolder<?> ofNone() {
+        return new EmptyChildHolder();
     }
 
     public static <T extends Child<?>> ChildHolder<T> of(T child) {
@@ -58,7 +58,7 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
 
     public static <T extends Child<?>> ChildHolder<T> of(Class<T> childClass, Collection<T> childs) {
         if (childs.isEmpty()) {
-            return ofNone(childClass);
+            return (ChildHolder<T>) ofNone();
         }
         if (childs.size() == 1) {
             return of(childs.stream().findAny().get());
@@ -112,34 +112,29 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
         return childClass;
     }
 
-    private static class EmptyChildHolder<T extends Child<?>> implements ChildHolder<T> {
+    private static class EmptyChildHolder implements ChildHolder<Child<?>> {
 
-        private final Class<T> childClass;
-
-        public EmptyChildHolder(Class<T> childClass) {
-            this.childClass = childClass;
-        }
+        public EmptyChildHolder() {}
 
         @Override
-        public Optional<T> put(T child, Parent<? super T> parent) {
+        public Optional<Child<?>> put(Child<?> child, Parent<? super Child<?>> parent) {
             return throwNewUnsupportedOperationExceptionImmutable();
         }
 
         @Override
-        public Stream<T> stream() {
+        public Stream<Child<?>> stream() {
             return Stream.empty();
         }
 
         @Override
-        public T find(String name) throws SpeedmentException {
-            throw thereIsNo(childClass, Parent.class, name).get();
+        public Child<?> find(String name) throws SpeedmentException {
+            throw new SpeedmentException("There is no children in this child holder.");
         }
 
         @Override
-        public Class<T> getChildClass() {
-            return childClass;
+        public Class<Child<?>> getChildClass() {
+            return (Class<Child<?>>) (Class) Child.class;
         }
-
     }
 
     private static class SingletonChildHolder<T extends Child<?>> implements ChildHolder<T> {

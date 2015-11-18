@@ -21,6 +21,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.annotation.Api;
+import com.speedment.config.aspects.Expandable;
 import com.speedment.config.aspects.Ordinable;
 import java.util.Optional;
 import java.util.function.Function;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
  * @see Child
  */
 @Api(version = "2.2")
-public interface Node extends Nameable, Enableable {
+public interface Node extends Nameable, Enableable, Expandable {
 
     /**
      * If this node implements the {@link Child} interface, it is returned
@@ -159,6 +160,29 @@ public interface Node extends Nameable, Enableable {
      * @return the main interface class
      */
     Class<?> getInterfaceMainClass();
+    
+    /**
+     * Returns a path to the icon to use for this node in the GUI. If empty, the
+     * gui will attempt to load one of the predefined icons. Make sure that any
+     * returned path exists in the context the application is running in!
+     * 
+     * @return  the path to the icon to load or empty to use a predefined one
+     */
+    default Optional<String> getIconPath() {
+        return Optional.empty();
+    }
+    
+    /**
+     * Returns the name that should be used to describe this node in persisted
+     * files. This is almost always the same as the interface simple name, but
+     * in the case of anonymous nodes this value might need to be specified
+     * explicitly.
+     * 
+     * @return  the node type name
+     */
+    default String nodeTypeName() {
+        return getInterfaceMainClass().getSimpleName();
+    }
 
     /**
      * Returns if this node is immutable. (i.e. can never change its internal

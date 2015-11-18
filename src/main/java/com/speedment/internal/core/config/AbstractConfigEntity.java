@@ -38,14 +38,16 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements Node, Enableable {
+public abstract class AbstractConfigEntity implements Node {
 
     private boolean enabled;
     private String name;
-
+    private boolean expanded;
+    
     protected AbstractConfigEntity(String defaultName) {
-        this.enabled = true;
-        this.name = defaultName; // Can be null
+        this.enabled  = true;
+        this.name     = defaultName; // Can be null
+        this.expanded = true;
         setDefaults();
     }
     
@@ -61,7 +63,6 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         this.enabled = enabled;
     }
 
-    
     @Override
     public String getName() {
         return name;
@@ -78,6 +79,16 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
 //        }
 
         this.name = name;
+    }
+
+    @Override
+    public void setExpanded(Boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    @Override
+    public Boolean isExpanded() {
+        return expanded;
     }
 
     @Override
@@ -118,6 +129,8 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         }
         return sj.toString() + nameMapper.apply(getName());
     }
+    
+    
 
     @Override
     public String toString() {

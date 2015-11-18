@@ -37,7 +37,7 @@ public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity imp
     private final Boolean unique;
     
     public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isEnabled());
+        super(requireNonNull(index).getName(), index.isExpanded(), index.isEnabled());
         // Fields
         this.parent = Optional.of(parent);
         this.unique = index.isUnique();

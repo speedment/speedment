@@ -37,13 +37,13 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
     @Override
     default Optional<C> add(final C child) {
         requireNonNull(child);
-        return getChildren().put(child, this);//.map(c -> (C) c);
+        return getChildren().put(child, this);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     default Stream<? extends C> stream() {
-        return getChildren().stream()/*.map(c -> (C) c)*/;
+        return getChildren().stream();
     }
 
     @Override
@@ -55,6 +55,18 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
         @SuppressWarnings("unchecked")
         final Stream<T> result = (Stream<T>) getChildren().stream();
         return result;
+    }
+    
+    @Override
+    default int count() {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) stream().count();
+    }
+    
+    @Override
+    default int countOf(Class<? extends C> type) {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) streamOf(type).count();
     }
 
     @Override

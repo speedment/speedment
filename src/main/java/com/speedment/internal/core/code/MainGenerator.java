@@ -29,6 +29,8 @@ import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTr
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.config.Project;
 import com.speedment.config.Table;
+import com.speedment.event.AfterGenerate;
+import com.speedment.event.BeforeGenerate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 
@@ -43,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
@@ -54,7 +57,7 @@ import static java.util.stream.Collectors.toList;
 public final class MainGenerator implements Consumer<Project> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
-    private int fileCounter = 0;
+    private final AtomicInteger fileCounter = new AtomicInteger(0);
     
     private final Speedment speedment;
     
@@ -67,11 +70,13 @@ public final class MainGenerator implements Consumer<Project> {
         requireNonNull(project);
         Statistics.onGenerate();
         
-        fileCounter = 0;
-
         final List<Translator<?, File>> translators = new ArrayList<>();
-
         final Generator gen = new JavaGenerator();
+        
+        fileCounter.set(0);
+        Formatting.tab("    ");
+        
+        speedment.getEventComponent().notify(new BeforeGenerate(project, gen));
 
         translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
@@ -84,32 +89,10 @@ public final class MainGenerator implements Consumer<Project> {
                 translators.add(new EntityManagerImplTranslator(speedment, gen, table));
             });
 
-        Formatting.tab("    ");
         gen.metaOn(translators.stream()
             .map(Translator::get)
-            .collect(Collectors.toList()))
-            .forEach(meta -> {
-
-                final String fname = project.getPackageLocation()
-                + "/"
-                + meta.getModel().getName();
-                final String content = meta.getResult();
-                final Path path = Paths.get(fname);
-                path.getParent().toFile().mkdirs();
-
-                try {
-                    Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                    fileCounter++;
-                } catch (IOException ex) {
-                    LOGGER.error(ex, "Failed to create file " + fname);
-                }
-
-                LOGGER.info("done");
-
-                System.out.println("*** BEGIN File:" + fname);
-                System.out.println(content);
-                System.out.println("*** END   File:" + fname);
-            });
+            .collect(Collectors.toList())
+        ).forEach(meta -> writeToFile(project, meta, fileCounter));
 
         final List<Table> tables = project
             .traverseOver(Table.class)
@@ -118,25 +101,51 @@ public final class MainGenerator implements Consumer<Project> {
 
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
-            fileCounter++;
+            fileCounter.incrementAndGet();
         });
+        
+        speedment.getEventComponent().notify(new AfterGenerate(project, gen));
     }
 
     public int getFilesCreated() {
-        return fileCounter;
+        return fileCounter.get();
+    }
+    
+    public static void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
+        requireNonNull(meta);
+        
+        final String fname = project.getPackageLocation()
+        + "/"
+        + meta.getModel().getName();
+        final String content = meta.getResult();
+        final Path path = Paths.get(fname);
+        path.getParent().toFile().mkdirs();
+
+        try {
+            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            fileCounter.incrementAndGet();
+        } catch (IOException ex) {
+            LOGGER.error(ex, "Failed to create file " + fname);
+        }
+
+        LOGGER.info("done");
+
+        System.out.println("*** BEGIN File:" + fname);
+        System.out.println(content);
+        System.out.println("*** END   File:" + fname);
     }
 
-    private static void writeToFile(Project project, Generator gen, Meta<Table, File> c) {
+    public static void writeToFile(Project project, Generator gen, Meta<Table, File> meta) {
         requireNonNull(project);
         requireNonNull(gen);
-        requireNonNull(c);
+        requireNonNull(meta);
         
-        final Optional<String> content = gen.on(c.getResult());
+        final Optional<String> content = gen.on(meta.getResult());
 
         if (content.isPresent()) {
             final String fname
                 = project.getPackageLocation()
-                + "/" + c.getResult().getName();
+                + "/" + meta.getResult().getName();
 
             final Path path = Paths.get(fname);
             path.getParent().toFile().mkdirs();

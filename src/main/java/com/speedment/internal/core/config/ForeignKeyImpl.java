@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
@@ -24,6 +25,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
@@ -32,11 +34,13 @@ import java.util.Optional;
  */
 public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements ForeignKey, ParentHelper<ForeignKeyColumn> {
 
+    private final Speedment speedment;
     private Table parent;
     private final ChildHolder<ForeignKeyColumn> children;
     
-    public ForeignKeyImpl() {
-        children = new ChildHolderImpl<>(ForeignKeyColumn.class);
+    public ForeignKeyImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children = new ChildHolderImpl<>(ForeignKeyColumn.class);
     }
     
     @Override

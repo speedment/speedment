@@ -1040,11 +1040,11 @@ public enum SilkIcon {
 	}
 	
 	public String getFileName() {
-		return icon;
+		return ICONS_DIRECTORY + icon;
 	}
 	
 	public InputStream getFileInputStream() {
-		return getClass().getResourceAsStream(ICONS_DIRECTORY + icon);
+		return getClass().getResourceAsStream(getFileName());
 	}
 	
 	public Image load() {

@@ -56,7 +56,7 @@ public final class Beans {
         }
 
         final String quote;
-        if (value instanceof String /*|| value instanceof Enum*/) {
+        if (value instanceof String) {
             quote = "\"";
         } else {
             quote = "";

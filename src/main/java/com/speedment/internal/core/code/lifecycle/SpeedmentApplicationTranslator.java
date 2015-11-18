@@ -74,6 +74,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
         final Method onInit = Method.of("onInit", VOID)
                 .protected_()
                 .add(OVERRIDE)
+                .add("super.onInit();")
                 .add("loadAndSetProject();");
         
         project().traverseOver(Table.class)
@@ -89,8 +90,6 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
                     }
                     
                 });
-        
-        onInit.add("super.onInit();");
 
         //final Path path = project().getConfigPath();
         return Class.of(className)

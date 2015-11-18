@@ -47,22 +47,12 @@ public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T>
     private final AtomicInteger nameNumber;
     private final Class<T> childClass;
 
-//    /**
-//     * ChildHolder constructor. This will use the name of the qualified name of
-//     * the children's implementation class to determine the order.
-//     */
-//    public ChildHolderImpl() {
-//        this(CLASS_COMPARATOR);
-//    }
     /**
      * ChildHolder constructor.
      *
-     * // * @param comparator the comparator to use when determining the order
-     * of the // * children.
-     *
      * @param childClass type
      */
-    public ChildHolderImpl(Class<T> childClass/*Comparator<Class<?>> comparator*/) {
+    public ChildHolderImpl(Class<T> childClass) {
         children = new ArrayList<>();
         ordinalNumber = new AtomicInteger(Ordinable.ORDINAL_FIRST);
         nameNumber = new AtomicInteger(Nameable.NAMEABLE_FIRST);
