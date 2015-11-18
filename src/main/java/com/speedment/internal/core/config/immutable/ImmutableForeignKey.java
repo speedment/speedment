@@ -33,7 +33,7 @@ import java.util.Optional;
 public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntity implements ForeignKey, ImmutableParentHelper<ForeignKeyColumn> {
 
     private final Optional<Table> parent;
-    private final ChildHolder children;
+    private final ChildHolder<ForeignKeyColumn> children;
 
     public ImmutableForeignKey(Table parent, ForeignKey fk) {
         super(requireNonNull(fk).getName(), fk.isExpanded(), fk.isEnabled());
@@ -41,7 +41,7 @@ public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntit
         // Fields
         this.parent = Optional.of(parent);
         // Children
-        children = childHolderOf(fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
+        children = childHolderOf(ForeignKeyColumn.class, fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
     }
 
     @Override
@@ -55,7 +55,7 @@ public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntit
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
     }
 

@@ -19,7 +19,6 @@ package com.speedment.internal.core.config.immutable;
 import com.speedment.internal.core.config.aspects.*;
 import com.speedment.config.aspects.Child;
 import com.speedment.internal.core.config.ChildHolder;
-import java.util.Comparator;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -37,12 +36,12 @@ public interface ImmutableParentHelper<C extends Child<?>> extends ParentHelper<
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
-    default ChildHolder childHolderOf(Stream<Child<?>> childs) {
-        return ImmutableChildHolder.of(childs.collect(toList()));
+    default ChildHolder<C> childHolderOf(Class<C> childClass, Stream<C> childs) {
+        return ImmutableChildHolder.of(childClass,childs.collect(toList()));
     }
-
-    default ChildHolder childHolderOf(Stream<Child<?>> childs, Comparator<Class<?>> comparator) {
-        return ImmutableChildHolder.of(childs.collect(toList()), comparator);
-    }
+//
+//    default ChildHolder childHolderOf(Stream<Child<?>> childs, Comparator<Class<?>> comparator) {
+//        return ImmutableChildHolder.of(childs.collect(toList()), comparator);
+//    }
 
 }

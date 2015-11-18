@@ -136,4 +136,9 @@ public abstract class ImmutableAbstractConfigEntity implements Node {
 //        System.out.println("resolve: " + toString());
     }
 
+    @Override
+    public boolean isImmutable() {
+        return true;
+    }
+
 }

@@ -25,7 +25,9 @@ import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.nio.file.Path;
@@ -34,6 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -43,20 +46,21 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
 
     private final Speedment speedment;
     private ProjectManager parent;
-    private final ChildHolder children;
+    private final ChildHolder<Dbms> dbmsChildren;
+    private final ChildHolder<PluginData> pluginDataChildren;
     private String packageName, packageLocation;
     private Path configPath;
 
     public ProjectImpl(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolderImpl();
+        this.speedment          = requireNonNull(speedment);
+        this.dbmsChildren       = new ChildHolderImpl<>(Dbms.class);
+        this.pluginDataChildren = new ChildHolderImpl<>(PluginData.class);
     }
 
     @Override
     protected void setDefaults() {
         setPackageLocation("src/main/java");
         setPackageName("com.company.speedment.test");
-        //setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
         setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
     }
     
@@ -95,8 +99,8 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
     }
 
     @Override
-    public ChildHolder getChildren() {
-        return children;
+    public ChildHolder<Child<Project>> getChildren() {
+        throw new IllegalStateException(Project.class.getSimpleName() + " has several child types");
     }
 
     @Override
@@ -153,7 +157,60 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find table: '" + tableName + "'."));
     }
-
+    
+    @Override
+    public Stream<? extends Child<Project>> stream() {
+        return Stream.of(dbmsChildren, pluginDataChildren)
+            .flatMap(ChildHolder::stream);
+    }
+    
+    @Override
+    public <T extends Child<Project>> Stream<T> streamOf(Class<T> childClass) {
+        if (Dbms.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) dbmsChildren.stream();
+            return result;
+        } else if (PluginData.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final Stream<T> result = (Stream<T>) pluginDataChildren.stream();
+            return result;
+        } else {
+            throw new SpeedmentException(
+                "'" + childClass.getName() + 
+                "' is not a child to '" + 
+                getClass().getSimpleName() + "'."
+            );
+        }
+    }
+    
+    @Override
+    public <T extends Child<Project>> T find(Class<T> childClass, String name) throws SpeedmentException {
+        if (Dbms.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) dbmsChildren.find(name);
+            return result;
+        } else if (PluginData.class.equals(childClass)) {
+            @SuppressWarnings("unchecked")
+            final T result = (T) pluginDataChildren.find(name);
+            return result;
+        } else throw thereIsNo(childClass, this.getClass(), name).get();
+    }
+    
+    @Override
+    public Optional<Child<Project>> add(Child<Project> child) {
+        if (Dbms.class.equals(child.getInterfaceMainClass())) {
+            final Optional<Dbms> result = dbmsChildren.put(Cast.castOrFail(child, Dbms.class), this);
+            @SuppressWarnings("unchecked")
+            final Optional<Child<Project>> castedResult = (Optional<Child<Project>>) (Optional<?>) result;
+            return castedResult;
+        } else if (PluginData.class.equals(child.getInterfaceMainClass())) {
+            final Optional<PluginData> result = pluginDataChildren.put(Cast.castOrFail(child, PluginData.class), this);
+            @SuppressWarnings("unchecked")
+            final Optional<Child<Project>> castedResult = (Optional<Child<Project>>) (Optional<?>) result;
+            return castedResult;
+        } else throw new IllegalArgumentException("Cannot add a " + child.getParentInterfaceMainClass());
+    }
+    
     @Override
     public Dbms dbms(Closure<?> c) {
         return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms(getSpeedment()));

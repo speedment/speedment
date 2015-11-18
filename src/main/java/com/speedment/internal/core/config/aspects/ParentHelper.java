@@ -37,19 +37,24 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
     @Override
     default Optional<C> add(final C child) {
         requireNonNull(child);
-        return getChildren().put(child, this).map(c -> (C) c);
+        return getChildren().put(child, this);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     default Stream<? extends C> stream() {
-        return getChildren().stream().map(c -> (C) c);
+        return getChildren().stream();
     }
 
     @Override
     default <T extends C> Stream<T> streamOf(Class<T> childClass) {
         requireNonNull(childClass);
-        return getChildren().streamOf(childClass);
+        if (!getChildren().getChildClass().equals(childClass)) {
+            return Stream.empty();
+        }
+        @SuppressWarnings("unchecked")
+        final Stream<T> result = (Stream<T>) getChildren().stream();
+        return result;
     }
     
     @Override
@@ -88,8 +93,13 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
     }
 
     @Override
-    default <T extends C> T find(Class<T> childClass, String name) throws SpeedmentException {
-        return getChildren().find(childClass, name);
+    public default <T extends C> T find(Class<T> childClass, String name) throws SpeedmentException {
+        if (!getChildren().getChildClass().equals(childClass)) {
+            throw new SpeedmentException("This parent does not hold " + childClass);
+        }
+        @SuppressWarnings("unchecked")
+        final T result = (T) getChildren().find(name);
+        return result;
     }
 
 }

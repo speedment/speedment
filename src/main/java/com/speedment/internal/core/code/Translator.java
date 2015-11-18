@@ -29,6 +29,7 @@ import com.speedment.config.Node;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A component that can translate a {@link Node} into something else. This 
@@ -108,7 +109,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<Column> columns() {
-        return table().streamOf(Column.class).filter(Column::isEnabled);
+        return table().streamOfColumns().filter(Column::isEnabled);
     }
 
     /**
@@ -120,7 +121,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<Index> indexes() {
-        return table().streamOf(Index.class).filter(Index::isEnabled);
+        return table().streamOfIndexes().filter(Index::isEnabled);
     }
 
     /**
@@ -132,7 +133,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<ForeignKey> foreignKeys() {
-        return table().streamOf(ForeignKey.class).filter(ForeignKey::isEnabled);
+        return table().streamOfForeignKeys().filter(ForeignKey::isEnabled);
     }
 
     /**
@@ -144,7 +145,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<PrimaryKeyColumn> primaryKeyColumns() {
-        return table().streamOf(PrimaryKeyColumn.class).filter(PrimaryKeyColumn::isEnabled);
+        return table().streamOfPrimaryKeyColumns().filter(PrimaryKeyColumn::isEnabled);
     }
 
     /**

@@ -43,7 +43,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     private final Speedment speedment;
     private Project parent;
-    private final ChildHolder children;
+    private final ChildHolder<Schema> children;
     private DbmsType type;
     private String ipAddress;
     private Integer port;
@@ -51,7 +51,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     public DbmsImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolderImpl();
+        this.children = new ChildHolderImpl<>(Schema.class);
     }
 
     @Override
@@ -124,7 +124,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Schema> getChildren() {
         return children;
     }
 

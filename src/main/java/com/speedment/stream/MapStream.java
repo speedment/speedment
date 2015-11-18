@@ -1995,7 +1995,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * If the keys are not {@link Comparable}, a 
      * {@code java.lang.ClassCastException} may be thrown when the terminal 
      * operation is executed. It is therefore better to use 
-     * {@link #toSortedMap(Comparator)} since it allows you to specify 
+     * {@link #toSortedMapByKey(Comparator)} since it allows you to specify 
      * a comparator to use when comparing the keys.
      *
      * <p>
@@ -2040,7 +2040,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @see #toConcurrentMap()
      * @see #toSortedMap()
      */
-    public SortedMap<K, V> toSortedMap(Comparator<K> keyComparator) {
+    public SortedMap<K, V> toSortedMapByKey(Comparator<K> keyComparator) {
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2149,7 +2149,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * If the keys are not {@link Comparable}, a 
      * {@code java.lang.ClassCastException} may be thrown when the terminal 
      * operation is executed. It is therefore better to use 
-     * {@link #toConcurrentNavigableMap(Comparator)} since it allows you to specify 
+     * {@link #toConcurrentNavigableMapByKey(Comparator)} since it allows you to specify 
      * a comparator to use when comparing the keys.
      * 
      * @return  a {@code ConcurrentNavigableMap} whose keys and values are 
@@ -2186,7 +2186,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @see #toConcurrentMap()
      * @see #toSortedMap()
      */
-    public ConcurrentNavigableMap<K, V> toConcurrentNavigableMap(Comparator<K> keyComparator) {
+    public ConcurrentNavigableMap<K, V> toConcurrentNavigableMapByKey(Comparator<K> keyComparator) {
         return inner.collect(Collectors.toConcurrentMap(
             Map.Entry::getKey,
             Map.Entry::getValue,

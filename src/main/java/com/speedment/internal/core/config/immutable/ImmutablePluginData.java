@@ -22,11 +22,11 @@ import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
+import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
 
 /**
  *
@@ -36,18 +36,27 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
 
     private final Speedment speedment;
     private final Optional<Project> parent;
-    private final ChildHolder children;
+    private final ChildHolder<Child<PluginData>> children;
 
     public ImmutablePluginData(Project parent, PluginData prototype) {
         super(requireNonNull(prototype).getName(), prototype.isExpanded(), prototype.isEnabled());
         requireNonNull(parent);
         
         // Members
-        this.speedment  = parent.getSpeedment();
-        this.parent     = Optional.of(parent);
+        this.speedment = parent.getSpeedment();
+        this.parent    = Optional.of(parent);
         
         // Children
-        this.children = childHolderOf(Stream.empty());
+        switch (prototype.count()) {
+            case 0 : 
+                this.children = (ChildHolder<Child<PluginData>>) ImmutableChildHolder.ofNone(); break;
+            case 1 : 
+                final Child<PluginData> child = prototype.stream().findAny().get();
+                this.children = ImmutableChildHolder.of(child);
+                break;
+            default :
+                throw new SpeedmentException(getClass().getSimpleName() + " should only contain one child node.");
+        }
     }
 
     @Override

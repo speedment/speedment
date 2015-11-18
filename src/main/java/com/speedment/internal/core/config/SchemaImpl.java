@@ -25,14 +25,10 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
-import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,8 +38,8 @@ import static java.util.Objects.requireNonNull;
 public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
 
     private final Speedment speedment;
+    private final ChildHolder<Table> children;
     private Dbms parent;
-    private final ChildHolder children;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
@@ -53,7 +49,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
 
     public SchemaImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children  = new ChildHolderImpl();
+        this.children  = new ChildHolderImpl<>(Table.class);
     }
 
     @Override
@@ -137,7 +133,7 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Table> getChildren() {
         return children;
     }
 

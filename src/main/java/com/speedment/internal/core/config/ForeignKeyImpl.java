@@ -36,11 +36,11 @@ public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements F
 
     private final Speedment speedment;
     private Table parent;
-    private final ChildHolder children;
+    private final ChildHolder<ForeignKeyColumn> children;
     
     public ForeignKeyImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children  = new ChildHolderImpl();
+        this.children = new ChildHolderImpl<>(ForeignKeyColumn.class);
     }
     
     @Override
@@ -57,7 +57,7 @@ public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements F
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
     }
 

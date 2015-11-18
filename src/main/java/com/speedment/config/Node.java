@@ -183,4 +183,13 @@ public interface Node extends Nameable, Enableable, Expandable {
     default String nodeTypeName() {
         return getInterfaceMainClass().getSimpleName();
     }
+
+    /**
+     * Returns if this node is immutable. (i.e. can never change its internal
+     * state). This can be used to optimize model dependant classes.
+     *
+     * @return if this node is immutable
+     */
+    boolean isImmutable();
+
 }

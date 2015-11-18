@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
 public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity implements Schema, ImmutableParentHelper<Table> {
 
     private final Optional<Dbms> parent;
-    private final ChildHolder children;
+    private final ChildHolder<Table> children;
     private final boolean defaultSchema;
     private final Optional<String> schemaName;
     private final Optional<String> catalogName;
@@ -55,7 +55,7 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
         this.columnCompressionType = schema.getColumnCompressionType();
         this.storageEngineType = schema.getStorageEngineType();
         //Children
-        children = childHolderOf(schema.stream().map(s -> new ImmutableTable(this, s)));
+        children = childHolderOf(Table.class, schema.stream().map(s -> new ImmutableTable(this, s)));
     }
 
     @Override
@@ -129,7 +129,7 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Table> getChildren() {
         return children;
     }
 

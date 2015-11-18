@@ -119,7 +119,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
     
     private Column findColumn(String name) {
-        return manager.getTable().streamOf(Column.class)
+        return manager.getTable().streamOfColumns()
                 .filter(c -> name.equals(c.getName()))
                 .findAny().get();
     }

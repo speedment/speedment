@@ -21,16 +21,12 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Child;
 import com.speedment.exception.SpeedmentException;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
-import java.util.ArrayList;
-import java.util.Collections;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import java.util.HashMap;
 import static java.util.Objects.requireNonNull;
@@ -39,47 +35,35 @@ import static java.util.Objects.requireNonNull;
  * A container class for children to a node in the database model tree.
  *
  * @author Emil Forslund
+ * @param <T> the child type
  * @see com.speedment.config.Node
  */
-public final class ImmutableChildHolder implements ChildHolder {
+public final class ImmutableChildHolder<T extends Child<?>> implements ChildHolder<T> {
+
+    private final Class<T> childClass;
 
     // Basic map
-    private final Map<Class<?>, Map<String, Child<?>>> children;
+    private final Map<String, T> children;
 
     // Optimized structures
-    private final List<Child<?>> sortedChildren;
-    private final Map<Class<?>, List<Child<?>>> sortedChildrenMap;
+    private final List<T> sortedChildren;
 
-    public static ChildHolder ofNone() {
-        return EMPTY_CHILD_HOLDER;
+    public static ChildHolder<?> ofNone() {
+        return new EmptyChildHolder();
     }
 
-    public static ChildHolder of(Child<?> child) {
-        return new SingletonChildHolder(child);
+    public static <T extends Child<?>> ChildHolder<T> of(T child) {
+        return new SingletonChildHolder<>(child);
     }
 
-    public static ChildHolder of(Collection<Child<?>> childs) {
-        return of(childs, CLASS_COMPARATOR);
-    }
-
-    public static ChildHolder of(Collection<Child<?>> childs, Comparator<Class<?>> comparator) {
+    public static <T extends Child<?>> ChildHolder<T> of(Class<T> childClass, Collection<T> childs) {
         if (childs.isEmpty()) {
-            return ofNone();
+            return (ChildHolder<T>) ofNone();
         }
         if (childs.size() == 1) {
             return of(childs.stream().findAny().get());
         }
-        return new ImmutableChildHolder(childs, comparator);
-    }
-
-    /**
-     * ChildHolder constructor. This will use the name of the qualified name of
-     * the children's implementation class to determine the order.
-     *
-     * @param childs to add
-     */
-    private ImmutableChildHolder(Collection<Child<?>> childs) {
-        this(childs, CLASS_COMPARATOR);
+        return new ImmutableChildHolder<>(childClass, childs);
     }
 
     /**
@@ -89,75 +73,51 @@ public final class ImmutableChildHolder implements ChildHolder {
      * @param comparator the comparator to use when determining the order of the
      * children.
      */
-    private ImmutableChildHolder(Collection<Child<?>> childs, Comparator<Class<?>> comparator) {
+    private ImmutableChildHolder(Class<T> childClass, Collection<T> childs) {
 
-        children = new TreeMap<>(requireNonNull(comparator));
+        children = new HashMap<>();
         childs.forEach(child -> {
-            children.computeIfAbsent(
-                    child.getInterfaceMainClass(),
-                    $ -> new HashMap<>()
-            )
-                    .put(child.getName(), child);
+            children.put(child.getName(), child);
         });
 
-        sortedChildren = children.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .flatMap(i -> i.values().stream().sorted()).collect(toList());
+        sortedChildren = children.values()
+                .stream()
+                .sorted()
+                .collect(toList());
 
-        sortedChildrenMap = new TreeMap<>(comparator);
-        children.entrySet().forEach(e -> {
-            sortedChildrenMap.computeIfAbsent(e.getKey(), $ -> new ArrayList<>())
-                    .addAll(toSortedList(e.getValue()));
-        });
-        int foo=1;
+        this.childClass = childClass;
     }
 
-    private <E> List<E> toSortedList(Map<?, E> map) {
-        List<E> result =   map.values().stream().sorted().collect(toList());
-        return result;
-    }
-    
     @Override
-    public Optional<Child<?>> put(Child<?> child, Parent<?> parent) {
+    public Optional<T> put(T child, Parent<? super T> parent) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public Stream<Child<?>> stream() {
+    public Stream<T> stream() {
         return sortedChildren.stream();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
-        requireNonNull(clazz);
-        final List<Child<?>> classList = sortedChildrenMap.get(clazz);
-        if (classList == null) {
-            return Stream.empty();
-        } else {
-            @SuppressWarnings("unchecked")
-            final Stream<C> result = (Stream<C>) classList.stream();
+    public T find(String name) throws SpeedmentException {
+        final T result = children.get(name);
+        if (result != null) {
             return result;
         }
+        throw thereIsNo(childClass, Parent.class, name).get();
     }
 
     @Override
-    public <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException {
-        final Child<?> child = children.getOrDefault(childClass, Collections.emptyMap()).get(name);
-        if (child == null) {
-            throw thereIsNo(childClass, Parent.class, name).get();
-        }
-        @SuppressWarnings("unchecked")
-        final C result = (C) child;
-        return result;
+    public Class<T> getChildClass() {
+        return childClass;
     }
 
-    private static final ChildHolder EMPTY_CHILD_HOLDER = new EmptyChildHolder();
+    private static class EmptyChildHolder implements ChildHolder<Child<?>> {
 
-    private static class EmptyChildHolder implements ChildHolder {
+        public EmptyChildHolder() {}
 
         @Override
-        public Optional<Child<?>> put(Child<?> child, Parent<?> parent) {
+        public Optional<Child<?>> put(Child<?> child, Parent<? super Child<?>> parent) {
             return throwNewUnsupportedOperationExceptionImmutable();
         }
 
@@ -167,61 +127,50 @@ public final class ImmutableChildHolder implements ChildHolder {
         }
 
         @Override
-        public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
-            return Stream.empty();
+        public Child<?> find(String name) throws SpeedmentException {
+            throw new SpeedmentException("There is no children in this child holder.");
         }
 
         @Override
-        public <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException {
-            throw thereIsNo(childClass, Parent.class, name).get();
+        public Class<Child<?>> getChildClass() {
+            return (Class<Child<?>>) (Class) Child.class;
         }
-
     }
 
-    private static class SingletonChildHolder implements ChildHolder {
+    private static class SingletonChildHolder<T extends Child<?>> implements ChildHolder<T> {
 
-        final Child<?> child;
-        final Class<?> childInterfaceClass;
+        private final T child;
+        private final Class<T> childClass;
 
-        public SingletonChildHolder(Child<?> child) {
+        public SingletonChildHolder(T child) {
             this.child = requireNonNull(child);
-            this.childInterfaceClass = child.getInterfaceMainClass();
+            @SuppressWarnings("unchecked")
+            final Class<T> childClass = (Class<T>) child.getInterfaceMainClass();
+            this.childClass = childClass;
         }
 
         @Override
-        public Optional<Child<?>> put(Child<?> child, Parent<?> parent) {
+        public Optional<T> put(T child, Parent<? super T> parent) {
             return throwNewUnsupportedOperationExceptionImmutable();
         }
 
         @Override
-        public Stream<Child<?>> stream() {
+        public Stream<T> stream() {
             return Stream.of(child);
         }
 
         @Override
-        public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
-            requireNonNull(clazz);
-            if (childInterfaceClass.equals(clazz)) {
-                @SuppressWarnings("unchecked")
-                final C result = (C) child;
-                return Stream.of(result);
-            } else {
-                return Stream.empty();
+        public T find(String name) throws SpeedmentException {
+            requireNonNull(name);
+            if (name.equals(child.getName())) {
+                return child;
             }
+            throw thereIsNo(childClass, Parent.class, name).get();
         }
 
         @Override
-        public <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException {
-            requireNonNull(childClass);
-            requireNonNull(name);
-            if (childInterfaceClass.equals(childClass)) {
-                if (name.equals(child.getName())) {
-                    @SuppressWarnings("unchecked")
-                    final C result = (C) child;
-                    return result;
-                }
-            }
-            throw thereIsNo(childClass, Parent.class, name).get();
+        public Class<T> getChildClass() {
+            return childClass;
         }
 
     }

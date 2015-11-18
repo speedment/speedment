@@ -205,7 +205,7 @@ public final class EntityTranslatorSupport {
     public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {
         requireNonNull(table);
         requireNonNull(column);
-        return table.streamOf(ForeignKey.class)
+        return table.streamOfForeignKeys()
             .filter(ForeignKey::isEnabled)
             .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
             .filter(ForeignKeyColumn::isEnabled)

@@ -35,13 +35,13 @@ import static java.util.Objects.requireNonNull;
 public final class IndexImpl extends AbstractNamedConfigEntity implements Index, ParentHelper<IndexColumn> {
 
     private final Speedment speedment;
-    private final ChildHolder children;
+    private final ChildHolder<IndexColumn> children;
     private Table parent;
     private boolean unique;
 
     public IndexImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children  = new ChildHolderImpl();
+        this.children  = new ChildHolderImpl<>(IndexColumn.class);
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class IndexImpl extends AbstractNamedConfigEntity implements Index,
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
     }
 

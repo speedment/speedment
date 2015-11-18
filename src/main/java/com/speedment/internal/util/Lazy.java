@@ -21,22 +21,33 @@ import java.util.function.Supplier;
 /**
  * Generic lazy initialization class.
  *
- * This class is not thread safe.
+ * This class is thread safe. The Supplier is guaranteed to be called exactly
+ * one time following one or several calls to 
+ * {@link  #getOrCompute(java.util.function.Supplier) } by any number of
+ * threads.
  *
  * @author pemi
  * @param <T> the type of the lazy initialized value
  */
-public class Lazy<T> {
+public final class Lazy<T> {
 
     private T value;
-    private boolean initialized;
+    private boolean initializedFast;
+    private volatile boolean initializedVolatile;
 
-    public synchronized T getOrCompute(Supplier<T> supplier) {
-        if (initialized) {
-            return value;
+    public T getOrCompute(Supplier<T> supplier) {
+        if (!initializedFast) {
+            maybeCompute(supplier);
         }
-        initialized = true;
-        return value = supplier.get();
+        return value;
+    }
+
+    private synchronized void maybeCompute(Supplier<T> supplier) {
+        if (!initializedVolatile) {
+            value = supplier.get();
+            initializedVolatile = true;
+            initializedFast = true;
+        }
     }
 
 }

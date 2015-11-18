@@ -27,8 +27,11 @@ import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  *
@@ -37,12 +40,12 @@ import java.util.Optional;
 public final class PluginDataImpl extends AbstractNamedConfigEntity implements PluginData, ParentHelper<Child<PluginData>> {
     
     private final Speedment speedment;
-    private final ChildHolder children;
+    private final Map<Class<?>, ChildHolder<Child<PluginData>>> children;
     private Project parent;
 
     public PluginDataImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children  = new ChildHolderImpl();
+        this.children  = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -67,11 +70,47 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
 
     @Override
     public ChildHolder getChildren() {
-        return children;
+        throw new IllegalStateException(PluginData.class.getSimpleName() + " does not have a known child type at this point.");
+    }
+    
+    @Override
+    public Stream<? extends Child<PluginData>> stream() {
+        return children.values().stream().flatMap(ChildHolder::stream);
+    }
+    
+    @Override
+    public <T extends Child<PluginData>> Stream<T> streamOf(Class<T> childClass) {
+        @SuppressWarnings("unchecked")
+        final ChildHolder<T> holder = (ChildHolder<T>) children.get(childClass);
+        if (holder != null) {
+            return holder.stream();
+        } else {
+            return Stream.empty();
+        }
+    }
+    
+    @Override
+    public <T extends Child<PluginData>> T find(Class<T> childClass, String name) throws SpeedmentException {
+        return streamOf(childClass)
+            .filter(child -> name.equals(child.getName()))
+            .findAny()
+            .orElseThrow(() -> new SpeedmentException(
+                "Found not child to '" + 
+                getClass().getSimpleName() + 
+                "' with name '" + name + "'."
+            ));
+    }
+    
+    @Override
+    public Optional<Child<PluginData>> add(Child<PluginData> child) {
+        final ChildHolder<Child<PluginData>> holder = children.get(child.getInterfaceMainClass());
+        final Optional<Child<PluginData>> result = holder.put(child, this);
+        return result;
     }
 
     @Override
     public Child<PluginData> metadata(Closure<?> c) {
+        @SuppressWarnings("unchecked")
         final String name = (String) c.getProperty("name");
         final Plugin plugin = getSpeedment()
             .getPluginComponent()
@@ -82,7 +121,14 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
         
         return ConfigUtil.groovyDelegatorHelper(c, () -> {
             final Child<PluginData> child = plugin.newChildToPluginData(c, this);
-            children.put(child, this);
+            @SuppressWarnings("unchecked")
+            final Class<Child<PluginData>> childType = (Class<Child<PluginData>>) child.getClass();
+            
+            children.computeIfAbsent(
+                child.getInterfaceMainClass(), 
+                clazz -> new ChildHolderImpl<>(childType)
+            ).put(child, this);
+            
             return child;
         });
     }
