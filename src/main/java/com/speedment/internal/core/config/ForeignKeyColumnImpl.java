@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity implements ForeignKeyColumn, ColumnableHelper {
+public final class ForeignKeyColumnImpl extends AbstractOrdinalNode implements ForeignKeyColumn, ColumnableHelper {
 
     private ForeignKey parent;
     private String foreignColumnName;

@@ -32,12 +32,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class PluginDataImpl extends AbstractNamedConfigEntity implements PluginData, ParentHelper<Child<PluginData>> {
+public final class PluginDataImpl extends AbstractNamedNode implements PluginData, ParentHelper<Child<PluginData>> {
     
     private final Speedment speedment;
     private final Map<Class<?>, ChildHolder<Child<PluginData>>> children;
@@ -67,7 +68,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     public Optional<Project> getParent() {
         return Optional.ofNullable(parent);
     }
-
+    
     @Override
     public ChildHolder getChildren() {
         throw new IllegalStateException(PluginData.class.getSimpleName() + " does not have a known child type at this point.");

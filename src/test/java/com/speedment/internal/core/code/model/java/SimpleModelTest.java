@@ -52,7 +52,7 @@ public abstract class SimpleModelTest {
     public void setUp() {
         speedment = SpeedmentFactory.newSpeedmentInstance();
         project = new ProjectImpl(speedment);
-        dbms = project.addNewDbms(speedment);
+        dbms = project.addNewDbms();
         schema = dbms.addNewSchema();
         table = schema.addNewTable();
         column = table.addNewColumn();

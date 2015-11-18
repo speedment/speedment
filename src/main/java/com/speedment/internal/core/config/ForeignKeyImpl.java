@@ -27,12 +27,13 @@ import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ForeignKeyImpl extends AbstractNamedConfigEntity implements ForeignKey, ParentHelper<ForeignKeyColumn> {
+public final class ForeignKeyImpl extends AbstractNamedNode implements ForeignKey, ParentHelper<ForeignKeyColumn> {
 
     private final Speedment speedment;
     private Table parent;

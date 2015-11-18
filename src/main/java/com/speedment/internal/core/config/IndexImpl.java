@@ -27,12 +27,13 @@ import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class IndexImpl extends AbstractNamedConfigEntity implements Index, ParentHelper<IndexColumn> {
+public final class IndexImpl extends AbstractNamedNode implements Index, ParentHelper<IndexColumn> {
 
     private final Speedment speedment;
     private final ChildHolder<IndexColumn> children;

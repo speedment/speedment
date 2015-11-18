@@ -81,7 +81,7 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @see ChildHolder
      */
-    Optional<C> add(final C child);
+    Optional<? extends C> add(final C child) throws IllegalStateException;
 
     /**
      * Returns a <code>Stream</code> over all the children of this node. The

@@ -26,8 +26,8 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Function;
@@ -39,6 +39,10 @@ import java.util.stream.StreamSupport;
  * @author Emil Forslund
  */
 public final class StreamUtil {
+    
+    public static <T> Stream<T> streamOfOptional(Optional<T> element) {
+        return Stream.of(element.orElse(null)).filter(e -> e != null);
+    }
 
     public static <T> Stream<T> streamOfNullable(T element) {
         // Needless to say, element is nullable...

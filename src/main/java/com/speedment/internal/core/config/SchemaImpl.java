@@ -30,12 +30,13 @@ import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
+public final class SchemaImpl extends AbstractNamedNode implements Schema, ParentHelper<Table> {
 
     private final Speedment speedment;
     private final ChildHolder<Table> children;

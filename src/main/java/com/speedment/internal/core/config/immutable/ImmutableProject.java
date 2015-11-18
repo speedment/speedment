@@ -33,9 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
-import com.speedment.internal.util.Cast;
 import static com.speedment.internal.util.Cast.castOrFail;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
@@ -203,12 +201,12 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     }
 
     @Override
-    public Dbms addNewDbms(Speedment speedment) {
+    public Dbms addNewDbms() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public PluginData addNewPluginData(Speedment speedment) {
+    public PluginData addNewPluginData() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

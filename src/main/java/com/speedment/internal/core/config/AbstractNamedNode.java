@@ -25,10 +25,10 @@ import com.speedment.config.aspects.Nameable;
  *
  * @author pemi
  */
-public abstract class AbstractNamedConfigEntity extends AbstractConfigEntity
+public abstract class AbstractNamedNode extends AbstractNode
         implements Comparable<Nameable> {
 
-    public AbstractNamedConfigEntity() {
+    public AbstractNamedNode() {
         super(null);
     }
 

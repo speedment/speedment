@@ -25,12 +25,12 @@ import com.speedment.config.aspects.Ordinable;
  *
  * @author pemi
  */
-public abstract class AbstractOrdinalConfigEntity extends AbstractConfigEntity
+public abstract class AbstractOrdinalNode extends AbstractNode
         implements Ordinable, Comparable<Ordinable> {
 
     private int ordinalPosition;
 
-    public AbstractOrdinalConfigEntity() {
+    public AbstractOrdinalNode() {
         super(null);
         ordinalPosition = Ordinable.UNSET;
     }

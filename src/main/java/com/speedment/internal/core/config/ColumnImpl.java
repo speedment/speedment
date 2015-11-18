@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class ColumnImpl extends AbstractOrdinalConfigEntity implements Column {
+public final class ColumnImpl extends AbstractOrdinalNode implements Column {
 
     private boolean nullable;
     private boolean autoincrement;

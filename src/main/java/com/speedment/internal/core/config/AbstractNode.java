@@ -18,18 +18,17 @@ package com.speedment.internal.core.config;
 
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
 import com.speedment.config.Node;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.util.Trees;
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Generic representation of a ConfigEntity.
@@ -38,20 +37,31 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements Node {
+public abstract class AbstractNode implements Node {
 
-    private boolean enabled;
     private String name;
+    private boolean enabled;
     private boolean expanded;
     
-    protected AbstractConfigEntity(String defaultName) {
-        this.enabled  = true;
+    protected AbstractNode(String defaultName) {
         this.name     = defaultName; // Can be null
+        this.enabled  = true;
         this.expanded = true;
         setDefaults();
     }
     
     protected abstract void setDefaults();
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        requireNonNull(name, "A name cannot be null");
+        this.name = name;
+    }
 
     @Override
     public Boolean isEnabled() {
@@ -61,24 +71,6 @@ public abstract class AbstractConfigEntity implements Node {
     @Override
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        requireNonNull(name, "A name cannot be null");
-        // Todo: Allow . and " " in names. Changes in GodeGen
-//        if (name.contains(".")) {
-//            throw new IllegalArgumentException("A name can't contain a '.' character");
-//        } else if (name.contains(" ")) {
-//            throw new IllegalArgumentException("A name can't contain a space character");
-//        }
-
-        this.name = name;
     }
 
     @Override
@@ -130,13 +122,11 @@ public abstract class AbstractConfigEntity implements Node {
         return sj.toString() + nameMapper.apply(getName());
     }
     
-    
-
     @Override
     public String toString() {
         return getInterfaceMainClass().getSimpleName()
             + " '" + Optional.of(this)
-            .filter(AbstractConfigEntity::isChildInterface)
+            .filter(AbstractNode::isChildInterface)
             .map(e -> (Child<?>) e)
             .flatMap(Child::getParent)
             .map(e -> getRelativeName(Project.class))

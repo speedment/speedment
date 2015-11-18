@@ -48,12 +48,12 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
         requireNonNull(parent);
         // Members
         this.speedment = parent.getSpeedment();
-        this.parent = Optional.of(parent);
-        this.type = dbms.getType();
+        this.parent    = Optional.of(parent);
+        this.type      = dbms.getType();
         this.ipAddress = dbms.getIpAddress();
-        this.port = dbms.getPort();
-        this.username = dbms.getUsername();
-        this.password = dbms.getPassword();
+        this.port      = dbms.getPort();
+        this.username  = dbms.getUsername();
+        this.password  = dbms.getPassword();
         // Children
         children = childHolderOf(Schema.class, dbms.stream().map(p -> new ImmutableSchema(this, p)));
     }

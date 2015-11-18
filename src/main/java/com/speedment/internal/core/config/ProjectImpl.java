@@ -37,12 +37,13 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ProjectImpl extends AbstractNamedConfigEntity implements Project, ParentHelper<Child<Project>> {
+public final class ProjectImpl extends AbstractNamedNode implements Project, ParentHelper<Child<Project>> {
 
     private final Speedment speedment;
     private ProjectManager parent;
@@ -65,14 +66,14 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
     }
     
     @Override
-    public Dbms addNewDbms(Speedment speedment) {
+    public Dbms addNewDbms() {
         final Dbms e = Dbms.newDbms(speedment);
         add(e);
         return e;
     }
 
     @Override
-    public PluginData addNewPluginData(Speedment speedment) {
+    public PluginData addNewPluginData() {
         final PluginData e = PluginData.newPluginData(speedment);
         add(e);
         return e;
@@ -213,11 +214,11 @@ public final class ProjectImpl extends AbstractNamedConfigEntity implements Proj
     
     @Override
     public Dbms dbms(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms(getSpeedment()));
+        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewDbms());
     }
     
     @Override
     public PluginData pluginData(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewPluginData(getSpeedment()));
+        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewPluginData());
     }
 }

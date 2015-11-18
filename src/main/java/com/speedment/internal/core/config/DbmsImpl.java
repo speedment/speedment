@@ -23,7 +23,6 @@ import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
 import com.speedment.internal.core.config.utils.ConfigUtil;
@@ -32,14 +31,12 @@ import groovy.lang.Closure;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, DbmsTypeableHelper, ParentHelper<Schema> {
+public final class DbmsImpl extends AbstractNamedNode implements Dbms, DbmsTypeableHelper, ParentHelper<Schema> {
 
     private final Speedment speedment;
     private Project parent;

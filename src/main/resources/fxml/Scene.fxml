@@ -30,7 +30,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="arrowContainer" prefHeight="555.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="arrowContainer" prefHeight="555.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <center>
@@ -80,7 +80,23 @@
                            <items>
                               <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" text="Node hierarchy">
                                 <content>
-                                    <TreeView fx:id="treeHierarchy" layoutX="58.0" layoutY="66.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
+                                    <TreeView fx:id="treeHierarchy" layoutX="58.0" layoutY="66.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                                       <contextMenu>
+                                          <ContextMenu fx:id="treeMenu">
+                                            <items>
+                                              <MenuItem fx:id="treeMenuEnable" mnemonicParsing="false" text="Enable">
+                                                   <accelerator>
+                                                      <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                                   </accelerator>
+                                                </MenuItem>
+                                                <MenuItem fx:id="treeMenuRename" mnemonicParsing="false" text="Rename">
+                                                   <accelerator>
+                                                      <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                                   </accelerator>
+                                                </MenuItem>
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu></TreeView>
                                 </content>
                               </TitledPane>
                               <TitledPane animated="false" collapsible="false" maxWidth="1.7976931348623157E308" minHeight="48.0" text="Project settings" SplitPane.resizableWithParent="false">

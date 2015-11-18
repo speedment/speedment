@@ -37,12 +37,13 @@ import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class TableImpl extends AbstractNamedConfigEntity implements Table, ParentHelper<Child<Table>> {
+public final class TableImpl extends AbstractNamedNode implements Table, ParentHelper<Child<Table>> {
 
     private final Speedment speedment;
     private final ChildHolder<Column> columns;

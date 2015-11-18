@@ -113,6 +113,9 @@ public final class SceneController implements Initializable {
     @FXML private MenuItem mbAbout;
     @FXML private StackPane arrowContainer;
     @FXML private Label arrow;
+    @FXML private ContextMenu treeMenu;
+    @FXML private MenuItem treeMenuEnable;
+    @FXML private MenuItem treeMenuRename;
 
     private final Speedment speedment;
     private final Stage stage;
@@ -339,21 +342,25 @@ public final class SceneController implements Initializable {
             )
         ;
 
-        treeHierarchy.setCellFactory(v -> new TreeCell<Child<?>>() {
+        treeHierarchy.setCellFactory(v -> {
+            final TreeCell<Child<?>> cell =  new TreeCell<Child<?>>() {
 
-            @Override
-            protected void updateItem(Child<?> item, boolean empty) {
-                // item nullable
-                super.updateItem(item, requireNonNull(empty));
+                @Override
+                protected void updateItem(Child<?> item, boolean empty) {
+                    // item nullable
+                    super.updateItem(item, requireNonNull(empty));
 
-                if (item == null || empty) {
-                    setGraphic(null);
-                    setText(null);
-                } else {
-                    setGraphic(iconFor(item));
-                    setText(item.getName());
+                    if (item == null || empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        setGraphic(iconFor(item));
+                        setText(item.getName());
+                    }
                 }
-            }
+            };
+            
+            return cell;
         });
 
         treeHierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
