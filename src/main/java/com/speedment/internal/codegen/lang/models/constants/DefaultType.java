@@ -84,7 +84,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type list(Type innerType) {
-		return LIST.add(new GenericImpl().add(requireNonNull(innerType)));
+		return LIST.add(new GenericImpl(requireNonNull(innerType)));
 	}
 	
     /**
@@ -95,7 +95,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
 	public static Type set(Type innerType) {
-		return SET.add(new GenericImpl().add(requireNonNull(innerType)));
+		return SET.add(new GenericImpl(requireNonNull(innerType)));
 	}
 	
     /**
@@ -107,7 +107,9 @@ public enum DefaultType implements Type {
      * @return            the resulting type
      */
 	public static Type map(Type innerTypeA, Type innerTypeB) {
-		return MAP.add(new GenericImpl().add(requireNonNull(innerTypeA))).add(new GenericImpl(requireNonNull(innerTypeB)));
+		return MAP
+            .add(new GenericImpl(requireNonNull(innerTypeA)))
+            .add(new GenericImpl(requireNonNull(innerTypeB)));
 	}
 	
     /**
@@ -118,7 +120,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
 	public static Type queue(Type innerType) {
-		return QUEUE.add(new GenericImpl().add(requireNonNull(innerType)));
+		return QUEUE.add(new GenericImpl(requireNonNull(innerType)));
 	}
 	
     /**
@@ -129,7 +131,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type stack(Type innerType) {
-        return STACK.add(new GenericImpl().add(requireNonNull(innerType)));
+        return STACK.add(new GenericImpl(requireNonNull(innerType)));
     }
     
     /**
@@ -140,7 +142,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type optional(Type innerType) {
-        return OPTIONAL.add(new GenericImpl().add(requireNonNull(innerType)));
+        return OPTIONAL.add(new GenericImpl(requireNonNull(innerType)));
     }
     
     /**
@@ -152,7 +154,9 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type entry(Type innerTypeA, Type innerTypeB) {
-        return ENTRY.add(new GenericImpl().add(requireNonNull(innerTypeA)).add(requireNonNull(innerTypeB)));
+        return ENTRY
+            .add(new GenericImpl(requireNonNull(innerTypeA)))
+            .add(new GenericImpl(requireNonNull(innerTypeB)));
     }
     
     /**
@@ -164,7 +168,9 @@ public enum DefaultType implements Type {
      * @return            the resulting type
      */
     public static Type function(Type innerTypeA, Type innerTypeB) {
-        return FUNCTION.add(new GenericImpl().add(requireNonNull(innerTypeA)).add(requireNonNull(innerTypeB)));
+        return FUNCTION
+            .add(new GenericImpl(requireNonNull(innerTypeA)))
+            .add(new GenericImpl(requireNonNull(innerTypeB)));
     }
     
     /**
@@ -175,7 +181,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type predicate(Type innerType) {
-        return PREDICATE.add(new GenericImpl().add(requireNonNull(innerType)));
+        return PREDICATE.add(new GenericImpl(requireNonNull(innerType)));
     }
     
     /**
@@ -186,7 +192,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type consumer(Type innerType) {
-        return CONSUMER.add(new GenericImpl().add(requireNonNull(innerType)));
+        return CONSUMER.add(new GenericImpl(requireNonNull(innerType)));
     }
     
     /**
@@ -197,7 +203,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type supplier(Type innerType) {
-        return SUPPLIER.add(new GenericImpl().add(requireNonNull(innerType)));
+        return SUPPLIER.add(new GenericImpl(requireNonNull(innerType)));
     }
     
     /**

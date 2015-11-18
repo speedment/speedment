@@ -17,6 +17,7 @@
 package com.speedment.config;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.Parent;
 
@@ -25,7 +26,7 @@ import com.speedment.config.aspects.Parent;
  * @author pemi
  */
 @Api(version = "2.2")
-public interface ProjectManager extends Node, Enableable, Parent<Project> {
+public interface ProjectManager extends Node, Enableable, Parent<Child<ProjectManager>> {
 
     /**
      * {@inheritDoc}

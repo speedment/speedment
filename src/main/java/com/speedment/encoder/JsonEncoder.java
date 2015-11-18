@@ -34,6 +34,15 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -196,7 +205,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Table table = manager.getTable();
 
         table
-            .streamOf(Column.class)
+            .streamOfColumns()
             .forEachOrdered(c
                 -> formatter.put(
                     javaVariableName(c.getName()),
@@ -228,7 +237,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Table table = manager.getTable();
 
         table
-            .streamOf(Column.class)
+            .streamOfColumns()
             .filter(c -> fieldNames.contains(c.getName()))
             .forEachOrdered(c
                 -> formatter.put(

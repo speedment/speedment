@@ -29,13 +29,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -69,18 +71,14 @@ public class GroovyParser {
                 .ifPresent(t -> sb.add(indent(indentLevel) + t))
             );
 
-//        if (node instanceof Dbms) {
-//            System.out.println("found DBMS:");
-//            MethodsParser.streamOfExternalNoneSecretGetters(node.getClass()).map(Method::toString).forEach(System.out::println);
-//        }
-
-        Optional.of(node).flatMap(n -> n.asParent()).ifPresent(n
+        Optional.of(node).flatMap(Node::asParent).ifPresent(n
             -> n.stream().forEach(c -> {
-                sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.getInterfaceMainClass().getSimpleName()) + " {");
+                sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.nodeTypeName()) + " {");
                 toGroovyLines(sb, c, indentLevel + 1);
                 sb.add(indent(indentLevel) + "}");
             })
         );
+        
         return sb;
     }
 
@@ -108,6 +106,7 @@ public class GroovyParser {
 
         final File file = path.toFile();
         fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(file));
+        
         if (node instanceof Project) {
             @SuppressWarnings("unchecked")
             final Project project = (Project) node;
@@ -129,18 +128,11 @@ public class GroovyParser {
         configuration.setRecompileGroovySource(true);
         configuration.setSourceEncoding(StandardCharsets.UTF_8.toString());
 
-        //final GroovyShell shell = new GroovyShell(DelegatorGroovyTest.class.getClassLoader(), binding, configuration);
         final GroovyShell shell = new GroovyShell(GroovyParser.class.getClassLoader(), binding, configuration);
-
         final DelegatingScript script = scriptMapper.apply(shell);
-//
-//        final DelegatingScript scripts = (DelegatingScript) shell.parse(path.toFile());
-
-        //final Project project = SpeedmentPlatform.getInstance().getConfigEntityFactory().newProject();
         script.setDelegate(node);
 
-        final Object value = script.run();
-
+        script.run();
     }
 
     public static void fromGroovy(final Node node, final String script) throws IOException {
@@ -148,6 +140,7 @@ public class GroovyParser {
         requireNonNull(script);
 
         fromGroovy(node, groovyShell -> (DelegatingScript) groovyShell.parse(script));
+        
         if (node instanceof Project) {
             @SuppressWarnings("unchecked")
             final Project project = (Project) node;
@@ -162,14 +155,8 @@ public class GroovyParser {
     }
 
     private static String indent(final int indentLevel) {
-        final StringBuilder sb = new StringBuilder();
-        return indent(sb, indentLevel).toString();
-    }
-
-    private static StringBuilder indent(final StringBuilder sb, final int indentLevel) {
-        requireNonNull(sb);
-
-        IntStream.range(0, indentLevel).forEach(i -> sb.append("    "));
-        return sb;
+        final char[] array = new char[indentLevel * 4];
+        Arrays.fill(array, ' ');
+        return String.valueOf(array);
     }
 }

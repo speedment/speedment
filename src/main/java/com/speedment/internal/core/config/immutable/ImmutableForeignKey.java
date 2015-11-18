@@ -22,8 +22,6 @@ import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -35,15 +33,15 @@ import java.util.Optional;
 public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntity implements ForeignKey, ImmutableParentHelper<ForeignKeyColumn> {
 
     private final Optional<Table> parent;
-    private final ChildHolder children;
+    private final ChildHolder<ForeignKeyColumn> children;
 
     public ImmutableForeignKey(Table parent, ForeignKey fk) {
-        super(requireNonNull(fk).getName(), fk.isEnabled());
+        super(requireNonNull(fk).getName(), fk.isExpanded(), fk.isEnabled());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);
         // Children
-        children = childHolderOf(fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
+        children = childHolderOf(ForeignKeyColumn.class, fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
     }
 
     @Override
@@ -57,7 +55,7 @@ public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntit
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
     }
 

@@ -30,6 +30,11 @@ import java.util.stream.Stream;
 @Api(version="2.2")
 public interface TypeMapperComponent extends Component {
     
+    @Override
+    default Class<TypeMapperComponent> getComponentClass() {
+        return TypeMapperComponent.class;
+    }
+    
     /**
      * Installs the specified type mapper in this component.
      * 

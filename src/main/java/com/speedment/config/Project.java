@@ -35,7 +35,7 @@ import java.util.function.Function;
  * @author pemi
  */
 @Api(version = "2.2")
-public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, Child<ProjectManager> {
+public interface Project extends Node, Enableable, HasSpeedment, Parent<Child<Project>>, Child<ProjectManager> {
 
     /**
      * Factory holder.
@@ -91,11 +91,16 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, C
      * @param speedment the {@link Speedment} instance
      * @return the newly added child
      */
-    default Dbms addNewDbms(Speedment speedment) {
-        final Dbms e = Dbms.newDbms(speedment);
-        add(e);
-        return e;
-    }
+    Dbms addNewDbms(Speedment speedment);
+    
+    /**
+     * Creates and adds a new {@link PluginData} as a child to this node in the
+     * configuration tree.
+     *
+     * @param speedment the {@link Speedment} instance
+     * @return the newly added child
+     */
+    PluginData addNewPluginData(Speedment speedment);
 
     /**
      * Returns the name of the generated package where this project will be
@@ -174,12 +179,22 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Dbms>, C
     Table findTableByName(String fullName);
 
     /**
-     * Creates and returns a new Dbms.
+     * Creates and returns a new {@link Dbms}.
      * <p>
      * This method is used by the Groovy parser.
      *
      * @param c Closure
-     * @return the new Dbms
+     * @return the new {@link Dbms}
      */
     Dbms dbms(Closure<?> c);
+    
+    /**
+     * Creates and returns a new {@link PluginData}.
+     * <p>
+     * This method is used by the Groovy parser.
+     *
+     * @param c Closure
+     * @return the new {@link PluginData}
+     */
+    PluginData pluginData(Closure<?> c);
 }

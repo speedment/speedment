@@ -14,31 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config;
+package com.speedment.event;
 
-import com.speedment.internal.core.config.aspects.ParentHelper;
-import com.speedment.config.Project;
-import com.speedment.config.ProjectManager;
+import com.speedment.Speedment;
+import com.speedment.annotation.Api;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
+ * @since 2.3
  */
-public final class ProjectManagerImpl extends AbstractNamedConfigEntity implements ProjectManager, ParentHelper<Project> {
+@Api(version="2.3")
+public interface Event {
     
-    private final ChildHolder children;
-
-    public ProjectManagerImpl() {
-        children = new ChildHolderImpl();
-    }
-
-    @Override
-    protected void setDefaults() {
-        setName(ProjectManager.class.getSimpleName());
-    }
-
-    @Override
-    public ChildHolder getChildren() {
-        return children;
+    String name();
+    
+    default void publish(Speedment speedment) {
+        speedment.getEventComponent().notify(this);
     }
 }

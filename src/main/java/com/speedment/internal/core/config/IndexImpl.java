@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
@@ -25,6 +26,7 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -32,12 +34,14 @@ import java.util.Optional;
  */
 public final class IndexImpl extends AbstractNamedConfigEntity implements Index, ParentHelper<IndexColumn> {
 
+    private final Speedment speedment;
+    private final ChildHolder<IndexColumn> children;
     private Table parent;
-    private final ChildHolder children;
     private boolean unique;
 
-    public IndexImpl() {
-        this.children = new ChildHolderImpl();
+    public IndexImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children  = new ChildHolderImpl<>(IndexColumn.class);
     }
 
     @Override
@@ -66,7 +70,7 @@ public final class IndexImpl extends AbstractNamedConfigEntity implements Index,
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
     }
 

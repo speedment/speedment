@@ -23,12 +23,16 @@ import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
+import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,7 +43,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     private final Speedment speedment;
     private Project parent;
-    private final ChildHolder children;
+    private final ChildHolder<Schema> children;
     private DbmsType type;
     private String ipAddress;
     private Integer port;
@@ -47,7 +51,7 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
 
     public DbmsImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        this.children = new ChildHolderImpl();
+        this.children = new ChildHolderImpl<>(Schema.class);
     }
 
     @Override
@@ -120,13 +124,13 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Schema> getChildren() {
         return children;
     }
 
     @Override
     public Schema addNewSchema() {
-        final Schema e = Schema.newSchema();
+        final Schema e = Schema.newSchema(speedment);
         add(e);
         return e;
     }

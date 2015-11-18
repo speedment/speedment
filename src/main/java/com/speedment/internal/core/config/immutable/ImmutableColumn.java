@@ -41,7 +41,7 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     private final TypeMapper<?, ?> typeMapper;
 
     public ImmutableColumn(Table parent, Column column) {
-        super(requireNonNull(column).getName(), column.isEnabled(), column.getOrdinalPosition());
+        super(requireNonNull(column).getName(), column.isEnabled(), column.isExpanded(), column.getOrdinalPosition());
         this.nullable = column.isNullable();
         this.autoincrement = column.isAutoincrement();
         this.alias = column.getAlias();

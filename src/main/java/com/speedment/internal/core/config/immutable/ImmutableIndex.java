@@ -33,16 +33,16 @@ import java.util.Optional;
 public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity implements Index, ImmutableParentHelper<IndexColumn> {
     
     private final Optional<Table> parent;
-    private final ChildHolder children;
+    private final ChildHolder<IndexColumn> children;
     private final Boolean unique;
     
     public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isEnabled());
+        super(requireNonNull(index).getName(), index.isExpanded(), index.isEnabled());
         // Fields
         this.parent = Optional.of(parent);
         this.unique = index.isUnique();
         // Children
-        this.children = childHolderOf(index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
+        this.children = childHolderOf(IndexColumn.class, index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
     }
     
     @Override
@@ -66,7 +66,7 @@ public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity imp
     }
     
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
     }
     

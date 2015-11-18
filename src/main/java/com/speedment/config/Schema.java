@@ -16,6 +16,7 @@
  */
 package com.speedment.config;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
 import com.speedment.config.aspects.Parent;
@@ -28,7 +29,7 @@ import com.speedment.config.aspects.StorageEngineTypeable;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  *
@@ -45,7 +46,7 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      */
     enum Holder {
         HOLDER;
-        private Supplier<Schema> provider = SchemaImpl::new;
+        private Function<Speedment, Schema> provider = SchemaImpl::new;
     }
 
     /**
@@ -54,19 +55,20 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
      *
      * @param provider the new constructor
      */
-    static void setSupplier(Supplier<Schema> provider) {
+    static void setSupplier(Function<Speedment, Schema> provider) {
         Holder.HOLDER.provider = requireNonNull(provider);
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
+     * @param speedment the speedment instance
      * @return the new instance
      */
-    static Schema newSchema() {
-        return Holder.HOLDER.provider.get();
+    static Schema newSchema(Speedment speedment) {
+        return Holder.HOLDER.provider.apply(speedment);
     }
 
     /**

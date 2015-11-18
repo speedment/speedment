@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -39,14 +38,16 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractConfigEntity implements Node, Enableable {
+public abstract class AbstractConfigEntity implements Node {
 
     private boolean enabled;
     private String name;
-
+    private boolean expanded;
+    
     protected AbstractConfigEntity(String defaultName) {
-        this.enabled = true;
-        this.name = defaultName; // Can be null
+        this.enabled  = true;
+        this.name     = defaultName; // Can be null
+        this.expanded = true;
         setDefaults();
     }
     
@@ -62,24 +63,32 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         this.enabled = enabled;
     }
 
-    @External(type = String.class)
     @Override
     public String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
     public void setName(String name) {
         requireNonNull(name, "A name cannot be null");
         // Todo: Allow . and " " in names. Changes in GodeGen
-        if (name.contains(".")) {
-            throw new IllegalArgumentException("A name can't contain a '.' character");
-        } else if (name.contains(" ")) {
-            throw new IllegalArgumentException("A name can't contain a space character");
-        }
+//        if (name.contains(".")) {
+//            throw new IllegalArgumentException("A name can't contain a '.' character");
+//        } else if (name.contains(" ")) {
+//            throw new IllegalArgumentException("A name can't contain a space character");
+//        }
 
         this.name = name;
+    }
+
+    @Override
+    public void setExpanded(Boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    @Override
+    public Boolean isExpanded() {
+        return expanded;
     }
 
     @Override
@@ -120,6 +129,8 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
         }
         return sj.toString() + nameMapper.apply(getName());
     }
+    
+    
 
     @Override
     public String toString() {
@@ -131,5 +142,10 @@ public abstract class AbstractConfigEntity implements Node, Enableable {
             .map(e -> getRelativeName(Project.class))
             .orElse(getName())
             + "'";
+    }
+
+    @Override
+    public boolean isImmutable() {
+        return false;
     }
 }

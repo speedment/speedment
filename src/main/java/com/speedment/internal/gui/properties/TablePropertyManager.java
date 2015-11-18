@@ -23,6 +23,7 @@ import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.config.utils.MethodsParser;
 import static com.speedment.internal.core.config.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.config.parameters.DbmsType;
+import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.internal.util.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +36,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.control.TreeView;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -172,19 +175,72 @@ public final class TablePropertyManager {
         final String methodName = "set" + javaName;
 
         try {
-            final Method method = nodeClass.getMethod(methodName, paramType);
-            return (c, v) -> {
-                try {
-                    method.invoke(c, v);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                    throw new RuntimeException("Could not invoke method '" + methodName + "' in class '" + nodeClass.getName() + "'.", ex);
-                }
-            };
+            return findSetterFrom(nodeClass, nodeClass.getMethod(methodName, paramType), paramType);
         } catch (NoSuchMethodException ex) {
-            throw new RuntimeException("Could not find @External method '" + methodName + "' with param '" + paramType + "' in class '" + nodeClass.getName() + "'.", ex);
+            try {
+                
+                final Class<?> alternative;
+                if (Boolean.class == paramType) {
+                    alternative = boolean.class;
+                } else if (Byte.class == paramType) {
+                    alternative = byte.class;
+                } else if (Short.class == paramType) {
+                    alternative = short.class;
+                } else if (Integer.class == paramType) {
+                    alternative = int.class;
+                } else if (Long.class == paramType) {
+                    alternative = long.class;
+                } else if (Double.class == paramType) {
+                    alternative = double.class;
+                } else if (Float.class == paramType) {
+                    alternative = float.class;
+                } else if (boolean.class == paramType) {
+                    alternative = Boolean.class;
+                } else if (byte.class == paramType) {
+                    alternative = Byte.class;
+                } else if (short.class == paramType) {
+                    alternative = Short.class;
+                } else if (int.class == paramType) {
+                    alternative = Integer.class;
+                } else if (long.class == paramType) {
+                    alternative = Long.class;
+                } else if (double.class == paramType) {
+                    alternative = Double.class;
+                } else if (float.class == paramType) {
+                    alternative = Float.class;
+                } else {
+                    throw new SpeedmentException("Can't parse alternative param type ");
+                }
+                
+                final Method method = nodeClass.getMethod(methodName, alternative);
+                return findSetterFrom(nodeClass, method, paramType);
+                
+            } catch (NoSuchMethodException exx) {
+                throw new RuntimeException(
+                    "Could not find @External method '" + methodName + 
+                    "' with param '" + paramType + 
+                    "' in class '" + nodeClass.getName() + 
+                    "'.", ex
+                );
+            }
         }
     }
-
+    
+    private <V> BiConsumer<Child<?>, V> findSetterFrom(Class<?> nodeClass, Method method, Class<V> paramType) {
+        return (c, v) -> {
+            try {
+                method.invoke(c, v);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                throw new RuntimeException(
+                    "Could not invoke method '" + method.getName() + 
+                    "' with param '" + paramType.getName() + 
+                    "' in class '" + nodeClass.getName() + 
+                    "'.", ex
+                );
+            }
+        };
+    }
+    
     private TableProperty<Boolean> createBooleanProperty(String label, List<Child<?>> nodes, Function<Child<?>, Boolean> selector, BiConsumer<Child<?>, Boolean> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);

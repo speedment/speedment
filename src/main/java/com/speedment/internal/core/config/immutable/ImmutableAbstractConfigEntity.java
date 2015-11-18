@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
@@ -39,14 +38,16 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
  *
  * @author pemi
  */
-public abstract class ImmutableAbstractConfigEntity implements Node, Enableable {
+public abstract class ImmutableAbstractConfigEntity implements Node {
 
     private final boolean enabled;
     private final String name;
+    private final boolean expanded;
 
-    protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
-        this.enabled = enabled;
-        this.name = name; // Can be null
+    protected ImmutableAbstractConfigEntity(String name, boolean enabled, boolean expanded) {
+        this.enabled  = enabled;
+        this.name     = name; // Can be null
+        this.expanded = expanded;
     }
 
     @Override
@@ -59,15 +60,23 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
-    @External(type = String.class)
     @Override
     public final String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
     public final void setName(String name) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+    
+    @Override
+    public Boolean isExpanded() {
+        return expanded;
+    }
+
+    @Override
+    public void setExpanded(Boolean expanded) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
@@ -125,6 +134,11 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     // This method is called when the entire tree is constructed
     public void resolve() {
 //        System.out.println("resolve: " + toString());
+    }
+
+    @Override
+    public boolean isImmutable() {
+        return true;
     }
 
 }

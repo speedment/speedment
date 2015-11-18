@@ -91,11 +91,6 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         // Special timestamp mappers
         install(TimestampToLongMapper::new);
     }
-    
-    @Override
-    public final Class<TypeMapperComponent> getComponentClass() {
-        return TypeMapperComponent.class;
-    }
 
     @Override
     public final void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {

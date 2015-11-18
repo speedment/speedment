@@ -37,14 +37,14 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
 
     private final Speedment speedment;
     private final Optional<Project> parent;
-    private final ChildHolder children;
+    private final ChildHolder<Schema> children;
     private final DbmsType type;
     private final Optional<String> ipAddress;
     private final Optional<Integer> port;
     private final Optional<String> username, password;
 
     public ImmutableDbms(Project parent, Dbms dbms) {
-        super(requireNonNull(dbms).getName(), dbms.isEnabled());
+        super(requireNonNull(dbms).getName(), dbms.isExpanded(), dbms.isEnabled());
         requireNonNull(parent);
         // Members
         this.speedment = parent.getSpeedment();
@@ -55,7 +55,7 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
         this.username = dbms.getUsername();
         this.password = dbms.getPassword();
         // Children
-        children = childHolderOf(dbms.stream().map(p -> new ImmutableSchema(this, p)));
+        children = childHolderOf(Schema.class, dbms.stream().map(p -> new ImmutableSchema(this, p)));
     }
 
     @Override
@@ -119,7 +119,7 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Schema> getChildren() {
         return children;
     }
 
