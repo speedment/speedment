@@ -28,7 +28,6 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -104,7 +103,11 @@ public final class PluginDataImpl extends AbstractNamedNode implements PluginDat
     
     @Override
     public Optional<Child<PluginData>> add(Child<PluginData> child) {
-        final ChildHolder<Child<PluginData>> holder = children.get(child.getInterfaceMainClass());
+        final ChildHolder<Child<PluginData>> holder = children.computeIfAbsent(
+            child.getInterfaceMainClass(),
+            clazz -> new ChildHolderImpl<>((Class<Child<PluginData>>) clazz)
+        );
+        
         final Optional<Child<PluginData>> result = holder.put(child, this);
         return result;
     }
