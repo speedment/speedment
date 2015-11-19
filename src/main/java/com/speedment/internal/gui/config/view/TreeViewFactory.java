@@ -10,6 +10,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.TreeItem;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -28,9 +31,9 @@ public final class TreeViewFactory {
     }
     
     public void bind() {
-       ui.currentSelectionProperty().addListener((ListChangeListener.Change<? extends TreeItem<Child<?>>> change) -> {
+       ui.getCurrentSelection().addListener((ListChangeListener.Change<? extends TreeItem<Child<?>>> change) -> {
            if (change.wasAdded()) {
-               ui.propertiesProperty().clear();
+               ui.getProperties().clear();
                final List<? extends TreeItem<Child<?>>> additions = change.getAddedSubList();
                final TreeItem<Child<?>> item = additions.get(additions.size() - 1);
                final Child<?> child = item.getValue();

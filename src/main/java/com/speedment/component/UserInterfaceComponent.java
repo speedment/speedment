@@ -18,7 +18,7 @@ public interface UserInterfaceComponent extends Component {
     default Class<UserInterfaceComponent> getComponentClass() {
         return UserInterfaceComponent.class;
     }
-    
+
     /**
      * Returns a observable and modifiable view of all the currently visible properties
      * in the workspace of the GUI. This can for an example be modified to show more
@@ -26,12 +26,12 @@ public interface UserInterfaceComponent extends Component {
      * <p>
      * The list will be modified by the GUI each time a new node in the tree is selected.
      * It is therefore recommended to only modify this component as a result of a
-     * {@link #currentSelectionProperty()} event.
+     * {@link #getCurrentSelection()} event.
      * 
      * @return  a view of the properties area
      */
-    ObservableList<Node> propertiesProperty();
-    
+    ObservableList<Node> getProperties();
+
     /**
      * Returns the currently selected nodes in the tree view of the GUI. This collection
      * could be listened to by extensions that want to react when the user change the focus
@@ -39,5 +39,5 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  a view of the selected tree nodes
      */
-    ObservableList<TreeItem<Child<?>>> currentSelectionProperty();   
+    ObservableList<TreeItem<Child<?>>> getCurrentSelection();   
 }

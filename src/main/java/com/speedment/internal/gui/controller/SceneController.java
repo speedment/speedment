@@ -84,6 +84,19 @@ import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.util.Duration.millis;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
+import static java.util.Objects.requireNonNull;
+import static javafx.util.Duration.millis;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
+import static java.util.Objects.requireNonNull;
+import static javafx.util.Duration.millis;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
+import static java.util.Objects.requireNonNull;
+import javafx.beans.binding.Bindings;
+import static javafx.util.Duration.millis;
 
 /**
  * FXML Controller class for the main window of the GUI.
@@ -159,10 +172,11 @@ public final class SceneController implements Initializable {
         requireNonNull(url);
         
         final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
+        Bindings.bindContentBidirectional(ui.getProperties(), propertiesContainer.getChildren());
         
         propertiesContainer.getChildren().addListener((ListChangeListener.Change<? extends javafx.scene.Node> c) -> {
-            ui.propertiesProperty().removeAll(c.getRemoved());
-            ui.propertiesProperty().addAll(c.getAddedSubList());
+            ui.getProperties().removeAll(c.getRemoved());
+            ui.getProperties().addAll(c.getAddedSubList());
         });
         
         propertyMgr = new TablePropertyManager(speedment, treeHierarchy);
@@ -338,19 +352,15 @@ public final class SceneController implements Initializable {
         
         speedment.getEventComponent().notify(new ProjectLoaded(project));
         
-        final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
-            populatePropertyTable(
-                propertyMgr.propertiesFor(
-                    l.getList().stream()
-                    .map(ti -> ti.getValue())
-                    .collect(Collectors.toList())
-                )
-            );
-            
-            final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
-            ui.currentSelectionProperty().removeAll(l.getRemoved());
-            ui.currentSelectionProperty().addAll(l.getAddedSubList());
-        };
+//        final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
+//            populatePropertyTable(
+//                propertyMgr.propertiesFor(
+//                    l.getList().stream()
+//                    .map(ti -> ti.getValue())
+//                    .collect(Collectors.toList())
+//                )
+//            );
+//        };
 
         treeHierarchy.setCellFactory(v -> {
             final TreeCell<Child<?>> cell =  new TreeCell<Child<?>>() {
@@ -372,9 +382,15 @@ public final class SceneController implements Initializable {
             
             return cell;
         });
-
+        
         treeHierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
-        treeHierarchy.getSelectionModel().getSelectedItems().addListener(change);
+        
+        final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
+        Bindings.bindContentBidirectional(
+            ui.getCurrentSelection(), 
+            treeHierarchy.getSelectionModel().getSelectedItems()
+        );
+        
         treeHierarchy.setRoot(branch(project));
     }
 

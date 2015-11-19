@@ -55,6 +55,12 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 

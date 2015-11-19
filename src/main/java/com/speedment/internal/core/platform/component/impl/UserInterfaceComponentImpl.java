@@ -7,6 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
@@ -24,12 +27,12 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public ObservableList<Node> propertiesProperty() {
+    public ObservableList<Node> getProperties() {
         return properties;
     }
     
     @Override
-    public ObservableList<TreeItem<Child<?>>> currentSelectionProperty() {
+    public ObservableList<TreeItem<Child<?>>> getCurrentSelection() {
         return currentSelection;
     }
 }
