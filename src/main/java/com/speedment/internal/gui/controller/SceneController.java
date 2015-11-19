@@ -20,7 +20,6 @@ import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.config.Project;
-import com.speedment.config.aspects.Child;
 import com.speedment.config.Node;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.gui.MainApp;
@@ -69,29 +68,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.internal.gui.MainApp.showWebsite;
+import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.gui.config.ProjectProperty;
 import static com.speedment.internal.gui.controller.NotificationController.showNotification;
 import static com.speedment.internal.gui.util.ProjectUtil.*;
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.animation.Interpolator.EASE_BOTH;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import static javafx.util.Duration.ZERO;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
-import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
-import static javafx.util.Duration.millis;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
-import static java.util.Objects.requireNonNull;
-import static javafx.util.Duration.millis;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
-import static java.util.Objects.requireNonNull;
-import static javafx.util.Duration.millis;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.gui.util.FadeAnimation.fadeIn;
 import static java.util.Objects.requireNonNull;
@@ -114,7 +102,7 @@ public final class SceneController implements Initializable {
     @FXML private Button buttonOpen;
     @FXML private Button buttonGenerate;
     @FXML private ImageView logo;
-    @FXML private TreeView<Child<?>> treeHierarchy;
+    @FXML private TreeView<AbstractNodeProperty> treeHierarchy;
     @FXML private VBox propertiesContainer;
     @FXML private WebView output;
     @FXML private MenuItem mbNew;
@@ -130,7 +118,7 @@ public final class SceneController implements Initializable {
 
     private final Speedment speedment;
     private final Stage stage;
-    private Project project;
+    private ProjectProperty project;
     private File savedFile;
     private TablePropertyManager propertyMgr;
 
@@ -157,7 +145,7 @@ public final class SceneController implements Initializable {
     private SceneController(Speedment speedment, Stage stage, Project project, File savedFile) {
         this.speedment = requireNonNull(speedment);
         this.stage     = requireNonNull(stage);
-        this.project   = requireNonNull(project);
+        this.project   = new ProjectProperty(speedment, requireNonNull(project));
         this.savedFile = savedFile; // Nullable
     }
 
@@ -211,9 +199,11 @@ public final class SceneController implements Initializable {
         final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
             speedment, stage, (f, p) -> {
                 
+            final ProjectProperty projProp = new ProjectProperty(speedment, p);
+                
             savedFile = f;
-            treeHierarchy.setRoot(branch(p));
-            project = p;
+            treeHierarchy.setRoot(branch(projProp));
+            project = projProp;
             writeToLog("Opened config file: " + savedFile);
         });
 
@@ -347,7 +337,7 @@ public final class SceneController implements Initializable {
      *
      * @param project  the project to display
      */
-    private void populateTree(Project project) {
+    private void populateTree(ProjectProperty project) {
         requireNonNull(project);
         
         speedment.getEventComponent().notify(new ProjectLoaded(project));
@@ -363,10 +353,10 @@ public final class SceneController implements Initializable {
 //        };
 
         treeHierarchy.setCellFactory(v -> {
-            final TreeCell<Child<?>> cell =  new TreeCell<Child<?>>() {
+            final TreeCell<AbstractNodeProperty> cell =  new TreeCell<AbstractNodeProperty>() {
 
                 @Override
-                protected void updateItem(Child<?> item, boolean empty) {
+                protected void updateItem(AbstractNodeProperty item, boolean empty) {
                     // item nullable
                     super.updateItem(item, requireNonNull(empty));
 
@@ -413,9 +403,9 @@ public final class SceneController implements Initializable {
      * @param node  the node
      * @return      the created branch
      */
-    private TreeItem<Child<?>> branch(Child<?> node) {
+    private TreeItem<AbstractNodeProperty> branch(AbstractNodeProperty node) {
         requireNonNull(node);
-        final TreeItem<Child<?>> branch = new TreeItem<>(node);
+        final TreeItem<AbstractNodeProperty> branch = new TreeItem<>(node);
 
         branch.setExpanded(node.isExpanded());
         branch.expandedProperty().set(node.isExpanded());
@@ -425,7 +415,9 @@ public final class SceneController implements Initializable {
         });
 
         node.asParent().ifPresent(p ->
-            p.stream().map(this::branch).forEachOrdered(
+            p.stream()
+                .map(n -> (AbstractNodeProperty) n)
+                .map(this::branch).forEachOrdered(
                 branch.getChildren()::add
             )
         );

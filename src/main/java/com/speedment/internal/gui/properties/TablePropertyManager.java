@@ -18,13 +18,12 @@ package com.speedment.internal.gui.properties;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.External;
-import com.speedment.config.aspects.Child;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.core.config.utils.MethodsParser;
 import static com.speedment.internal.core.config.utils.MethodsParser.METHOD_IS_VISIBLE_IN_GUI;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.util.JavaLanguage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,7 +35,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.scene.control.TreeView;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -47,98 +45,97 @@ import static java.util.Objects.requireNonNull;
 public final class TablePropertyManager {
 
     private final Speedment speedment;
-    private final TreeView<Child<?>> tree;
+    private final TreeView<AbstractNodeProperty> tree;
 
-    public TablePropertyManager(Speedment speedment, TreeView<Child<?>> view) {
+    public TablePropertyManager(Speedment speedment, TreeView<AbstractNodeProperty> view) {
         this.speedment = requireNonNull(speedment);
         this.tree      = requireNonNull(view);
     }
 
 	@SuppressWarnings("unchecked")
-    public Stream<TableProperty<?>> propertiesFor(List<Child<?>> nodes) {
+    public Stream<TableProperty<?>> propertiesFor(List<AbstractNodeProperty> nodes) {
         requireNonNulls(nodes);
         return nodes.stream().flatMap(node -> {
             return MethodsParser.streamOfExternalNoneSecretGetters(node.getClass())
-                    .filter(METHOD_IS_VISIBLE_IN_GUI)
-                    .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
-                    //.sorted(comparing(Method::getName))
-                    .map(m -> {
-                        final String javaName;
-                        if (m.getName().startsWith("is")) {
-                            javaName = m.getName().substring(2);
-                        } else {
-                            javaName = m.getName().substring(3);
-                        }
+                .filter(METHOD_IS_VISIBLE_IN_GUI)
+                .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
+                .map(m -> {
+                    final String javaName;
+                    if (m.getName().startsWith("is")) {
+                        javaName = m.getName().substring(2);
+                    } else {
+                        javaName = m.getName().substring(3);
+                    }
 
-                        final String propertyName = JavaLanguage.toHumanReadable(javaName);
-                        final External e = MethodsParser.getExternalFor(m, node.getClass());
+                    final String propertyName = JavaLanguage.toHumanReadable(javaName);
+                    final External e = MethodsParser.getExternalFor(m, node.getClass());
 
-                        Class<?> type = m.getReturnType();
-                        Class<?> innerType = e.type();
-                        boolean optional = Optional.class.isAssignableFrom(type);
+                    Class<?> type = m.getReturnType();
+                    Class<?> innerType = e.type();
+                    boolean optional = Optional.class.isAssignableFrom(type);
 
-                        if (Boolean.class.isAssignableFrom(innerType)) {
-                            return createBooleanProperty(propertyName, nodes,
+                    if (Boolean.class.isAssignableFrom(innerType)) {
+                        return createBooleanProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, innerType, optional),
+                                findSetter(node.getClass(), javaName, Boolean.class)
+                        );
+                    } else if (String.class.isAssignableFrom(innerType)) {
+                        if ("Password".equals(propertyName)) {
+                            return createPasswordProperty(propertyName, nodes,
                                     findGetter(node.getClass(), javaName, innerType, optional),
-                                    findSetter(node.getClass(), javaName, Boolean.class)
-                            );
-                        } else if (String.class.isAssignableFrom(innerType)) {
-                            if ("Password".equals(propertyName)) {
-                                return createPasswordProperty(propertyName, nodes,
-                                        findGetter(node.getClass(), javaName, innerType, optional),
-                                        findSetter(node.getClass(), javaName, String.class)
-                                );
-                            } else {
-                                return createStringProperty(propertyName, nodes,
-                                        findGetter(node.getClass(), javaName, innerType, optional),
-                                        findSetter(node.getClass(), javaName, String.class)
-                                );
-                            }
-                        } else if (Class.class.isAssignableFrom(innerType)) {
-                            return createClassProperty(propertyName, nodes,
-                                    findGetter(node.getClass(), javaName, innerType, optional),
-                                    findSetter(node.getClass(), javaName, Class.class)
-                            );
-                        } else if (TypeMapper.class.isAssignableFrom(innerType)) {
-                            return createTypeMapperProperty(propertyName, nodes,
-                                    findGetter(node.getClass(), javaName, innerType, optional),
-                                    findSetter(node.getClass(), javaName, TypeMapper.class)
-                            );
-                        } else if (Number.class.isAssignableFrom(innerType)) {
-                            @SuppressWarnings("unchecked")
-                            final Class<Number> castedInnerType = (Class<Number>) innerType;
-                            return createNumberProperty(propertyName, nodes,
-                                    findGetter(node.getClass(), javaName, innerType, optional),
-                                    findSetter(node.getClass(), javaName, castedInnerType)
-                            );
-                        } else if (DbmsType.class.isAssignableFrom(innerType)) {
-                            @SuppressWarnings("unchecked")
-                            final Class<DbmsType> castedInnerType = (Class<DbmsType>) innerType;
-                            return createDbmsTypeProperty(propertyName, nodes,
-                                    findGetter(node.getClass(), javaName, innerType, optional),
-                                    findSetter(node.getClass(), javaName, castedInnerType)
-                            );
-                        } else if (Enum.class.isAssignableFrom(innerType)) {
-                            @SuppressWarnings("unchecked")
-                            final Class<Enum> castedInnerType = (Class<Enum>) innerType;
-                            @SuppressWarnings({"unchecked", "rawtypes"})
-                            final Enum defaultValue = (Enum) type.getEnumConstants()[0];
-
-                            return createEnumProperty(propertyName, nodes,
-                                    findGetter(node.getClass(), javaName, Enum.class, optional),
-                                    findSetter(node.getClass(), javaName, castedInnerType),
-                                    defaultValue
+                                    findSetter(node.getClass(), javaName, String.class)
                             );
                         } else {
-                            throw new UnsupportedOperationException("Found method '" + m + "' in '" + node.getClass() + "' marked as @External of unsupported type " + type.getName());
+                            return createStringProperty(propertyName, nodes,
+                                    findGetter(node.getClass(), javaName, innerType, optional),
+                                    findSetter(node.getClass(), javaName, String.class)
+                            );
                         }
-                    });
+                    } else if (Class.class.isAssignableFrom(innerType)) {
+                        return createClassProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, innerType, optional),
+                                findSetter(node.getClass(), javaName, Class.class)
+                        );
+                    } else if (TypeMapper.class.isAssignableFrom(innerType)) {
+                        return createTypeMapperProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, innerType, optional),
+                                findSetter(node.getClass(), javaName, TypeMapper.class)
+                        );
+                    } else if (Number.class.isAssignableFrom(innerType)) {
+                        @SuppressWarnings("unchecked")
+                        final Class<Number> castedInnerType = (Class<Number>) innerType;
+                        return createNumberProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, innerType, optional),
+                                findSetter(node.getClass(), javaName, castedInnerType)
+                        );
+                    } else if (DbmsType.class.isAssignableFrom(innerType)) {
+                        @SuppressWarnings("unchecked")
+                        final Class<DbmsType> castedInnerType = (Class<DbmsType>) innerType;
+                        return createDbmsTypeProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, innerType, optional),
+                                findSetter(node.getClass(), javaName, castedInnerType)
+                        );
+                    } else if (Enum.class.isAssignableFrom(innerType)) {
+                        @SuppressWarnings("unchecked")
+                        final Class<Enum> castedInnerType = (Class<Enum>) innerType;
+                        @SuppressWarnings({"unchecked", "rawtypes"})
+                        final Enum defaultValue = (Enum) type.getEnumConstants()[0];
+
+                        return createEnumProperty(propertyName, nodes,
+                                findGetter(node.getClass(), javaName, Enum.class, optional),
+                                findSetter(node.getClass(), javaName, castedInnerType),
+                                defaultValue
+                        );
+                    } else {
+                        throw new UnsupportedOperationException("Found method '" + m + "' in '" + node.getClass() + "' marked as @External of unsupported type " + type.getName());
+                    }
+                });
         }).map(tp -> (TableProperty<?>) tp)
           .distinct()
           .sorted();
     }
     
-    private <V> Function<Child<?>, V> findGetter(Class<?> nodeClass, String javaName, Class<?> innerType, boolean optional) {
+    private <V> Function<AbstractNodeProperty, V> findGetter(Class<?> nodeClass, String javaName, Class<?> innerType, boolean optional) {
         requireNonNulls(nodeClass, javaName, innerType);
         final String methodName;
 
@@ -170,7 +167,7 @@ public final class TablePropertyManager {
         }
     }
 
-    private <V> BiConsumer<Child<?>, V> findSetter(Class<?> nodeClass, String javaName, Class<V> paramType) {
+    private <V> BiConsumer<AbstractNodeProperty, V> findSetter(Class<?> nodeClass, String javaName, Class<V> paramType) {
         requireNonNulls(nodeClass, javaName, paramType);
         final String methodName = "set" + javaName;
 
@@ -226,7 +223,7 @@ public final class TablePropertyManager {
         }
     }
     
-    private <V> BiConsumer<Child<?>, V> findSetterFrom(Class<?> nodeClass, Method method, Class<V> paramType) {
+    private <V> BiConsumer<AbstractNodeProperty, V> findSetterFrom(Class<?> nodeClass, Method method, Class<V> paramType) {
         return (c, v) -> {
             try {
                 method.invoke(c, v);
@@ -241,63 +238,63 @@ public final class TablePropertyManager {
         };
     }
     
-    private TableProperty<Boolean> createBooleanProperty(String label, List<Child<?>> nodes, Function<Child<?>, Boolean> selector, BiConsumer<Child<?>, Boolean> updater) {
+    private TableProperty<Boolean> createBooleanProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, Boolean> selector, BiConsumer<AbstractNodeProperty, Boolean> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableBooleanProperty(speedment, a, b), selector, updater);
     }
 
-    private TableProperty<String> createStringProperty(String label, List<Child<?>> nodes, Function<Child<?>, String> selector, BiConsumer<Child<?>, String> updater) {
+    private TableProperty<String> createStringProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, String> selector, BiConsumer<AbstractNodeProperty, String> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableStringProperty(speedment, a, b), selector, updater);
     }
 
-    private TableProperty<String> createPasswordProperty(String label, List<Child<?>> nodes, Function<Child<?>, String> selector, BiConsumer<Child<?>, String> updater) {
+    private TableProperty<String> createPasswordProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, String> selector, BiConsumer<AbstractNodeProperty, String> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TablePasswordProperty(speedment, a, b), selector, updater);
     }
 
 	@SuppressWarnings("rawtypes")
-    private TableProperty<Class> createClassProperty(String label, List<Child<?>> nodes, Function<Child<?>, Class> selector, BiConsumer<Child<?>, Class> updater) {
+    private TableProperty<Class> createClassProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, Class> selector, BiConsumer<AbstractNodeProperty, Class> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableClassProperty(speedment, a, b), selector, updater);
     }
     
     @SuppressWarnings("rawtypes")
-    private TableProperty<TypeMapper> createTypeMapperProperty(String label, List<Child<?>> nodes, Function<Child<?>, TypeMapper> selector, BiConsumer<Child<?>, TypeMapper> updater) {
+    private TableProperty<TypeMapper> createTypeMapperProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, TypeMapper> selector, BiConsumer<AbstractNodeProperty, TypeMapper> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableTypeMapperProperty(speedment, a, b), selector, updater);
     }
 
-    private TableProperty<Number> createNumberProperty(String label, List<Child<?>> nodes, Function<Child<?>, Number> selector, BiConsumer<Child<?>, Number> updater) {
+    private TableProperty<Number> createNumberProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, Number> selector, BiConsumer<AbstractNodeProperty, Number> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableIntegerProperty(speedment, a, b), selector, updater);
     }
 
-    private TableProperty<DbmsType> createDbmsTypeProperty(String label, List<Child<?>> nodes, Function<Child<?>, DbmsType> selector, BiConsumer<Child<?>, DbmsType> updater) {
+    private TableProperty<DbmsType> createDbmsTypeProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, DbmsType> selector, BiConsumer<AbstractNodeProperty, DbmsType> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableDbmsTypeProperty(speedment, a, b), selector, updater);
     }
 
-    private <V extends Enum<V>> TableProperty<V> createEnumProperty(String label, List<Child<?>> nodes, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater, V defaultValue) {
+    private <V extends Enum<V>> TableProperty<V> createEnumProperty(String label, List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, V> selector, BiConsumer<AbstractNodeProperty, V> updater, V defaultValue) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, (a, b) -> new TableEnumProperty<>(speedment, a, b), selector, updater, defaultValue);
     }
 
-    private <V> TableProperty<V> createProperty(String label, List<Child<?>> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater) {
+    private <V> TableProperty<V> createProperty(String label, List<AbstractNodeProperty> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<AbstractNodeProperty, V> selector, BiConsumer<AbstractNodeProperty, V> updater) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         return createProperty(label, nodes, initiator, selector, updater, null);
     }
 
-    private <V> TableProperty<V> createProperty(String label, List<Child<?>> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<Child<?>, V> selector, BiConsumer<Child<?>, V> updater, V defaultValue) {
+    private <V> TableProperty<V> createProperty(String label, List<AbstractNodeProperty> nodes, BiFunction<String, V, TableProperty<V>> initiator, Function<AbstractNodeProperty, V> selector, BiConsumer<AbstractNodeProperty, V> updater, V defaultValue) {
         requireNonNulls(label, selector, updater);
         requireNonNulls(nodes);
         // default value nullable
@@ -311,14 +308,14 @@ public final class TablePropertyManager {
 
         property.valueProperty().addListener((ob, o, newValue) -> {
             tree.getSelectionModel().getSelectedItems().stream()
-                    .map(i -> i.getValue())
-                    .forEachOrdered(c -> updater.accept(c, newValue));
+                .map(i -> i.getValue())
+                .forEachOrdered(c -> updater.accept(c, newValue));
         });
 
         return property;
     }
 
-    private <V> V getOption(List<Child<?>> nodes, Function<Child<?>, V> selector) {
+    private <V> V getOption(List<AbstractNodeProperty> nodes, Function<AbstractNodeProperty, V> selector) {
         requireNonNull(selector);
         requireNonNulls(nodes);
         final List<V> variants = nodes.stream().map(n -> selector.apply(n)).distinct().collect(Collectors.toList());
