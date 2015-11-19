@@ -52,6 +52,7 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -179,6 +180,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
+        final AtomicInteger position = new AtomicInteger(1);
         columns().forEachOrdered(c -> {
 
             final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getDatabaseType());
@@ -204,13 +206,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                         .append("resultSet.")
                         .append("get")
                         .append(mapping.getResultSetMethodName(dbms()))
-                        .append("(").append(c.getOrdinalPosition()).append(")");
+                        .append("(").append(position.getAndIncrement()).append(")");
             } else {
                 sb
                         .append("get")
                         .append(mapping.getResultSetMethodName(dbms()))
                         .append("(resultSet, ")
-                        .append(c.getOrdinalPosition()).append(")");
+                        .append(position.getAndIncrement()).append(")");
             }
             sb.append("));");
             streamBuilder.add(sb.toString());

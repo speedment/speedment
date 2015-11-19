@@ -65,14 +65,16 @@ public class GroovyParser {
         requireNonNull(sb);
         requireNonNull(node);
 
+        // Properties
         MethodsParser.streamOfExternalNoneSecretGetters(node.getClass())
             .sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
             .forEach(m -> getterBeanPropertyNameAndValue(m, node)
                 .ifPresent(t -> sb.add(indent(indentLevel) + t))
             );
 
+        // Childs
         Optional.of(node).flatMap(Node::asParent).ifPresent(n
-            -> n.stream().forEach(c -> {
+            -> n.stream().filter(Node::isEnabled).forEach(c -> {
                 sb.add(indent(indentLevel) + JavaLanguage.javaVariableName(c.nodeTypeName()) + " {");
                 toGroovyLines(sb, c, indentLevel + 1);
                 sb.add(indent(indentLevel) + "}");
