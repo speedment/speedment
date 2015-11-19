@@ -33,6 +33,7 @@ import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
+import com.speedment.component.UserInterfaceComponent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
@@ -47,6 +48,7 @@ import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComp
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
+import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
 import static com.speedment.internal.util.Cast.castOrFail;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -70,6 +72,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private TypeMapperComponent typeMapperComponent;
     private PluginComponent pluginComponent;
     private EventComponent eventComponent;
+    private UserInterfaceComponent userInterfaceComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -85,6 +88,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(TypeMapperComponentImpl::new);
         put(PluginComponentImpl::new);
         put(EventComponentImpl::new);
+        put(UserInterfaceComponentImpl::new);
     }
 
     @Override
@@ -234,5 +238,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public EventComponent getEventComponent() {
         return eventComponent;
+    }
+    
+    @Override
+    public UserInterfaceComponent getUserInterfaceComponent() {
+        return userInterfaceComponent;
     }
 }

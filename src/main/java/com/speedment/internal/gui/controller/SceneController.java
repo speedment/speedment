@@ -17,6 +17,7 @@
 package com.speedment.internal.gui.controller;
 
 import com.speedment.Speedment;
+import com.speedment.component.UserInterfaceComponent;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
@@ -113,9 +114,6 @@ public final class SceneController implements Initializable {
     @FXML private MenuItem mbAbout;
     @FXML private StackPane arrowContainer;
     @FXML private Label arrow;
-    @FXML private ContextMenu treeMenu;
-    @FXML private MenuItem treeMenuEnable;
-    @FXML private MenuItem treeMenuRename;
 
     private final Speedment speedment;
     private final Stage stage;
@@ -159,6 +157,14 @@ public final class SceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         requireNonNull(url);
+        
+        final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
+        
+        propertiesContainer.getChildren().addListener((ListChangeListener.Change<? extends javafx.scene.Node> c) -> {
+            ui.propertiesProperty().removeAll(c.getRemoved());
+            ui.propertiesProperty().addAll(c.getAddedSubList());
+        });
+        
         propertyMgr = new TablePropertyManager(speedment, treeHierarchy);
 
         runLater(() -> populateTree(project));
@@ -186,7 +192,7 @@ public final class SceneController implements Initializable {
 
         buttonNew.setOnAction(newProject);
         mbNew.setOnAction(newProject);
-
+        
         // Open project.
         final EventHandler<ActionEvent> openProject = createOpenProjectHandler(
             speedment, stage, (f, p) -> {
@@ -332,15 +338,19 @@ public final class SceneController implements Initializable {
         
         speedment.getEventComponent().notify(new ProjectLoaded(project));
         
-        final ListChangeListener<? super TreeItem<Child<?>>> change = l ->
+        final ListChangeListener<? super TreeItem<Child<?>>> change = l -> {
             populatePropertyTable(
                 propertyMgr.propertiesFor(
                     l.getList().stream()
                     .map(ti -> ti.getValue())
                     .collect(Collectors.toList())
                 )
-            )
-        ;
+            );
+            
+            final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
+            ui.currentSelectionProperty().removeAll(l.getRemoved());
+            ui.currentSelectionProperty().addAll(l.getAddedSubList());
+        };
 
         treeHierarchy.setCellFactory(v -> {
             final TreeCell<Child<?>> cell =  new TreeCell<Child<?>>() {
