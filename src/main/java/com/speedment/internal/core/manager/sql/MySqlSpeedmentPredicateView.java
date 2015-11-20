@@ -64,7 +64,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
             case EQUAL:
                 return of("(" + cn + " = ?)").add(getFirstOperandAsRaw(model));
             case NOT_EQUAL:
-                return of("(NOT " + cn + " = ?))").add(getFirstOperandAsRaw(model));
+                return of("(NOT (" + cn + " = ?))").add(getFirstOperandAsRaw(model));
             case GREATER_THAN:
                 return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
             case GREATER_OR_EQUAL:
