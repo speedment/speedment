@@ -26,12 +26,13 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
-import static javafx.collections.FXCollections.observableMap;
 import javafx.collections.ObservableMap;
+
+import static java.util.Objects.requireNonNull;
+import static javafx.collections.FXCollections.observableMap;
 
 /**
  *
@@ -83,7 +84,14 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
         final String name = (String) c.getProperty("name");
 
         return ConfigUtil.groovyDelegatorHelper(c, () -> {
-            final Child<PluginData> child = findPlugin().newChildToPluginData(c, this);
+            final Child<PluginData> child = getSpeedment()
+                .getPluginComponent()
+                .get(name)
+                .orElseThrow(() -> new SpeedmentException(
+                    "Could not find plugin '" + name + "'."
+                ))
+                .newChildToPluginData(c, this);
+            
             children.put(child.getName(), child);
             return child;
         });

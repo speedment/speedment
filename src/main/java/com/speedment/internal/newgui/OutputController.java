@@ -19,12 +19,9 @@ package com.speedment.internal.newgui;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
