@@ -23,10 +23,10 @@ import com.speedment.config.Dbms;
 /**
  * Created by fdirlikl on 11/15/2015.
  */
-public class PostgreDbmsHandler extends AbstractRelationalDbmsHandler {
+public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
     private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEM";
 
-    public PostgreDbmsHandler(Speedment speedment, final Dbms dbms) {
+    public PostgresDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
 }

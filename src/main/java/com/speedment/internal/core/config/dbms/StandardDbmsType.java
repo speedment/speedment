@@ -28,11 +28,12 @@ import java.util.stream.Stream;
 public final class StandardDbmsType {
 
     private static final MySqlDbmsType MYSQL_DBMS_TYPE = new MySqlDbmsType();
-    private static final PostgreDbmsType POSTGRE_DBMS_TYPE = new PostgreDbmsType();
+    private static final MariaDbDbmsType MARIADB_DBMS_TYPE = new MariaDbDbmsType();
+    private static final PostgresDbmsType POSTGRE_DBMS_TYPE = new PostgresDbmsType();
 
     private final static List<DbmsType> STANDARD_TYPES = Stream.of(
         MYSQL_DBMS_TYPE,
-        new MariaDbDbmsType(),
+        MARIADB_DBMS_TYPE,
         POSTGRE_DBMS_TYPE
     ).collect(Collectors.toList());
 
@@ -41,6 +42,6 @@ public final class StandardDbmsType {
     }
 
     public static DbmsType defaultType() {
-        return MYSQL_DBMS_TYPE; // Kunde inte hålla fingrarna borta Emil...
+        return MYSQL_DBMS_TYPE; 
     }
 }

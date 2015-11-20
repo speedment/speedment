@@ -19,29 +19,31 @@ package com.speedment.internal.core.config.dbms;
 import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
-import com.speedment.internal.core.db.MySqlDbmsHandler;
-import com.speedment.internal.core.db.PostgreDbmsHandler;
+import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import java.util.Collections;
+
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 /**
  * Created by fdirlikl on 11/13/2015.
  */
-public final class PostgreDbmsType extends AbstractDbmsType {
-    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = PostgreDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
+public final class PostgresDbmsType extends AbstractDbmsType {
+
+    private static final String QUOTE = "\"";
+    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = PostgresDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
     private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEM";
     private static final String JDBC_CONNECTOR_NAME = "postgresql";
-    private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.of("useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
-    private static final Function<Dbms,String> CONNECTION_URL_GENERATOR = dbms -> {
+    private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.empty();
+    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder();
         result.append("jdbc:").append(JDBC_CONNECTOR_NAME).append("://");
         dbms.getIpAddress().ifPresent(ip -> result.append(ip));
@@ -51,29 +53,30 @@ public final class PostgreDbmsType extends AbstractDbmsType {
         return result.toString();
     };
 
-    public PostgreDbmsType() {
+    public PostgresDbmsType() {
 
         super(
                 "Postgres",
                 "Postgres-AB JDBC Driver",
                 5432,
                 ".",
-                "Just a name",
+                "Database name",
                 "org.postgresql.Driver",
-                "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
+                unwrap(DEFAULT_CONNECTOR_PARAMS),
                 "postgresql",
-                "\"",
-                "\"",
-                Stream.of("pg_catalog", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
+                QUOTE,
+                QUOTE,
+                Stream.of("pg_catalog", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
                 DBMS_MAPPER,
                 RESULTSET_TABLE_SCHEMA,
                 CONNECTION_URL_GENERATOR
         );
     }
 
+    private final static PostgresSpeedmentPredicateView VIEW = new PostgresSpeedmentPredicateView(QUOTE, QUOTE);
 
     @Override
     public SpeedmentPredicateView getSpeedmentPredicateView() {
-        return new PostgresSpeedmentPredicateView();
+        return VIEW;
     }
 }

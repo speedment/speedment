@@ -28,7 +28,6 @@ import com.speedment.config.IndexColumn;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
-import com.speedment.config.parameters.DbmsType;
 import com.speedment.config.parameters.OrderType;
 import com.speedment.internal.core.manager.sql.SqlStatement;
 import com.speedment.internal.core.manager.sql.SqlUpdateStatement;
@@ -53,8 +52,6 @@ import java.util.function.*;
 
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
@@ -113,17 +110,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     public String getUrl() {
         return getDbms().getType().getConnectionUrlGenerator().apply(getDbms());
-        /*final StringBuilder result = new StringBuilder();
-        result.append("jdbc:");
-        result.append(dbmsType.getJdbcConnectorName());
-        result.append("://");
-        getDbms().getIpAddress().ifPresent(ip -> result.append(ip));
-        getDbms().getPort().ifPresent(p -> result.append(":").append(p));
-        result.append("/test");
-
-        dbmsType.getDefaultConnectorParameters().ifPresent(d -> result.append("?").append(d));
-
-        return result.toString();*/
     }
 
     protected Map<String, Class<?>> readTypeMapFromDB(Connection connection) throws SQLException {
