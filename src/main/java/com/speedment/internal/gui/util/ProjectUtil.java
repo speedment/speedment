@@ -94,11 +94,11 @@ public final class ProjectUtil {
     public static EventHandler<ActionEvent> createSaveProjectHandler(SceneController controller, Consumer<File> fileConsumer) {
         requireNonNulls(controller, fileConsumer);
         return ev -> {
-            if (controller.getLastSaved() == null) {
-                showSaveDialog(controller, fileConsumer);
-            } else {
-                saveGroovyFile(controller, controller.getLastSaved(), fileConsumer);
-            }
+//            if (controller.getLastSaved() == null) {
+//                showSaveDialog(controller, fileConsumer);
+//            } else {
+//                saveGroovyFile(controller, controller.getLastSaved(), fileConsumer);
+//            }
         };
     }
 
@@ -133,16 +133,16 @@ public final class ProjectUtil {
                 Files.createDirectories(parent);
             }
 
-            final String groovy = GroovyParser.toGroovy(controller.getProject());
-            Files.write(target.toPath(), groovy.getBytes(UTF_8));
+//            final String groovy = GroovyParser.toGroovy(controller.getProject());
+//            Files.write(target.toPath(), groovy.getBytes(UTF_8));
             fileConsumer.accept(target);
 
             Settings.inst().set("project_location", parent.toFile().getAbsolutePath());
-            controller.setLastSaved(target);
+//            controller.setLastSaved(target);
             
             return true;
         } catch (IOException ex) {
-            showAlert(controller.getStage(), ex.getMessage());
+//            showAlert(controller.getStage(), ex.getMessage());
         }
         
         return false;
@@ -153,17 +153,17 @@ public final class ProjectUtil {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Groovy File");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
-        getDefaultLocation(controller.getLastSaved())
-            .ifPresent(fileChooser::setInitialDirectory);
+//        getDefaultLocation(controller.getLastSaved())
+//            .ifPresent(fileChooser::setInitialDirectory);
         
-        File file = fileChooser.showSaveDialog(controller.getStage());
-        if (file != null) {
-            if (!file.getName().endsWith(".groovy")) {
-                file = new File(file.getAbsolutePath() + ".groovy");
-            }
-            
-            return saveGroovyFile(controller, file, fileConsumer);
-        }
+//        File file = fileChooser.showSaveDialog(controller.getStage());
+//        if (file != null) {
+//            if (!file.getName().endsWith(".groovy")) {
+//                file = new File(file.getAbsolutePath() + ".groovy");
+//            }
+//            
+//            return saveGroovyFile(controller, file, fileConsumer);
+//        }
 
         return false;
     }

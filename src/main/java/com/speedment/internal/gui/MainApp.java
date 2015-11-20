@@ -17,35 +17,87 @@
 package com.speedment.internal.gui;
 
 import com.speedment.Speedment;
-import com.speedment.config.Project;
-import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.platform.SpeedmentFactory;
-import com.speedment.internal.util.Settings;
-import com.speedment.internal.gui.controller.MailPromptController;
-import com.speedment.internal.gui.controller.ProjectPromptController;
-import com.speedment.internal.gui.controller.SceneController;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.internal.newgui.SceneController;
 import com.speedment.internal.util.Statistics;
-import java.io.File;
-import java.util.List;
-import javafx.application.Application;
-import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
+import javafx.application.Application;
+import static javafx.application.Application.launch;
+import javafx.stage.Stage;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class MainApp extends Application {
-
+//
+//    private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
+//    private static Speedment SPEEDMENT;
+//    private static MainApp APP;
+//    
+//    public static void setSpeedment(Speedment speedment) {
+//        MainApp.SPEEDMENT = requireNonNull(speedment);
+//    }
+//
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        requireNonNull(stage);
+//        
+//        if (SPEEDMENT == null) {
+//            LOGGER.info("Creating new Speedment instance for GUI session.");
+//            SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
+//        }
+//        
+//        APP = this;
+//
+//        //stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
+//        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
+//
+//        Statistics.onGuiStarted();
+//
+//        final Parameters parameters = getParameters();
+//        final List<String> params = parameters.getRaw();
+//        if (params.isEmpty()) {
+//            if (Settings.inst().has("user_mail")) {
+//                ProjectPromptController.showIn(SPEEDMENT, stage);
+//            } else {
+//                MailPromptController.showIn(SPEEDMENT, stage);
+//            }
+//        } else {
+//            final Project project = Project.newProject(SPEEDMENT);
+//            final String filename = params.get(0).trim().replace("\\", "/");
+//            final File file = new File(filename);
+//            GroovyParser.fromGroovy(project, file.toPath());
+//            SceneController.showIn(SPEEDMENT, stage, project, file);
+//        }
+//
+//        stage.show();
+//
+//    }
+//
+//    public static void showWebsite(String url) {
+//        requireNonNull(url);
+//        APP.getHostServices().showDocument(url);
+//    }
+//    
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
+    
+    
+    
     private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
     private static Speedment SPEEDMENT;
     private static MainApp APP;
     
     public static void setSpeedment(Speedment speedment) {
-        MainApp.SPEEDMENT = requireNonNull(speedment);
+        SPEEDMENT = requireNonNull(speedment);
     }
 
     @Override
@@ -59,29 +111,9 @@ public final class MainApp extends Application {
         
         APP = this;
 
-        //stage.getIcons().add(SpeedmentIcon.SPEEDMENT_LOGO.load());
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
-
         Statistics.onGuiStarted();
-
-        final Parameters parameters = getParameters();
-        final List<String> params = parameters.getRaw();
-        if (params.isEmpty()) {
-            if (Settings.inst().has("user_mail")) {
-                ProjectPromptController.showIn(SPEEDMENT, stage);
-            } else {
-                MailPromptController.showIn(SPEEDMENT, stage);
-            }
-        } else {
-            final Project project = Project.newProject(SPEEDMENT);
-            final String filename = params.get(0).trim().replace("\\", "/");
-            final File file = new File(filename);
-            GroovyParser.fromGroovy(project, file.toPath());
-            SceneController.showIn(SPEEDMENT, stage, project, file);
-        }
-
-        stage.show();
-
+        SceneController.createAndShow(stage, SPEEDMENT);
     }
 
     public static void showWebsite(String url) {

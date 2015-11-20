@@ -181,7 +181,7 @@ public final class ProjectPromptController implements Initializable {
                         Trees.TraversalOrder.DEPTH_FIRST_PRE
                     ).forEachOrdered(System.out::println);
 
-                    SceneController.showIn(speedment, stage, project);
+//                    SceneController.showIn(speedment, stage, project);
                     Settings.inst().set("hide_open_option", false);
                 } catch (Exception ex) {
                     showAlert(stage, "Error!",
@@ -195,7 +195,7 @@ public final class ProjectPromptController implements Initializable {
 
             buttonOpen.setOnAction(createOpenProjectHandler(speedment, stage, (f, p) -> {
                 // Todo: set saved file;
-                SceneController.showIn(speedment, stage, p, f);
+//                SceneController.showIn(speedment, stage, p, f);
             }));
         } catch (Exception exxx) {
             exxx.printStackTrace();

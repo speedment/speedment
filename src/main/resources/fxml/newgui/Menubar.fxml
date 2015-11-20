@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<MenuBar BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+    <menus>
+        <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+            <items>
+                <MenuItem fx:id="mbNew" mnemonicParsing="false" text="New project..." />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="mbOpen" mnemonicParsing="false" text="Open..." />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="mbSave" mnemonicParsing="false" text="Save" />
+                <MenuItem fx:id="mbSaveAs" mnemonicParsing="false" text="Save as..." />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="mbQuit" mnemonicParsing="false" text="Quit" />
+            </items>
+        </Menu>
+        <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
+            <items>
+                <MenuItem fx:id="mbGenerate" mnemonicParsing="false" text="Generate" />
+            </items>
+        </Menu>
+        <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+            <items>
+                <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />
+                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About" />
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>
