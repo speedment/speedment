@@ -19,30 +19,25 @@ package com.speedment.internal.core.manager.sql;
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
+
 import java.util.Set;
-import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
-import static com.speedment.field.predicate.PredicateType.IS_NULL;
-import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
+
+import static com.speedment.field.predicate.PredicateType.*;
 import static com.speedment.field.predicate.PredicateType.NOT_CONTAINS;
 import static com.speedment.field.predicate.PredicateType.NOT_ENDS_WITH;
-import static com.speedment.field.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
-import static com.speedment.field.predicate.PredicateType.NOT_IN;
-import static com.speedment.field.predicate.PredicateType.NOT_STARTS_WITH;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
-import static java.util.stream.Collectors.toList;
+import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
- *
- * @author Emil Forslund
+ * Created by fdirlikl on 11/18/2015.
  */
-@SuppressWarnings("rawtypes")
-public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
-
+public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
     // TODO: Get from DbmsType
-    private static final String OPENING_FIELD_QUOTE =  "`";
-    private static final String CLOSING_FIELD_QUOTE = "`";
+    private static final String OPENING_FIELD_QUOTE =  "\"";
+    private static final String CLOSING_FIELD_QUOTE = "\"";
 
     @Override
     protected SqlPredicateFragment render(SpeedmentPredicate model) {
@@ -128,7 +123,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
                 return of("(" + cn + " <> '')");
             default:
                 throw new UnsupportedOperationException(
-                    "Unknown PredicateType  " + pt.name() + "."
+                        "Unknown PredicateType  " + pt.name() + "."
                 );
         }
     }

@@ -28,10 +28,12 @@ import java.util.stream.Stream;
 public final class StandardDbmsType {
 
     private static final MySqlDbmsType MYSQL_DBMS_TYPE = new MySqlDbmsType();
+    private static final PostgreDbmsType POSTGRE_DBMS_TYPE = new PostgreDbmsType();
 
     private final static List<DbmsType> STANDARD_TYPES = Stream.of(
         MYSQL_DBMS_TYPE,
-        new MariaDbDbmsType()
+        new MariaDbDbmsType(),
+        POSTGRE_DBMS_TYPE
     ).collect(Collectors.toList());
 
     public static Stream<DbmsType> stream() {
