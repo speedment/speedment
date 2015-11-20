@@ -394,7 +394,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4-1204-jdbc4</version>
+            <version>9.4-1205-jdbc4</version>
         </dependency>
 
     </dependencies>

@@ -20,6 +20,9 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
+import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
+import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -69,4 +72,8 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
         );
     }
 
+    @Override
+    public SpeedmentPredicateView getSpeedmentPredicateView() {
+        return new MySqlSpeedmentPredicateView();
+    }
 }

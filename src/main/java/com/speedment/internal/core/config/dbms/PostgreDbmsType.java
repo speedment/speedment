@@ -21,6 +21,8 @@ import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.db.PostgreDbmsHandler;
+import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
+import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -67,5 +69,11 @@ public final class PostgreDbmsType extends AbstractDbmsType {
                 RESULTSET_TABLE_SCHEMA,
                 CONNECTION_URL_GENERATOR
         );
+    }
+
+
+    @Override
+    public SpeedmentPredicateView getSpeedmentPredicateView() {
+        return new PostgresSpeedmentPredicateView();
     }
 }

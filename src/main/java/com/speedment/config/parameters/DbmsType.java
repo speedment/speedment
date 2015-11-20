@@ -20,6 +20,8 @@ import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
+import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -208,5 +210,7 @@ public interface DbmsType {
     String getResultSetTableSchema();
 
     Function<Dbms, String> getConnectionUrlGenerator();
+
+    SpeedmentPredicateView getSpeedmentPredicateView();
 
 }
