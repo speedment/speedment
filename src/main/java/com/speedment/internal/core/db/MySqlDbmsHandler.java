@@ -28,8 +28,6 @@ import com.speedment.config.Dbms;
  */
 public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
-    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
-
     public MySqlDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
