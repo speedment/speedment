@@ -16,15 +16,16 @@
  */
 package com.speedment.internal.newgui;
 
-import com.speedment.Speedment;
-import com.speedment.exception.SpeedmentException;
-import java.io.IOException;
+import com.speedment.internal.newgui.util.UILoader;
+import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -32,10 +33,10 @@ import javafx.scene.Node;
  */
 public final class OutputController implements Initializable {
     
-    private final Speedment speedment;
+    private final UISession session;
     
-    public OutputController(Speedment speedment) {
-        this.speedment = speedment;
+    private OutputController(UISession session) {
+        this.session = requireNonNull(session);
     }
 
     @Override
@@ -43,17 +44,7 @@ public final class OutputController implements Initializable {
         // Do nothing.
     }
     
-    public static Node create(Speedment speedment) {
-        requireNonNull(speedment);
-		final FXMLLoader loader = new FXMLLoader(OutputController.class.getResource("/fxml/newgui/Output.fxml"));
-		final OutputController control = new OutputController(speedment);
-        loader.setController(control);
-
-        try {
-            final Node loaded = loader.load();
-            return loaded;
-        } catch (IOException ex) {
-            throw new SpeedmentException(ex);
-        }
+    public static Node create(UISession session) {
+        return UILoader.create(session, "Output", OutputController::new);
 	}
 }

@@ -16,20 +16,17 @@
  */
 package com.speedment.internal.newgui;
 
-import com.speedment.Speedment;
-import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.gui.icon.SilkIcon;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
-import java.io.IOException;
+import com.speedment.internal.newgui.util.UILoader;
+import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -37,7 +34,7 @@ import javafx.scene.control.MenuItem;
  */
 public final class MenubarController implements Initializable {
     
-    private final Speedment speedment;
+    private final UISession session;
     
     private @FXML MenuItem mbNew;
     private @FXML MenuItem mbOpen;
@@ -48,8 +45,8 @@ public final class MenubarController implements Initializable {
     private @FXML MenuItem mbGitHub;
     private @FXML MenuItem mbAbout;
     
-    public MenubarController(Speedment speedment) {
-        this.speedment = speedment;
+    private MenubarController(UISession session) {
+        this.session = requireNonNull(session);
     }
 
     @Override
@@ -64,22 +61,19 @@ public final class MenubarController implements Initializable {
         mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
         mbAbout.setGraphic(SilkIcon.INFORMATION.view());
         
-        mbNew.setOnAction(ev -> {
-            
+        mbNew.setOnAction(session.newProject());
+        mbOpen.setOnAction(session.openProject());
+        mbSave.setOnAction(session.saveProject());
+        mbSaveAs.setOnAction(session.saveProjectAs());
+        mbQuit.setOnAction(session.quit());
+        mbGenerate.setOnAction(session.generate());
+        mbGitHub.setOnAction(session.showGithub());
+        mbAbout.setOnAction(ev -> {
+            AboutController.createAndShow(session);
         });
     }
     
-    public static Node create(Speedment speedment) {
-        requireNonNull(speedment);
-		final FXMLLoader loader = new FXMLLoader(MenubarController.class.getResource("/fxml/newgui/Menubar.fxml"));
-		final MenubarController control = new MenubarController(speedment);
-        loader.setController(control);
-
-        try {
-            final MenuBar loaded = (MenuBar) loader.load();
-            return loaded;
-        } catch (IOException ex) {
-            throw new SpeedmentException(ex);
-        }
+    public static Node create(UISession session) {
+        return UILoader.create(session, "Menubar", MenubarController::new);
 	}
 }

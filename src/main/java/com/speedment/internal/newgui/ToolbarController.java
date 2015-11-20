@@ -16,16 +16,20 @@
  */
 package com.speedment.internal.newgui;
 
-import com.speedment.Speedment;
-import com.speedment.exception.SpeedmentException;
-import java.io.IOException;
+import com.speedment.internal.gui.icon.SpeedmentIcon;
+import com.speedment.internal.newgui.util.UILoader;
+import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -33,28 +37,30 @@ import javafx.scene.layout.HBox;
  */
 public final class ToolbarController implements Initializable {
     
-    private final Speedment speedment;
+    private final UISession session;
     
-    public ToolbarController(Speedment speedment) {
-        this.speedment = speedment;
+    private @FXML Button buttonNew;
+    private @FXML Button buttonOpen;
+    private @FXML Button buttonGenerate;
+    private @FXML ImageView logo;
+    
+    private ToolbarController(UISession session) {
+        this.session = requireNonNull(session);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Do nothing.
+        buttonNew.setOnAction(session.newProject());
+        buttonOpen.setOnAction(session.openProject());
+        buttonGenerate.setOnAction(session.generate());
+
+        buttonNew.setGraphic(SpeedmentIcon.NEW_PROJECT_24.view());
+        buttonOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT_24.view());
+        buttonGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT_24.view());
+        logo.setOnMousePressed(session.showGithub());
     }
     
-    public static Node create(Speedment speedment) {
-        requireNonNull(speedment);
-		final FXMLLoader loader = new FXMLLoader(ToolbarController.class.getResource("/fxml/newgui/Toolbar.fxml"));
-		final ToolbarController control = new ToolbarController(speedment);
-        loader.setController(control);
-
-        try {
-            final Node loaded = loader.load();
-            return loaded;
-        } catch (IOException ex) {
-            throw new SpeedmentException(ex);
-        }
+    public static Node create(UISession session) {
+        return UILoader.create(session, "Toolbar", ToolbarController::new);
 	}
 }

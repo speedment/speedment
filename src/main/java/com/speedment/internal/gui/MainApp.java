@@ -22,6 +22,7 @@ import com.speedment.internal.gui.icon.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.newgui.SceneController;
+import com.speedment.internal.newgui.util.UISession;
 import com.speedment.internal.util.Statistics;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
@@ -110,15 +111,12 @@ public final class MainApp extends Application {
         }
         
         APP = this;
+        
+        final UISession session = new UISession(SPEEDMENT, APP, stage);
 
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         Statistics.onGuiStarted();
-        SceneController.createAndShow(stage, SPEEDMENT);
-    }
-
-    public static void showWebsite(String url) {
-        requireNonNull(url);
-        APP.getHostServices().showDocument(url);
+        SceneController.createAndShow(session);
     }
     
     /**

@@ -53,7 +53,7 @@
         <Pane prefHeight="200.0" HBox.hgrow="ALWAYS" />
         <ImageView fx:id="logo" fitHeight="48.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../images/logo.png" />
+                <Image url="@../../images/logo.png" />
             </image>
             <HBox.margin>
                 <Insets right="16.0" />
