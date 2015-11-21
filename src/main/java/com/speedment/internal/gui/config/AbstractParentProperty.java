@@ -27,9 +27,10 @@ import com.speedment.stream.MapStream;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -50,6 +51,12 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
     @Override
     public final ChildHolder<CHILD> getChildren() {
         throw new UnsupportedOperationException("This method should not be used.");
+    }
+    
+    public final CHILD prepare(CHILD child) {
+        child.setParent(this);
+        child.setName(child.getInterfaceMainClass().getSimpleName() + "_" + child.hashCode());
+        return child;
     }
 
     @Override
@@ -88,15 +95,15 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
         );
     }
     
-    protected <CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> ObservableMap<String, CHILD> copyChildrenFrom(THIS prototype, Class<CHILD> childType, BiFunction<Speedment, CHILD, CHILD> wrapper) {
-        return observableMap(MapStream
-            .fromValues(prototype.streamOf(childType), Node::getName)
-            .mapValue(child -> {
-                final CHILD newChild = wrapper.apply(getSpeedment(), child);
-                newChild.setParent(this);
-                return newChild;
-            })
-            .toConcurrentNavigableMap()
+    protected <CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> ObservableSet<CHILD> copyChildrenFrom(THIS prototype, Class<CHILD> childType, BiFunction<Speedment, CHILD, CHILD> wrapper) {
+        return observableSet(
+            prototype.streamOf(childType)
+                .map(child -> {
+                    final CHILD newChild = wrapper.apply(getSpeedment(), child);
+                    newChild.setParent(this);
+                    return newChild;
+                })
+                .collect(toSet())
         );
     }
 }

@@ -18,17 +18,20 @@ package com.speedment.internal.newgui.util;
 
 import com.speedment.Speedment;
 import com.speedment.internal.gui.config.ProjectProperty;
+import java.io.File;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import javafx.event.Event;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class UISession {
+    
+    public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
     private final Speedment speedment;
     private final Application application;

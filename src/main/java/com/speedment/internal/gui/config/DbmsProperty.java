@@ -26,6 +26,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -37,7 +38,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -45,7 +46,7 @@ import javafx.collections.ObservableMap;
  */
 public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> implements Dbms, ChildHelper<Dbms, Project> {
     
-    private final ObservableMap<String, Schema> schemaChildren;
+    private final ObservableSet<Schema> schemaChildren;
     private final StringProperty ipAddress;
     private final IntegerProperty port;
     private final StringProperty username;
@@ -57,7 +58,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     
     public DbmsProperty(Speedment speedment) {
         super(speedment);
-        schemaChildren = observableMap(new ConcurrentSkipListMap<>());
+        schemaChildren = observableMap(newSetFromMap(new ConcurrentSkipListMap<>()));
         ipAddress      = new SimpleStringProperty();
         port           = new SimpleIntegerProperty();
         username       = new SimpleStringProperty();
