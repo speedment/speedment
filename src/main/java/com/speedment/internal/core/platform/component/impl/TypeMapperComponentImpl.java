@@ -19,7 +19,6 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
-import com.speedment.internal.core.config.dbms.timestamp.TimestampToLongMapper;
 import com.speedment.internal.core.config.mapper.identity.ArrayIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BigDecimalIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BlobIdentityMapper;
@@ -41,6 +40,13 @@ import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.TimeIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.TimestampIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.URLIdentityMapper;
+import com.speedment.internal.core.config.mapper.string.StringToLocaleMapper;
+import com.speedment.internal.core.config.mapper.string.TrueFalseStringToBooleanMapper;
+import com.speedment.internal.core.config.mapper.string.YesNoStringToBooleanMapper;
+import com.speedment.internal.core.config.mapper.time.DateToLongMapper;
+import com.speedment.internal.core.config.mapper.time.TimeToLongMapper;
+import com.speedment.internal.core.config.mapper.time.TimestampToLongMapper;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -88,8 +94,15 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         install(TimestampIdentityMapper::new);
         install(URLIdentityMapper::new);
         
-        // Special timestamp mappers
+        // Special time mappers
+        install(DateToLongMapper::new);
         install(TimestampToLongMapper::new);
+        install(TimeToLongMapper::new);
+        
+        // Special string mappers
+        install(StringToLocaleMapper::new);
+        install(TrueFalseStringToBooleanMapper::new);
+        install(YesNoStringToBooleanMapper::new);
     }
 
     @Override

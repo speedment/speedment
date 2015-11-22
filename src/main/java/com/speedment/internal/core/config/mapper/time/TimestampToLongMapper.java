@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.dbms.timestamp;
+package com.speedment.internal.core.config.mapper.time;
 
 import com.speedment.config.mapper.TypeMapper;
 import java.sql.Timestamp;
