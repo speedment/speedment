@@ -95,7 +95,7 @@ public abstract class AbstractConfigEntity implements Node {
     public Stream<? extends Parent<?>> ancestors() {
         return asChild()
             .flatMap(c -> c.getParent())
-            .map(p -> (Parent<?>) p)
+            //.map(p -> (Parent<?>) p)
             .map(parent -> Trees.walkOptional(
                 parent, (Parent<?> p) -> p.asChild()
                 .flatMap(c -> c.getParent())
@@ -117,7 +117,7 @@ public abstract class AbstractConfigEntity implements Node {
     public <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> nameMapper) {
         Objects.requireNonNull(from);
         final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
-        final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
+        final List<Parent<?>> ancestors = ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
         for (final Parent<?> parent : ancestors) {
             if (from.isAssignableFrom(parent.getClass())) {

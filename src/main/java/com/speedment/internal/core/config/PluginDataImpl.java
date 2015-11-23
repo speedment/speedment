@@ -69,7 +69,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Child<PluginData>> getChildren() {
         throw new IllegalStateException(PluginData.class.getSimpleName() + " does not have a known child type at this point.");
     }
     

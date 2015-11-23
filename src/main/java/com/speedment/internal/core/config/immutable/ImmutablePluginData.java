@@ -41,20 +41,24 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     public ImmutablePluginData(Project parent, PluginData prototype) {
         super(requireNonNull(prototype).getName(), prototype.isExpanded(), prototype.isEnabled());
         requireNonNull(parent);
-        
+
         // Members
         this.speedment = parent.getSpeedment();
         this.parent    = Optional.of(parent);
-        
+
         // Children
         switch (prototype.count()) {
-            case 0 : 
-                this.children = (ChildHolder<Child<PluginData>>) ImmutableChildHolder.ofNone(); break;
-            case 1 : 
+            case 0: {
+                @SuppressWarnings("unchecked")
+                ChildHolder<Child<PluginData>> c = (ChildHolder<Child<PluginData>>) ImmutableChildHolder.ofNone();
+                this.children = c;
+                break;
+            }
+            case 1:
                 final Child<PluginData> child = prototype.stream().findAny().get();
                 this.children = ImmutableChildHolder.of(child);
                 break;
-            default :
+            default:
                 throw new SpeedmentException(getClass().getSimpleName() + " should only contain one child node.");
         }
     }
@@ -70,7 +74,7 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Child<PluginData>> getChildren() {
         return children;
     }
 

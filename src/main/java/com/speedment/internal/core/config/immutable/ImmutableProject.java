@@ -59,29 +59,38 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
 
     public ImmutableProject(ProjectManager parent, Project project) {
         super(requireNonNull(project).getName(), project.isExpanded(), project.isEnabled());
-        
+
         // Menbers
         this.speedment = project.getSpeedment();
         this.packageName = project.getPackageName();
         this.packageLocation = project.getPackageLocation();
         this.configPath = project.getConfigPath();
         this.parent = Optional.ofNullable(parent);
-        
+
         // Children
-        dbmsChildren = (ChildHolder<Dbms>) (ChildHolder) childHolderOf(
-            (Class<Child<Project>>) (Class) Dbms.class, 
-            project.streamOf(Dbms.class).map(p -> new ImmutableDbms(this, p)));
-        
-        pluginDataChildren = (ChildHolder<PluginData>) (ChildHolder) childHolderOf(
-            (Class<Child<Project>>) (Class) PluginData.class, 
-            project.streamOf(PluginData.class).map(p -> new ImmutablePluginData(this, p)));
-        
+        @SuppressWarnings("unchecked")
+        final Class<Child<Project>> dbmsClass = (Class<Child<Project>>) (Class) Dbms.class;
+        @SuppressWarnings("unchecked")
+        final ChildHolder<Dbms> dbmsCh = (ChildHolder<Dbms>) (ChildHolder) childHolderOf(
+                dbmsClass,
+                project.streamOf(Dbms.class).map(p -> new ImmutableDbms(this, p)));
+        dbmsChildren = dbmsCh;
+
+        @SuppressWarnings("unchecked")
+        final Class<Child<Project>> pluginClass = (Class<Child<Project>>) (Class) PluginData.class;
+        @SuppressWarnings("unchecked")
+        final ChildHolder<PluginData> pluginDataCh = (ChildHolder<PluginData>) (ChildHolder) childHolderOf(
+                pluginClass,
+                project.streamOf(PluginData.class).map(p -> new ImmutablePluginData(this, p)));
+
+        pluginDataChildren = pluginDataCh;
+
         // Special
         this.tableNameMap = new HashMap<>();
         traverseOver(Table.class).forEach(t -> {
             tableNameMap.put(t.getRelativeName(Dbms.class), t);
         });
-        
+
         // resolve all dependencies that needs to be done post tree construction
         traverse().forEach(node -> {
             if (node instanceof ImmutableAbstractConfigEntity) {
@@ -139,13 +148,13 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     public Speedment getSpeedment() {
         return speedment;
     }
-    
+
     @Override
     public Stream<? extends Child<Project>> stream() {
         return Stream.of(dbmsChildren, pluginDataChildren)
-            .flatMap(ChildHolder::stream);
+                .flatMap(ChildHolder::stream);
     }
-    
+
     @Override
     public <T extends Child<Project>> Stream<T> streamOf(Class<T> childClass) {
         if (Dbms.class.equals(childClass)) {
@@ -158,13 +167,13 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
             return result;
         } else {
             throw new SpeedmentException(
-                "'" + childClass.getName() + 
-                "' is not a child to '" + 
-                getClass().getSimpleName() + "'."
+                    "'" + childClass.getName()
+                    + "' is not a child to '"
+                    + getClass().getSimpleName() + "'."
             );
         }
     }
-    
+
     @Override
     public <T extends Child<Project>> T find(Class<T> childClass, String name) throws SpeedmentException {
         if (Dbms.class.equals(childClass)) {
@@ -175,9 +184,11 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
             @SuppressWarnings("unchecked")
             final T result = (T) pluginDataChildren.find(name);
             return result;
-        } else throw thereIsNo(childClass, this.getClass(), name).get();
+        } else {
+            throw thereIsNo(childClass, this.getClass(), name).get();
+        }
     }
-    
+
     @Override
     public Table findTableByName(String fullName) {
         final Table table = tableNameMap.get(fullName);
@@ -191,7 +202,7 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     public Dbms dbms(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public PluginData pluginData(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
