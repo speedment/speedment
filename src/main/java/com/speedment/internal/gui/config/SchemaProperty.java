@@ -28,6 +28,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -38,8 +39,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -47,7 +48,7 @@ import javafx.collections.ObservableMap;
  */
 public final class SchemaProperty extends AbstractParentProperty<Schema, Table> implements Schema, ChildHelper<Schema, Dbms> {
     
-    private final ObservableMap<String, Table> tableChildren;
+    private final ObservableSet<Table> tableChildren;
     private final StringProperty schemaName;
     private final StringProperty catalogName;
     private final BooleanProperty defaultSchema;
@@ -59,7 +60,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     
     public SchemaProperty(Speedment speedment) {
         super(speedment);
-        tableChildren         = observableMap(new ConcurrentSkipListMap<>());
+        tableChildren         = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
         schemaName            = new SimpleStringProperty();
         catalogName           = new SimpleStringProperty();
         defaultSchema         = new SimpleBooleanProperty();
@@ -192,12 +193,13 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     
     @Override
     public Optional<Table> add(Table child) throws IllegalStateException {
-        return Optional.ofNullable(tableChildren.put(child.getName(), child));
+        requireNonNull(child);
+        return tableChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<Table> stream() {
-        return MapStream.of(tableChildren).values();
+        return tableChildren.stream();
     }
 
     @Override
@@ -205,7 +207,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         requireNonNull(childType);
         
         if (Table.class.isAssignableFrom(childType)) {
-            return (Stream<T>) tableChildren.values().stream();
+            return (Stream<T>) tableChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -230,17 +232,11 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
         if (Table.class.isAssignableFrom(childType)) {
-            node = (T) tableChildren.get(name);
+            return (T) tableChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }

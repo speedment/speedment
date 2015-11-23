@@ -25,12 +25,13 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
-import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -38,13 +39,13 @@ import javafx.collections.ObservableMap;
  */
 public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey, ForeignKeyColumn> implements ForeignKey, ChildHelper<ForeignKey, Table> {
     
-    private final ObservableMap<String, ForeignKeyColumn> foreignKeyColumnChildren;
+    private final ObservableSet<ForeignKeyColumn> foreignKeyColumnChildren;
     
     private Table parent;
     
     public ForeignKeyProperty(Speedment speedment) {
         super(speedment);
-        foreignKeyColumnChildren = observableMap(new ConcurrentSkipListMap<>());
+        foreignKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
     }
     
     public ForeignKeyProperty(Speedment speedment, ForeignKey prototype) {
@@ -81,12 +82,12 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     
     @Override
     public Optional<ForeignKeyColumn> add(ForeignKeyColumn child) throws IllegalStateException {
-        return Optional.ofNullable(foreignKeyColumnChildren.put(child.getName(), child));
+        return foreignKeyColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<ForeignKeyColumn> stream() {
-        return MapStream.of(foreignKeyColumnChildren).values();
+        return foreignKeyColumnChildren.stream();
     }
 
     @Override
@@ -94,7 +95,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
         requireNonNull(childType);
         
         if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) foreignKeyColumnChildren.values().stream();
+            return (Stream<T>) foreignKeyColumnChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -119,17 +120,11 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
         if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            node = (T) foreignKeyColumnChildren.get(name);
+            return (T) foreignKeyColumnChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }

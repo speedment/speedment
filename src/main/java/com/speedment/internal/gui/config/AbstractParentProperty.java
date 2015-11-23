@@ -23,13 +23,12 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.ChildHolder;
 import com.speedment.internal.util.Trees;
 import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
-import com.speedment.stream.MapStream;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableSet;
 
 /**
@@ -78,7 +77,7 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
             .filter(t -> childType.isAssignableFrom(t.getClass()))
             .map(t -> (T) t);
     }
-    
+
     protected IllegalArgumentException wrongChildTypeException(Class<?> childType) {
         return new IllegalArgumentException(
             getClass().getSimpleName() + 

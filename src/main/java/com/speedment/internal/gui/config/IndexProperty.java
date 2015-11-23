@@ -23,16 +23,16 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -40,14 +40,14 @@ import javafx.collections.ObservableMap;
  */
 public final class IndexProperty extends AbstractParentProperty<Index, IndexColumn> implements Index, ChildHelper<Index, Table> {
     
-    private final ObservableMap<String, IndexColumn> indexColumnChildren;
+    private final ObservableSet<IndexColumn> indexColumnChildren;
     private final BooleanProperty unique;
     
     private Table parent;
     
     public IndexProperty(Speedment speedment) {
         super(speedment);
-        indexColumnChildren = observableMap(new ConcurrentSkipListMap<>());
+        indexColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
         unique              = new SimpleBooleanProperty();
     }
     
@@ -100,12 +100,13 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     
     @Override
     public Optional<IndexColumn> add(IndexColumn child) throws IllegalStateException {
-        return Optional.ofNullable(indexColumnChildren.put(child.getName(), child));
+        requireNonNull(child);
+        return indexColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<IndexColumn> stream() {
-        return MapStream.of(indexColumnChildren).values();
+        return indexColumnChildren.stream();
     }
 
     @Override
@@ -113,7 +114,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
         requireNonNull(childType);
         
         if (IndexColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) indexColumnChildren.values().stream();
+            return (Stream<T>) indexColumnChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -138,17 +139,11 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
         if (IndexColumn.class.isAssignableFrom(childType)) {
-            node = (T) indexColumnChildren.get(name);
+            return (T) indexColumnChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }

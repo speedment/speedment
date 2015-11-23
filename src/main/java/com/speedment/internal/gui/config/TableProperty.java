@@ -32,6 +32,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -40,8 +41,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -49,10 +50,10 @@ import javafx.collections.ObservableMap;
  */
 public final class TableProperty extends AbstractParentProperty<Table, Child<Table>> implements Table, ChildHelper<Table, Schema> {
     
-    private final ObservableMap<String, Column> columnChildren;
-    private final ObservableMap<String, PrimaryKeyColumn> primaryKeyColumnChildren;
-    private final ObservableMap<String, Index> indexChildren;
-    private final ObservableMap<String, ForeignKey> foreignKeyChildren;
+    private final ObservableSet<Column> columnChildren;
+    private final ObservableSet<PrimaryKeyColumn> primaryKeyColumnChildren;
+    private final ObservableSet<Index> indexChildren;
+    private final ObservableSet<ForeignKey> foreignKeyChildren;
     private final Property<FieldStorageType> fieldStorageType;
     private final Property<ColumnCompressionType> columnCompressionType;
     private final Property<StorageEngineType> storageEngineType;
@@ -62,10 +63,10 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     
     public TableProperty(Speedment speedment) {
         super(speedment);
-        columnChildren           = observableMap(new ConcurrentSkipListMap<>());
-        primaryKeyColumnChildren = observableMap(new ConcurrentSkipListMap<>());
-        indexChildren            = observableMap(new ConcurrentSkipListMap<>());
-        foreignKeyChildren       = observableMap(new ConcurrentSkipListMap<>());
+        columnChildren           = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        primaryKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        indexChildren            = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        foreignKeyChildren       = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
         fieldStorageType         = new SimpleObjectProperty<>();
         columnCompressionType    = new SimpleObjectProperty<>();
         storageEngineType        = new SimpleObjectProperty<>();
@@ -223,33 +224,33 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     
     public Optional<Column> addColumn(Column child) {
         requireNonNull(child);
-        return Optional.ofNullable(columnChildren.put(child.getName(), child));
+        return columnChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     public Optional<PrimaryKeyColumn> addPrimaryKeyColumn(PrimaryKeyColumn child) {
         requireNonNull(child);
-        return Optional.ofNullable(primaryKeyColumnChildren.put(child.getName(), child));
+        return primaryKeyColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     public Optional<Index> addIndex(Index child) {
         requireNonNull(child);
-        return Optional.ofNullable(indexChildren.put(child.getName(), child));
+        return indexChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     public Optional<ForeignKey> addForeignKey(ForeignKey child) {
         requireNonNull(child);
-        return Optional.ofNullable(foreignKeyChildren.put(child.getName(), child));
+        return foreignKeyChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<? extends Child<Table>> stream() {
         return Stream.concat(
             Stream.concat(
-                MapStream.of(columnChildren).values(),
-                MapStream.of(primaryKeyColumnChildren).values()
+                columnChildren.stream(),
+                primaryKeyColumnChildren.stream()
             ), Stream.concat(
-                MapStream.of(indexChildren).values(),
-                MapStream.of(foreignKeyChildren).values()
+                indexChildren.stream(),
+                foreignKeyChildren.stream()
             )
         );
     }
@@ -260,13 +261,13 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         requireNonNull(childType);
         
         if (Column.class.isAssignableFrom(childType)) {
-            return (Stream<T>) columnChildren.values().stream();
+            return (Stream<T>) columnChildren.stream();
         } else if (PrimaryKeyColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) primaryKeyColumnChildren.values().stream();
+            return (Stream<T>) primaryKeyColumnChildren.stream();
         } else if (Index.class.isAssignableFrom(childType)) {
-            return (Stream<T>) indexChildren.values().stream();
+            return (Stream<T>) indexChildren.stream();
         } else if (ForeignKey.class.isAssignableFrom(childType)) {
-            return (Stream<T>) foreignKeyChildren.values().stream();
+            return (Stream<T>) foreignKeyChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -304,21 +305,19 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         
         final T node;
         if (Column.class.isAssignableFrom(childType)) {
-            node = (T) columnChildren.get(name);
+            return (T) columnChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else if (PrimaryKeyColumn.class.isAssignableFrom(childType)) {
-            node = (T) primaryKeyColumnChildren.get(name);
+            return (T) primaryKeyColumnChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else if (Index.class.isAssignableFrom(childType)) {
-            node = (T) indexChildren.get(name);
+            return (T) indexChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else if (ForeignKey.class.isAssignableFrom(childType)) {
-            node = (T) foreignKeyChildren.get(name);
+            return (T) foreignKeyChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }

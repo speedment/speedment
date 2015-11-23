@@ -37,7 +37,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableSet;
 
 /**
@@ -58,7 +58,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     
     public DbmsProperty(Speedment speedment) {
         super(speedment);
-        schemaChildren = observableMap(newSetFromMap(new ConcurrentSkipListMap<>()));
+        schemaChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
         ipAddress      = new SimpleStringProperty();
         port           = new SimpleIntegerProperty();
         username       = new SimpleStringProperty();
@@ -191,12 +191,12 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     
     @Override
     public Optional<Schema> add(Schema child) throws IllegalStateException {
-        return Optional.ofNullable(schemaChildren.put(child.getName(), child));
+        return schemaChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<Schema> stream() {
-        return MapStream.of(schemaChildren).values();
+        return schemaChildren.stream();
     }
 
     @Override
@@ -204,7 +204,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         requireNonNull(childType);
         
         if (Schema.class.isAssignableFrom(childType)) {
-            return (Stream<T>) schemaChildren.values().stream();
+            return (Stream<T>) schemaChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -229,17 +229,11 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
         if (Schema.class.isAssignableFrom(childType)) {
-            node = (T) schemaChildren.get(name);
+            return (T) schemaChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }

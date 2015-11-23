@@ -26,9 +26,10 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
 import java.nio.file.Path;
+import static java.util.Collections.newSetFromMap;
+import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -36,8 +37,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableMap;
-import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -45,8 +46,8 @@ import javafx.collections.ObservableMap;
  */
 public final class ProjectProperty extends AbstractParentProperty<Project, Child<Project>> implements Project, ChildHelper<Project, ProjectManager> {
     
-    private final ObservableMap<String, Dbms> dbmsChildren;
-    private final ObservableMap<String, PluginData> pluginDataChildren;
+    private final ObservableSet<Dbms> dbmsChildren;
+    private final ObservableSet<PluginData> pluginDataChildren;
     private final StringProperty packageName;
     private final StringProperty packageLocation;
     
@@ -55,8 +56,8 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     
     public ProjectProperty(Speedment speedment) {
         super(speedment);
-        dbmsChildren       = observableMap(new ConcurrentSkipListMap<>());
-        pluginDataChildren = observableMap(new ConcurrentSkipListMap<>());
+        dbmsChildren       = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        pluginDataChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
         packageName        = new SimpleStringProperty();
         packageLocation    = new SimpleStringProperty();
     }
@@ -192,19 +193,19 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     
     public Optional<Dbms> addDbms(Dbms child) {
         requireNonNull(child);
-        return Optional.ofNullable(dbmsChildren.put(child.getName(), child));
+        return dbmsChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     public Optional<PluginData> addPluginData(PluginData child) {
         requireNonNull(child);
-        return Optional.ofNullable(pluginDataChildren.put(child.getName(), child));
+        return pluginDataChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
 
     @Override
     public Stream<? extends Child<Project>> stream() {
         return Stream.concat(
-            MapStream.of(dbmsChildren).values(),
-            MapStream.of(pluginDataChildren).values()
+            dbmsChildren.stream().sorted(comparing(Dbms::getName)),
+            pluginDataChildren.stream().sorted(comparing(PluginData::getName))
         );
     }
 
@@ -214,9 +215,9 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         requireNonNull(childType);
         
         if (Dbms.class.isAssignableFrom(childType)) {
-            return (Stream<T>) dbmsChildren.values().stream();
+            return (Stream<T>) dbmsChildren.stream();
         } else if (PluginData.class.isAssignableFrom(childType)) {
-            return (Stream<T>) pluginDataChildren.values().stream();
+            return (Stream<T>) pluginDataChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
@@ -245,19 +246,14 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
         if (Dbms.class.isAssignableFrom(childType)) {
-            node = (T) dbmsChildren.get(name);
+            return (T) dbmsChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else if (PluginData.class.isAssignableFrom(childType)) {
-            node = (T) pluginDataChildren.get(name);
+            return (T) pluginDataChildren.stream().filter(child -> name.equals(child.getName()))
+                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         } else {
             throw wrongChildTypeException(childType);
-        }
-        
-        if (node != null) {
-            return node;
-        } else {
-            throw noChildWithNameException(childType, name);
         }
     }
 }
