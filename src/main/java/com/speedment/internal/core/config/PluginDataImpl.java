@@ -102,6 +102,7 @@ public final class PluginDataImpl extends AbstractNamedNode implements PluginDat
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<Child<PluginData>> add(Child<PluginData> child) {
         final ChildHolder<Child<PluginData>> holder = children.computeIfAbsent(
             child.getInterfaceMainClass(),

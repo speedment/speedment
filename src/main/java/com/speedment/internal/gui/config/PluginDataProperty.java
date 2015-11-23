@@ -17,22 +17,23 @@
 package com.speedment.internal.gui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Node;
 import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
+import static java.util.Collections.newSetFromMap;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
-import javafx.collections.ObservableMap;
 
 import static java.util.Objects.requireNonNull;
-import static javafx.collections.FXCollections.observableMap;
+import java.util.concurrent.ConcurrentHashMap;
+import static java.util.stream.Collectors.toCollection;
+import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -40,26 +41,26 @@ import static javafx.collections.FXCollections.observableMap;
  */
 public final class PluginDataProperty extends AbstractParentProperty<PluginData, Child<PluginData>> implements PluginData, ChildHelper<PluginData, Project> {
     
-    private final ObservableMap<String, Child<PluginData>> children;
+    private final ObservableSet<Child<PluginData>> children;
     
     private Project parent;
 
     public PluginDataProperty(Speedment speedment) {
         super(speedment);
-        children = observableMap(new ConcurrentSkipListMap<>());
+        children = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
     }
 
     public PluginDataProperty(Speedment speedment, PluginData prototype) {
         super(speedment, prototype);
-        children = observableMap(MapStream
-            .fromValues(prototype.stream()
+        children = observableSet(
+            prototype.stream()
                 .map(child -> {
                     @SuppressWarnings("unchecked")
                     final Child<PluginData> newChild = (Child<PluginData>) child;
                     newChild.setParent(this);
                     return newChild;
                 })
-            , Node::getName).toConcurrentNavigableMap()
+                .collect(toCollection(() -> newSetFromMap(new ConcurrentHashMap<>())))
         );
     }
     
@@ -92,21 +93,20 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
                 ))
                 .newChildToPluginData(c, this);
             
-            children.put(child.getName(), child);
+            children.add(child);
             return child;
         });
     }
     
     @Override
     public Optional<? extends Child<PluginData>> add(Child<PluginData> child) {
-        return Optional.ofNullable(
-            children.put(child.getName(), child)
-        );
+        requireNonNull(child);
+        return children.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     @Override
     public Stream<? extends Child<PluginData>> stream() {
-        return MapStream.of(children).values();
+        return children.stream();
     }
 
     @Override
@@ -128,22 +128,19 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
     }
     
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends Child<PluginData>> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);
         
-        final Child<PluginData> child = children.get(name);
-        if (child != null) {
-            if (child.getInterfaceMainClass().isAssignableFrom(childType)) {
-                @SuppressWarnings("unchecked")
-                final T node = (T) child;
-                return node;
-            } else {
-                throw wrongChildTypeException(childType);
-            }
+        final Child<PluginData> child = children.stream().filter(c -> name.equals(c.getName()))
+            .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+
+        if (child.getInterfaceMainClass().isAssignableFrom(childType)) {
+            @SuppressWarnings("unchecked")
+            final T node = (T) child;
+            return node;
         } else {
-            throw noChildWithNameException(childType, name);
+            throw wrongChildTypeException(childType);
         }
     }
 }
