@@ -32,7 +32,7 @@ import static java.util.Collections.newSetFromMap;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,8 +56,8 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     
     public ProjectProperty(Speedment speedment) {
         super(speedment);
-        dbmsChildren       = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
-        pluginDataChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        dbmsChildren       = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
+        pluginDataChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         packageName        = new SimpleStringProperty();
         packageLocation    = new SimpleStringProperty();
     }

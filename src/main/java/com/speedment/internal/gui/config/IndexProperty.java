@@ -27,7 +27,7 @@ import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,14 +47,15 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     
     public IndexProperty(Speedment speedment) {
         super(speedment);
-        indexColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        indexColumnChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         unique              = new SimpleBooleanProperty();
     }
     
-    public IndexProperty(Speedment speedment, Index prototype) {
+    public IndexProperty(Speedment speedment, Table parent, Index prototype) {
         super(speedment, prototype);
         indexColumnChildren = copyChildrenFrom(prototype, IndexColumn.class, IndexColumnProperty::new);
         unique              = new SimpleBooleanProperty(prototype.isUnique());
+        this.parent = parent;
     }
     
     @Override

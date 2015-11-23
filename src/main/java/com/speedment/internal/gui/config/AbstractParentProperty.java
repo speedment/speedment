@@ -23,10 +23,13 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.ChildHolder;
 import com.speedment.internal.util.Trees;
 import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableSet;
@@ -94,15 +97,20 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
         );
     }
     
-    protected <CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> ObservableSet<CHILD> copyChildrenFrom(THIS prototype, Class<CHILD> childType, BiFunction<Speedment, CHILD, CHILD> wrapper) {
+    protected <CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> ObservableSet<CHILD> copyChildrenFrom(THIS prototype, Class<CHILD> childType, CopyConstructor<CHILD, THIS> wrapper) {
         return observableSet(
             prototype.streamOf(childType)
                 .map(child -> {
-                    final CHILD newChild = wrapper.apply(getSpeedment(), child);
+                    final CHILD newChild = wrapper.create(getSpeedment(), (THIS) this, child);
                     newChild.setParent(this);
                     return newChild;
                 })
-                .collect(toSet())
+                .collect(toCollection(() -> newSetFromMap(new ConcurrentHashMap<>())))
         );
+    }
+    
+    @FunctionalInterface
+    protected interface CopyConstructor<CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> {
+        CHILD create(Speedment speedment, THIS parent, CHILD prototype);
     }
 }

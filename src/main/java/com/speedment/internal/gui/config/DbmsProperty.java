@@ -24,19 +24,18 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableSet;
 
@@ -51,31 +50,40 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     private final IntegerProperty port;
     private final StringProperty username;
     private final StringProperty password;
-    private final Property<DbmsType> dbmsType;
     private final StringProperty typeName;
+    private final ObservableValue<DbmsType> dbmsType;
     
     private Project parent;
     
     public DbmsProperty(Speedment speedment) {
         super(speedment);
-        schemaChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        schemaChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         ipAddress      = new SimpleStringProperty();
         port           = new SimpleIntegerProperty();
         username       = new SimpleStringProperty();
         password       = new SimpleStringProperty();
-        dbmsType       = new SimpleObjectProperty<>();
         typeName       = new SimpleStringProperty();
+        dbmsType       = bindDbmsType();
     }
     
-    public DbmsProperty(Speedment speedment, Dbms prototype) {
+    public DbmsProperty(Speedment speedment, Project parent, Dbms prototype) {
         super(speedment, prototype);
         schemaChildren = copyChildrenFrom(prototype, Schema.class, SchemaProperty::new);
         ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse(null));
         port           = new SimpleIntegerProperty(prototype.getPort().orElse(0));
         username       = new SimpleStringProperty(prototype.getUsername().orElse(null));
         password       = new SimpleStringProperty(prototype.getPassword().orElse(null));
-        dbmsType       = new SimpleObjectProperty<>(prototype.getType());
         typeName       = new SimpleStringProperty(prototype.getTypeName());
+        dbmsType       = bindDbmsType();
+        
+        this.parent = parent;
+    }
+    
+    private ObservableValue<DbmsType> bindDbmsType() {
+        return Bindings.createObjectBinding(() -> 
+            getSpeedment().getDbmsHandlerComponent().findByName(typeName.getValue()).orElse(null),
+            typeName
+        );
     }
     
     @Override
@@ -156,10 +164,10 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
 
     @Override
     public void setType(DbmsType dbmsType) {
-        this.dbmsType.setValue(dbmsType);
+        this.typeName.setValue(dbmsType.getName());
     }
     
-    public Property<DbmsType> typeProperty() {
+    public ObservableValue<DbmsType> typeProperty() {
         return dbmsType;
     }
 

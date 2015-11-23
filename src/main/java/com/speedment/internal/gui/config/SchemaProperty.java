@@ -26,12 +26,11 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
@@ -60,7 +59,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     
     public SchemaProperty(Speedment speedment) {
         super(speedment);
-        tableChildren         = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        tableChildren         = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         schemaName            = new SimpleStringProperty();
         catalogName           = new SimpleStringProperty();
         defaultSchema         = new SimpleBooleanProperty();
@@ -69,15 +68,16 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         storageEngineType     = new SimpleObjectProperty<>();
     }
     
-    public SchemaProperty(Speedment speedment, Schema prototype) {
+    public SchemaProperty(Speedment speedment, Dbms parent, Schema prototype) {
         super(speedment, prototype);
-        tableChildren         = copyChildrenFrom(prototype, Table.class, TableProperty::new);
-        schemaName            = new SimpleStringProperty(prototype.getSchemaName().orElse(null));
-        catalogName           = new SimpleStringProperty(prototype.getCatalogName().orElse(null));
-        defaultSchema         = new SimpleBooleanProperty(prototype.isDefaultSchema());
-        fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
-        columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
-        storageEngineType     = new SimpleObjectProperty<>(prototype.getStorageEngineType());
+        this.tableChildren         = copyChildrenFrom(prototype, Table.class, TableProperty::new);
+        this.schemaName            = new SimpleStringProperty(prototype.getSchemaName().orElse(null));
+        this.catalogName           = new SimpleStringProperty(prototype.getCatalogName().orElse(null));
+        this.defaultSchema         = new SimpleBooleanProperty(prototype.isDefaultSchema());
+        this.fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
+        this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
+        this.storageEngineType     = new SimpleObjectProperty<>(prototype.getStorageEngineType());
+        this.parent                = parent;
     }
     
     @Override
@@ -93,6 +93,10 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    public ObservableSet<Table> tableChildren() {
+        return tableChildren;
     }
 
     @Override

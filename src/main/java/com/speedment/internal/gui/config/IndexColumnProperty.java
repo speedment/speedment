@@ -44,10 +44,11 @@ public final class IndexColumnProperty extends AbstractNodeProperty implements I
         orderType = new SimpleObjectProperty<>();
     }
     
-    public IndexColumnProperty(Speedment speedment, IndexColumn prototype) {
+    public IndexColumnProperty(Speedment speedment, Index parent, IndexColumn prototype) {
         super(speedment, prototype);
         orderType       = new SimpleObjectProperty<>(prototype.getOrderType());
         ordinalPosition = prototype.getOrdinalPosition();
+        this.parent = parent;
     }
     
     @Override

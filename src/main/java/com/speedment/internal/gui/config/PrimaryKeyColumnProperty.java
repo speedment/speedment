@@ -37,9 +37,10 @@ public final class PrimaryKeyColumnProperty extends AbstractNodeProperty impleme
         super(speedment);
     }
     
-    public PrimaryKeyColumnProperty(Speedment speedment, PrimaryKeyColumn prototype) {
+    public PrimaryKeyColumnProperty(Speedment speedment, Table parent, PrimaryKeyColumn prototype) {
         super(speedment, prototype);
         ordinalPosition = prototype.getOrdinalPosition();
+        this.parent = parent;
     }
     
     @Override

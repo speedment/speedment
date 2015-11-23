@@ -19,7 +19,6 @@ package com.speedment.internal.newgui;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
@@ -28,13 +27,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

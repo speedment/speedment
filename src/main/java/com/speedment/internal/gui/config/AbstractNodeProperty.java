@@ -18,11 +18,13 @@ package com.speedment.internal.gui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.Node;
+import com.speedment.config.aspects.Parent;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  *
@@ -95,7 +97,7 @@ public abstract class AbstractNodeProperty implements Node {
     public final BooleanProperty expandedProperty() {
         return expanded;
     }
-    
+
     @Override
     public final boolean isImmutable() {
         return false;

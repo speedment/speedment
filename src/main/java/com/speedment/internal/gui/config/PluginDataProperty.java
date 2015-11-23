@@ -26,7 +26,6 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -47,10 +46,10 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
 
     public PluginDataProperty(Speedment speedment) {
         super(speedment);
-        children = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        children = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
     }
 
-    public PluginDataProperty(Speedment speedment, PluginData prototype) {
+    public PluginDataProperty(Speedment speedment, Project parent, PluginData prototype) {
         super(speedment, prototype);
         children = observableSet(
             prototype.stream()
@@ -62,6 +61,8 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
                 })
                 .collect(toCollection(() -> newSetFromMap(new ConcurrentHashMap<>())))
         );
+        
+        this.parent = parent;
     }
     
     @Override
@@ -91,7 +92,7 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
                 .orElseThrow(() -> new SpeedmentException(
                     "Could not find plugin '" + name + "'."
                 ))
-                .newChildToPluginData(c, this);
+                .newChildToPluginData(getSpeedment(), c, this);
             
             children.add(child);
             return child;

@@ -30,12 +30,11 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -63,17 +62,17 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     
     public TableProperty(Speedment speedment) {
         super(speedment);
-        columnChildren           = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
-        primaryKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
-        indexChildren            = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
-        foreignKeyChildren       = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        columnChildren           = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
+        primaryKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
+        indexChildren            = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
+        foreignKeyChildren       = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         fieldStorageType         = new SimpleObjectProperty<>();
         columnCompressionType    = new SimpleObjectProperty<>();
         storageEngineType        = new SimpleObjectProperty<>();
         tableName                = new SimpleStringProperty();
     }
     
-    public TableProperty(Speedment speedment, Table prototype) {
+    public TableProperty(Speedment speedment, Schema parent, Table prototype) {
         super(speedment, prototype);
         columnChildren           = copyChildrenFrom(prototype, Column.class, ColumnProperty::new);
         primaryKeyColumnChildren = copyChildrenFrom(prototype, PrimaryKeyColumn.class, PrimaryKeyColumnProperty::new);
@@ -83,6 +82,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         columnCompressionType    = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         storageEngineType        = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         tableName                = new SimpleStringProperty(prototype.getTableName().orElse(null));
+        this.parent = parent;
     }
 
     @Override
@@ -98,6 +98,22 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    public ObservableSet<Column> columnChildren() {
+        return columnChildren;
+    }
+    
+    public ObservableSet<PrimaryKeyColumn> primaryKeyColumnChildren() {
+        return primaryKeyColumnChildren;
+    }
+    
+    public ObservableSet<Index> indexChildren() {
+        return indexChildren;
+    }
+    
+    public ObservableSet<ForeignKey> foreignKeyChildren() {
+        return foreignKeyChildren;
     }
 
     @Override

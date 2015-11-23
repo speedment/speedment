@@ -25,9 +25,9 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 
 /**
  *
@@ -37,46 +37,22 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
     
     private final StringProperty foreignColumnName;
     private final StringProperty foreignTableName;
-    private final ObservableValue<Table> foreignTable;
-    private final ObservableValue<Column> foreignColumn;
     
-    private ForeignKey parent;
     private int ordinalPosition;
+    private ForeignKey parent;
     
     public ForeignKeyColumnProperty(Speedment speedment) {
         super(speedment);
         foreignColumnName = new SimpleStringProperty();
         foreignTableName  = new SimpleStringProperty();
-        foreignTable      = bindForeignTable();
-        foreignColumn     = bindForeignColumn();
     }
     
-    public ForeignKeyColumnProperty(Speedment speedment, ForeignKeyColumn prototype) {
+    public ForeignKeyColumnProperty(Speedment speedment, ForeignKey parent, ForeignKeyColumn prototype) {
         super(speedment, prototype);
-        foreignColumnName = new SimpleStringProperty(prototype.getForeignColumnName());
-        foreignTableName  = new SimpleStringProperty(prototype.getForeignTableName());
-        foreignTable      = bindForeignTable();
-        foreignColumn     = bindForeignColumn();
-        ordinalPosition   = prototype.getOrdinalPosition();
-    }
-    
-    private ObservableValue<Table> bindForeignTable() {
-        return Bindings.createObjectBinding(() -> 
-            getParent()
-                .flatMap(ForeignKey::getParent)
-                .flatMap(Table::getParent)
-                .map(schema -> schema.find(Table.class, foreignTableName.getValue()))
-                .orElse(null)
-            , foreignTableName
-        );
-    }
-    
-    private ObservableValue<Column> bindForeignColumn() {
-        return Bindings.createObjectBinding(() -> 
-            foreignTable.getValue().findColumn(foreignColumnName.getValue()),
-            foreignTable,
-            foreignColumnName
-        );
+        this.foreignColumnName = new SimpleStringProperty(prototype.getForeignColumnName());
+        this.foreignTableName  = new SimpleStringProperty(prototype.getForeignTableName());
+        this.ordinalPosition   = prototype.getOrdinalPosition();
+        this.parent            = parent;
     }
     
     @Override
@@ -87,8 +63,8 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
     @Override
     @SuppressWarnings("unchecked")
     public void setParent(Parent<?> parent) {
-        if (parent instanceof ForeignKey) {
-            this.parent = (ForeignKey) parent;
+        if (parent instanceof ForeignKeyProperty) {
+            this.parent = (ForeignKeyProperty) parent;
         } else {
             throw wrongParentClass(parent.getClass());
         }
@@ -110,11 +86,15 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
     
     @Override
     public Column getForeignColumn() {
-        return foreignColumn.getValue();
+        return foreignColumnProperty().getValue();
     }
     
-    public ObservableValue<Column> foreignColumnProperty() {
-        return foreignColumn;
+    public ObjectBinding<Column> foreignColumnProperty() {
+        return Bindings.createObjectBinding(() -> 
+            getForeignTable().findColumn(foreignColumnName.getValue()),
+            foreignTableName,
+            foreignColumnName
+        );
     }
     
     @Override
@@ -133,11 +113,18 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
     
     @Override
     public Table getForeignTable() {
-        return foreignTable.getValue();
+        return foreignTableProperty().getValue();
     }
     
-    public ObservableValue<Table> foreignTableProperty() {
-        return foreignTable;
+    public ObjectBinding<Table> foreignTableProperty() {
+        return Bindings.createObjectBinding(() -> 
+            getParent()
+                .flatMap(ForeignKey::getParent)
+                .flatMap(Table::getParent)
+                .map(schema -> schema.find(Table.class, foreignTableName.getValue()))
+                .orElse(null),
+            foreignTableName
+        );
     }
 
     @Override

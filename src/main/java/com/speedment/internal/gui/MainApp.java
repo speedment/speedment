@@ -21,6 +21,7 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.internal.newgui.ConnectController;
 import com.speedment.internal.newgui.SceneController;
 import com.speedment.internal.newgui.util.UISession;
 import com.speedment.internal.util.Statistics;
@@ -116,7 +117,8 @@ public final class MainApp extends Application {
 
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         Statistics.onGuiStarted();
-        SceneController.createAndShow(session);
+        //SceneController.createAndShow(session);
+        ConnectController.createAndShow(session);
     }
     
     /**

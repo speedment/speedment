@@ -125,7 +125,7 @@ public final class PluginDataImpl extends AbstractNamedNode implements PluginDat
             ));
         
         return ConfigUtil.groovyDelegatorHelper(c, () -> {
-            final Child<PluginData> child = plugin.newChildToPluginData(c, this);
+            final Child<PluginData> child = plugin.newChildToPluginData(getSpeedment(), c, this);
             @SuppressWarnings("unchecked")
             final Class<Child<PluginData>> childType = (Class<Child<PluginData>>) child.getClass();
             

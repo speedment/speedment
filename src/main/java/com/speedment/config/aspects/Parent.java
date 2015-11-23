@@ -54,7 +54,7 @@ public interface Parent<C extends Child<?>> extends Node {
      * @see Child
      */
     @Override
-    default Optional<Parent<?>> asParent() {
+    default Optional<? extends Parent<?>> asParent() {
         return Optional.of(this);
     }
 

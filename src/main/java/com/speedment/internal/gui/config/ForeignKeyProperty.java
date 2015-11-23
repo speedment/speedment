@@ -23,12 +23,11 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.stream.MapStream;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableSet;
@@ -45,12 +44,13 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     
     public ForeignKeyProperty(Speedment speedment) {
         super(speedment);
-        foreignKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentSkipListMap<>()));
+        foreignKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
     }
     
-    public ForeignKeyProperty(Speedment speedment, ForeignKey prototype) {
+    public ForeignKeyProperty(Speedment speedment, Table parent, ForeignKey prototype) {
         super(speedment, prototype);
         foreignKeyColumnChildren = copyChildrenFrom(prototype, ForeignKeyColumn.class, ForeignKeyColumnProperty::new);
+        this.parent = parent;
     }
     
     @Override

@@ -58,7 +58,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         columnCompressionType = new SimpleObjectProperty<>();
     }
     
-    public ColumnProperty(Speedment speedment, Column prototype) {
+    public ColumnProperty(Speedment speedment, Table parent, Column prototype) {
         super(speedment, prototype);
         typeMapper            = new SimpleObjectProperty<>(prototype.getTypeMapper());
         nullable              = new SimpleBooleanProperty(prototype.isNullable());
@@ -67,6 +67,8 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
         columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         ordinalPosition       = prototype.getOrdinalPosition();
+        
+        this.parent = parent;
     }
     
     @Override

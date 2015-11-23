@@ -17,6 +17,7 @@
 package com.speedment.internal.newgui.util;
 
 import com.speedment.Speedment;
+import com.speedment.config.Project;
 import com.speedment.internal.gui.config.ProjectProperty;
 import java.io.File;
 import javafx.event.EventHandler;

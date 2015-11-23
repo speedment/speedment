@@ -75,7 +75,8 @@ public final class ProjectTreeController implements Initializable {
 
                     if (item == null || empty) {
                         setGraphic(null);
-                        setText(null);
+                        textProperty().unbind();
+                        //setText(null);
                     } else {
                         setGraphic(SpeedmentIcon.forNode(item));
                         textProperty().bind(item.nameProperty());
@@ -98,7 +99,7 @@ public final class ProjectTreeController implements Initializable {
         
         final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
         Bindings.bindContent(
-            ui.getCurrentSelection(), 
+            ui.getCurrentSelection(),
             hierarchy.getSelectionModel().getSelectedItems()
         );
         
