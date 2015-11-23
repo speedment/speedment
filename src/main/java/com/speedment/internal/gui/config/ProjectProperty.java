@@ -179,6 +179,7 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<? extends Child<Project>> add(Child<Project> child) throws IllegalStateException {
         requireNonNull(child);
         
@@ -246,14 +247,19 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         requireNonNull(childType);
         requireNonNull(name);
         
+        final Stream<? extends Child<Project>> stream;
         if (Dbms.class.isAssignableFrom(childType)) {
-            return (T) dbmsChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = dbmsChildren.stream();
         } else if (PluginData.class.isAssignableFrom(childType)) {
-            return (T) pluginDataChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = pluginDataChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
+        
+        @SuppressWarnings("unchecked")
+        final T result = (T) stream.filter(child -> name.equals(child.getName()))
+            .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+        
+        return result;
     }
 }

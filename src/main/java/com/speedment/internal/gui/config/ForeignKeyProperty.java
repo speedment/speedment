@@ -91,6 +91,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ForeignKeyColumn> Stream<T> streamOf(Class<T> childType) {
         requireNonNull(childType);
         
@@ -116,6 +117,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ForeignKeyColumn> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);

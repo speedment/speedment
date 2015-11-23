@@ -303,21 +303,23 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         requireNonNull(childType);
         requireNonNull(name);
         
-        final T node;
+        final Stream<? extends Child<Table>> stream;
         if (Column.class.isAssignableFrom(childType)) {
-            return (T) columnChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = columnChildren.stream();
         } else if (PrimaryKeyColumn.class.isAssignableFrom(childType)) {
-            return (T) primaryKeyColumnChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = primaryKeyColumnChildren.stream();
         } else if (Index.class.isAssignableFrom(childType)) {
-            return (T) indexChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = indexChildren.stream();
         } else if (ForeignKey.class.isAssignableFrom(childType)) {
-            return (T) foreignKeyChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+            stream = foreignKeyChildren.stream();
         } else {
             throw wrongChildTypeException(childType);
         }
+        
+        @SuppressWarnings("unchecked")
+        final T result = (T) stream.filter(child -> name.equals(child.getName()))
+            .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
+        
+        return result;
     }
 }

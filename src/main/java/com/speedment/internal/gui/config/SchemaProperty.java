@@ -203,6 +203,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Table> Stream<T> streamOf(Class<T> childType) {
         requireNonNull(childType);
         
@@ -228,6 +229,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Table> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);

@@ -85,7 +85,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     }
     
     @Override
-    public void setTypeMapper(TypeMapper typeMapper) {
+    public void setTypeMapper(TypeMapper<?, ?> typeMapper) {
         this.typeMapper.setValue(typeMapper);
     }
     

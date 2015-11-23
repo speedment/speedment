@@ -200,6 +200,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Schema> Stream<T> streamOf(Class<T> childType) {
         requireNonNull(childType);
         
@@ -225,6 +226,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Schema> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);

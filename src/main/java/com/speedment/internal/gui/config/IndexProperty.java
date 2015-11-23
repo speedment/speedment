@@ -110,6 +110,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IndexColumn> Stream<T> streamOf(Class<T> childType) {
         requireNonNull(childType);
         
@@ -135,6 +136,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends IndexColumn> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);

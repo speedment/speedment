@@ -128,6 +128,7 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Child<PluginData>> T find(Class<T> childType, String name) throws SpeedmentException {
         requireNonNull(childType);
         requireNonNull(name);
