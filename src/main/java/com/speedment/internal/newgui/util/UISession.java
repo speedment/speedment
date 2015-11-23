@@ -61,6 +61,7 @@ public final class UISession {
         return project;
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E newProject() {
         return (E) new EventHandler<T>() {
             @Override
@@ -70,6 +71,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E openProject() {
         return (E) new EventHandler<T>() {
             @Override
@@ -79,6 +81,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProject() {
         return (E) new EventHandler<T>() {
             @Override
@@ -88,6 +91,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
         return (E) new EventHandler<T>() {
             @Override
@@ -97,6 +101,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E quit() {
         return (E) new EventHandler<T>() {
             @Override
@@ -106,6 +111,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>>  E generate() {
         return (E) new EventHandler<T>() {
             @Override
@@ -115,6 +121,7 @@ public final class UISession {
         };
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
         return (E) new EventHandler<T>() {
             @Override
