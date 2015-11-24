@@ -79,27 +79,19 @@ public final class ProjectTreeController implements Initializable {
                         setGraphic(null);
                         textProperty().unbind();
                         styleProperty().unbind();
-//                        backgroundProperty().unbind();
-
+                        setText(null);
+                        setStyle(null);
                     } else {
                         setGraphic(SpeedmentIcon.forNode(item));
                         textProperty().bind(item.nameProperty());
 
-//                        backgroundProperty().bind(
-//                            createObjectBinding(
-//                                () -> item.enabledProperty().get() ?
-//                                BG_ENABLED : BG_DISABLED, 
-//                                item.enabledProperty()
-//                            )
-//                        );
-
-//                        styleProperty().bind(
-//                            createObjectBinding(
-//                                () -> item.enabledProperty().get() ?
-//                                "" : "-fx-background-color: lightgray;", 
-//                                item.enabledProperty()
-//                            )
-//                        );
+                        styleProperty().bind(
+                            createObjectBinding(
+                                () -> item.enabledProperty().get() ?
+                                "" : "-fx-text-fill: gray; -fx-font-style: italic;", 
+                                item.enabledProperty()
+                            )
+                        );
                     }
                 }
             };
@@ -123,9 +115,7 @@ public final class ProjectTreeController implements Initializable {
         
         final TreeItem<AbstractNodeProperty> branch = new TreeItem<>(node);
         branch.expandedProperty().bindBidirectional(node.expandedProperty());
-        
-        
-        
+
         if (node instanceof AbstractParentProperty) {
             @SuppressWarnings("unchecked")
             final AbstractParentProperty<AbstractNodeProperty, ? extends AbstractNodeProperty> nodeAsParent 
