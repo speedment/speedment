@@ -36,8 +36,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 
 /**
  *
@@ -99,6 +102,11 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+
+    @Override
+    public ObservableList<Schema> children() {
+        return createChildrenView(schemaChildren);
     }
     
     @Override

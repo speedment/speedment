@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 /**
@@ -66,6 +67,11 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    @Override
+    public ObservableList<ForeignKeyColumn> children() {
+        return createChildrenView(foreignKeyColumnChildren);
     }
 
     @Override

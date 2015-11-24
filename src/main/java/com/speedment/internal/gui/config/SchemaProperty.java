@@ -39,6 +39,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 /**
@@ -93,6 +94,11 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    @Override
+    public ObservableList<Table> children() {
+        return createChildrenView(tableChildren);
     }
     
     public ObservableSet<Table> tableChildren() {

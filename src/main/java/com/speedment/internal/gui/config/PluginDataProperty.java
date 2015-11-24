@@ -32,6 +32,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import static java.util.stream.Collectors.toCollection;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 /**
@@ -78,6 +79,11 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    @Override
+    public ObservableList<Child<PluginData>> children() {
+        return createChildrenView(children);
     }
 
     @Override

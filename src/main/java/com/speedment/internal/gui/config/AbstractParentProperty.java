@@ -25,14 +25,16 @@ import com.speedment.internal.util.Trees;
 import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import javafx.collections.FXCollections;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 
 /**
  *
@@ -49,6 +51,8 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
     public AbstractParentProperty(Speedment speedment, THIS prototype) {
         super(speedment, prototype);
     }
+    
+    public abstract ObservableList<CHILD> children();
 
     @Override
     public final ChildHolder<CHILD> getChildren() {
@@ -95,6 +99,24 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
             " does not have any " + childType.getSimpleName() + 
             " with name '" + name + "'."
         );
+    }
+    
+    protected ObservableList<CHILD> createChildrenView(ObservableSet<? extends CHILD>... children) {
+        final ObservableList<CHILD> list = FXCollections.observableArrayList(stream().collect(toList()));
+        
+        for (ObservableSet<? extends CHILD> local : children) {
+            local.addListener((SetChangeListener.Change<? extends CHILD> change) -> {
+                if (change.wasAdded()) {
+                    list.add(change.getElementAdded());
+                }
+                
+                if (change.wasRemoved()) {
+                    list.remove(change.getElementRemoved());
+                }
+            });
+        }
+        
+        return list;
     }
     
     protected <CHILD extends Child<?>, THIS extends Node & Parent<? super CHILD>> ObservableSet<CHILD> copyChildrenFrom(THIS prototype, Class<CHILD> childType, CopyConstructor<CHILD, THIS> wrapper) {

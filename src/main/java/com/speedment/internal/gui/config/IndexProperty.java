@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import static javafx.collections.FXCollections.observableSet;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 /**
@@ -71,6 +72,11 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
         } else {
             throw wrongParentClass(parent.getClass());
         }
+    }
+    
+    @Override
+    public ObservableList<IndexColumn> children() {
+        return createChildrenView(indexColumnChildren);
     }
     
     @Override

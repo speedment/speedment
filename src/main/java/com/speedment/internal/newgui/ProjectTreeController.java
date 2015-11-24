@@ -19,6 +19,7 @@ package com.speedment.internal.newgui;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.gui.config.AbstractParentProperty;
 import com.speedment.internal.gui.config.ProjectProperty;
 import com.speedment.internal.gui.icon.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
@@ -31,6 +32,7 @@ import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import static javafx.beans.binding.Bindings.createObjectBinding;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
@@ -66,7 +68,7 @@ public final class ProjectTreeController implements Initializable {
         
         session.getSpeedment().getEventComponent().notify(new ProjectLoaded(project));
 
-        hierarchy.setCellFactory(v -> {
+        hierarchy.setCellFactory(view -> {
             final TreeCell<AbstractNodeProperty> cell =  new TreeCell<AbstractNodeProperty>() {
                 @Override
                 protected void updateItem(AbstractNodeProperty item, boolean empty) {
@@ -76,18 +78,28 @@ public final class ProjectTreeController implements Initializable {
                     if (item == null || empty) {
                         setGraphic(null);
                         textProperty().unbind();
-                        //setText(null);
+                        styleProperty().unbind();
+//                        backgroundProperty().unbind();
+
                     } else {
                         setGraphic(SpeedmentIcon.forNode(item));
                         textProperty().bind(item.nameProperty());
-                        
-                        backgroundProperty().bind(
-                            createObjectBinding(
-                                () -> item.enabledProperty().get() ?
-                                BG_ENABLED : BG_DISABLED, 
-                                item.enabledProperty()
-                            )
-                        );
+
+//                        backgroundProperty().bind(
+//                            createObjectBinding(
+//                                () -> item.enabledProperty().get() ?
+//                                BG_ENABLED : BG_DISABLED, 
+//                                item.enabledProperty()
+//                            )
+//                        );
+
+//                        styleProperty().bind(
+//                            createObjectBinding(
+//                                () -> item.enabledProperty().get() ?
+//                                "" : "-fx-background-color: lightgray;", 
+//                                item.enabledProperty()
+//                            )
+//                        );
                     }
                 }
             };
@@ -111,15 +123,31 @@ public final class ProjectTreeController implements Initializable {
         
         final TreeItem<AbstractNodeProperty> branch = new TreeItem<>(node);
         branch.expandedProperty().bindBidirectional(node.expandedProperty());
-
-        node.asParent().ifPresent(p ->
-            p.stream()
-                .map(n -> (AbstractNodeProperty) n)
+        
+        
+        
+        if (node instanceof AbstractParentProperty) {
+            @SuppressWarnings("unchecked")
+            final AbstractParentProperty<AbstractNodeProperty, ? extends AbstractNodeProperty> nodeAsParent 
+                = (AbstractParentProperty<AbstractNodeProperty, ? extends AbstractNodeProperty>) node;
+            
+            nodeAsParent.stream()
                 .map(this::branch)
-                .forEachOrdered(
-                    branch.getChildren()::add
-                )
-        );
+                .forEach(branch.getChildren()::add);
+            
+            nodeAsParent.children().addListener((ListChangeListener.Change<? extends AbstractNodeProperty> c) -> {
+                if (c.wasAdded()) {
+                    c.getAddedSubList().stream()
+                        .map(this::branch)
+                        .forEach(branch.getChildren()::add);
+                }
+                
+                if (c.wasRemoved()) {
+                    c.getRemoved().stream()
+                        .forEach(val -> branch.getChildren().removeIf(item -> val.equals(item.getValue())));
+                }
+            });
+        }
 
         return branch;
     }
