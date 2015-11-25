@@ -64,8 +64,8 @@ public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T>
         requireNonNull(parent);
         child.getParent().ifPresent(c -> {
             throw new IllegalStateException(
-                    "It is illegal to add a child that already has a parent. child="
-                    + child + ", parent=" + child.getParent().get()
+                "It is illegal to add a child that already has a parent. child="
+                + child + ", parent=" + child.getParent().get()
             );
         });
         
@@ -80,9 +80,9 @@ public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T>
 
         if (!child.hasName()) {
             child.setName(
-                    JavaLanguage.toUnderscoreSeparated(
-                            child.getInterfaceMainClass().getSimpleName()
-                    ) + "_" + nameNumber.getAndIncrement()
+                JavaLanguage.toUnderscoreSeparated(
+                    child.getInterfaceMainClass().getSimpleName()
+                ) + "_" + nameNumber.getAndIncrement()
             );
         }
 
@@ -97,33 +97,24 @@ public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T>
 
     @Override
     public Stream<T> stream() {
-        return children.stream().sorted();
+        return children.stream();
     }
 
-//    @SuppressWarnings("unchecked")
-//    @Override
-//    public <C extends Child<?>> Stream<C> streamOf(Class<C> clazz) {
-//        requireNonNull(clazz);
-//        return children.getOrDefault(clazz, Collections.emptyMap())
-//                .values().stream().map(c -> (C) c).sorted();
-//    }
     @Override
-    public T find(/*Class<C> childClass,*/String name) throws SpeedmentException {
-        //Objects.requireNonNull(childClass);
+    public T find(String name) throws SpeedmentException {
         Objects.requireNonNull(name);
         return childByName(name)
-                .orElseThrow(thereIsNo(Child.class, this.getClass(), name));
+            .orElseThrow(thereIsNo(Child.class, this.getClass(), name));
     }
 
     private Optional<T> childByName(String name) {
         return children.stream()
-                .filter(c->name.equals(c.getName()))
-                .findAny();
+            .filter(c->name.equals(c.getName()))
+            .findAny();
     }
     
     @Override
     public Class<T> getChildClass() {
         return childClass;
     }
-
 }

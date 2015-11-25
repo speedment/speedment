@@ -245,7 +245,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
 
     @Override
     public Stream<Schema> stream() {
-        return schemaChildren.stream();
+        return schemaChildren.stream().sorted(COMPARATOR);
     }
 
     @Override
@@ -254,7 +254,7 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         requireNonNull(childType);
         
         if (Schema.class.isAssignableFrom(childType)) {
-            return (Stream<T>) schemaChildren.stream();
+            return (Stream<T>) schemaChildren.stream().sorted(COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

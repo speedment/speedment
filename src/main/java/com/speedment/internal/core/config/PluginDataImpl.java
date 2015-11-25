@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.plugin.Plugin;
 import com.speedment.exception.SpeedmentException;
@@ -75,7 +76,8 @@ public final class PluginDataImpl extends AbstractNamedNode implements PluginDat
     
     @Override
     public Stream<? extends Child<PluginData>> stream() {
-        return children.values().stream().flatMap(ChildHolder::stream);
+        return children.values().stream()
+            .flatMap(holder -> holder.stream().sorted(Nameable.COMPARATOR));
     }
     
     @Override
@@ -83,7 +85,7 @@ public final class PluginDataImpl extends AbstractNamedNode implements PluginDat
         @SuppressWarnings("unchecked")
         final ChildHolder<T> holder = (ChildHolder<T>) children.get(childClass);
         if (holder != null) {
-            return holder.stream();
+            return holder.stream().sorted(Nameable.COMPARATOR);
         } else {
             return Stream.empty();
         }

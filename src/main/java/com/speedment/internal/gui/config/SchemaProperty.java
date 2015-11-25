@@ -51,7 +51,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class SchemaProperty extends AbstractParentProperty<Schema, Table> implements Schema, ChildHelper<Schema, Dbms> {
-    
+
     private final ObservableSet<Table> tableChildren;
     private final StringProperty schemaName;
     private final StringProperty catalogName;
@@ -252,7 +252,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
 
     @Override
     public Stream<Table> stream() {
-        return tableChildren.stream();
+        return tableChildren.stream().sorted(COMPARATOR);
     }
 
     @Override
@@ -261,7 +261,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         requireNonNull(childType);
         
         if (Table.class.isAssignableFrom(childType)) {
-            return (Stream<T>) tableChildren.stream();
+            return (Stream<T>) tableChildren.stream().sorted(COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

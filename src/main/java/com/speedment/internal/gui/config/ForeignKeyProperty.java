@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
@@ -99,7 +100,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
 
     @Override
     public Stream<ForeignKeyColumn> stream() {
-        return foreignKeyColumnChildren.stream();
+        return foreignKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR);
     }
 
     @Override
@@ -108,7 +109,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
         requireNonNull(childType);
         
         if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) foreignKeyColumnChildren.stream();
+            return (Stream<T>) foreignKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

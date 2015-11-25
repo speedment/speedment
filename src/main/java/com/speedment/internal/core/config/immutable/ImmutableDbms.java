@@ -21,6 +21,7 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
@@ -28,6 +29,7 @@ import groovy.lang.Closure;
 import java.util.Optional;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -121,6 +123,29 @@ public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity impl
     @Override
     public ChildHolder<Schema> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends Schema> stream() {
+        return getChildren().stream().sorted(Nameable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends Schema> Stream<T> streamOf(Class<T> childClass) {
+        if (Schema.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Nameable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override

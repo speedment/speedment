@@ -119,14 +119,14 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
     
     @Override
     public Stream<? extends Child<PluginData>> stream() {
-        return children.stream();
+        return children.stream().sorted(COMPARATOR);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends Child<PluginData>> Stream<T> streamOf(Class<T> childType) {
         requireNonNull(childType);
-        return stream().map(childType::cast);
+        return stream().map(childType::cast).sorted(COMPARATOR);
     }
     
     @Override

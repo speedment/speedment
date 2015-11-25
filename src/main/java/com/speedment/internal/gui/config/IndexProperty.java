@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
@@ -126,7 +127,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
 
     @Override
     public Stream<IndexColumn> stream() {
-        return indexColumnChildren.stream();
+        return indexColumnChildren.stream().sorted(Ordinable.COMPARATOR);
     }
 
     @Override
@@ -135,7 +136,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
         requireNonNull(childType);
         
         if (IndexColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) indexColumnChildren.stream();
+            return (Stream<T>) indexColumnChildren.stream().sorted(Ordinable.COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

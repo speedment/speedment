@@ -40,22 +40,22 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
         return getChildren().put(child, this);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    default Stream<? extends C> stream() {
-        return getChildren().stream();
-    }
-
-    @Override
-    default <T extends C> Stream<T> streamOf(Class<T> childClass) {
-        requireNonNull(childClass);
-        if (!getChildren().getChildClass().equals(childClass)) {
-            return Stream.empty();
-        }
-        @SuppressWarnings("unchecked")
-        final Stream<T> result = (Stream<T>) getChildren().stream();
-        return result;
-    }
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    default Stream<? extends C> stream() {
+//        return getChildren().stream();
+//    }
+//
+//    @Override
+//    default <T extends C> Stream<T> streamOf(Class<T> childClass) {
+//        requireNonNull(childClass);
+//        if (!getChildren().getChildClass().equals(childClass)) {
+//            return Stream.empty();
+//        }
+//        @SuppressWarnings("unchecked")
+//        final Stream<T> result = (Stream<T>) getChildren().stream();
+//        return result;
+//    }
     
     @Override
     default int count() {
@@ -101,5 +101,4 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
         final T result = (T) getChildren().find(name);
         return result;
     }
-
 }

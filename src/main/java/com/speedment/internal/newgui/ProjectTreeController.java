@@ -145,9 +145,4 @@ public final class ProjectTreeController implements Initializable {
     public static Node create(UISession session) {
         return UILoader.create(session, "ProjectTree", ProjectTreeController::new);
 	}
-    
-    private final static Background 
-        BG_ENABLED = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)),
-        BG_DISABLED = new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY));
-    
 }

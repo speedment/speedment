@@ -24,6 +24,8 @@ import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
@@ -300,11 +302,11 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     public Stream<? extends Child<Table>> stream() {
         return Stream.concat(
             Stream.concat(
-                columnChildren.stream(),
-                primaryKeyColumnChildren.stream()
+                columnChildren.stream().sorted(Ordinable.COMPARATOR),
+                primaryKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR)
             ), Stream.concat(
-                indexChildren.stream(),
-                foreignKeyChildren.stream()
+                indexChildren.stream().sorted(Nameable.COMPARATOR),
+                foreignKeyChildren.stream().sorted(Nameable.COMPARATOR)
             )
         );
     }
@@ -315,13 +317,13 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         requireNonNull(childType);
         
         if (Column.class.isAssignableFrom(childType)) {
-            return (Stream<T>) columnChildren.stream();
+            return (Stream<T>) columnChildren.stream().sorted(Ordinable.COMPARATOR);
         } else if (PrimaryKeyColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) primaryKeyColumnChildren.stream();
+            return (Stream<T>) primaryKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR);
         } else if (Index.class.isAssignableFrom(childType)) {
-            return (Stream<T>) indexChildren.stream();
+            return (Stream<T>) indexChildren.stream().sorted(Nameable.COMPARATOR);
         } else if (ForeignKey.class.isAssignableFrom(childType)) {
-            return (Stream<T>) foreignKeyChildren.stream();
+            return (Stream<T>) foreignKeyChildren.stream().sorted(Nameable.COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

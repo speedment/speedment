@@ -23,6 +23,8 @@ import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
@@ -204,22 +206,22 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
     public <T extends Child<Table>> Stream<T> streamOf(Class<T> childClass) {
         if (Column.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) columns.stream();
+            final Stream<T> result = (Stream<T>) columns.stream().sorted(Ordinable.COMPARATOR);
             return result;
         }
         if (PrimaryKeyColumn.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) primaryKeyColumns.stream();
+            final Stream<T> result = (Stream<T>) primaryKeyColumns.stream().sorted(Ordinable.COMPARATOR);
             return result;
         }
         if (Index.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) indexes.stream();
+            final Stream<T> result = (Stream<T>) indexes.stream().sorted(Nameable.COMPARATOR);
             return result;
         }
         if (Column.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) foreignKeys.stream();
+            final Stream<T> result = (Stream<T>) foreignKeys.stream().sorted(Nameable.COMPARATOR);
             return result;
         }
         return Stream.empty();

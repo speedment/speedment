@@ -27,7 +27,9 @@ import com.speedment.config.aspects.FieldStorageTypeable;
 import com.speedment.config.aspects.StorageEngineTypeable;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.TableImpl;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -43,7 +45,7 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
         FieldStorageTypeable,
         ColumnCompressionTypeable,
         StorageEngineTypeable {
-
+ 
     /**
      * Factory holder.
      */

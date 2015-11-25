@@ -48,7 +48,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class ProjectProperty extends AbstractParentProperty<Project, Child<Project>> implements Project, ChildHelper<Project, ProjectManager> {
-    
+
     private final ObservableSet<Dbms> dbmsChildren;
     private final ObservableSet<PluginData> pluginDataChildren;
     private final StringProperty packageName;
@@ -229,8 +229,8 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     @Override
     public Stream<? extends Child<Project>> stream() {
         return Stream.concat(
-            dbmsChildren.stream().sorted(comparing(Dbms::getName)),
-            pluginDataChildren.stream().sorted(comparing(PluginData::getName))
+            dbmsChildren.stream().sorted(COMPARATOR),
+            pluginDataChildren.stream().sorted(COMPARATOR)
         );
     }
 
@@ -240,9 +240,9 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         requireNonNull(childType);
         
         if (Dbms.class.isAssignableFrom(childType)) {
-            return (Stream<T>) dbmsChildren.stream();
+            return (Stream<T>) dbmsChildren.stream().sorted(COMPARATOR);
         } else if (PluginData.class.isAssignableFrom(childType)) {
-            return (Stream<T>) pluginDataChildren.stream();
+            return (Stream<T>) pluginDataChildren.stream().sorted(COMPARATOR);
         } else {
             throw wrongChildTypeException(childType);
         }

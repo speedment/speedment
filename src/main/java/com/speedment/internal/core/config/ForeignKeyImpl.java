@@ -20,14 +20,17 @@ import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
+import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Nameable;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -60,6 +63,29 @@ public final class ForeignKeyImpl extends AbstractNamedNode implements ForeignKe
     @Override
     public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends ForeignKeyColumn> stream() {
+        return getChildren().stream().sorted(Ordinable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends ForeignKeyColumn> Stream<T> streamOf(Class<T> childClass) {
+        if (ForeignKeyColumn.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Ordinable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override

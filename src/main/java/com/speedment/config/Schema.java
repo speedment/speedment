@@ -26,7 +26,9 @@ import com.speedment.internal.core.config.SchemaImpl;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
 import com.speedment.config.aspects.StorageEngineTypeable;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -40,7 +42,7 @@ public interface Schema extends Node, Enableable, Child<Dbms>, Parent<Table>,
     FieldStorageTypeable,
     ColumnCompressionTypeable,
     StorageEngineTypeable {
-
+    
     /**
      * Factory holder.
      */

@@ -66,26 +66,6 @@ public final class WorkspaceController implements Initializable {
                             .forEachOrdered(properties::add);
                     }
                 }
-                
-//                MapStream.fromValues(
-//                    change.getList().stream().sequential()
-//                        .map(TreeItem::getValue)
-//                        .flatMap(node -> node.getGuiVisibleProperties()),
-//                    property -> property.getName()
-//                ).groupingBy(item -> item.getName())
-//                 .mapValue(list ->
-//                     list.stream().reduce((a, b) -> {
-//                         if (a == null || b == null) {
-//                             return null;
-//                         } else {
-//                             if (Objects.equals(a.getValue(), b.getValue())) {
-//                                 return a;
-//                             } else return null;
-//                         }
-//                     }).orElse(null)
-//                 ).values()
-//                    .filter(item -> item != null)
-//                    .forEach(properties::add);
             });
     }
 

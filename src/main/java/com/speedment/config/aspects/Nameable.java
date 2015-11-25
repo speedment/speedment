@@ -18,6 +18,8 @@ package com.speedment.config.aspects;
 
 import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
+import static com.speedment.stream.MapStream.comparing;
+import java.util.Comparator;
 
 /**
  * A trait-like interface for nodes that have a name.
@@ -28,6 +30,8 @@ import com.speedment.annotation.External;
 public interface Nameable {
 
     final int NAMEABLE_FIRST = 1;
+    
+    static Comparator<Nameable> COMPARATOR = comparing(Nameable::getName);
 
     /**
      * Sets the name of this node.

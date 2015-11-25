@@ -23,6 +23,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.annotation.Api;
 import com.speedment.config.aspects.Expandable;
 import com.speedment.config.aspects.Ordinable;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -191,5 +192,4 @@ public interface Node extends Nameable, Enableable, Expandable {
      * @return if this node is immutable
      */
     boolean isImmutable();
-
 }
