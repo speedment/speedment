@@ -67,13 +67,11 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
         return Stream.of(
             new StringPropertyItem(
                 foreignTableName, 
-                getClass().getSimpleName(),
                 "Foreign Table Name",
                 "The name of the database table that this foreign key references."
             ),
             new StringPropertyItem(
                 foreignColumnName, 
-                getClass().getSimpleName(),
                 "Foreign Column Name",
                 "The name of the database column that this foreign key references."
             )

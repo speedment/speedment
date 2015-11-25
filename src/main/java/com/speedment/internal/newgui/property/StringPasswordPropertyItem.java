@@ -26,8 +26,8 @@ import org.controlsfx.property.editor.PropertyEditor;
  */
 public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
-    public StringPasswordPropertyItem(StringProperty value, String category, String name, String description) {
-        super(value, category, name, description);
+    public StringPasswordPropertyItem(StringProperty value, String name, String description) {
+        super(value, name, description);
     }
 
     @Override

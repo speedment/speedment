@@ -26,8 +26,8 @@ import org.controlsfx.property.editor.PropertyEditor;
  */
 public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
-    public StringPropertyItem(StringProperty value, String category, String name, String description) {
-        super(value, category, name, description);
+    public StringPropertyItem(StringProperty value, String name, String description) {
+        super(value, name, description);
     }
 
     @Override

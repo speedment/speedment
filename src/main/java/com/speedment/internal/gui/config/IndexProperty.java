@@ -65,8 +65,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     protected Stream<PropertySheet.Item> guiVisibleProperties() {
         return Stream.of(
             new BooleanPropertyItem(
-                unique, 
-                getClass().getSimpleName(),
+                unique,
                 "Is Unique",
                 "True if elements in this index are unique."
             )

@@ -59,8 +59,7 @@ public final class IndexColumnProperty extends AbstractNodeProperty implements I
         return Stream.of(
             new EnumPropertyItem<>(
                 OrderType.class,
-                orderType, 
-                getClass().getSimpleName(),
+                orderType,
                 "Ordering",
                 "The default ordering to use for this index."
             )

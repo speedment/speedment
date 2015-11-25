@@ -93,29 +93,25 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     protected Stream<PropertySheet.Item> guiVisibleProperties() {
         return Stream.of(
             new StringPropertyItem(
-                tableName, 
-                getClass().getSimpleName(),          
+                tableName,
                 "Table Name",                  
                 "The name that is used for this entity in the database."
             ),
             new EnumPropertyItem(
                 FieldStorageType.class, 
-                fieldStorageType, 
-                "Internal Implementation",          
+                fieldStorageType,
                 "Field Storage Type",     
                 "The type of storage to use for entities of this kind."
             ),
             new EnumPropertyItem(
                 ColumnCompressionType.class, 
-                columnCompressionType, 
-                "Internal Implementation",          
+                columnCompressionType,
                 "Column Compression Type",     
                 "The compression strategy to use for entities of this kind."
             ),
             new EnumPropertyItem(
                 StorageEngineType.class, 
-                storageEngineType, 
-                "Internal Implementation",          
+                storageEngineType,
                 "Storage Engine Type",     
                 "The storage engine to use for entities of this kind."
             )

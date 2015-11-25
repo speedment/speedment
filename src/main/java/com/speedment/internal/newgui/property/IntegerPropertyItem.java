@@ -26,8 +26,8 @@ import org.controlsfx.property.editor.PropertyEditor;
  */
 public final class IntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty> {
 
-    public IntegerPropertyItem(IntegerProperty value, String category, String name, String description) {
-        super(value, category, name, description);
+    public IntegerPropertyItem(IntegerProperty value, String name, String description) {
+        super(value, name, description);
     }
 
     @Override

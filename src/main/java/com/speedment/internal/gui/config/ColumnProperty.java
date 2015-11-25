@@ -81,35 +81,30 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         return Stream.of(
             // TODO: Add TypeMapper
             new StringPropertyItem(
-                alias, 
-                getClass().getSimpleName(),          
+                alias,       
                 "Alias",                  
                 "The name to use in the generated code to represent this entity."
             ),
             new BooleanPropertyItem(
-                nullable, 
-                getClass().getSimpleName(),      
-                "Is Nullable",            
+                nullable,
+                "Is Nullable",
                 "If this column can hold 'null'-values or not."
             ),
             new BooleanPropertyItem(
-                autoIncrement, 
-                getClass().getSimpleName(), 
-                "Is Auto Incrementing",   
+                autoIncrement,
+                "Is Auto Incrementing",
                 "If this column will increment automatically for each new entity."
             ),
             new EnumPropertyItem(
-                FieldStorageType.class, 
-                fieldStorageType, 
-                "Internal Implementation",          
+                FieldStorageType.class,
+                fieldStorageType,
                 "Field Storage Type",     
                 "The type of storage to use for fields of this kind."
             ),
             new EnumPropertyItem(
                 ColumnCompressionType.class, 
-                columnCompressionType, 
-                "Internal Implementation",          
-                "Column Compression Type",     
+                columnCompressionType,
+                "Column Compression Type",
                 "The compression strategy to use for fields of this kind."
             )
         );

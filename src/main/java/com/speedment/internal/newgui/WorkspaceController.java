@@ -32,8 +32,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.StackPane;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -45,7 +45,7 @@ public final class WorkspaceController implements Initializable {
     private final UISession session;
     private final ObservableList<PropertySheet.Item> properties;
     
-    private @FXML StackPane workspace;
+    private @FXML TitledPane workspace;
     
     private WorkspaceController(UISession session) {
         this.session    = requireNonNull(session);
@@ -57,23 +57,35 @@ public final class WorkspaceController implements Initializable {
             .addListener((ListChangeListener.Change<? extends TreeItem<AbstractNodeProperty>> change) -> {
                 properties.clear();
                 
-                MapStream.fromValues(
-                    change.getList().stream()
-                        .map(TreeItem::getValue)
-                        .flatMap(node -> node.getGuiVisibleProperties()),
-                    property -> property.getName()
-                ).groupingBy(item -> item.getName())
-                 .mapValue(list ->
-                     list.stream().reduce((a, b) -> {
-                         if (a == null || b == null) {
-                             return null;
-                         } else {
-                             if (Objects.equals(a.getValue(), b.getValue())) {
-                                 return a;
-                             } else return null;
-                         }
-                     }).orElse(null)
-                 ).values().forEach(properties::add);
+                if (!change.getList().isEmpty()) {
+                    final TreeItem<AbstractNodeProperty> treeItem = change.getList().get(0);
+                    
+                    if (treeItem != null) {
+                        final AbstractNodeProperty node = treeItem.getValue();
+                        node.getGuiVisibleProperties()
+                            .forEachOrdered(properties::add);
+                    }
+                }
+                
+//                MapStream.fromValues(
+//                    change.getList().stream().sequential()
+//                        .map(TreeItem::getValue)
+//                        .flatMap(node -> node.getGuiVisibleProperties()),
+//                    property -> property.getName()
+//                ).groupingBy(item -> item.getName())
+//                 .mapValue(list ->
+//                     list.stream().reduce((a, b) -> {
+//                         if (a == null || b == null) {
+//                             return null;
+//                         } else {
+//                             if (Objects.equals(a.getValue(), b.getValue())) {
+//                                 return a;
+//                             } else return null;
+//                         }
+//                     }).orElse(null)
+//                 ).values()
+//                    .filter(item -> item != null)
+//                    .forEach(properties::add);
             });
     }
 
@@ -82,8 +94,8 @@ public final class WorkspaceController implements Initializable {
         
         final PropertySheet sheet = new PropertySheet(properties);
         
-        sheet.setMode(PropertySheet.Mode.CATEGORY);
-        sheet.setModeSwitcherVisible(true);
+        sheet.setMode(PropertySheet.Mode.NAME);
+        sheet.setModeSwitcherVisible(false);
         sheet.setSearchBoxVisible(true);
         sheet.setPropertyEditorFactory(item -> {
             if (item instanceof AbstractPropertyItem<?, ?>) {
@@ -95,7 +107,7 @@ public final class WorkspaceController implements Initializable {
             );
         });
         
-        workspace.getChildren().add(sheet);
+        workspace.setContent(sheet);
     }
     
     public static Node create(UISession session) {

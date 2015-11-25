@@ -31,8 +31,8 @@ public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyI
     
     private final Class<E> enumType;
 
-    public EnumPropertyItem(Class<E> enumType, Property<E> property, String category, String name, String description) {
-        super(property, category, name, description);
+    public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description) {
+        super(property, name, description);
         this.enumType = requireNonNull(enumType);
     }
 

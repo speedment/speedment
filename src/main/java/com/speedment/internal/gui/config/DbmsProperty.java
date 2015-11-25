@@ -100,26 +100,22 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         return Stream.of(
             // TODO: Add DbmsType
             new StringPropertyItem(
-                ipAddress, 
-                "Connection",          
+                ipAddress,       
                 "IP Address",                  
                 "The ip of the database host."
             ),
             new IntegerPropertyItem(
-                port, 
-                "Connection",          
+                port,       
                 "Port",                  
                 "The port of the database on the database host."
             ),
             new StringPropertyItem(
-                username, 
-                "Connection",          
+                username,      
                 "Username",                  
                 "The username to use when connecting to the database."
             ),
             new StringPasswordPropertyItem(
-                password, 
-                "Connection",          
+                password,       
                 "Password",                  
                 "The password to use when connecting to the database."
             )

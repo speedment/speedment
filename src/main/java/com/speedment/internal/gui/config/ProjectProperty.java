@@ -78,14 +78,12 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     protected Stream<PropertySheet.Item> guiVisibleProperties() {
         return Stream.of(
             new StringPropertyItem(
-                packageName, 
-                getClass().getSimpleName(),
+                packageName,
                 "Package Name",
                 "The name of the package to place all generated files in. This should be a fully qualified java package name."
             ),
             new StringPropertyItem(
-                packageLocation, 
-                getClass().getSimpleName(),
+                packageLocation,
                 "Package Location",
                 "The folder to store all generated files in. This should be a relative name from the working directory."
             )

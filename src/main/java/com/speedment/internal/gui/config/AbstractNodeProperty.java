@@ -42,8 +42,8 @@ public abstract class AbstractNodeProperty implements Node {
     protected AbstractNodeProperty(Speedment speedment) {
         this.speedment = speedment;
         this.name      = new SimpleStringProperty();
-        this.enabled   = new SimpleBooleanProperty();
-        this.expanded  = new SimpleBooleanProperty();
+        this.enabled   = new SimpleBooleanProperty(true);
+        this.expanded  = new SimpleBooleanProperty(true);
     }
     
     protected AbstractNodeProperty(Speedment speedment, Node prototype) {
@@ -57,8 +57,8 @@ public abstract class AbstractNodeProperty implements Node {
     public Stream<PropertySheet.Item> getGuiVisibleProperties() {
         return Stream.concat(
             Stream.of(
-                new BooleanPropertyItem(enabled, "General", "Enabled", "True if this node should be included in the code generation."), 
-                new StringPropertyItem(name, "General", "Name", "The name of the persisted entity represented by this node.")
+                new BooleanPropertyItem(enabled, "Enabled", "True if this node should be included in the code generation."), 
+                new StringPropertyItem(name, "Name", "The name of the persisted entity represented by this node.")
             ), guiVisibleProperties()
         );
     }

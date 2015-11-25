@@ -26,8 +26,8 @@ import org.controlsfx.property.editor.PropertyEditor;
  */
 public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty> {
 
-    public BooleanPropertyItem(BooleanProperty value, String category, String name, String description) {
-        super(value, category, name, description);
+    public BooleanPropertyItem(BooleanProperty value, String name, String description) {
+        super(value, name, description);
     }
 
     @Override
