@@ -34,7 +34,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 
 /**
  *
@@ -71,6 +73,9 @@ public class StreamCompositionTest {
 
     }
 
+    @Rule
+    public TestName name = new TestName();
+
     private void produceException(String s) {
         throw new RuntimeException("Opps, something went south.");
     }
@@ -81,7 +86,7 @@ public class StreamCompositionTest {
 
     @Test
     public void testPureStream() {
-        System.out.println("testPureStream");
+        printTestName();
         List<String> result = StreamComposition.concatAndAutoClose(a, b, c).collect(toList());
         assertEquals(Arrays.asList("A", "B", "C"), result);
         assertAllClosed();
@@ -89,7 +94,7 @@ public class StreamCompositionTest {
 
     @Test
     public void testPartialIteration() {
-        System.out.println("testPureStream");
+        printTestName();
         Optional<String> result = StreamComposition.concatAndAutoClose(a, b, c).findFirst();
         assertEquals(Optional.of("A"), result);
 
@@ -99,7 +104,7 @@ public class StreamCompositionTest {
 
     @Test
     public void testException() {
-        System.out.println("testException");
+        printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         boolean gotException = false;
         final Stream<String> f = Stream.of("F").peek(this::produceException).onClose(() -> fClosed.set(true));
@@ -116,17 +121,17 @@ public class StreamCompositionTest {
 
     @Test
     public void testExceptionInClose() {
-        System.out.println("testExceptionInClose");
+        printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         final AtomicBoolean gClosed = new AtomicBoolean();
         boolean gotException = false;
 
         final Stream<String> f = Stream.of("F")
-            .onClose(() -> fClosed.set(true))
-            .onClose(() -> produceException("F"));
+                .onClose(() -> fClosed.set(true))
+                .onClose(() -> produceException("F"));
         final Stream<String> g = Stream.of("G")
-            .onClose(() -> gClosed.set(true))
-            .onClose(() -> produceException("G"));
+                .onClose(() -> gClosed.set(true))
+                .onClose(() -> produceException("G"));
         List<String> result;
         try {
             result = StreamComposition.concatAndAutoClose(a, b, f, g, c).collect(toList());
@@ -142,23 +147,22 @@ public class StreamCompositionTest {
 
     @Test
     public void testChainedStreams() {
-
-        System.out.println("testChainedStreams");
+        printTestName();
 
         // This test makes sure that "chained" streams gets closed all the way up to the "root"
         final AtomicBoolean fClosed = new AtomicBoolean();
 
         final Stream<String> f = StreamComposition.concatAndAutoClose(
-            Stream.of("F").onClose(() -> fClosed.set(true))
+                Stream.of("F").onClose(() -> fClosed.set(true))
         );
 
         List<Integer> result = f
-            .mapToInt(String::length)
-            .boxed()
-            .mapToLong(l -> l)
-            .mapToInt((long l) -> (int) l)
-            .boxed()
-            .collect(toList());
+                .mapToInt(String::length)
+                .boxed()
+                .mapToLong(l -> l)
+                .mapToInt((long l) -> (int) l)
+                .boxed()
+                .collect(toList());
 
         assertEquals(Arrays.asList(1), result);
         assertTrue(fClosed.get());
@@ -166,6 +170,10 @@ public class StreamCompositionTest {
 
     private void assertAllClosed() {
         assertEquals(Arrays.asList(true, true, true), closeStatus); // Make sure all streams are AutoClosed
+    }
+
+    private void printTestName() {
+        System.out.println(name.getMethodName());
     }
 
 }

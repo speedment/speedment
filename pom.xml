@@ -76,6 +76,14 @@
             <email>fatihdirlikli@gmail.com</email>
             <timezone>Europe/Istanbul</timezone>
         </contributor>
+        <contributor>
+            <name>Patrick Hobusch (GitHub:pathob)</name>
+            <timezone>Europe/Berlin</timezone>
+        </contributor>
+        <contributor>
+            <name>Maria Sparenberg (GitHub:marylla)</name>
+            <timezone>Europe/Berlin</timezone>
+        </contributor>
     </contributors>
 
     <issueManagement>
