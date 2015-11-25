@@ -32,11 +32,13 @@ import org.controlsfx.property.editor.PropertyEditor;
 public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T> & WritableValue<T>> implements PropertySheet.Item {
     
     private final PROPERTY property;
+    private final String category;
     private final String name;
     private final String description;
     
     protected AbstractPropertyItem(PROPERTY property, String category, String name, String description) {
         this.property    = requireNonNull(property);
+        this.category    = requireNonNull(category);
         this.name        = requireNonNull(name);
         this.description = requireNonNull(description);
     }
@@ -45,7 +47,7 @@ public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T
 
     @Override
     public final String getCategory() {
-        return "";
+        return category;
     }
 
     @Override
