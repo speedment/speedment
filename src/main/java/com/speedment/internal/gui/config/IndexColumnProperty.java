@@ -24,9 +24,12 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.OrderType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -49,6 +52,19 @@ public final class IndexColumnProperty extends AbstractNodeProperty implements I
         orderType       = new SimpleObjectProperty<>(prototype.getOrderType());
         ordinalPosition = prototype.getOrdinalPosition();
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new EnumPropertyItem<>(
+                OrderType.class,
+                orderType, 
+                getClass().getSimpleName(),
+                "Ordering",
+                "The default ordering to use for this index."
+            )
+        );
     }
     
     @Override

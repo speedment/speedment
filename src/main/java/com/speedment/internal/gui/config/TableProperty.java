@@ -30,6 +30,8 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
@@ -43,6 +45,7 @@ import javafx.beans.property.StringProperty;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -84,6 +87,39 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         storageEngineType        = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         tableName                = new SimpleStringProperty(prototype.getTableName().orElse(null));
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new StringPropertyItem(
+                tableName, 
+                getClass().getSimpleName(),          
+                "Table Name",                  
+                "The name that is used for this entity in the database."
+            ),
+            new EnumPropertyItem(
+                FieldStorageType.class, 
+                fieldStorageType, 
+                "Internal Implementation",          
+                "Field Storage Type",     
+                "The type of storage to use for entities of this kind."
+            ),
+            new EnumPropertyItem(
+                ColumnCompressionType.class, 
+                columnCompressionType, 
+                "Internal Implementation",          
+                "Column Compression Type",     
+                "The compression strategy to use for entities of this kind."
+            ),
+            new EnumPropertyItem(
+                StorageEngineType.class, 
+                storageEngineType, 
+                "Internal Implementation",          
+                "Storage Engine Type",     
+                "The storage engine to use for entities of this kind."
+            )
+        );
     }
 
     @Override

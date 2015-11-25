@@ -17,8 +17,8 @@
 package com.speedment.internal.newgui.util;
 
 import com.speedment.Speedment;
-import com.speedment.config.Project;
 import com.speedment.internal.gui.config.ProjectProperty;
+import com.speedment.internal.newgui.property.PropertySheetFactory;
 import java.io.File;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -38,12 +38,15 @@ public final class UISession {
     private final Application application;
     private final Stage stage;
     private final ProjectProperty project;
+    private final PropertySheetFactory propertySheetFactory;
     
     public UISession(Speedment speedment, Application application, Stage stage) {
-        this.speedment   = requireNonNull(speedment);
-        this.application = requireNonNull(application);
-        this.stage       = requireNonNull(stage);
-        this.project     = new ProjectProperty(speedment);
+        this.speedment            = requireNonNull(speedment);
+        this.application          = requireNonNull(application);
+        this.stage                = requireNonNull(stage);
+        this.project              = new ProjectProperty(speedment);
+        
+        this.propertySheetFactory = new PropertySheetFactory();
     }
     
     public Speedment getSpeedment() {
@@ -60,6 +63,10 @@ public final class UISession {
     
     public ProjectProperty getProject() {
         return project;
+    }
+    
+    public PropertySheetFactory getPropertySheetFactory() {
+        return propertySheetFactory;
     }
     
     @SuppressWarnings("unchecked")

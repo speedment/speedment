@@ -24,13 +24,18 @@ import com.speedment.config.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.newgui.property.BooleanPropertyItem;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -69,6 +74,45 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         ordinalPosition       = prototype.getOrdinalPosition();
         
         this.parent = parent;
+    }
+
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            // TODO: Add TypeMapper
+            new StringPropertyItem(
+                alias, 
+                getClass().getSimpleName(),          
+                "Alias",                  
+                "The name to use in the generated code to represent this entity."
+            ),
+            new BooleanPropertyItem(
+                nullable, 
+                getClass().getSimpleName(),      
+                "Is Nullable",            
+                "If this column can hold 'null'-values or not."
+            ),
+            new BooleanPropertyItem(
+                autoIncrement, 
+                getClass().getSimpleName(), 
+                "Is Auto Incrementing",   
+                "If this column will increment automatically for each new entity."
+            ),
+            new EnumPropertyItem(
+                FieldStorageType.class, 
+                fieldStorageType, 
+                "Internal Implementation",          
+                "Field Storage Type",     
+                "The type of storage to use for fields of this kind."
+            ),
+            new EnumPropertyItem(
+                ColumnCompressionType.class, 
+                columnCompressionType, 
+                "Internal Implementation",          
+                "Column Compression Type",     
+                "The compression strategy to use for fields of this kind."
+            )
+        );
     }
     
     @Override

@@ -21,9 +21,16 @@ import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
+import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.parameters.FieldStorageType;
+import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.newgui.property.IntegerPropertyItem;
+import com.speedment.internal.newgui.property.StringPasswordPropertyItem;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
@@ -36,11 +43,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -86,6 +92,37 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         return Bindings.createObjectBinding(() -> 
             getSpeedment().getDbmsHandlerComponent().findByName(typeName.getValue()).orElse(null),
             typeName
+        );
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            // TODO: Add DbmsType
+            new StringPropertyItem(
+                ipAddress, 
+                "Connection",          
+                "IP Address",                  
+                "The ip of the database host."
+            ),
+            new IntegerPropertyItem(
+                port, 
+                "Connection",          
+                "Port",                  
+                "The port of the database on the database host."
+            ),
+            new StringPropertyItem(
+                username, 
+                "Connection",          
+                "Username",                  
+                "The username to use when connecting to the database."
+            ),
+            new StringPasswordPropertyItem(
+                password, 
+                "Connection",          
+                "Password",                  
+                "The password to use when connecting to the database."
+            )
         );
     }
     

@@ -22,12 +22,19 @@ import com.speedment.config.ForeignKey;
 import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
+import com.speedment.config.parameters.ColumnCompressionType;
+import com.speedment.config.parameters.FieldStorageType;
+import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -53,6 +60,24 @@ public final class ForeignKeyColumnProperty extends AbstractNodeProperty impleme
         this.foreignTableName  = new SimpleStringProperty(prototype.getForeignTableName());
         this.ordinalPosition   = prototype.getOrdinalPosition();
         this.parent            = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new StringPropertyItem(
+                foreignTableName, 
+                getClass().getSimpleName(),
+                "Foreign Table Name",
+                "The name of the database table that this foreign key references."
+            ),
+            new StringPropertyItem(
+                foreignColumnName, 
+                getClass().getSimpleName(),
+                "Foreign Column Name",
+                "The name of the database column that this foreign key references."
+            )
+        );
     }
     
     @Override

@@ -34,6 +34,7 @@ import static java.util.stream.Collectors.toCollection;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -64,6 +65,11 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
         );
         
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.empty();
     }
     
     @Override

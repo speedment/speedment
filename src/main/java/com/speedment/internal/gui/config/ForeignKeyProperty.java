@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -52,6 +53,11 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
         super(speedment, prototype);
         foreignKeyColumnChildren = copyChildrenFrom(prototype, ForeignKeyColumn.class, ForeignKeyColumnProperty::new);
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.empty();
     }
     
     @Override

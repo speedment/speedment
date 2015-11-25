@@ -23,6 +23,7 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.newgui.property.BooleanPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
@@ -34,6 +35,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -57,6 +59,18 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
         indexColumnChildren = copyChildrenFrom(prototype, IndexColumn.class, IndexColumnProperty::new);
         unique              = new SimpleBooleanProperty(prototype.isUnique());
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new BooleanPropertyItem(
+                unique, 
+                getClass().getSimpleName(),
+                "Is Unique",
+                "True if elements in this index are unique."
+            )
+        );
     }
     
     @Override

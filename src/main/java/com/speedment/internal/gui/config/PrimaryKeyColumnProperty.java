@@ -23,6 +23,8 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -41,6 +43,11 @@ public final class PrimaryKeyColumnProperty extends AbstractNodeProperty impleme
         super(speedment, prototype);
         ordinalPosition = prototype.getOrdinalPosition();
         this.parent = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.empty();
     }
     
     @Override

@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
 
 /**
@@ -53,4 +54,8 @@ public final class UILoader {
             throw new SpeedmentException(ex);
         }
 	}
+    
+    private UILoader() {
+        instanceNotAllowed(getClass());
+    }
 }

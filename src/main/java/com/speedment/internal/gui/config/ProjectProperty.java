@@ -26,8 +26,8 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
-import static groovy.xml.dom.DOMCategory.children;
 import java.nio.file.Path;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Comparator.comparing;
@@ -35,15 +35,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -74,6 +72,24 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         packageName        = new SimpleStringProperty(prototype.getPackageName());
         packageLocation    = new SimpleStringProperty(prototype.getPackageLocation());
         configPath         = prototype.getConfigPath().orElse(null);
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new StringPropertyItem(
+                packageName, 
+                getClass().getSimpleName(),
+                "Package Name",
+                "The name of the package to place all generated files in. This should be a fully qualified java package name."
+            ),
+            new StringPropertyItem(
+                packageLocation, 
+                getClass().getSimpleName(),
+                "Package Location",
+                "The folder to store all generated files in. This should be a relative name from the working directory."
+            )
+        );
     }
     
     @Override

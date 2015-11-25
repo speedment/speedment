@@ -26,6 +26,9 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.internal.newgui.property.BooleanPropertyItem;
+import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
@@ -41,6 +44,7 @@ import javafx.beans.property.StringProperty;
 import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -79,6 +83,51 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         this.storageEngineType     = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         this.parent                = parent;
+    }
+    
+    @Override
+    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+        return Stream.of(
+            new StringPropertyItem(
+                schemaName, 
+                getClass().getSimpleName(),
+                "Schema Name",
+                "The name for this schema in the database."
+            ),
+            new StringPropertyItem(
+                catalogName, 
+                getClass().getSimpleName(),
+                "Package Location",
+                "The catalog name for this schema."
+            ),
+            new BooleanPropertyItem(
+                defaultSchema, 
+                getClass().getSimpleName(),
+                "Is Default Schema",
+                "True if this is the default schema to use."
+            ),
+            new EnumPropertyItem(
+                FieldStorageType.class, 
+                fieldStorageType, 
+                "Internal Implementation",          
+                "Field Storage Type",     
+                "The default type of storage to use for entities of this kind."
+            ),
+            new EnumPropertyItem(
+                ColumnCompressionType.class, 
+                columnCompressionType, 
+                "Internal Implementation",          
+                "Column Compression Type",     
+                "The default compression strategy to use for entities of this kind."
+            ),
+            new EnumPropertyItem(
+                StorageEngineType.class, 
+                storageEngineType, 
+                "Internal Implementation",          
+                "Storage Engine Type",     
+                "The default storage engine to use for entities of this kind."
+            )
+        );
     }
     
     @Override

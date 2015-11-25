@@ -55,5 +55,5 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  a view of the selected tree nodes
      */
-    ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection();   
+    ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection();
 }
