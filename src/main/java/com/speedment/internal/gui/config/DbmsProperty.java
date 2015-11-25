@@ -21,13 +21,9 @@ import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.config.parameters.FieldStorageType;
-import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.newgui.property.EnumPropertyItem;
 import com.speedment.internal.newgui.property.IntegerPropertyItem;
 import com.speedment.internal.newgui.property.StringPasswordPropertyItem;
 import com.speedment.internal.newgui.property.StringPropertyItem;
@@ -113,11 +109,6 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
                 username,      
                 "Username",                  
                 "The username to use when connecting to the database."
-            ),
-            new StringPasswordPropertyItem(
-                password,       
-                "Password",                  
-                "The password to use when connecting to the database."
             )
         );
     }

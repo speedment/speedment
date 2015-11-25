@@ -22,6 +22,8 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.gui.config.DbmsProperty;
 import com.speedment.internal.gui.config.SchemaProperty;
+import com.speedment.internal.gui.resource.SpeedmentFont;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import com.speedment.internal.util.Settings;
@@ -41,10 +43,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -61,6 +65,8 @@ public final class ConnectController implements Initializable {
     
     private final UISession session;
     
+    private @FXML Label leftTitle;
+    private @FXML Label rightTitle;
     private @FXML Button buttonOpen;
     private @FXML TextField fieldHost;
     private @FXML TextField fieldPort;
@@ -82,6 +88,12 @@ public final class ConnectController implements Initializable {
         if (Settings.inst().get("hide_open_option", true)) {
             container.getChildren().remove(openContainer);
         }
+        
+        leftTitle.setFont(SpeedmentFont.HEADER.get());
+        leftTitle.setTextFill(Color.web("#3267c9"));
+        
+        rightTitle.setFont(SpeedmentFont.HEADER.get());
+        rightTitle.setTextFill(Color.web("#3267c9"));
 
         fieldType.setItems(
             getDbmsTypes()
@@ -203,6 +215,7 @@ public final class ConnectController implements Initializable {
         
         final Stage stage = session.getStage();
         stage.hide();
+        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         stage.setTitle("Speedment");
         stage.setScene(scene);
         stage.show();

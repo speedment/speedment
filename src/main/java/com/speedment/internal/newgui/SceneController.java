@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.newgui;
 
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
@@ -73,6 +74,7 @@ public final class SceneController implements Initializable {
         stage.hide();
         stage.setTitle("Speedment");
         stage.setMaximized(screen.getWidth() <= 1920);
+        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         stage.setScene(scene);
         stage.show();
 	}

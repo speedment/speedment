@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.internal.gui.icon;
+package com.speedment.internal.gui.resource;
 
 import java.io.InputStream;
 import static java.util.Objects.requireNonNull;

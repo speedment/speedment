@@ -17,7 +17,7 @@
 package com.speedment.internal.gui.controller;
 
 import com.speedment.internal.gui.MainApp;
-import com.speedment.internal.gui.icon.SpeedmentIcon;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

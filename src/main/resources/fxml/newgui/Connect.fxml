@@ -28,7 +28,7 @@
    <children>
       <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
          <children>
-            <Label text="Open existing project" textFill="#3e6293" StackPane.alignment="TOP_CENTER">
+            <Label fx:id="leftTitle" text="Open existing project" textFill="#3e6293" StackPane.alignment="TOP_CENTER">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
@@ -48,7 +48,7 @@
       </StackPane>
       <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
          <children>
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Create from database" textFill="#3f6291">
+            <Label fx:id="rightTitle" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Create from database" textFill="#3f6291">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>

@@ -17,6 +17,8 @@
 package com.speedment.internal.newgui;
 
 import com.speedment.SpeedmentVersion;
+import com.speedment.internal.gui.resource.SpeedmentFont;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
@@ -28,6 +30,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 
@@ -39,6 +42,7 @@ public final class AboutController implements Initializable {
     
     private final UISession session;
     
+    private @FXML Label title;
     private @FXML Button close;
     private @FXML Label version;
     private @FXML Label external;
@@ -51,7 +55,9 @@ public final class AboutController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        close.setOnAction(ev -> dialog.close());
+
+        title.setTextFill(Color.web("#45a6fc"));
+        title.setFont(SpeedmentFont.HEADER.get());
         version.setText(SpeedmentVersion.getImplementationVersion());
         external.setText(
             "It includes software licensed as follows:\n\n"
@@ -67,6 +73,8 @@ public final class AboutController implements Initializable {
             + "BSD 3-Clause License:\n"
             + "ControlsFX (8.40.10)"
         );
+        
+        close.setOnAction(ev -> dialog.close());
     }
     
     public static void createAndShow(UISession session) {
@@ -80,6 +88,7 @@ public final class AboutController implements Initializable {
         
         dialog.setTitle("About Speedment");
         dialog.initModality(APPLICATION_MODAL);
+        dialog.getIcons().add(SpeedmentIcon.SPIRE.load());
         dialog.initOwner(session.getStage());
         dialog.setScene(scene);
         dialog.show();

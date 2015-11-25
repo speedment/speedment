@@ -21,7 +21,7 @@ import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.gui.config.AbstractParentProperty;
 import com.speedment.internal.gui.config.ProjectProperty;
-import com.speedment.internal.gui.icon.SpeedmentIcon;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;

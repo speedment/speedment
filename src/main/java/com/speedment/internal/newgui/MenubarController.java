@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.newgui;
 
-import com.speedment.internal.gui.icon.SilkIcon;
-import com.speedment.internal.gui.icon.SpeedmentIcon;
+import com.speedment.internal.gui.resource.SilkIcon;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import java.net.URL;
