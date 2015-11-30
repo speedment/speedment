@@ -24,6 +24,7 @@ import com.speedment.config.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.newgui.property.BooleanPropertyItem;
 import com.speedment.internal.newgui.property.EnumPropertyItem;
 import com.speedment.internal.newgui.property.StringPropertyItem;
@@ -61,19 +62,29 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         alias                 = new SimpleStringProperty();
         fieldStorageType      = new SimpleObjectProperty<>();
         columnCompressionType = new SimpleObjectProperty<>();
+        setDefaults();
     }
     
     public ColumnProperty(Speedment speedment, Table parent, Column prototype) {
         super(speedment, prototype);
-        typeMapper            = new SimpleObjectProperty<>(prototype.getTypeMapper());
-        nullable              = new SimpleBooleanProperty(prototype.isNullable());
-        autoIncrement         = new SimpleBooleanProperty(prototype.isAutoincrement());
-        alias                 = new SimpleStringProperty(prototype.getAlias().orElse(null));
-        fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
-        columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
-        ordinalPosition       = prototype.getOrdinalPosition();
+        
+        this.typeMapper            = new SimpleObjectProperty<>(prototype.getTypeMapper());
+        this.nullable              = new SimpleBooleanProperty(prototype.isNullable());
+        this.autoIncrement         = new SimpleBooleanProperty(prototype.isAutoincrement());
+        this.alias                 = new SimpleStringProperty(prototype.getAlias().orElse(null));
+        this.fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
+        this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
+        this.ordinalPosition       = prototype.getOrdinalPosition();
         
         this.parent = parent;
+    }
+    
+    private void setDefaults() {
+        setNullable(true);
+        setAutoincrement(false);
+        setFieldStorageType(FieldStorageType.INHERIT);
+        setColumnCompressionType(ColumnCompressionType.INHERIT);
+        setTypeMapper(new StringIdentityMapper());
     }
 
     @Override
@@ -94,7 +105,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
                 autoIncrement,
                 "Is Auto Incrementing",
                 "If this column will increment automatically for each new entity."
-            ),
+            )/*,
             new EnumPropertyItem(
                 FieldStorageType.class,
                 fieldStorageType,
@@ -106,7 +117,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
                 columnCompressionType,
                 "Column Compression Type",
                 "The compression strategy to use for fields of this kind."
-            )
+            )*/
         );
     }
     

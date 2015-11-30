@@ -71,6 +71,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         fieldStorageType      = new SimpleObjectProperty<>();
         columnCompressionType = new SimpleObjectProperty<>();
         storageEngineType     = new SimpleObjectProperty<>();
+        setDefaults();
     }
     
     public SchemaProperty(Speedment speedment, Dbms parent, Schema prototype) {
@@ -83,6 +84,12 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
         this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         this.storageEngineType     = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         this.parent                = parent;
+    }
+    
+    private void setDefaults() {
+        setFieldStorageType(FieldStorageType.WRAPPER);
+        setColumnCompressionType(ColumnCompressionType.NONE);
+        setStorageEngineType(StorageEngineType.ON_HEAP);
     }
     
     @Override

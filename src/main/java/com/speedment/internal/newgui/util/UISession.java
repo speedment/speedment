@@ -19,12 +19,13 @@ package com.speedment.internal.newgui.util;
 import com.speedment.Speedment;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.gui.config.ProjectProperty;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.newgui.output.Line;
 import static com.speedment.internal.newgui.output.Line.error;
 import static com.speedment.internal.newgui.output.Line.info;
 import static com.speedment.internal.newgui.output.Line.success;
 import com.speedment.internal.newgui.property.PropertySheetFactory;
-import static com.speedment.internal.util.TextUtil.alignLeft;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;
@@ -41,6 +42,7 @@ import java.util.function.Consumer;
  */
 public final class UISession {
     
+    private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
     public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
     private final Speedment speedment;
@@ -135,7 +137,7 @@ public final class UISession {
                     "+-------------------------------------------------+"
                 ));
                 
-//                LOGGER.error(ex, "Error! Failed to generate code.");
+                LOGGER.error(ex, "Error! Failed to generate code.");
             }
         });
     }

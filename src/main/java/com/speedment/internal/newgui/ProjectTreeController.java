@@ -34,15 +34,10 @@ import javafx.beans.binding.Bindings;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 
 /**
  *

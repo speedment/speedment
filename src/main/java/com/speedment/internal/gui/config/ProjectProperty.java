@@ -29,8 +29,8 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import static java.util.Collections.newSetFromMap;
-import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,6 +63,7 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         pluginDataChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
         packageName        = new SimpleStringProperty();
         packageLocation    = new SimpleStringProperty();
+        setDefaults();
     }
     
     public ProjectProperty(Speedment speedment, Project prototype) {
@@ -71,7 +72,13 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         pluginDataChildren = copyChildrenFrom(prototype, PluginData.class, PluginDataProperty::new);
         packageName        = new SimpleStringProperty(prototype.getPackageName());
         packageLocation    = new SimpleStringProperty(prototype.getPackageLocation());
-        configPath         = prototype.getConfigPath().orElse(null);
+        configPath         = prototype.getConfigPath().orElse(Paths.get("src/main/groovy/speedment.groovy"));
+    }
+    
+    private void setDefaults() {
+        setPackageLocation("src/main/java");
+        setPackageName("com.company.speedment.test");
+        setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
     }
     
     @Override

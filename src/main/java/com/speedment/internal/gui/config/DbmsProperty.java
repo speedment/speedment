@@ -23,9 +23,9 @@ import com.speedment.config.Schema;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.newgui.property.IntegerPropertyItem;
-import com.speedment.internal.newgui.property.StringPasswordPropertyItem;
 import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
@@ -69,19 +69,28 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         password       = new SimpleStringProperty();
         typeName       = new SimpleStringProperty();
         dbmsType       = bindDbmsType();
+        setDefaults();
     }
     
     public DbmsProperty(Speedment speedment, Project parent, Dbms prototype) {
         super(speedment, prototype);
         schemaChildren = copyChildrenFrom(prototype, Schema.class, SchemaProperty::new);
-        ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse(null));
-        port           = new SimpleIntegerProperty(prototype.getPort().orElse(0));
-        username       = new SimpleStringProperty(prototype.getUsername().orElse(null));
-        password       = new SimpleStringProperty(prototype.getPassword().orElse(null));
+        ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse("localhost"));
+        port           = new SimpleIntegerProperty(prototype.getPort().orElse(getType().getDefaultPort()));
+        username       = new SimpleStringProperty(prototype.getUsername().orElse("root"));
+        password       = new SimpleStringProperty(prototype.getPassword().orElse(""));
         typeName       = new SimpleStringProperty(prototype.getTypeName());
         dbmsType       = bindDbmsType();
         
         this.parent = parent;
+    }
+    
+    private void setDefaults() {
+        setType(StandardDbmsType.defaultType());
+        setIpAddress("localhost");
+        setPort(getType().getDefaultPort());
+        setUsername("root");
+        setPassword("");
     }
     
     private ObservableValue<DbmsType> bindDbmsType() {
