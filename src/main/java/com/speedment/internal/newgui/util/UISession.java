@@ -120,8 +120,8 @@ public final class UISession {
                 
                 log(success(
                     "+------------: Generation completed! :------------+" + "\n" +
-                    "| Total time......." + alignRight(stopwatch.toString(), 31, '.') + "|\n" +
-                    "| Files generated.." + alignRight("" + instance.getFilesCreated(), 31, '.') + "|\n" +
+                    "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n" +
+                    "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n" +
                     "+-------------------------------------------------+"
                 ));
             } catch (final Exception ex) {
