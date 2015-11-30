@@ -122,6 +122,127 @@ public final class TextUtil {
     }
     
     /**
+     * Returns a string of the specified length where the substring is located
+     * in the middle, padded with spaces on both sides. If uneven, an extra
+     * space will be added to the right side. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @return            the padded string
+     */
+    public static String alignCenter(String substring, int totalWidth) {
+        return alignCenter(substring, totalWidth, ' ');
+    }
+ 
+    /**
+     * Returns a string of the specified length where the substring is located
+     * in the middle, padded with a character on both sides. If uneven, an extra
+     * space will be added to the right side. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @param fill        the character to use for padding
+     * @return            the padded string
+     */
+    public static String alignCenter(String substring, int totalWidth, char fill) {
+        if (substring.length() > totalWidth) {
+            return substring.substring(0, totalWidth);
+        } else {
+            final double padding = (totalWidth - substring.length()) / 2d;
+            final int left  = (int) Math.floor(padding);
+            final int right = (int) Math.ceil(padding);
+            return repeat("" + fill, left) + substring + repeat("" + fill, right);
+        }
+    }
+
+    /**
+     * Returns a string of the specified length where the substring is located
+     * to the left, padded spaces on the right. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @return            the padded string
+     */
+    public static String alignLeft(String substring, int totalWidth) {
+        return alignLeft(substring, totalWidth, ' ');
+    }
+    
+    /**
+     * Returns a string of the specified length where the substring is located
+     * to the left, padded with a character on the right. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @param fill        the character to use for padding
+     * @return            the padded string
+     */
+    public static String alignLeft(String substring, int totalWidth, char fill) {
+        if (substring.length() > totalWidth) {
+            return substring.substring(0, totalWidth);
+        } else {
+            return substring + repeat("" + fill, totalWidth - substring.length());
+        }
+    }
+    
+    /**
+     * Returns a string of the specified length where the substring is located
+     * to the right, padded with spaces on the left. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @return            the padded string
+     */
+    public static String alignRight(String substring, int totalWidth) {
+        return alignRight(substring, totalWidth, ' ');
+    }
+
+    /**
+     * Returns a string of the specified length where the substring is located
+     * to the right, padded with a character on the left. If the specified 
+     * {@code totalWidth} is less than the length of the substring, the
+     * substring is returned but with the overflowing characters removed.
+     * 
+     * @param substring   the substring to align
+     * @param totalWidth  the width of the returned string
+     * @param fill        the character to use for padding
+     * @return            the padded string
+     */
+    public static String alignRight(String substring, int totalWidth, char fill) {
+        if (substring.length() > totalWidth) {
+            return substring.substring(0, totalWidth);
+        } else {
+            return repeat("" + fill, totalWidth - substring.length()) + substring;
+        }
+    }
+
+    /**
+     * Repeats the specified substring a number of times.
+     *
+     * @param str    the string to repeat
+     * @param count  the number of times to repeat it
+     * @return       the new string
+     */
+    public static String repeat(String str, int count) {
+        final StringBuilder result = new StringBuilder(str.length() * count);
+
+        for (int i = 0; i < count; i++) {
+            result.append(str);
+        }
+
+        return result.toString();
+    }
+    
+    /**
      * Utility classes should not be instantiated.
      */
     private TextUtil() { instanceNotAllowed(getClass()); }

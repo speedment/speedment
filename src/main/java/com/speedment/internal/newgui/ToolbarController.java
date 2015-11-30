@@ -54,6 +54,7 @@ public final class ToolbarController implements Initializable {
         buttonNew.setGraphic(SpeedmentIcon.NEW_PROJECT_24.view());
         buttonOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT_24.view());
         buttonGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT_24.view());
+        
         logo.setOnMousePressed(session.showGithub());
     }
     

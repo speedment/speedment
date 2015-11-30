@@ -32,11 +32,13 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     
     private final ObservableList<Node> properties;
     private final ObservableList<TreeItem<AbstractNodeProperty>> currentSelection;
+    private final ObservableList<Node> outputMessages;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
         properties       = observableArrayList();
         currentSelection = observableArrayList();
+        outputMessages   = observableArrayList();
     }
 
     @Override
@@ -47,5 +49,10 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     @Override
     public ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection() {
         return currentSelection;
+    }
+
+    @Override
+    public ObservableList<Node> getOutputMessages() {
+        return outputMessages;
     }
 }

@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import static java.util.Objects.requireNonNull;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -31,6 +34,7 @@ import static java.util.Objects.requireNonNull;
 public final class OutputController implements Initializable {
     
     private final UISession session;
+    private @FXML VBox output;
     
     private OutputController(UISession session) {
         this.session = requireNonNull(session);
@@ -38,7 +42,10 @@ public final class OutputController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Do nothing.
+        Bindings.bindContent(
+            output.getChildren(), 
+            session.getSpeedment().getUserInterfaceComponent().getOutputMessages()
+        );
     }
     
     public static Node create(UISession session) {

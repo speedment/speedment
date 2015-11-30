@@ -28,7 +28,6 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.File;
 import java.io.IOException;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;

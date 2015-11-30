@@ -11,7 +11,7 @@
     <content>
         <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
            <content>
-              <WebView fx:id="output" />
+              <VBox fx:id="output" />
            </content>
         </ScrollPane>
     </content>

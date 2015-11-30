@@ -18,6 +18,7 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.newgui.output.Line;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
@@ -56,4 +57,16 @@ public interface UserInterfaceComponent extends Component {
      * @return  a view of the selected tree nodes
      */
     ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection();
+    
+    /**
+     * Returns an observable list with all the output messages currently
+     * visible in the output area. New messages can be added to this list or
+     * removed safely.
+     * <p>
+     * Messages should ideally be created using the {@link Line} class, but
+     * could be any node implementation.
+     * 
+     * @return  the currently visible output messages
+     */
+    ObservableList<Node> getOutputMessages();
 }
