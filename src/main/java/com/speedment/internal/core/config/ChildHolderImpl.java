@@ -96,6 +96,17 @@ public final class ChildHolderImpl<T extends Child<?>> implements ChildHolder<T>
     }
 
     @Override
+    public Optional<T> remove(T child) {
+        requireNonNull(child);
+        if (children.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public Stream<T> stream() {
         return children.stream();
     }

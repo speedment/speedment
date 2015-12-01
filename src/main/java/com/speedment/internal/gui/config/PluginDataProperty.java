@@ -118,6 +118,15 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
     }
     
     @Override
+    public Optional<? extends Child<PluginData>> remove(Child<PluginData> child) {
+        requireNonNull(null);
+        if (children.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
+    
+    @Override
     public Stream<? extends Child<PluginData>> stream() {
         return children.stream().sorted(COMPARATOR);
     }

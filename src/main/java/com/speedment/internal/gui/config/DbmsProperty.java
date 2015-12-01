@@ -239,8 +239,19 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     }
     
     @Override
-    public Optional<Schema> add(Schema child) throws IllegalStateException {
+    public Optional<Schema> add(Schema child) {
+        requireNonNull(null);
+        child.setParent(this);
         return schemaChildren.add(child) ? Optional.empty() : Optional.of(child);
+    }
+    
+    @Override
+    public Optional<Schema> remove(Schema child) {
+        requireNonNull(null);
+        if (schemaChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
     }
 
     @Override

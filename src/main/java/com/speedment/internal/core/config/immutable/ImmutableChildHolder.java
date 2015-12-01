@@ -92,6 +92,11 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
     public Optional<T> put(T child, Parent<? super T> parent) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
+    
+    @Override
+    public Optional<T> remove(T child) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 
     @Override
     public Stream<T> stream() {
@@ -118,6 +123,11 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
 
         @Override
         public Optional<Child<?>> put(Child<?> child, Parent<? super Child<?>> parent) {
+            return throwNewUnsupportedOperationExceptionImmutable();
+        }
+        
+        @Override
+        public Optional<Child<?>> remove(Child<?> child) {
             return throwNewUnsupportedOperationExceptionImmutable();
         }
 
@@ -151,6 +161,11 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
 
         @Override
         public Optional<T> put(T child, Parent<? super T> parent) {
+            return throwNewUnsupportedOperationExceptionImmutable();
+        }
+        
+        @Override
+        public Optional<T> remove(T child) {
             return throwNewUnsupportedOperationExceptionImmutable();
         }
 

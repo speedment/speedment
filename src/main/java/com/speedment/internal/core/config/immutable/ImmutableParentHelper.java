@@ -35,6 +35,11 @@ public interface ImmutableParentHelper<C extends Child<?>> extends ParentHelper<
     default Optional<C> add(final C child) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
+    
+    @Override
+    default Optional<C> remove(final C child) {
+        return throwNewUnsupportedOperationExceptionImmutable();
+    }
 
     default ChildHolder<C> childHolderOf(Class<C> childClass, Stream<C> childs) {
         return ImmutableChildHolder.of(childClass, childs.collect(toList()));

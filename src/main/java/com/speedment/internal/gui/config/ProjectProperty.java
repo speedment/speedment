@@ -232,6 +232,36 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         requireNonNull(child);
         return pluginDataChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
+    
+    public Optional<Dbms> removeDbms(Dbms child) {
+        requireNonNull(null);
+        if (dbmsChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public Optional<? extends Child<Project>> remove(Child<Project> child) {
+        requireNonNull(child);
+        
+        if (child instanceof Dbms) {
+            return removeDbms((Dbms) child);
+        } else if (child instanceof PluginData) {
+            return removePluginData((PluginData) child);
+        } else {
+            throw wrongChildTypeException(child.getClass());
+        }
+    }
+    
+    public Optional<PluginData> removePluginData(PluginData child) {
+        requireNonNull(null);
+        if (pluginDataChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
 
     @Override
     public Stream<? extends Child<Project>> stream() {

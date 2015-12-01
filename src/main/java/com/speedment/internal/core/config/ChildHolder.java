@@ -49,6 +49,16 @@ public interface ChildHolder<T extends Child<?>> {
      * @see Ordinable
      */
     Optional<T> put(T child, Parent<? super T> parent);
+    
+    /**
+     * Removes the specified child from this holder, also setting its parent to 
+     * null. If the node was removed, it is returned wrapped in an Optional. 
+     * Else, an empty is returned.
+     *
+     * @param child   the child to remove.
+     * @return        the child removed or empty
+     */
+    Optional<T> remove(T child);
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder. The

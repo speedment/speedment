@@ -97,6 +97,15 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     public Optional<ForeignKeyColumn> add(ForeignKeyColumn child) throws IllegalStateException {
         return foreignKeyColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
+    
+    @Override
+    public Optional<ForeignKeyColumn> remove(ForeignKeyColumn child) {
+        requireNonNull(null);
+        if (foreignKeyColumnChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
 
     @Override
     public Stream<ForeignKeyColumn> stream() {

@@ -39,6 +39,12 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
         requireNonNull(child);
         return getChildren().put(child, this);
     }
+    
+    @Override
+    default Optional<C> remove(final C child) {
+        requireNonNull(child);
+        return getChildren().remove(child);
+    }
 
 //    @SuppressWarnings("unchecked")
 //    @Override

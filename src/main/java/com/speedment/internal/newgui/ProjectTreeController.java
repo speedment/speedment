@@ -124,15 +124,15 @@ public final class ProjectTreeController implements Initializable {
                 .forEach(branch.getChildren()::add);
             
             nodeAsParent.children().addListener((ListChangeListener.Change<? extends AbstractNodeProperty> c) -> {
-                if (c.wasAdded()) {
-                    c.getAddedSubList().stream()
-                        .map(this::branch)
-                        .forEach(branch.getChildren()::add);
-                }
-                
-                if (c.wasRemoved()) {
-                    c.getRemoved().stream()
-                        .forEach(val -> branch.getChildren().removeIf(item -> val.equals(item.getValue())));
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        c.getAddedSubList().stream()
+                            .map(this::branch)
+                            .forEach(branch.getChildren()::add);
+                    } else if (c.wasRemoved()) {
+                        c.getRemoved().stream()
+                            .forEach(val -> branch.getChildren().removeIf(item -> val.equals(item.getValue())));
+                    }
                 }
             });
         }

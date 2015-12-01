@@ -27,7 +27,6 @@ import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.newgui.property.BooleanPropertyItem;
-import com.speedment.internal.newgui.property.EnumPropertyItem;
 import com.speedment.internal.newgui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
@@ -237,6 +236,15 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     public Optional<Table> add(Table child) throws IllegalStateException {
         requireNonNull(child);
         return tableChildren.add(child) ? Optional.empty() : Optional.of(child);
+    }
+    
+    @Override
+    public Optional<Table> remove(Table child) {
+        requireNonNull(null);
+        if (tableChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
     }
 
     @Override

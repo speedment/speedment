@@ -18,6 +18,7 @@ package com.speedment.internal.gui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.Column;
+import com.speedment.config.Dbms;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.Index;
 import com.speedment.config.PrimaryKeyColumn;
@@ -278,6 +279,56 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     public Optional<ForeignKey> addForeignKey(ForeignKey child) {
         requireNonNull(child);
         return foreignKeyChildren.add(child) ? Optional.empty() : Optional.of(child);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public Optional<? extends Child<Table>> remove(Child<Table> child) {
+        requireNonNull(child);
+        
+        if (child instanceof Column) {
+            return removeColumn((Column) child);
+        } else if (child instanceof PrimaryKeyColumn) {
+            return removePrimaryKeyColumn((PrimaryKeyColumn) child);
+        } else if (child instanceof Index) {
+            return removeIndex((Index) child);
+        } else if (child instanceof ForeignKey) {
+            return removeForeignKey((ForeignKey) child);
+        } else {
+            throw wrongChildTypeException(child.getClass());
+        }
+    }
+    
+    public Optional<Column> removeColumn(Column child) {
+        requireNonNull(null);
+        if (columnChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
+    
+    public Optional<PrimaryKeyColumn> removePrimaryKeyColumn(PrimaryKeyColumn child) {
+        requireNonNull(null);
+        if (primaryKeyColumnChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
+    
+    public Optional<Index> removeIndex(Index child) {
+        requireNonNull(null);
+        if (indexChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
+    }
+    
+    public Optional<ForeignKey> removeForeignKey(ForeignKey child) {
+        requireNonNull(null);
+        if (foreignKeyChildren.remove(child)) {
+            child.setParent(null);
+            return Optional.of(child);
+        } else return Optional.empty();
     }
 
     @Override
