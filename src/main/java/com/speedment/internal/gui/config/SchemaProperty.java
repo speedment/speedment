@@ -240,7 +240,7 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
     
     @Override
     public Optional<Table> remove(Table child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (tableChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

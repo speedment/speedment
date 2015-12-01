@@ -240,14 +240,14 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     
     @Override
     public Optional<Schema> add(Schema child) {
-        requireNonNull(null);
+        requireNonNull(child);
         child.setParent(this);
         return schemaChildren.add(child) ? Optional.empty() : Optional.of(child);
     }
     
     @Override
     public Optional<Schema> remove(Schema child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (schemaChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

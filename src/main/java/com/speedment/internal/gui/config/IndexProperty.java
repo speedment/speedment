@@ -127,7 +127,7 @@ public final class IndexProperty extends AbstractParentProperty<Index, IndexColu
     
     @Override
     public Optional<IndexColumn> remove(IndexColumn child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (indexColumnChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

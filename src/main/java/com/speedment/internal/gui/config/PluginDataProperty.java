@@ -119,7 +119,7 @@ public final class PluginDataProperty extends AbstractParentProperty<PluginData,
     
     @Override
     public Optional<? extends Child<PluginData>> remove(Child<PluginData> child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (children.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

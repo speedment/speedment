@@ -300,7 +300,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     }
     
     public Optional<Column> removeColumn(Column child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (columnChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);
@@ -308,7 +308,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     }
     
     public Optional<PrimaryKeyColumn> removePrimaryKeyColumn(PrimaryKeyColumn child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (primaryKeyColumnChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);
@@ -316,7 +316,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     }
     
     public Optional<Index> removeIndex(Index child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (indexChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);
@@ -324,7 +324,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     }
     
     public Optional<ForeignKey> removeForeignKey(ForeignKey child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (foreignKeyChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

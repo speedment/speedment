@@ -100,7 +100,7 @@ public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey,
     
     @Override
     public Optional<ForeignKeyColumn> remove(ForeignKeyColumn child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (foreignKeyColumnChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);

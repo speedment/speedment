@@ -234,7 +234,7 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     }
     
     public Optional<Dbms> removeDbms(Dbms child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (dbmsChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);
@@ -256,7 +256,7 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     }
     
     public Optional<PluginData> removePluginData(PluginData child) {
-        requireNonNull(null);
+        requireNonNull(child);
         if (pluginDataChildren.remove(child)) {
             child.setParent(null);
             return Optional.of(child);
