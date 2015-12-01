@@ -98,24 +98,6 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
                 tableName,
                 "Table Name",                  
                 "The name that is used for this entity in the database."
-            ),
-            new EnumPropertyItem(
-                FieldStorageType.class, 
-                fieldStorageType,
-                "Field Storage Type",     
-                "The type of storage to use for entities of this kind."
-            ),
-            new EnumPropertyItem(
-                ColumnCompressionType.class, 
-                columnCompressionType,
-                "Column Compression Type",     
-                "The compression strategy to use for entities of this kind."
-            ),
-            new EnumPropertyItem(
-                StorageEngineType.class, 
-                storageEngineType,
-                "Storage Engine Type",     
-                "The storage engine to use for entities of this kind."
             )
         );
     }

@@ -109,24 +109,6 @@ public final class SchemaProperty extends AbstractParentProperty<Schema, Table> 
                 defaultSchema,
                 "Is Default Schema",
                 "True if this is the default schema to use."
-            ),
-            new EnumPropertyItem(
-                FieldStorageType.class, 
-                fieldStorageType,      
-                "Field Storage Type",     
-                "The default type of storage to use for entities of this kind."
-            ),
-            new EnumPropertyItem(
-                ColumnCompressionType.class, 
-                columnCompressionType,
-                "Column Compression Type",     
-                "The default compression strategy to use for entities of this kind."
-            ),
-            new EnumPropertyItem(
-                StorageEngineType.class, 
-                storageEngineType,   
-                "Storage Engine Type",     
-                "The default storage engine to use for entities of this kind."
             )
         );
     }

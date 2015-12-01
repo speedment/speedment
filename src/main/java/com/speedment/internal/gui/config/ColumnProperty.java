@@ -105,19 +105,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
                 autoIncrement,
                 "Is Auto Incrementing",
                 "If this column will increment automatically for each new entity."
-            )/*,
-            new EnumPropertyItem(
-                FieldStorageType.class,
-                fieldStorageType,
-                "Field Storage Type",     
-                "The type of storage to use for fields of this kind."
-            ),
-            new EnumPropertyItem(
-                ColumnCompressionType.class, 
-                columnCompressionType,
-                "Column Compression Type",
-                "The compression strategy to use for fields of this kind."
-            )*/
+            )
         );
     }
     
