@@ -19,10 +19,15 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import static javafx.collections.FXCollections.observableArrayList;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TreeCell;
 
 /**
  *
@@ -33,12 +38,14 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     private final ObservableList<Node> properties;
     private final ObservableList<TreeItem<AbstractNodeProperty>> currentSelection;
     private final ObservableList<Node> outputMessages;
+    private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
         properties       = observableArrayList();
         currentSelection = observableArrayList();
         outputMessages   = observableArrayList();
+        contextMenuBuilders = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -54,5 +61,24 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     @Override
     public ObservableList<Node> getOutputMessages() {
         return outputMessages;
+    }
+
+    @Override
+    public <NODE extends AbstractNodeProperty> void installContextMenu(Class<? super NODE> nodeType, ContextMenuBuilder<NODE> menuBuilder) {
+        contextMenuBuilders.put(nodeType, menuBuilder);
+    }
+
+    @Override
+    public <NODE extends AbstractNodeProperty> Optional<ContextMenu> createContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node) {
+        @SuppressWarnings("unchecked")
+        final UserInterfaceComponent.ContextMenuBuilder<NODE> builder = 
+            (UserInterfaceComponent.ContextMenuBuilder<NODE>) 
+            contextMenuBuilders.get(node.getInterfaceMainClass());
+        
+        if (builder == null) {
+            return Optional.empty();
+        } else {
+            return builder.build(treeCell, node);
+        }
     }
 }

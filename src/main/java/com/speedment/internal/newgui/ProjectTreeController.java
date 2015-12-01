@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.newgui;
 
+import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
@@ -61,42 +62,44 @@ public final class ProjectTreeController implements Initializable {
     private void populateTree(ProjectProperty project) {
         requireNonNull(project);
         
-        session.getSpeedment().getEventComponent().notify(new ProjectLoaded(project));
+        final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
+        final EventComponent events     = session.getSpeedment().getEventComponent();
+        
+        events.notify(new ProjectLoaded(project));
 
-        hierarchy.setCellFactory(view -> {
-            final TreeCell<AbstractNodeProperty> cell =  new TreeCell<AbstractNodeProperty>() {
-                @Override
-                protected void updateItem(AbstractNodeProperty item, boolean empty) {
-                    // item can be null
-                    super.updateItem(item, requireNonNull(empty));
+        hierarchy.setCellFactory(view -> new TreeCell<AbstractNodeProperty>() {
+            @Override
+            protected void updateItem(AbstractNodeProperty item, boolean empty) {
+                // item can be null
+                super.updateItem(item, requireNonNull(empty));
 
-                    if (item == null || empty) {
-                        setGraphic(null);
-                        textProperty().unbind();
-                        styleProperty().unbind();
-                        setText(null);
-                        setStyle(null);
-                    } else {
-                        setGraphic(SpeedmentIcon.forNode(item));
-                        textProperty().bind(item.nameProperty());
+                if (item == null || empty) {
+                    setGraphic(null);
+                    textProperty().unbind();
+                    styleProperty().unbind();
+                    setText(null);
+                    setStyle(null);
+                    setContextMenu(null);
+                } else {
+                    setGraphic(SpeedmentIcon.forNode(item));
+                    textProperty().bind(item.nameProperty());
 
-                        styleProperty().bind(
-                            createObjectBinding(
-                                () -> item.enabledProperty().get() ?
-                                "" : "-fx-text-fill: gray; -fx-font-style: italic;", 
-                                item.enabledProperty()
-                            )
-                        );
-                    }
+                    ui.createContextMenu(this, item)
+                        .ifPresent(this::setContextMenu);
+
+                    styleProperty().bind(
+                        createObjectBinding(
+                            () -> item.enabledProperty().get() ?
+                            "" : "-fx-text-fill: gray; -fx-font-style: italic;", 
+                            item.enabledProperty()
+                        )
+                    );
                 }
-            };
-            
-            return cell;
+            }
         });
         
         hierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
         
-        final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
         Bindings.bindContent(
             ui.getCurrentSelection(),
             hierarchy.getSelectionModel().getSelectedItems()

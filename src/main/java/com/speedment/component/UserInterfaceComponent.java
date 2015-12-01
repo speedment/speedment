@@ -18,9 +18,13 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.newgui.ProjectTreeController;
 import com.speedment.internal.newgui.output.Line;
+import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -69,4 +73,33 @@ public interface UserInterfaceComponent extends Component {
      * @return  the currently visible output messages
      */
     ObservableList<Node> getOutputMessages();
+    
+    /**
+     * Installs a new context menu builder that will be used in the 
+     * {@link ProjectTreeController} of the GUI. This is useful for plugins
+     * that require a custom menu to handle custom project tree nodes. If no
+     * builder exists for a particular type of node, no menu will be displayed.
+     * 
+     * @param <NODE>       the implementation type of the node
+     * @param nodeType     the interface main type of the node
+     * @param menuBuilder  the builder to use
+     */
+    <NODE extends AbstractNodeProperty> void installContextMenu(Class<? super NODE> nodeType, ContextMenuBuilder<NODE> menuBuilder);
+    
+    /**
+     * If a builder exists for the interface main type of the specified node,
+     * it will be called and the result will be returned. If no builder exists,
+     * an {@code empty} will be returned.
+     * 
+     * @param <NODE>    the implementation type of the node
+     * @param treeCell  the tree cell that invoced the context menu
+     * @param node      the node to create a context menu for
+     * @return          the created context menu or {@code empty}
+     */
+    <NODE extends AbstractNodeProperty> Optional<ContextMenu> createContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    
+    @FunctionalInterface
+    interface ContextMenuBuilder<NODE extends AbstractNodeProperty> {
+        Optional<ContextMenu> build(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    }
 }
