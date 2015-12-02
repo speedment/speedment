@@ -35,6 +35,8 @@ import javafx.application.Application;
 import javafx.event.Event;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

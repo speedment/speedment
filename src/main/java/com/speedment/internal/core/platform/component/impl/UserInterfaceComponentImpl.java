@@ -25,9 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
-import static javafx.collections.FXCollections.observableArrayList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
@@ -36,15 +36,15 @@ import javafx.scene.control.TreeCell;
 public final class UserInterfaceComponentImpl extends Apache2AbstractComponent implements UserInterfaceComponent {
     
     private final ObservableList<Node> properties;
-    private final ObservableList<TreeItem<AbstractNodeProperty>> currentSelection;
     private final ObservableList<Node> outputMessages;
+    private final ObservableList<TreeItem<AbstractNodeProperty>> selectedTreeItems;
     private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
-        properties       = observableArrayList();
-        currentSelection = observableArrayList();
-        outputMessages   = observableArrayList();
+        properties          = observableArrayList();
+        outputMessages      = observableArrayList();
+        selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
     }
 
@@ -52,10 +52,10 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     public ObservableList<Node> getProperties() {
         return properties;
     }
-    
+
     @Override
-    public ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection() {
-        return currentSelection;
+    public ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems() {
+        return selectedTreeItems;
     }
 
     @Override

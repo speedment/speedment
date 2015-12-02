@@ -47,20 +47,18 @@ public interface UserInterfaceComponent extends Component {
      * <p>
      * The list will be modified by the GUI each time a new node in the tree is selected.
      * It is therefore recommended to only modify this component as a result of a
-     * {@link #getCurrentSelection()} event.
+     * {@link #getSelectedTreeItems()} event.
      * 
      * @return  a view of the properties area
      */
     ObservableList<Node> getProperties();
 
     /**
-     * Returns the currently selected nodes in the tree view of the GUI. This collection
-     * could be listened to by extensions that want to react when the user change the focus
-     * of the workspace.
+     * Returns a read-only view of the currently selected tree items in the GUI.
      * 
-     * @return  a view of the selected tree nodes
+     * @return  the view of currently selected tree items.
      */
-    ObservableList<TreeItem<AbstractNodeProperty>> getCurrentSelection();
+    ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems();
     
     /**
      * Returns an observable list with all the output messages currently

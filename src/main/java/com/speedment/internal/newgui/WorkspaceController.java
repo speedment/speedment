@@ -21,10 +21,7 @@ import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.newgui.property.AbstractPropertyItem;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
-import com.speedment.stream.MapStream;
 import java.net.URL;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -35,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -53,8 +51,23 @@ public final class WorkspaceController implements Initializable {
         
         session.getSpeedment()
             .getUserInterfaceComponent()
-            .getCurrentSelection()
+            .getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<AbstractNodeProperty>> change) -> {
+//                while (change.next()) {
+//                    if (change.wasRemoved()) {
+//                        properties.clear();
+//                    }
+//                    
+//                    if (change.wasAdded()) {
+//                        final TreeItem<AbstractNodeProperty> treeItem = change.getAddedSubList().get(0);
+//                    
+//                        if (treeItem != null) {
+//                            final AbstractNodeProperty node = treeItem.getValue();
+//                            node.getGuiVisibleProperties()
+//                                .forEachOrdered(properties::add);
+//                        }
+//                    }
+//                }
                 properties.clear();
                 
                 if (!change.getList().isEmpty()) {

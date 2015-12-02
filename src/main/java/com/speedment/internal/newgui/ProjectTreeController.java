@@ -39,6 +39,7 @@ import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -98,13 +99,8 @@ public final class ProjectTreeController implements Initializable {
             }
         });
         
+        Bindings.bindContent(ui.getSelectedTreeItems(), hierarchy.getSelectionModel().getSelectedItems());
         hierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
-        
-        Bindings.bindContent(
-            ui.getCurrentSelection(),
-            hierarchy.getSelectionModel().getSelectedItems()
-        );
-        
         hierarchy.setRoot(branch(project));
     }
     
