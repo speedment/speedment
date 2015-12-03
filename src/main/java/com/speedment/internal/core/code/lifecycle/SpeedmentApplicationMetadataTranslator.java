@@ -64,7 +64,10 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
         
         //final StringBuilder str = new StringBuilder();
         GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
-            initializer.add("METADATA.append(\"" + l.replace("\"", "\\\"") + "\\n\");");
+            initializer.add("METADATA.append(\"" + 
+                l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
+                "\\n\");"
+            );
             //str.append("METADATA.append(\"").append(l.replace("\"", "\\\"")).append("\\n\");\n");
         });
         
