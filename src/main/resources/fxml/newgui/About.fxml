@@ -29,7 +29,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="8.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
+        <Label fx:id="title" styleClass="header" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
         <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />
         <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license." wrapText="true" />
         <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />

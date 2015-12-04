@@ -32,7 +32,7 @@
 
 <HBox alignment="CENTER" prefHeight="38.0" prefWidth="900.0" spacing="16.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Button fx:id="buttonNew" alignment="CENTER" mnemonicParsing="false" text="New" textAlignment="CENTER">
+        <Button fx:id="buttonNew" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" text="New" textAlignment="CENTER">
             <HBox.margin>
                 <Insets left="16.0" />
             </HBox.margin>
@@ -40,12 +40,17 @@
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>
         </Button>
-        <Button fx:id="buttonOpen" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Open" textAlignment="CENTER">
+        <Button fx:id="buttonOpen" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Open" textAlignment="CENTER">
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>
         </Button>
-        <Button fx:id="buttonGenerate" alignment="CENTER" defaultButton="true" layoutX="50.0" layoutY="10.0" mnemonicParsing="false" text="Generate" textAlignment="CENTER">
+        <Button fx:id="buttonReload" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Reload" textAlignment="CENTER">
+            <padding>
+                <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
+            </padding>
+        </Button>
+        <Button fx:id="buttonGenerate" alignment="CENTER" defaultButton="true" graphicTextGap="10.0" layoutX="50.0" layoutY="10.0" mnemonicParsing="false" text="Generate" textAlignment="CENTER">
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>

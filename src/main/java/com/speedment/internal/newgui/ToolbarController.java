@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.newgui;
 
-import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -34,10 +35,12 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ToolbarController implements Initializable {
     
+    public final static String ICON_SIZE = "2em";
     private final UISession session;
     
     private @FXML Button buttonNew;
     private @FXML Button buttonOpen;
+    private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
     private @FXML ImageView logo;
     
@@ -51,9 +54,10 @@ public final class ToolbarController implements Initializable {
         buttonOpen.setOnAction(session.openProject());
         buttonGenerate.setOnAction(session.generate());
 
-        buttonNew.setGraphic(SpeedmentIcon.NEW_PROJECT_24.view());
-        buttonOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT_24.view());
-        buttonGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT_24.view());
+        buttonNew.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLUS_SQUARE, ICON_SIZE));
+        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
+        buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
+        buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
         
         logo.setOnMousePressed(session.showGithub());
     }

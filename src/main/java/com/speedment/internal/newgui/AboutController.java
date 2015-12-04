@@ -62,7 +62,8 @@ public final class AboutController implements Initializable {
         external.setText(
             "It includes software licensed as follows:\n\n"
             + "Apache 2:\n"
-            + "groovy-all (2.4.0).\n"
+            + "groovy-all (2.4.0)\n"
+            + "fontawesomefx (8.6)\n"
             + "\n"
             + "GPL 2 with FOSS exception:\n"
             + "mysql-connector-java (5.1.34)\n"
@@ -71,7 +72,7 @@ public final class AboutController implements Initializable {
             + "silk (1.3)\n"
             + "\n"
             + "BSD 3-Clause License:\n"
-            + "ControlsFX (8.40.10)"
+            + "controlsfx (8.40.10)"
         );
         
         close.setOnAction(ev -> dialog.close());
@@ -85,6 +86,7 @@ public final class AboutController implements Initializable {
         });
         
         final Scene scene  = new Scene(root);
+        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
         
         dialog.setTitle("About Speedment");
         dialog.initModality(APPLICATION_MODAL);

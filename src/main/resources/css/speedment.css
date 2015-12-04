@@ -127,6 +127,10 @@
     -fx-background-color: -fx-speedment-lightgreen;
 }
 
+.button > .glyph-icon {
+    -fx-fill: white;
+}
+
 /*** Choice Box ***/
 .choice-box {
     -fx-background-color: white;

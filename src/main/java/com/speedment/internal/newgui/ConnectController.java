@@ -87,15 +87,6 @@ public final class ConnectController implements Initializable {
             container.getChildren().remove(openContainer);
         }
         
-        leftTitle.getStyleClass().add("header");
-        rightTitle.getStyleClass().add("header");
-        
-//        leftTitle.setFont(SpeedmentFont.HEADER.get());
-//        leftTitle.setTextFill(Color.web("#3267c9"));
-//        
-//        rightTitle.setFont(SpeedmentFont.HEADER.get());
-//        rightTitle.setTextFill(Color.web("#3267c9"));
-
         fieldType.setItems(
             getDbmsTypes()
             .map(DbmsType::getName)
