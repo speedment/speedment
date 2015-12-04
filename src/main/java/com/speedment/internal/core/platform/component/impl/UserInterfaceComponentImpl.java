@@ -22,6 +22,8 @@ import com.speedment.internal.gui.config.AbstractNodeProperty;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
@@ -35,10 +37,13 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public final class UserInterfaceComponentImpl extends Apache2AbstractComponent implements UserInterfaceComponent {
     
+    private final static String DEFAULT_STYLESHEET = "/css/speedment.css";
+    
     private final ObservableList<Node> properties;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<AbstractNodeProperty>> selectedTreeItems;
     private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
+    private final StringProperty stylesheet;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
@@ -46,6 +51,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
         outputMessages      = observableArrayList();
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
+        stylesheet          = new SimpleStringProperty(DEFAULT_STYLESHEET);
     }
 
     @Override
@@ -80,5 +86,15 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
         } else {
             return builder.build(treeCell, node);
         }
+    }
+
+    @Override
+    public String getStylesheetFile() {
+        return stylesheet.getValue();
+    }
+
+    @Override
+    public void setStylesheetFile(String filename) {
+        this.stylesheet.setValue(filename);
     }
 }

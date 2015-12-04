@@ -70,6 +70,8 @@ public final class SceneController implements Initializable {
         final Rectangle2D screen = Screen.getPrimary().getVisualBounds();
         final Scene scene        = new Scene(root);
         
+        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        
         final Stage stage = session.getStage();
         stage.hide();
         stage.setTitle("Speedment");

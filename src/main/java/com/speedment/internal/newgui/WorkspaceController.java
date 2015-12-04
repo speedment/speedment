@@ -53,21 +53,6 @@ public final class WorkspaceController implements Initializable {
             .getUserInterfaceComponent()
             .getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<AbstractNodeProperty>> change) -> {
-//                while (change.next()) {
-//                    if (change.wasRemoved()) {
-//                        properties.clear();
-//                    }
-//                    
-//                    if (change.wasAdded()) {
-//                        final TreeItem<AbstractNodeProperty> treeItem = change.getAddedSubList().get(0);
-//                    
-//                        if (treeItem != null) {
-//                            final AbstractNodeProperty node = treeItem.getValue();
-//                            node.getGuiVisibleProperties()
-//                                .forEachOrdered(properties::add);
-//                        }
-//                    }
-//                }
                 properties.clear();
                 
                 if (!change.getList().isEmpty()) {
@@ -89,7 +74,7 @@ public final class WorkspaceController implements Initializable {
         
         sheet.setMode(PropertySheet.Mode.NAME);
         sheet.setModeSwitcherVisible(false);
-        sheet.setSearchBoxVisible(true);
+        sheet.setSearchBoxVisible(false);
         sheet.setPropertyEditorFactory(item -> {
             if (item instanceof AbstractPropertyItem<?, ?>) {
                 @SuppressWarnings("unchecked")

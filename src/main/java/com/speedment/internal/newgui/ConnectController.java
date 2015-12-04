@@ -22,7 +22,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.gui.config.DbmsProperty;
 import com.speedment.internal.gui.config.SchemaProperty;
-import com.speedment.internal.gui.resource.SpeedmentFont;
 import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
@@ -48,7 +47,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -89,11 +87,14 @@ public final class ConnectController implements Initializable {
             container.getChildren().remove(openContainer);
         }
         
-        leftTitle.setFont(SpeedmentFont.HEADER.get());
-        leftTitle.setTextFill(Color.web("#3267c9"));
+        leftTitle.getStyleClass().add("header");
+        rightTitle.getStyleClass().add("header");
         
-        rightTitle.setFont(SpeedmentFont.HEADER.get());
-        rightTitle.setTextFill(Color.web("#3267c9"));
+//        leftTitle.setFont(SpeedmentFont.HEADER.get());
+//        leftTitle.setTextFill(Color.web("#3267c9"));
+//        
+//        rightTitle.setFont(SpeedmentFont.HEADER.get());
+//        rightTitle.setTextFill(Color.web("#3267c9"));
 
         fieldType.setItems(
             getDbmsTypes()
@@ -202,16 +203,13 @@ public final class ConnectController implements Initializable {
                 throw ex;
             }
         });
-
-//        buttonOpen.setOnAction(createOpenProjectHandler(speedment, stage, (f, p) -> {
-//            // Todo: set saved file;
-////                SceneController.showIn(speedment, stage, p, f);
-//        }));
     }
     
     public static void createAndShow(UISession session) {
         final Parent root        = UILoader.create(session, "Connect", ConnectController::new);
         final Scene scene        = new Scene(root);
+        
+        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
         
         final Stage stage = session.getStage();
         stage.hide();

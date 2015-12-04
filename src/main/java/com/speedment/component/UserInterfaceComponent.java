@@ -73,6 +73,20 @@ public interface UserInterfaceComponent extends Component {
     ObservableList<Node> getOutputMessages();
     
     /**
+     * Returns the css-file that should be used to style the GUI.
+     * 
+     * @return  the stylesheet
+     */
+    String getStylesheetFile();
+    
+    /**
+     * Returns the css-file used to style the GUI.
+     * 
+     * @param filename  the new css stylesheet
+     */
+    void setStylesheetFile(String filename);
+    
+    /**
      * Installs a new context menu builder that will be used in the 
      * {@link ProjectTreeController} of the GUI. This is useful for plugins
      * that require a custom menu to handle custom project tree nodes. If no

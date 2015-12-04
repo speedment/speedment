@@ -29,7 +29,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -40,6 +39,8 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  *
@@ -81,6 +82,7 @@ public final class ProjectTreeController implements Initializable {
                     setText(null);
                     setStyle(null);
                     setContextMenu(null);
+                    while (getStyleClass().remove("gui-disabled")) {}
                 } else {
                     setGraphic(SpeedmentIcon.forNode(item));
                     textProperty().bind(item.nameProperty());
@@ -88,13 +90,17 @@ public final class ProjectTreeController implements Initializable {
                     ui.createContextMenu(this, item)
                         .ifPresent(this::setContextMenu);
 
-                    styleProperty().bind(
-                        createObjectBinding(
-                            () -> item.enabledProperty().get() ?
-                            "" : "-fx-text-fill: gray; -fx-font-style: italic;", 
-                            item.enabledProperty()
-                        )
-                    );
+                    item.enabledProperty().addListener((ob, o, enabled) -> {
+                        if (enabled) {
+                            while (getStyleClass().remove("gui-disabled")) {}
+                        } else {
+                            getStyleClass().add("gui-disabled");
+                        }
+                    });
+                    
+                    if (!item.isEnabled()) {
+                        getStyleClass().add("gui-disabled");
+                    }
                 }
             }
         });
@@ -117,14 +123,14 @@ public final class ProjectTreeController implements Initializable {
             
             nodeAsParent.stream()
                 .map(this::branch)
-                .forEach(branch.getChildren()::add);
+                .forEachOrdered(branch.getChildren()::add);
             
             nodeAsParent.children().addListener((ListChangeListener.Change<? extends AbstractNodeProperty> c) -> {
                 while (c.next()) {
                     if (c.wasAdded()) {
                         c.getAddedSubList().stream()
                             .map(this::branch)
-                            .forEach(branch.getChildren()::add);
+                            .forEachOrdered(branch.getChildren()::add);
                     } else if (c.wasRemoved()) {
                         c.getRemoved().stream()
                             .forEach(val -> branch.getChildren().removeIf(item -> val.equals(item.getValue())));

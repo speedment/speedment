@@ -18,6 +18,7 @@ package com.speedment.internal.gui;
 
 import com.speedment.Speedment;
 import com.speedment.internal.core.platform.SpeedmentFactory;
+import com.speedment.internal.gui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.newgui.ConnectController;
@@ -54,6 +55,7 @@ public final class MainApp extends Application {
         APP = this;
         
         final UISession session = new UISession(SPEEDMENT, APP, stage);
+        SpeedmentFont.loadAll();
 
         Statistics.onGuiStarted();
         ConnectController.createAndShow(session);

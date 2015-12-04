@@ -26,14 +26,12 @@ import static com.speedment.internal.newgui.output.Line.error;
 import static com.speedment.internal.newgui.output.Line.info;
 import static com.speedment.internal.newgui.output.Line.success;
 import com.speedment.internal.newgui.property.PropertySheetFactory;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.event.Event;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
@@ -45,6 +43,7 @@ import static java.util.Objects.requireNonNull;
 public final class UISession {
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
+
     public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
     private final Speedment speedment;
