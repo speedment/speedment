@@ -60,8 +60,7 @@ public final class AboutController implements Initializable {
         title.setFont(SpeedmentFont.HEADER.get());
         version.setText(SpeedmentVersion.getImplementationVersion());
         external.setText(
-            "It includes software licensed as follows:\n\n"
-            + "Apache 2:\n"
+              "Apache 2:\n"
             + "groovy-all (2.4.0)\n"
             + "fontawesomefx (8.6)\n"
             + "\n"
