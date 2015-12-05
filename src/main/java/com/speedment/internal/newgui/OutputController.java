@@ -22,7 +22,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import static java.util.Objects.requireNonNull;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;

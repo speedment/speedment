@@ -315,3 +315,22 @@
 .info .header-panel {
     -fx-background-color: -fx-speedment-green;
 }
+
+/*** Output messages ***/
+.label.msg {
+    -fx-font-family: 'Monospaced';
+    -fx-font-size: 1.1em;
+    -fx-text-fill: black;
+}
+
+.label.msg.error {
+    -fx-background-color: #ffb6c1;
+}
+
+.label.msg.warning {
+    -fx-background-color: #fafad2;
+}
+
+.label.msg.success {
+    -fx-background-color: #90ee90;
+}

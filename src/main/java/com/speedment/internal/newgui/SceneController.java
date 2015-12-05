@@ -66,18 +66,19 @@ public final class SceneController implements Initializable {
     }
     
     public static void createAndShow(UISession session) {
-        final Parent root        = UILoader.create(session, "Scene", SceneController::new);
-        final Rectangle2D screen = Screen.getPrimary().getVisualBounds();
-        final Scene scene        = new Scene(root);
-        
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
-        
-        final Stage stage = session.getStage();
+        final Parent root           = UILoader.create(session, "Scene", SceneController::new);
+        final Scene scene           = new Scene(root);
+        final Stage stage           = session.getStage();
+        final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();
+        final boolean screenIsSmall = screen.getWidth() <= 1920;
+
         stage.hide();
         stage.setTitle("Speedment");
-        stage.setMaximized(screen.getWidth() <= 1920);
+        stage.setMaximized(screenIsSmall);
         stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         stage.setScene(scene);
         stage.show();
+        
+        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
 	}
 }
