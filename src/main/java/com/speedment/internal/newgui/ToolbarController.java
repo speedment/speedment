@@ -52,6 +52,7 @@ public final class ToolbarController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         buttonNew.setOnAction(session.newProject());
         buttonOpen.setOnAction(session.openProject());
+        buttonReload.setOnAction(session.reload());
         buttonGenerate.setOnAction(session.generate());
 
         buttonNew.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLUS_SQUARE, ICON_SIZE));

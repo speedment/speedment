@@ -121,6 +121,7 @@
     -fx-font-family: 'Advent Pro';
     -fx-font-size: 1.5em;
     -fx-cursor: hand;
+    -fx-graphic-text-gap: 0.7em;
 }
 
 .button:hover {
@@ -283,4 +284,34 @@
     -fx-background-color: -fx-speedment-green;
     -fx-text-fill: white;
     -fx-focus-color:white;
+}
+
+/*** Dialog Panels ***/
+.header-panel {
+    -fx-border-width: 0px;
+}
+
+.header-panel > .label,
+.header-panel > .label > .text {
+    -fx-text-fill: white;
+    -fx-font-family: 'Advent Pro';
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+}
+
+.header-panel > .graphic-container > .glyph-icon {
+    -fx-fill: white;
+}
+
+.error .header-panel {
+    -fx-background-color: #cc4d4d;
+}
+
+.confirmation .header-panel {
+    -fx-background-color: #e3ae2d;
+}
+
+.info .header-panel {
+    -fx-background-color: -fx-speedment-green;
 }

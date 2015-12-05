@@ -19,6 +19,7 @@ package com.speedment.internal.newgui.util;
 import com.speedment.Speedment;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.gui.config.ProjectProperty;
+import com.speedment.internal.gui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.newgui.output.Line;
@@ -34,7 +35,13 @@ import javafx.application.Application;
 import javafx.event.Event;
 import java.util.function.Consumer;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -43,6 +50,7 @@ import static java.util.Objects.requireNonNull;
 public final class UISession {
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
+    private final static String DIALOG_PANE_ICON_SIZE = "48px";
 
     public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
@@ -107,6 +115,19 @@ public final class UISession {
     }
     
     @SuppressWarnings("unchecked")
+    public <T extends Event, E extends EventHandler<T>> E reload() {
+        return on(event -> {
+            if (showWarning(
+                "Do you really want to do this?",
+                "Reloading the project will remove any changes you have done " +
+                "to the project. Are you sure you want to continue?"
+            ).filter(ButtonType.OK::equals).isPresent()) {
+                // TODD fix this.
+            }
+        });
+    }
+    
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>>  E generate() {
         return on(event -> {
             clearLog();
@@ -141,6 +162,39 @@ public final class UISession {
                 LOGGER.error(ex, "Error! Failed to generate code.");
             }
         });
+    }
+    
+    public void showError(String title, String message, final Throwable ex) {
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        final Scene scene = alert.getDialogPane().getScene();
+        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+
+        @SuppressWarnings("unchecked")
+        final Stage dialogStage = (Stage) scene.getWindow();
+        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
+
+        alert.setTitle(ex.getClass().getSimpleName());
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        alert.showAndWait();
+    }
+    
+    public Optional<ButtonType> showWarning(String title, String message) {
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        final Scene scene = alert.getDialogPane().getScene();
+        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+
+        @SuppressWarnings("unchecked")
+        final Stage dialogStage = (Stage) scene.getWindow();
+        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
+
+        alert.setTitle("Confirmation");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        
+        return alert.showAndWait();
     }
     
     public void clearLog() {

@@ -27,14 +27,14 @@ import com.speedment.internal.newgui.util.UILoader;
 import com.speedment.internal.newgui.util.UISession;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.Trees;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,13 +42,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.newgui.ToolbarController.ICON_SIZE;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -63,8 +68,6 @@ public final class ConnectController implements Initializable {
     
     private final UISession session;
     
-    private @FXML Label leftTitle;
-    private @FXML Label rightTitle;
     private @FXML Button buttonOpen;
     private @FXML TextField fieldHost;
     private @FXML TextField fieldPort;
@@ -86,6 +89,9 @@ public final class ConnectController implements Initializable {
         if (Settings.inst().get("hide_open_option", true)) {
             container.getChildren().remove(openContainer);
         }
+        
+        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
+        buttonConnect.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_IN, ICON_SIZE));
         
         fieldType.setItems(
             getDbmsTypes()
@@ -185,13 +191,10 @@ public final class ConnectController implements Initializable {
 
                 Settings.inst().set("hide_open_option", false);
                 SceneController.createAndShow(session);
-            } catch (Exception ex) {
-//                showAlert(stage, "Error!",
-//                    "Could not connect to the database. Make sure the "
-//                    + "information provided is correct and that the database "
-//                    + "server is running."
-//                );
-                throw ex;
+            } catch (final Exception ex) {
+                session.showError("Error Connecting to Database", 
+                    ex.getMessage(), ex
+                );
             }
         });
     }
