@@ -74,15 +74,24 @@ public final class ConfigurableIteratorSpliterator<T> implements Spliterator<T> 
             if (batchSize > MAX_BATCH) {
                 batchSize = MAX_BATCH;
             }
-            final Object[] array = new Object[batchSize];
-            int noRead = 0;
-            do {
-                array[noRead] = iterator.next();
-            } while (++noRead < batchSize && iterator.hasNext());
-            if (sizeEstimate != Long.MAX_VALUE) {
-                sizeEstimate -= noRead;
+            if (batchSize == 1) {
+                final T item = iterator.next();
+                if (sizeEstimate != Long.MAX_VALUE) {
+                    sizeEstimate--;
+                }
+                return new SingletonSpliterator<>(item, characteristics);
+            } else {
+                final Object[] array = new Object[batchSize];
+                int noRead = 0;
+                do {
+                    array[noRead] = iterator.next();
+                } while (++noRead < batchSize && iterator.hasNext());
+                if (sizeEstimate != Long.MAX_VALUE) {
+                    sizeEstimate -= noRead;
+                }
+
+                return new ArraySpliterator<>(array, 0, noRead, characteristics);
             }
-            return new ArraySpliterator<>(array, 0, noRead, characteristics);
         }
         return null;
     }

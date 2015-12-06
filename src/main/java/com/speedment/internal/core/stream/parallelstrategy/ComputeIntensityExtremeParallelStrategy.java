@@ -3,18 +3,14 @@ package com.speedment.internal.core.stream.parallelstrategy;
 import com.speedment.stream.ParallelStrategy;
 import java.util.Iterator;
 import java.util.Spliterator;
-import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
  */
-public final class ComputeIntensityHighParallelStrategy implements ParallelStrategy {
+public final class ComputeIntensityExtremeParallelStrategy implements ParallelStrategy {
 
-    private final static int[] BATCH_SIZES = IntStream.range(0, 8)
-            .map(ComputeIntensityUtil::toThePowerOfTwo)
-            .flatMap(ComputeIntensityUtil::repeatOnHalfAvailableProcessors)
-            .toArray();
+    private final static int[] BATCH_SIZES = {1};
 
     @Override
     public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
