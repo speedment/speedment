@@ -14,23 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.parallelstrategy;
-
-import com.speedment.stream.ParallelStrategy;
-import java.util.Iterator;
-import java.util.Spliterator;
+package com.speedment.stream;
 
 /**
  *
  * @author pemi
  */
-public final class ComputeIntensityExtremeParallelStrategy implements ParallelStrategy {
+public interface HasParallelStrategy {
 
-    private final static int[] BATCH_SIZES = {1};
+    ParallelStrategy getParallelStrategy();
 
-    @Override
-    public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
-        return new ConfigurableIteratorSpliterator<>(iterator, characteristics, BATCH_SIZES);
-    }
+    void setParallelStrategy(ParallelStrategy parallelStrategy);
 
 }
