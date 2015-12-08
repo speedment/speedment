@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
-import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.ui.config.AbstractNodeProperty;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;

@@ -18,7 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.internal.gui.config.AbstractNodeProperty;
+import com.speedment.internal.ui.config.AbstractNodeProperty;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
