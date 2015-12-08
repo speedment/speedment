@@ -48,6 +48,8 @@ import javafx.util.StringConverter;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -159,6 +161,8 @@ public final class ConnectController implements Initializable {
         fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
         fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
         fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
+        
+        buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
 
         buttonConnect.setOnAction(ev -> {
             session.getProject().setName(fieldSchema.getText());

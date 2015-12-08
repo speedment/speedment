@@ -48,6 +48,8 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class ProjectProperty extends AbstractParentProperty<Project, Child<Project>> implements Project, ChildHelper<Project, ProjectManager> {
+    
+    private final static Path DEFAULT_CONFIG_PATH = Paths.get("src/main/groovy/speedment.groovy");
 
     private final ObservableSet<Dbms> dbmsChildren;
     private final ObservableSet<PluginData> pluginDataChildren;
@@ -72,13 +74,25 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
         pluginDataChildren = copyChildrenFrom(prototype, PluginData.class, PluginDataProperty::new);
         packageName        = new SimpleStringProperty(prototype.getPackageName());
         packageLocation    = new SimpleStringProperty(prototype.getPackageLocation());
-        configPath         = prototype.getConfigPath().orElse(Paths.get("src/main/groovy/speedment.groovy"));
+        configPath         = prototype.getConfigPath().orElse(DEFAULT_CONFIG_PATH);
     }
     
     private void setDefaults() {
         setPackageLocation("src/main/java");
         setPackageName("com.company.speedment.test");
-        setConfigPath(Paths.get("src/main/groovy/speedment.groovy"));
+        setConfigPath(DEFAULT_CONFIG_PATH);
+    }
+    
+    public void loadSettingsFrom(Project prototype) {
+        packageName.setValue(prototype.getPackageName());
+        packageLocation.setValue(prototype.getPackageLocation());
+        configPath = prototype.getConfigPath().orElse(DEFAULT_CONFIG_PATH);
+        
+        dbmsChildren.clear();
+        dbmsChildren.addAll(copyChildrenFrom(prototype, Dbms.class, DbmsProperty::new));
+        
+        pluginDataChildren.clear();
+        pluginDataChildren.addAll(copyChildrenFrom(prototype, PluginData.class, PluginDataProperty::new));
     }
     
     @Override

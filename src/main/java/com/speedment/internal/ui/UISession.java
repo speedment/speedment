@@ -24,6 +24,7 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
@@ -46,11 +47,11 @@ import javafx.scene.control.ButtonType;
 import java.util.function.Predicate;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -60,6 +61,11 @@ import static java.util.Objects.requireNonNull;
 public final class UISession {
     
     public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
+    
+    public enum ReuseStage {
+        USE_EXISTING_STAGE,
+        CREATE_A_NEW_STAGE
+    }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
     private final static String DIALOG_PANE_ICON_SIZE = "48px";
@@ -136,8 +142,12 @@ public final class UISession {
         });
     }
     
-    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E openProject() {
+        return openProject(CREATE_A_NEW_STAGE);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T extends Event, E extends EventHandler<T>> E openProject(ReuseStage reuse) {
         return on(event -> {
             final FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open .groovy File");
@@ -155,13 +165,27 @@ public final class UISession {
                         final Project p = Project.newProject(speedment);
                         GroovyParser.fromGroovy(p, file.toPath());
                         
-                        final Stage newStage = new Stage();
-                        final Speedment newSpeedment = speedment.newInstance();
-                        final UISession session = new UISession(newSpeedment, application, newStage, p);
+                        switch (reuse) {
+                            case CREATE_A_NEW_STAGE :
+                                final Stage newStage = new Stage();
+                                final Speedment newSpeedment = speedment.newInstance();
+                                final UISession session = new UISession(newSpeedment, application, newStage, p);
+                                SceneController.createAndShow(session);
+                                break;
+                                
+                            case USE_EXISTING_STAGE :
+                                project.loadSettingsFrom(p);
+                                SceneController.createAndShow(this);
+                                break;
+                                
+                            default :
+                                throw new IllegalStateException(
+                                    "Unknown enum constant '" + reuse + "'."
+                                );
+                        }
                         
-                        SceneController.createAndShow(session);
                         currentlyOpenFile = file;
-                    } catch (Exception e) {
+                    } catch (IOException | IllegalStateException e) {
                         LOGGER.error(e);
                         log(error(e.getMessage()));
                         showError("Could not load project", e.getMessage(), e);
