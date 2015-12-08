@@ -17,12 +17,12 @@
 
 /*** Constants ***/
 * {
-    -fx-speedment-lightgray: #f5f5f5;
-    -fx-speedment-gray: #cdcdcd;
-    -fx-speedment-darkgray: #a9a9a9;
-    -fx-speedment-blue: #3267c9;
-    -fx-speedment-green: #00cc99;
-    -fx-speedment-lightblue: #45a6fc;
+    -fx-speedment-lightgray:  #f5f5f5;
+    -fx-speedment-gray:       #cdcdcd;
+    -fx-speedment-darkgray:   #a9a9a9;
+    -fx-speedment-blue:       #3267c9;
+    -fx-speedment-green:      #00cc99;
+    -fx-speedment-lightblue:  #45a6fc;
     -fx-speedment-lightgreen: #1ce1b0;
 
     -fx-focus-color: -fx-speedment-lightblue;
