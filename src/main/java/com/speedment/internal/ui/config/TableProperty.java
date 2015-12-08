@@ -18,7 +18,6 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.Column;
-import com.speedment.config.Dbms;
 import com.speedment.config.ForeignKey;
 import com.speedment.config.Index;
 import com.speedment.config.PrimaryKeyColumn;
@@ -33,7 +32,6 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.ui.property.EnumPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;

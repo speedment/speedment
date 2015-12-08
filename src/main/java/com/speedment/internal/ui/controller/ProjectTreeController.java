@@ -31,16 +31,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
-import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import static java.util.Objects.requireNonNull;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import static java.util.Objects.requireNonNull;
 
 /**

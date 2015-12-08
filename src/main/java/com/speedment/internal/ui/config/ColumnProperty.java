@@ -26,7 +26,6 @@ import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import com.speedment.internal.ui.property.EnumPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;

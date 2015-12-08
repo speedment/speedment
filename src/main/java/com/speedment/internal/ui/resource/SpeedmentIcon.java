@@ -26,7 +26,6 @@ import com.speedment.config.Node;
 import com.speedment.config.PluginData;
 import com.speedment.config.PrimaryKeyColumn;
 import com.speedment.config.Project;
-import com.speedment.config.ProjectManager;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
 import com.speedment.internal.logging.Logger;

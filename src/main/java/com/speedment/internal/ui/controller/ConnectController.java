@@ -49,11 +49,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -63,9 +60,9 @@ import static java.util.Objects.requireNonNull;
 public final class ConnectController implements Initializable {
     
     private final static String 
-        DEFAULT_HOST     = "127.0.0.1",
-        DEFAULT_USER     = "root",
-        DEFAULT_NAME     = "db0";
+        DEFAULT_HOST = "127.0.0.1",
+        DEFAULT_USER = "root",
+        DEFAULT_NAME = "db0";
     
     private final UISession session;
     
