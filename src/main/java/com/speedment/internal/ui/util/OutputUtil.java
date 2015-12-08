@@ -23,7 +23,7 @@ import javafx.scene.control.Label;
  *
  * @author Emil Forslund
  */
-public final class LogUtil {
+public final class OutputUtil {
 
     public static Label info(String message) {
         return log(message, "info");
@@ -47,7 +47,7 @@ public final class LogUtil {
         return label;
     }
     
-    private LogUtil() {
+    private OutputUtil() {
         instanceNotAllowed(getClass());
     }
 }
