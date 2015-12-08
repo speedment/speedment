@@ -29,7 +29,6 @@ import com.speedment.internal.ui.property.IntegerPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -39,7 +38,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
@@ -76,15 +74,14 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
     
     public DbmsProperty(Speedment speedment, Project parent, Dbms prototype) {
         super(speedment, prototype);
-        schemaChildren = copyChildrenFrom(prototype, Schema.class, SchemaProperty::new);
-        ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse("localhost"));
-        port           = new SimpleIntegerProperty(prototype.getPort().orElse(getType().getDefaultPort()));
-        username       = new SimpleStringProperty(prototype.getUsername().orElse("root"));
-        password       = new SimpleStringProperty(prototype.getPassword().orElse(""));
-        typeName       = new SimpleStringProperty(prototype.getTypeName());
-        dbmsType       = bindDbmsType();
-        
-        this.parent = parent;
+        this.schemaChildren = copyChildrenFrom(prototype, Schema.class, SchemaProperty::new);
+        this.typeName       = new SimpleStringProperty(prototype.getTypeName());
+        this.dbmsType       = bindDbmsType();
+        this.ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse("localhost"));
+        this.port           = new SimpleIntegerProperty(prototype.getPort().orElse(getType().getDefaultPort()));
+        this.username       = new SimpleStringProperty(prototype.getUsername().orElse("root"));
+        this.password       = new SimpleStringProperty(prototype.getPassword().orElse(""));
+        this.parent         = parent;
     }
     
     private void setDefaults() {
