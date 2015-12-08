@@ -18,7 +18,7 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.Loader;
-import com.speedment.internal.util.Settings;
+import com.speedment.internal.util.EmailUtil;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
@@ -62,12 +62,7 @@ public final class MailPromptController implements Initializable {
 
         okey.setOnAction(ev -> {
             ConnectController.createAndShow(session);
-
-            try {
-                Settings.inst().set(MAIL_FIELD, email.getText());
-            } catch (RuntimeException ex) {
-                session.showError("Error!", "Could not save settings file", ex);
-            }
+            EmailUtil.setEmail(email.getText());
         });
     }
     

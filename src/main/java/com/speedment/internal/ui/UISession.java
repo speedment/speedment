@@ -25,6 +25,7 @@ import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
+import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
@@ -133,7 +134,7 @@ public final class UISession {
                 final Speedment newSpeedment = speedment.newInstance();
                 final UISession session = new UISession(newSpeedment, application, newStage);
 
-                SceneController.createAndShow(session);
+                ConnectController.createAndShow(session);
             } catch (Exception e) {
                 LOGGER.error(e);
                 log(error(e.getMessage()));

@@ -47,7 +47,6 @@ import javafx.util.StringConverter;
 
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static java.util.Objects.requireNonNull;
 

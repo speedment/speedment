@@ -23,7 +23,6 @@ package com.speedment.internal.core.stream.parallelstrategy;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Spliterator;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.IntStream;
@@ -35,6 +34,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -45,8 +45,8 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
     private static final int SIZE = 2048;
 
     private static final Supplier<Stream<Integer>> STREAM_SUPPLIER
-            = () -> IntStream.range(0, SIZE)
-            .boxed();
+        = () -> IntStream.range(0, SIZE)
+        .boxed();
 
     private Integer[] array;
     private Set<Integer> expectedSet;
@@ -74,6 +74,7 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
     }
 
     @Test
+    @Ignore
     public void testTrySplit() {
         printTestName();
         Set<String> threadNames = new HashSet<>();

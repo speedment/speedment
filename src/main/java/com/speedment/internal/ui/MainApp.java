@@ -24,7 +24,7 @@ import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.MailPromptController;
-import com.speedment.internal.util.Settings;
+import com.speedment.internal.util.EmailUtil;
 import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
@@ -62,7 +62,7 @@ public final class MainApp extends Application {
         final Parameters parameters = getParameters();
         final List<String> params = parameters.getRaw();
         if (params.isEmpty()) {
-            if (Settings.inst().has(MailPromptController.MAIL_FIELD)) {
+            if (EmailUtil.hasEmail()) {
                 ConnectController.createAndShow(session);
             } else {
                 MailPromptController.createAndShow(session);
