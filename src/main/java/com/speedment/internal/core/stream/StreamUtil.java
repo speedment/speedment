@@ -22,6 +22,7 @@
 package com.speedment.internal.core.stream;
 
 import com.speedment.exception.SpeedmentException;
+import com.speedment.stream.ParallelStrategy;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,10 +66,18 @@ public final class StreamUtil {
     }
 
     public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper) {
+//        requireNonNull(resultSet);
+//        requireNonNull(mapper);
+//        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
+//        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+         return asStream(resultSet, mapper, ParallelStrategy.DEFAULT);
+    }
+    
+    public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+        return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
 
     private static class ResultSetIterator<T> implements Iterator<T> {

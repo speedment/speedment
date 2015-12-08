@@ -84,9 +84,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap());
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap()));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
-        final Supplier<BaseStream<?, ?>> initialSupplier = () -> asynchronousQueryResult.stream();
+        final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.apply(asynchronousQueryResult.stream());
         final Stream<ENTITY> result = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
         result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
         return result;

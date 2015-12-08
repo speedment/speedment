@@ -58,7 +58,9 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
 
     public static <T extends Child<?>> ChildHolder<T> of(Class<T> childClass, Collection<T> childs) {
         if (childs.isEmpty()) {
-            return (ChildHolder<T>) ofNone();
+            @SuppressWarnings("unchecked")
+            final ChildHolder<T> result = (ChildHolder<T>) ofNone();
+            return result;
         }
         if (childs.size() == 1) {
             return of(childs.stream().findAny().get());
@@ -143,7 +145,9 @@ public final class ImmutableChildHolder<T extends Child<?>> implements ChildHold
 
         @Override
         public Class<Child<?>> getChildClass() {
-            return (Class<Child<?>>) (Class) Child.class;
+            @SuppressWarnings("unchecked")
+            final Class<Child<?>> result = (Class<Child<?>>) (Class) Child.class;
+            return result;
         }
     }
 

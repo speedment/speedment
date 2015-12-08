@@ -20,10 +20,17 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
+import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
+import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -32,24 +39,44 @@ import java.util.stream.Stream;
  */
 public final class MariaDbDbmsType extends AbstractDbmsType {
 
+    private static final String QUOTE = "`";
     private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
+    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
+    private static final String JDBC_CONNECTOR_NAME = "mariadb";
+    private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.of("useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
+    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
+        final StringBuilder result = new StringBuilder();
+        result.append("jdbc:").append(JDBC_CONNECTOR_NAME).append("://");
+        dbms.getIpAddress().ifPresent(ip -> result.append(ip));
+        dbms.getPort().ifPresent(p -> result.append(":").append(p));
+        result.append("/");
+        DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
+        return result.toString();
+    };
 
     public MariaDbDbmsType() {
 
         super(
-            "MariaDB",
-            "MariaDB JDBC Driver",
-            3305,
-            ".",
-            "Just a name",
-            "com.mysql.jdbc.Driver",
-            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
-            "mariadb",
-            "`",
-            "`",
-            Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
-            DBMS_MAPPER
+                "MariaDB",
+                "MariaDB JDBC Driver",
+                3305,
+                ".",
+                "Just a name",
+                "com.mysql.jdbc.Driver",
+                unwrap(DEFAULT_CONNECTOR_PARAMS),
+                JDBC_CONNECTOR_NAME,
+                QUOTE,
+                QUOTE,
+                Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
+                DBMS_MAPPER,
+                RESULTSET_TABLE_SCHEMA,
+                CONNECTION_URL_GENERATOR
         );
     }
+    private static final MySqlSpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
 
+    @Override
+    public MySqlSpeedmentPredicateView getSpeedmentPredicateView() {
+        return VIEW;
+    }
 }

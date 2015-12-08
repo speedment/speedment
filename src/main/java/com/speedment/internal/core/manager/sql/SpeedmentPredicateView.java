@@ -26,4 +26,8 @@ public interface SpeedmentPredicateView {
 
     SqlPredicateFragment transform(SpeedmentPredicate<?, ?> model);
 
+    String getOpeningFieldQuote();
+    
+    String getClosingFieldQuote();
+    
 }

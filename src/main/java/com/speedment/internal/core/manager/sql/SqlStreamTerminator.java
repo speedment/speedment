@@ -89,8 +89,9 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .map(FieldTrait::getColumnName)
                 .map(this::findColumn)
                 .collect(toList());
+
         
-        final SpeedmentPredicateView spv = new MySqlSpeedmentPredicateView();
+        final SpeedmentPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
                 .map(spv::transform)
                 .collect(toList());

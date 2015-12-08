@@ -38,7 +38,8 @@ import org.junit.Before;
  */
 public abstract class SimpleModelTest {
     protected static final String TABLE_NAME = "user";
-    protected static final String COLUMN_NAME = "first_name";
+    protected static final String COLUMN_NAME = "first_name"; 
+    
 
     protected Speedment speedment;
     protected Project project;

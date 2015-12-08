@@ -14,34 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.dbms.timestamp;
+
+package com.speedment.internal.core.config.mapper.string;
 
 import com.speedment.config.mapper.TypeMapper;
-import java.sql.Timestamp;
 
 /**
  *
- * @author Emil Forslund
+ * @author Maria Sparenberg
+ * @author Patrick Hobusch
  */
-public class TimestampToLongMapper implements TypeMapper<Timestamp, Long> {
+public class TrueFalseStringToBooleanMapper implements TypeMapper<String, Boolean> {
 
     @Override
-    public Class<Long> getJavaType() {
-        return Long.class;
+    public Class<Boolean> getJavaType() {
+        return Boolean.class;
     }
 
     @Override
-    public Class<Timestamp> getDatabaseType() {
-        return Timestamp.class;
+    public Class<String> getDatabaseType() {
+        return String.class;
     }
 
     @Override
-    public Long toJavaType(Timestamp value) {
-        return value == null ? null : value.getTime();
+    public Boolean toJavaType(String value) {
+        return value == null ? null : Boolean.valueOf(value);
     }
 
     @Override
-    public Timestamp toDatabaseType(Long value) {
-        return value == null ? null : new Timestamp(value);
+    public String toDatabaseType(Boolean value) {
+        return value == null ? null : String.valueOf(value);
     }
+
 }

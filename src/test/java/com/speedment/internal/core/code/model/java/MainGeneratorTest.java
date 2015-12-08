@@ -32,7 +32,7 @@ public class MainGeneratorTest extends SimpleModelTest {
     @Ignore
     public void testAccept() {
         System.out.println("accept");
-        final Speedment speedment = SpeedmentFactory.newSpeedmentInstance();
+
         final MainGenerator instance = new MainGenerator(speedment);
         instance.accept(project);
     }

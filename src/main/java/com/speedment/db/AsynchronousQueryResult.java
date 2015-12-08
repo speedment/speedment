@@ -17,6 +17,7 @@
 package com.speedment.db;
 
 import com.speedment.annotation.Api;
+import com.speedment.stream.HasParallelStrategy;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.function.Function;
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
  * @param <T> The type that the ResultSet shall be mapped to
  */
 @Api(version = "2.2")
-public interface AsynchronousQueryResult<T> extends AutoCloseable {
+public interface AsynchronousQueryResult<T> extends HasParallelStrategy, AutoCloseable {
 
     Stream<T> stream();
 

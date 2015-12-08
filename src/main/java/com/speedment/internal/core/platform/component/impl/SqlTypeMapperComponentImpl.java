@@ -76,6 +76,7 @@ public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent i
 
         //PostgreSQL specific mappings
         put("UUID", UUID.class);
+        //FMDTODO: Add postgresql specific type mappings
     }
 
     @Override
