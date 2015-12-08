@@ -18,6 +18,7 @@ package com.speedment.internal.ui.util;
 
 import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.resource.SpeedmentIcon;
 import java.io.IOException;
 import java.util.function.Function;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,8 @@ import javafx.scene.Parent;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
@@ -55,6 +58,26 @@ public final class Loader {
             throw new SpeedmentException(ex);
         }
 	}
+    
+    public static <T extends Initializable> Parent createAndShow(UISession session, String filename, Function<UISession, T> constructor) {
+        return createAndShow(session, filename, constructor, e -> {});
+    }
+    
+    public static <T extends Initializable> Parent createAndShow(UISession session, String filename, Function<UISession, T> constructor, Consumer<T> consumer) {
+        final Parent root = Loader.create(session, filename, constructor, consumer);
+        final Scene scene = new Scene(root);
+        
+        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        
+        final Stage stage = session.getStage();
+        stage.hide();
+        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
+        stage.setTitle("Speedment");
+        stage.setScene(scene);
+        stage.show();
+        
+        return root;
+    }
     
     private Loader() {
         instanceNotAllowed(getClass());

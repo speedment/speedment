@@ -22,7 +22,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
-import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.util.Settings;
@@ -38,20 +37,16 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -199,17 +194,7 @@ public final class ConnectController implements Initializable {
     }
     
     public static void createAndShow(UISession session) {
-        final Parent root        = Loader.create(session, "Connect", ConnectController::new);
-        final Scene scene        = new Scene(root);
-        
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
-        
-        final Stage stage = session.getStage();
-        stage.hide();
-        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
-        stage.setTitle("Speedment");
-        stage.setScene(scene);
-        stage.show();
+        Loader.createAndShow(session, "Connect", ConnectController::new);
 	}
     
     private Stream<DbmsType> getDbmsTypes() {

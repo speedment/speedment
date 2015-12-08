@@ -22,6 +22,8 @@ import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.ui.controller.ConnectController;
+import com.speedment.internal.ui.controller.MailPromptController;
+import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.Statistics;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
@@ -36,7 +38,6 @@ public final class MainApp extends Application {
 
     private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
     private static Speedment SPEEDMENT;
-    private static MainApp APP;
     
     public static void setSpeedment(Speedment speedment) {
         SPEEDMENT = requireNonNull(speedment);
@@ -51,13 +52,15 @@ public final class MainApp extends Application {
             SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
         }
         
-        APP = this;
-        
-        final UISession session = new UISession(SPEEDMENT, APP, stage);
+        final UISession session = new UISession(SPEEDMENT, this, stage);
         SpeedmentFont.loadAll();
-
         Statistics.onGuiStarted();
-        ConnectController.createAndShow(session);
+        
+        if (Settings.inst().has(MailPromptController.MAIL_FIELD)) {
+            ConnectController.createAndShow(session);
+        } else {
+            MailPromptController.createAndShow(session);
+        }
     }
     
     /**

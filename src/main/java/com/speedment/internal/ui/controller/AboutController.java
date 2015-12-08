@@ -33,7 +33,6 @@ import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
