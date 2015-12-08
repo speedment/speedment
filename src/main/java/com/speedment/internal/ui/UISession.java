@@ -53,6 +53,10 @@ import javafx.stage.FileChooser;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import java.io.IOException;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -83,6 +87,8 @@ public final class UISession {
     private final Stage stage;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
+    
+    private File currentlyOpenFile = null;
     
     public UISession(Speedment speedment, Application application, Stage stage) {
         this(speedment, application, stage, new ProjectProperty(speedment));
@@ -160,6 +166,7 @@ public final class UISession {
                         final UISession session = new UISession(newSpeedment, application, newStage, p);
                         
                         SceneController.createAndShow(session);
+                        currentlyOpenFile = file;
                     } catch (Exception e) {
                         LOGGER.error(e);
                         log(error(e.getMessage()));
@@ -179,12 +186,20 @@ public final class UISession {
     
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProject() {
-        return on(event -> {throw new UnsupportedOperationException("Not yet implemented.");});
+        return on(event -> {
+            if (currentlyOpenFile == null) {
+                saveGroovyFile();
+            } else {
+                saveGroovyFile(currentlyOpenFile);
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
-        return on(event -> {throw new UnsupportedOperationException("Not yet implemented.");});
+        return on(event -> {
+            saveGroovyFile();
+        });
     }
     
     @SuppressWarnings("unchecked")
@@ -277,6 +292,50 @@ public final class UISession {
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
+    }
+    
+    private void saveGroovyFile() {
+        final FileChooser fileChooser = new FileChooser();
+        
+        fileChooser.setTitle("Save Groovy File");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+        
+        if (currentlyOpenFile != null) {
+            fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
+            fileChooser.setInitialFileName(currentlyOpenFile.getName());
+        }
+        
+        
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            if (!file.getName().endsWith(".groovy")) {
+                file = new File(file.getAbsolutePath() + ".groovy");
+            }
+            
+            saveGroovyFile(file);
+        }
+    }
+    
+    private void saveGroovyFile(File file) {
+        final Path path   = file.toPath();
+        final Path parent = path.getParent();
+
+        try {
+            if (!Files.exists(parent)) {
+                Files.createDirectories(parent);
+            }
+
+            final String groovy = GroovyParser.toGroovy(project);
+            Files.write(path, groovy.getBytes(UTF_8));
+
+            final String absolute = parent.toFile().getAbsolutePath();
+            Settings.inst().set("project_location", absolute);
+            log(success("Saved file " + absolute));
+            currentlyOpenFile = file;
+            
+        } catch (IOException ex) {
+            showError("Could not save file", ex.getMessage(), ex);
+        }
     }
     
     public void clearLog() {
