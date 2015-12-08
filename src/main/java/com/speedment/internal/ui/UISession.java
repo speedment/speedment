@@ -17,8 +17,6 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.core.config.utils.GroovyParser;
@@ -26,8 +24,6 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.config.PluginDataProperty;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
@@ -50,8 +46,6 @@ import javafx.scene.control.ButtonType;
 import java.util.function.Predicate;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import java.io.IOException;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -300,7 +294,22 @@ public final class UISession {
         fileChooser.setTitle("Save Groovy File");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
         
-        if (currentlyOpenFile != null) {
+        if (currentlyOpenFile == null) {
+            final Path path   = DEFAULT_GROOVY_LOCATION.toPath();
+            final Path parent = path.getParent();
+            
+            try {
+                if (!Files.exists(parent)) {
+                    Files.createDirectories(parent);
+                }
+            } catch (IOException ex) {/*
+                Do nothing. Creating the parent directory is purely for
+                the convenience of the user.
+            */}
+            
+            fileChooser.setInitialDirectory(parent.toFile());
+            fileChooser.setInitialFileName(DEFAULT_GROOVY_LOCATION.getName());
+        } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());
         }
