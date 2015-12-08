@@ -121,7 +121,19 @@ public final class UISession {
     
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E newProject() {
-        return on(event -> {throw new UnsupportedOperationException("Not yet implemented.");});
+        return on(event -> {
+            try {
+                final Stage newStage = new Stage();
+                final Speedment newSpeedment = speedment.newInstance();
+                final UISession session = new UISession(newSpeedment, application, newStage);
+
+                SceneController.createAndShow(session);
+            } catch (Exception e) {
+                LOGGER.error(e);
+                log(error(e.getMessage()));
+                showError("Could not create empty project", e.getMessage(), e);
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
