@@ -37,7 +37,7 @@ import javafx.stage.Stage;
 public final class Loader {
     
     public static final String 
-        FILENAME_PREFIX = "/fxml/newgui/",
+        FILENAME_PREFIX = "/fxml/",
         FILENAME_SUFFIX = ".fxml";
     
     public static <T extends Initializable> Parent create(UISession session, String filename, Function<UISession, T> constructor) {

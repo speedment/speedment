@@ -21,10 +21,13 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.MailPromptController;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.Statistics;
+import java.io.File;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -56,10 +59,18 @@ public final class MainApp extends Application {
         SpeedmentFont.loadAll();
         Statistics.onGuiStarted();
         
-        if (Settings.inst().has(MailPromptController.MAIL_FIELD)) {
-            ConnectController.createAndShow(session);
+        final Parameters parameters = getParameters();
+        final List<String> params = parameters.getRaw();
+        if (params.isEmpty()) {
+            if (Settings.inst().has(MailPromptController.MAIL_FIELD)) {
+                ConnectController.createAndShow(session);
+            } else {
+                MailPromptController.createAndShow(session);
+            }
         } else {
-            MailPromptController.createAndShow(session);
+            final String filename = params.get(0).trim().replace("\\", "/");
+            final File file = new File(filename);
+            session.loadGroovyFile(file, USE_EXISTING_STAGE);
         }
     }
     

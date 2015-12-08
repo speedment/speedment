@@ -160,44 +160,7 @@ public final class UISession {
             
             final File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
-                if (OPEN_FILE_CONDITIONS.test(file)) {
-                    try {
-                        final Project p = Project.newProject(speedment);
-                        GroovyParser.fromGroovy(p, file.toPath());
-                        
-                        switch (reuse) {
-                            case CREATE_A_NEW_STAGE :
-                                final Stage newStage = new Stage();
-                                final Speedment newSpeedment = speedment.newInstance();
-                                final UISession session = new UISession(newSpeedment, application, newStage, p);
-                                SceneController.createAndShow(session);
-                                break;
-                                
-                            case USE_EXISTING_STAGE :
-                                project.loadSettingsFrom(p);
-                                SceneController.createAndShow(this);
-                                break;
-                                
-                            default :
-                                throw new IllegalStateException(
-                                    "Unknown enum constant '" + reuse + "'."
-                                );
-                        }
-                        
-                        currentlyOpenFile = file;
-                    } catch (IOException | IllegalStateException e) {
-                        LOGGER.error(e);
-                        log(error(e.getMessage()));
-                        showError("Could not load project", e.getMessage(), e);
-                    }
-                } else {
-                    showError(
-                        "Could not read .groovy file", 
-                        "The file '" + file.getAbsoluteFile().getName() + 
-                        "' could not be read.", 
-                        null
-                    );
-                }
+                loadGroovyFile(file, reuse);
             }
         });
     }
@@ -242,6 +205,13 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>>  E generate() {
         return on(event -> {
             clearLog();
+            
+            if (currentlyOpenFile == null) {
+                currentlyOpenFile = DEFAULT_GROOVY_LOCATION;
+            }
+            
+            saveGroovyFile(currentlyOpenFile);
+            
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
@@ -312,6 +282,47 @@ public final class UISession {
         return alert.showAndWait();
     }
     
+    public void loadGroovyFile(File file, ReuseStage reuse) {
+        if (OPEN_FILE_CONDITIONS.test(file)) {
+            try {
+                final Project p = Project.newProject(speedment);
+                GroovyParser.fromGroovy(p, file.toPath());
+
+                switch (reuse) {
+                    case CREATE_A_NEW_STAGE :
+                        final Stage newStage = new Stage();
+                        final Speedment newSpeedment = speedment.newInstance();
+                        final UISession session = new UISession(newSpeedment, application, newStage, p);
+                        SceneController.createAndShow(session);
+                        break;
+
+                    case USE_EXISTING_STAGE :
+                        project.loadSettingsFrom(p);
+                        SceneController.createAndShow(this);
+                        break;
+
+                    default :
+                        throw new IllegalStateException(
+                            "Unknown enum constant '" + reuse + "'."
+                        );
+                }
+
+                currentlyOpenFile = file;
+            } catch (IOException | IllegalStateException e) {
+                LOGGER.error(e);
+                log(error(e.getMessage()));
+                showError("Could not load project", e.getMessage(), e);
+            }
+        } else {
+            showError(
+                "Could not read .groovy file", 
+                "The file '" + file.getAbsoluteFile().getName() + 
+                "' could not be read.", 
+                null
+            );
+        }
+    }
+    
     private void saveGroovyFile() {
         final FileChooser fileChooser = new FileChooser();
         
@@ -363,7 +374,7 @@ public final class UISession {
 
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
-            log(success("Saved file " + absolute));
+            log(success("Saved project file to '" + absolute + "'."));
             currentlyOpenFile = file;
             
         } catch (IOException ex) {
