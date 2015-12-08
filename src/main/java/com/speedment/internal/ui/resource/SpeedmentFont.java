@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.gui.resource;
+package com.speedment.internal.ui.resource;
 
 import static java.util.Objects.requireNonNull;
 import javafx.scene.text.Font;

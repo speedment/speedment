@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui;
+package com.speedment.internal.ui;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.internal.gui.resource.SpeedmentFont;
-import com.speedment.internal.gui.resource.SpeedmentIcon;
-import com.speedment.internal.newgui.util.UILoader;
-import com.speedment.internal.newgui.util.UISession;
+import com.speedment.internal.ui.resource.SpeedmentFont;
+import com.speedment.internal.ui.resource.SpeedmentIcon;
+import com.speedment.internal.ui.util.UILoader;
+import com.speedment.internal.ui.util.UISession;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;

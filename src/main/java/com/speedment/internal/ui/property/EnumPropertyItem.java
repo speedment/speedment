@@ -14,29 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.property;
+package com.speedment.internal.ui.property;
 
-import javafx.beans.property.IntegerProperty;
+import java.util.Arrays;
+import static java.util.Objects.requireNonNull;
+import javafx.beans.property.Property;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
  * @author Emil Forslund
+ * @param <E> the enum type
  */
-public final class IntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty> {
+public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>> {
+    
+    private final Class<E> enumType;
 
-    public IntegerPropertyItem(IntegerProperty value, String name, String description) {
-        super(value, name, description);
+    public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description) {
+        super(property, name, description);
+        this.enumType = requireNonNull(enumType);
     }
 
     @Override
-    public Class<Integer> getType() {
-        return Integer.class;
+    public Class<E> getType() {
+        return enumType;
     }
     
     @Override
     public PropertyEditor<?> createEditor() {
-        return Editors.createNumericEditor(this);
+        return Editors.createChoiceEditor(this, Arrays.asList(enumType.getEnumConstants()));
     }
 }

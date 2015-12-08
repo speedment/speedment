@@ -14,19 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.util;
+package com.speedment.internal.ui.util;
 
 import com.speedment.Speedment;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.gui.config.ProjectProperty;
-import com.speedment.internal.gui.resource.SpeedmentIcon;
+import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.newgui.output.Line;
-import static com.speedment.internal.newgui.output.Line.error;
-import static com.speedment.internal.newgui.output.Line.info;
-import static com.speedment.internal.newgui.output.Line.success;
-import com.speedment.internal.newgui.property.PropertySheetFactory;
+import com.speedment.internal.ui.output.Line;
+import static com.speedment.internal.ui.output.Line.error;
+import static com.speedment.internal.ui.output.Line.info;
+import static com.speedment.internal.ui.output.Line.success;
+import com.speedment.internal.ui.property.PropertySheetFactory;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;
 import javafx.event.EventHandler;

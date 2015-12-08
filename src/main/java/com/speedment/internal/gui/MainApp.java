@@ -18,11 +18,11 @@ package com.speedment.internal.gui;
 
 import com.speedment.Speedment;
 import com.speedment.internal.core.platform.SpeedmentFactory;
-import com.speedment.internal.gui.resource.SpeedmentFont;
+import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.newgui.ConnectController;
-import com.speedment.internal.newgui.util.UISession;
+import com.speedment.internal.ui.ConnectController;
+import com.speedment.internal.ui.util.UISession;
 import com.speedment.internal.util.Statistics;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Application;

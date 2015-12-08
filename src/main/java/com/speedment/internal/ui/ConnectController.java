@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui;
+package com.speedment.internal.ui;
 
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
@@ -22,9 +22,9 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
 import com.speedment.internal.gui.config.DbmsProperty;
 import com.speedment.internal.gui.config.SchemaProperty;
-import com.speedment.internal.gui.resource.SpeedmentIcon;
-import com.speedment.internal.newgui.util.UILoader;
-import com.speedment.internal.newgui.util.UISession;
+import com.speedment.internal.ui.resource.SpeedmentIcon;
+import com.speedment.internal.ui.util.UILoader;
+import com.speedment.internal.ui.util.UISession;
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.Trees;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -50,7 +50,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.newgui.ToolbarController.ICON_SIZE;
+import static com.speedment.internal.ui.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

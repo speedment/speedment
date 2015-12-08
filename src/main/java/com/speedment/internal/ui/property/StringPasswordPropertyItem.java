@@ -14,35 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.property;
+package com.speedment.internal.ui.property;
 
-import java.util.Arrays;
-import static java.util.Objects.requireNonNull;
-import javafx.beans.property.Property;
-import org.controlsfx.property.editor.Editors;
+import com.speedment.internal.ui.util.EditorsUtil;
+import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
  * @author Emil Forslund
- * @param <E> the enum type
  */
-public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>> {
-    
-    private final Class<E> enumType;
+public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
-    public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description) {
-        super(property, name, description);
-        this.enumType = requireNonNull(enumType);
+    public StringPasswordPropertyItem(StringProperty value, String name, String description) {
+        super(value, name, description);
     }
 
     @Override
-    public Class<E> getType() {
-        return enumType;
+    public Class<String> getType() {
+        return String.class;
     }
     
     @Override
     public PropertyEditor<?> createEditor() {
-        return Editors.createChoiceEditor(this, Arrays.asList(enumType.getEnumConstants()));
+        return EditorsUtil.createPasswordEditor(this);
     }
 }

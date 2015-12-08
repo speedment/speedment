@@ -14,19 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.property;
+package com.speedment.internal.ui.property;
 
-import com.speedment.internal.newgui.util.EditorsUtil;
 import javafx.beans.property.StringProperty;
+import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
-    public StringPasswordPropertyItem(StringProperty value, String name, String description) {
+    public StringPropertyItem(StringProperty value, String name, String description) {
         super(value, name, description);
     }
 
@@ -34,9 +34,9 @@ public final class StringPasswordPropertyItem extends AbstractPropertyItem<Strin
     public Class<String> getType() {
         return String.class;
     }
-    
+
     @Override
     public PropertyEditor<?> createEditor() {
-        return EditorsUtil.createPasswordEditor(this);
+        return Editors.createTextEditor(this);
     }
 }

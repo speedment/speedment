@@ -23,7 +23,7 @@ import com.speedment.config.ForeignKeyColumn;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.newgui.property.StringPropertyItem;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;

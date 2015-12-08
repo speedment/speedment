@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.property;
+package com.speedment.internal.ui.property;
 
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.BooleanProperty;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
@@ -24,19 +24,19 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty> {
 
-    public StringPropertyItem(StringProperty value, String name, String description) {
+    public BooleanPropertyItem(BooleanProperty value, String name, String description) {
         super(value, name, description);
     }
 
     @Override
-    public Class<String> getType() {
-        return String.class;
+    public Class<Boolean> getType() {
+        return Boolean.class;
     }
 
     @Override
     public PropertyEditor<?> createEditor() {
-        return Editors.createTextEditor(this);
+        return Editors.createCheckEditor(this);
     }
 }

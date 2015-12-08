@@ -18,8 +18,8 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.internal.gui.config.AbstractNodeProperty;
-import com.speedment.internal.newgui.ProjectTreeController;
-import com.speedment.internal.newgui.output.Line;
+import com.speedment.internal.ui.ProjectTreeController;
+import com.speedment.internal.ui.output.Line;
 import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

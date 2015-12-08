@@ -18,8 +18,8 @@ package com.speedment.internal.gui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.Node;
-import com.speedment.internal.newgui.property.BooleanPropertyItem;
-import com.speedment.internal.newgui.property.StringPropertyItem;
+import com.speedment.internal.ui.property.BooleanPropertyItem;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;

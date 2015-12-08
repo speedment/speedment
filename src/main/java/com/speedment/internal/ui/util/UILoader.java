@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.util;
+package com.speedment.internal.ui.util;
 
 import com.speedment.exception.SpeedmentException;
 import java.io.IOException;

@@ -24,7 +24,7 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.OrderType;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.newgui.property.EnumPropertyItem;
+import com.speedment.internal.ui.property.EnumPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.Property;

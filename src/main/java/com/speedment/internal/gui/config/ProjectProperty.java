@@ -26,7 +26,7 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.newgui.property.StringPropertyItem;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import groovy.lang.Closure;
 import java.nio.file.Path;
 import java.nio.file.Paths;

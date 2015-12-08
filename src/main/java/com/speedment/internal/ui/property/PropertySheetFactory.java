@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.newgui.property;
+package com.speedment.internal.ui.property;
 
 import com.speedment.internal.gui.config.AbstractNodeProperty;
 import java.util.Map;

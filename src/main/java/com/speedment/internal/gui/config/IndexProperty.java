@@ -24,7 +24,7 @@ import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.newgui.property.BooleanPropertyItem;
+import com.speedment.internal.ui.property.BooleanPropertyItem;
 import groovy.lang.Closure;
 import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;

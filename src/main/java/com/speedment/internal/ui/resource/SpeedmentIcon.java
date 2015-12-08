@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.gui.resource;
+package com.speedment.internal.ui.resource;
 
 import com.speedment.config.Column;
 import com.speedment.config.Dbms;
