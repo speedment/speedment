@@ -14,38 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.output;
+package com.speedment.internal.ui.util;
 
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import javafx.scene.control.Label;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class Line extends Label {
-    
-    private Line(String text, String... classes) {
-        super(text);
-        getStyleClass().addAll(classes);
-    }
+public final class LogUtil {
 
-    public static Line info(String message) {
-        final Line line = new Line(message, "msg", "info");
-        return line;
+    public static Label info(String message) {
+        return log(message, "info");
     }
     
-    public static Line warning(String message) {
-        final Line line = new Line(message, "msg", "warning");
-        return line;
+    public static Label warning(String message) {
+        return log(message, "warning");
     }
     
-    public static Line error(String message) {
-        final Line line = new Line(message, "msg", "error");
-        return line;
+    public static Label error(String message) {
+        return log(message, "error");
     }
     
-    public static Line success(String message) {
-        final Line line = new Line(message, "msg", "success");
-        return line;
+    public static Label success(String message) {
+        return log(message, "success");
+    }
+    
+    private static Label log(String message, String type) {
+        final Label label = new Label(message);
+        label.getStyleClass().addAll("msg", type);
+        return label;
+    }
+    
+    private LogUtil() {
+        instanceNotAllowed(getClass());
     }
 }

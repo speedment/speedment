@@ -19,7 +19,7 @@ package com.speedment.component;
 import com.speedment.annotation.Api;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
-import com.speedment.internal.ui.output.Line;
+import com.speedment.internal.ui.util.LogUtil;
 import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -65,7 +65,7 @@ public interface UserInterfaceComponent extends Component {
      * visible in the output area. New messages can be added to this list or
      * removed safely.
      * <p>
-     * Messages should ideally be created using the {@link Line} class, but
+     * Messages should ideally be created using the {@link LogUtil} class, but
      * could be any node implementation.
      * 
      * @return  the currently visible output messages

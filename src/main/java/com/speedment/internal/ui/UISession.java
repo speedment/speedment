@@ -22,10 +22,9 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.ui.output.Line;
-import static com.speedment.internal.ui.output.Line.error;
-import static com.speedment.internal.ui.output.Line.info;
-import static com.speedment.internal.ui.output.Line.success;
+import static com.speedment.internal.ui.util.LogUtil.error;
+import static com.speedment.internal.ui.util.LogUtil.info;
+import static com.speedment.internal.ui.util.LogUtil.success;
 import com.speedment.internal.ui.property.PropertySheetFactory;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;
@@ -34,14 +33,15 @@ import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.event.Event;
 import java.util.function.Consumer;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -201,7 +201,7 @@ public final class UISession {
         speedment.getUserInterfaceComponent().getOutputMessages().clear();
     }
     
-    public void log(Line line) {
+    public void log(Label line) {
         speedment.getUserInterfaceComponent().getOutputMessages().add(line);
     }
     
