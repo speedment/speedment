@@ -117,7 +117,15 @@ public interface Speedment {
      * After stop() has been called, the Speedment instance can not be called
      * any more.
      */
-    public void stop();
+    void stop();
+    
+    /**
+     * Creates a new speedment instance and loads a new instance of each
+     * component that this speedment instance has.
+     * 
+     * @return  the new instance
+     */
+    Speedment newInstance();
 
     default EntityManager getEntityManager() {
         return get(EntityManager.class);

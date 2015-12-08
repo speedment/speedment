@@ -43,6 +43,8 @@ import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
+import static java.util.Objects.requireNonNull;
+import static javafx.collections.FXCollections.observableSet;
 
 /**
  *

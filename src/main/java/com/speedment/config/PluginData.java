@@ -29,6 +29,7 @@ import com.speedment.internal.core.config.PluginDataImpl;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

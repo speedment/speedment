@@ -17,15 +17,23 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
+import com.speedment.config.Dbms;
+import com.speedment.config.PluginData;
+import com.speedment.config.Project;
 import com.speedment.internal.core.code.MainGenerator;
+import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.config.PluginDataProperty;
+import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.LogUtil.error;
 import static com.speedment.internal.ui.util.LogUtil.info;
 import static com.speedment.internal.ui.util.LogUtil.success;
 import com.speedment.internal.ui.property.PropertySheetFactory;
+import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;
 import javafx.event.EventHandler;
@@ -39,9 +47,11 @@ import java.util.Optional;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import java.util.function.Predicate;
+import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -49,11 +59,23 @@ import javafx.scene.control.Label;
  */
 public final class UISession {
     
-    private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static String DIALOG_PANE_ICON_SIZE = "48px";
-
     public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
     
+    private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
+    private final static String DIALOG_PANE_ICON_SIZE = "48px";
+    
+    private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
+        file != null &&
+        file.exists() && 
+        file.isFile() && 
+        file.canRead() && 
+        file.getName().toLowerCase().endsWith(".groovy");
+    
+    private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file ->
+        file != null &&
+        file.exists() && 
+        file.isDirectory();
+
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
@@ -61,10 +83,16 @@ public final class UISession {
     private final PropertySheetFactory propertySheetFactory;
     
     public UISession(Speedment speedment, Application application, Stage stage) {
+        this(speedment, application, stage, new ProjectProperty(speedment));
+    }
+    
+    public UISession(Speedment speedment, Application application, Stage stage, Project project) {
+        requireNonNull(project);
+        
         this.speedment            = requireNonNull(speedment);
         this.application          = requireNonNull(application);
         this.stage                = requireNonNull(stage);
-        this.project              = new ProjectProperty(speedment);
+        this.project              = new ProjectProperty(speedment, project);
         
         this.propertySheetFactory = new PropertySheetFactory();
     }
@@ -96,7 +124,43 @@ public final class UISession {
     
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E openProject() {
-        return on(event -> {throw new UnsupportedOperationException("Not yet implemented.");});
+        return on(event -> {
+            final FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open .groovy File");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+            
+            Optional.ofNullable(Settings.inst().get("project_location"))
+                .map(File::new)
+                .filter(OPEN_DIRECTORY_CONDITIONS)
+                .ifPresent(fileChooser::setInitialDirectory);
+            
+            final File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                if (OPEN_FILE_CONDITIONS.test(file)) {
+                    try {
+                        final Project p = Project.newProject(speedment);
+                        GroovyParser.fromGroovy(p, file.toPath());
+                        
+                        final Stage newStage = new Stage();
+                        final Speedment newSpeedment = speedment.newInstance();
+                        final UISession session = new UISession(newSpeedment, application, newStage, p);
+                        
+                        SceneController.createAndShow(session);
+                    } catch (Exception e) {
+                        LOGGER.error(e);
+                        log(error(e.getMessage()));
+                        showError("Could not load project", e.getMessage(), e);
+                    }
+                } else {
+                    showError(
+                        "Could not read .groovy file", 
+                        "The file '" + file.getAbsoluteFile().getName() + 
+                        "' could not be read.", 
+                        null
+                    );
+                }
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
@@ -173,7 +237,11 @@ public final class UISession {
         final Stage dialogStage = (Stage) scene.getWindow();
         dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
 
-        alert.setTitle(ex.getClass().getSimpleName());
+        if (ex != null) {
+            alert.setTitle(ex.getClass().getSimpleName());
+        } else {
+            alert.setTitle("Error");
+        }
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));

@@ -50,6 +50,9 @@ import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponen
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
 import static com.speedment.internal.util.Cast.castOrFail;
+import com.speedment.stream.MapStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -91,6 +94,21 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(PluginComponentImpl::new);
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
+    }
+    
+    private SpeedmentImpl(SpeedmentImpl prototype) {
+        this();
+        MapStream.of(prototype.stream())
+            .mapValue(c -> {
+                try {
+                    final Class<? extends Component> clazz = c.getClass();
+                    final Constructor<? extends Component> constr = clazz.getConstructor(Speedment.class);
+                    final Component comp = constr.newInstance(this);
+                    return comp;
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }).values().forEach(this::put);
     }
 
     @Override
@@ -248,5 +266,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public UserInterfaceComponent getUserInterfaceComponent() {
         return userInterfaceComponent;
+    }
+
+    @Override
+    public Speedment newInstance() {
+        return new SpeedmentImpl(this);
     }
 }
