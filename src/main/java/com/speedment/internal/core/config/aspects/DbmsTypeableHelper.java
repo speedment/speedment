@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.aspects;
 import com.speedment.config.aspects.DbmsTypeable;
 import com.speedment.component.DbmsHandlerComponent;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

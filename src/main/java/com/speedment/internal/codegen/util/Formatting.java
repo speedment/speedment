@@ -149,6 +149,22 @@ public final class Formatting {
     public static String indent(String text) {
         return tab + text.replaceAll("\\r?\\n", nltab);
     }
+    
+    /**
+     * Indents a variable number of levels level after each new-line-character 
+     * as defined by <code>nl()</code>.
+     *
+     * @param text   the text to indent
+     * @param steps  the number of steps to indent
+     * @return       the indented text
+     */
+    public static String indent(String text, int steps) {
+        switch (steps) {
+            case 0  : return text;
+            case 1  : return indent(text);
+            default : return indent(indent(text, steps - 1));
+        }
+    }
 	
 	/**
 	 * If the condition is present, the true-function will be called

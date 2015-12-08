@@ -55,20 +55,4 @@ public interface Component extends Lifecyclable<Component> {
     String getTitle();
 
     String getVersion();
-
-    // Lifecycle operations for plugins
-//    /**
-//     * This method is called whenever this Component is added to a Component
-//     * manager.
-//     */
-//    default void onAdd() {
-//    }
-//
-//    /**
-//     * This method is called whenever this Component is removed from a Component
-//     * manager.
-//     */
-//    default void onRemove() {
-//    }
-
 }

@@ -27,30 +27,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="8.0" style="-fx-background-color: #e0e0e0;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-         <effect>
-            <DropShadow height="16.0" offsetY="1.0" radius="7.5" width="16.0" />
-         </effect>
-      </Label>
-      <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />
-      <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license." wrapText="true" />
-	  <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />
-      <HBox alignment="CENTER_RIGHT">
-         <children>
-            <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">
-               <padding>
-                  <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
-               </padding>
-            </Button>
-         </children>
-      </HBox>
-   </children>
-   <padding>
-      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-   </padding>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="8.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="title" styleClass="header" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
+        <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />
+        <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license.\nIt includes software licensed as follows:\n\n" wrapText="true" />
+        <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />
+        <HBox alignment="CENTER_RIGHT">
+            <children>
+                <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">
+                    <padding>
+                        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                    </padding>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+    </padding>
 </VBox>

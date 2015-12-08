@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.plugin.Plugin;
 import com.speedment.exception.SpeedmentException;
@@ -28,16 +29,17 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class PluginDataImpl extends AbstractNamedConfigEntity implements PluginData, ParentHelper<Child<PluginData>> {
+public final class PluginDataImpl extends AbstractNamedNode implements PluginData, ParentHelper<Child<PluginData>> {
     
     private final Speedment speedment;
     private final Map<Class<?>, ChildHolder<Child<PluginData>>> children;
@@ -67,7 +69,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     public Optional<Project> getParent() {
         return Optional.ofNullable(parent);
     }
-
+    
     @Override
     public ChildHolder<Child<PluginData>> getChildren() {
         throw new IllegalStateException(PluginData.class.getSimpleName() + " does not have a known child type at this point.");
@@ -75,7 +77,8 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     
     @Override
     public Stream<? extends Child<PluginData>> stream() {
-        return children.values().stream().flatMap(ChildHolder::stream);
+        return children.values().stream()
+            .flatMap(holder -> holder.stream().sorted(Nameable.COMPARATOR));
     }
     
     @Override
@@ -83,7 +86,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
         @SuppressWarnings("unchecked")
         final ChildHolder<T> holder = (ChildHolder<T>) children.get(childClass);
         if (holder != null) {
-            return holder.stream();
+            return holder.stream().sorted(Nameable.COMPARATOR);
         } else {
             return Stream.empty();
         }
@@ -102,8 +105,13 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<Child<PluginData>> add(Child<PluginData> child) {
-        final ChildHolder<Child<PluginData>> holder = children.get(child.getInterfaceMainClass());
+        final ChildHolder<Child<PluginData>> holder = children.computeIfAbsent(
+            child.getInterfaceMainClass(),
+            clazz -> new ChildHolderImpl<>((Class<Child<PluginData>>) clazz)
+        );
+        
         final Optional<Child<PluginData>> result = holder.put(child, this);
         return result;
     }
@@ -120,7 +128,7 @@ public final class PluginDataImpl extends AbstractNamedConfigEntity implements P
             ));
         
         return ConfigUtil.groovyDelegatorHelper(c, () -> {
-            final Child<PluginData> child = plugin.newChildToPluginData(c, this);
+            final Child<PluginData> child = plugin.newChildToPluginData(getSpeedment(), c, this);
             @SuppressWarnings("unchecked")
             final Class<Child<PluginData>> childType = (Class<Child<PluginData>>) child.getClass();
             

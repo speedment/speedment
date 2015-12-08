@@ -28,7 +28,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class IndexColumnImpl extends AbstractOrdinalConfigEntity implements IndexColumn, ColumnableHelper {
+public final class IndexColumnImpl extends AbstractOrdinalNode implements IndexColumn, ColumnableHelper {
 
     private Index parent;
     private OrderType orderType;

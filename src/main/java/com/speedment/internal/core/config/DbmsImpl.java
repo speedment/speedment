@@ -21,9 +21,9 @@ import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.DbmsType;
-import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
 import com.speedment.internal.core.config.utils.ConfigUtil;
@@ -31,15 +31,13 @@ import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, DbmsTypeableHelper, ParentHelper<Schema> {
+public final class DbmsImpl extends AbstractNamedNode implements Dbms, DbmsTypeableHelper, ParentHelper<Schema> {
 
     private final Speedment speedment;
     private Project parent;
@@ -126,6 +124,29 @@ public final class DbmsImpl extends AbstractNamedConfigEntity implements Dbms, D
     @Override
     public ChildHolder<Schema> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends Schema> stream() {
+        return getChildren().stream().sorted(Nameable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends Schema> Stream<T> streamOf(Class<T> childClass) {
+        if (Schema.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Nameable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override

@@ -54,7 +54,7 @@ public interface Parent<C extends Child<?>> extends Node {
      * @see Child
      */
     @Override
-    default Optional<Parent<?>> asParent() {
+    default Optional<? extends Parent<?>> asParent() {
         return Optional.of(this);
     }
 
@@ -81,7 +81,17 @@ public interface Parent<C extends Child<?>> extends Node {
      *
      * @see ChildHolder
      */
-    Optional<C> add(final C child);
+    Optional<? extends C> add(final C child) throws IllegalStateException;
+    
+    /**
+     * Removes the specified child from this parent, returning it if it was
+     * removed. If the specified component was not a child of this parent,
+     * an {@code empty} optional is returned.
+     * 
+     * @param child  the child to remove
+     * @return       the child if it was removed, else {@code empty}
+     */
+    Optional<? extends C> remove(final C child);
 
     /**
      * Returns a <code>Stream</code> over all the children of this node. The

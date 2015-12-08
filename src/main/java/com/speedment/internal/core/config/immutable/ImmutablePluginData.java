@@ -21,12 +21,14 @@ import com.speedment.Speedment;
 import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -76,6 +78,21 @@ public final class ImmutablePluginData extends ImmutableAbstractNamedConfigEntit
     @Override
     public ChildHolder<Child<PluginData>> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends Child<PluginData>> stream() {
+        return children.stream().sorted(Nameable.COMPARATOR);
+    }
+    
+    @Override
+    public <T extends Child<PluginData>> Stream<T> streamOf(Class<T> childClass) {
+        return getChildren().stream()
+            .map(child -> {
+                @SuppressWarnings("unchecked")
+                final T cast = (T) child;
+                return cast;
+            }).sorted(Nameable.COMPARATOR);
     }
 
     @Override

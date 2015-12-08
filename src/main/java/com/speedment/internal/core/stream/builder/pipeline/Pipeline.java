@@ -59,4 +59,40 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
 
     void setInitialSupplier(Supplier<BaseStream<?, ?>> initialSupplier);
 
+    /**
+     * Returns whether this pipeline, if a terminal operation were to be
+     * executed, would execute in parallel.
+     *
+     * @return {@code true} if this pipeline would execute in parallel if
+     * executed
+     */
+    boolean isParallel();
+
+    /**
+     * Sets if this Pipeline is parallel.
+     *
+     * @param flag <code>true</code> if the Pipeline is parallel,
+     * <code>false</code> if the Pipeline is sequential
+     */
+    void setParallel(boolean flag);
+    
+    
+        /**
+     * Returns whether this pipeline, if a terminal operation were to be
+     * executed, would execute in parallel.
+     *
+     * @return {@code true} if this pipeline would execute in parallel if
+     * executed
+     */
+    boolean isOrdered();
+
+    /**
+     * Sets if this Pipeline is ordered.
+     *
+     * @param flag <code>true</code> if the Pipeline is ordered,
+     * <code>false</code> if the Pipeline is unordered
+     */
+    void setOrdered(boolean flag);
+    
+
 }

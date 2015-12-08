@@ -26,6 +26,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.core.stream.StreamUtil;
+import com.speedment.stream.ParallelStrategy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,6 +50,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private List<?> values;
     private Function<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
+    private ParallelStrategy parallelStrategy;
     private Connection connection;
     private PreparedStatement ps;
     private ResultSet rs;
@@ -68,6 +70,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         setValues(values);
         setRsMapper(rsMapper);
         this.connectionSupplier = requireNonNull(connectionSupplier);
+        parallelStrategy = ParallelStrategy.DEFAULT;
         setState(State.INIT);
         debug();
     }
@@ -89,7 +92,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             throw new SpeedmentException(sqle);
         }
         setState(State.OPEN);
-        return StreamUtil.asStream(rs, getRsMapper());
+        return StreamUtil.asStream(rs, getRsMapper(), parallelStrategy);
     }
 
     @Override
@@ -158,5 +161,14 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private void debug() {
         // LOGGER.debug(this);
     }
+    
+        public ParallelStrategy getParallelStrategy() {
+        return parallelStrategy;
+    }
+
+    public void setParallelStrategy(ParallelStrategy parallelStrategy) {
+        this.parallelStrategy = parallelStrategy;
+    }
+    
 
 }

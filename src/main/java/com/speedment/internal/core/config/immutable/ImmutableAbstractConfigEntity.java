@@ -18,7 +18,6 @@ package com.speedment.internal.core.config.immutable;
 
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
 import com.speedment.config.Node;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.util.Trees;

@@ -24,6 +24,7 @@ import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

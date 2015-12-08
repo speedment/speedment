@@ -19,6 +19,7 @@ package com.speedment.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
 import com.speedment.config.Schema;
+import com.speedment.stream.ParallelStrategy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;

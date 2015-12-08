@@ -24,6 +24,7 @@ import com.speedment.config.Project;
 import com.speedment.config.ProjectManager;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Child;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import groovy.lang.Closure;
@@ -33,9 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
-import com.speedment.internal.util.Cast;
 import static com.speedment.internal.util.Cast.castOrFail;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
@@ -151,19 +150,21 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
 
     @Override
     public Stream<? extends Child<Project>> stream() {
-        return Stream.of(dbmsChildren, pluginDataChildren)
-                .flatMap(ChildHolder::stream);
+        return Stream.concat(
+            dbmsChildren.stream().sorted(Nameable.COMPARATOR), 
+            pluginDataChildren.stream().sorted(Nameable.COMPARATOR)
+        );
     }
 
     @Override
     public <T extends Child<Project>> Stream<T> streamOf(Class<T> childClass) {
         if (Dbms.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) dbmsChildren.stream();
+            final Stream<T> result = (Stream<T>) dbmsChildren.stream().sorted(Nameable.COMPARATOR);
             return result;
         } else if (PluginData.class.equals(childClass)) {
             @SuppressWarnings("unchecked")
-            final Stream<T> result = (Stream<T>) pluginDataChildren.stream();
+            final Stream<T> result = (Stream<T>) pluginDataChildren.stream().sorted(Nameable.COMPARATOR);
             return result;
         } else {
             throw new SpeedmentException(
@@ -214,12 +215,12 @@ public final class ImmutableProject extends ImmutableAbstractNamedConfigEntity i
     }
 
     @Override
-    public Dbms addNewDbms(Speedment speedment) {
+    public Dbms addNewDbms() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
-    public PluginData addNewPluginData(Speedment speedment) {
+    public PluginData addNewPluginData() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

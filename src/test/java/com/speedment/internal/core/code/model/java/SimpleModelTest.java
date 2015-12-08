@@ -38,7 +38,8 @@ import org.junit.Before;
  */
 public abstract class SimpleModelTest {
     protected static final String TABLE_NAME = "user";
-    protected static final String COLUMN_NAME = "first_name";
+    protected static final String COLUMN_NAME = "first_name"; 
+    
 
     protected Speedment speedment;
     protected Project project;
@@ -52,7 +53,7 @@ public abstract class SimpleModelTest {
     public void setUp() {
         speedment = SpeedmentFactory.newSpeedmentInstance();
         project = new ProjectImpl(speedment);
-        dbms = project.addNewDbms(speedment);
+        dbms = project.addNewDbms();
         schema = dbms.addNewSchema();
         table = schema.addNewTable();
         column = table.addNewColumn();

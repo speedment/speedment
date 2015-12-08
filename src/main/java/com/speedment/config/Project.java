@@ -24,8 +24,10 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ProjectImpl;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
 import java.nio.file.Path;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,7 +38,7 @@ import java.util.function.Function;
  */
 @Api(version = "2.2")
 public interface Project extends Node, Enableable, HasSpeedment, Parent<Child<Project>>, Child<ProjectManager> {
-
+   
     /**
      * Factory holder.
      */
@@ -88,19 +90,17 @@ public interface Project extends Node, Enableable, HasSpeedment, Parent<Child<Pr
      * Creates and adds a new {@link Dbms} as a child to this node in the
      * configuration tree.
      *
-     * @param speedment the {@link Speedment} instance
      * @return the newly added child
      */
-    Dbms addNewDbms(Speedment speedment);
+    Dbms addNewDbms();
     
     /**
      * Creates and adds a new {@link PluginData} as a child to this node in the
      * configuration tree.
      *
-     * @param speedment the {@link Speedment} instance
      * @return the newly added child
      */
-    PluginData addNewPluginData(Speedment speedment);
+    PluginData addNewPluginData();
 
     /**
      * Returns the name of the generated package where this project will be

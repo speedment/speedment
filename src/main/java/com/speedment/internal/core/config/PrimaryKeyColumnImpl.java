@@ -27,7 +27,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class PrimaryKeyColumnImpl extends AbstractOrdinalConfigEntity implements PrimaryKeyColumn, ColumnableHelper {
+public final class PrimaryKeyColumnImpl extends AbstractOrdinalNode implements PrimaryKeyColumn, ColumnableHelper {
     
     private Table parent;
 
