@@ -18,7 +18,6 @@ package com.speedment.internal.core.manager.sql;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
 
-import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 
 /**
  * Created by fdirlikl on 11/18/2015.
