@@ -42,7 +42,7 @@ public final class MailPromptController implements Initializable {
         Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
     
     private final static Predicate<String> IS_INVALID_MAIL = 
-        mail -> INVALID_MAIL.matcher(mail).find();
+        mail -> !INVALID_MAIL.matcher(mail).find();
     
     private final UISession session;
     private @FXML TextField email;
