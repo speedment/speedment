@@ -38,7 +38,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import javafx.beans.value.ChangeListener;
 
 /**
  *
@@ -68,37 +68,49 @@ public final class ProjectTreeController implements Initializable {
         events.notify(new ProjectLoaded(project));
 
         hierarchy.setCellFactory(view -> new TreeCell<AbstractNodeProperty>() {
+            
+            private final ChangeListener<Boolean> change = (ob, o, enabled) -> {
+                if (enabled) enable(); 
+                else disable();
+            };
+            
+            {
+                itemProperty().addListener((ob, o, n) -> {
+                    if (o != null) o.enabledProperty().removeListener(change);
+                    if (n != null) n.enabledProperty().addListener(change);
+                });
+            }
+            
+            private void disable() {
+                getStyleClass().add("gui-disabled");
+            }
+            
+            private void enable() {
+                while (getStyleClass().remove("gui-disabled")) {}
+            }
+            
             @Override
             protected void updateItem(AbstractNodeProperty item, boolean empty) {
                 // item can be null
                 super.updateItem(item, requireNonNull(empty));
-
-                if (item == null || empty) {
-                    setGraphic(null);
+                
+                if (empty || item == null) {
                     textProperty().unbind();
-                    styleProperty().unbind();
+                    
                     setText(null);
-                    setStyle(null);
+                    setGraphic(null);
                     setContextMenu(null);
-                    while (getStyleClass().remove("gui-disabled")) {}
+                    
+                    disable();
                 } else {
                     setGraphic(SpeedmentIcon.forNode(item));
                     textProperty().bind(item.nameProperty());
-
+                    
                     ui.createContextMenu(this, item)
                         .ifPresent(this::setContextMenu);
-
-                    item.enabledProperty().addListener((ob, o, enabled) -> {
-                        if (enabled) {
-                            while (getStyleClass().remove("gui-disabled")) {}
-                        } else {
-                            getStyleClass().add("gui-disabled");
-                        }
-                    });
                     
-                    if (!item.isEnabled()) {
-                        getStyleClass().add("gui-disabled");
-                    }
+                    if (item.isEnabled()) enable(); 
+                    else disable();
                 }
             }
         });
