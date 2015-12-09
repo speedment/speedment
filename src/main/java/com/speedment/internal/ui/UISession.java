@@ -264,6 +264,8 @@ public final class UISession {
                 ));
                 
                 LOGGER.error(ex, "Error! Failed to generate code.");
+                
+                showError("Failed to generate code", ex.getMessage(), ex);
             }
         });
     }
