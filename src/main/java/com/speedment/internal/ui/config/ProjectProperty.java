@@ -84,6 +84,10 @@ public final class ProjectProperty extends AbstractParentProperty<Project, Child
     }
     
     public void loadSettingsFrom(Project prototype) {
+        setName(prototype.getName());
+        setEnabled(prototype.isEnabled());
+        setExpanded(prototype.isExpanded());
+        
         packageName.setValue(prototype.getPackageName());
         packageLocation.setValue(prototype.getPackageLocation());
         configPath = prototype.getConfigPath().orElse(DEFAULT_CONFIG_PATH);
