@@ -17,11 +17,18 @@
 package com.speedment.internal.ui.util;
 
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.util.List;
+import java.util.function.Function;
+import static java.util.stream.Collectors.toList;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
@@ -42,6 +49,26 @@ public final class EditorsUtil {
                 getEditor().textProperty().setValue(t);
             }
             
+        };
+    }
+    
+    public static <T> PropertyEditor<T> createChoiceEditorWithConverter(PropertySheet.Item item, List<T> alternatives, Function<T, String> converter) {
+        final ObservableList<String> labels = observableArrayList(alternatives.stream().map(converter).collect(toList()));
+        final ObservableList<T> observable = observableArrayList(alternatives);
+        
+        final ChoiceBox<String> choice = new ChoiceBox(labels);
+        
+        return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {
+
+            @Override
+            protected ObservableValue<T> getObservableValue() {
+                return Bindings.valueAt(observable, getEditor().getSelectionModel().selectedIndexProperty());
+            }
+
+            @Override
+            public void setValue(T t) {
+                getEditor().getSelectionModel().select(observable.indexOf(t));
+            }
         };
     }
     

@@ -60,6 +60,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 
 /**
  *
@@ -88,6 +98,9 @@ public final class UISession {
         file != null &&
         file.exists() && 
         file.isDirectory();
+    
+    private final static Predicate<Optional<String>> NO_PASSWORD_SPECIFIED = pass ->
+        !pass.isPresent() || "".equals(pass.get().trim());
 
     private final Speedment speedment;
     private final Application application;
@@ -204,6 +217,10 @@ public final class UISession {
                 "to the project. Are you sure you want to continue?"
             ).filter(ButtonType.OK::equals).isPresent()) {
                 
+                project.streamOf(Dbms.class)
+                    .filter(dbms -> NO_PASSWORD_SPECIFIED.test(dbms.getPassword()))
+                    .forEach(dbms -> showPasswordDialog(dbms));
+                
                 final Optional<String> schemaName = project
                     .traverseOver(Schema.class)
                     .map(Schema::getName)
@@ -298,7 +315,7 @@ public final class UISession {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
         scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
-
+        
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
         dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
@@ -309,6 +326,64 @@ public final class UISession {
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
+    }
+    
+    private void showPasswordDialog(Dbms dbms) {
+        final Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Authentication Required");
+        dialog.setHeaderText("Enter password for " + dbms.getName());
+        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
+        
+        final DialogPane pane = dialog.getDialogPane();
+        pane.getStyleClass().add("authentication");
+        
+        final Scene scene     = pane.getScene();
+        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+        
+        @SuppressWarnings("unchecked")
+        final Stage dialogStage = (Stage) scene.getWindow();
+        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
+
+        final ButtonType authButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        pane.getButtonTypes().addAll(ButtonType.CANCEL, authButtonType);
+
+        final GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField username = new TextField(dbms.getUsername().orElse("Root"));
+        username.setPromptText("Username");
+        PasswordField password = new PasswordField();
+        password.setPromptText("Password");
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(username, 1, 0);
+        grid.add(new Label("Password:"), 0, 1);
+        grid.add(password, 1, 1);
+
+        final Node loginButton = pane.lookupButton(authButtonType);
+
+        username.textProperty().addListener((ob, o, n) ->
+            loginButton.setDisable(n.trim().isEmpty())
+        );
+
+        pane.setContent(grid);
+        Platform.runLater(username::requestFocus);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == authButtonType) {
+                return new Pair<>(username.getText(), password.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(usernamePassword -> {
+            dbms.setUsername(usernamePassword.getKey());
+            dbms.setPassword(usernamePassword.getValue());
+        });
     }
     
     public <NODE extends AbstractNodeProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {

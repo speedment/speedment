@@ -276,6 +276,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         ));
 
                 column.setTypeMapper(typeMapper);
+                column.setDatabaseType(mapping);
 
             } else {
                 LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());

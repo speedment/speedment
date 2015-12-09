@@ -40,6 +40,7 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private TypeMapper<?, ?> typeMapper;
+    private Class<?> databaseType;
 
     @Override
     protected void setDefaults() {
@@ -48,6 +49,7 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
         setTypeMapper(new StringIdentityMapper());
+        setDatabaseType(Object.class);
     }
 
     @Override
@@ -135,5 +137,15 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
                 );
             }
         }
+    }
+
+    @Override
+    public void setDatabaseType(Class<?> databaseType) {
+        this.databaseType = databaseType;
+    }
+
+    @Override
+    public Class<?> getDatabaseType() {
+        return databaseType;
     }
 }

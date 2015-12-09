@@ -27,6 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
@@ -49,6 +50,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     private final StringProperty alias;
     private final Property<FieldStorageType> fieldStorageType;
     private final Property<ColumnCompressionType> columnCompressionType;
+    private final Property<Class<?>> databaseType;
     
     private Table parent;
     private int ordinalPosition;
@@ -61,6 +63,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         alias                 = new SimpleStringProperty();
         fieldStorageType      = new SimpleObjectProperty<>();
         columnCompressionType = new SimpleObjectProperty<>();
+        databaseType          = new SimpleObjectProperty<>();
         setDefaults();
     }
     
@@ -74,6 +77,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         this.fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
         this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         this.ordinalPosition       = prototype.getOrdinalPosition();
+        this.databaseType          = new SimpleObjectProperty<>(prototype.getDatabaseType());
         
         this.parent = parent;
     }
@@ -83,17 +87,24 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         setAutoincrement(false);
         setFieldStorageType(FieldStorageType.INHERIT);
         setColumnCompressionType(ColumnCompressionType.INHERIT);
+        setDatabaseType(Object.class);
         setTypeMapper(new StringIdentityMapper());
     }
 
     @Override
     protected Stream<PropertySheet.Item> guiVisibleProperties() {
         return Stream.of(
-            // TODO: Add TypeMapper
             new StringPropertyItem(
                 alias,       
                 "Alias",                  
                 "The name to use in the generated code to represent this entity."
+            ),
+            new TypeMapperPropertyItem(
+                getSpeedment(),
+                getDatabaseType(),
+                typeMapper,
+                "Type Mapper",
+                "The class that will be used to map types between the database and the generated code."
             ),
             new BooleanPropertyItem(
                 nullable,
@@ -233,5 +244,19 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     @Override
     public int getOrdinalPosition() {
         return ordinalPosition;
+    }
+
+    @Override
+    public void setDatabaseType(Class<?> databaseType) {
+        this.databaseType.setValue(databaseType);
+    }
+
+    @Override
+    public Class<?> getDatabaseType() {
+        return databaseType.getValue();
+    }
+    
+    public Property<Class<?>> databaseTypeProperty() {
+        return databaseType;
     }
 }

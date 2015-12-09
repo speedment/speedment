@@ -316,6 +316,10 @@
     -fx-background-color: -fx-speedment-green;
 }
 
+.authentication .header-panel {
+    -fx-background-color: -fx-speedment-blue;
+}
+
 /*** Output messages ***/
 .label.msg {
     -fx-font-family: 'Monospaced';
