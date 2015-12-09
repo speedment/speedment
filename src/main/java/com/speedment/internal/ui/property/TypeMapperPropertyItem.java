@@ -42,6 +42,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Class<TypeMapper<?, ?>> getType() {
         return (Class<TypeMapper<?, ?>>) (Class<?>) TypeMapper.class;
     }

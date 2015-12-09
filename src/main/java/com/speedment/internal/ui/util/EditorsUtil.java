@@ -56,7 +56,7 @@ public final class EditorsUtil {
         final ObservableList<String> labels = observableArrayList(alternatives.stream().map(converter).collect(toList()));
         final ObservableList<T> observable = observableArrayList(alternatives);
         
-        final ChoiceBox<String> choice = new ChoiceBox(labels);
+        final ChoiceBox<String> choice = new ChoiceBox<>(labels);
         
         return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {
 
