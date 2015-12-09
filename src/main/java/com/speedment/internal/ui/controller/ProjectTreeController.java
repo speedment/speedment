@@ -149,7 +149,9 @@ public final class ProjectTreeController implements Initializable {
     
     private void populateTree(ProjectProperty project) {
         requireNonNull(project);
-        hierarchy.setRoot(branch(project));
+        final TreeItem<AbstractNodeProperty> root = branch(project);
+        hierarchy.setRoot(root);
+        hierarchy.getSelectionModel().select(root);
     }
     
     private TreeItem<AbstractNodeProperty> branch(AbstractNodeProperty node) {
