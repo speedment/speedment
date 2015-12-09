@@ -27,6 +27,11 @@ import com.speedment.config.mapper.TypeMapper;
 public class TrueFalseStringToBooleanMapper implements TypeMapper<String, Boolean> {
 
     @Override
+    public String getLabel() {
+        return "\"True\"/\"False\" to Boolean";
+    }
+    
+    @Override
     public Class<Boolean> getJavaType() {
         return Boolean.class;
     }
@@ -44,6 +49,11 @@ public class TrueFalseStringToBooleanMapper implements TypeMapper<String, Boolea
     @Override
     public String toDatabaseType(Boolean value) {
         return value == null ? null : String.valueOf(value);
+    }
+    
+    @Override
+    public boolean isIdentityMapper() {
+        return false;
     }
 
 }

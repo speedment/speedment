@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.internal.core.config.mapper.string;
 
 import com.speedment.config.mapper.TypeMapper;
@@ -25,6 +24,11 @@ import com.speedment.config.mapper.TypeMapper;
  * @author Patrick Hobusch
  */
 public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
+
+    @Override
+    public String getLabel() {
+        return "\"Yes\"/\"No\" to Boolean";
+    }
 
     @Override
     public Class<Boolean> getJavaType() {
@@ -44,6 +48,11 @@ public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
     @Override
     public String toDatabaseType(Boolean value) {
         return value == null ? null : (value ? "yes" : "no");
+    }
+
+    @Override
+    public boolean isIdentityMapper() {
+        return false;
     }
 
 }

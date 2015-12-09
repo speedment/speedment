@@ -27,7 +27,7 @@ import com.speedment.config.mapper.TypeMapper;
 * @author Patrick Hobusch
 */
 public class StringToLocaleMapper implements TypeMapper<String, Locale> {
-
+   
     @Override
     public Class<Locale> getJavaType() {
         return Locale.class;
@@ -46,6 +46,11 @@ public class StringToLocaleMapper implements TypeMapper<String, Locale> {
     @Override
     public String toDatabaseType(Locale value) {
        return value == null ? null : value.getLanguage();
+    }
+
+    @Override
+    public boolean isIdentityMapper() {
+        return false;
     }
 
 }

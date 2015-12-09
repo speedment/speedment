@@ -51,4 +51,10 @@ public abstract class AbstractIdentityMapper<T> implements TypeMapper<T, T> {
     public final T toDatabaseType(T value) {
         return value;
     }
+
+    @Override
+    public boolean isIdentityMapper() {
+        return true;
+    }
+    
 }

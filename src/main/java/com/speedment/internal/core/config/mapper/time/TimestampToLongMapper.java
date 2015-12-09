@@ -44,4 +44,10 @@ public class TimestampToLongMapper implements TypeMapper<Timestamp, Long> {
     public Timestamp toDatabaseType(Long value) {
         return value == null ? null : new Timestamp(value);
     }
+    
+    @Override
+    public boolean isIdentityMapper() {
+        return false;
+    }
+    
 }
