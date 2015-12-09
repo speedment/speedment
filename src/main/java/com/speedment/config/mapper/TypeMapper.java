@@ -34,7 +34,8 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * @return the label
      */
     default String getLabel() {
-        return getDatabaseType()+" to "+getJavaType();
+        return getDatabaseType().getSimpleName() + 
+            " to " + getJavaType().getSimpleName();
     }
 
     /**

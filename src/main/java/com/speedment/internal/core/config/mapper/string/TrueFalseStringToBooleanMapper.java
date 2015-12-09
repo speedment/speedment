@@ -28,7 +28,7 @@ public class TrueFalseStringToBooleanMapper implements TypeMapper<String, Boolea
 
     @Override
     public String getLabel() {
-        return "\"True\"/\"False\" to Boolean";
+        return "True/False to Boolean";
     }
     
     @Override

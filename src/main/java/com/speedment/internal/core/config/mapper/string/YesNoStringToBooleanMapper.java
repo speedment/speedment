@@ -27,7 +27,7 @@ public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
 
     @Override
     public String getLabel() {
-        return "\"Yes\"/\"No\" to Boolean";
+        return "Yes/No to Boolean";
     }
 
     @Override

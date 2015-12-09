@@ -101,9 +101,11 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
             ),
             new TypeMapperPropertyItem(
                 getSpeedment(),
-                getDatabaseType(),
+                Optional.ofNullable(getTypeMapper())
+                    .map(tm -> (Class) tm.getDatabaseType())
+                    .orElse(getDatabaseType()),
                 typeMapper,
-                "JDBC Type -> Java",
+                "JDBC Type to Java",
                 "The class that will be used to map types between the database and the generated code."
             ),
             new BooleanPropertyItem(

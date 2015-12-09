@@ -19,6 +19,7 @@ package com.speedment.internal.ui.property;
 import com.speedment.Speedment;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.ui.util.EditorsUtil;
+import static java.util.Comparator.comparing;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -49,6 +50,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
     public PropertyEditor<?> createEditor() {
         final List<TypeMapper<?, ?>> mappers = speedment.getTypeMapperComponent().stream()
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
+            .sorted(comparing(TypeMapper::getLabel))
             .collect(toList());
         
         return EditorsUtil.createChoiceEditorWithConverter(
