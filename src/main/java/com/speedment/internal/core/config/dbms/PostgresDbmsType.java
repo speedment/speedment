@@ -22,7 +22,6 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import java.util.Collections;
 
 import java.util.Optional;
@@ -56,14 +55,14 @@ public final class PostgresDbmsType extends AbstractDbmsType {
     public PostgresDbmsType() {
 
         super(
-                "Postgres",
-                "Postgres-AB JDBC Driver",
+                "PostgreSQL",
+                "PostgreSQL JDBC Driver",
                 5432,
                 ".",
                 "Database name",
                 "org.postgresql.Driver",
                 unwrap(DEFAULT_CONNECTOR_PARAMS),
-                "postgresql",
+                JDBC_CONNECTOR_NAME,
                 QUOTE,
                 QUOTE,
                 Stream.of("pg_catalog", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
