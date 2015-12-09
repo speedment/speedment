@@ -16,10 +16,12 @@
  */
 package com.speedment.internal.util;
 
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 /**
- * Generic lazy initialization class.
+ * Generic lazy initialization class. The supplier must produce a non-null
+ * value.
  *
  * This class is thread safe. The Supplier is guaranteed to be called exactly
  * one time following one or several calls to 
@@ -32,22 +34,16 @@ import java.util.function.Supplier;
 public final class Lazy<T> {
 
     private T value;
-    private boolean initializedFast;
-    private volatile boolean initializedVolatile;
 
     public T getOrCompute(Supplier<T> supplier) {
-        if (!initializedFast) {
-            maybeCompute(supplier);
-        }
-        return value;
+        return value == null ? maybeCompute(supplier) : value;
     }
 
-    private synchronized void maybeCompute(Supplier<T> supplier) {
-        if (!initializedVolatile) {
-            value = supplier.get();
-            initializedVolatile = true;
-            initializedFast = true;
+    private synchronized T maybeCompute(Supplier<T> supplier) {
+        if (value == null) {
+            value = requireNonNull(supplier.get());
         }
+        return value;
     }
 
 }
