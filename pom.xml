@@ -125,12 +125,14 @@
                     </properties>
                     <excludes>
                         <exclude>**/README</exclude>
+                        <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
                         <exclude>README.md</exclude>
                         <exclude>LICENSE</exclude>
                         <exclude>DISCLAIMER</exclude>
                         <exclude>THIRD_PARTY_LICENSES</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
+                        <exclude>nbproject/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
