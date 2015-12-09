@@ -103,7 +103,7 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
                 getSpeedment(),
                 getDatabaseType(),
                 typeMapper,
-                "Type Mapper",
+                "JDBC Type -> Java",
                 "The class that will be used to map types between the database and the generated code."
             ),
             new BooleanPropertyItem(

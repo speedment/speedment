@@ -24,7 +24,6 @@ import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.OrderType;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.property.EnumPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.Property;
@@ -56,14 +55,7 @@ public final class IndexColumnProperty extends AbstractNodeProperty implements I
     
     @Override
     protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.of(
-            new EnumPropertyItem<>(
-                OrderType.class,
-                orderType,
-                "Ordering",
-                "The default ordering to use for this index."
-            )
-        );
+        return Stream.of();
     }
     
     @Override
