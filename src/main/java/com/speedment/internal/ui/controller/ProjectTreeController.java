@@ -18,6 +18,14 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.config.Dbms;
+import com.speedment.config.ForeignKey;
+import com.speedment.config.Index;
+import com.speedment.config.PluginData;
+import com.speedment.config.Project;
+import com.speedment.config.Schema;
+import com.speedment.config.Table;
+import com.speedment.config.aspects.Parent;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.config.AbstractParentProperty;
@@ -25,6 +33,7 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.resource.SilkIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -38,7 +47,10 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 
 /**
  *
@@ -47,7 +59,6 @@ import javafx.beans.value.ChangeListener;
 public final class ProjectTreeController implements Initializable {
     
     private final UISession session;
-    
     private @FXML TreeView<AbstractNodeProperty> hierarchy;
     
     private ProjectTreeController(UISession session) {
@@ -56,6 +67,16 @@ public final class ProjectTreeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        final UserInterfaceComponent ui =session.getSpeedment().getUserInterfaceComponent();
+        
+        ui.installContextMenu(Project.class,    this::createDefaultContextMenu);
+        ui.installContextMenu(PluginData.class, this::createDefaultContextMenu);
+        ui.installContextMenu(Dbms.class,       this::createDefaultContextMenu);
+        ui.installContextMenu(Schema.class,     this::createDefaultContextMenu);
+        ui.installContextMenu(Table.class,      this::createDefaultContextMenu);
+        ui.installContextMenu(Index.class,      this::createDefaultContextMenu);
+        ui.installContextMenu(ForeignKey.class, this::createDefaultContextMenu);
+        
         runLater(() -> populateTree(session.getProject()));
     }
     
@@ -150,6 +171,23 @@ public final class ProjectTreeController implements Initializable {
         }
 
         return branch;
+    }
+    
+    private <NODE extends AbstractNodeProperty & Parent<?>> Optional<ContextMenu> createDefaultContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node) {
+        final MenuItem expandAll = new MenuItem("Expand All", SilkIcon.BOOK_OPEN.view());
+        final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
+        
+        expandAll.setOnAction(ev -> {
+            node.traverseOver(AbstractNodeProperty.class)
+                .forEach(n -> n.setExpanded(true));
+        });
+        
+        collapseAll.setOnAction(ev -> {
+            node.traverseOver(AbstractNodeProperty.class)
+                .forEach(n -> n.setExpanded(false));
+        });
+        
+        return Optional.of(new ContextMenu(expandAll, collapseAll));
     }
     
     public static Node create(UISession session) {
