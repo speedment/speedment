@@ -90,8 +90,8 @@ public final class ConnectController implements Initializable {
         
         fieldType.setItems(
             getDbmsTypes()
-            .map(DbmsType::getName)
-            .collect(Collectors.toCollection(FXCollections::observableArrayList))
+                .map(DbmsType::getName)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList))
         );
 
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
@@ -143,7 +143,9 @@ public final class ConnectController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return Integer.parseInt(string);
+                if (string == null || "".equals(string.trim())) {
+                    return 0;
+                } else return Integer.parseInt(string);
             }
         });
 
