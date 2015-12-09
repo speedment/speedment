@@ -19,7 +19,6 @@ package com.speedment.internal.ui.property;
 import com.speedment.Speedment;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.ui.util.EditorsUtil;
-import com.speedment.internal.util.JavaLanguage;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -53,7 +52,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
             .collect(toList());
         
         return EditorsUtil.createChoiceEditorWithConverter(
-            this, mappers, mapper -> JavaLanguage.toHumanReadable(mapper.getJavaType().getSimpleName())
+            this, mappers, TypeMapper::getLabel
         );
     }
 }
