@@ -165,6 +165,7 @@ public final class ConnectController implements Initializable {
 
         buttonConnect.setOnAction(ev -> {
             session.getProject().setName(fieldSchema.getText());
+            
             Settings.inst().set("last_known_schema", fieldSchema.getText());
             Settings.inst().set("last_known_dbtype", dbms.getTypeName());
             Settings.inst().set("last_known_host", fieldHost.getText());
@@ -172,26 +173,9 @@ public final class ConnectController implements Initializable {
             Settings.inst().set("last_known_name", fieldName.getText());
             Settings.inst().set("last_known_port", fieldPort.getText());
 
-            try {
-                final DbmsHandler dh = dbms.getType().makeDbmsHandler(session.getSpeedment(), dbms);
-                dh.schemas(s -> fieldSchema.getText().equalsIgnoreCase(s.getName()))
-                    .map(schema -> new SchemaProperty(session.getSpeedment(), dbms, schema))
-                    .forEachOrdered(dbms::add);
-
-                final AbstractNodeProperty root = session.getProject();
-                Trees.traverse(root, c -> c.asParent()
-                    .map(p -> p.stream())
-                    .orElse(Stream.empty())
-                    .map(n -> (AbstractNodeProperty) n),
-                    Trees.TraversalOrder.DEPTH_FIRST_PRE
-                ).forEachOrdered(System.out::println);
-
+            if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
                 SceneController.createAndShow(session);
-            } catch (final Exception ex) {
-                session.showError("Error Connecting to Database", 
-                    ex.getMessage(), ex
-                );
             }
         });
     }

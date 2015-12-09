@@ -25,6 +25,7 @@ import com.speedment.config.PluginData;
 import com.speedment.config.Project;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
@@ -77,10 +78,14 @@ public final class ProjectTreeController implements Initializable {
         ui.installContextMenu(Index.class,      this::createDefaultContextMenu);
         ui.installContextMenu(ForeignKey.class, this::createDefaultContextMenu);
         
-        runLater(() -> populateTree(session.getProject()));
+        runLater(() -> prepareTree(session.getProject()));
+        
+        session.getProject().children().addListener((ListChangeListener.Change<? extends Child<Project>> c) -> {
+            populateTree(session.getProject());
+        });
     }
     
-    private void populateTree(ProjectProperty project) {
+    private void prepareTree(ProjectProperty project) {
         requireNonNull(project);
         
         final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
@@ -138,6 +143,12 @@ public final class ProjectTreeController implements Initializable {
         
         Bindings.bindContent(ui.getSelectedTreeItems(), hierarchy.getSelectionModel().getSelectedItems());
         hierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
+        
+        populateTree(project);
+    }
+    
+    private void populateTree(ProjectProperty project) {
+        requireNonNull(project);
         hierarchy.setRoot(branch(project));
     }
     

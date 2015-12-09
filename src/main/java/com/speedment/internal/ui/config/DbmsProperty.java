@@ -121,6 +121,10 @@ public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> imp
         );
     }
     
+    public void clear() {
+        schemaChildren.clear();
+    }
+    
     @Override
     public Optional<Project> getParent() {
         return Optional.ofNullable(parent);

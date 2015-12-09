@@ -17,7 +17,10 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
+import com.speedment.config.Dbms;
 import com.speedment.config.Project;
+import com.speedment.config.Schema;
+import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.ui.config.ProjectProperty;
@@ -25,6 +28,9 @@ import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
+import com.speedment.internal.ui.config.AbstractNodeProperty;
+import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
@@ -197,7 +203,23 @@ public final class UISession {
                 "Reloading the project will remove any changes you have done " +
                 "to the project. Are you sure you want to continue?"
             ).filter(ButtonType.OK::equals).isPresent()) {
-                // TODD fix this.
+                
+                final Optional<String> schemaName = project
+                    .traverseOver(Schema.class)
+                    .map(Schema::getName)
+                    .findAny();
+                
+                if (schemaName.isPresent()) {
+                    project
+                        .streamOf(Dbms.class)
+                        .map(dbms -> (DbmsProperty) dbms)
+                        .forEach(dbms -> loadFromDatabase(dbms, schemaName.get()));
+                } else {
+                    showError(
+                        "No Schema Found", 
+                        "Can not connect to the database without atleast one schema specified."
+                    );
+                }
             }
         });
     }
@@ -246,6 +268,10 @@ public final class UISession {
         });
     }
     
+    public void showError(String title, String message) {
+        showError(title, message, null);
+    }
+    
     public void showError(String title, String message, final Throwable ex) {
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
@@ -281,6 +307,25 @@ public final class UISession {
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
+    }
+    
+    public <NODE extends AbstractNodeProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+        try {
+            dbms.clear();
+            
+            final DbmsHandler dh = dbms.getType().makeDbmsHandler(speedment, dbms);
+            dh.schemas(s -> schemaName.equalsIgnoreCase(s.getName()))
+                .map(schema -> new SchemaProperty(speedment, dbms, schema))
+                .forEachOrdered(dbms::add);
+            
+            return true;
+        } catch (final Exception ex) {
+            showError("Error Connecting to Database", 
+                ex.getMessage(), ex
+            );
+        }
+        
+        return false;
     }
     
     public void loadGroovyFile(File file, ReuseStage reuse) {
