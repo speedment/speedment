@@ -40,13 +40,13 @@
                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
             </padding>
         </StackPane>
-        <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
+        <VBox alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="280.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="rightTitle" alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Select Database" textFill="#3f6291" />
                 <ChoiceBox fx:id="fieldType" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
                 <HBox spacing="8.0">
                     <children>
-                        <TextField fx:id="fieldHost" prefHeight="25.0" prefWidth="248.0" promptText="Host">
+                        <TextField fx:id="fieldHost" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="248.0" promptText="Host" HBox.hgrow="ALWAYS">
                             <tooltip>
                                 <Tooltip text="The database host." />
                             </tooltip>
