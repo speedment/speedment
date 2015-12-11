@@ -26,6 +26,8 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -61,8 +63,9 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @Override
     public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+        requireNonNull(field);
         return speedment.getStreamSupplierComponent()
-                .find(getEntityClass(), field, value);
+                .findAny(getEntityClass(), field, value);
     }
 
 //    @Override
