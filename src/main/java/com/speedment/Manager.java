@@ -22,6 +22,7 @@ import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ComparableField;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import java.util.function.Consumer;
@@ -399,6 +400,9 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * (e.g. SQLException)
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
+    
+    
+    <V extends Comparable<? super V>> ENTITY find(ComparableField<ENTITY, V> field, V value);
 
     ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 

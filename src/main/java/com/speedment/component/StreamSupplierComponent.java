@@ -17,6 +17,8 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ComparableField;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 
@@ -43,4 +45,15 @@ public interface StreamSupplierComponent extends Component {
      * @return a stream for the given entity class
      */
     <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
+
+    default <ENTITY, V extends Comparable<? super V>, FK>
+            ENTITY find(Class<ENTITY> entityClass, ComparableField<ENTITY, V> field, V value) {
+        return stream(entityClass, StreamDecorator.IDENTITY)
+                .filter(field.equal(value))
+                .findAny()
+                .orElseThrow(() -> new SpeedmentException(
+                        "Foreign key constraint error. " + entityClass.getSimpleName() + " is set to " + value)
+                );
+    }
+
 }

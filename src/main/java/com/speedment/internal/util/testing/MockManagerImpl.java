@@ -21,7 +21,9 @@ import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ComparableField;
 import com.speedment.stream.StreamDecorator;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,7 +42,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     private Function<StreamDecorator, Stream<ENTITY>> streamer;
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
-    Function<ENTITY, ENTITY> remover;
+    private Function<ENTITY, ENTITY> remover;
+    private BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, ENTITY> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
@@ -86,6 +89,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     @Override
     public MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover) {
         this.remover = remover;
+        return this;
+    }
+    
+    @Override
+    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, ENTITY> finder) {
+        this.finder = finder;
         return this;
     }
 
@@ -148,6 +157,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover.apply(entity);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> ENTITY find(ComparableField<ENTITY, V> field, V value) {
+        return finder.apply(field, value);
     }
 
     @Override
