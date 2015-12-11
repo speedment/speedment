@@ -24,6 +24,8 @@ import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,7 +60,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public <V extends Comparable<? super V>> ENTITY find(ComparableField<ENTITY, V> field, V value) {
+    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
         return speedment.getStreamSupplierComponent()
                 .find(getEntityClass(), field, value);
     }

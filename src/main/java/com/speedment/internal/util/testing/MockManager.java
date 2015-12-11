@@ -19,6 +19,7 @@ package com.speedment.internal.util.testing;
 import com.speedment.Manager;
 import com.speedment.field.ComparableField;
 import com.speedment.stream.StreamDecorator;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -99,13 +100,13 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
     /**
      * Sets the finder of this {@code MockManager}.
      *
-     * The finder is invoked each time a Managers {@link Manager#find(com.speedment.field.ComparableField, java.lang.Comparable) ()
+     * The finder is invoked each time a Managers {@link Manager#findAny(com.speedment.field.ComparableField, java.lang.Comparable) ()
      * } method is called.
      *
      * @param finder the new finder supplier
      * @return this instance
      */
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, ENTITY> finder);
+    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder);
 
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);

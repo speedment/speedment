@@ -24,6 +24,8 @@ import com.speedment.component.ManagerComponent;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

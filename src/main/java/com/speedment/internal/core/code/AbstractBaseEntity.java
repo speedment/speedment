@@ -26,6 +26,8 @@ import com.speedment.Entity;
 import com.speedment.Speedment;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

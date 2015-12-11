@@ -63,6 +63,10 @@ import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
