@@ -68,7 +68,7 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
     @Override
     public Stream<Node> traverse() {
         final Function<Node, Stream<Node>> traverse = n -> n.asParent()
-            .map(Parent::stream)
+            .map(p -> p.stream())
             .orElse(Stream.empty())
             .map(Node.class::cast);
 
@@ -101,20 +101,39 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
         );
     }
     
-    protected ObservableList<CHILD> createChildrenView(ObservableSet<? extends CHILD>... children) {
+    protected ObservableList<CHILD> createChildrenView(ObservableSet<? extends CHILD> children) {
         final ObservableList<CHILD> list = FXCollections.observableArrayList(stream().collect(toList()));
         
-        for (ObservableSet<? extends CHILD> local : children) {
-            local.addListener((SetChangeListener.Change<? extends CHILD> change) -> {
-                if (change.wasAdded()) {
-                    list.add(change.getElementAdded());
-                }
-                
-                if (change.wasRemoved()) {
-                    list.remove(change.getElementRemoved());
-                }
-            });
-        }
+        final SetChangeListener<? super CHILD> listener = change -> {
+            if (change.wasAdded()) {
+                list.add(change.getElementAdded());
+            }
+
+            if (change.wasRemoved()) {
+                list.remove(change.getElementRemoved());
+            }
+        };
+
+        children.addListener(listener);
+        
+        return list;
+    }
+    
+    protected ObservableList<CHILD> createChildrenView(ObservableSet<? extends CHILD> firstChildren, ObservableSet<? extends CHILD> secondChildren) {
+        final ObservableList<CHILD> list = FXCollections.observableArrayList(stream().collect(toList()));
+        
+        final SetChangeListener<? super CHILD> listener = change -> {
+            if (change.wasAdded()) {
+                list.add(change.getElementAdded());
+            }
+
+            if (change.wasRemoved()) {
+                list.remove(change.getElementRemoved());
+            }
+        };
+
+        firstChildren.addListener(listener);
+        secondChildren.addListener(listener);
         
         return list;
     }
@@ -123,7 +142,9 @@ public abstract class AbstractParentProperty<THIS extends Node, CHILD extends Ch
         return observableSet(
             prototype.streamOf(childType)
                 .map(child -> {
-                    final CHILD newChild = wrapper.create(getSpeedment(), (THIS) this, child);
+                    @SuppressWarnings("unchecked")
+                    final THIS thiz = (THIS) this;
+                    final CHILD newChild = wrapper.create(getSpeedment(), thiz, child);
                     newChild.setParent(this);
                     return newChild;
                 })
