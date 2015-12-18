@@ -32,7 +32,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
 
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        return of("(UPPER(" + cn + ") = UPPER(?))", negated).add(getFirstOperandAsRaw(model));
+        return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override

@@ -48,9 +48,9 @@ public class ComparableFieldImpl<ENTITY, V extends Comparable<? super V>> implem
     private final ComparableFieldTrait<ENTITY, V> comparableField;
 
     public ComparableFieldImpl(
-        String columnName,
-        Getter<ENTITY, V> getter,
-        Setter<ENTITY, V> setter
+            String columnName,
+            Getter<ENTITY, V> getter,
+            Setter<ENTITY, V> setter
     ) {
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
@@ -152,6 +152,18 @@ public class ComparableFieldImpl<ENTITY, V extends Comparable<? super V>> implem
     @Override
     public ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values) {
         return comparableField.in(values);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, V> notIn(V... values) {
+        return comparableField.notIn(values);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, V> notIn(Set<V> values) {
+        return comparableField.notIn(values);
     }
 
 }

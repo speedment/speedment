@@ -18,27 +18,28 @@ package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import static com.speedment.field.predicate.PredicateType.IN;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import static com.speedment.field.predicate.PredicateType.NOT_IN;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import java.util.Set;
 import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
-    
+
 /**
  *
  * @author pemi
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class InPredicate<ENTITY, V extends Comparable<? super V>>
-    extends SpeedmentPredicateImpl<ENTITY, V>
-    implements SpeedmentPredicate<ENTITY, V>, BinarySetOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class NotInPredicate<ENTITY, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, V>
+        implements SpeedmentPredicate<ENTITY, V>, BinarySetOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
 
     private final Set<V> operand0;
 
-    public InPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, Set<V> values) {
-        super(IN, field, referenceField);
+    public NotInPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, Set<V> values) {
+        super(NOT_IN, field, referenceField);
         this.operand0 = values;
     }
 
@@ -49,7 +50,7 @@ public class InPredicate<ENTITY, V extends Comparable<? super V>>
 
     @Override
     public boolean testField(V fieldValue) {
-        return operand0.contains(fieldValue);
+        return !operand0.contains(fieldValue);
     }
 
 }

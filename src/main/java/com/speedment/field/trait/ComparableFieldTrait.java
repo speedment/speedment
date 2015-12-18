@@ -192,4 +192,32 @@ public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
      */
     ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values);
 
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not in</em> the set of
+     * given values.
+     * <p>
+     * N.B. if no values are given, then the returned Predicate will always
+     * evaluate to {@code true}
+     *
+     * @param values the set of values to match towards this Field
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not in</em> the set of given values
+     */
+    @SuppressWarnings("unchecked")
+    ComparableSpeedmentPredicate<ENTITY, V> notIn(V... values);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not in</em> the given Set.
+     * <p>
+     * N.B. if the Set is empty, then the returned Predicate will always
+     * evaluate to {@code true}
+     *
+     * @param values the set of values to match towards this Field
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not in</em> the given Set
+     */
+    ComparableSpeedmentPredicate<ENTITY, V> notIn(Set<V> values);
+
 }

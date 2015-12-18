@@ -17,7 +17,8 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
-
+import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRaw;
+import static com.speedment.internal.core.manager.sql.AbstractSpeedmentPredicateView.of;
 
 /**
  * Created by fdirlikl on 11/18/2015.
@@ -28,24 +29,27 @@ public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateVi
         super(openingFieldQuote, closingFieldQuote);
     }
 
+    // Info from:
+    // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
+    
     @Override
-    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        throw new UnsupportedOperationException("To be implemented");
+    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+        return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        throw new UnsupportedOperationException("To be implemented");
+    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+        return of("(" + cn + " LIKE ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        throw new UnsupportedOperationException("To be implemented");
+    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+        return of("(" + cn + " LIKE '%' || ?)", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        throw new UnsupportedOperationException("To be implemented");
+    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+        return of("(" + cn + " LIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
 
 }

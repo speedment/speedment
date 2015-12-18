@@ -33,7 +33,6 @@ import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -120,11 +119,11 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
             case LESS_OR_EQUAL:
                 return lessOrEqual(cn, model);
 
-            case BETWEEN:
+            case BETWEEN:   
                 return between(cn, model);
             case NOT_BETWEEN:
                 return notBetween(cn, model);
-            case IN:
+            case IN:    
                 return in(cn, model);
             case NOT_IN:
                 return notIn(cn, model);
@@ -139,7 +138,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
             case NOT_STARTS_WITH:
                 return notStartsWith(cn, model);
 
-            case ENDS_WITH:
+            case ENDS_WITH: 
                 return endsWith(cn, model);
             case NOT_ENDS_WITH:
                 return notEndsWith(cn, model);
@@ -237,7 +236,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
 
     protected SqlPredicateFragment inHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(" + cn + " IN (" + set.stream().map(o -> "?").collect(joining(",")) + "))", negated).addAll(set.stream().collect(toList()));
+        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
     }
 
     protected SqlPredicateFragment equalIgnoreCase(String cn, SpeedmentPredicate<?,?> model) {
