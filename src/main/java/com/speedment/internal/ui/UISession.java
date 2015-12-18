@@ -59,6 +59,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import java.nio.file.Paths;
 import static java.util.Objects.requireNonNull;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -76,8 +77,8 @@ import javafx.util.Pair;
  * @author Emil Forslund
  */
 public final class UISession {
-    
-    public final static File DEFAULT_GROOVY_LOCATION = new File("src/main/groovy/speedment.groovy");
+
+    public final static String DEFAULT_GROOVY_LOCATION = "src/main/groovy/speedment.groovy";
     
     public enum ReuseStage {
         USE_EXISTING_STAGE,
@@ -105,24 +106,25 @@ public final class UISession {
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
+    private final String defaultGroovyLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
     
     private File currentlyOpenFile = null;
     
-    public UISession(Speedment speedment, Application application, Stage stage) {
-        this(speedment, application, stage, new ProjectProperty(speedment));
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation) {
+        this(speedment, application, stage, defaultGroovyLocation, new ProjectProperty(speedment));
     }
     
-    public UISession(Speedment speedment, Application application, Stage stage, Project project) {
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation, Project project) {
         requireNonNull(project);
         
-        this.speedment            = requireNonNull(speedment);
-        this.application          = requireNonNull(application);
-        this.stage                = requireNonNull(stage);
-        this.project              = new ProjectProperty(speedment, project);
-        
-        this.propertySheetFactory = new PropertySheetFactory();
+        this.speedment             = requireNonNull(speedment);
+        this.application           = requireNonNull(application);
+        this.stage                 = requireNonNull(stage);
+        this.defaultGroovyLocation = requireNonNull(defaultGroovyLocation);
+        this.project               = new ProjectProperty(speedment, project);
+        this.propertySheetFactory  = new PropertySheetFactory();
     }
     
     public Speedment getSpeedment() {
@@ -151,7 +153,7 @@ public final class UISession {
             try {
                 final Stage newStage = new Stage();
                 final Speedment newSpeedment = speedment.newInstance();
-                final UISession session = new UISession(newSpeedment, application, newStage);
+                final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation);
 
                 ConnectController.createAndShow(session);
             } catch (Exception e) {
@@ -247,7 +249,7 @@ public final class UISession {
             clearLog();
             
             if (currentlyOpenFile == null) {
-                currentlyOpenFile = DEFAULT_GROOVY_LOCATION;
+                currentlyOpenFile = new File(defaultGroovyLocation);
             }
             
             saveGroovyFile(currentlyOpenFile);
@@ -415,7 +417,7 @@ public final class UISession {
                     case CREATE_A_NEW_STAGE :
                         final Stage newStage = new Stage();
                         final Speedment newSpeedment = speedment.newInstance();
-                        final UISession session = new UISession(newSpeedment, application, newStage, p);
+                        final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation, p);
                         SceneController.createAndShow(session);
                         break;
 
@@ -453,7 +455,7 @@ public final class UISession {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
         
         if (currentlyOpenFile == null) {
-            final Path path   = DEFAULT_GROOVY_LOCATION.toPath();
+            final Path path   = Paths.get(defaultGroovyLocation);
             final Path parent = path.getParent();
             
             try {
@@ -466,7 +468,7 @@ public final class UISession {
             */}
             
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(DEFAULT_GROOVY_LOCATION.getName());
+            fileChooser.setInitialFileName(defaultGroovyLocation);
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());

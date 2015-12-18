@@ -55,21 +55,20 @@ public final class MainApp extends Application {
             SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
         }
         
-        final UISession session = new UISession(SPEEDMENT, this, stage);
-        SpeedmentFont.loadAll();
-        Statistics.onGuiStarted();
-        
         final Parameters parameters = getParameters();
-        final List<String> params = parameters.getRaw();
+        final List<String> params   = parameters.getRaw();
         if (params.isEmpty()) {
+            final UISession session = createSession(stage, UISession.DEFAULT_GROOVY_LOCATION);
+            
             if (EmailUtil.hasEmail()) {
                 ConnectController.createAndShow(session);
             } else {
                 MailPromptController.createAndShow(session);
             }
         } else {
-            final String filename = params.get(0).trim().replace("\\", "/");
-            final File file = new File(filename);
+            final String filename   = params.get(0).trim().replace("\\", "/");
+            final UISession session = createSession(stage, filename);
+            final File file         = new File(filename);
             session.loadGroovyFile(file, USE_EXISTING_STAGE);
         }
     }
@@ -79,5 +78,13 @@ public final class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    private UISession createSession(Stage stage, String groovyLocation) {
+        final UISession session = new UISession(SPEEDMENT, this, stage, groovyLocation);
+        SpeedmentFont.loadAll();
+        Statistics.onGuiStarted();
+        
+        return session;
     }
 }
