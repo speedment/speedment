@@ -22,12 +22,13 @@
 package com.speedment.internal.core.stream;
 
 import com.speedment.exception.SpeedmentException;
+import com.speedment.stream.ParallelStrategy;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Function;
@@ -39,6 +40,10 @@ import java.util.stream.StreamSupport;
  * @author Emil Forslund
  */
 public final class StreamUtil {
+    
+    public static <T> Stream<T> streamOfOptional(Optional<T> element) {
+        return Stream.of(element.orElse(null)).filter(e -> e != null);
+    }
 
     public static <T> Stream<T> streamOfNullable(T element) {
         // Needless to say, element is nullable...
@@ -61,10 +66,18 @@ public final class StreamUtil {
     }
 
     public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper) {
+//        requireNonNull(resultSet);
+//        requireNonNull(mapper);
+//        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
+//        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+         return asStream(resultSet, mapper, ParallelStrategy.DEFAULT);
+    }
+    
+    public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+        return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
 
     private static class ResultSetIterator<T> implements Iterator<T> {

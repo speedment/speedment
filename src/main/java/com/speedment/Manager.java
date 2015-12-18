@@ -22,8 +22,10 @@ import com.speedment.config.Column;
 import com.speedment.config.Table;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ComparableField;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -224,7 +226,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
     default Stream<ENTITY> stream() {
         return stream(StreamDecorator.IDENTITY);
     }
-    
+
     /**
      * Creates and returns a new {@link Stream} over all entities in the
      * underlying database. This is the main query API for Speedment.
@@ -309,7 +311,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * </ul>
      *
      *
-     * @param decorator  the implementation for decorating this stream
+     * @param decorator the implementation for decorating this stream
      * @return a new stream over all entities in this table
      * @throws SpeedmentException if an error occurs during a Terminal Operation
      * (e.g. an SqlException is thrown by the underlying database)
@@ -325,7 +327,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * from the underlying database.
      * <p>
      *
-     * @param decorator  the implementation for decorating this stream
+     * @param decorator the implementation for decorating this stream
      * @return a new stream over all entities in this table
      * @throws SpeedmentException if an error occurs during a Terminal Operation
      * (e.g. an SqlException is thrown by the underlying database)
@@ -333,10 +335,8 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @see Stream
      */
     Stream<ENTITY> nativeStream(StreamDecorator decorator);
-    
-    // TBI: Shall we expose this method in the API?
-    
 
+    // TBI: Shall we expose this method in the API?
     // Persistence
     /**
      * Persists the provided entity to the underlying database and returns a
@@ -399,6 +399,19 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * (e.g. SQLException)
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
+
+    /**
+     * Finds and returns an Optional entity where the given field matches the
+     * given value. If no entity matches, an Optional.empty() is returned. If
+     * several entities match, then an arbitrary matching entity will be
+     * returned.
+     *
+     * @param <V> value type
+     * @param field to use
+     * @param value to match with the field
+     * @return An Optional entity where the given field matches the given value
+     */
+    <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value);
 
     ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 

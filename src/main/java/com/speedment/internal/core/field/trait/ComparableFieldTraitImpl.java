@@ -39,6 +39,8 @@ import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysFalseCo
 import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysTrueComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.IsNotNullComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.IsNullComparablePredicate;
+import com.speedment.internal.core.field.predicate.impl.comparable.NotInPredicate;
+import static com.speedment.internal.util.CollectionsUtil.getAnyFrom;
 
 /**
  * @param <ENTITY> the entity type
@@ -205,9 +207,33 @@ public class ComparableFieldTraitImpl<ENTITY, V extends Comparable<? super V>> i
             return newAlwaysFalsePredicate();
         }
         if (values.size() == 1) {
-            return new EqualPredicate<>(field, referenceFieldTrait, values.stream().findAny().get());
+            return new EqualPredicate<>(field, referenceFieldTrait, getAnyFrom(values)); 
         }
         return new InPredicate<>(field, referenceFieldTrait, values);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs") // Creating a stream from an array is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, V> notIn(V... values) {
+        if (values.length == 0) {
+            return newAlwaysTruePredicate();
+        }
+        if (values.length == 1) {
+            return new NotEqualPredicate<>(field, referenceFieldTrait, values[0]);
+        }
+        return notIn(Stream.of(values).collect(toSet()));
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, V> notIn(Set<V> values) {
+        if (values.isEmpty()) {
+            return newAlwaysTruePredicate();
+        }
+        if (values.size() == 1) {
+            return new NotEqualPredicate<>(field, referenceFieldTrait, getAnyFrom(values)); 
+        }
+        return new NotInPredicate<>(field, referenceFieldTrait, values);
     }
 
     private ComparableSpeedmentPredicate<ENTITY, V> newAlwaysFalsePredicate() {

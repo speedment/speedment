@@ -31,7 +31,6 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
-import java.util.function.Predicate;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -160,7 +159,19 @@ public class ComparableForeignKeyFieldImpl<ENTITY, V extends Comparable<? super 
     public ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values) {
         return comparableField.in(values);
     }
+    
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, V> notIn(V... values) {
+        return comparableField.notIn(values);
+    }
 
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, V> notIn(Set<V> values) {
+        return comparableField.notIn(values);
+    }
+    
     @Override
     public Finder<ENTITY, FK> finder() {
         return referenceForeignKeyField.finder();

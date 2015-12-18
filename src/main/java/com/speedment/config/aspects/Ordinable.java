@@ -18,6 +18,8 @@ package com.speedment.config.aspects;
 
 import com.speedment.config.Node;
 import com.speedment.annotation.Api;
+import static com.speedment.stream.MapStream.comparing;
+import java.util.Comparator;
 
 /**
  * A trait for nodes that have a predefined order. This can for an example be
@@ -29,6 +31,8 @@ import com.speedment.annotation.Api;
 public interface Ordinable extends Node {
 
     final int ORDINAL_FIRST = 1, UNSET = -1;
+    
+    static Comparator<Ordinable> COMPARATOR = comparing(Ordinable::getOrdinalPosition);
 
     /**
      * Returns the position to use when ordering this node.

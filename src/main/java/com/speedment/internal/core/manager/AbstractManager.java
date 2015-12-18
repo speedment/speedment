@@ -18,12 +18,16 @@ package com.speedment.internal.core.manager;
 
 import com.speedment.Manager;
 import com.speedment.Speedment;
-import com.speedment.component.StreamSupplierComponent;
 import com.speedment.encoder.JsonEncoder;
+import com.speedment.field.ComparableField;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -54,7 +58,14 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     @Override
     public Stream<ENTITY> stream(StreamDecorator decorator) {
         return speedment.getStreamSupplierComponent()
-            .stream(getEntityClass(), decorator);
+                .stream(getEntityClass(), decorator);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+        requireNonNull(field);
+        return speedment.getStreamSupplierComponent()
+                .findAny(getEntityClass(), field, value);
     }
 
 //    @Override

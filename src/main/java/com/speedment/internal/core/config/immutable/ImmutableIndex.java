@@ -20,11 +20,13 @@ import com.speedment.internal.core.config.*;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
@@ -33,16 +35,16 @@ import java.util.Optional;
 public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity implements Index, ImmutableParentHelper<IndexColumn> {
     
     private final Optional<Table> parent;
-    private final ChildHolder children;
+    private final ChildHolder<IndexColumn> children;
     private final Boolean unique;
     
     public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isEnabled());
+        super(requireNonNull(index).getName(), index.isExpanded(), index.isEnabled());
         // Fields
         this.parent = Optional.of(parent);
         this.unique = index.isUnique();
         // Children
-        this.children = childHolderOf(index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
+        this.children = childHolderOf(IndexColumn.class, index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
     }
     
     @Override
@@ -66,8 +68,31 @@ public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity imp
     }
     
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends IndexColumn> stream() {
+        return getChildren().stream().sorted(Ordinable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends IndexColumn> Stream<T> streamOf(Class<T> childClass) {
+        if (IndexColumn.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Ordinable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
     
     @Override

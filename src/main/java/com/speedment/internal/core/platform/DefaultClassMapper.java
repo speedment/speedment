@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.platform;
 
-import com.speedment.internal.core.platform.ClassMapper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -31,8 +30,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
 
-    protected final Consumer<V> NOTHING = (V v) -> {
-    };
+    protected final Consumer<V> NOTHING = v -> {};
 
     private final Map<Class<?>, V> map;
 

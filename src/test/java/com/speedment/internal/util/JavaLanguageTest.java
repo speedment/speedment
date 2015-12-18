@@ -26,6 +26,7 @@ import static com.speedment.internal.util.JavaLanguage.javaObjectName;
 import static com.speedment.internal.util.JavaLanguage.javaStaticFieldName;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import static com.speedment.internal.util.JavaLanguage.javaVariableName;
+import static com.speedment.internal.util.JavaLanguage.replaceIfIllegalJavaIdentifierCharacter;
 import static com.speedment.internal.util.JavaLanguage.replaceIfJavaUsedWord;
 import static com.speedment.internal.util.JavaLanguage.toHumanReadable;
 import static com.speedment.internal.util.JavaLanguage.toUnderscoreSeparated;
@@ -134,7 +135,14 @@ public class JavaLanguageTest {
         assertEquals("my_variable_name", toUnderscoreSeparated("myVariableName"));
 
     }
-
+    
+    @Test
+    public void testreplaceIfIllegalJavaIdentifierCharacter() {
+        System.out.println("replaceIfIllegalJavaIdentifierCharacter");
+        assertEquals("_2my", replaceIfIllegalJavaIdentifierCharacter("2my"));
+        assertEquals("_2my_test_case_one", replaceIfIllegalJavaIdentifierCharacter("2my test+case.one"));
+    }
+    
     /**
      * Test of toHumanReadable method, of class JavaLanguage.
      */

@@ -40,6 +40,8 @@ import com.speedment.stream.StreamDecorator;
 import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -89,8 +91,9 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .map(FieldTrait::getColumnName)
                 .map(this::findColumn)
                 .collect(toList());
+
         
-        final SpeedmentPredicateView spv = new MySqlSpeedmentPredicateView();
+        final SpeedmentPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
                 .map(spv::transform)
                 .collect(toList());
@@ -119,7 +122,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
     
     private Column findColumn(String name) {
-        return manager.getTable().streamOf(Column.class)
+        return manager.getTable().streamOfColumns()
                 .filter(c -> name.equals(c.getName()))
                 .findAny().get();
     }

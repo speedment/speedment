@@ -20,7 +20,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.Manager;
 import com.speedment.db.MetaResult;
-import com.speedment.component.ManagerComponent;
 import java.util.function.Consumer;
 import com.speedment.Entity;
 import com.speedment.Speedment;
@@ -33,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
 
-    private final Speedment speedment;
+    private final transient Speedment speedment;
 
     public AbstractBaseEntity(Speedment speedment) {
         this.speedment = requireNonNull(speedment);

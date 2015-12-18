@@ -22,6 +22,8 @@ import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.stream.StreamDecorator;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
+import com.speedment.stream.HasParallelStrategy;
 
 /**
  *
@@ -73,4 +75,26 @@ public final class ComposedStreamDecorator implements StreamDecorator {
 
         return p;
     }
+
+    @Override
+    public <ENTITY> Stream<ENTITY> apply(Stream<ENTITY> stream) {
+        Stream<ENTITY> s = stream;
+
+        for (StreamDecorator sd : decorators) {
+            s = sd.apply(s);
+        }
+        return s;
+    }
+
+    @Override
+    public <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
+        H h = hasParallelStrategy;
+        
+        for (StreamDecorator sd : decorators) {
+            h = sd.apply(h);
+        }
+        return h;
+        
+    }
+
 }

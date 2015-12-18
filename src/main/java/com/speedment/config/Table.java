@@ -16,6 +16,7 @@
  */
 package com.speedment.config;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
 import com.speedment.config.aspects.Parent;
@@ -24,28 +25,33 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
 import com.speedment.config.aspects.StorageEngineTypeable;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.TableImpl;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 
 /**
  *
  * @author pemi
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Table>>,
-    FieldStorageTypeable,
-    ColumnCompressionTypeable,
-    StorageEngineTypeable {
-
+        FieldStorageTypeable,
+        ColumnCompressionTypeable,
+        StorageEngineTypeable {
+ 
     /**
      * Factory holder.
      */
     enum Holder {
         HOLDER;
-        private Supplier<Table> provider = TableImpl::new;
+        private Function<Speedment, Table> provider = TableImpl::new;
     }
 
     /**
@@ -54,19 +60,20 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      *
      * @param provider the new constructor
      */
-    static void setSupplier(Supplier<Table> provider) {
+    static void setSupplier(Function<Speedment, Table> provider) {
         Holder.HOLDER.provider = requireNonNull(provider);
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
+     * @param speedment the speedment instance
      * @return the new instance
      */
-    static Table newTable() {
-        return Holder.HOLDER.provider.get();
+    static Table newTable(Speedment speedment) {
+        return Holder.HOLDER.provider.apply(speedment);
     }
 
     /**
@@ -176,4 +183,101 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
      * @return the new PrimaryKeyColumn
      */
     PrimaryKeyColumn primaryKeyColumn(Closure<?> c);
+
+    // Optimized Table specific methods 
+    /**
+     * Returns a <code>Stream</code> over all the Column of this node. The
+     * stream will be sorted based on the node's natural order
+     *
+     * @return a <code>Stream</code> of Columns
+     */
+    default Stream<Column> streamOfColumns() {
+        return streamOf(Column.class);
+    }
+
+    /**
+     * Returns a <code>Stream</code> over all the PrimaryKeyColumns of this
+     * node. The stream will be sorted based on the node's natural order
+     *
+     * @return a <code>Stream</code> of PrimaryKeyColumns
+     */
+    default Stream<PrimaryKeyColumn> streamOfPrimaryKeyColumns() {
+        return streamOf(PrimaryKeyColumn.class);
+    }
+
+    /**
+     * Returns a <code>Stream</code> over all the Indexes of this node. The
+     * stream will be sorted based on the node's natural order
+     *
+     * @return a <code>Stream</code> of Index
+     */
+    default Stream<Index> streamOfIndexes() {
+        return streamOf(Index.class);
+    }
+
+    /**
+     * Returns a <code>Stream</code> over all the ForeignKey of this node. The
+     * stream will be sorted based on the node's natural order
+     *
+     * @return a <code>Stream</code> of ForeignKey
+     */
+    default Stream<ForeignKey> streamOfForeignKeys() {
+        return streamOf(ForeignKey.class);
+    }
+
+    /**
+     * Returns a Column with the given name. If no such Column is present, a
+     * {@link SpeedmentException} is thrown. An implementing class may override
+     * this default method to provide a more optimized implementation, for
+     * example by using a look up map.
+     *
+     * @param name the name of the Column
+     * @return a Column with the given name
+     * @throws SpeedmentException if no such Column is present
+     */
+    default Column findColumn(String name) throws SpeedmentException {
+        return find(Column.class, name);
+    }
+
+    /**
+     * Returns a PrimaryKeyColumn with the given name. If no such
+     * PrimaryKeyColumn is present, a {@link SpeedmentException} is thrown. An
+     * implementing class may override this default method to provide a more
+     * optimized implementation, for example by using a look up map.
+     *
+     * @param name the name of the Column
+     * @return a PrimaryKeyColumn with the given name
+     * @throws SpeedmentException if no such PrimaryKeyColumn is present
+     */
+    default PrimaryKeyColumn findPrimaryKeyColumn(String name) throws SpeedmentException {
+        return find(PrimaryKeyColumn.class, name);
+    }
+
+    /**
+     * Returns a Index with the given name. If no such Index is present, a
+     * {@link SpeedmentException} is thrown. An implementing class may override
+     * this default method to provide a more optimized implementation, for
+     * example by using a look up map.
+     *
+     * @param name the name of the Index
+     * @return a Index with the given name
+     * @throws SpeedmentException if no such Index is present
+     */
+    default Index findIndex(String name) throws SpeedmentException {
+        return find(Index.class, name);
+    }
+
+    /**
+     * Returns a ForeignKey with the given name. If no such ForeignKey is
+     * present, a {@link SpeedmentException} is thrown. An implementing class
+     * may override this default method to provide a more optimized
+     * implementation, for example by using a look up map.
+     *
+     * @param name the name of the ForeignKey
+     * @return a ForeignKey with the given name
+     * @throws SpeedmentException if no such ForeignKey is present
+     */
+    default ForeignKey findForeignKey(String name) throws SpeedmentException {
+        return find(ForeignKey.class, name);
+    }
 }

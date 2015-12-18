@@ -16,15 +16,18 @@
  */
 package com.speedment.config;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.annotation.External;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.IndexImpl;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  *
@@ -32,13 +35,13 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.2")
 public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColumn> {
-
+    
     /**
      * Factory holder.
      */
     enum Holder {
         HOLDER;
-        private Supplier<Index> provider = IndexImpl::new;
+        private Function<Speedment, Index> provider = IndexImpl::new;
     }
 
     /**
@@ -47,19 +50,20 @@ public interface Index extends Node, Enableable, Child<Table>, Parent<IndexColum
      *
      * @param provider the new constructor
      */
-    static void setSupplier(Supplier<Index> provider) {
+    static void setSupplier(Function<Speedment, Index> provider) {
         Holder.HOLDER.provider = requireNonNull(provider);
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
-     * @return the new instance
+     * @param speedment  the speedment instance
+     * @return           the new instance
      */
-    static Index newIndex() {
-        return Holder.HOLDER.provider.get();
+    static Index newIndex(Speedment speedment) {
+        return Holder.HOLDER.provider.apply(speedment);
     }
 
     /**

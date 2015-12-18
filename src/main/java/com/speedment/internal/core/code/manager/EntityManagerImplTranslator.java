@@ -41,16 +41,17 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.mapper.TypeMapper;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.speedment.internal.core.platform.SpeedmentFactory;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 
 /**
  *
@@ -71,49 +72,31 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     protected Class make(File file) {
 
         return new ClassBuilder(MANAGER.getImplName())
-            
             .addColumnConsumer((i, c) -> {
-                
+
                 final TypeMapper<?, ?> mapper = c.getTypeMapper();
                 final java.lang.Class<?> javaType = mapper.getJavaType();
                 final java.lang.Class<?> dbType = mapper.getDatabaseType();
                 final Type mapperType = Type.of(TypeMapper.class).add(Generic.of().add(Type.of(dbType))).add(Generic.of().add(Type.of(javaType)));
-                
+
                 file.add(Import.of(Type.of(mapper.getClass())));
-                
+
                 i.add(Field.of(typeMapperName(c), mapperType)
                     .private_().final_()
                     .set(new ReferenceValue("new " + mapper.getClass().getSimpleName() + "()"))
                 );
             })
-            
             .build()
             .public_()
             .setSupertype(Type.of(AbstractSqlManager.class)
                 .add(Generic.of().add(ENTITY.getType()))
             )
-            // .add(MANAGER.getType())
-            //            .call(i -> file.add(Import.of(Type.of(Platform.class))))
-            //            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            //            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-            //                .add("return " + Platform.class.getSimpleName() + 
-            //                    ".get().get(" + ProjectComponent.class.getSimpleName() + 
-            //                    ".class).getProject().findTableByName(getTableName());"))
-
             .call(i -> file.add(Import.of(ENTITY.getImplType())))
-            //            .add(Field.of("speedment_", Type.of(Speedment.class)).private_().final_())
-
             .add(Constructor.of()
                 .public_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setSqlEntityMapper(this::defaultReadEntity);"))
-            //            .add(Method.of("builder", BUILDER.getType()).public_().add(OVERRIDE)
-            //                .add("return new " + ENTITY.getImplName() + "();"))
-            //            .add(Method.of("toBuilder", BUILDER.getType()).public_().add(OVERRIDE)
-            //                .add(Field.of("prototype", ENTITY.getType()))
-            //                .add("return new " + ENTITY.getImplName() + "(prototype);"))
-
             .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
                 .add("return " + ENTITY.getName() + ".class;"))
             .add(generateGet(file))
@@ -122,18 +105,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                 .add("return " + SPEEDMENT_VARIABLE_NAME
                     + ".getProjectComponent()"
                     + ".getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
-            //.call($ -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            //.call(i -> file.add(Import.of(Type.of(Stream.class))))
-            //                .add(Method.of("stream", Type.of(Stream.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-            //                        .add("return Stream.empty();")) //TODO MUST BE FIXED!
-
-            //                .add(Method.of("persist", ENTITY.getType()).public_().add(OVERRIDE)
-            //                        .add(Field.of("entity", ENTITY.getType()))
-            //                        .add("return entity;")) //TODO MUST BE FIXED!
-
-            //                .add(Method.of("remove", ENTITY.getType()).public_().add(OVERRIDE)
-            //                        .add(Field.of("entity", ENTITY.getType()))
-            //                        .add("return entity;")) //TODO MUST BE FIXED!
             .
             add(defaultReadEntity(file))
             .add(Method.of("newInstance", ENTITY.getType())
@@ -180,6 +151,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
+        final AtomicInteger position = new AtomicInteger(1);
         columns().forEachOrdered(c -> {
 
             final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getDatabaseType());
@@ -205,22 +177,16 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                     .append("resultSet.")
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
-                    .append("(").append(c.getOrdinalPosition()).append(")");
+                    .append("(").append(position.getAndIncrement()).append(")");
             } else {
                 sb
                     .append("get")
                     .append(mapping.getResultSetMethodName(dbms()))
                     .append("(resultSet, ")
-                    .append(c.getOrdinalPosition()).append(")");
+                    .append(position.getAndIncrement()).append(")");
             }
             sb.append("));");
             streamBuilder.add(sb.toString());
-
-//            if (isResultSetMethod && c.isNullable() && isResultSetMethodReturnsPrimitive) {
-//                streamBuilder.add("if (resultSet.wasNull()) {");
-//                streamBuilder.add(indent("entity.set"+typeName(c)+"(null);"));
-//                streamBuilder.add("}");
-//            }
         });
 
         method
@@ -281,14 +247,25 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final Method method = Method.of("primaryKeyFor", typeOfPK()).public_().add(OVERRIDE)
             .add(Field.of("entity", ENTITY.getType()));
 
-        if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().getColumn()) + "();");
-        } else {
-            file.add(Import.of(Type.of(Arrays.class)));
-            method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
-                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
-            );
+        final int count = (int) primaryKeyColumns().count();
+        switch (count) {
+            case 0: {
+                file.add(Import.of(Type.of(Collections.class)));
+                method.add("return Collections.emptyList();");
+                break;
+            }
+            case 1: {
+                method.add("return entity.get" + typeName(primaryKeyColumns().findFirst().get().getColumn()) + "();");
+                break;
+            }
+            default: {
+                file.add(Import.of(Type.of(Arrays.class)));
+                method.add(primaryKeyColumns()
+                    .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                    .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+                );
+                break;
+            }
         }
 
         return method;

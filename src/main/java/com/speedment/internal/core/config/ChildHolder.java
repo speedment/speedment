@@ -21,8 +21,6 @@ import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Child;
 import com.speedment.exception.SpeedmentException;
-import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -30,15 +28,10 @@ import java.util.stream.Stream;
  * A container class for children to a node in the database model tree.
  *
  * @author Emil Forslund
+ * @param <T> the child type
  * @see com.speedment.config.Node
  */
-public interface ChildHolder {
-
-    /**
-     * A comparator that uses the qualified class name to compare classes.
-     */
-    final static Comparator<Class<?>> CLASS_COMPARATOR = (a, b)
-            -> Objects.compare(a.getName(), b.getName(), Comparator.naturalOrder());
+public interface ChildHolder<T extends Child<?>> {
 
     /**
      * Put the specified child into this holder, also setting its parent to the
@@ -55,7 +48,17 @@ public interface ChildHolder {
      * @see Nameable
      * @see Ordinable
      */
-    Optional<Child<?>> put(Child<?> child, Parent<?> parent);
+    Optional<T> put(T child, Parent<? super T> parent);
+    
+    /**
+     * Removes the specified child from this holder, also setting its parent to 
+     * null. If the node was removed, it is returned wrapped in an Optional. 
+     * Else, an empty is returned.
+     *
+     * @param child   the child to remove.
+     * @return        the child removed or empty
+     */
+    Optional<T> remove(T child);
 
     /**
      * Returns a <code>Stream</code> over all the children in this holder. The
@@ -66,21 +69,7 @@ public interface ChildHolder {
      * @return a stream of all children
      * @see Nameable
      */
-    Stream<Child<?>> stream();
-
-    /**
-     * Returns a <code>Stream</code> over all the children in this holder with
-     * the specified interface main class. The inputted class should correspond
-     * to the one returned by {@link Child#getInterfaceMainClass()}. The stream
-     * will be sorted based on the node name returned by
-     * {@link Child#getName()}.
-     *
-     * @param <C> the type of the children to return
-     * @param clazz the class to search for amongst the children
-     * @return a stream of children of the specified type
-     */
-    @SuppressWarnings("unchecked")
-    <C extends Child<?>> Stream<C> streamOf(Class<C> clazz);
+    Stream<T> stream();
 
     /**
      * Returns a child of the given childClass and with the given name. If no
@@ -88,12 +77,12 @@ public interface ChildHolder {
      * implementing class may override this default method to provide a more
      * optimized implementation, for example by using a look up map.
      *
-     * @param <C> The type of the child to return
-     * @param childClass the class of the child to return
      * @param name the name of the child
      * @return a child of the given childClass and with the given name
      * @throws SpeedmentException if no such child is present
      */
-    <C extends Child<?>> C find(Class<C> childClass, String name) throws SpeedmentException;
+     T find(/*Class<C> childClass,*/ String name) throws SpeedmentException;
 
+     Class<T> getChildClass();
+     
 }

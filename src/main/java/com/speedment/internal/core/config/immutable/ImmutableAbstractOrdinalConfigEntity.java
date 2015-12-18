@@ -32,8 +32,8 @@ public abstract class ImmutableAbstractOrdinalConfigEntity extends ImmutableAbst
 
     private final int ordinalPosition;
 
-    public ImmutableAbstractOrdinalConfigEntity(String name, boolean enabled, int ordinalPosition) {
-        super(name, enabled);
+    public ImmutableAbstractOrdinalConfigEntity(String name, boolean enabled, boolean expanded, int ordinalPosition) {
+        super(name, enabled, expanded);
         this.ordinalPosition = ordinalPosition;
     }
 

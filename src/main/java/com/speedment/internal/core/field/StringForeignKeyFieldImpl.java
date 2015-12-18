@@ -56,10 +56,10 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
     private final ReferenceForeignKeyFieldTrait<ENTITY, FK> referenceForeignKeyField;
 
     public StringForeignKeyFieldImpl(
-        String columnName,
-        Getter<ENTITY, String> getter,
-        Setter<ENTITY, String> setter,
-        Finder<ENTITY, FK> finder
+            String columnName,
+            Getter<ENTITY, String> getter,
+            Setter<ENTITY, String> setter,
+            Finder<ENTITY, FK> finder
     ) {
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
@@ -160,6 +160,18 @@ public class StringForeignKeyFieldImpl<ENTITY, FK> implements StringForeignKeyFi
 
     @Override
     public ComparableSpeedmentPredicate<ENTITY, String> in(Set<String> values) {
+        return comparableField.in(values);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, String> notIn(String... values) {
+        return comparableField.in(values);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, String> notIn(Set<String> values) {
         return comparableField.in(values);
     }
 

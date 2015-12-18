@@ -16,28 +16,36 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
+import com.speedment.config.ForeignKeyColumn;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Index;
 import com.speedment.config.IndexColumn;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class IndexImpl extends AbstractNamedConfigEntity implements Index, ParentHelper<IndexColumn> {
+public final class IndexImpl extends AbstractNamedNode implements Index, ParentHelper<IndexColumn> {
 
+    private final Speedment speedment;
+    private final ChildHolder<IndexColumn> children;
     private Table parent;
-    private final ChildHolder children;
     private boolean unique;
 
-    public IndexImpl() {
-        this.children = new ChildHolderImpl();
+    public IndexImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children  = new ChildHolderImpl<>(IndexColumn.class);
     }
 
     @Override
@@ -66,8 +74,31 @@ public final class IndexImpl extends AbstractNamedConfigEntity implements Index,
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<IndexColumn> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends IndexColumn> stream() {
+        return getChildren().stream().sorted(Ordinable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends IndexColumn> Stream<T> streamOf(Class<T> childClass) {
+        if (IndexColumn.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Ordinable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override

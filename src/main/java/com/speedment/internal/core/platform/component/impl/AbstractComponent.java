@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractComponent implements Component {
 
     private final Speedment speedment;
-        private Lifecyclable.State state;
+    private Lifecyclable.State state;
 
     public AbstractComponent(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
@@ -44,7 +44,7 @@ public abstract class AbstractComponent implements Component {
         return getClass().getSimpleName();
     }
     
-        @Override
+    @Override
     public AbstractComponent initialize() {
         state = State.INIITIALIZED;
         return this;

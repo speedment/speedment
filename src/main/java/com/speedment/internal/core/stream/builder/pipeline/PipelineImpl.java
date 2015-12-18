@@ -39,10 +39,14 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
 
     private final LinkedList<Action<?, ?>> list;
     private Supplier<BaseStream<?, ?>> initialSupplier;
+    private boolean parallel;
+    private boolean ordered;
 
     public PipelineImpl(Supplier<BaseStream<?, ?>> initialSupplier) {
         this.initialSupplier = Objects.requireNonNull(initialSupplier);
         this.list = new LinkedList<>();
+        this.parallel = false;
+        this.ordered = true;
     }
 
     @SuppressWarnings("rawtypes")
@@ -85,7 +89,18 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
         for (Action<?, ?> action : this) {
             result = cast(result, action);
         }
-
+        
+        // Convey pipeline parallelism and ordering
+        // setting to the destination stream.
+        if (parallel) {
+            result.parallel();
+        } else {
+            result.sequential();
+        }
+        if (!ordered) {
+            result.unordered();
+        }
+        
         @SuppressWarnings("unchecked")
         final BaseStream<E, ?> castedResult = (BaseStream<E, ?>) result;
         return castedResult;
@@ -193,4 +208,25 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
     public void setInitialSupplier(Supplier<BaseStream<?, ?>> initialSupplier) {
         this.initialSupplier = Objects.requireNonNull(initialSupplier);
     }
+
+    @Override
+    public boolean isParallel() {
+        return parallel;
+    }
+
+    @Override
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
+    }
+
+    @Override
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    @Override
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
 }

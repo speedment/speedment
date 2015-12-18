@@ -20,29 +20,16 @@ import com.speedment.internal.core.config.*;
 import com.speedment.config.Dbms;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.config.parameters.StorageEngineType;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -51,7 +38,7 @@ import static java.util.Objects.requireNonNull;
 public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity implements Schema, ImmutableParentHelper<Table> {
 
     private final Optional<Dbms> parent;
-    private final ChildHolder children;
+    private final ChildHolder<Table> children;
     private final boolean defaultSchema;
     private final Optional<String> schemaName;
     private final Optional<String> catalogName;
@@ -60,7 +47,7 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
     private final StorageEngineType storageEngineType;
 
     public ImmutableSchema(Dbms parent, Schema schema) {
-        super(requireNonNull(schema).getName(), schema.isEnabled());
+        super(requireNonNull(schema).getName(), schema.isExpanded(), schema.isEnabled());
         // Fields
         this.parent = Optional.of(parent);
         this.defaultSchema = schema.isDefaultSchema();
@@ -70,7 +57,7 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
         this.columnCompressionType = schema.getColumnCompressionType();
         this.storageEngineType = schema.getStorageEngineType();
         //Children
-        children = childHolderOf(schema.stream().map(s -> new ImmutableTable(this, s)));
+        children = childHolderOf(Table.class, schema.stream().map(s -> new ImmutableTable(this, s)));
     }
 
     @Override
@@ -144,8 +131,31 @@ public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity im
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Table> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends Table> stream() {
+        return getChildren().stream().sorted(Nameable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends Table> Stream<T> streamOf(Class<T> childClass) {
+        if (Table.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Nameable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override

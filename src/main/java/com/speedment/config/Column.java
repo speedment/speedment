@@ -178,4 +178,28 @@ public interface Column extends Node, Enableable, Ordinable, Child<Table>,
      * @param mapper  the type mapper class to instantiate
      */
     void setTypeMapper(Class<?> mapper);
+    
+    /**
+     * Returns the type that this column has in the database.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @return  the database type class
+     */
+    @External(type = Class.class, isVisibleInGui = false)
+    Class<?> getDatabaseType();
+    
+    /**
+     * Sets the type that this column has in the database. This should only
+     * be called during the initialization of the metadata model!
+     * <p>
+     * To change the mapping to use, see {@link #setTypeMapper(java.lang.Class)}.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     * 
+     * @param databaseType  the type of this column in the database
+     * @see #setTypeMapper(java.lang.Class)
+     */
+    @External(type = Class.class, isVisibleInGui = false)
+    void setDatabaseType(Class<?> databaseType);
 }

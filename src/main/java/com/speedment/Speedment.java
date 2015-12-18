@@ -21,14 +21,17 @@ import com.speedment.annotation.Api;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
+import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
+import com.speedment.component.UserInterfaceComponent;
 import com.speedment.exception.SpeedmentException;
 import java.util.stream.Stream;
 
@@ -63,6 +66,9 @@ public interface Speedment {
      * <li>{@link com.speedment.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
+     * <li>{@link com.speedment.component.PluginComponent PluginComponent}</li>
+     * <li>{@link com.speedment.component.EventComponent EventComponent}</li>
+     * <li>{@link com.speedment.component.UserInterfaceComponent UserInterfaceComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
@@ -111,7 +117,15 @@ public interface Speedment {
      * After stop() has been called, the Speedment instance can not be called
      * any more.
      */
-    public void stop();
+    void stop();
+    
+    /**
+     * Creates a new speedment instance and loads a new instance of each
+     * component that this speedment instance has.
+     * 
+     * @return  the new instance
+     */
+    Speedment newInstance();
 
     default EntityManager getEntityManager() {
         return get(EntityManager.class);
@@ -156,5 +170,16 @@ public interface Speedment {
     default TypeMapperComponent getTypeMapperComponent() {
         return get(TypeMapperComponent.class);
     }
-
+    
+    default PluginComponent getPluginComponent() {
+        return get(PluginComponent.class);
+    }
+    
+    default EventComponent getEventComponent() {
+        return get(EventComponent.class);
+    }
+    
+    default UserInterfaceComponent getUserInterfaceComponent() {
+        return get(UserInterfaceComponent.class);
+    }
 }

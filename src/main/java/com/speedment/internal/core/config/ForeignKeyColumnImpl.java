@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity implements ForeignKeyColumn, ColumnableHelper {
+public final class ForeignKeyColumnImpl extends AbstractOrdinalNode implements ForeignKeyColumn, ColumnableHelper {
 
     private ForeignKey parent;
     private String foreignColumnName;
@@ -72,7 +72,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
 
     @Override
     public Column getForeignColumn() {
-        return getForeignTable().find(Column.class, getForeignColumnName());
+        return getForeignTable().findColumn(getForeignColumnName());
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class ForeignKeyColumnImpl extends AbstractOrdinalConfigEntity impl
         return ancestor(Schema.class).orElseThrow(
                 thereIsNo(
                         Table.class,
-                        ForeignKeyColumn.class,
+                        Schema.class,
                         getForeignTableName()
                 )
         ).find(Table.class, getForeignTableName());

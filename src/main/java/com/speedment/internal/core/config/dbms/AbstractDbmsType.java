@@ -20,10 +20,11 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.config.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  *
@@ -43,6 +44,8 @@ public abstract class AbstractDbmsType implements DbmsType {
     private final String fieldEncloserEnd;
     private final Set<String> schemaExcludeSet;
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
+    private final String resultSetTableSchema;
+    private final Function<Dbms,String> connectionUrlGenerator;
 
     protected AbstractDbmsType(
         String name,
@@ -56,20 +59,24 @@ public abstract class AbstractDbmsType implements DbmsType {
         String fieldEncloserStart,
         String fieldEncloserEnd,
         Set<String> schemaExcludeSet,
-        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper) {
+        BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
+        String resultSetTableSchema,
+        Function<Dbms,String> connectionUrlGenerator) {
 
-        this.name = Objects.requireNonNull(name);
-        this.driverManagerName = Objects.requireNonNull(driverManagerName);
+        this.name = requireNonNull(name);
+        this.driverManagerName = requireNonNull(driverManagerName);
         this.defaultPort = defaultPort;
-        this.schemaTableDelimiter = Objects.requireNonNull(schemaTableDelimiter);
-        this.dbmsNameMeaning = Objects.requireNonNull(dbmsNameMeaning);
-        this.driverName = Objects.requireNonNull(driverName);
-        this.defaultConnectorParameters = Objects.requireNonNull(defaultConnectorParameters);
-        this.jdbcConnectorName = Objects.requireNonNull(jdbcConnectorName);
-        this.fieldEncloserStart = Objects.requireNonNull(fieldEncloserStart);
-        this.fieldEncloserEnd = Objects.requireNonNull(fieldEncloserEnd);
-        this.schemaExcludeSet = Objects.requireNonNull(schemaExcludeSet);
-        this.dbmsMapper = Objects.requireNonNull(dbmsMapper);
+        this.schemaTableDelimiter = requireNonNull(schemaTableDelimiter);
+        this.dbmsNameMeaning = requireNonNull(dbmsNameMeaning);
+        this.driverName = requireNonNull(driverName);
+        this.defaultConnectorParameters = defaultConnectorParameters; // Nullable
+        this.jdbcConnectorName = requireNonNull(jdbcConnectorName);
+        this.fieldEncloserStart = requireNonNull(fieldEncloserStart);
+        this.fieldEncloserEnd = requireNonNull(fieldEncloserEnd);
+        this.schemaExcludeSet = requireNonNull(schemaExcludeSet);
+        this.dbmsMapper = requireNonNull(dbmsMapper);
+        this.resultSetTableSchema = requireNonNull(resultSetTableSchema);
+        this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
     }
 
     @Override
@@ -152,5 +159,15 @@ public abstract class AbstractDbmsType implements DbmsType {
             return "\\" + item;
         }
         return item;
+    }
+
+    @Override
+    public String getResultSetTableSchema() {
+        return resultSetTableSchema;
+    }
+
+    @Override
+    public Function<Dbms, String> getConnectionUrlGenerator() {
+        return connectionUrlGenerator;
     }
 }

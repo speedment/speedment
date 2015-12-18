@@ -37,19 +37,42 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
     @Override
     default Optional<C> add(final C child) {
         requireNonNull(child);
-        return getChildren().put(child, this).map(c -> (C) c);
+        return getChildren().put(child, this);
+    }
+    
+    @Override
+    default Optional<C> remove(final C child) {
+        requireNonNull(child);
+        return getChildren().remove(child);
     }
 
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    default Stream<? extends C> stream() {
+//        return getChildren().stream();
+//    }
+//
+//    @Override
+//    default <T extends C> Stream<T> streamOf(Class<T> childClass) {
+//        requireNonNull(childClass);
+//        if (!getChildren().getChildClass().equals(childClass)) {
+//            return Stream.empty();
+//        }
+//        @SuppressWarnings("unchecked")
+//        final Stream<T> result = (Stream<T>) getChildren().stream();
+//        return result;
+//    }
+    
     @Override
-    default Stream<? extends C> stream() {
-        return getChildren().stream().map(c -> (C) c);
+    default int count() {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) stream().count();
     }
-
+    
     @Override
-    default <T extends C> Stream<T> streamOf(Class<T> childClass) {
-        requireNonNull(childClass);
-        return getChildren().streamOf(childClass);
+    default int countOf(Class<? extends C> type) {
+        // Todo: Add support of more efficient count method in ChildHolder
+        return (int) streamOf(type).count();
     }
 
     @Override
@@ -77,7 +100,11 @@ public interface ParentHelper<C extends Child<?>> extends Parent<C> {
 
     @Override
     public default <T extends C> T find(Class<T> childClass, String name) throws SpeedmentException {
-        return getChildren().find(childClass, name);
+        if (!getChildren().getChildClass().equals(childClass)) {
+            throw new SpeedmentException("This parent does not hold " + childClass);
+        }
+        @SuppressWarnings("unchecked")
+        final T result = (T) getChildren().find(name);
+        return result;
     }
-
 }

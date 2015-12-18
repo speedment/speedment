@@ -16,14 +16,17 @@
  */
 package com.speedment.config;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ForeignKeyImpl;
+import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
+import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  *
@@ -31,13 +34,13 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.2")
 public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<ForeignKeyColumn> {
-
+ 
     /**
      * Factory holder.
      */
     enum Holder {
         HOLDER;
-        private Supplier<ForeignKey> provider = ForeignKeyImpl::new;
+        private Function<Speedment, ForeignKey> provider = ForeignKeyImpl::new;
     }
 
     /**
@@ -46,19 +49,20 @@ public interface ForeignKey extends Node, Enableable, Child<Table>, Parent<Forei
      *
      * @param provider the new constructor
      */
-    static void setSupplier(Supplier<ForeignKey> provider) {
+    static void setSupplier(Function<Speedment, ForeignKey> provider) {
         Holder.HOLDER.provider = requireNonNull(provider);
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setSupplier(java.util.function.Function) setSupplier} method.
      *
-     * @return the new instance
+     * @param speedment  the speedment instance
+     * @return           the new instance
      */
-    static ForeignKey newForeignKey() {
-        return Holder.HOLDER.provider.get();
+    static ForeignKey newForeignKey(Speedment speedment) {
+        return Holder.HOLDER.provider.apply(speedment);
     }
 
     /**

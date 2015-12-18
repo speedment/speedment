@@ -51,15 +51,15 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected final StreamTerminator streamTerminator;
     protected final Set<BaseStream<?, ?>> streamSet; // Keeps track of the chain of streams so that we can auto-close them all
     private final List<Runnable> closeHandlers;  // The close handlers for this particular stream
-    private boolean parallel;
-    private boolean ordered;
+//    private boolean parallel;
+//    private boolean ordered;
     private boolean closed;
 
     protected AbstractStreamBuilder(PipelineImpl<?> pipeline, StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         this.pipeline = requireNonNull(pipeline);
         this.streamTerminator = requireNonNull(streamTerminator);
         this.closeHandlers = new ArrayList<>();
-        this.ordered = true;
+//        this.ordered = true;
         this.streamSet = streamSet;
     }
 
@@ -70,21 +70,21 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     }
 
     public T sequential() {
-        parallel = false;
+        pipeline.setParallel(false);
         return self();
     }
 
     public T parallel() {
-        parallel = true;
+        pipeline.setParallel(true);
         return self();
     }
 
     public boolean isParallel() {
-        return parallel;
+        return pipeline.isParallel();
     }
 
     public T unordered() {
-        ordered = false;
+        pipeline.setOrdered(false);
         return self();
     }
 
@@ -114,7 +114,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     }
 
     public boolean isOrdered() {
-        return ordered;
+        return pipeline.isOrdered();
     }
 
     protected P pipeline() {

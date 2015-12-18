@@ -17,7 +17,6 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import static com.speedment.field.predicate.PredicateType.IN;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
@@ -25,7 +24,7 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import java.util.Set;
 import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
-
+    
 /**
  *
  * @author pemi

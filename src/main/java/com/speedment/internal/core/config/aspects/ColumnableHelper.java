@@ -36,7 +36,7 @@ public interface ColumnableHelper extends Columnable {
                 .orElseThrow(() -> new SpeedmentException(
                         "Found no ancestor table from this "
                         + getClass().getSimpleName() + "."
-                )).find(Column.class, getName());
+                )).findColumn(getName());
 
     }
 }

@@ -39,9 +39,10 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     private final FieldStorageType fieldStorageType;
     private final ColumnCompressionType columnCompressionType;
     private final TypeMapper<?, ?> typeMapper;
+    private final Class<?> databaseType;
 
     public ImmutableColumn(Table parent, Column column) {
-        super(requireNonNull(column).getName(), column.isEnabled(), column.getOrdinalPosition());
+        super(requireNonNull(column).getName(), column.isEnabled(), column.isExpanded(), column.getOrdinalPosition());
         this.nullable = column.isNullable();
         this.autoincrement = column.isAutoincrement();
         this.alias = column.getAlias();
@@ -49,6 +50,7 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
         this.fieldStorageType = column.getFieldStorageType();
         this.columnCompressionType = column.getColumnCompressionType();
         this.typeMapper = column.getTypeMapper();
+        this.databaseType = column.getDatabaseType();
     }
 
     @Override
@@ -123,6 +125,16 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
 
     @Override
     public void setTypeMapper(Class<?> mapper) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+
+    @Override
+    public Class<?> getDatabaseType() {
+        return databaseType;
+    }
+
+    @Override
+    public void setDatabaseType(Class<?> databaseType) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
 }

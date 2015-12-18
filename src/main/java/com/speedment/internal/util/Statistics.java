@@ -28,7 +28,6 @@ import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -37,13 +36,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -57,7 +54,6 @@ public final class Statistics {
 
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
     private final static String VERSION = SpeedmentVersion.getImplementationVersion();
-    private final static Settings SETTINGS = Settings.inst();
 
     public static void onGuiStarted() {
 
@@ -99,7 +95,7 @@ public final class Statistics {
     }
 
     private static Param includeMail() {
-        return new Param("mail", SETTINGS.get("user_mail", "no-mail-specified"));
+        return new Param("mail", EmailUtil.getEmail());
     }
 
     private static void sendPostRequest(Collection<Param> params) {
@@ -111,13 +107,6 @@ public final class Statistics {
             try {
                 final HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-                //con.setDoOutput(true);
-                //con.setRequestMethod("POST");
-
-                //try (final DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-                    //wr.writeBytes("ping");
-                //    wr.flush();
-                //}
                 final int responseCode = con.getResponseCode();
                 final String responseMessage = con.getResponseMessage();
                 try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
@@ -138,11 +127,10 @@ public final class Statistics {
     private static URL createRequestURL(Collection<Param> params) {
         requireNonNull(params);
         try {
-
             return new URL(PING_URL + "?"
-                    + params.stream()
-                    .map(Param::encode)
-                    .collect(joining("&"))
+                + params.stream()
+                .map(Param::encode)
+                .collect(joining("&"))
             );
         } catch (MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
@@ -162,7 +150,7 @@ public final class Statistics {
             try {
 
                 return URLEncoder.encode(key, ENCODING) + "="
-                        + URLEncoder.encode(value, ENCODING);
+                    + URLEncoder.encode(value, ENCODING);
             } catch (UnsupportedEncodingException ex) {
                 throw new SpeedmentException("Encoding '" + ENCODING + "' is not supported.", ex);
             }

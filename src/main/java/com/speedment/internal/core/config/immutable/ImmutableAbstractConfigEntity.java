@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.annotation.External;
 import com.speedment.config.Project;
 import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
 import com.speedment.config.Node;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.util.Trees;
@@ -39,14 +37,16 @@ import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNe
  *
  * @author pemi
  */
-public abstract class ImmutableAbstractConfigEntity implements Node, Enableable {
+public abstract class ImmutableAbstractConfigEntity implements Node {
 
     private final boolean enabled;
     private final String name;
+    private final boolean expanded;
 
-    protected ImmutableAbstractConfigEntity(String name, boolean enabled) {
-        this.enabled = enabled;
-        this.name = name; // Can be null
+    protected ImmutableAbstractConfigEntity(String name, boolean enabled, boolean expanded) {
+        this.enabled  = enabled;
+        this.name     = name; // Can be null
+        this.expanded = expanded;
     }
 
     @Override
@@ -59,15 +59,23 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
-    @External(type = String.class)
     @Override
     public final String getName() {
         return name;
     }
 
-    @External(type = String.class)
     @Override
     public final void setName(String name) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+    
+    @Override
+    public Boolean isExpanded() {
+        return expanded;
+    }
+
+    @Override
+    public void setExpanded(Boolean expanded) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
 
@@ -75,7 +83,7 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     public final Stream<? extends Parent<?>> ancestors() {
         return asChild()
                 .flatMap(c -> c.getParent())
-                .map(p -> (Parent<?>) p)
+                //.map(p -> (Parent<?>) p)
                 .map(parent -> Trees.walkOptional(
                         parent, (Parent<?> p) -> p.asChild()
                         .flatMap(c -> c.getParent())
@@ -97,7 +105,7 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     public final <T extends Parent<?>> String getRelativeName(final Class<T> from, Function<String, String> nameMapper) {
         Objects.requireNonNull(from);
         final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
-        final List<Parent<?>> ancestors = ancestors().map(p -> (Parent<?>) p).collect(toList());
+        final List<Parent<?>> ancestors = ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
         for (final Parent<?> parent : ancestors) {
             if (from.isAssignableFrom(parent.getClass())) {
@@ -125,6 +133,11 @@ public abstract class ImmutableAbstractConfigEntity implements Node, Enableable 
     // This method is called when the entire tree is constructed
     public void resolve() {
 //        System.out.println("resolve: " + toString());
+    }
+
+    @Override
+    public boolean isImmutable() {
+        return true;
     }
 
 }

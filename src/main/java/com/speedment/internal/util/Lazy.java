@@ -16,27 +16,34 @@
  */
 package com.speedment.internal.util;
 
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 /**
- * Generic lazy initialization class.
+ * Generic lazy initialization class. The supplier must produce a non-null
+ * value.
  *
- * This class is not thread safe.
+ * This class is thread safe. The Supplier is guaranteed to be called exactly
+ * one time following one or several calls to 
+ * {@link  #getOrCompute(java.util.function.Supplier) } by any number of
+ * threads.
  *
  * @author pemi
  * @param <T> the type of the lazy initialized value
  */
-public class Lazy<T> {
+public final class Lazy<T> {
 
     private T value;
-    private boolean initialized;
 
-    public synchronized T getOrCompute(Supplier<T> supplier) {
-        if (initialized) {
-            return value;
+    public T getOrCompute(Supplier<T> supplier) {
+        return value == null ? maybeCompute(supplier) : value;
+    }
+
+    private synchronized T maybeCompute(Supplier<T> supplier) {
+        if (value == null) {
+            value = requireNonNull(supplier.get());
         }
-        initialized = true;
-        return value = supplier.get();
+        return value;
     }
 
 }

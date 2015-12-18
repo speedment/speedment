@@ -16,10 +16,12 @@
  */
 package com.speedment.internal.core.config;
 
+import com.speedment.Speedment;
 import com.speedment.internal.core.config.aspects.ParentHelper;
 import com.speedment.config.Dbms;
 import com.speedment.config.Schema;
 import com.speedment.config.Table;
+import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
@@ -28,15 +30,18 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class SchemaImpl extends AbstractNamedConfigEntity implements Schema, ParentHelper<Table> {
+public final class SchemaImpl extends AbstractNamedNode implements Schema, ParentHelper<Table> {
 
+    private final Speedment speedment;
+    private final ChildHolder<Table> children;
     private Dbms parent;
-    private final ChildHolder children;
     private boolean defaultSchema;
     private String schemaName;
     private String catalogName;
@@ -44,8 +49,9 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
 
-    public SchemaImpl() {
-        children = new ChildHolderImpl();
+    public SchemaImpl(Speedment speedment) {
+        this.speedment = requireNonNull(speedment);
+        this.children  = new ChildHolderImpl<>(Table.class);
     }
 
     @Override
@@ -129,13 +135,36 @@ public final class SchemaImpl extends AbstractNamedConfigEntity implements Schem
     }
 
     @Override
-    public ChildHolder getChildren() {
+    public ChildHolder<Table> getChildren() {
         return children;
+    }
+    
+    @Override
+    public Stream<? extends Table> stream() {
+        return getChildren().stream().sorted(Nameable.COMPARATOR);
+    }
+
+    @Override
+    public <T extends Table> Stream<T> streamOf(Class<T> childClass) {
+        if (Table.class.isAssignableFrom(childClass)) {
+            return getChildren().stream()
+                .map(child -> {
+                    @SuppressWarnings("unchecked")
+                    final T cast = (T) child;
+                    return cast;
+                }).sorted(Nameable.COMPARATOR);
+        } else {
+            throw new IllegalArgumentException(
+                getClass().getSimpleName() + 
+                " does not have children of type " + 
+                childClass.getSimpleName() + "."
+            );
+        }
     }
 
     @Override
     public Table addNewTable() {
-        final Table e = Table.newTable();
+        final Table e = Table.newTable(speedment);
         add(e);
         return e;
     }

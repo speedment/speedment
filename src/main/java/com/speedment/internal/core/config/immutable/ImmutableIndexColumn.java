@@ -37,7 +37,7 @@ public final class ImmutableIndexColumn extends ImmutableAbstractOrdinalConfigEn
     private Column column;
 
     public ImmutableIndexColumn(Index parent, IndexColumn indexColumn) {
-        super(requireNonNull(indexColumn).getName(), indexColumn.isEnabled(), indexColumn.getOrdinalPosition());
+        super(requireNonNull(indexColumn).getName(), indexColumn.isEnabled(), indexColumn.isExpanded(), indexColumn.getOrdinalPosition());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);

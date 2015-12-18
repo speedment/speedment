@@ -20,9 +20,15 @@ import com.speedment.Speedment;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
+import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
+import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+import java.util.function.Function;
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
@@ -32,24 +38,45 @@ import java.util.stream.Stream;
  */
 public final class MySqlDbmsType extends AbstractDbmsType {
 
+    private static final String QUOTE = "`";
     private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
+    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
+    private static final String JDBC_CONNECTOR_NAME = "mysql";
+    private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.of("useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
+    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
+        final StringBuilder result = new StringBuilder();
+        result.append("jdbc:").append(JDBC_CONNECTOR_NAME).append("://");
+        dbms.getIpAddress().ifPresent(ip -> result.append(ip));
+        dbms.getPort().ifPresent(p -> result.append(":").append(p));
+        result.append("/");
+        DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
+        return result.toString();
+    };
 
     public MySqlDbmsType() {
 
         super(
-            "MySQL",
-            "MySQL-AB JDBC Driver",
-            3306,
-            ".",
-            "Just a name",
-            "com.mysql.jdbc.Driver",
-            "useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull",
-            "mysql",
-            "`",
-            "`",
-            Stream.of("MySQL", "information_schema").collect(Collectors.collectingAndThen(toSet(), Collections::unmodifiableSet)),
-            DBMS_MAPPER
+                "MySQL",
+                "MySQL-AB JDBC Driver",
+                3306,
+                ".",
+                "Just a name",
+                "com.mysql.jdbc.Driver",
+                unwrap(DEFAULT_CONNECTOR_PARAMS),
+                JDBC_CONNECTOR_NAME,
+                QUOTE,
+                QUOTE,
+                Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
+                DBMS_MAPPER,
+                RESULTSET_TABLE_SCHEMA,
+                CONNECTION_URL_GENERATOR
         );
     }
 
+    private static final MySqlSpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
+
+    @Override
+    public SpeedmentPredicateView getSpeedmentPredicateView() {
+        return VIEW;
+    }
 }

@@ -51,9 +51,9 @@ public class StringFieldImpl<ENTITY> implements StringField<ENTITY> {
     private final StringFieldTrait<ENTITY> stringField;
 
     public StringFieldImpl(
-        String columnName,
-        Getter<ENTITY, String> getter,
-        Setter<ENTITY, String> setter
+            String columnName,
+            Getter<ENTITY, String> getter,
+            Setter<ENTITY, String> setter
     ) {
         field = new FieldTraitImpl(requireNonNull(columnName));
         referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
@@ -154,6 +154,18 @@ public class StringFieldImpl<ENTITY> implements StringField<ENTITY> {
     @Override
     public ComparableSpeedmentPredicate<ENTITY, String> in(Set<String> values) {
         return comparableField.in(values);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, String> notIn(String... values) {
+        return comparableField.notIn(values);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, String> notIn(Set<String> values) {
+        return comparableField.notIn(values);
     }
 
     @Override

@@ -29,9 +29,8 @@ import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
-import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
-import com.speedment.component.ProjectComponent;
+import com.speedment.config.Schema;
 import com.speedment.internal.core.config.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -41,6 +40,7 @@ import com.speedment.internal.util.Trees;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -91,7 +91,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param <C> the type of ConfigEntity that is to be used
      * @param type the class of the type of ConfigEntity that is to be used
      * @param name the fully qualified name of the ConfigEntity.
-     * @param consumer the consumer to apply.
+     * @param consumer the consumer to apply
      * @return this instance
      */
     public <C extends Node & Enableable> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
@@ -111,7 +111,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      *
      * @param <C> the type of ConfigEntity that is to be used
      * @param type the class of the type of ConfigEntity that is to be used
-     * @param consumer the consumer to apply.
+     * @param consumer the consumer to apply
      * @return this instance
      */
     public <C extends Node & Enableable> T with(final Class<C> type, final Consumer<C> consumer) {
@@ -128,7 +128,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * then be applied after the configuration has been read and after the
      * System properties have been applied.
      *
-     * @param password to use for all dbms:es in this project.
+     * @param password to use for all dbms:es in this project
      * @return this instance
      */
     public T withPassword(final String password) {
@@ -143,7 +143,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * properties have been applied.
      *
      * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms.
+     * @param password to use for the named dbms
      * @return this instance
      */
     public T withPassword(final String dbmsName, final String password) {
@@ -157,7 +157,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * then be applied after the configuration has been read and after the
      * System properties have been applied.
      *
-     * @param username to use for all dbms:es in this project.
+     * @param username to use for all dbms:es in this project
      * @return this instance
      */
     public T withUsername(final String username) {
@@ -172,7 +172,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * properties have been applied.
      *
      * @param dbmsName the name of the dbms
-     * @param username to use for the named dbms.
+     * @param username to use for the named dbms
      * @return this instance
      */
     public T withUsername(final String dbmsName, final String username) {
@@ -186,7 +186,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * will then be applied after the configuration has been read and after the
      * System properties have been applied.
      *
-     * @param ipAddress to use for all dbms:es in this project.
+     * @param ipAddress to use for all dbms:es in this project
      * @return this instance
      */
     public T withIpAddress(final String ipAddress) {
@@ -215,7 +215,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param port to use for all dbms:es in this project.
+     * @param port to use for all dbms:es in this project
      * @return this instance
      */
     public T withPort(final int port) {
@@ -229,11 +229,46 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * applied.
      *
      * @param dbmsName the name of the dbms
-     * @param port to use for the named dbms.
+     * @param port to use for the named dbms
      * @return this instance
      */
     public T withPort(final String dbmsName, final int port) {
         with(Dbms.class, dbmsName, d -> d.setPort(port));
+        return self();
+    }
+
+    /**
+     * Configures a new schema name for all schemas in this project. The new
+     * schema name will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     * <p>
+     * This method is useful for multi-tenant projects where there are several 
+     * identical schemas separated only by their names.
+     * 
+     * @param schemaName to use for all schemas this project
+     * @return this instance
+     */
+    public T withSchema(final String schemaName) {
+        requireNonNull(schemaName);
+        with(Schema.class, s -> s.setName(schemaName));
+        return self();
+    }
+
+    /**
+     * Configures a new schema name for the named old schema name. The new
+     * schema name will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     * <p>
+     * This method is useful for multi-tenant projects where there are several 
+     * identical schemas separated only by their names.
+     * 
+     * @param oldSchemaName the current name of a schema
+     * @param schemaName to use for the named schema
+     * @return this instance
+     */
+    public T withSchema(final String oldSchemaName, final String schemaName) {
+        requireNonNulls(oldSchemaName, schemaName);
+        with(Schema.class, oldSchemaName, s -> s.setName(schemaName));
         return self();
     }
 

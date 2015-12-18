@@ -27,6 +27,7 @@ import com.speedment.internal.core.config.aspects.ColumnableHelper;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -41,7 +42,7 @@ public final class ImmutableForeignKeyColumn extends ImmutableAbstractOrdinalCon
     private Table foreignTable;
 
     public ImmutableForeignKeyColumn(ForeignKey parent, ForeignKeyColumn fkc) {
-        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.getOrdinalPosition());
+        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.isExpanded(), fkc.getOrdinalPosition());
         requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);
@@ -94,11 +95,11 @@ public final class ImmutableForeignKeyColumn extends ImmutableAbstractOrdinalCon
         foreignTable = ancestor(Schema.class).orElseThrow(
                 thereIsNo(
                         Table.class,
-                        ForeignKeyColumn.class,
+                        Schema.class,
                         getForeignTableName()
                 )
         ).find(Table.class, getForeignTableName());
-        foreignColumn = foreignTable.find(Column.class, foreignColumnName);
+        foreignColumn = foreignTable.findColumn(foreignColumnName);
     }
 
 }
