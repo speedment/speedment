@@ -143,6 +143,7 @@ Make sure that you use the latest `${speedment.version}` available.
 Speedment comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
+* PostgreSQL
 
 As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
 
