@@ -18,6 +18,7 @@ package com.speedment.internal.ui.property;
 
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -30,9 +31,14 @@ import org.controlsfx.property.editor.PropertyEditor;
 public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>> {
     
     private final Class<E> enumType;
-
+    
     public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description) {
-        super(property, name, description);
+        super(property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        this.enumType = requireNonNull(enumType);
+    }
+
+    public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+        super(property, name, description, decorator);
         this.enumType = requireNonNull(enumType);
     }
 

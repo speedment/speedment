@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -27,7 +28,11 @@ import org.controlsfx.property.editor.PropertyEditor;
 public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
     public StringPropertyItem(StringProperty value, String name, String description) {
-        super(value, name, description);
+        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+    }
+    
+    public StringPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+        super(value, name, description, decorator);
     }
 
     @Override

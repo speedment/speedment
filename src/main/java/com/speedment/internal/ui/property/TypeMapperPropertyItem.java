@@ -22,6 +22,7 @@ import com.speedment.internal.ui.util.EditorsUtil;
 import static java.util.Comparator.comparing;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -34,9 +35,13 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
     
     private final Speedment speedment;
     private final Class<?> type;
-
+    
     public TypeMapperPropertyItem(Speedment speedment, Class<?> type, Property<TypeMapper<?, ?>> property, String name, String description) {
-        super(property, name, description);
+        this(speedment, type, property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+    }
+
+    public TypeMapperPropertyItem(Speedment speedment, Class<?> type, Property<TypeMapper<?, ?>> property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+        super(property, name, description, decorator);
         this.speedment = requireNonNull(speedment);
         this.type      = requireNonNull(type);
     }
