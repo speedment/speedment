@@ -33,7 +33,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import javafx.beans.binding.Bindings;
 
 /**
  *
@@ -87,6 +87,11 @@ public final class WorkspaceController implements Initializable {
         });
         
         workspace.setContent(sheet);
+        
+        Bindings.bindContentBidirectional(
+            session.getSpeedment().getUserInterfaceComponent().getProperties(), 
+            properties
+        );
     }
     
     public static Node create(UISession session) {

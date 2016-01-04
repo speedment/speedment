@@ -68,7 +68,7 @@ public final class ProjectTreeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final UserInterfaceComponent ui =session.getSpeedment().getUserInterfaceComponent();
+        final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
         
         ui.installContextMenu(Project.class,    this::createDefaultContextMenu);
         ui.installContextMenu(PluginData.class, this::createDefaultContextMenu);

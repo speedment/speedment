@@ -54,7 +54,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class TableProperty extends AbstractParentProperty<Table, Child<Table>> implements Table, ChildHelper<Table, Schema> {
+public final class TableProperty extends AbstractParentProperty<Table, Child<Table>> implements Table, ChildHelper<Table, Schema>, RestExposableHelper {
     
     private final ObservableSet<Column> columnChildren;
     private final ObservableSet<PrimaryKeyColumn> primaryKeyColumnChildren;
@@ -418,24 +418,14 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         
         return result;
     }
-    
+  
     @Override
-    public void setExposedInRest(boolean exposed) {
-        exposedInRest.setValue(exposed);
+    public BooleanProperty exposedInRestProperty() {
+        return exposedInRest;
     }
 
     @Override
-    public boolean isExposedInRest() {
-        return exposedInRest.getValue();
-    }
-
-    @Override
-    public void setRestPath(String restPath) {
-        this.restPath.setValue(restPath);
-    }
-
-    @Override
-    public String getRestPath() {
-        return restPath.getValue();
+    public StringProperty restPathProperty() {
+        return restPath;
     }
 }

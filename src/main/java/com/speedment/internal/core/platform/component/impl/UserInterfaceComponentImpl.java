@@ -30,6 +30,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
 import static javafx.collections.FXCollections.observableArrayList;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -39,7 +40,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     
     private final static String DEFAULT_STYLESHEET = "/css/speedment.css";
     
-    private final ObservableList<Node> properties;
+    private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<AbstractNodeProperty>> selectedTreeItems;
     private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
@@ -55,7 +56,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public ObservableList<Node> getProperties() {
+    public ObservableList<PropertySheet.Item> getProperties() {
         return properties;
     }
 

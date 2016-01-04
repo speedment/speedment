@@ -26,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -51,7 +52,7 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  a view of the properties area
      */
-    ObservableList<Node> getProperties();
+    ObservableList<PropertySheet.Item> getProperties();
 
     /**
      * Returns a read-only view of the currently selected tree items in the GUI.

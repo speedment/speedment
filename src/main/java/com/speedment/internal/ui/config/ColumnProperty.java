@@ -18,6 +18,7 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.Column;
+import com.speedment.config.Node;
 import com.speedment.config.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.mapper.TypeMapper;
@@ -29,6 +30,7 @@ import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
@@ -42,7 +44,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractNodeProperty implements Column, ChildHelper<Column, Table> {
+public final class ColumnProperty extends AbstractNodeProperty implements Column, ChildHelper<Column, Table>, RestExposableHelper {
     
     private final Property<TypeMapper<?, ?>> typeMapper;
     private final BooleanProperty nullable;
@@ -268,24 +270,14 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     public Property<Class<?>> databaseTypeProperty() {
         return databaseType;
     }
-    
+  
     @Override
-    public void setExposedInRest(boolean exposed) {
-        exposedInRest.setValue(exposed);
+    public BooleanProperty exposedInRestProperty() {
+        return exposedInRest;
     }
 
     @Override
-    public boolean isExposedInRest() {
-        return exposedInRest.getValue();
-    }
-
-    @Override
-    public void setRestPath(String restPath) {
-        this.restPath.setValue(restPath);
-    }
-
-    @Override
-    public String getRestPath() {
-        return restPath.getValue();
+    public StringProperty restPathProperty() {
+        return restPath;
     }
 }
