@@ -41,7 +41,7 @@ public final class StringPasswordPropertyItem extends AbstractPropertyItem<Strin
     }
     
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return EditorsUtil.createPasswordEditor(this);
     }
 }

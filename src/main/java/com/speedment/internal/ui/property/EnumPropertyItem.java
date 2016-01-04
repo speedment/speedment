@@ -22,6 +22,9 @@ import java.util.function.Consumer;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -48,7 +51,7 @@ public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyI
     }
     
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return Editors.createChoiceEditor(this, Arrays.asList(enumType.getEnumConstants()));
     }
 }

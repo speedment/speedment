@@ -41,7 +41,7 @@ public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, Boo
     }
 
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return Editors.createCheckEditor(this);
     }
 }

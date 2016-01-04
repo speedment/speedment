@@ -26,6 +26,12 @@ import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.PropertyEditor;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -53,7 +59,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
     }
 
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         final List<TypeMapper<?, ?>> mappers = speedment.getTypeMapperComponent().stream()
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
             .sorted(comparing(TypeMapper::getLabel))

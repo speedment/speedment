@@ -41,7 +41,7 @@ public final class StringPropertyItem extends AbstractPropertyItem<String, Strin
     }
 
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return Editors.createTextEditor(this);
     }
 }

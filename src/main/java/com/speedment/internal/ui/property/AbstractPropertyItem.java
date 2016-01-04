@@ -23,6 +23,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -46,9 +49,13 @@ public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T
         this.decorator   = DEFAULT_DECORATOR;
     }
     
+    protected abstract PropertyEditor<?> createUndecoratedEditor();
     
-    
-    public abstract PropertyEditor<?> createEditor();
+    public final PropertyEditor createEditor() {
+        final PropertyEditor<?> editor = createUndecoratedEditor();
+        decorator.accept(editor);
+        return editor;
+    }
 
     @Override
     public final String getCategory() {

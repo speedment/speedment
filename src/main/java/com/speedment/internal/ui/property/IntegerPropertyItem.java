@@ -41,7 +41,7 @@ public final class IntegerPropertyItem extends AbstractPropertyItem<Number, Inte
     }
     
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return Editors.createNumericEditor(this);
     }
 }
