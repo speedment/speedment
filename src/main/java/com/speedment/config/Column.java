@@ -24,6 +24,7 @@ import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ColumnImpl;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
+import com.speedment.config.aspects.RestExposable;
 import com.speedment.config.mapper.TypeMapper;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -36,7 +37,7 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.2")
 public interface Column extends Node, Enableable, Ordinable, Child<Table>,
-    FieldStorageTypeable, ColumnCompressionTypeable {
+    FieldStorageTypeable, ColumnCompressionTypeable, RestExposable {
 
     /**
      * The holder of the factory for instances of the {@link Column} interface.

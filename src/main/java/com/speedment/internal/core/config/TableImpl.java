@@ -34,7 +34,6 @@ import com.speedment.internal.core.config.utils.ConfigUtil;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import com.speedment.internal.util.Cast;
 import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
@@ -56,6 +55,9 @@ public final class TableImpl extends AbstractNamedNode implements Table, ParentH
     private FieldStorageType fieldStorageType;
     private ColumnCompressionType columnCompressionType;
     private StorageEngineType storageEngineType;
+    
+    private boolean exposedInRest;
+    private String restPath;
 
     public TableImpl(Speedment speedment) {
         this.speedment         = requireNonNull(speedment);
@@ -262,4 +264,23 @@ public final class TableImpl extends AbstractNamedNode implements Table, ParentH
         );
     }
     
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        this.exposedInRest = exposed;
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest;
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        this.restPath = restPath;
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath;
+    }
 }

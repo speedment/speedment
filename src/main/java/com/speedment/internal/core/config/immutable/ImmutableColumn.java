@@ -40,6 +40,9 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     private final ColumnCompressionType columnCompressionType;
     private final TypeMapper<?, ?> typeMapper;
     private final Class<?> databaseType;
+    
+    private final boolean exposedInRest;
+    private final String restPath;
 
     public ImmutableColumn(Table parent, Column column) {
         super(requireNonNull(column).getName(), column.isEnabled(), column.isExpanded(), column.getOrdinalPosition());
@@ -51,6 +54,9 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
         this.columnCompressionType = column.getColumnCompressionType();
         this.typeMapper = column.getTypeMapper();
         this.databaseType = column.getDatabaseType();
+        
+        this.exposedInRest = column.isExposedInRest();
+        this.restPath = column.getRestPath();
     }
 
     @Override
@@ -136,5 +142,25 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     @Override
     public void setDatabaseType(Class<?> databaseType) {
         throwNewUnsupportedOperationExceptionImmutable();
+    }
+    
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest;
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath;
     }
 }

@@ -24,12 +24,11 @@ import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.config.aspects.ColumnCompressionTypeable;
 import com.speedment.config.aspects.FieldStorageTypeable;
+import com.speedment.config.aspects.RestExposable;
 import com.speedment.config.aspects.StorageEngineTypeable;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.TableImpl;
-import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
-import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -44,7 +43,8 @@ import java.util.stream.Stream;
 public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Table>>,
         FieldStorageTypeable,
         ColumnCompressionTypeable,
-        StorageEngineTypeable {
+        StorageEngineTypeable,
+        RestExposable {
  
     /**
      * Factory holder.

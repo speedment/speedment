@@ -52,6 +52,9 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     private final Property<ColumnCompressionType> columnCompressionType;
     private final Property<Class<?>> databaseType;
     
+    private final BooleanProperty exposedInRest;
+    private final StringProperty restPath;
+    
     private Table parent;
     private int ordinalPosition;
     
@@ -64,6 +67,8 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         fieldStorageType      = new SimpleObjectProperty<>();
         columnCompressionType = new SimpleObjectProperty<>();
         databaseType          = new SimpleObjectProperty<>();
+        exposedInRest         = new SimpleBooleanProperty();
+        restPath              = new SimpleStringProperty();
         setDefaults();
     }
     
@@ -78,6 +83,8 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         this.ordinalPosition       = prototype.getOrdinalPosition();
         this.databaseType          = new SimpleObjectProperty<>(prototype.getDatabaseType());
+        this.exposedInRest         = new SimpleBooleanProperty(prototype.isExposedInRest());
+        this.restPath              = new SimpleStringProperty(prototype.getRestPath());
         
         this.parent = parent;
     }
@@ -260,5 +267,25 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     
     public Property<Class<?>> databaseTypeProperty() {
         return databaseType;
+    }
+    
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        exposedInRest.setValue(exposed);
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest.getValue();
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        this.restPath.setValue(restPath);
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath.getValue();
     }
 }

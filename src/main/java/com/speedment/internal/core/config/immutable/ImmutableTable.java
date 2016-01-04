@@ -58,6 +58,8 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
     private final FieldStorageType fieldStorageType;
     private final ColumnCompressionType columnCompressionType;
     private final StorageEngineType storageEngineType;
+    private final boolean exposedInRest;
+    private final String restPath;
 
     /// Optimized 
     private final List<Child<Table>> streamList;
@@ -72,6 +74,8 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
         this.fieldStorageType      = table.getFieldStorageType();
         this.columnCompressionType = table.getColumnCompressionType();
         this.storageEngineType     = table.getStorageEngineType();
+        this.exposedInRest         = table.isExposedInRest();
+        this.restPath              = table.getRestPath();
         
         // Children
         this.columns           = ImmutableChildHolder.of(Column.class, table.streamOfColumns().map(this::toImmutable).collect(toList()));
@@ -293,4 +297,23 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
         return foreignKeys.find(name);
     }
 
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest;
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        throwNewUnsupportedOperationExceptionImmutable();
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath;
+    }
 }

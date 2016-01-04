@@ -39,7 +39,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -63,6 +65,9 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     private final Property<StorageEngineType> storageEngineType;
     private final StringProperty tableName;
     
+    private final BooleanProperty exposedInRest;
+    private final StringProperty restPath;
+    
     private Schema parent;
     
     public TableProperty(Speedment speedment) {
@@ -75,6 +80,8 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         columnCompressionType    = new SimpleObjectProperty<>();
         storageEngineType        = new SimpleObjectProperty<>();
         tableName                = new SimpleStringProperty();
+        exposedInRest            = new SimpleBooleanProperty();
+        restPath                 = new SimpleStringProperty();
     }
     
     public TableProperty(Speedment speedment, Schema parent, Table prototype) {
@@ -87,6 +94,8 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         columnCompressionType    = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
         storageEngineType        = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         tableName                = new SimpleStringProperty(prototype.getTableName().orElse(null));
+        exposedInRest            = new SimpleBooleanProperty(prototype.isExposedInRest());
+        restPath                 = new SimpleStringProperty(prototype.getRestPath());
         this.parent = parent;
     }
     
@@ -408,5 +417,25 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
             .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
         
         return result;
+    }
+    
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        exposedInRest.setValue(exposed);
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest.getValue();
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        this.restPath.setValue(restPath);
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath.getValue();
     }
 }

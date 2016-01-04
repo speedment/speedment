@@ -41,6 +41,9 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
     private ColumnCompressionType columnCompressionType;
     private TypeMapper<?, ?> typeMapper;
     private Class<?> databaseType;
+    
+    private boolean exposedInRest;
+    private String restPath;
 
     @Override
     protected void setDefaults() {
@@ -147,5 +150,25 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
     @Override
     public Class<?> getDatabaseType() {
         return databaseType;
+    }
+
+    @Override
+    public void setExposedInRest(boolean exposed) {
+        this.exposedInRest = exposed;
+    }
+
+    @Override
+    public boolean isExposedInRest() {
+        return exposedInRest;
+    }
+
+    @Override
+    public void setRestPath(String restPath) {
+        this.restPath = restPath;
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath;
     }
 }
