@@ -16,15 +16,12 @@
  */
 package com.speedment.internal.ui.property;
 
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -46,7 +43,7 @@ public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T
         this.property    = requireNonNull(property);
         this.name        = requireNonNull(name);
         this.description = requireNonNull(description);
-        this.decorator   = DEFAULT_DECORATOR;
+        this.decorator   = requireNonNull(decorator);
     }
     
     protected abstract PropertyEditor<?> createUndecoratedEditor();
