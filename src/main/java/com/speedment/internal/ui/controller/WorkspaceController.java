@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.component.UserInterfaceComponent;
+import com.speedment.event.TreeSelectionChange;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.property.AbstractPropertyItem;
@@ -34,6 +36,7 @@ import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import static java.util.Objects.requireNonNull;
 import javafx.beans.binding.Bindings;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -50,9 +53,10 @@ public final class WorkspaceController implements Initializable {
         this.session    = requireNonNull(session);
         this.properties = FXCollections.observableArrayList();
         
-        session.getSpeedment()
-            .getUserInterfaceComponent()
-            .getSelectedTreeItems()
+        final UserInterfaceComponent ui = session.getSpeedment()
+            .getUserInterfaceComponent();
+        
+        ui.getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<AbstractNodeProperty>> change) -> {
                 properties.clear();
                 
@@ -65,6 +69,10 @@ public final class WorkspaceController implements Initializable {
                             .forEachOrdered(properties::add);
                     }
                 }
+                
+                session.getSpeedment()
+                    .getEventComponent()
+                    .notify(new TreeSelectionChange(change, properties));
             });
     }
 

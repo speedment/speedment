@@ -25,5 +25,5 @@ import com.speedment.annotation.Api;
  */
 @Api(version="2.3")
 public enum DefaultEvent implements Event {
-    ;
+    ARNE;
 }

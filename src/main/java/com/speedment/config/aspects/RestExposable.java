@@ -15,10 +15,4 @@ public interface RestExposable {
     
     @External(type = Boolean.class, isVisibleInGui = false)
     void setExposedInRest(boolean exposed);
-    
-    @External(type = String.class, isVisibleInGui = false)
-    String getRestPath();
-    
-    @External(type = String.class, isVisibleInGui = false)
-    void setRestPath(String path);
 }

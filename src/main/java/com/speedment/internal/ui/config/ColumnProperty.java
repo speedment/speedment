@@ -55,7 +55,6 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     private final Property<Class<?>> databaseType;
     
     private final BooleanProperty exposedInRest;
-    private final StringProperty restPath;
     
     private Table parent;
     private int ordinalPosition;
@@ -70,7 +69,6 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         columnCompressionType = new SimpleObjectProperty<>();
         databaseType          = new SimpleObjectProperty<>();
         exposedInRest         = new SimpleBooleanProperty();
-        restPath              = new SimpleStringProperty();
         setDefaults();
     }
     
@@ -86,7 +84,6 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
         this.ordinalPosition       = prototype.getOrdinalPosition();
         this.databaseType          = new SimpleObjectProperty<>(prototype.getDatabaseType());
         this.exposedInRest         = new SimpleBooleanProperty(prototype.isExposedInRest());
-        this.restPath              = new SimpleStringProperty(prototype.getRestPath());
         
         this.parent = parent;
     }
@@ -274,10 +271,5 @@ public final class ColumnProperty extends AbstractNodeProperty implements Column
     @Override
     public BooleanProperty exposedInRestProperty() {
         return exposedInRest;
-    }
-
-    @Override
-    public StringProperty restPathProperty() {
-        return restPath;
     }
 }

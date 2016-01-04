@@ -42,7 +42,6 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     private final Class<?> databaseType;
     
     private final boolean exposedInRest;
-    private final String restPath;
 
     public ImmutableColumn(Table parent, Column column) {
         super(requireNonNull(column).getName(), column.isEnabled(), column.isExpanded(), column.getOrdinalPosition());
@@ -56,7 +55,6 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
         this.databaseType = column.getDatabaseType();
         
         this.exposedInRest = column.isExposedInRest();
-        this.restPath = column.getRestPath();
     }
 
     @Override
@@ -152,15 +150,5 @@ public final class ImmutableColumn extends ImmutableAbstractOrdinalConfigEntity 
     @Override
     public boolean isExposedInRest() {
         return exposedInRest;
-    }
-
-    @Override
-    public void setRestPath(String restPath) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public String getRestPath() {
-        return restPath;
     }
 }

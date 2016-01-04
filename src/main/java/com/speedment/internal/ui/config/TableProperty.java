@@ -424,8 +424,17 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         return exposedInRest;
     }
 
-    @Override
     public StringProperty restPathProperty() {
         return restPath;
+    }
+
+    @Override
+    public void setRestPath(String path) {
+        restPath.setValue(path);
+    }
+
+    @Override
+    public String getRestPath() {
+        return restPath.getValue();
     }
 }

@@ -43,7 +43,6 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
     private Class<?> databaseType;
     
     private boolean exposedInRest;
-    private String restPath;
 
     @Override
     protected void setDefaults() {
@@ -160,15 +159,5 @@ public final class ColumnImpl extends AbstractOrdinalNode implements Column {
     @Override
     public boolean isExposedInRest() {
         return exposedInRest;
-    }
-
-    @Override
-    public void setRestPath(String restPath) {
-        this.restPath = restPath;
-    }
-
-    @Override
-    public String getRestPath() {
-        return restPath;
     }
 }

@@ -13,8 +13,6 @@ public interface RestExposableHelper extends RestExposable {
     
     BooleanProperty exposedInRestProperty();
     
-    StringProperty restPathProperty();
-    
     @Override
     default boolean isExposedInRest() {
         return exposedInRestProperty().getValue();
@@ -24,17 +22,5 @@ public interface RestExposableHelper extends RestExposable {
     @Override
     default void setExposedInRest(boolean exposed) {
         exposedInRestProperty().setValue(exposed);
-    }
-    
-    @External(type = String.class, isVisibleInGui = false)
-    @Override
-    default String getRestPath() {
-        return restPathProperty().getValue();
-    }
-    
-    @External(type = String.class, isVisibleInGui = false)
-    @Override
-    default void setRestPath(String restPath) {
-        restPathProperty().setValue(restPath);
     }
 }

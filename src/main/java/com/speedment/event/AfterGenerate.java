@@ -31,25 +31,12 @@ import static java.util.Objects.requireNonNull;
 @Api(version="2.3")
 public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     
-    private final static String NAME = "AFTER_GENERATE";
     private final Project project;
     private final Generator generator;
-    
-    public static AfterGenerate EVENT = new AfterGenerate();
-    
-    private AfterGenerate() {
-        this.project   = null;
-        this.generator = null;
-    }
-    
+
     public AfterGenerate(Project project, Generator generator) {
         this.project   = requireNonNull(project);
         this.generator = requireNonNull(generator);
-    }
-
-    @Override
-    public String name() {
-        return NAME;
     }
     
     @Override

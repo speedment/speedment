@@ -280,4 +280,10 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     default ForeignKey findForeignKey(String name) throws SpeedmentException {
         return find(ForeignKey.class, name);
     }
+    
+    @External(type = String.class, isVisibleInGui = false)
+    String getRestPath();
+    
+    @External(type = String.class, isVisibleInGui = false)
+    void setRestPath(String path);
 }

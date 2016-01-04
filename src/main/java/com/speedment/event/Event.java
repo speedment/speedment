@@ -18,6 +18,7 @@ package com.speedment.event;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.internal.util.JavaLanguage;
 
 /**
  *
@@ -27,7 +28,9 @@ import com.speedment.annotation.Api;
 @Api(version="2.3")
 public interface Event {
     
-    String name();
+    default String name() {
+        return JavaLanguage.toHumanReadable(getClass().getSimpleName());
+    }
     
     default void publish(Speedment speedment) {
         speedment.getEventComponent().notify(this);

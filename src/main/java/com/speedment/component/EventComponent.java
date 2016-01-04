@@ -41,9 +41,10 @@ public interface EventComponent extends Component {
     /**
      * Notifies all listeners for this type of event.
      * 
+     * @param <E>    the event type
      * @param event  the event that happened
      */
-    void notify(Event event);
+    <E extends Event> void notify(E event);
     
     /**
      * Listens to a particular type of event. The specified action
@@ -51,10 +52,20 @@ public interface EventComponent extends Component {
      * method is called.
      * 
      * @param <E>    the event implementation
-     * @param event  the event that happened
+     * @param event  the event type to listen for
      * @param action the action to call
      */
-    <E extends Event> void on(E event, Consumer<E> action);
+    <E extends Event> void on(Class<E> event, Consumer<E> action);
+    
+    /**
+     * Listens to a particular type of event. The specified action
+     * will be called when the appropriate {@link #notify(com.speedment.event.Event) notify()}
+     * method is called.
+     * 
+     * @param event  the event type to listen for
+     * @param action the action to call
+     */
+    void on(DefaultEvent event, Consumer<DefaultEvent> action);
     
     /**
      * Listens to all kind of events.

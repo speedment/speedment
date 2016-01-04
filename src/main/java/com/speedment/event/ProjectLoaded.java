@@ -28,23 +28,11 @@ import static java.util.Objects.requireNonNull;
  */
 @Api(version="2.3")
 public final class ProjectLoaded implements ProjectEvent {
-    
-    private final static String NAME = "PROJECT_LOADED";
+
     private final Project project;
-    
-    public static ProjectLoaded EVENT = new ProjectLoaded();
-    
-    private ProjectLoaded() {
-        this.project = null;
-    }
     
     public ProjectLoaded(Project project) {
         this.project = requireNonNull(project);
-    }
-
-    @Override
-    public String name() {
-        return NAME;
     }
     
     @Override
