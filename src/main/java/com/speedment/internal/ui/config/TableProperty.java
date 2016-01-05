@@ -95,7 +95,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
         storageEngineType        = new SimpleObjectProperty<>(prototype.getStorageEngineType());
         tableName                = new SimpleStringProperty(prototype.getTableName().orElse(null));
         exposedInRest            = new SimpleBooleanProperty(prototype.isExposedInRest());
-        restPath                 = new SimpleStringProperty(prototype.getRestPath());
+        restPath                 = new SimpleStringProperty(prototype.getRestPath().orElse(null));
         this.parent = parent;
     }
     
@@ -434,7 +434,7 @@ public final class TableProperty extends AbstractParentProperty<Table, Child<Tab
     }
 
     @Override
-    public String getRestPath() {
-        return restPath.getValue();
+    public Optional<String> getRestPath() {
+        return Optional.ofNullable(restPath.getValue());
     }
 }

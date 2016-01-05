@@ -30,7 +30,6 @@ import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -78,6 +77,11 @@ public final class StreamUtil {
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
         return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
+    }
+
+    public static <T> Stream<T> from(Optional<T> optional) {
+        requireNonNull(optional);
+        return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
     }
 
     private static class ResultSetIterator<T> implements Iterator<T> {

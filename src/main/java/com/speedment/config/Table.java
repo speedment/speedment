@@ -282,7 +282,7 @@ public interface Table extends Node, Enableable, Child<Schema>, Parent<Child<Tab
     }
     
     @External(type = String.class, isVisibleInGui = false)
-    String getRestPath();
+    Optional<String> getRestPath();
     
     @External(type = String.class, isVisibleInGui = false)
     void setRestPath(String path);

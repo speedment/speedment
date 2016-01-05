@@ -75,7 +75,7 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
         this.columnCompressionType = table.getColumnCompressionType();
         this.storageEngineType     = table.getStorageEngineType();
         this.exposedInRest         = table.isExposedInRest();
-        this.restPath              = table.getRestPath();
+        this.restPath              = table.getRestPath().orElse(null);
         
         // Children
         this.columns           = ImmutableChildHolder.of(Column.class, table.streamOfColumns().map(this::toImmutable).collect(toList()));
@@ -313,7 +313,7 @@ public final class ImmutableTable extends ImmutableAbstractNamedConfigEntity
     }
 
     @Override
-    public String getRestPath() {
-        return restPath;
+    public Optional<String> getRestPath() {
+        return Optional.ofNullable(restPath);
     }
 }

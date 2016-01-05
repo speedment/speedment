@@ -280,7 +280,7 @@ public final class TableImpl extends AbstractNamedNode implements Table, ParentH
     }
 
     @Override
-    public String getRestPath() {
-        return restPath;
+    public Optional<String> getRestPath() {
+        return Optional.ofNullable(restPath);
     }
 }
