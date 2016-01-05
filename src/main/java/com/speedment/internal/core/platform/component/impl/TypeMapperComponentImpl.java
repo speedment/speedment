@@ -43,8 +43,11 @@ import com.speedment.internal.core.config.mapper.identity.URLIdentityMapper;
 import com.speedment.internal.core.config.mapper.string.StringToLocaleMapper;
 import com.speedment.internal.core.config.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.internal.core.config.mapper.string.YesNoStringToBooleanMapper;
+import com.speedment.internal.core.config.mapper.time.DateToIntMapper;
 import com.speedment.internal.core.config.mapper.time.DateToLongMapper;
+import com.speedment.internal.core.config.mapper.time.TimeToIntMapper;
 import com.speedment.internal.core.config.mapper.time.TimeToLongMapper;
+import com.speedment.internal.core.config.mapper.time.TimestampToIntMapper;
 import com.speedment.internal.core.config.mapper.time.TimestampToLongMapper;
 
 import java.util.Map;
@@ -98,6 +101,9 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         install(DateToLongMapper::new);
         install(TimestampToLongMapper::new);
         install(TimeToLongMapper::new);
+        install(DateToIntMapper::new);
+        install(TimestampToIntMapper::new);
+        install(TimeToIntMapper::new);
         
         // Special string mappers
         install(StringToLocaleMapper::new);
