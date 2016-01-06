@@ -17,9 +17,9 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;

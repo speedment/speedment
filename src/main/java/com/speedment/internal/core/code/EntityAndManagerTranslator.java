@@ -24,7 +24,7 @@ import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

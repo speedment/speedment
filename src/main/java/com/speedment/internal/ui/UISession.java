@@ -17,9 +17,9 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.core.config.utils.GroovyParser;

@@ -18,12 +18,12 @@ package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
 import groovy.lang.Closure;
 import java.util.Optional;

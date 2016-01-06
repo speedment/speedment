@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.sql;
 
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.db.crud.Create;
 import com.speedment.db.crud.CrudOperation;
 import static com.speedment.db.crud.CrudOperation.Type.CREATE;

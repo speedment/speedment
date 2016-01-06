@@ -17,12 +17,12 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.OrderType;
+import com.speedment.config.db.parameters.OrderType;
 import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import java.util.stream.Stream;

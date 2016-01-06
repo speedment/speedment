@@ -17,11 +17,11 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
+import com.speedment.config.db.Column;
 import com.speedment.config.Node;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Parent;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;
 import com.speedment.exception.SpeedmentException;

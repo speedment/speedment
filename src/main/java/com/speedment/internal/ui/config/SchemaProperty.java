@@ -17,9 +17,9 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;
 import com.speedment.config.parameters.FieldStorageType;

@@ -33,13 +33,13 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.V
 import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;

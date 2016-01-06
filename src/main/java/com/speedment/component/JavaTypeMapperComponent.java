@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 
 /**

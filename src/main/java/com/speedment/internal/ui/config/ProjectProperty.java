@@ -17,11 +17,11 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 import com.speedment.config.PluginData;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.ProjectManager;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;

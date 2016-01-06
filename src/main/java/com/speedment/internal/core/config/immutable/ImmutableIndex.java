@@ -17,9 +17,9 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;

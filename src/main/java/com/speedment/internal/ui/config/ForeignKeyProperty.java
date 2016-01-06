@@ -17,9 +17,9 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;

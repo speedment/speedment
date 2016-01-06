@@ -18,9 +18,9 @@ package com.speedment.internal.core.manager;
 
 import com.speedment.Speedment;
 import com.speedment.component.CrudHandlerComponent;
-import com.speedment.config.Column;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.db.crud.Result;
 import com.speedment.db.crud.Selector;

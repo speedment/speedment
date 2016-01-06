@@ -18,7 +18,7 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.PluginData;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;

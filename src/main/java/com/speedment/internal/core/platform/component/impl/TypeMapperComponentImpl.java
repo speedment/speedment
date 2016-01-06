@@ -18,7 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.core.config.mapper.identity.ArrayIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BigDecimalIdentityMapper;
 import com.speedment.internal.core.config.mapper.identity.BlobIdentityMapper;

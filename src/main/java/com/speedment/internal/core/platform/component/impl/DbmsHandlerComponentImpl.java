@@ -17,8 +17,8 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.component.DbmsHandlerComponent;

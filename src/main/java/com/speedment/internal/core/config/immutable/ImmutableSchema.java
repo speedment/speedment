@@ -17,9 +17,9 @@
 package com.speedment.internal.core.config.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.config.Dbms;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;
 import com.speedment.config.parameters.ColumnCompressionType;

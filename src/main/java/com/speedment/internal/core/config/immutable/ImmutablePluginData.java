@@ -19,7 +19,7 @@ package com.speedment.internal.core.config.immutable;
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
 import com.speedment.config.PluginData;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Parent;

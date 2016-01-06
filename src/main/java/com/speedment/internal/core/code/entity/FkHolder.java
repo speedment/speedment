@@ -21,10 +21,10 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.core.code.manager.EntityManagerTranslator;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 

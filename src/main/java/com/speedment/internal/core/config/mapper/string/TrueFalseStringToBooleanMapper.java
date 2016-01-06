@@ -17,7 +17,7 @@
 
 package com.speedment.internal.core.config.mapper.string;
 
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 
 /**
  *

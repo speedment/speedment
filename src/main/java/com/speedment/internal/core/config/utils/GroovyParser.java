@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.config.utils;
 
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.Node;
 import static com.speedment.internal.util.Beans.getterBeanPropertyNameAndValue;
 import com.speedment.internal.util.JavaLanguage;

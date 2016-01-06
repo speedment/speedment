@@ -17,7 +17,7 @@
 package com.speedment.event.trait;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.event.Event;
 
 /**

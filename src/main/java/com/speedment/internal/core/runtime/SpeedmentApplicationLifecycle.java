@@ -17,9 +17,9 @@
 package com.speedment.internal.core.runtime;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 import com.speedment.annotation.External;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.Node;
 import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.config.utils.MethodsParser;
@@ -30,7 +30,7 @@ import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
-import com.speedment.config.Schema;
+import com.speedment.config.db.Schema;
 import com.speedment.internal.core.config.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;

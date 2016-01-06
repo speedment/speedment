@@ -17,7 +17,7 @@
 package com.speedment.internal.core.config.dbms;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;

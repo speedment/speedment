@@ -18,7 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.PluginComponent;
-import com.speedment.config.plugin.Plugin;
+import com.speedment.plugin.Plugin;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

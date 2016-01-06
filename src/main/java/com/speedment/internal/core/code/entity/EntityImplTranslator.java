@@ -30,7 +30,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.indent;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.AbstractBaseEntity;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Speedment;

@@ -17,7 +17,7 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.config.Node;
 import com.speedment.internal.util.JavaLanguage;
 import static java.util.Objects.requireNonNull;

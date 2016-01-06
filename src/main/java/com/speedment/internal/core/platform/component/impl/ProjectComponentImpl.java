@@ -17,7 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.component.ProjectComponent;
 import static java.util.Objects.requireNonNull;
 

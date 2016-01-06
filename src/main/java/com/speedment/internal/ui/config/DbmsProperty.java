@@ -17,11 +17,11 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
 import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.core.config.utils.ConfigUtil;

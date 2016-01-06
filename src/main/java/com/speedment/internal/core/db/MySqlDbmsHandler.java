@@ -17,7 +17,7 @@
 package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no

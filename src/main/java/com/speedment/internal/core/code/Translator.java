@@ -16,21 +16,18 @@
  */
 package com.speedment.internal.core.code;
 
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.Index;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Enableable;
-import com.speedment.config.Node;
-import static java.util.Objects.requireNonNull;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.Document;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A component that can translate a {@link Node} into something else. This 
@@ -42,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <R>  the type to translate into
  * @see        Node
  */
-public interface Translator<T extends Node, R> extends Supplier<R> {
+public interface Translator<T extends Document, R> extends Supplier<R> {
 
     /**
      * The node being translated.
@@ -110,7 +107,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<Column> columns() {
-        return table().streamOfColumns().filter(Column::isEnabled);
+        return table().columns().filter(Column::isEnabled);
     }
 
     /**
@@ -122,7 +119,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<Index> indexes() {
-        return table().streamOfIndexes().filter(Index::isEnabled);
+        return table().indexes().filter(Index::isEnabled);
     }
 
     /**
@@ -134,7 +131,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<ForeignKey> foreignKeys() {
-        return table().streamOfForeignKeys().filter(ForeignKey::isEnabled);
+        return table().foreignKeys().filter(ForeignKey::isEnabled);
     }
 
     /**
@@ -146,7 +143,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @see          Enableable#isEnabled()
      */
     default Stream<PrimaryKeyColumn> primaryKeyColumns() {
-        return table().streamOfPrimaryKeyColumns().filter(PrimaryKeyColumn::isEnabled);
+        return table().primaryKeyColumns().filter(PrimaryKeyColumn::isEnabled);
     }
 
     /**
@@ -158,7 +155,7 @@ public interface Translator<T extends Node, R> extends Supplier<R> {
      * @param clazz  the class to match
      * @return       the node found
      */
-    default <E extends Node> E getGenericConfigEntity(Class<E> clazz) {
+    default <E extends Document> E getGenericConfigEntity(Class<E> clazz) {
         requireNonNull(clazz);
         if (clazz.isAssignableFrom(getNode().getInterfaceMainClass())) {
             @SuppressWarnings("unchecked")

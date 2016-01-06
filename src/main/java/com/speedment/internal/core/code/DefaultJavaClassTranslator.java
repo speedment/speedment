@@ -33,18 +33,17 @@ import com.speedment.internal.codegen.lang.models.implementation.FileImpl;
 import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.codegen.lang.models.values.TextValue;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Index;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
-import com.speedment.config.Node;
-import com.speedment.config.PrimaryKeyColumn;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.Document;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.trait.HasEnabled;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +52,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -61,7 +59,7 @@ import static java.util.Objects.requireNonNull;
  * @param <C> ConfigEntity type.
  * @param <J> Java type (Interface or Class) to generate
  */
-public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J extends ClassOrInterface<J>> implements JavaClassTranslator<C> {
+public abstract class DefaultJavaClassTranslator<C extends Document & HasEnabled, J extends ClassOrInterface<J>> implements JavaClassTranslator<C> {
 
     public static final String GETTER_METHOD_PREFIX = "get",
             SETTER_METHOD_PREFIX = "set",
@@ -130,7 +128,7 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
     protected abstract class Builder<T extends ClassOrInterface<T>> {
 
         private final String name;
-        private final Map<Class<?>, List<BiConsumer<T, ? extends Node>>> map;
+        private final Map<Class<?>, List<BiConsumer<T, ? extends Document>>> map;
 
         // Special for this case
         private final List<BiConsumer<T, ForeignKey>> foreignKeyReferencesThisTableConsumers;
@@ -182,19 +180,19 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
+        protected <C extends Document> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
             aquireList(requireNonNull(clazz))
-                    .add(requireNonNull((BiConsumer<T, Node>) consumer));
+                    .add(requireNonNull((BiConsumer<T, Document>) consumer));
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Node> List<BiConsumer<T, C>> aquireList(Class<?> clazz) {
+        protected <C extends Document> List<BiConsumer<T, C>> aquireList(Class<?> clazz) {
             return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(requireNonNull(clazz), $ -> new ArrayList<>());
         }
 
-        public void act(T item, Node node) {
-            aquireList(node.getInterfaceMainClass())
-                    .forEach(c -> c.accept(requireNonNull(item), requireNonNull(node)));
+        public void act(T item, Document document) {
+            aquireList(document.getInterfaceMainClass())
+                    .forEach(c -> c.accept(requireNonNull(item), requireNonNull(document)));
         }
 
         public abstract T newInstance(String name);
@@ -215,7 +213,7 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
                     -> aquireList(ifType)
                     .forEach(actor -> table().stream()
                             .filter(ifType::isInstance)
-                            .filter(Child<Table>::isEnabled)
+                            .filter(HasEnabled::isEnabled)
                             .forEachOrdered(c -> actor.accept(i, c)))
             );
 

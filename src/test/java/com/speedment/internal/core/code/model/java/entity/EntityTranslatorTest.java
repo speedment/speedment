@@ -22,7 +22,7 @@ import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.model.java.SimpleModelTest;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import java.util.Optional;
 import org.junit.Test;
 

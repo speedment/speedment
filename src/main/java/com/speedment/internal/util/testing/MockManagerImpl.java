@@ -17,8 +17,8 @@
 package com.speedment.internal.util.testing;
 
 import com.speedment.Manager;
-import com.speedment.config.Column;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;

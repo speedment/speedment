@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.db.crud;
 
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import static com.speedment.db.crud.CrudOperation.Type.UPDATE;
 import com.speedment.db.crud.Selector;
 import com.speedment.db.crud.Update;

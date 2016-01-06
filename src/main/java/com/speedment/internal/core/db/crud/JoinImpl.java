@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.db.crud;
 
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.db.crud.Join;
 import static java.util.Objects.requireNonNull;
 

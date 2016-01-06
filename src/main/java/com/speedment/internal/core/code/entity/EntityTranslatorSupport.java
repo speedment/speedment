@@ -28,11 +28,11 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.DOT;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Project;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
 import com.speedment.field.ComparableField;
 import com.speedment.field.ComparableForeignKeyField;
 import com.speedment.field.StringForeignKeyField;

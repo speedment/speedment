@@ -19,7 +19,7 @@ package com.speedment.internal.core.config.mapper.string;
 
 import java.util.Locale;
 
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 
 /**
 *

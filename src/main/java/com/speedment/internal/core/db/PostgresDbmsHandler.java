@@ -18,7 +18,7 @@
 package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 
 /**
  * Created by fdirlikl on 11/15/2015.

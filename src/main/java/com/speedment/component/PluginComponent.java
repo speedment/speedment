@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.plugin.Plugin;
+import com.speedment.plugin.Plugin;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;

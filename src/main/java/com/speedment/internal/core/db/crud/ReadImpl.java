@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.db.crud;
 
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import static com.speedment.db.crud.CrudOperation.Type.READ;
 import com.speedment.db.crud.Join;
 import com.speedment.db.crud.Read;

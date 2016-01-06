@@ -28,7 +28,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.Initalizer;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;

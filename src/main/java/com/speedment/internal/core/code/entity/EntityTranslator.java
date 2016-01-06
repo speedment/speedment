@@ -32,8 +32,8 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
-import com.speedment.config.Table;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.Dbms;
 import com.speedment.internal.core.code.entity.EntityTranslatorSupport.ReferenceFieldType;
 import static com.speedment.internal.util.JavaLanguage.javaStaticFieldName;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;

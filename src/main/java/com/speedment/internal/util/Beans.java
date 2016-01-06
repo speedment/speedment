@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util;
 
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

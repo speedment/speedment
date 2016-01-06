@@ -17,7 +17,7 @@
 package com.speedment.internal.ui.property;
 
 import com.speedment.Speedment;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.ui.util.EditorsUtil;
 import static java.util.Comparator.comparing;
 import java.util.List;

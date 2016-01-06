@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.config.Column;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.aspects.ColumnableHelper;
-import com.speedment.config.parameters.OrderType;
+import com.speedment.config.db.parameters.OrderType;
 import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

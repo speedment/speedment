@@ -17,12 +17,12 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.manager.AbstractManager;
 import com.speedment.db.MetaResult;
 import com.speedment.internal.core.manager.metaresult.SqlMetaResultImpl;
@@ -30,7 +30,7 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import java.math.BigDecimal;

@@ -18,7 +18,7 @@ package com.speedment.event;
 
 import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.event.trait.GeneratorEvent;
 import com.speedment.internal.codegen.base.Generator;
 import static java.util.Objects.requireNonNull;

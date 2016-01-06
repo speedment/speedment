@@ -17,9 +17,9 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Parent;
 import com.speedment.exception.SpeedmentException;
 import java.util.Optional;

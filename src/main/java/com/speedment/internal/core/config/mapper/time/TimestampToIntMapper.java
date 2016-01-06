@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.config.mapper.time;
 
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
 import java.sql.Timestamp;
 
 /**

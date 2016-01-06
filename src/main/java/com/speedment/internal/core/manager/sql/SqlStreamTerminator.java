@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.config.Column;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.Property.SIZE;

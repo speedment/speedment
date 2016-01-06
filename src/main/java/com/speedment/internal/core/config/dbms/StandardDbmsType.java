@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

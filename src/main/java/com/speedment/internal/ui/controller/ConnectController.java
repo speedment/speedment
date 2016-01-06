@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.AbstractNodeProperty;

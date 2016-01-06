@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 
 /**
  * This Component interface is used for holding the current {@link Project} that is being

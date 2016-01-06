@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import java.util.function.BiFunction;
 

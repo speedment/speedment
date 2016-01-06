@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.core.config.immutable;
 
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.Index;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Nameable;
 import com.speedment.config.aspects.Ordinable;

@@ -17,7 +17,7 @@
 package com.speedment.db.crud;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 
 /**
  * @author Emil Forslund

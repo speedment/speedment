@@ -30,9 +30,9 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.SqlManager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
