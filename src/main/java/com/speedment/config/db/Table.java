@@ -1,5 +1,6 @@
 package com.speedment.config.db;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName, HasAlias {
     
     final String

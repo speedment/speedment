@@ -1,5 +1,6 @@
 package com.speedment.config;
 
+import com.speedment.annotation.Api;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.OptionalLong;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public class BaseDocument implements Document {
     
     private final transient Document parent; // Nullable

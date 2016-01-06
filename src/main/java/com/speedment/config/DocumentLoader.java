@@ -2,6 +2,7 @@ package com.speedment.config;
 
 import com.speedment.config.db.Project;
 import com.google.gson.Gson;
+import com.speedment.annotation.Api;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public final class DocumentLoader {
     
     public static String save(Project project) {

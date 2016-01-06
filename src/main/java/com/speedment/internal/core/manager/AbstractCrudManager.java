@@ -19,7 +19,6 @@ package com.speedment.internal.core.manager;
 import com.speedment.Speedment;
 import com.speedment.component.CrudHandlerComponent;
 import com.speedment.config.db.Column;
-import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.db.crud.Result;
@@ -36,21 +35,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -192,7 +176,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return        values mapped to column names
      */
     private Map<String, Object> valuesFor(ENTITY entity) {
-        return MapStream.fromStream(table.streamOfColumns(), 
+        return MapStream.fromStream(table.columns(), 
             col -> col.getName(), 
             col -> get(entity, col)
         ).toMap();
@@ -207,9 +191,9 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return       the column of the primary key
      */
     private static Column findColumnOfPrimaryKey(Table table) {
-        return table.streamOfPrimaryKeyColumns().findFirst()
+        return table.primaryKeyColumns().findFirst()
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find any primary key in table '" + table.getName() + "'."
-            )).getColumn();
+            )).findColumn();
     }
 }

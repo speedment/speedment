@@ -18,9 +18,8 @@ package com.speedment.internal.core.code;
 
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
-import com.speedment.config.Node;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguage;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -31,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @param <T> The Node type
  */
-public interface JavaClassTranslator<T extends Node> extends Translator<T, File> {
+public interface JavaClassTranslator<T extends HasName> extends Translator<T, File> {
 
     /**
      * Returns the name of the current node formatted as a java variable.
@@ -63,7 +62,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from.
      * @return the node name as a variable
      */
-    default String variableName(Node node) {
+    default String variableName(HasName node) {
         requireNonNull(node);
         return JavaLanguage.javaVariableName(node.getName());
     }
@@ -98,7 +97,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from
      * @return the node name as a type
      */
-    default String typeName(Node node) {
+    default String typeName(HasName node) {
         return JavaLanguage.javaTypeName(requireNonNull(node).getName());
     }
 
@@ -134,7 +133,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from
      * @return the node name as a manager type
      */
-    default String managerTypeName(Node node) {
+    default String managerTypeName(HasName node) {
         return typeName(node) + "Manager";
     }
 

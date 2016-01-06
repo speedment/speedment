@@ -1,5 +1,6 @@
 package com.speedment.config.db.trait;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import static com.speedment.stream.MapStream.comparing;
 import java.util.Comparator;
@@ -8,6 +9,7 @@ import java.util.Comparator;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public interface HasOrdinalPosition extends Document {
     
     final int ORDINAL_FIRST = 1, UNSET = -1;

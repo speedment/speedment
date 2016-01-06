@@ -25,6 +25,7 @@ import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PasswordComponent;
 import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
@@ -69,6 +70,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.PluginComponent PluginComponent}</li>
      * <li>{@link com.speedment.component.EventComponent EventComponent}</li>
      * <li>{@link com.speedment.component.UserInterfaceComponent UserInterfaceComponent}</li>
+     * <li>{@link com.speedment.component.PasswordComponent PasswordComponent}</li>
      * </ul>
      *
      * @param <R> The intended return type
@@ -181,5 +183,9 @@ public interface Speedment {
     
     default UserInterfaceComponent getUserInterfaceComponent() {
         return get(UserInterfaceComponent.class);
+    }
+    
+    default PasswordComponent getPasswordComponent() {
+        return get(PasswordComponent.class);
     }
 }

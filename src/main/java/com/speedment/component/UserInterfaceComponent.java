@@ -17,7 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
 import java.util.Optional;
@@ -59,7 +59,7 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  the view of currently selected tree items.
      */
-    ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems();
+    ObservableList<TreeItem<DocumentProperty>> getSelectedTreeItems();
     
     /**
      * Returns an observable list with all the output messages currently
@@ -93,11 +93,11 @@ public interface UserInterfaceComponent extends Component {
      * that require a custom menu to handle custom project tree nodes. If no
      * builder exists for a particular type of node, no menu will be displayed.
      * 
-     * @param <NODE>       the implementation type of the node
-     * @param nodeType     the interface main type of the node
-     * @param menuBuilder  the builder to use
+     * @param <DOC>       the implementation type of the node
+     * @param nodeType    the interface main type of the node
+     * @param menuBuilder the builder to use
      */
-    <NODE extends AbstractNodeProperty> void installContextMenu(Class<? super NODE> nodeType, ContextMenuBuilder<NODE> menuBuilder);
+    <DOC extends DocumentProperty> void installContextMenu(Class<? super DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
     
     /**
      * If a builder exists for the interface main type of the specified node,
@@ -109,10 +109,10 @@ public interface UserInterfaceComponent extends Component {
      * @param node      the node to create a context menu for
      * @return          the created context menu or {@code empty}
      */
-    <NODE extends AbstractNodeProperty> Optional<ContextMenu> createContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    <NODE extends DocumentProperty> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, NODE node);
     
     @FunctionalInterface
-    interface ContextMenuBuilder<NODE extends AbstractNodeProperty> {
-        Optional<ContextMenu> build(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    interface ContextMenuBuilder<NODE extends DocumentProperty> {
+        Optional<ContextMenu> build(TreeCell<DocumentProperty> treeCell, NODE node);
     }
 }

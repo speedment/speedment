@@ -27,6 +27,7 @@ import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PasswordComponent;
 import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
@@ -43,6 +44,7 @@ import com.speedment.internal.core.platform.component.impl.JavaTypeMapperCompone
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
+import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PluginComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
@@ -56,8 +58,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -78,6 +78,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private PluginComponent pluginComponent;
     private EventComponent eventComponent;
     private UserInterfaceComponent userInterfaceComponent;
+    private PasswordComponent passwordComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -94,6 +95,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(PluginComponentImpl::new);
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
+        put(PasswordComponentImpl::new);
     }
     
     private SpeedmentImpl(SpeedmentImpl prototype) {
@@ -170,6 +172,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof UserInterfaceComponent) {
             userInterfaceComponent = castOrFail(item, UserInterfaceComponent.class);
+        }
+        if (item instanceof PasswordComponent) {
+            passwordComponent = castOrFail(item, PasswordComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -266,6 +271,11 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public UserInterfaceComponent getUserInterfaceComponent() {
         return userInterfaceComponent;
+    }
+    
+    @Override
+    public PasswordComponent getPasswordComponent() {
+        return passwordComponent;
     }
 
     @Override

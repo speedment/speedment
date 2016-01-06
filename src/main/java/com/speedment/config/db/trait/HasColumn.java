@@ -1,5 +1,6 @@
 package com.speedment.config.db.trait;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
@@ -8,6 +9,7 @@ import com.speedment.config.db.Table;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public interface HasColumn extends Document, HasName {
     
     default Column findColumn() {

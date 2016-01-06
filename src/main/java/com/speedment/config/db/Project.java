@@ -1,5 +1,6 @@
 package com.speedment.config.db;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
+@Api(version = "2.3")
 public interface Project extends Document, HasEnabled, HasName {
     
     final String 

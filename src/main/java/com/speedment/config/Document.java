@@ -1,5 +1,6 @@
 package com.speedment.config;
 
+import com.speedment.annotation.Api;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forsund
  */
+@Api(version = "2.3")
 public interface Document {
     
     Optional<? extends Document> getParent();
