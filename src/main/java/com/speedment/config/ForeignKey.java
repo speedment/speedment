@@ -22,9 +22,7 @@ import com.speedment.config.aspects.Parent;
 import com.speedment.config.aspects.Child;
 import com.speedment.config.aspects.Enableable;
 import com.speedment.internal.core.config.ForeignKeyImpl;
-import static com.speedment.stream.MapStream.comparing;
 import groovy.lang.Closure;
-import java.util.Comparator;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
