@@ -225,13 +225,12 @@ public final class UISession {
                     .forEach(dbms -> showPasswordDialog(dbms));
                 
                 final Optional<String> schemaName = project
-                    .traverseOver(Schema.class)
+                    .dbms().flatMap(Dbms::schemas)
                     .map(Schema::getName)
                     .findAny();
                 
                 if (schemaName.isPresent()) {
-                    project
-                        .streamOf(Dbms.class)
+                    project.dbms()
                         .map(dbms -> (DbmsProperty) dbms)
                         .forEach(dbms -> loadFromDatabase(dbms, schemaName.get()));
                 } else {
