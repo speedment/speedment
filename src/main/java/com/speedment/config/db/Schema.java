@@ -1,7 +1,6 @@
 package com.speedment.config.db;
 
 import com.speedment.config.Document;
-import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;

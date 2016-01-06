@@ -1,7 +1,6 @@
 package com.speedment.config.db;
 
 import com.speedment.config.Document;
-import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasColumn;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasOrdinalPosition;
@@ -14,13 +13,17 @@ import com.speedment.exception.SpeedmentException;
  */
 public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasName, HasOrdinalPosition, HasColumn {
     
+    final String
+        FOREIGN_TABLE_NAME  = "foreignTableName",
+        FOREIGN_COLUMN_NAME = "foreignColumnName";
+    
     /**
      * Returns the name of the foreign column referenced by this column.
      * 
      * @return  the name of the foreign column
      */
     default String getForeignTableName() {
-        return (String) get("foreignTableName").get();
+        return (String) get(FOREIGN_TABLE_NAME).get();
     }
     
     /**
@@ -29,7 +32,7 @@ public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasNa
      * @return  the name of the foreign table
      */
     default String getForeignColumnName() {
-        return (String) get("foreignColumnName").get();
+        return (String) get(FOREIGN_COLUMN_NAME).get();
     }
     
     /**

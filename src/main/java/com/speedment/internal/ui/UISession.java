@@ -61,6 +61,7 @@ import java.nio.file.Path;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import java.nio.file.Paths;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -113,7 +114,7 @@ public final class UISession {
     private File currentlyOpenFile = null;
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation) {
-        this(speedment, application, stage, defaultGroovyLocation, new ProjectProperty(speedment));
+        this(speedment, application, stage, defaultGroovyLocation, new ProjectProperty(new ConcurrentHashMap<>()));
     }
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation, Project project) {
@@ -123,7 +124,7 @@ public final class UISession {
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
         this.defaultGroovyLocation = requireNonNull(defaultGroovyLocation);
-        this.project               = new ProjectProperty(speedment, project);
+        this.project               = new ProjectProperty(project.stream().toConcurrentMap());
         this.propertySheetFactory  = new PropertySheetFactory();
     }
     
@@ -219,7 +220,7 @@ public final class UISession {
                 "to the project. Are you sure you want to continue?"
             ).filter(ButtonType.OK::equals).isPresent()) {
                 
-                project.streamOf(Dbms.class)
+                project.dbms()
                     .filter(dbms -> NO_PASSWORD_SPECIFIED.test(dbms.getPassword()))
                     .forEach(dbms -> showPasswordDialog(dbms));
                 

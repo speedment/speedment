@@ -42,6 +42,16 @@ public interface Column extends Document, HasParent<Table>, HasEnabled, HasName,
     }
     
     /**
+     * Returns the name of the mapper class that will be used to generate a java 
+     * representation of the database types.
+     * 
+     * @return  the mapper class
+     */
+    default String getTypeMapper() {
+        return getAsString(TYPE_MAPPER).get();
+    }
+    
+    /**
      * Returns the mapper class that will be used to generate a java 
      * representation of the database types.
      * 
@@ -57,16 +67,6 @@ public interface Column extends Document, HasParent<Table>, HasEnabled, HasName,
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
         }
-    }
-
-    /**
-     * Returns the name of the mapper class that will be used to generate a java 
-     * representation of the database types.
-     * 
-     * @return  the mapper class
-     */
-    default String getTypeMapper() {
-        return getAsString(TYPE_MAPPER).get();
     }
     
     /**

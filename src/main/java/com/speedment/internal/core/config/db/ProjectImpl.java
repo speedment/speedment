@@ -5,6 +5,8 @@ import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
@@ -12,8 +14,18 @@ import java.util.Map;
  */
 public final class ProjectImpl extends BaseDocument implements Project {
 
-    public ProjectImpl(Document parent, Map<String, Object> data) {
-        super(parent, data);
+    public ProjectImpl(Map<String, Object> data) {
+        super(null, data);
+    }
+
+    @Override
+    public Optional<? extends Document> getParent() {
+        return Optional.empty();
+    }
+    
+    @Override
+    public Stream<Document> ancestors() {
+        return Stream.empty();
     }
 
     @Override
