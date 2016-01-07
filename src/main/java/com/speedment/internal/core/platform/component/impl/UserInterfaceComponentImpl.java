@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.config.Document;
 import com.speedment.internal.ui.config.AbstractNodeProperty;
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems() {
+    public ObservableList<TreeItem<Document>> getSelectedTreeItems() {
         return selectedTreeItems;
     }
 

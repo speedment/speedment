@@ -5,6 +5,7 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -17,12 +18,7 @@ public final class IndexImpl extends AbstractChildDocument<Table> implements Ind
     }
 
     @Override
-    public IndexColumn newIndexColumn(Map<String, Object> data) {
-        return new IndexColumnImpl(this, data);
-    }
-
-    @Override
-    public IndexColumn newIndexColumn() {
-        return newIndexColumn(newEmptyMap(INDEX_COLUMNS));
+    public BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor() {
+        return IndexColumnImpl::new;
     }
 }

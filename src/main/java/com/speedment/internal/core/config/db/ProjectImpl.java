@@ -6,6 +6,7 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -29,12 +30,7 @@ public final class ProjectImpl extends BaseDocument implements Project {
     }
 
     @Override
-    public Dbms newDbms(Map<String, Object> data) {
-        return new DbmsImpl(this, data);
-    }
-
-    @Override
-    public Dbms newDbms() {
-        return newDbms(newEmptyMap(DBMSES));
+    public BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor() {
+        return DbmsImpl::new;
     }
 }

@@ -1,10 +1,12 @@
 package com.speedment.internal.core.config.db;
 
+import com.speedment.config.Document;
 import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -17,12 +19,7 @@ public final class ForeignKeyImpl extends AbstractChildDocument<Table> implement
     }
 
     @Override
-    public ForeignKeyColumn newForeignKeyColumn(Map<String, Object> data) {
-        return new ForeignKeyColumnImpl(this, data);
-    }
-
-    @Override
-    public ForeignKeyColumn newForeignKeyColumn() {
-        return newForeignKeyColumn(newEmptyMap(FOREIGN_KEY_COLUMNS));
+    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumn> foreignKeyColumnConstructor() {
+        return ForeignKeyColumnImpl::new;
     }
 }

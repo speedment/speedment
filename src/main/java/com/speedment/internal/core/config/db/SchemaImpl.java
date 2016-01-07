@@ -6,6 +6,7 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -18,12 +19,7 @@ public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Sch
     }
 
     @Override
-    public Table newTable(Map<String, Object> data) {
-        return new TableImpl(this, data);
-    }
-
-    @Override
-    public Table newTable() {
-        return newTable(newEmptyMap(TABLES));
+    public BiFunction<Schema, Map<String, Object>, Table> tableConstructor() {
+        return TableImpl::new;
     }
 }
