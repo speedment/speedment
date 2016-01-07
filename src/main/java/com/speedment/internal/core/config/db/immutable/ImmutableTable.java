@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
@@ -34,7 +34,7 @@ import com.speedment.internal.core.config.ChildHolder;
 import static com.speedment.internal.util.Cast.castOrFail;
 import groovy.lang.Closure;
 import java.util.Optional;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import java.util.List;
 import static java.util.stream.Collectors.toList;

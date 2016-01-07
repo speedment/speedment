@@ -21,15 +21,25 @@ public interface Document {
     
     Optional<? extends Document> getParent();
     
+    Map<String, Object> getData();
+    
     Optional<Object> get(String key);
+    
     OptionalBoolean getAsBoolean(String key);
+    
     OptionalLong getAsLong(String key);
+    
     OptionalDouble getAsDouble(String key);
+    
     OptionalInt getAsInt(String key);
+    
     Optional<String> getAsString(String key);
     
     void put(String key, Object value);
-    MapStream<String, Object> stream();
+    
+    default MapStream<String, Object> stream() {
+        return MapStream.of(getData());
+    }
     
     default <T> Stream<T> children(String key, Function<Map<String, Object>, T> instantiator) {
         final List<Map<String, Object>> list = 

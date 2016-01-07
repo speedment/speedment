@@ -36,6 +36,11 @@ public class BaseDocument implements Document {
     }
 
     @Override
+    public Map<String, Object> getData() {
+        return config;
+    }
+
+    @Override
     public Optional<Object> get(String key) {
         return Optional.ofNullable(config.get(key));
     }

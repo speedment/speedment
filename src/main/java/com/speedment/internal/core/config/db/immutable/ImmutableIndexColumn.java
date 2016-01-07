@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Index;
@@ -22,7 +22,7 @@ import com.speedment.config.db.IndexColumn;
 import com.speedment.config.aspects.Parent;
 import com.speedment.internal.core.config.aspects.ColumnableHelper;
 import com.speedment.config.db.parameters.OrderType;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

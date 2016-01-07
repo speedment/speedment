@@ -71,6 +71,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty {
             }
         });
     }
+
+    @Override
+    public final Map<String, Object> getData() {
+        return config;
+    }
     
     @Override
     public Optional<Object> get(String key) {
@@ -108,11 +113,6 @@ public abstract class AbstractDocumentProperty implements DocumentProperty {
     @Override
     public void put(String key, Object value) {
         config.put(key, value);
-    }
-    
-    @Override
-    public final MapStream<String, Object> stream() {
-        return MapStream.of(config);
     }
     
     @Override

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
@@ -32,7 +32,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
 import static com.speedment.internal.util.Cast.castOrFail;
 import java.util.stream.Stream;

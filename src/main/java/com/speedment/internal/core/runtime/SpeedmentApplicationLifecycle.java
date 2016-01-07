@@ -27,7 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.db.Schema;
-import com.speedment.internal.core.config.immutable.ImmutableProject;
+import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;

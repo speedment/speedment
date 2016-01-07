@@ -14,15 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.internal.core.config.*;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.config.aspects.Ordinable;
 import com.speedment.config.aspects.Parent;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import groovy.lang.Closure;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -32,54 +32,43 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity implements Index, ImmutableParentHelper<IndexColumn> {
-    
+public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntity implements ForeignKey, ImmutableParentHelper<ForeignKeyColumn> {
+
     private final Optional<Table> parent;
-    private final ChildHolder<IndexColumn> children;
-    private final Boolean unique;
-    
-    public ImmutableIndex(Table parent, Index index) {
-        super(requireNonNull(index).getName(), index.isExpanded(), index.isEnabled());
+    private final ChildHolder<ForeignKeyColumn> children;
+
+    public ImmutableForeignKey(Table parent, ForeignKey fk) {
+        super(requireNonNull(fk).getName(), fk.isExpanded(), fk.isEnabled());
+        requireNonNull(parent);
         // Fields
         this.parent = Optional.of(parent);
-        this.unique = index.isUnique();
         // Children
-        this.children = childHolderOf(IndexColumn.class, index.stream().map(ic -> new ImmutableIndexColumn(this, ic)));
+        children = childHolderOf(ForeignKeyColumn.class, fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
     }
-    
-    @Override
-    public Boolean isUnique() {
-        return unique;
-    }
-    
-    @Override
-    public void setUnique(Boolean unique) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-    
+
     @Override
     public void setParent(Parent<?> parent) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
     public Optional<Table> getParent() {
         return parent;
     }
-    
+
     @Override
-    public ChildHolder<IndexColumn> getChildren() {
+    public ChildHolder<ForeignKeyColumn> getChildren() {
         return children;
     }
     
     @Override
-    public Stream<? extends IndexColumn> stream() {
+    public Stream<? extends ForeignKeyColumn> stream() {
         return getChildren().stream().sorted(Ordinable.COMPARATOR);
     }
 
     @Override
-    public <T extends IndexColumn> Stream<T> streamOf(Class<T> childClass) {
-        if (IndexColumn.class.isAssignableFrom(childClass)) {
+    public <T extends ForeignKeyColumn> Stream<T> streamOf(Class<T> childClass) {
+        if (ForeignKeyColumn.class.isAssignableFrom(childClass)) {
             return getChildren().stream()
                 .map(child -> {
                     @SuppressWarnings("unchecked")
@@ -94,14 +83,14 @@ public final class ImmutableIndex extends ImmutableAbstractNamedConfigEntity imp
             );
         }
     }
-    
+
     @Override
-    public IndexColumn addNewIndexColumn() {
+    public ForeignKeyColumn addNewForeignKeyColumn() {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
-    public IndexColumn indexColumn(Closure<?> c) {
+    public ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
         return throwNewUnsupportedOperationExceptionImmutable();
     }
 }

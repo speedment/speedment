@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.internal.core.config.aspects.*;
 import com.speedment.config.aspects.Child;
@@ -22,7 +22,7 @@ import com.speedment.internal.core.config.ChildHolder;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 
 /**
  *

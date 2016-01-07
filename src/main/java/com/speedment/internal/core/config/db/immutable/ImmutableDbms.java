@@ -14,65 +14,47 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.immutable;
+package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.internal.core.config.*;
 import com.speedment.Speedment;
+import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
-import com.speedment.config.aspects.Nameable;
-import com.speedment.config.aspects.Parent;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.internal.core.config.aspects.DbmsTypeableHelper;
-import groovy.lang.Closure;
 import java.util.Optional;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import java.util.OptionalInt;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableDbms extends ImmutableAbstractNamedConfigEntity implements Dbms, DbmsTypeableHelper, ImmutableParentHelper<Schema> {
+public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
-    private final Speedment speedment;
-    private final Optional<Project> parent;
-    private final ChildHolder<Schema> children;
-    private final DbmsType type;
+    private final String typeName;
     private final Optional<String> ipAddress;
-    private final Optional<Integer> port;
-    private final Optional<String> username, password;
+    private final OptionalInt port;
+    private final Optional<String> username;
 
-    public ImmutableDbms(Project parent, Dbms dbms) {
-        super(requireNonNull(dbms).getName(), dbms.isExpanded(), dbms.isEnabled());
-        requireNonNull(parent);
-        // Members
-        this.speedment = parent.getSpeedment();
-        this.parent    = Optional.of(parent);
-        this.type      = dbms.getType();
-        this.ipAddress = dbms.getIpAddress();
-        this.port      = dbms.getPort();
-        this.username  = dbms.getUsername();
-        this.password  = dbms.getPassword();
-        // Children
-        children = childHolderOf(Schema.class, dbms.stream().map(p -> new ImmutableSchema(this, p)));
+    public ImmutableDbms(ImmutableProject parent, Dbms dbms) {
+        super(parent, dbms.getData());
+
+        this.typeName  = dbms.getTypeName();
+        this.ipAddress = dbms.getIpAddress().orElse(null);
+        this.port      = dbms.getPort().isPresent() ? dbms.getPort().getAsInt() : null;
+        this.username  = dbms.getUsername().orElse(null);
     }
 
     @Override
-    public DbmsType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(DbmsType dbmsType) {
-        throwNewUnsupportedOperationExceptionImmutable();
+    public String getTypeName() {
+        return typeName;
     }
 
     @Override
     public Optional<String> getIpAddress() {
-        return ipAddress;
+        return Optional.ofNullable(ipAddress);
     }
 
     @Override
