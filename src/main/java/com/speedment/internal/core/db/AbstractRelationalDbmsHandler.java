@@ -36,6 +36,7 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.internal.core.config.db.mutator.ColumnMutator;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -253,12 +254,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 -> connection.getMetaData().getColumns(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), table.getName(), null);
 
         final SqlFunction<ResultSet, Column> mapper = rs -> {
-            final Column column = Column.newColumn();
-            column.setName(rs.getString("COLUMN_NAME"));
-            column.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+            
+            final Column column = table.newColumn();
+            final ColumnMutator columnMutator = ColumnMutator.of(column);
+            
+            columnMutator.setName(rs.getString("COLUMN_NAME"));
+            columnMutator.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
             boolean nullable = rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls;
-            column.setNullable(nullable);
+            columnMutator.setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
             final Class<?> mapping = typeMapping.get(classMappingString);
@@ -271,15 +275,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                                 "Found no identity type mapper for mapping '" + mapping.getName() + "'."
                         ));
 
-                column.setTypeMapper(typeMapper);
-                column.setDatabaseType(mapping);
+                columnMutator.setTypeMapper(typeMapper);
+                columnMutator.setDatabaseType(mapping);
 
             } else {
                 LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
             }
 
             try {
-                column.setAutoincrement(rs.getBoolean("IS_AUTOINCREMENT"));
+                columnMutator.setAutoIncrement(rs.getBoolean("IS_AUTOINCREMENT"));
             } catch (final SQLException sqle) {
                 LOGGER.info("Unable to determine IS_AUTOINCREMENT for table " + table.getName() + ", column " + column.getName());
             }

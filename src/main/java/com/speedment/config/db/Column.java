@@ -9,13 +9,14 @@ import com.speedment.config.db.trait.HasParent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasOrdinalPosition;
 
 /**
  *
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, HasAlias, HasMainInterface {
+public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, HasAlias, HasOrdinalPosition, HasMainInterface {
 
     final String 
         NULLABLE       = "nullable",

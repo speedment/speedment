@@ -22,7 +22,7 @@
 package com.speedment.internal.core.code.model.java;
 
 import com.speedment.Speedment;
-import com.speedment.config.DocumentLoader;
+import com.speedment.config.DocumentTranscoder;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
@@ -33,6 +33,7 @@ import com.speedment.internal.core.platform.SpeedmentFactory;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -75,7 +76,7 @@ public abstract class SimpleModelTest {
     public void setUp() {
 
         final String json = "{"
-                + objectWithKey(DocumentLoader.ROOT,
+                + objectWithKey(DocumentTranscoder.ROOT,
                         name("myProject"),
                         array(Project.DBMSES,
                                 object(
@@ -107,7 +108,7 @@ public abstract class SimpleModelTest {
 
         System.out.println(json);
         
-        project = DocumentLoader.load(json);
+        project = DocumentTranscoder.load(json);
         
         System.out.println(project);
         

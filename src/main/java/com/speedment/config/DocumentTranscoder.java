@@ -15,7 +15,7 @@ import java.nio.file.Path;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public final class DocumentLoader {
+public final class DocumentTranscoder {
     
     public static final String ROOT = "project";
     
@@ -44,10 +44,10 @@ public final class DocumentLoader {
             return load(new String(Files.readAllBytes(location)));
         } catch (final IOException ex) {
             throw new RuntimeException(
-                "Could not save json-file to path '" + location + "'."
+                "Could not load json-file from path '" + location + "'."
             );
         }
     }
     
-    private DocumentLoader() { instanceNotAllowed(getClass()); }
+    private DocumentTranscoder() { instanceNotAllowed(getClass()); }
 }

@@ -19,14 +19,14 @@ import java.util.stream.Stream;
 public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName, HasMainInterface {
     
     final String
-        DBMS_TYPE  = "dbmsType",
+        TYPE_NAME  = "typeName",
         IP_ADDRESS = "ipAddress",
         PORT       = "port",
         USERNAME   = "username",
         SCHEMAS    = "schemas";
     
     default String getTypeName() {
-        return (String) get(DBMS_TYPE).get();
+        return (String) get(TYPE_NAME).get();
     }
     
     /**

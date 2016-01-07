@@ -47,5 +47,5 @@ public final class PasswordComponentImpl extends Apache2AbstractComponent implem
     @Override
     public String get(String dbmsName) {
         return passwords.get(dbmsName);
-    }
+    }    
 }
