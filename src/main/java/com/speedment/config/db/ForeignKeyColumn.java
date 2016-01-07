@@ -85,6 +85,5 @@ public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasNa
      @Override
     default Class<ForeignKeyColumn> mainInterface() {
         return ForeignKeyColumn.class;
-    }    
-    
+    }
 }

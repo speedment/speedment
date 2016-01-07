@@ -5,6 +5,7 @@ import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
