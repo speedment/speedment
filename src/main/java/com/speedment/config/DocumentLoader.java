@@ -17,6 +17,8 @@ import java.nio.file.Path;
 @Api(version = "2.3")
 public final class DocumentLoader {
     
+    public static final String ROOT = "project";
+    
     public static String save(Project project) {
         final Gson gson   = new Gson();
         final String json = gson.toJson(project);

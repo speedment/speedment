@@ -36,6 +36,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.SqlManager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,7 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
             .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
                 .add("return " + Speedment.class.getSimpleName()
                     + ".get().get(" + ProjectComponent.class.getSimpleName()
-                    + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
+                    + ".class).getProject().findTableByName(\"" + relativeName(table(), Dbms.class) + "\");"))
             //            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
             //                .add("return \"" + table().getRelativeName(project()) + "\";"))
 
@@ -85,11 +86,11 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
             .add(Field.of("entity", ENTITY.getType()));
 
         if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().getColumn()) + "();");
+            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                .map(pkc -> "entity.get" + typeName(pkc.findColumn()) + "()")
                 .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
@@ -116,8 +117,8 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
                 columns()
-                .peek(c -> file.add(Import.of(Type.of(c.getTypeMapper().getJavaType()))))
-                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
+                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.findTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
             ));
     }

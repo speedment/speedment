@@ -40,8 +40,6 @@ import com.speedment.stream.StreamDecorator;
 import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -111,7 +109,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
             @SuppressWarnings("unchecked")
-            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).getTypeMapper();
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).findTypeMapper();
             fragments.get(i).objects()
                     .map(tm::toDatabaseType)
                     .forEach(values::add);
@@ -122,7 +120,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
     
     private Column findColumn(String name) {
-        return manager.getTable().streamOfColumns()
+        return manager.getTable().columns()
                 .filter(c -> name.equals(c.getName()))
                 .findAny().get();
     }

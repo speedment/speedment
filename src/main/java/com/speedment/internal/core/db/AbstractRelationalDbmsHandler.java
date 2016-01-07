@@ -35,6 +35,7 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -52,11 +53,6 @@ import java.util.function.*;
 
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import com.speedment.stream.ParallelStrategy;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
@@ -114,7 +110,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     public String getUrl() {
-        return getDbms().getType().getConnectionUrlGenerator().apply(getDbms());
+        return dbmsType(getDbms()).getConnectionUrlGenerator().apply(getDbms());
     }
 
     protected Map<String, Class<?>> readTypeMapFromDB(Connection connection) throws SQLException {
@@ -186,7 +182,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     } catch (SQLException sqlException) {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
-                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
+                    if (!dbmsType(dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = Schema.newSchema(speedment);
                         schema.setName(schemaName);
                         schema.setSchemaName(schemaName);
@@ -199,7 +195,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
-                    if (!dbms.getType().getSchemaExcludeSet().contains(schemaName)) {
+                    if (!dbmsType(dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = Schema.newSchema(speedment);
                         schema.setName(schemaName);
                         schemas.add(schema);
@@ -417,7 +413,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected String jdbcCatalogLookupName(Schema schema) {
-        return schema.getSchemaName().orElse(null);
+        return schema.getName();
+        //return schema.getSchemaName().orElse(null);
     }
 
     @Override
@@ -562,5 +559,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         };
 
     }
-
+    
+    
+    private DbmsType dbmsType(Dbms dbms) {
+        return  speedment.getDbmsHandlerComponent().findByName(getDbms().getTypeName()).get();
+    }
+    
 }

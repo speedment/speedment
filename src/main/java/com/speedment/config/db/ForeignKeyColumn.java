@@ -3,6 +3,7 @@ package com.speedment.config.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasColumn;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.config.db.trait.HasParent;
@@ -13,7 +14,7 @@ import com.speedment.exception.SpeedmentException;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasName, HasOrdinalPosition, HasColumn {
+public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasName, HasOrdinalPosition, HasColumn, HasMainInterface {
     
     final String
         FOREIGN_TABLE_NAME  = "foreignTableName",
@@ -80,4 +81,10 @@ public interface ForeignKeyColumn extends Document, HasParent<ForeignKey>, HasNa
                 "' in table '" + getForeignTableName() + "' was referenced."
             ));
     }
+    
+     @Override
+    default Class<ForeignKeyColumn> mainInterface() {
+        return ForeignKeyColumn.class;
+    }    
+    
 }

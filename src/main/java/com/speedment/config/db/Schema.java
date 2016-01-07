@@ -4,6 +4,7 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, HasAlias {
+public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, HasAlias, HasMainInterface {
     
     final String
         DEFAULT_SCHEMA = "defaultSchema",
@@ -35,4 +36,10 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
     }
     
     Table newTable(Map<String, Object> data);
+    
+     @Override
+    default Class<Schema> mainInterface() {
+        return Schema.class;
+    }    
+    
 }

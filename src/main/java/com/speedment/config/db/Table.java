@@ -5,6 +5,7 @@ import com.speedment.config.Document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName, HasAlias {
+public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName, HasAlias, HasMainInterface {
     
     final String
         COLUMNS = "columns",
@@ -60,4 +61,10 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
     Index newIndex(Map<String, Object> data);
     ForeignKey newForeignKey(Map<String, Object> data);
     PrimaryKeyColumn newPrimaryKeyColumn(Map<String, Object> data);
+    
+     @Override
+    default Class<Table> mainInterface() {
+        return Table.class;
+    }    
+    
 }

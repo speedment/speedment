@@ -18,8 +18,10 @@ package com.speedment.internal.core.code;
 
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguage;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -30,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @param <T> The Node type
  */
-public interface JavaClassTranslator<T extends HasName> extends Translator<T, File> {
+public interface JavaClassTranslator<T extends HasName & HasMainInterface> extends Translator<T, File> {
 
     /**
      * Returns the name of the current node formatted as a java variable.
@@ -207,7 +209,7 @@ public interface JavaClassTranslator<T extends HasName> extends Translator<T, Fi
         if (getNode() instanceof Project) {
             return packName + project().getName();
         } else {
-            return packName + getNode().getRelativeName(Project.class, JavaLanguage::javaPacketName);
+            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPacketName);
         }
     }
 

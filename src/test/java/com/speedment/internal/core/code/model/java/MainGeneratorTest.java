@@ -17,8 +17,6 @@
 package com.speedment.internal.core.code.model.java;
 
 import com.speedment.internal.core.code.MainGenerator;
-import com.speedment.Speedment;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -29,7 +27,7 @@ import org.junit.Test;
 public class MainGeneratorTest extends SimpleModelTest {
 
     @Test
-    @Ignore
+    
     public void testAccept() {
         System.out.println("accept");
 

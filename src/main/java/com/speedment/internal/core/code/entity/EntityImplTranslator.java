@@ -26,7 +26,6 @@ import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Import;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.indent;
@@ -34,10 +33,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.AbstractBaseEntity;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Speedment;
-import com.speedment.internal.codegen.lang.controller.AutoEquals;
-import com.speedment.internal.codegen.lang.models.Javadoc;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.BOOLEAN_PRIMITIVE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.INT_PRIMITIVE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
@@ -51,7 +47,6 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -80,10 +75,10 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     final Type retType;
                     final String getter;
                     if (c.isNullable()) {
-                        retType = OPTIONAL.add(Generic.of().add(Type.of(c.getTypeMapper().getJavaType())));
+                        retType = OPTIONAL.add(Generic.of().add(Type.of(c.findTypeMapper().getJavaType())));
                         getter = "Optional.ofNullable(" + variableName(c) + ")";
                     } else {
-                        retType = Type.of(c.getTypeMapper().getJavaType());
+                        retType = Type.of(c.findTypeMapper().getJavaType());
                         getter = variableName(c);
                     }
                     cl
@@ -258,7 +253,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + typeName(c);
-            if (c.getTypeMapper().getJavaType().isPrimitive()) {
+            if (c.findTypeMapper().getJavaType().isPrimitive()) {
                 method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
             } else {
                 method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
@@ -280,7 +275,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
 
-            switch (c.getTypeMapper().getJavaType().getName()) {
+            switch (c.findTypeMapper().getJavaType().getName()) {
                 case "byte":
                     str.append("Byte");
                     break;

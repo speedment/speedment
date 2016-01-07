@@ -8,13 +8,14 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.config.db.trait.HasMainInterface;
 
 /**
  *
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, HasAlias {
+public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, HasAlias, HasMainInterface {
 
     final String 
         NULLABLE       = "nullable",
@@ -94,4 +95,10 @@ public interface Column extends Document, HasParent<Table>, HasEnabled, HasName,
             throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
         }
     }
+
+    @Override
+    default Class<Column> mainInterface() {
+        return Column.class;
+    }
+    
 }
