@@ -17,12 +17,13 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.config.Document;
 import com.speedment.event.TreeSelectionChange;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.property.AbstractPropertyItem;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -34,7 +35,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
-import static java.util.Objects.requireNonNull;
 import javafx.beans.binding.Bindings;
 import static java.util.Objects.requireNonNull;
 
@@ -57,15 +57,15 @@ public final class WorkspaceController implements Initializable {
             .getUserInterfaceComponent();
         
         ui.getSelectedTreeItems()
-            .addListener((ListChangeListener.Change<? extends TreeItem<AbstractNodeProperty>> change) -> {
+            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
                 properties.clear();
                 
                 if (!change.getList().isEmpty()) {
-                    final TreeItem<AbstractNodeProperty> treeItem = change.getList().get(0);
+                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
                     
                     if (treeItem != null) {
-                        final AbstractNodeProperty node = treeItem.getValue();
-                        node.getGuiVisibleProperties()
+                        final DocumentProperty node = treeItem.getValue();
+                        node.getUiVisibleProperties()
                             .forEachOrdered(properties::add);
                     }
                 }

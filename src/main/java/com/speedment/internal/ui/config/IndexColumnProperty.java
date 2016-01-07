@@ -7,6 +7,8 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrderTypeProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.Map;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -18,5 +20,13 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
     
     public IndexColumnProperty(Index parent, Map<String, Object> data) {
         super(parent, data);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.concat(
+            HasColumnProperty.super.getUiVisibleProperties(),
+            HasOrderTypeProperty.super.getUiVisibleProperties()
+        );
     }
 }

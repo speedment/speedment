@@ -7,6 +7,8 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.Map;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -18,5 +20,13 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
 
     public PrimaryKeyColumnProperty(Table parent, Map<String, Object> data) {
         super(parent, data);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.concat(
+            HasColumnProperty.super.getUiVisibleProperties(),
+            HasEnabledProperty.super.getUiVisibleProperties()
+        );
     }
 }

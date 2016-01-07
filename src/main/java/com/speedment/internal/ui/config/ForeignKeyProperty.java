@@ -7,6 +7,8 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -17,6 +19,14 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
 
     public ForeignKeyProperty(Table parent, Map<String, Object> data) {
         super(parent, data);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.concat(
+            HasNameProperty.super.getUiVisibleProperties(),
+            HasEnabledProperty.super.getUiVisibleProperties()
+        );
     }
 
     @Override

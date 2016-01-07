@@ -15,8 +15,6 @@
  */
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
-import com.speedment.stream.MapStream;
 import com.speedment.util.OptionalBoolean;
 import java.util.Map;
 import java.util.Optional;

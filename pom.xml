@@ -354,19 +354,19 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.10</version>
         </dependency>
-        
-        <!-- LICENSE INFORMATION
+<!--        
+         LICENSE INFORMATION
         FontawesomeFX:8.7
         Apache 2 License
         http://logging.apache.org/log4j/2.x/license.html
         2015-12-04
         emifor
-        -->
+        
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
             <version>8.7</version>
-        </dependency>
+        </dependency>-->
 
         <!-- LICENSE INFORMATION
         PostgreSQL:9.4-1205-jdbc4

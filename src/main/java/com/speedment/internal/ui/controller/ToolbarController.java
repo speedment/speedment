@@ -18,8 +18,6 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -28,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
+import org.controlsfx.glyphfont.FontAwesome;
 
 /**
  *
@@ -35,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ToolbarController implements Initializable {
     
-    public final static String ICON_SIZE = "2em";
+    public final static double ICON_SIZE = 2d;
     private final UISession session;
     
     private @FXML Button buttonNew;
@@ -54,12 +53,13 @@ public final class ToolbarController implements Initializable {
         buttonOpen.setOnAction(session.openProject());
         buttonReload.setOnAction(session.reload());
         buttonGenerate.setOnAction(session.generate());
-
-        buttonNew.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLUS_SQUARE, ICON_SIZE));
-        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
-        buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
-        buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
         
+        final FontAwesome fa = new FontAwesome();
+        buttonNew.setGraphic(fa.create(FontAwesome.Glyph.PLUS_SQUARE).size(ICON_SIZE));
+        buttonOpen.setGraphic(fa.create(FontAwesome.Glyph.FOLDER_OPEN).size(ICON_SIZE));
+        buttonReload.setGraphic(fa.create(FontAwesome.Glyph.REFRESH).size(ICON_SIZE));
+        buttonGenerate.setGraphic(fa.create(FontAwesome.Glyph.PLAY_CIRCLE).size(ICON_SIZE));
+
         logo.setOnMousePressed(session.showGithub());
     }
     

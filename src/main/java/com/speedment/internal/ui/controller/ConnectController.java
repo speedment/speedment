@@ -17,17 +17,11 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.util.Settings;
-import com.speedment.internal.util.Trees;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -49,6 +43,7 @@ import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static java.util.Objects.requireNonNull;
+import org.controlsfx.glyphfont.FontAwesome;
 
 /**
  *
@@ -84,9 +79,10 @@ public final class ConnectController implements Initializable {
         if (Settings.inst().get("hide_open_option", true)) {
             container.getChildren().remove(openContainer);
         }
-        
-        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
-        buttonConnect.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_IN, ICON_SIZE));
+
+        final FontAwesome fa = new FontAwesome();
+        buttonOpen.setGraphic(fa.create(FontAwesome.Glyph.FOLDER_OPEN).size(ICON_SIZE));
+        buttonConnect.setGraphic(fa.create(FontAwesome.Glyph.SIGN_IN).size(ICON_SIZE));
         
         fieldType.setItems(
             getDbmsTypes()

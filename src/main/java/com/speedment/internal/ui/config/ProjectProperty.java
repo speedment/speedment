@@ -7,15 +7,18 @@ import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -26,6 +29,26 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
 
     public ProjectProperty(Map<String, Object> data) {
         super(data);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.of(
+            HasNameProperty.super.getUiVisibleProperties(),
+            HasEnabledProperty.super.getUiVisibleProperties(),
+            Stream.of(
+                new StringPropertyItem(
+                    packageNameProperty(),
+                    "Package Name",
+                    "The name of the package to place all generated files in. This should be a fully qualified java package name."
+                ),
+                new StringPropertyItem(
+                    packageLocationProperty(),
+                    "Package Location",
+                    "The folder to store all generated files in. This should be a relative name from the working directory."
+                )
+            )
+        ).flatMap(s -> s);
     }
     
     public final StringProperty packageNameProperty() {

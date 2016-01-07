@@ -11,6 +11,8 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -21,6 +23,15 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
 
     public TableProperty(Schema parent, Map<String, Object> data) {
         super(parent, data);
+    }
+
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.of(
+            HasNameProperty.super.getUiVisibleProperties(),
+            HasEnabledProperty.super.getUiVisibleProperties(),
+            HasAliasProperty.super.getUiVisibleProperties()
+        ).flatMap(s -> s);
     }
 
     @Override

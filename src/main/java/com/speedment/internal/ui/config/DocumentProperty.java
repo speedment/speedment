@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
+import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -28,7 +29,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author Emil Forslund
  */
-public interface DocumentProperty extends Document {
+public interface DocumentProperty extends Document, HasUiVisibleProperties {
     
     StringProperty stringPropertyOf(String key);
     

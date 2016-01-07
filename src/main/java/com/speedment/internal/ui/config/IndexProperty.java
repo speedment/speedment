@@ -5,9 +5,12 @@ import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -18,6 +21,21 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
 
     public IndexProperty(Table parent, Map<String, Object> data) {
         super(parent, data);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+        return Stream.of(
+            HasNameProperty.super.getUiVisibleProperties(),
+            HasEnabledProperty.super.getUiVisibleProperties(),
+            Stream.of(
+                new BooleanPropertyItem(
+                    uniqueProperty(),       
+                    "Is Unique",
+                    "True if elements in this index are unique."
+                )
+            )
+        ).flatMap(s -> s);
     }
     
     public final BooleanProperty uniqueProperty() {
