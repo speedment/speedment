@@ -38,6 +38,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     protected Class make(File file) {
         requireNonNull(file);
         
-        final Map<String, List<Table>> nameMap = project().traverseOver(Table.class)
+        final Map<String, List<Table>> nameMap = traverseOver(project(), Table.class)
                 .filter(Table::isEnabled)
                 .collect(Collectors.groupingBy(Table::getName));
         
@@ -77,7 +78,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
                 .add("super.onInit();")
                 .add("loadAndSetProject();");
         
-        project().traverseOver(Table.class)
+        traverseOver(project(), Table.class)
                 .filter(Table::isEnabled)
                 .forEachOrdered(t -> {
                     EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);

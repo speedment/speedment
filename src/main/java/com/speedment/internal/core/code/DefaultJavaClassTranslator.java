@@ -44,6 +44,8 @@ import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +64,9 @@ import static java.util.Objects.requireNonNull;
  * @param <C> ConfigEntity type.
  * @param <J> Java type (Interface or Class) to generate
  */
-public abstract class DefaultJavaClassTranslator<C extends Document & HasEnabled, J extends ClassOrInterface<J>> implements JavaClassTranslator<C> {
+public abstract class DefaultJavaClassTranslator
+        <C extends Document & HasName & HasEnabled & HasMainInterface, J extends ClassOrInterface<J>>
+        implements JavaClassTranslator<C> {
 
     public static final String GETTER_METHOD_PREFIX = "get",
             SETTER_METHOD_PREFIX = "set",
@@ -193,8 +197,8 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasEnabled
             return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(requireNonNull(clazz), $ -> new ArrayList<>());
         }
 
-        public void act(T item, Document document) {
-            aquireList(document.getInterfaceMainClass())
+        public <D extends Document & HasMainInterface> void act(T item, D document) {
+            aquireList(document.mainInterface())
                     .forEach(c -> c.accept(requireNonNull(item), requireNonNull(document)));
         }
 
@@ -220,7 +224,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasEnabled
                             .forEachOrdered(c -> actor.accept(i, c)))
             );
 
-            if (Table.class.equals(getNode().getInterfaceMainClass())) {
+            if (Table.class.equals(getNode().mainInterface())) {
                 schema().stream()
                         .filter(Table::isEnabled)
                         .flatMap(t -> t.streamOfForeignKeys())
@@ -270,7 +274,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasEnabled
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(variableName(c), Type.of(c.getTypeMapper().getJavaType()));
+        return Field.of(variableName(c), Type.of(c.findTypeMapper().getJavaType()));
     }
 
     public Constructor emptyConstructor() {

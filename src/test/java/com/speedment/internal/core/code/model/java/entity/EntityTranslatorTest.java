@@ -23,6 +23,7 @@ import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.model.java.SimpleModelTest;
 import com.speedment.config.db.Table;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class EntityTranslatorTest extends SimpleModelTest {
 
         final Generator cg = new JavaGenerator();
 
-        final Table table2 = project.traverseOver(Table.class)
+        final Table table2 = traverseOver(project, Table.class)
             .filter(e -> TABLE_NAME.equals(e.getName()))
             .findAny().get();
 

@@ -17,6 +17,7 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
+import com.speedment.config.DocumentTranscoder;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
 import com.speedment.internal.codegen.lang.models.File;
@@ -32,8 +33,9 @@ import com.speedment.config.db.Project;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.Initalizer;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -63,7 +65,8 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
         final Initalizer initializer = Initalizer.of().static_();
         
         //final StringBuilder str = new StringBuilder();
-        GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
+        Stream.of(DocumentTranscoder.save(project()).split("\\R"))
+        .forEachOrdered(l -> {
             initializer.add("METADATA.append(\"" + 
                 l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
                 "\\n\");"

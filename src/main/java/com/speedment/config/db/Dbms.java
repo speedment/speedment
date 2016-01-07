@@ -3,6 +3,7 @@ package com.speedment.config.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
@@ -16,17 +17,17 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName {
+public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName, HasMainInterface {
     
     final String
-        DBMS_TYPE  = "dbmsType",
+        TYPE_NAME  = "typeName",
         IP_ADDRESS = "ipAddress",
         PORT       = "port",
         USERNAME   = "username",
         SCHEMAS    = "schemas";
     
     default String getTypeName() {
-        return (String) get(DBMS_TYPE).get();
+        return (String) get(TYPE_NAME).get();
     }
     
     /**
@@ -63,10 +64,15 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName 
     default Stream<Schema> schemas() {
         return children(SCHEMAS, schemaConstructor());
     }
-    
+
     default Schema newSchema() {
         return schemaConstructor().apply(this, newDocument(this, SCHEMAS));
     }
     
     BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor();
+   
+    @Override
+    default Class<Dbms> mainInterface() {
+        return Dbms.class;
+    }  
 }

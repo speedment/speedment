@@ -22,6 +22,7 @@ import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.exception.SpeedmentException;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -52,8 +53,11 @@ public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent imp
 
     @Override
     public DbmsHandler make(final Dbms dbms) {
-        requireNonNull(dbms);
-        return dbms.getType().makeDbmsHandler(getSpeedment(), dbms);
+        requireNonNull(dbms);      
+        final String dbmsTypeName = dbms.getTypeName();
+        final DbmsType dbmsType = findByName(dbmsTypeName)
+                .orElseThrow(() -> new SpeedmentException("Unable to find a DbmsType with name "+dbmsTypeName));
+        return dbmsType.makeDbmsHandler(getSpeedment(), dbms);
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.speedment.config.db;
+package com.speedment.internal.core.config.db.mutator;
 
+import com.speedment.config.db.*;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
@@ -9,15 +10,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author Per Minborg
  */
-@Api(version = "2.3")
-public interface Project extends Document, HasEnabled, HasName, HasMainInterface {
+public interface ProjectMutator extends Document, HasEnabled, HasName, HasMainInterface {
     
     final String 
         PACKAGE_NAME     = "packageName",
@@ -56,18 +55,16 @@ public interface Project extends Document, HasEnabled, HasName, HasMainInterface
         return getAsString(CONFIG_PATH).map(Paths::get);
     }
 
-    default Stream<Dbms> dbms() {
-        return children(DBMSES, dbmsConstructor());
-    }
-    
-    default Dbms newDbms() {
-        return dbmsConstructor().apply(this, newDocument(this, DBMSES));
-    }
-    
-    BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor();
+    default Stream<DbmsMutator> dbmses() {
 
-    @Override
-    default Class<Project> mainInterface() {
-        return Project.class;
+        return children(DBMSES, this::newDbms);
     }
+    
+    DbmsMutator newDbms(Map<String, Object> data);
+    
+     @Override
+    default Class<ProjectMutator> mainInterface() {
+        return ProjectMutator.class;
+    }    
+    
 }

@@ -253,7 +253,7 @@ public final class SqlWriter {
      * @return       the formatted table name
      */
     private static String formatTableName(Table table) {
-        return table.getTableName().orElse(table.getName());
+        return table.getName();
     }
 
     /**

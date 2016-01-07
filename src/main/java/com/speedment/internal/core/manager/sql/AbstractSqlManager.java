@@ -60,6 +60,8 @@ import java.util.Optional;
 import com.speedment.internal.util.Lazy;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -120,7 +122,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
-        return getTable().streamOfColumns()
+        return getTable().columns()
                 .map(Column::getName)
                 .map(this::quoteField)
                 .map(postMapper)
@@ -129,7 +131,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     public String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
-        return getTable().streamOfPrimaryKeyColumns()
+        return getTable().primaryKeyColumns()
                 .map(PrimaryKeyColumn::getName)
                 .map(this::quoteField)
                 .map(postMapper)
@@ -137,7 +139,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     public String sqlTableReference() {
-        return getTable().getRelativeName(Schema.class, this::quoteField);
+        return relativeName(getTable(), Schema.class, this::quoteField);
     }
 
     public String sqlSelect(String suffix) {
@@ -195,16 +197,16 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected Dbms getDbms() {
-        return getTable().ancestor(Dbms.class).get();
+        return ancestor(getTable(), Dbms.class).get();
     }
 
     protected DbmsType getDbmsType() {
-        return getDbms().getType();
+        return speedment.getDbmsHandlerComponent().findByName(getDbms().getTypeName()).get();
     }
 
     private String quoteField(final String s) {
-        final DbmsType dbmsType = getDbms().getType();
-        return dbmsType.getFieldEncloserStart() + s + dbmsType.getFieldEncloserEnd();
+        final DbmsType dbmsType = getDbmsType();
+        return getDbmsType().getFieldEncloserStart() + s + dbmsType.getFieldEncloserEnd();
     }
 
     protected DbmsHandler dbmsHandler() {
@@ -397,7 +399,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private Object toDatabaseType(Column column, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, column));
         @SuppressWarnings("unchecked")
-        final Object dbValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toDatabaseType(javaValue);
+        final Object dbValue = ((TypeMapper<Object, Object>) column.findTypeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
 
@@ -409,7 +411,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" values ");
         sb.append("(").append(sqlColumnListWithQuestionMarks()).append(")");
 
-        final List<Object> values = table.streamOfColumns()
+        final List<Object> values = table.columns()
                 .map(c -> toDatabaseType(c, entity))
                 .collect(Collectors.toList());
 
@@ -418,21 +420,21 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
-                    table.streamOfColumns()
-                            .filter(Column::isAutoincrement)
+                    table.columns()
+                            .filter(Column::isAutoIncrement)
                             .forEachOrdered(column -> {
                                 // Cast from Long to the column target type
 
                                 final Object val = speedment
                                         .getJavaTypeMapperComponent()
-                                        .apply(column.getTypeMapper().getJavaType())
+                                        .apply(column.findTypeMapper().getJavaType())
                                         .parse(
                                                 l.get(cnt.getAndIncrement())
                                         );
 
                                 //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
                                 @SuppressWarnings("unchecked")
-                                final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
+                                final Object javaValue = ((TypeMapper<Object, Object>) column.findTypeMapper()).toJavaType(val);
                                 set(builder, column, javaValue);
                             });
                 }
@@ -452,11 +454,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = table.streamOfColumns()
+        final List<Object> values = table.columns()
                 .map(c -> toDatabaseType(c, entity))
                 .collect(Collectors.toList());
 
-        table.streamOfPrimaryKeyColumns().map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
+        table.primaryKeyColumns().map(pkc -> pkc.findColumn()).forEachOrdered(c -> values.add(get(entity, c)));
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
@@ -468,8 +470,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append("delete from ").append(sqlTableReference());
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
-        final List<Object> values = table.streamOfPrimaryKeyColumns()
-                .map(pk -> toDatabaseType(pk.getColumn(), entity))
+        final List<Object> values = table.primaryKeyColumns()
+                .map(pk -> toDatabaseType(pk.findColumn(), entity))
                 .collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);

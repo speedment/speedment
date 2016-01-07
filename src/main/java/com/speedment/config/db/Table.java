@@ -4,12 +4,12 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName, HasAlias {
+public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName, HasAlias, HasMainInterface {
     
     final String
         COLUMNS = "columns",
@@ -80,4 +80,9 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
     BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor();
     
     BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor();
+
+     @Override
+    default Class<Table> mainInterface() {
+        return Table.class;
+    }
 }

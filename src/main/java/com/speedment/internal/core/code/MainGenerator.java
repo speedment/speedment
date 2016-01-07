@@ -33,6 +33,7 @@ import com.speedment.event.AfterGenerate;
 import com.speedment.event.BeforeGenerate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 import com.speedment.internal.util.Statistics;
 import java.io.IOException;
@@ -81,7 +82,7 @@ public final class MainGenerator implements Consumer<Project> {
         translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
-        project.traverseOver(Table.class)
+        traverseOver(project, Table.class)
             .filter(Table::isEnabled)
             .forEach(table -> {
                 translators.add(new EntityTranslator(speedment, gen, table));
@@ -94,8 +95,7 @@ public final class MainGenerator implements Consumer<Project> {
             .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, fileCounter));
 
-        final List<Table> tables = project
-            .traverseOver(Table.class)
+        final List<Table> tables = traverseOver(project, Table.class)
             .filter(Table::isEnabled)
             .collect(toList());
 

@@ -7,8 +7,9 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasOrdinalPosition;
 
 /**
  *
@@ -16,7 +17,7 @@ import com.speedment.exception.SpeedmentException;
  */
 @Api(version = "2.3")
 public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, 
-    HasAlias, HasOrdinalPosition {
+    HasAlias, HasOrdinalPosition, HasMainInterface {
 
     final String 
         NULLABLE       = "nullable",
@@ -95,5 +96,10 @@ public interface Column extends Document, HasParent<Table>, HasEnabled, HasName,
         } catch (ClassNotFoundException ex) {
             throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
         }
+    }
+
+    @Override
+    default Class<Column> mainInterface() {
+        return Column.class;
     }
 }

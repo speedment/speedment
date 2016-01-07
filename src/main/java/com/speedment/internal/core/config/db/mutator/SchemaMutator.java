@@ -1,6 +1,5 @@
-package com.speedment.config.db;
+package com.speedment.internal.core.config.db.mutator;
 
-import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
@@ -8,15 +7,13 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author Per Minborg
  */
-@Api(version = "2.3")
-public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, HasAlias, HasMainInterface {
+public interface SchemaMutator extends Document, HasParent<DbmsMutator>, HasEnabled, HasName, HasAlias, HasMainInterface {
     
     final String
         DEFAULT_SCHEMA = "defaultSchema",
@@ -32,18 +29,15 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
         return getAsBoolean(DEFAULT_SCHEMA).orElse(false);
     }
     
-    default Stream<Table> tables() {
-        return children(TABLES, tableConstructor());
+    default Stream<TableMutator> tables() {
+        return children(TABLES, this::newTable);
     }
     
-    default Table newTable() {
-        return tableConstructor().apply(this, newDocument(this, TABLES));
-    }
+    TableMutator newTable(Map<String, Object> data);
     
-    BiFunction<Schema, Map<String, Object>, Table> tableConstructor();
-
-    @Override
-    default Class<Schema> mainInterface() {
-        return Schema.class;
-    }
+     @Override
+    default Class<SchemaMutator> mainInterface() {
+        return SchemaMutator.class;
+    }    
+    
 }

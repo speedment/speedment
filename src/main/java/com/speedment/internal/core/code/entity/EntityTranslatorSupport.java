@@ -54,9 +54,10 @@ import com.speedment.util.Pluralis;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguage;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -74,11 +75,11 @@ public final class EntityTranslatorSupport {
 
     public static Type getEntityType(Table table) {
         requireNonNull(table);
-        final Project project = table.ancestor(Project.class).get();
+        final Project project = ancestor(table, Project.class).get();
 
         return Type.of(
             project.getPackageName().toLowerCase() + DOT
-            + table.getRelativeName(Project.class, JavaLanguage::javaPacketName) + DOT
+            + relativeName(table, Project.class, JavaLanguage::javaPacketName) + DOT
             + javaTypeName(table.getName())
         );
     }
@@ -99,13 +100,13 @@ public final class EntityTranslatorSupport {
         requireNonNull(column);
         requireNonNull(entityType);
 
-        final Class<?> mapping = column.getTypeMapper().getJavaType();
+        final Class<?> mapping = column.findTypeMapper().getJavaType();
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(fkc.getForeignTable());
+                final Type fkType = getEntityType(fkc.findForeignTable());
 
                 file.add(Import.of(fkType));
 
@@ -206,11 +207,10 @@ public final class EntityTranslatorSupport {
     public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {
         requireNonNull(table);
         requireNonNull(column);
-        return table.streamOfForeignKeys()
+        return table.foreignKeys()
             .filter(ForeignKey::isEnabled)
-            .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
-            .filter(ForeignKeyColumn::isEnabled)
-            .filter(fkc -> fkc.getColumn().equals(column))
+            .flatMap(ForeignKey::foreignKeyColumns)
+            .filter(fkc -> fkc.findColumn().equals(column))
             .findFirst();
     }
 

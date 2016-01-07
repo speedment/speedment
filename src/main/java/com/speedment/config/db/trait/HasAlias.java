@@ -2,6 +2,7 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import java.util.Optional;
 
 /**
  *
@@ -12,7 +13,12 @@ public interface HasAlias extends Document, HasName {
     
     final String ALIAS = "alias";
     
-    default String getAlias() {
-        return (String) get(ALIAS).orElse(getName());
+    default Optional<String> getAlias() {
+        return getAsString(ALIAS);
     }
+    
+    default String getJavaName() {
+        return getAlias().orElse(getName());
+    }
+    
 }

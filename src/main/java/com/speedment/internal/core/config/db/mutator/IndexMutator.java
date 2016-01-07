@@ -1,0 +1,44 @@
+package com.speedment.internal.core.config.db.mutator;
+
+import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.config.db.trait.HasParent;
+import java.util.Map;
+import java.util.stream.Stream;
+
+/**
+ *
+ * @author Per Minborg
+ */
+public interface IndexMutator extends DocumentMutator, HasEnabled, HasName, HasMainInterface {
+
+    final String 
+        UNIQUE       = "unique",
+        INDEX_COLUMN = "indexColumns";
+    
+    /**
+     * Returns whether or not this index is an {@code UNIQUE} index.
+     * <p>
+     * This property is editable in the GUI through reflection.
+     *
+     * @return {@code true} if this index is {@code UNIQUE}
+     */    
+    default boolean isUnique() {
+        return getAsBoolean(UNIQUE).orElse(false);
+    }
+    
+    default Stream<IndexColumnMutator> indexColumns() {
+        return children(INDEX_COLUMN, this::newIndexColumn);
+    }
+    
+    IndexColumnMutator newIndexColumn(Map<String, Object> data);
+    
+    
+     @Override
+    default Class<IndexMutator> mainInterface() {
+        return IndexMutator.class;
+    }    
+    
+}

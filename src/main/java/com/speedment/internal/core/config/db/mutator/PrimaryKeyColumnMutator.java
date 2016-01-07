@@ -1,6 +1,5 @@
-package com.speedment.config.db;
+package com.speedment.internal.core.config.db.mutator;
 
-import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasColumn;
 import com.speedment.config.db.trait.HasEnabled;
@@ -11,15 +10,14 @@ import com.speedment.config.db.trait.HasParent;
 
 /**
  *
- * @author Emil Forslund
+ * @author Per Minborg
  */
-@Api(version = "2.3")
-public interface PrimaryKeyColumn extends Document, HasParent<Table>, HasName, 
+public interface PrimaryKeyColumnMutator extends Document, HasParent<TableMutator>, HasName, 
     HasEnabled, HasOrdinalPosition, HasColumn, HasMainInterface {
 
     @Override
-    default Class<PrimaryKeyColumn> mainInterface() {
-        return PrimaryKeyColumn.class;
+    default Class<PrimaryKeyColumnMutator> mainInterface() {
+        return PrimaryKeyColumnMutator.class;
     }    
 
 }
