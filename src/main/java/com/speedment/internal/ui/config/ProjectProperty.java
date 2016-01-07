@@ -8,10 +8,14 @@ import static com.speedment.config.db.Project.PACKAGE_NAME;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.function.BiFunction;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.util.StringConverter;
 
 /**
  *
@@ -33,12 +37,31 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
 
     public final ObjectProperty<Path> configPathProperty() {
-        Bindings.bindBidirectional(stringPropertyOf(CONFIG_PATH), otherProperty, format);
-        return objectPropertyOf(CONFIG_PATH, String.class).;
+        final ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
+        
+        Bindings.bindBidirectional(
+            stringPropertyOf(CONFIG_PATH), 
+            pathProperty, 
+            PATH_CONVERTER
+        );
+        
+        return pathProperty;
     }
 
     @Override
-    public Dbms newDbms(Map<String, Object> data) {
-        return new DbmsProperty(this, data);
+    public BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor() {
+        return DbmsProperty::new;
     }
+    
+    private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
+        @Override
+        public String toString(Path p) {
+            return p.toString();
+        }
+
+        @Override
+        public Path fromString(String string) {
+            return Paths.get(string);
+        }
+    };
 }

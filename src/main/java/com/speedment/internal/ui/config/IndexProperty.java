@@ -6,6 +6,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.function.BiFunction;
 import javafx.beans.property.BooleanProperty;
 
 /**
@@ -24,7 +25,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
 
     @Override
-    public IndexColumn newIndexColumn(Map<String, Object> data) {
-        return new IndexColumnProperty(this, data);
+    public BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor() {
+        return IndexColumnProperty::new;
     }
 }

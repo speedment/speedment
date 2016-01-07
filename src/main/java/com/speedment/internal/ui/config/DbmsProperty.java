@@ -1,7 +1,6 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.db.Dbms;
-import static com.speedment.config.db.Dbms.DBMS_TYPE;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
@@ -10,6 +9,7 @@ import com.speedment.config.db.Schema;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.function.BiFunction;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 
@@ -24,13 +24,8 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
         super(parent, data);
     }
     
-    @Override
-    public Schema newSchema(Map<String, Object> data) {
-        return new SchemaProperty(this, data);
-    }
-    
     public final StringProperty typeNameProperty() {
-        return stringPropertyOf(DBMS_TYPE);
+        return stringPropertyOf(TYPE_NAME);
     }
 
     public final StringProperty ipAddressProperty() {
@@ -43,5 +38,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
 
     public final StringProperty usernameProperty() {
         return stringPropertyOf(USERNAME);
+    }
+
+    @Override
+    public BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor() {
+        return SchemaProperty::new;
     }
 }

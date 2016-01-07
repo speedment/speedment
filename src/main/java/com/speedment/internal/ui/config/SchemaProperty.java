@@ -7,6 +7,7 @@ import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.function.BiFunction;
 import javafx.beans.property.BooleanProperty;
 
 /**
@@ -25,7 +26,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
 
     @Override
-    public Table newTable(Map<String, Object> data) {
-        return new TableProperty(this, data);
+    public BiFunction<Schema, Map<String, Object>, Table> tableConstructor() {
+        return TableProperty::new;
     }
 }

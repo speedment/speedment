@@ -6,6 +6,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -19,7 +20,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
 
     @Override
-    public ForeignKeyColumn newForeignKeyColumn(Map<String, Object> data) {
-        return new ForeignKeyColumnProperty(this, data);
+    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumn> foreignKeyColumnConstructor() {
+        return ForeignKeyColumnProperty::new;
     }
 }
