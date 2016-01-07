@@ -2,13 +2,14 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
-import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -25,19 +26,19 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
         PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
     
     default Stream<Column> columns() {
-        return children(COLUMNS, this::newColumn);
+        return children(COLUMNS, columnConstructor());
     }
     
     default Stream<Index> indexes() {
-        return children(INDEXES, this::newIndex);
+        return children(INDEXES, indexConstructor());
     }
     
     default Stream<ForeignKey> foreignKeys() {
-        return children(FOREIGN_KEYS, this::newForeignKey);
+        return children(FOREIGN_KEYS, foreignKeyConstructor());
     }
     
     default Stream<PrimaryKeyColumn> primaryKeyColumns() {
-        return children(PRIMARY_KEY_COLUMNS, this::newPrimaryKeyColumn);
+        return children(PRIMARY_KEY_COLUMNS, primaryKeyColumnConstructor());
     }
     
     default Optional<Column> findColumn(String name) {
@@ -56,8 +57,27 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
     }
     
-    Column newColumn(Map<String, Object> data);
-    Index newIndex(Map<String, Object> data);
-    ForeignKey newForeignKey(Map<String, Object> data);
-    PrimaryKeyColumn newPrimaryKeyColumn(Map<String, Object> data);
+    default Column newColumn() {
+        return columnConstructor().apply(this, newDocument(this, COLUMNS));
+    }
+    
+    default Index newIndex() {
+        return indexConstructor().apply(this, newDocument(this, INDEXES));
+    }
+    
+    default ForeignKey newForeignKey() {
+        return foreignKeyConstructor().apply(this, newDocument(this, FOREIGN_KEYS));
+    }
+    
+    default PrimaryKeyColumn newPrimaryKeyColumn() {
+        return primaryKeyColumnConstructor().apply(this, newDocument(this, PRIMARY_KEY_COLUMNS));
+    }
+    
+    BiFunction<Table, Map<String, Object>, Column> columnConstructor();
+    
+    BiFunction<Table, Map<String, Object>, Index> indexConstructor();
+    
+    BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor();
+    
+    BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor();
 }

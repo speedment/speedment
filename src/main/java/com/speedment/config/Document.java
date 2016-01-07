@@ -3,13 +3,15 @@ package com.speedment.config;
 import com.speedment.annotation.Api;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
-import java.util.function.Function;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -41,14 +43,14 @@ public interface Document {
         return MapStream.of(getData());
     }
     
-    default <T> Stream<T> children(String key, Function<Map<String, Object>, T> instantiator) {
+    default <P extends Document, T> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> instantiator) {
         final List<Map<String, Object>> list = 
             (List<Map<String, Object>>) get(key).orElse(null);
         
         if (list == null) {
             return Stream.empty();
         } else {
-            return list.stream().map(instantiator);
+            return list.stream().map(map -> instantiator.apply((P) this, map));
         }
     }
     
@@ -62,4 +64,19 @@ public interface Document {
         
         return stream.build();
     }
+    
+//    default Map<String, Object> newSubDocument(String key) {
+//        final List<Map<String, Object>> children = get(key)
+//            .map(list -> (List<Map<String, Object>>) list)
+//            .orElseGet(() -> {
+//            final List<Map<String, Object>> list = new LinkedList<>();
+//            put(key, list);
+//            return list;
+//        });
+//        
+//        final Map<String, Object> child = new ConcurrentHashMap<>();
+//        children.add(child);
+//        
+//        return child;
+//    }
 }

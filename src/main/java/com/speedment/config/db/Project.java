@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -54,8 +55,12 @@ public interface Project extends Document, HasEnabled, HasName {
     }
 
     default Stream<Dbms> dbms() {
-        return children(DBMSES, this::newDbms);
+        return children(DBMSES, dbmsConstructor());
     }
     
-    Dbms newDbms(Map<String, Object> data);
+    default Dbms newDbms() {
+        return dbmsConstructor().apply(this, newDocument(this, DBMSES));
+    }
+    
+    BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor();
 }

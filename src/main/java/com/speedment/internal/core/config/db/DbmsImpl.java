@@ -20,4 +20,9 @@ public final class DbmsImpl extends AbstractChildDocument<Project> implements Db
     public Schema newSchema(Map<String, Object> data) {
         return new SchemaImpl(this, data);
     }
+
+    @Override
+    public Schema newSchema() {
+        return newSchema(newEmptyMap(SCHEMAS));
+    }
 }

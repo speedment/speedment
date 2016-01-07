@@ -6,6 +6,7 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -16,8 +17,8 @@ import java.util.stream.Stream;
 public interface Index extends Document, HasParent<Table>, HasEnabled, HasName {
 
     final String 
-        UNIQUE       = "unique",
-        INDEX_COLUMN = "indexColumns";
+        UNIQUE        = "unique",
+        INDEX_COLUMNS = "indexColumns";
     
     /**
      * Returns whether or not this index is an {@code UNIQUE} index.
@@ -31,8 +32,12 @@ public interface Index extends Document, HasParent<Table>, HasEnabled, HasName {
     }
     
     default Stream<IndexColumn> indexColumns() {
-        return children(INDEX_COLUMN, this::newIndexColumn);
+        return children(INDEX_COLUMNS, indexColumnConstructor());
     }
     
-    IndexColumn newIndexColumn(Map<String, Object> data);
+    default IndexColumn newIndexColumn() {
+        return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
+    }
+    
+    BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor();
 }

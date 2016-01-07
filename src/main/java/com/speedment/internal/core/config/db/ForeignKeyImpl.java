@@ -20,4 +20,9 @@ public final class ForeignKeyImpl extends AbstractChildDocument<Table> implement
     public ForeignKeyColumn newForeignKeyColumn(Map<String, Object> data) {
         return new ForeignKeyColumnImpl(this, data);
     }
+
+    @Override
+    public ForeignKeyColumn newForeignKeyColumn() {
+        return newForeignKeyColumn(newEmptyMap(FOREIGN_KEY_COLUMNS));
+    }
 }

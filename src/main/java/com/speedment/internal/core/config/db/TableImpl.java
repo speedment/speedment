@@ -8,34 +8,55 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class TableImpl extends AbstractChildDocument<Schema> implements Table {
+public class TableImpl extends AbstractChildDocument<Schema> implements Table {
 
     public TableImpl(Schema parent, Map<String, Object> data) {
         super(parent, data);
     }
 
     @Override
-    public Column newColumn(Map<String, Object> data) {
-        return new ColumnImpl(this, data);
+    public final Column newColumn() {
+        return columnConstructor().apply(this, newEmptyMap(this, COLUMNS));
     }
 
     @Override
-    public Index newIndex(Map<String, Object> data) {
-        return new IndexImpl(this, data);
+    public final Index newIndex() {
+        return indexConstructor().apply(this, newEmptyMap(this, INDEXES));
     }
 
     @Override
-    public ForeignKey newForeignKey(Map<String, Object> data) {
-        return new ForeignKeyImpl(this, data);
+    public final ForeignKey newForeignKey() {
+        return foreignKeyConstructor().apply(this, newEmptyMap(this, FOREIGN_KEYS));
     }
 
     @Override
-    public PrimaryKeyColumn newPrimaryKeyColumn(Map<String, Object> data) {
-        return new PrimaryKeyColumnImpl(this, data);
+    public final PrimaryKeyColumn newPrimaryKeyColumn() {
+        return primaryKeyColumnConstructor().apply(this, newEmptyMap(this, PRIMARY_KEY_COLUMNS));
+    }
+
+    @Override
+    public BiFunction<Table, Map<String, Object>, Column> columnConstructor() {
+        return ColumnImpl::new;
+    }
+
+    @Override
+    public BiFunction<Table, Map<String, Object>, Index> indexConstructor() {
+        return IndexImpl::new;
+    }
+
+    @Override
+    public BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor() {
+        return ForeignKeyImpl::new;
+    }
+
+    @Override
+    public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
+        return PrimaryKeyColumnImpl::new;
     }
 }

@@ -20,4 +20,9 @@ public final class IndexImpl extends AbstractChildDocument<Table> implements Ind
     public IndexColumn newIndexColumn(Map<String, Object> data) {
         return new IndexColumnImpl(this, data);
     }
+
+    @Override
+    public IndexColumn newIndexColumn() {
+        return newIndexColumn(newEmptyMap(INDEX_COLUMNS));
+    }
 }

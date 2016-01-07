@@ -7,6 +7,7 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -31,8 +32,12 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
     }
     
     default Stream<Table> tables() {
-        return children(TABLES, this::newTable);
+        return children(TABLES, tableConstructor());
     }
     
-    Table newTable(Map<String, Object> data);
+    default Table newTable() {
+        return tableConstructor().apply(this, newDocument(this, TABLES));
+    }
+    
+    BiFunction<Schema, Map<String, Object>, Table> tableConstructor();
 }

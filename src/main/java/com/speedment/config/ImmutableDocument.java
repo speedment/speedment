@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -54,7 +54,7 @@ public class ImmutableDocument extends BaseDocument {
     }
     
     @Override
-    public final <T> Stream<T> children(String key, Function<Map<String, Object>, T> instantiator) {
+    public final <P extends Document, T> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
         return children.computeIfAbsent(key, k -> {
             final List<Map<String, Object>> list = 
                 (List<Map<String, Object>>) get(k).orElse(null);
@@ -64,7 +64,7 @@ public class ImmutableDocument extends BaseDocument {
             } else {
                 return list.stream()
                     .map(Collections::unmodifiableMap)
-                    .map(instantiator)
+                    .map(data -> constructor.apply((P) this, data))
                     .map(Document.class::cast)
                     .collect(toList());
             }

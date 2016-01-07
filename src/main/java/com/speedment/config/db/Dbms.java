@@ -8,6 +8,7 @@ import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -60,8 +61,12 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName 
     }
     
     default Stream<Schema> schemas() {
-        return children(SCHEMAS, this::newSchema);
+        return children(SCHEMAS, schemaConstructor());
     }
     
-    Schema newSchema(Map<String, Object> data);
+    default Schema newSchema() {
+        return schemaConstructor().apply(this, newDocument(this, SCHEMAS));
+    }
+    
+    BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor();
 }

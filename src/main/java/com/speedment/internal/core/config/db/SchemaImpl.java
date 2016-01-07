@@ -21,4 +21,9 @@ public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Sch
     public Table newTable(Map<String, Object> data) {
         return new TableImpl(this, data);
     }
+
+    @Override
+    public Table newTable() {
+        return newTable(newEmptyMap(TABLES));
+    }
 }

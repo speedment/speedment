@@ -37,6 +37,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

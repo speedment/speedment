@@ -7,6 +7,7 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.exception.SpeedmentException;
 
 /**
@@ -14,7 +15,8 @@ import com.speedment.exception.SpeedmentException;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, HasAlias {
+public interface Column extends Document, HasParent<Table>, HasEnabled, HasName, 
+    HasAlias, HasOrdinalPosition {
 
     final String 
         NULLABLE       = "nullable",

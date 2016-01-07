@@ -32,4 +32,9 @@ public final class ProjectImpl extends BaseDocument implements Project {
     public Dbms newDbms(Map<String, Object> data) {
         return new DbmsImpl(this, data);
     }
+
+    @Override
+    public Dbms newDbms() {
+        return newDbms(newEmptyMap(DBMSES));
+    }
 }
