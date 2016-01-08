@@ -24,7 +24,7 @@ public interface ForeignKey extends Document, HasParent<Table>, HasEnabled, HasN
         return children(FOREIGN_KEY_COLUMNS, foreignKeyColumnConstructor());
     }
     
-    default ForeignKeyColumn newForeignKeyColumn() {
+    default ForeignKeyColumn addNewForeignKeyColumn() {
         return foreignKeyColumnConstructor().apply(this, newDocument(this, FOREIGN_KEY_COLUMNS));
     }
     

@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 /**
  * Created by fdirlikl on 11/13/2015.

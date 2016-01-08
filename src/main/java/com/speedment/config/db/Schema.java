@@ -37,7 +37,7 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
         return children(TABLES, tableConstructor());
     }
     
-    default Table newTable() {
+    default Table addNewTable() {
         return tableConstructor().apply(this, newDocument(this, TABLES));
     }
     

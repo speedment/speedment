@@ -68,6 +68,36 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -389,7 +419,7 @@ public final class UISession {
             dbms.clear();
             
             final DbmsHandler dh = dbms.getType().makeDbmsHandler(speedment, dbms);
-            dh.schemas(s -> schemaName.equalsIgnoreCase(s.getName()))
+            dh.readSchemaMetadata(s -> schemaName.equalsIgnoreCase(s.getName()))
                 .map(schema -> new SchemaProperty(speedment, dbms, schema))
                 .forEachOrdered(dbms::add);
             

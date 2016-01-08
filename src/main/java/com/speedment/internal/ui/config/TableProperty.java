@@ -55,6 +55,7 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
         return PrimaryKeyColumnProperty::new;
     }
+<<<<<<< Updated upstream
     
     @Override
     protected final Document createDocument(String key, Map<String, Object> data) {
@@ -65,5 +66,26 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
             case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
             default                  : return super.createDocument(key, data);
         }
+=======
+
+    @Override
+    public Column addNewColumn() {
+        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
+    }
+
+    @Override
+    public Index addNewIndex() {
+        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
+    }
+
+    @Override
+    public ForeignKey addNewForeignKey() {
+        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
+    }
+
+    @Override
+    public PrimaryKeyColumn addNewPrimaryKeyColumn() {
+        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
+>>>>>>> Stashed changes
     }
 }

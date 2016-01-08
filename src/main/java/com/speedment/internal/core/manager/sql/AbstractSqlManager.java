@@ -60,7 +60,197 @@ import java.util.Optional;
 import com.speedment.internal.util.Lazy;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -103,21 +293,21 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
     
     public String sqlColumnList() {
-        if (getTable().isImmutable()) {
+//        if (getTable().isImmutable()) {
             return sqlColumnList.getOrCompute(columnListSupplier);
-        } else {
-            return columnListSupplier.get();
-        }
+//        } else {
+//            return columnListSupplier.get();
+//        }
     }
 
     private final Supplier<String> columnListWithQuestionMarkSupplier = () -> sqlColumnList(c -> "?");
     
     public String sqlColumnListWithQuestionMarks() {
-        if (getTable().isImmutable()) {
+//        if (getTable().isImmutable()) {
             return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
-        } else {
-            return columnListWithQuestionMarkSupplier.get();
-        }
+//        } else {
+//            return columnListWithQuestionMarkSupplier.get();
+//        }
     }
 
     private String sqlColumnList(Function<String, String> postMapper) {
@@ -201,7 +391,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     protected DbmsType getDbmsType() {
-        return speedment.getDbmsHandlerComponent().findByName(getDbms().getTypeName()).get();
+        return dbmsTypeOf(speedment, getDbms());
     }
 
     private String quoteField(final String s) {

@@ -30,6 +30,7 @@ import java.util.Optional;
 import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

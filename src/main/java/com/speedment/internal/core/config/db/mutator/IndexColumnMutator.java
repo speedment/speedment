@@ -1,7 +1,6 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.IndexColumn;
-import com.speedment.internal.core.config.db.mutator.impl.IndexColumnMutatorImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasOrderTypeMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMutator;
@@ -10,11 +9,11 @@ import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMut
  *
  * @author Per Minborg
  */
-public interface IndexColumnMutator extends DocumentMutator, HasNameMutator,
+public final class IndexColumnMutator extends DocumentMutatorImpl implements DocumentMutator, HasNameMutator,
         HasOrdinalPositionMutator, HasOrderTypeMutator {
 
-    static IndexColumnMutator of(IndexColumn indexColumn) {
-        return new IndexColumnMutatorImpl(indexColumn);
+    IndexColumnMutator(IndexColumn indexColumn) {
+        super(indexColumn);
     }
 
 }

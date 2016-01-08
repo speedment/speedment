@@ -1,70 +1,36 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.*;
-import com.speedment.annotation.Api;
-import com.speedment.config.Document;
-import com.speedment.config.db.trait.HasEnabled;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasName;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
+import static com.speedment.config.db.Project.CONFIG_PATH;
+import static com.speedment.config.db.Project.PACKAGE_LOCATION;
+import static com.speedment.config.db.Project.PACKAGE_NAME;
+import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
+import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
 
 /**
  *
  * @author Per Minborg
  */
-public interface ProjectMutator extends Document, HasEnabled, HasName, HasMainInterface {
-    
-    final String 
-        PACKAGE_NAME     = "packageName",
-        PACKAGE_LOCATION = "packageLocation",
-        CONFIG_PATH      = "configPath",
-        DBMSES           = "dbmses";
-    
+public final class ProjectMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator {
 
-    /**
-     * Returns the name of the generated package where this project will be
-     * located.
-     *
-     * @return the name of the generated package
-     */
-    default String getPackageName() {
-        return getAsString(PACKAGE_NAME).orElse("com.speedment.example");
-    }
-
-    /**
-     * Returns where the code generated for this project will be located.
-     *
-     * @return the package location
-     */
-    default String getPackageLocation() {
-        return getAsString(PACKAGE_LOCATION).orElse("src/main/java/");
-    }
-
-    /**
-     * Returns the path to the groovy configuration file for this project. The
-     * path may not be set at the time of the calling and the result may
-     * therefore be {@code empty}.
-     *
-     * @return the path to the groovy configuration file
-     */
-    default Optional<Path> getConfigPath() {
-        return getAsString(CONFIG_PATH).map(Paths::get);
-    }
-
-    default Stream<DbmsMutator> dbmses() {
-
-        return children(DBMSES, this::newDbms);
+    ProjectMutator(Project project) {
+        super(project);
     }
     
-    DbmsMutator newDbms(Map<String, Object> data);
+    public void setPackageName(String packageName) {
+        put(PACKAGE_NAME, packageName);
+    }
+
+    public void setPackageLocation(String packageLocation) {
+        put(PACKAGE_LOCATION, packageLocation);
+    }
+
+    public void setConfigPath(String configPath) {
+        put(CONFIG_PATH, configPath);
+    }
     
-     @Override
-    default Class<ProjectMutator> mainInterface() {
-        return ProjectMutator.class;
-    }    
-    
+    public void add(Dbms dbms) {
+        
+    }
+
 }

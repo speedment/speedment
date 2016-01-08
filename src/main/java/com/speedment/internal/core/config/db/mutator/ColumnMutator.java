@@ -2,7 +2,7 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.*;
 import static com.speedment.config.db.Column.*;
-import com.speedment.internal.core.config.db.mutator.impl.ColumnMutatorImpl;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.core.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
@@ -12,26 +12,26 @@ import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMut
  *
  * @author Per Minborg
  */
-public interface ColumnMutator extends DocumentMutator, HasEnabledMutator, HasNameMutator, HasAliasMutator, HasOrdinalPositionMutator {
+public final class ColumnMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator, HasAliasMutator, HasOrdinalPositionMutator {
 
-    default void setNullable(Boolean nullable) {
+    ColumnMutator(Column column) {
+        super(column);
+    }
+
+    public void setNullable(Boolean nullable) {
         put(NULLABLE, nullable);
     }
 
-    default void setAutoIncrement(Boolean autoIncrement) {
+    public void setAutoIncrement(Boolean autoIncrement) {
         put(AUTO_INCREMENT, autoIncrement);
     }
 
-    default void setTypeMapper(String typeMapper) {
-        put(TYPE_MAPPER, typeMapper);
+    public void setTypeMapper(TypeMapper typeMapper) {
+        put(TYPE_MAPPER, typeMapper.getClass().getName());
     }
 
-    default void setDatabaseType(String databaseType) {
-        put(DATABASE_TYPE, databaseType);
-    }
-
-    static ColumnMutator of(Column column) {
-        return new ColumnMutatorImpl(column);
+    public void setDatabaseType(Class<?> databaseType) {
+        put(DATABASE_TYPE, databaseType.getName());
     }
 
 }

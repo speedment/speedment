@@ -58,19 +58,19 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
     }
     
-    default Column newColumn() {
+    default Column addNewColumn() {
         return columnConstructor().apply(this, newDocument(this, COLUMNS));
     }
     
-    default Index newIndex() {
+    default Index addNewIndex() {
         return indexConstructor().apply(this, newDocument(this, INDEXES));
     }
     
-    default ForeignKey newForeignKey() {
+    default ForeignKey addNewForeignKey() {
         return foreignKeyConstructor().apply(this, newDocument(this, FOREIGN_KEYS));
     }
     
-    default PrimaryKeyColumn newPrimaryKeyColumn() {
+    default PrimaryKeyColumn addNewPrimaryKeyColumn() {
         return primaryKeyColumnConstructor().apply(this, newDocument(this, PRIMARY_KEY_COLUMNS));
     }
     

@@ -66,7 +66,7 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName,
         return children(SCHEMAS, schemaConstructor());
     }
 
-    default Schema newSchema() {
+    default Schema addNewSchema() {
         return schemaConstructor().apply(this, newDocument(this, SCHEMAS));
     }
     

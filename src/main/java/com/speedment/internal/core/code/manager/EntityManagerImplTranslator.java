@@ -46,6 +46,7 @@ import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -156,8 +157,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final AtomicInteger position = new AtomicInteger(1);
         columns().forEachOrdered(c -> {
 
-            final DbmsType dbmsType = speedment.getDbmsHandlerComponent().findByName(dbms().getTypeName()).get();
-            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbmsType, c.findTypeMapper().getDatabaseType());
+            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbmsTypeOf(speedment, dbms()), c.findTypeMapper().getDatabaseType());
             final StringBuilder sb = new StringBuilder()
                 .append("entity.set")
                 .append(typeName(c))

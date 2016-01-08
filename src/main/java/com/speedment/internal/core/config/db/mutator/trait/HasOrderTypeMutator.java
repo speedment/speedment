@@ -10,7 +10,7 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
  */
 public interface HasOrderTypeMutator extends DocumentMutator {
     
-    default void getOrderType(OrderType orderType) {
+    default void setOrderType(OrderType orderType) {
          put(HasOrderType.ORDER_TYPE, orderType);
     }
 }

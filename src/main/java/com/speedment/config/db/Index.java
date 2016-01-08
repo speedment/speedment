@@ -37,7 +37,7 @@ public interface Index extends Document, HasParent<Table>, HasEnabled, HasName, 
         return children(INDEX_COLUMNS, indexColumnConstructor());
     }
     
-    default IndexColumn newIndexColumn() {
+    default IndexColumn addNewIndexColumn() {
         return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
     }
     

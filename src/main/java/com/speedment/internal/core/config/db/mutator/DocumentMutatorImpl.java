@@ -1,6 +1,8 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.Document;
+import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -11,7 +13,7 @@ public class DocumentMutatorImpl implements DocumentMutator {
     private final Document document;
 
     public DocumentMutatorImpl(Document document) {
-        this.document = document;
+        this.document = requireNonNull(document);
     }
 
     @Override

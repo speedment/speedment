@@ -19,14 +19,17 @@ package com.speedment.internal.util.document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.Cast;
+import com.speedment.internal.util.Trees;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import java.util.LinkedList;
+import static java.lang.Math.E;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
@@ -39,6 +42,12 @@ import java.util.stream.Stream;
 public final class DocumentUtil {
 
     @SuppressWarnings("unchecked")
+
+    public static Stream<Document> traverseOver(Document document) {
+        requireNonNull(document);
+        return (Stream<Document>)Trees.traverse(document, Document::children, Trees.TraversalOrder.DEPTH_FIRST_PRE);
+    }
+    
     public static <E extends Document> Optional<E> ancestor(Document document, final Class<E> clazz) {
         requireNonNulls(document, clazz);
         return document.ancestors()
@@ -62,7 +71,7 @@ public final class DocumentUtil {
         final List<Map<String, Object>> children = document.get(key)
             .map(list -> (List<Map<String, Object>>) list)
             .orElseGet(() -> {
-            final List<Map<String, Object>> list = new LinkedList<>();
+            final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
             document.put(key, list);
             return list;
         });

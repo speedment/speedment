@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util.document;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
@@ -26,6 +27,8 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.stream.Stream;
 
@@ -35,6 +38,11 @@ import java.util.stream.Stream;
  */
 public final class DocumentDbUtil {
 
+    public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
+        return speedment.getDbmsHandlerComponent().findByName(dbms.getTypeName())
+                .orElseThrow(() -> new SpeedmentException("Unable to find the database type "+dbms.getTypeName()));
+    }
+    
     public static <T> Stream<T> traverseOver(Project project, Class<T> clazz) {
         if (Dbms.class.isAssignableFrom(clazz)) {
             return project.dbms().map(clazz::cast);

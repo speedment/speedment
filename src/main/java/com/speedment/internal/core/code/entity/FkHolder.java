@@ -28,6 +28,7 @@ import com.speedment.config.db.Table;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

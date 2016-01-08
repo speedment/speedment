@@ -61,7 +61,7 @@ public interface Project extends Document, HasEnabled, HasName, HasMainInterface
         return children(DBMSES, dbmsConstructor());
     }
     
-    default Dbms newDbms() {
+    default Dbms addNewDbms() {
         return dbmsConstructor().apply(this, newDocument(this, DBMSES));
     }
     

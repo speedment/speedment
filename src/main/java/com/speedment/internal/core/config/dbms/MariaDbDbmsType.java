@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 /**
  *
