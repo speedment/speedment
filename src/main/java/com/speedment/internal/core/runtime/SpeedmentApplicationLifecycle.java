@@ -26,13 +26,19 @@ import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
+import com.speedment.config.Document;
+import com.speedment.config.DocumentTranscoder;
 import com.speedment.config.db.Schema;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import static com.speedment.internal.util.Beans.beanPropertyName;
 import com.speedment.internal.util.Trees;
+import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.traverseOver;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
@@ -48,6 +54,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import javafx.scene.Node;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -63,8 +70,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     private final static Logger LOGGER = LoggerManager.getLogger(SpeedmentApplicationLifecycle.class);
 
-    private final List<Tuple3<Class<? extends Node>, String, Consumer<? extends Node>>> withsNamed;
-    private final List<Tuple2<Class<? extends Node>, Consumer<Node>>> withsAll;
+    private final List<Tuple3<Class<? extends Document>, String, Consumer<? extends Document>>> withsNamed;
+    private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
 
     private ApplicationMetadata speedmentApplicationMetadata;
     private Path configPath;
@@ -90,13 +97,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param consumer the consumer to apply
      * @return this instance
      */
-    public <C extends Node & Enableable> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
-        requireNonNull(type);
-        requireNonNull(name);
-        requireNonNull(consumer);
-        @SuppressWarnings("unchecked")
-        final Consumer<Node> consumerCasted = (Consumer<Node>) requireNonNull(consumer);
-        withsNamed.add(Tuples.of(requireNonNull(type), requireNonNull(name), consumerCasted));
+    public <C extends Document & HasEnabled> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
+        requireNonNulls(type, name, consumer);
+        //@SuppressWarnings("unchecked")
+        //final Consumer<? extends Document> consumerCasted = (Consumer<? extends Document>)consumer;
+        withsNamed.add(Tuples.of(type, name, consumer));
         return self();
     }
 
@@ -110,12 +115,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param consumer the consumer to apply
      * @return this instance
      */
-    public <C extends Node & Enableable> T with(final Class<C> type, final Consumer<C> consumer) {
-        requireNonNull(type);
-        requireNonNull(consumer);
-        @SuppressWarnings("unchecked")
-        final Consumer<Node> consumerCasted = (Consumer<Node>) requireNonNull(consumer);
-        withsAll.add(Tuples.of(requireNonNull(type), consumerCasted));
+    public <C extends Document & HasEnabled> T with(final Class<C> type, final Consumer<C> consumer) {
+        requireNonNulls(type, consumer);       
+//        @SuppressWarnings("unchecked")
+//        final Consumer<? extends Document> consumerCasted = (Consumer<? extends Document>) requireNonNull(consumer);
+        withsAll.add(Tuples.of(type, consumer));
         return self();
     }
 
@@ -158,7 +162,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withUsername(final String username) {
         // username nullable
-        with(Dbms.class, d -> d.setUsername(username));
+        with(Dbms.class, d -> d.mutator().setUsername(username));
         return self();
     }
 
@@ -173,7 +177,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withUsername(final String dbmsName, final String username) {
         // username nullable
-        with(Dbms.class, dbmsName, d -> d.setUsername(username));
+        with(Dbms.class, dbmsName, d -> d.mutator().setUsername(username));
         return self();
     }
 
@@ -187,7 +191,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withIpAddress(final String ipAddress) {
         requireNonNull(ipAddress);
-        with(Dbms.class, d -> d.setIpAddress(ipAddress));
+        with(Dbms.class, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
 
@@ -202,7 +206,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withIpAddress(final String dbmsName, final String ipAddress) {
         requireNonNull(ipAddress);
-        with(Dbms.class, dbmsName, d -> d.setIpAddress(ipAddress));
+        with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
 
@@ -215,7 +219,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @return this instance
      */
     public T withPort(final int port) {
-        with(Dbms.class, d -> d.setPort(port));
+        with(Dbms.class, d -> d.mutator().setPort(port));
         return self();
     }
 
@@ -229,7 +233,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @return this instance
      */
     public T withPort(final String dbmsName, final int port) {
-        with(Dbms.class, dbmsName, d -> d.setPort(port));
+        with(Dbms.class, dbmsName, d -> d.mutator().setPort(port));
         return self();
     }
 
@@ -246,7 +250,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withSchema(final String schemaName) {
         requireNonNull(schemaName);
-        with(Schema.class, s -> s.setName(schemaName));
+        with(Schema.class, s -> s.mutator().setName(schemaName));
         return self();
     }
 
@@ -264,7 +268,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withSchema(final String oldSchemaName, final String schemaName) {
         requireNonNulls(oldSchemaName, schemaName);
-        with(Schema.class, oldSchemaName, s -> s.setName(schemaName));
+        with(Schema.class, oldSchemaName, s -> s.mutator().setName(schemaName));
         return self();
     }
 
@@ -325,16 +329,21 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Optional<Path> oPath = getConfigPath();
             final Project project;
             if (oPath.isPresent()) {
-                project = GroovyParser.projectFromGroovy(speedment, oPath.get());
+                project = DocumentTranscoder.load(oPath.get());
             } else {
-                project = GroovyParser.projectFromGroovy(speedment, getSpeedmentApplicationMetadata().getMetadata());
+                project = DocumentTranscoder.load(getSpeedmentApplicationMetadata().getMetadata());
             }
 
             // Apply overridden values from the system properties (if any)
-            final Function<Node, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
-            Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
-                    .forEach((Node node) -> {
+            //final Function<Document, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+            DocumentUtil.traverseOver(project)
+//            Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
+                    .forEach((Document node) -> {
                         final Class<?> clazz = node.getClass();
+                        node.stream().filterValue(o->List.class.isInstance(o))
+                                
+                        final String path = "speedment.project." + relativeName(node, Project.class) + "." + beanPropertyName(method);
+                        
                         MethodsParser.streamOfExternalSetters(clazz).forEach(method -> {
                             final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
                             Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
@@ -357,11 +366,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
             // Apply overidden item (if any) for all ConfigEntities of a given class
             withsAll.forEach(t2 -> {
-                final Class<? extends Node> clazz = t2.get0();
-                final Consumer<Node> consumer = t2.get1();
-                project.traverse()
+                final Class<? extends Document> clazz = t2.get0();
+                final Consumer<? extends Document> consumer = t2.get1();
+                traverseOver(project)
                         .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                        .map(Node.class::cast)
+                        .map(Document.class::cast)
                         .forEachOrdered(consumer::accept);
             });
 

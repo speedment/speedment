@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Emil Forslund
  */
 public final class ColumnImpl extends AbstractChildDocument<Table> implements Column {
-    
+        
     public ColumnImpl(Table parent, Map<String, Object> data) {
         super(parent, data);
     }

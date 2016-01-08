@@ -215,18 +215,20 @@ public abstract class DefaultJavaClassTranslator
                     ForeignKey.class
             ).forEachOrdered(ifType
                     -> aquireList(ifType)
-                    .forEach(actor -> table().stream()
+                    .forEach(actor -> table().children()
+                            .filter(HasEnabled.class::isInstance)
+                            .map(HasEnabled.class::cast)
                             .filter(ifType::isInstance)
                             .filter(HasEnabled::isEnabled)
                             .forEachOrdered(c -> actor.accept(i, c)))
             );
 
             if (Table.class.equals(getNode().mainInterface())) {
-                schema().stream()
+                schema().tables()
                         .filter(Table::isEnabled)
-                        .flatMap(t -> t.streamOfForeignKeys())
-                        .filter(fk -> fk.stream()
-                                .filter(ForeignKeyColumn::isEnabled)
+                        .flatMap(t -> t.foreignKeys())
+                        .filter(fk -> fk.foreignKeyColumns()
+                                //.filter(ForeignKeyColumn::isEnabled)
                                 .filter(fkc -> fkc.getForeignTableName().equals(getNode().getName()))
                                 .findFirst()
                                 .isPresent()

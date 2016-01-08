@@ -35,16 +35,7 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.internal.core.config.db.mutator.ColumnMutator;
-import static com.speedment.internal.core.config.db.mutator.DocumentMutator.*;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
-import com.speedment.internal.core.config.db.mutator.ForeignKeyMutator;
-import com.speedment.internal.core.config.db.mutator.IndexColumnMutator;
-import com.speedment.internal.core.config.db.mutator.IndexMutator;
-import com.speedment.internal.core.config.db.mutator.PrimaryKeyColumnMutator;
-import com.speedment.internal.core.config.db.mutator.SchemaMutator;
-import com.speedment.internal.core.config.db.mutator.TableMutator;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -60,11 +51,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
@@ -106,7 +94,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
         final String url = getUrl();
         final String user = unwrap(dbms.getUsername());
-        final String password = unwrap(dbms.getPassword());
+        final String password = unwrap(speedment.getPasswordComponent().get(dbms));
         try {
             //conn = DriverManager.getConnection(url, user, password);
             conn = speedment.getConnectionPoolComponent().getConnection(url, user, password);
@@ -204,8 +192,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     }
                     if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = dbms.addNewSchema();
-                        final SchemaMutator schemaMutator = of(schema);
-                        schemaMutator.setName(Optional.ofNullable(schemaName).orElse(catalogName));
+                        schema.mutator().setName(Optional.ofNullable(schemaName).orElse(catalogName));
 //                        schemaMutator.setSchemaName(schemaName);
 //                        schemaMutator.setCatalogName(catalogName);
                         schemas.add(schema);
@@ -218,8 +205,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     final String schemaName = catalogResultSet.getString(1);
                     if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final Schema schema = dbms.addNewSchema();
-                        final SchemaMutator schemaMutator = of(schema);
-                        schemaMutator.setName(schemaName);
+                        schema.mutator().setName(schemaName);
                         schemas.add(schema);
                     }
                 }
@@ -228,7 +214,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } catch (SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
-        return schemas.stream();
     }
 
     protected Stream<Table> tables(final Connection connection, Schema schema) {
@@ -255,9 +240,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         }
                     }
                     final Table table = schema.addNewTable();
-                    final TableMutator tableMutator = of(table);
                     final String tableName = rsTable.getString("TABLE_NAME");
-                    tableMutator.setName(tableName);
+                    table.mutator().setName(tableName);
                     tables.add(table);
                 }
             }
@@ -277,13 +261,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final SqlFunction<ResultSet, Column> mapper = rs -> {
 
             final Column column = table.addNewColumn();
-            final ColumnMutator columnMutator = of(column);
 
-            columnMutator.setName(rs.getString("COLUMN_NAME"));
-            columnMutator.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+            column.mutator().setName(rs.getString("COLUMN_NAME"));
+            column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
             boolean nullable = rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls;
-            columnMutator.setNullable(nullable);
+            column.mutator().setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
             final Class<?> mapping = typeMapping.get(classMappingString);
@@ -296,15 +279,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                                 "Found no identity type mapper for mapping '" + mapping.getName() + "'."
                         ));
 
-                columnMutator.setTypeMapper(typeMapper);
-                columnMutator.setDatabaseType(mapping);
+                column.mutator().setTypeMapper(typeMapper);
+                column.mutator().setDatabaseType(mapping);
 
             } else {
                 LOGGER.info("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
             }
 
             try {
-                columnMutator.setAutoIncrement(rs.getBoolean("IS_AUTOINCREMENT"));
+                column.mutator().setAutoIncrement(rs.getBoolean("IS_AUTOINCREMENT"));
             } catch (final SQLException sqle) {
                 LOGGER.info("Unable to determine IS_AUTOINCREMENT for table " + table.getName() + ", column " + column.getName());
             }
@@ -322,10 +305,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final SqlFunction<ResultSet, PrimaryKeyColumn> mapper = rs -> {
             final PrimaryKeyColumn primaryKeyColumn = table.addNewPrimaryKeyColumn();
-            final PrimaryKeyColumnMutator primaryKeyColumnMutator = of(primaryKeyColumn);
 
-            primaryKeyColumnMutator.setName(rs.getString("COLUMN_NAME"));
-            primaryKeyColumnMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
+            primaryKeyColumn.mutator().setName(rs.getString("COLUMN_NAME"));
+            primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
             return primaryKeyColumn;
         };
         return tableChilds(supplier, mapper);
@@ -345,24 +327,22 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final boolean exists = indexes.containsKey(indexName);
             final Index index = indexes.computeIfAbsent(indexName, n -> {
                 final Index newIndex = table.addNewIndex();
-                final IndexMutator newIndexMutator = of(newIndex);
-                newIndexMutator.setName(n);
-                newIndexMutator.setUnique(!notUnique); // !
+                newIndex.mutator().setName(n);
+                newIndex.mutator().setUnique(!notUnique); // !(sic)
                 return newIndex;
             });
 
             final IndexColumn indexColumn = index.addNewIndexColumn();
-            final IndexColumnMutator indexColumnMutator = of(indexColumn);
-            indexColumnMutator.setName(rs.getString("COLUMN_NAME"));
-            indexColumnMutator.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+            indexColumn.mutator().setName(rs.getString("COLUMN_NAME"));
+            indexColumn.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
             final String ascOrDesc = rs.getString("ASC_OR_DESC");
 
             if ("A".equalsIgnoreCase(ascOrDesc)) {
-                indexColumnMutator.setOrderType(OrderType.ASC);
+                indexColumn.mutator().setOrderType(OrderType.ASC);
             } else if ("D".equalsIgnoreCase(ascOrDesc)) {
-                indexColumnMutator.setOrderType(OrderType.DESC);
+                indexColumn.mutator().setOrderType(OrderType.DESC);
             } else {
-                indexColumnMutator.setOrderType(OrderType.NONE);
+                indexColumn.mutator().setOrderType(OrderType.NONE);
             }
 //            index.add(indexColumn);
 
@@ -386,18 +366,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final String foreignKeyName = rs.getString("FK_NAME");
             final boolean exists = foreignKeys.containsKey(foreignKeyName);
             final ForeignKey foreignKey = foreignKeys.computeIfAbsent(foreignKeyName, n -> {
-                final ForeignKey newforeigKey = table.addNewForeignKey();
-                final ForeignKeyMutator newForeigKeyMutator = of(newforeigKey);
-                newForeigKeyMutator.setName(n);
-                return newforeigKey;
+                final ForeignKey newForeigKey = table.addNewForeignKey();
+                newForeigKey.mutator().setName(n);
+                return newForeigKey;
             });
 
             final ForeignKeyColumn foreignKeyColumn = foreignKey.addNewForeignKeyColumn();
-            final ForeignKeyColumnMutator foreignKeyColumnMutator = of(foreignKeyColumn);
-            foreignKeyColumnMutator.setName(rs.getString("FKCOLUMN_NAME"));
-            foreignKeyColumnMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
-            foreignKeyColumnMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
-            foreignKeyColumnMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
+            final ForeignKeyColumnMutator mutator = foreignKeyColumn.mutator();
+            mutator.setName(rs.getString("FKCOLUMN_NAME"));
+            mutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
+            mutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
+            mutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
 //            foreignKey.add(foreignKeyColumn);
 
             return exists ? null : foreignKey;

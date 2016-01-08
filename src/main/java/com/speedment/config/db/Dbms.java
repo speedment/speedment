@@ -4,8 +4,11 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
+import com.speedment.internal.core.config.db.mutator.DbmsMutator;
+import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.util.Map;
 import java.util.Optional;
@@ -18,7 +21,13 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName, HasMainInterface {
+public interface Dbms extends 
+        Document,
+        HasParent<Project>,
+        HasEnabled,
+        HasName,
+        HasMainInterface,
+        HasMutator<DbmsMutator> {
     
     final String
         TYPE_NAME  = "typeName",
@@ -76,4 +85,10 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName,
     default Class<Dbms> mainInterface() {
         return Dbms.class;
     }  
+    
+    @Override
+    default DbmsMutator mutator() {
+        return DocumentMutator.of(this);
+    }
+    
 }

@@ -4,7 +4,10 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.internal.core.config.db.mutator.ProjectMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +21,12 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Project extends Document, HasEnabled, HasName, HasMainInterface {
+public interface Project extends 
+        Document,
+        HasEnabled,
+        HasName,
+        HasMainInterface,
+        HasMutator<ProjectMutator> {
     
     final String 
         PACKAGE_NAME     = "packageName",
@@ -71,4 +79,10 @@ public interface Project extends Document, HasEnabled, HasName, HasMainInterface
     default Class<Project> mainInterface() {
         return Project.class;
     }
+    
+    @Override
+    default ProjectMutator mutator() {
+        return DocumentMutator.of(this);
+    }
+    
 }

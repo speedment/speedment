@@ -22,7 +22,6 @@ import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.Trees;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import static java.lang.Math.E;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -42,7 +41,6 @@ import java.util.stream.Stream;
 public final class DocumentUtil {
 
     @SuppressWarnings("unchecked")
-
     public static Stream<Document> traverseOver(Document document) {
         requireNonNull(document);
         return (Stream<Document>)Trees.traverse(document, Document::children, Trees.TraversalOrder.DEPTH_FIRST_PRE);
