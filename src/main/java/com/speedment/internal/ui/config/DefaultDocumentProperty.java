@@ -16,8 +16,10 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
+import com.speedment.stream.MapStream;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 

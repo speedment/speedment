@@ -2,9 +2,7 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
-import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -47,8 +45,13 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
 
     @Override
-    public BiFunction<Schema, Map<String, Object>, Table> tableConstructor() {
+    public BiFunction<Schema, Map<String, Object>, TableProperty> tableConstructor() {
         return TableProperty::new;
+    }
+
+    @Override
+    public Stream<TableProperty> tables() {
+        return (Stream<TableProperty>) Schema.super.tables();
     }
     
     @Override

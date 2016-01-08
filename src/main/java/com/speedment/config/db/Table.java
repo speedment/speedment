@@ -26,35 +26,35 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
         FOREIGN_KEYS = "foreignKeys",
         PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
     
-    default Stream<Column> columns() {
+    default Stream<? extends Column> columns() {
         return children(COLUMNS, columnConstructor());
     }
     
-    default Stream<Index> indexes() {
+    default Stream<? extends Index> indexes() {
         return children(INDEXES, indexConstructor());
     }
     
-    default Stream<ForeignKey> foreignKeys() {
+    default Stream<? extends ForeignKey> foreignKeys() {
         return children(FOREIGN_KEYS, foreignKeyConstructor());
     }
     
-    default Stream<PrimaryKeyColumn> primaryKeyColumns() {
+    default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
         return children(PRIMARY_KEY_COLUMNS, primaryKeyColumnConstructor());
     }
     
-    default Optional<Column> findColumn(String name) {
+    default Optional<? extends Column> findColumn(String name) {
         return columns().filter(child -> child.getName().equals(name)).findAny();
     }
     
-    default Optional<Index> findIndex(String name) {
+    default Optional<? extends Index> findIndex(String name) {
         return indexes().filter(child -> child.getName().equals(name)).findAny();
     }
     
-    default Optional<ForeignKey> findForeignKey(String name) {
+    default Optional<? extends ForeignKey> findForeignKey(String name) {
         return foreignKeys().filter(child -> child.getName().equals(name)).findAny();
     }
     
-    default Optional<PrimaryKeyColumn> findPrimaryKeyColumn(String name) {
+    default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String name) {
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
     }
     
@@ -74,13 +74,13 @@ public interface Table extends Document, HasParent<Schema>, HasEnabled, HasName,
         return primaryKeyColumnConstructor().apply(this, newDocument(this, PRIMARY_KEY_COLUMNS));
     }
     
-    BiFunction<Table, Map<String, Object>, Column> columnConstructor();
+    BiFunction<Table, Map<String, Object>, ? extends Column> columnConstructor();
     
-    BiFunction<Table, Map<String, Object>, Index> indexConstructor();
+    BiFunction<Table, Map<String, Object>, ? extends Index> indexConstructor();
     
-    BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor();
+    BiFunction<Table, Map<String, Object>, ? extends ForeignKey> foreignKeyConstructor();
     
-    BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor();
+    BiFunction<Table, Map<String, Object>, ? extends PrimaryKeyColumn> primaryKeyColumnConstructor();
 
      @Override
     default Class<Table> mainInterface() {

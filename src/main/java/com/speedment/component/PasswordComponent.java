@@ -18,6 +18,7 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
+import java.util.Optional;
 
 /**
  *
@@ -32,9 +33,9 @@ public interface PasswordComponent extends Component {
         put(dbms.getName(), password);
     }
     
-    String get(String dbmsName);
+    Optional<String> get(String dbmsName);
     
-    default String get(Dbms dbms) {
+    default Optional<String> get(Dbms dbms) {
         return get(dbms.getName());
     }
 }

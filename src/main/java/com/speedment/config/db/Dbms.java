@@ -62,7 +62,7 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName,
         return getAsString(USERNAME);
     }
     
-    default Stream<Schema> schemas() {
+    default Stream<? extends Schema> schemas() {
         return children(SCHEMAS, schemaConstructor());
     }
 
@@ -70,7 +70,7 @@ public interface Dbms extends Document, HasParent<Project>, HasEnabled, HasName,
         return schemaConstructor().apply(this, newDocument(this, SCHEMAS));
     }
     
-    BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor();
+    BiFunction<Dbms, Map<String, Object>, ? extends Schema> schemaConstructor();
    
     @Override
     default Class<Dbms> mainInterface() {

@@ -17,10 +17,13 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
+import com.speedment.component.PasswordComponent;
+import com.speedment.config.DocumentTranscoder;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.code.MainGenerator;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
@@ -28,6 +31,7 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
@@ -51,12 +55,9 @@ import java.util.function.Predicate;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import java.io.IOException;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import java.nio.file.Paths;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -68,34 +69,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
+import org.controlsfx.glyphfont.FontAwesome;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 
@@ -113,7 +87,7 @@ public final class UISession {
     }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static String DIALOG_PANE_ICON_SIZE = "48px";
+    private final static double DIALOG_PANE_ICON_SIZE = 48.0;
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
@@ -133,9 +107,10 @@ public final class UISession {
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
-    private final String defaultGroovyLocation;
+    private final String defaultJsonLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
+    private final FontAwesome fontAwesome;
     
     private File currentlyOpenFile = null;
     
@@ -149,9 +124,10 @@ public final class UISession {
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
-        this.defaultGroovyLocation = requireNonNull(defaultGroovyLocation);
+        this.defaultJsonLocation = requireNonNull(defaultGroovyLocation);
         this.project               = new ProjectProperty(project.stream().toConcurrentMap());
         this.propertySheetFactory  = new PropertySheetFactory();
+        this.fontAwesome           = new FontAwesome();
     }
     
     public Speedment getSpeedment() {
@@ -180,7 +156,7 @@ public final class UISession {
             try {
                 final Stage newStage = new Stage();
                 final Speedment newSpeedment = speedment.newInstance();
-                final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation);
+                final UISession session = new UISession(newSpeedment, application, newStage, defaultJsonLocation);
 
                 ConnectController.createAndShow(session);
             } catch (Exception e) {
@@ -246,17 +222,19 @@ public final class UISession {
                 "to the project. Are you sure you want to continue?"
             ).filter(ButtonType.OK::equals).isPresent()) {
                 
-                project.dbms()
-                    .filter(dbms -> NO_PASSWORD_SPECIFIED.test(dbms.getPassword()))
+                final PasswordComponent pass = speedment.getPasswordComponent();
+                
+                project.dbmses()
+                    .filter(dbms -> NO_PASSWORD_SPECIFIED.test(pass.get(dbms)))
                     .forEach(dbms -> showPasswordDialog(dbms));
                 
                 final Optional<String> schemaName = project
-                    .dbms().flatMap(Dbms::schemas)
+                    .dbmses().flatMap(Dbms::schemas)
                     .map(Schema::getName)
                     .findAny();
                 
                 if (schemaName.isPresent()) {
-                    project.dbms()
+                    project.dbmses()
                         .map(dbms -> (DbmsProperty) dbms)
                         .forEach(dbms -> loadFromDatabase(dbms, schemaName.get()));
                 } else {
@@ -275,7 +253,7 @@ public final class UISession {
             clearLog();
             
             if (currentlyOpenFile == null) {
-                currentlyOpenFile = new File(defaultGroovyLocation);
+                currentlyOpenFile = new File(defaultJsonLocation);
             }
             
             saveGroovyFile(currentlyOpenFile);
@@ -333,9 +311,10 @@ public final class UISession {
         } else {
             alert.setTitle("Error");
         }
+        
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
         alert.showAndWait();
     }
     
@@ -351,17 +330,16 @@ public final class UISession {
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
     }
     
-    private void showPasswordDialog(Dbms dbms) {
+    private void showPasswordDialog(DbmsProperty dbms) {
         final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
-        
+        dialog.setGraphic(fontAwesome.create(FontAwesome.Glyph.LOCK).size(DIALOG_PANE_ICON_SIZE));
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
         
@@ -409,14 +387,14 @@ public final class UISession {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(usernamePassword -> {
-            dbms.setUsername(usernamePassword.getKey());
-            dbms.setPassword(usernamePassword.getValue());
+            dbms.usernameProperty().setValue(usernamePassword.getKey());
+            speedment.getPasswordComponent().put(dbms, usernamePassword.getValue());
         });
     }
     
-    public <NODE extends AbstractNodeProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+    public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
-            dbms.clear();
+            dbms.clear(); // TODO dbms children need to be observable
             
             final DbmsHandler dh = dbms.getType().makeDbmsHandler(speedment, dbms);
             dh.readSchemaMetadata(s -> schemaName.equalsIgnoreCase(s.getName()))
@@ -436,19 +414,26 @@ public final class UISession {
     public void loadGroovyFile(File file, ReuseStage reuse) {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
-                final Project p = Project.newProject(speedment);
-                GroovyParser.fromGroovy(p, file.toPath());
+                final Project p = DocumentTranscoder.load(file.toPath());
 
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :
                         final Stage newStage = new Stage();
                         final Speedment newSpeedment = speedment.newInstance();
-                        final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation, p);
+                        
+                        final UISession session = new UISession(
+                            newSpeedment, 
+                            application, 
+                            newStage, 
+                            defaultJsonLocation, 
+                            p
+                        );
+                        
                         SceneController.createAndShow(session);
                         break;
 
                     case USE_EXISTING_STAGE :
-                        project.loadSettingsFrom(p);
+                        project.getData().putAll(p.getData());
                         SceneController.createAndShow(this);
                         break;
 
@@ -459,10 +444,10 @@ public final class UISession {
                 }
 
                 currentlyOpenFile = file;
-            } catch (IOException | IllegalStateException e) {
-                LOGGER.error(e);
-                log(error(e.getMessage()));
-                showError("Could not load project", e.getMessage(), e);
+            } catch (final SpeedmentException ex) {
+                LOGGER.error(ex);
+                log(error(ex.getMessage()));
+                showError("Could not load project", ex.getMessage(), ex);
             }
         } else {
             showError(
@@ -481,7 +466,7 @@ public final class UISession {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
         
         if (currentlyOpenFile == null) {
-            final Path path   = Paths.get(defaultGroovyLocation);
+            final Path path   = Paths.get(defaultJsonLocation);
             final Path parent = path.getParent();
             
             try {
@@ -494,7 +479,7 @@ public final class UISession {
             */}
             
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(defaultGroovyLocation);
+            fileChooser.setInitialFileName(defaultJsonLocation);
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());
@@ -520,8 +505,7 @@ public final class UISession {
                 Files.createDirectories(parent);
             }
 
-            final String groovy = GroovyParser.toGroovy(project);
-            Files.write(path, groovy.getBytes(UTF_8));
+            DocumentTranscoder.save(project, path);
 
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);

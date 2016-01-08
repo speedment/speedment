@@ -6,7 +6,6 @@ import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
@@ -72,8 +71,13 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
 
     @Override
-    public BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor() {
+    public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
         return SchemaProperty::new;
+    }
+
+    @Override
+    public Stream<SchemaProperty> schemas() {
+        return (Stream<SchemaProperty>) Dbms.super.schemas();
     }
     
     @Override

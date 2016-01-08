@@ -33,7 +33,7 @@ public interface Index extends Document, HasParent<Table>, HasEnabled, HasName, 
         return getAsBoolean(UNIQUE).orElse(false);
     }
     
-    default Stream<IndexColumn> indexColumns() {
+    default Stream<? extends IndexColumn> indexColumns() {
         return children(INDEX_COLUMNS, indexColumnConstructor());
     }
     
@@ -41,7 +41,7 @@ public interface Index extends Document, HasParent<Table>, HasEnabled, HasName, 
         return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
     }
     
-    BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor();
+    BiFunction<Index, Map<String, Object>, ? extends IndexColumn> indexColumnConstructor();
     
     @Override
     default Class<Index> mainInterface() {

@@ -45,8 +45,13 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
 
     @Override
-    public BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor() {
+    public BiFunction<Index, Map<String, Object>, IndexColumnProperty> indexColumnConstructor() {
         return IndexColumnProperty::new;
+    }
+
+    @Override
+    public Stream<IndexColumnProperty> indexColumns() {
+        return (Stream<IndexColumnProperty>) Index.super.indexColumns();
     }
     
     @Override

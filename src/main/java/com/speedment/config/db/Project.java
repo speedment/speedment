@@ -57,7 +57,7 @@ public interface Project extends Document, HasEnabled, HasName, HasMainInterface
         return getAsString(CONFIG_PATH).map(Paths::get);
     }
 
-    default Stream<Dbms> dbms() {
+    default Stream<? extends Dbms> dbmses() {
         return children(DBMSES, dbmsConstructor());
     }
     
@@ -65,7 +65,7 @@ public interface Project extends Document, HasEnabled, HasName, HasMainInterface
         return dbmsConstructor().apply(this, newDocument(this, DBMSES));
     }
     
-    BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor();
+    BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor();
 
     @Override
     default Class<Project> mainInterface() {

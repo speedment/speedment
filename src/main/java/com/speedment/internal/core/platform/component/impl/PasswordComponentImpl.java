@@ -19,6 +19,7 @@ import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.component.PasswordComponent;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -45,7 +46,7 @@ public final class PasswordComponentImpl extends Apache2AbstractComponent implem
     }
 
     @Override
-    public String get(String dbmsName) {
-        return passwords.get(dbmsName);
+    public Optional<String> get(String dbmsName) {
+        return Optional.ofNullable(passwords.get(dbmsName));
     }    
 }

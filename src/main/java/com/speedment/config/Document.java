@@ -41,7 +41,9 @@ public interface Document {
         return MapStream.of(getData());
     }
     
-    default <P extends Document, T> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> instantiator) {
+    default <P extends Document, T extends Document> Stream<T> 
+            children(String key, BiFunction<P, Map<String, Object>, T> instantiator) {
+        
         final List<Map<String, Object>> list = 
             (List<Map<String, Object>>) get(key).orElse(null);
         

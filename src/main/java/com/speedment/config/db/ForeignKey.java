@@ -20,7 +20,7 @@ public interface ForeignKey extends Document, HasParent<Table>, HasEnabled, HasN
     
     final String FOREIGN_KEY_COLUMNS = "foreignKeyColumns";
     
-    default Stream<ForeignKeyColumn> foreignKeyColumns() {
+    default Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
         return children(FOREIGN_KEY_COLUMNS, foreignKeyColumnConstructor());
     }
     
@@ -28,7 +28,7 @@ public interface ForeignKey extends Document, HasParent<Table>, HasEnabled, HasN
         return foreignKeyColumnConstructor().apply(this, newDocument(this, FOREIGN_KEY_COLUMNS));
     }
     
-    BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumn> foreignKeyColumnConstructor();
+    BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor();
 
     @Override
     default Class<ForeignKey> mainInterface() {

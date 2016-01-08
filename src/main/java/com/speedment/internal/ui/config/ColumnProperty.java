@@ -1,6 +1,5 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
@@ -13,7 +12,6 @@ import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import java.util.Map;
 import java.util.Optional;

@@ -33,7 +33,7 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
         return getAsBoolean(DEFAULT_SCHEMA).orElse(false);
     }
     
-    default Stream<Table> tables() {
+    default Stream<? extends Table> tables() {
         return children(TABLES, tableConstructor());
     }
     
@@ -41,7 +41,7 @@ public interface Schema extends Document, HasParent<Dbms>, HasEnabled, HasName, 
         return tableConstructor().apply(this, newDocument(this, TABLES));
     }
     
-    BiFunction<Schema, Map<String, Object>, Table> tableConstructor();
+    BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor();
 
     @Override
     default Class<Schema> mainInterface() {

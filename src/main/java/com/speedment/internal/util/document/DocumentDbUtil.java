@@ -45,9 +45,9 @@ public final class DocumentDbUtil {
     
     public static <T> Stream<T> traverseOver(Project project, Class<T> clazz) {
         if (Dbms.class.isAssignableFrom(clazz)) {
-            return project.dbms().map(clazz::cast);
+            return project.dbmses().map(clazz::cast);
         } else {
-            return project.dbms().flatMap(dbms -> traverseOver(dbms, clazz));
+            return project.dbmses().flatMap(dbms -> traverseOver(dbms, clazz));
         }
     }
 

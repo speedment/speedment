@@ -139,7 +139,7 @@ public final class ProjectTreeController implements Initializable {
         final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
         
         expandAll.setOnAction(ev -> {
-            
+ 
             node.traverseOver(AbstractNodeProperty.class)
                 .forEach(n -> n.setExpanded(true));
         });

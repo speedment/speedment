@@ -2,7 +2,6 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.Column;
-import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
@@ -37,26 +36,45 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, Column> columnConstructor() {
+    public BiFunction<Table, Map<String, Object>, ColumnProperty> columnConstructor() {
         return ColumnProperty::new;
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, Index> indexConstructor() {
+    public BiFunction<Table, Map<String, Object>, IndexProperty> indexConstructor() {
         return IndexProperty::new;
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor() {
+    public BiFunction<Table, Map<String, Object>, ForeignKeyProperty> foreignKeyConstructor() {
         return ForeignKeyProperty::new;
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
+    public BiFunction<Table, Map<String, Object>, PrimaryKeyColumnProperty> primaryKeyColumnConstructor() {
         return PrimaryKeyColumnProperty::new;
     }
-<<<<<<< Updated upstream
-    
+
+    @Override
+    public Stream<? extends ColumnProperty> columns() {
+        return (Stream<ColumnProperty>) Table.super.columns();
+    }
+
+    @Override
+    public Stream<? extends IndexProperty> indexes() {
+        return (Stream<IndexProperty>) Table.super.indexes();
+    }
+
+    @Override
+    public Stream<? extends ForeignKeyProperty> foreignKeys() {
+        return (Stream<ForeignKeyProperty>) Table.super.foreignKeys();
+    }
+
+    @Override
+    public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
+        return (Stream<PrimaryKeyColumnProperty>) Table.super.primaryKeyColumns();
+    }
+
     @Override
     protected final Document createDocument(String key, Map<String, Object> data) {
         switch (key) {
@@ -66,26 +84,5 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
             case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
             default                  : return super.createDocument(key, data);
         }
-=======
-
-    @Override
-    public Column addNewColumn() {
-        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
-    }
-
-    @Override
-    public Index addNewIndex() {
-        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
-    }
-
-    @Override
-    public ForeignKey addNewForeignKey() {
-        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
-    }
-
-    @Override
-    public PrimaryKeyColumn addNewPrimaryKeyColumn() {
-        return columnConstructor().apply(this, newEmptyMap(COLUMNS));
->>>>>>> Stashed changes
     }
 }
