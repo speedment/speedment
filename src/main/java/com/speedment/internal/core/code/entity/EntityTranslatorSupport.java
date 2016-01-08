@@ -23,11 +23,6 @@ import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
-import static com.speedment.internal.codegen.util.Formatting.DOT;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
@@ -40,25 +35,29 @@ import com.speedment.field.StringField;
 import com.speedment.field.ReferenceField;
 import com.speedment.field.ReferenceForeignKeyField;
 import com.speedment.exception.SpeedmentException;
-
 import com.speedment.internal.core.field.ComparableFieldImpl;
 import com.speedment.internal.core.field.ComparableForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringFieldImpl;
 import com.speedment.internal.core.field.ReferenceFieldImpl;
 import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
-
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.util.Pluralis;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
-import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
+
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
+import static com.speedment.internal.codegen.util.Formatting.DOT;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.internal.util.JavaLanguage.javaTypeName;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -253,5 +252,4 @@ public final class EntityTranslatorSupport {
     public static Method removeWithListener(Type entityType) {
         return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
     }
-
 }

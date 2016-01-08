@@ -1,10 +1,5 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
@@ -13,6 +8,7 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -56,6 +52,17 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
 
     @Override
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case COLUMNS             : return new ColumnProperty(this, data);
+            case INDEXES             : return new IndexProperty(this, data);
+            case FOREIGN_KEYS        : return new ForeignKeyProperty(this, data);
+            case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
+            default                  : return super.createDocument(key, data);
+        }
+    }
+    
+    @Override
     public Stream<? extends ColumnProperty> columns() {
         return (Stream<ColumnProperty>) Table.super.columns();
     }
@@ -74,15 +81,40 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
         return (Stream<PrimaryKeyColumnProperty>) Table.super.primaryKeyColumns();
     }
+    
+    public ObservableList<ColumnProperty> columnsProperty() {
+        return observableListOf(COLUMNS, ColumnProperty.class);
+    }
+    
+    public ObservableList<IndexProperty> indexesProperty() {
+        return observableListOf(INDEXES, IndexProperty.class);
+    }
+    
+    public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
+        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty.class);
+    }
+    
+    public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
+        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty.class);
+    }
 
     @Override
-    protected final Document createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case COLUMNS             : return new ColumnProperty(this, data);
-            case INDEXES             : return new IndexProperty(this, data);
-            case FOREIGN_KEYS        : return new ForeignKeyProperty(this, data);
-            case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
-            default                  : return super.createDocument(key, data);
-        }
+    public ColumnProperty addNewColumn() {
+        return (ColumnProperty) Table.super.addNewColumn();
+    }
+
+    @Override
+    public IndexProperty addNewIndex() {
+        return (IndexProperty) Table.super.addNewIndex();
+    }
+
+    @Override
+    public ForeignKeyProperty addNewForeignKey() {
+        return (ForeignKeyProperty) Table.super.addNewForeignKey();
+    }
+
+    @Override
+    public PrimaryKeyColumnProperty addNewPrimaryKeyColumn() {
+        return (PrimaryKeyColumnProperty) Table.super.addNewPrimaryKeyColumn();
     }
 }
