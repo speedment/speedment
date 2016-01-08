@@ -12,7 +12,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasOrderTypeProperty extends DocumentProperty, HasUiVisibleProperties {
+public interface HasOrderTypeProperty extends DocumentProperty {
     
     default ObjectProperty<OrderType> orderTypeProperty() {
         return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class);

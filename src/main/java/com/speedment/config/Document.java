@@ -52,6 +52,8 @@ public interface Document {
         }
     }
     
+    Stream<Document> children();
+    
     default Stream<Document> ancestors() {
         final Stream.Builder<Document> stream = Stream.builder();
         Document parent = this;

@@ -1,6 +1,8 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
+import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
@@ -47,5 +49,13 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     @Override
     public BiFunction<Schema, Map<String, Object>, Table> tableConstructor() {
         return TableProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case TABLES : return new TableProperty(this, data);
+            default     : return super.createDocument(key, data);
+        }
     }
 }

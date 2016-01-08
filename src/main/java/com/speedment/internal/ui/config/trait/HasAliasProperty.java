@@ -11,7 +11,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasAliasProperty extends DocumentProperty, HasUiVisibleProperties {
+public interface HasAliasProperty extends DocumentProperty {
 
     default StringProperty aliasProperty() {
         return stringPropertyOf(HasAlias.ALIAS);

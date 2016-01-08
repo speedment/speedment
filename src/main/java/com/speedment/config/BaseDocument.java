@@ -1,14 +1,17 @@
 package com.speedment.config;
 
 import com.speedment.annotation.Api;
+import static com.speedment.internal.util.document.DocumentUtil.childrenOf;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
+import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.stream.Stream;
 
 /**
  *
@@ -81,5 +84,10 @@ public class BaseDocument implements Document {
     @Override
     public final MapStream<String, Object> stream() {
         return MapStream.of(config);
+    }
+
+    @Override
+    public Stream<Document> children() {
+        return childrenOf(this, BaseDocument::new);
     }
 }

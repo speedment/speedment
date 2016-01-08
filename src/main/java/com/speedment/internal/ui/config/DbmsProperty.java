@@ -1,5 +1,6 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
@@ -73,5 +74,13 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     @Override
     public BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor() {
         return SchemaProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case SCHEMAS : return new SchemaProperty(this, data);
+            default      : return super.createDocument(key, data);
+        }
     }
 }

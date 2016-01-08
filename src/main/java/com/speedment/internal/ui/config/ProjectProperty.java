@@ -1,6 +1,8 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
+import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
@@ -74,6 +76,14 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     @Override
     public BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor() {
         return DbmsProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case DBMSES : return new DbmsProperty(this, data);
+            default     : return super.createDocument(key, data);
+        }
     }
     
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {

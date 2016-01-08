@@ -15,7 +15,11 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import static com.speedment.internal.util.document.DocumentUtil.childrenOf;
 import com.speedment.util.OptionalBoolean;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -23,6 +27,7 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -45,7 +50,7 @@ import javafx.collections.ObservableMap;
  *
  * @author Emil Forslund
  */
-public abstract class AbstractDocumentProperty implements DocumentProperty {
+public abstract class AbstractDocumentProperty implements DocumentProperty, HasExpandedProperty {
     
     private final ObservableMap<String, Object> config;
     private final transient Map<String, Property<?>> properties;
@@ -141,6 +146,22 @@ public abstract class AbstractDocumentProperty implements DocumentProperty {
     @Override
     public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type) {
         return (ObjectProperty<T>) properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(type.cast(get(k).orElse(null)))));
+    }
+
+    protected Document createDocument(String key, Map<String, Object> data) {
+        return new DefaultDocumentProperty(this, data);
+    } 
+    
+    @Override
+    public final Stream<Document> children() {
+        return stream()
+            .filterValue(obj -> obj instanceof List<?>)
+            .mapValue(list -> (List<Object>) list)
+            .flatMapValue(list -> list.stream())
+            .filterValue(obj -> obj instanceof Map<?, ?>)
+            .mapValue(map -> (Map<String, Object>) map)
+            .mapValue((key, value) -> createDocument(key, value))
+            .values();
     }
     
     private <T, P extends Property<T>> P prepare(String key, P property) {

@@ -1,5 +1,6 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
@@ -32,5 +33,13 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     @Override
     public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumn> foreignKeyColumnConstructor() {
         return ForeignKeyColumnProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case FOREIGN_KEY_COLUMNS : return new ForeignKeyColumnProperty(this, data);
+            default                  : return super.createDocument(key, data);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
+import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
@@ -45,5 +47,13 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     @Override
     public BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor() {
         return IndexColumnProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case INDEX_COLUMNS : return new IndexColumnProperty(this, data);
+            default            : return super.createDocument(key, data);
+        }
     }
 }

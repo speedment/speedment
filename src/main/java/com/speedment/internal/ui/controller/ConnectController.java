@@ -127,9 +127,8 @@ public final class ConnectController implements Initializable {
             fieldUser.textProperty()
         ));
 
-        final DbmsProperty dbms = new DbmsProperty(session.getSpeedment());
-        dbms.setParent(session.getProject());
-        session.getProject().add(dbms);
+        @SuppressWarnings("unchecked")
+        final DbmsProperty dbms = (DbmsProperty) session.getProject().newDbms();
         
         Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
             @Override
@@ -149,7 +148,6 @@ public final class ConnectController implements Initializable {
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
         dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
-        dbms.passwordProperty().bindBidirectional(fieldPass.textProperty());
         dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
         
         fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
@@ -162,7 +160,13 @@ public final class ConnectController implements Initializable {
         buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
 
         buttonConnect.setOnAction(ev -> {
-            session.getProject().setName(fieldSchema.getText());
+            
+            // Register password in password component
+            session.getSpeedment().getPasswordComponent()
+                .put(fieldName.getText(), fieldPass.getText());
+            
+            
+            session.getProject().nameProperty().setValue(fieldSchema.getText());
             
             Settings.inst().set("last_known_schema", fieldSchema.getText());
             Settings.inst().set("last_known_dbtype", dbms.getTypeName());

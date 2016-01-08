@@ -1,5 +1,6 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;

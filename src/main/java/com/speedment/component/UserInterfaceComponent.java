@@ -17,6 +17,7 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
@@ -97,19 +98,19 @@ public interface UserInterfaceComponent extends Component {
      * @param nodeType    the interface main type of the node
      * @param menuBuilder the builder to use
      */
-    <DOC extends DocumentProperty> void installContextMenu(Class<? super DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
+    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? super DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
     
     /**
      * If a builder exists for the interface main type of the specified node,
      * it will be called and the result will be returned. If no builder exists,
      * an {@code empty} will be returned.
      * 
-     * @param <NODE>    the implementation type of the node
+     * @param <DOC>    the implementation type of the node
      * @param treeCell  the tree cell that invoced the context menu
      * @param node      the node to create a context menu for
      * @return          the created context menu or {@code empty}
      */
-    <NODE extends DocumentProperty> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, NODE node);
+    <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC node);
     
     @FunctionalInterface
     interface ContextMenuBuilder<NODE extends DocumentProperty> {

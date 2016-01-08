@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -37,13 +39,23 @@ import static java.util.stream.Collectors.toList;
 public final class DocumentUtil {
 
     @SuppressWarnings("unchecked")
-
     public static <E extends Document> Optional<E> ancestor(Document document, final Class<E> clazz) {
         requireNonNulls(document, clazz);
         return document.ancestors()
                 .filter(p -> clazz.isAssignableFrom(p.getClass()))
                 .map(p -> (E) p)
                 .findFirst();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <E extends Document> Stream<Document> childrenOf(Document document, BiFunction<Document, Map<String, Object>, E> childConstructor) {
+        return document.stream().values()
+            .filter(obj -> obj instanceof List<?>)
+            .map(list -> (List<Object>) list)
+            .flatMap(list -> list.stream())
+            .filter(obj -> obj instanceof Map<?, ?>)
+            .map(map -> (Map<String, Object>) map)
+            .map(map -> childConstructor.apply(document, map));
     }
     
     public static Map<String, Object> newDocument(Document document, String key) {

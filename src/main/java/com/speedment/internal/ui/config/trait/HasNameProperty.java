@@ -11,7 +11,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasNameProperty extends DocumentProperty, HasUiVisibleProperties {
+public interface HasNameProperty extends DocumentProperty {
 
     default StringProperty nameProperty() {
         return stringPropertyOf(HasName.NAME);

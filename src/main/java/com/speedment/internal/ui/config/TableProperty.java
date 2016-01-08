@@ -1,6 +1,8 @@
 package com.speedment.internal.ui.config;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
+import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
@@ -52,5 +54,16 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     @Override
     public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
         return PrimaryKeyColumnProperty::new;
+    }
+    
+    @Override
+    protected final Document createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case COLUMNS             : return new ColumnProperty(this, data);
+            case INDEXES             : return new IndexProperty(this, data);
+            case FOREIGN_KEYS        : return new ForeignKeyProperty(this, data);
+            case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
+            default                  : return super.createDocument(key, data);
+        }
     }
 }
