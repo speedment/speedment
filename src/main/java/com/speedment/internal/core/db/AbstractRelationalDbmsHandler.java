@@ -35,7 +35,6 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.config.db.mutator.ColumnMutator;
 import static com.speedment.internal.core.config.db.mutator.DocumentMutator.*;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
@@ -60,11 +59,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
@@ -228,7 +224,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } catch (SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
-        return schemas.stream();
+        //return schemas.stream();
     }
 
     protected Stream<Table> tables(final Connection connection, Schema schema) {

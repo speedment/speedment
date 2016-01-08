@@ -1,13 +1,14 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
 import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -35,15 +36,24 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
 
     @Override
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case FOREIGN_KEY_COLUMNS : return new ForeignKeyColumnProperty(this, data);
+            default                  : return super.createDocument(key, data);
+        }
+    }
+    
+    @Override
     public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
         return (Stream<ForeignKeyColumnProperty>) ForeignKey.super.foreignKeyColumns();
     }
     
     @Override
-    protected final Document createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case FOREIGN_KEY_COLUMNS : return new ForeignKeyColumnProperty(this, data);
-            default                  : return super.createDocument(key, data);
-        }
+    public ForeignKeyColumnProperty addNewForeignKeyColumn() {
+        return (ForeignKeyColumnProperty) ForeignKey.super.addNewForeignKeyColumn();
+    }
+    
+    public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
+        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty.class);
     }
 }

@@ -394,12 +394,10 @@ public final class UISession {
     
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
-            dbms.clear(); // TODO dbms children need to be observable
+            dbms.schemasProperty().clear();
             
-            final DbmsHandler dh = dbms.getType().makeDbmsHandler(speedment, dbms);
-            dh.readSchemaMetadata(s -> schemaName.equalsIgnoreCase(s.getName()))
-                .map(schema -> new SchemaProperty(speedment, dbms, schema))
-                .forEachOrdered(dbms::add);
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
+            dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
             
             return true;
         } catch (final Exception ex) {

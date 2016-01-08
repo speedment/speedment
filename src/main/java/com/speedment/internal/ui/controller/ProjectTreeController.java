@@ -24,6 +24,8 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
@@ -32,7 +34,9 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.resource.SilkIcon;
+import com.speedment.internal.util.document.DocumentUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -48,8 +52,8 @@ import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.Parent;
 import static java.util.Objects.requireNonNull;
+import javafx.collections.ListChangeListener;
 
 /**
  *
@@ -76,8 +80,6 @@ public final class ProjectTreeController implements Initializable {
         ui.installContextMenu(ForeignKey.class, this::createDefaultContextMenu);
         
         runLater(() -> prepareTree(session.getProject()));
-        
-        // TODO: React on changes in the config model
     }
     
     private void prepareTree(ProjectProperty project) {
@@ -88,9 +90,8 @@ public final class ProjectTreeController implements Initializable {
         
         events.notify(new ProjectLoaded(project));
 
-        hierarchy.setCellFactory(view -> new DocumentPropertyCell());
-        
         Bindings.bindContent(ui.getSelectedTreeItems(), hierarchy.getSelectionModel().getSelectedItems());
+        hierarchy.setCellFactory(view -> new DocumentPropertyCell(ui));
         hierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
         
         populateTree(project);
@@ -116,37 +117,43 @@ public final class ProjectTreeController implements Initializable {
             .map(this::branch)
             .forEachOrdered(branch.getChildren()::add);
 
-        // TODO: React when new children are added to the tree
-
-//            nodeAsParent.children().addListener((ListChangeListener.Change<? extends AbstractNodeProperty> c) -> {
-//                while (c.next()) {
-//                    if (c.wasAdded()) {
-//                        c.getAddedSubList().stream()
-//                            .map(this::branch)
-//                            .forEachOrdered(branch.getChildren()::add);
-//                    } else if (c.wasRemoved()) {
-//                        c.getRemoved().stream()
-//                            .forEach(val -> branch.getChildren().removeIf(item -> val.equals(item.getValue())));
-//                    }
-//                }
-//            });
+        // TODO: React when new new child types are added to the tree
+        doc.childrenProperty()
+            .forEach(list -> list.addListener((ListChangeListener.Change<? extends DocumentProperty> c) -> {
+                
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    c.getAddedSubList().stream()
+                        .filter(HasExpandedProperty.class::isInstance)
+                        .map(d -> branch((DocumentProperty & HasExpandedProperty) d))
+                        .forEachOrdered(branch.getChildren()::add);
+                } else if (c.wasRemoved()) {
+                    c.getRemoved().stream()
+                        .forEach(val -> branch.getChildren()
+                            .removeIf(item -> val.equals(item.getValue()))
+                        );
+                }
+            }
+        }));
 
         return branch;
     }
     
     private <DOC extends DocumentProperty> Optional<ContextMenu> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
+        
         final MenuItem expandAll = new MenuItem("Expand All", SilkIcon.BOOK_OPEN.view());
         final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
         
         expandAll.setOnAction(ev -> {
- 
-            node.traverseOver(AbstractNodeProperty.class)
-                .forEach(n -> n.setExpanded(true));
+            DocumentUtil.traverseOver(node)
+                .filter(HasExpandedProperty.class::isInstance)
+                .forEach(doc -> ((HasExpandedProperty) doc).expandedProperty().setValue(true));
         });
         
         collapseAll.setOnAction(ev -> {
-            node.traverseOver(AbstractNodeProperty.class)
-                .forEach(n -> n.setExpanded(false));
+            DocumentUtil.traverseOver(node)
+                .filter(HasExpandedProperty.class::isInstance)
+                .forEach(doc -> ((HasExpandedProperty) doc).expandedProperty().setValue(false));
         });
         
         return Optional.of(new ContextMenu(expandAll, collapseAll));
@@ -163,14 +170,13 @@ public final class ProjectTreeController implements Initializable {
             else disable();
         };
         
-        public DocumentPropertyCell() {
+        private final UserInterfaceComponent ui;
+        
+        public DocumentPropertyCell(UserInterfaceComponent ui) {
             
-        }
-
-        // Listener should be initiated with a listener attached
-        // that removes enabled-listeners attached to the previous
-        // node when a new node is selected.
-        {
+            // Listener should be initiated with a listener attached
+            // that removes enabled-listeners attached to the previous
+            // node when a new node is selected.
             itemProperty().addListener((ob, o, n) -> {
 
                 if (o != null && o instanceof HasEnabledProperty) {
@@ -184,6 +190,8 @@ public final class ProjectTreeController implements Initializable {
                 }
 
             });
+            
+            this.ui = requireNonNull(ui);
         }
 
         private void disable() {
@@ -209,13 +217,31 @@ public final class ProjectTreeController implements Initializable {
                 disable();
             } else {
                 setGraphic(SpeedmentIcon.forNode(item));
-                textProperty().bind(item.nameProperty());
+                
+                if (item instanceof HasNameProperty) {
+                    @SuppressWarnings("unchecked")
+                    final HasNameProperty withName = (HasNameProperty) item;
+                    textProperty().bind(withName.nameProperty());
+                } else {
+                    textProperty().unbind();
+                    textProperty().setValue(null);
+                }
 
-                ui.createContextMenu(this, item)
-                    .ifPresent(this::setContextMenu);
+                if (item instanceof HasMainInterface) {
+                    ui.createContextMenu(this, (DocumentProperty & HasMainInterface) item)
+                        .ifPresent(this::setContextMenu);
+                }
 
-                if (item.isEnabled()) enable(); 
-                else disable();
+                if (item instanceof HasEnabled) {
+                    @SuppressWarnings("unchecked")
+                    final HasEnabled withEnabled = (HasEnabled) item;
+                    
+                    if (withEnabled.isEnabled()) 
+                        enable(); 
+                    else 
+                        disable();
+                }
+                
             }
         }
     }

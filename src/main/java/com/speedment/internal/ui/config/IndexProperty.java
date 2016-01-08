@@ -1,9 +1,6 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
-import static com.speedment.config.db.Dbms.SCHEMAS;
 import com.speedment.config.db.Index;
-import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -12,6 +9,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -50,15 +48,24 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
 
     @Override
-    public Stream<IndexColumnProperty> indexColumns() {
-        return (Stream<IndexColumnProperty>) Index.super.indexColumns();
-    }
-    
-    @Override
-    protected final Document createDocument(String key, Map<String, Object> data) {
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
         switch (key) {
             case INDEX_COLUMNS : return new IndexColumnProperty(this, data);
             default            : return super.createDocument(key, data);
         }
+    }
+    
+    @Override
+    public Stream<IndexColumnProperty> indexColumns() {
+        return (Stream<IndexColumnProperty>) Index.super.indexColumns();
+    }
+    
+    public ObservableList<IndexColumnProperty> indexColumnProperties() {
+        return observableListOf(INDEX_COLUMNS, IndexColumnProperty.class);
+    }
+
+    @Override
+    public IndexColumnProperty addNewIndexColumn() {
+        return (IndexColumnProperty) Index.super.addNewIndexColumn();
     }
 }

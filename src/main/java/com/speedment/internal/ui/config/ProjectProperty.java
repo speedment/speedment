@@ -1,7 +1,5 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
@@ -18,6 +16,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
 
@@ -82,8 +81,17 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
         return (Stream<DbmsProperty>) Project.super.dbmses();
     }
     
+    public ObservableList<DbmsProperty> dbmsesProperty() {
+        return observableListOf(DBMSES, DbmsProperty.class);
+    }
+
     @Override
-    protected final Document createDocument(String key, Map<String, Object> data) {
+    public DbmsProperty addNewDbms() {
+        return (DbmsProperty) Project.super.addNewDbms();
+    }
+    
+    @Override
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
         switch (key) {
             case DBMSES : return new DbmsProperty(this, data);
             default     : return super.createDocument(key, data);

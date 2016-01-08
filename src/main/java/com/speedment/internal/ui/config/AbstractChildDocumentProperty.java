@@ -18,22 +18,7 @@ package com.speedment.internal.ui.config;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

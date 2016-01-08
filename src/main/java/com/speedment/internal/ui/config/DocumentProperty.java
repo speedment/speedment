@@ -18,12 +18,14 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
+import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -42,4 +44,9 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties {
     BooleanProperty booleanPropertyOf(String key);
     
     <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type);
+
+    @Override
+    Stream<? extends DocumentProperty> children();
+    
+    Stream<ObservableList<DocumentProperty>> childrenProperty();
 }

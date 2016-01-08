@@ -19,7 +19,6 @@ package com.speedment.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
-import com.speedment.stream.ParallelStrategy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -87,7 +86,7 @@ public interface DbmsHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
-     * @param filterCriteria criteria that schemas must fulfill
+     * @param filterCriteria criteria that schema  names must fulfill
      */
     void readSchemaMetadata(Predicate<String> filterCriteria);
 

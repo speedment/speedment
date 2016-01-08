@@ -1,6 +1,5 @@
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
@@ -15,6 +14,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -74,17 +74,26 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
         return SchemaProperty::new;
     }
-
+    
+    public ObservableList<SchemaProperty> schemasProperty() {
+        return observableListOf(SCHEMAS, SchemaProperty.class);
+    }
+    
+    @Override
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case SCHEMAS : return new SchemaProperty(this, data);
+            default      : return super.createDocument(key, data);
+        }
+    }
+    
     @Override
     public Stream<SchemaProperty> schemas() {
         return (Stream<SchemaProperty>) Dbms.super.schemas();
     }
     
     @Override
-    protected final Document createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case SCHEMAS : return new SchemaProperty(this, data);
-            default      : return super.createDocument(key, data);
-        }
+    public SchemaProperty addNewSchema() {
+        return (SchemaProperty) Dbms.super.addNewSchema();
     }
 }

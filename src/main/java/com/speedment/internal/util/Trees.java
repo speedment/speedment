@@ -71,7 +71,7 @@ public final class Trees {
         return walkOptional(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<? extends T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder) {
+    public static <T> Stream<? extends T> traverse(T first, Function<T, Stream<? extends T>> traverser, TraversalOrder traversalOrder) {
         requireNonNulls(first, traverser, traversalOrder);
         if (traversalOrder == TraversalOrder.BREADTH_FIRST) {
             return traverseBredthFirst(first, traverser, Stream.builder()).build();
@@ -110,7 +110,7 @@ public final class Trees {
         return builder;
     }
 
-    private static <T> Stream.Builder<? extends T> traverse(T first, Function<T, Stream<T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverse(T first, Function<T, Stream<? extends T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
         requireNonNulls(first, traverser, traversalOrder, builder);
         if (first == null) {
             return builder;
@@ -118,7 +118,7 @@ public final class Trees {
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_PRE) {
             builder.add(first);
         }
-        final Stream<T> next = traverser.apply(first);
+        final Stream<? extends T> next = traverser.apply(first);
         if (next != null) {
             next.filter(Objects::nonNull).forEach((T n) -> {
                 traverse(n, traverser, traversalOrder, builder);
@@ -130,7 +130,7 @@ public final class Trees {
         return builder;
     }
 
-    private static <T> Stream.Builder<? extends T> traverseBredthFirst(T first, Function<T, Stream<T>> traverser, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverseBredthFirst(T first, Function<T, Stream<? extends T>> traverser, Stream.Builder<T> builder) {
         requireNonNulls(first, traverser, builder);
         if (first == null) {
             return builder;
