@@ -41,8 +41,8 @@ public interface Document {
         return MapStream.of(getData());
     }
     
-    default <P extends Document, T extends Document> Stream<T> 
-            children(String key, BiFunction<P, Map<String, Object>, T> instantiator) {
+    default <P extends Document, T extends Document> Stream<T> children(
+        String key, BiFunction<P, Map<String, Object>, T> constructor) {
         
         final List<Map<String, Object>> list = 
             (List<Map<String, Object>>) get(key).orElse(null);
@@ -50,7 +50,7 @@ public interface Document {
         if (list == null) {
             return Stream.empty();
         } else {
-            return list.stream().map(map -> instantiator.apply((P) this, map));
+            return list.stream().map(map -> constructor.apply((P) this, map));
         }
     }
     

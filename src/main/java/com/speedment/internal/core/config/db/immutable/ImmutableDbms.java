@@ -16,16 +16,16 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.Speedment;
+import com.speedment.config.Document;
 import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
-import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.config.db.Table;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import java.util.OptionalInt;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -42,9 +42,9 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         super(parent, dbms.getData());
 
         this.typeName  = dbms.getTypeName();
-        this.ipAddress = dbms.getIpAddress().orElse(null);
-        this.port      = dbms.getPort().isPresent() ? dbms.getPort().getAsInt() : null;
-        this.username  = dbms.getUsername().orElse(null);
+        this.ipAddress = dbms.getIpAddress();
+        this.port      = dbms.getPort();
+        this.username  = dbms.getUsername();
     }
 
     @Override
@@ -54,22 +54,12 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     @Override
     public Optional<String> getIpAddress() {
-        return Optional.ofNullable(ipAddress);
+        return ipAddress;
     }
 
     @Override
-    public void setIpAddress(String ipAddress) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<Integer> getPort() {
+    public OptionalInt getPort() {
         return port;
-    }
-
-    @Override
-    public void setPort(Integer port) {
-        throwNewUnsupportedOperationExceptionImmutable();
     }
 
     @Override
@@ -78,70 +68,12 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     }
 
     @Override
-    public void setUsername(String name) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<String> getPassword() {
-        return password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
+    public BiFunction<Dbms, Map<String, Object>, ImmutableSchema> schemaConstructor() {
+        return ImmutableSchema::new;
     }
 
     @Override
     public Optional<Project> getParent() {
-        return parent;
-    }
-
-    @Override
-    public ChildHolder<Schema> getChildren() {
-        return children;
-    }
-    
-    @Override
-    public Stream<? extends Schema> stream() {
-        return getChildren().stream().sorted(Nameable.COMPARATOR);
-    }
-
-    @Override
-    public <T extends Schema> Stream<T> streamOf(Class<T> childClass) {
-        if (Schema.class.isAssignableFrom(childClass)) {
-            return getChildren().stream()
-                .map(child -> {
-                    @SuppressWarnings("unchecked")
-                    final T cast = (T) child;
-                    return cast;
-                }).sorted(Nameable.COMPARATOR);
-        } else {
-            throw new IllegalArgumentException(
-                getClass().getSimpleName() + 
-                " does not have children of type " + 
-                childClass.getSimpleName() + "."
-            );
-        }
-    }
-
-    @Override
-    public Schema addNewSchema() {
-        return throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Speedment getSpeedment() {
-        return speedment;
-    }
-
-    @Override
-    public Schema schema(Closure<?> c) {
-        return throwNewUnsupportedOperationExceptionImmutable();
+        return super.getParent().map(Project.class::cast);
     }
 }

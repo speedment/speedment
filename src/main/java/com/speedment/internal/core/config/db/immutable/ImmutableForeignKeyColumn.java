@@ -16,68 +16,35 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
+import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import com.speedment.config.aspects.Parent;
-import static com.speedment.internal.core.config.utils.ConfigUtil.thereIsNo;
-import com.speedment.internal.core.config.aspects.ColumnableHelper;
 import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.unmodifiableMap;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableForeignKeyColumn extends ImmutableAbstractOrdinalConfigEntity implements ForeignKeyColumn, ColumnableHelper {
+public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
-    private final Optional<ForeignKey> parent;
+    private final Column column;
     private final String foreignColumnName;
     private final String foreignTableName;
-    private Column foreignColumn;
-    private Table foreignTable;
+    private final Column foreignColumn;
+    private final Table foreignTable;
+    
 
-    public ImmutableForeignKeyColumn(ForeignKey parent, ForeignKeyColumn fkc) {
-        super(requireNonNull(fkc).getName(), fkc.isEnabled(), fkc.isExpanded(), fkc.getOrdinalPosition());
-        requireNonNull(parent);
-        // Fields
-        this.parent = Optional.of(parent);
+    public ImmutableForeignKeyColumn(ImmutableForeignKey parent, ForeignKeyColumn fkc) {
+        super(parent, unmodifiableMap(fkc.getData()));
+        
         this.foreignColumnName = fkc.getForeignColumnName();
-        this.foreignTableName = fkc.getForeignTableName();
+        this.foreignTableName  = fkc.getForeignTableName();
+        this.foreignColumn     = fkc.findForeignColumn();
     }
 
     @Override

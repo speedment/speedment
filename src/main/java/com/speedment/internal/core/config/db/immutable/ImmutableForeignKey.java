@@ -16,81 +16,52 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.internal.core.config.*;
+import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
-import com.speedment.config.aspects.Ordinable;
-import com.speedment.config.aspects.Parent;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import groovy.lang.Closure;
-import static java.util.Objects.requireNonNull;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.function.BiFunction;
 
 /**
  *
  * @author pemi
  */
-public final class ImmutableForeignKey extends ImmutableAbstractNamedConfigEntity implements ForeignKey, ImmutableParentHelper<ForeignKeyColumn> {
+public final class ImmutableForeignKey extends ImmutableDocument implements ForeignKey {
 
-    private final Optional<Table> parent;
-    private final ChildHolder<ForeignKeyColumn> children;
-
-    public ImmutableForeignKey(Table parent, ForeignKey fk) {
-        super(requireNonNull(fk).getName(), fk.isExpanded(), fk.isEnabled());
-        requireNonNull(parent);
-        // Fields
-        this.parent = Optional.of(parent);
-        // Children
-        children = childHolderOf(ForeignKeyColumn.class, fk.stream().map(fkc -> new ImmutableForeignKeyColumn(this, fkc)));
+    private final String name;
+    private final boolean enabled;
+    
+    public ImmutableForeignKey(ImmutableTable parent, ForeignKey foreignKey) {
+        super(parent, unmodifiableMap(foreignKey.getData()));
+        this.name    = foreignKey.getName();
+        this.enabled = foreignKey.isEnabled();
+    }
+    
+    public ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
+        super(parent, unmodifiableMap(data));
+        this.name    = (String) data.get(NAME);
+        this.enabled = (Boolean) data.get(ENABLED);
     }
 
     @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
+    public String getName() {
+        return name;
     }
 
     @Override
-    public Optional<Table> getParent() {
-        return parent;
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
-    public ChildHolder<ForeignKeyColumn> getChildren() {
-        return children;
+    public BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor() {
+        return ImmutableForeignKeyColumn::new;
     }
     
     @Override
-    public Stream<? extends ForeignKeyColumn> stream() {
-        return getChildren().stream().sorted(Ordinable.COMPARATOR);
-    }
-
-    @Override
-    public <T extends ForeignKeyColumn> Stream<T> streamOf(Class<T> childClass) {
-        if (ForeignKeyColumn.class.isAssignableFrom(childClass)) {
-            return getChildren().stream()
-                .map(child -> {
-                    @SuppressWarnings("unchecked")
-                    final T cast = (T) child;
-                    return cast;
-                }).sorted(Ordinable.COMPARATOR);
-        } else {
-            throw new IllegalArgumentException(
-                getClass().getSimpleName() + 
-                " does not have children of type " + 
-                childClass.getSimpleName() + "."
-            );
-        }
-    }
-
-    @Override
-    public ForeignKeyColumn addNewForeignKeyColumn() {
-        return throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
-        return throwNewUnsupportedOperationExceptionImmutable();
+    public Optional<Table> getParent() {
+        return super.getParent().map(Table.class::cast);
     }
 }

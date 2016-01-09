@@ -52,9 +52,9 @@ public class ImmutableDocument extends BaseDocument {
     public final void put(String key, Object value) {
         throwNewUnsupportedOperationExceptionImmutable();
     }
-    
+
     @Override
-    public final <P extends Document, T> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
+    public <P extends Document, T extends Document> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
         return children.computeIfAbsent(key, k -> {
             final List<Map<String, Object>> list = 
                 (List<Map<String, Object>>) get(k).orElse(null);

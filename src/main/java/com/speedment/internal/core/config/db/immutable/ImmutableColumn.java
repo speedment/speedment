@@ -18,7 +18,9 @@ package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Column;
+import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
+import java.util.Optional;
 
 /**
  *
@@ -28,7 +30,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
 
     private final boolean nullable;
     private final boolean autoincrement;
-    private final String alias;
+    private final Optional<String> alias;
     private final String typeMapper;
     private final TypeMapper<?, ?> typeMapperObject;
     private final String databaseType;
@@ -46,7 +48,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     }
 
     @Override
-    public String getAlias() {
+    public Optional<String> getAlias() {
         return alias;
     }
 
@@ -78,5 +80,10 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     @Override
     public Class<?> findDatabaseType() {
         return databaseTypeObject;
+    }
+
+    @Override
+    public Optional<Table> getParent() {
+        return super.getParent().map(Table.class::cast);
     }
 }
