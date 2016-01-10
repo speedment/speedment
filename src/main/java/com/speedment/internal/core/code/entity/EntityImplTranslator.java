@@ -253,7 +253,6 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                 .add(Field.of(thatName, OBJECT))
                 .add("if (this == that) { return true; }")
                 .add("if (!(" + thatName + " instanceof " + ENTITY.getName() + ")) { return false; }")
-                .add("@SuppressWarnings(\"unchecked\")")
                 .add("final " + ENTITY.getName() + " " + thatCastedName + " = (" + ENTITY.getName() + ")" + thatName + ";");
 
         columns().forEachOrdered(c -> {
