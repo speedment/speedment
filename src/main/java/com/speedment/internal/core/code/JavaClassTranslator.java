@@ -206,9 +206,9 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
     default String basePackageName() {
         final String packName = project().getPackageName().toLowerCase() + ".";
         if (getNode() instanceof Project) {
-            return packName + project().getName();
+            return packName + project().getName().toLowerCase();
         } else {
-            return packName + getNode().getRelativeName(Project.class, JavaLanguage::javaPacketName);
+            return packName + getNode().getRelativeName(Project.class, JavaLanguage::javaPacketName).toLowerCase();
         }
     }
 
