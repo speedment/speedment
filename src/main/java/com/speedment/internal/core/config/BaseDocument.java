@@ -45,8 +45,8 @@ public class BaseDocument implements Document {
     }
     
     public BaseDocument(Document parent, Map<String, Object> data) {
-        this.parent = parent;
-        this.config = data;
+        this.parent = requireNonNull(parent);
+        this.config = requireNonNull(data);
     }
 
     @Override

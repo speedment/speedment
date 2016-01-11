@@ -37,7 +37,6 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.Document;
 import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;

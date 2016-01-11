@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.code.model.java.entity;
 
+import com.speedment.config.Document;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
@@ -40,8 +41,9 @@ public class EntityTranslatorTest extends SimpleModelTest {
         final Generator cg = new JavaGenerator();
 
         final Table table2 = traverseOver(project, Table.class)
-            .filter(e -> TABLE_NAME.equals(e.getName()))
-            .findAny().get();
+                .peek(this::print)
+                .filter(e -> TABLE_NAME.equals(e.getName()))
+                .findAny().get();
 
         final EntityTranslator instance = new EntityTranslator(speedment, cg, table2);
         final File file = instance.get();
@@ -52,4 +54,10 @@ public class EntityTranslatorTest extends SimpleModelTest {
 
         System.out.println(code.get());
     }
+    
+    private void print(Document d) {
+        System.out.println(d);
+    }
+    
+    
 }

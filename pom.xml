@@ -84,6 +84,10 @@
             <name>Maria Sparenberg (GitHub:marylla)</name>
             <timezone>Europe/Berlin</timezone>
         </contributor>
+        <contributor>
+            <name>Anton Johansson (GitHub:anton-johansson)</name>
+            <timezone>Europe/Stockholm</timezone>
+        </contributor>
     </contributors>
 
     <issueManagement>

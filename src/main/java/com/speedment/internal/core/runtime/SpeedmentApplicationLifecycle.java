@@ -30,6 +30,7 @@ import com.speedment.config.Document;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -116,7 +117,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @return this instance
      */
     public <C extends Document & HasEnabled> T with(final Class<C> type, final Consumer<C> consumer) {
-        requireNonNulls(type, consumer);       
+        requireNonNulls(type, consumer);
 //        @SuppressWarnings("unchecked")
 //        final Consumer<? extends Document> consumerCasted = (Consumer<? extends Document>) requireNonNull(consumer);
         withsAll.add(Tuples.of(type, consumer));
@@ -133,7 +134,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withPassword(final String password) {
         // password nullable
-        with(Dbms.class, d -> d.setPassword(password));
+        with(Dbms.class, dbms -> speedment.getPasswordComponent().put(dbms, password));
         return self();
     }
 
@@ -148,7 +149,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     public T withPassword(final String dbmsName, final String password) {
         // password nullable
-        with(Dbms.class, dbmsName, d -> d.setPassword(password));
+        with(Dbms.class, dbmsName, dbms -> speedment.getPasswordComponent().put(dbms, password));
         return self();
     }
 
@@ -242,9 +243,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * schema name will then be applied after the configuration has been read
      * and after the System properties have been applied.
      * <p>
-     * This method is useful for multi-tenant projects where there are several 
+     * This method is useful for multi-tenant projects where there are several
      * identical schemas separated only by their names.
-     * 
+     *
      * @param schemaName to use for all schemas this project
      * @return this instance
      */
@@ -259,9 +260,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * schema name will then be applied after the configuration has been read
      * and after the System properties have been applied.
      * <p>
-     * This method is useful for multi-tenant projects where there are several 
+     * This method is useful for multi-tenant projects where there are several
      * identical schemas separated only by their names.
-     * 
+     *
      * @param oldSchemaName the current name of a schema
      * @param schemaName to use for the named schema
      * @return this instance
@@ -325,17 +326,19 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * Builds up the complete Project meta data tree.
      */
     protected void loadAndSetProject() {
-        try {
-            final Optional<Path> oPath = getConfigPath();
-            final Project project;
-            if (oPath.isPresent()) {
-                project = DocumentTranscoder.load(oPath.get());
-            } else {
-                project = DocumentTranscoder.load(getSpeedmentApplicationMetadata().getMetadata());
-            }
+        final Optional<Path> oPath = getConfigPath();
+        final Project project;
+        if (oPath.isPresent()) {
+            project = DocumentTranscoder.load(oPath.get());
+        } else {
+            project = DocumentTranscoder.load(getSpeedmentApplicationMetadata().getMetadata());
+        }
 
-            // Apply overridden values from the system properties (if any)
-            //final Function<Document, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+        // Apply overridden values from the system properties (if any)
+        //final Function<Document, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
+
+        /*
+
             DocumentUtil.traverseOver(project)
 //            Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
                     .forEach((Document node) -> {
@@ -364,36 +367,36 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                         );
                     });
 
-            // Apply overidden item (if any) for all ConfigEntities of a given class
-            withsAll.forEach(t2 -> {
-                final Class<? extends Document> clazz = t2.get0();
-                final Consumer<? extends Document> consumer = t2.get1();
-                traverseOver(project)
-                        .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                        .map(Document.class::cast)
-                        .forEachOrdered(consumer::accept);
-            });
+         */
+        // Apply overidden item (if any) for all ConfigEntities of a given class
+        withsAll.forEach(t2 -> {
+            final Class<? extends Document> clazz = t2.get0();
+            @SuppressWarnings("unchecked")
+            final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
+            traverseOver(project)
+                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
+                    .map(Document.class::cast)
+                    .forEachOrdered(consumer::accept);
+        });
 
-            // Apply a named overidden item (if any) for all ConfigEntities of a given class
-            withsNamed.forEach(t3 -> {
-                final Class<? extends Node> clazz = t3.get0();
-                final String name = t3.get1();
+        // Apply a named overidden item (if any) for all ConfigEntities of a given class
+        withsNamed.forEach(t3 -> {
+            final Class<? extends Document> clazz = t3.get0();
+            final String name = t3.get1();
 
-                @SuppressWarnings("unchecked")
-                final Consumer<Node> consumer = (Consumer<Node>) t3.get2();
+            @SuppressWarnings("unchecked")
+            final Consumer<Document> consumer = (Consumer<Document>) t3.get2();
 
-                project.traverse()
-                        .filter(c -> clazz.isAssignableFrom(c.getClass()))
-                        .map(Node.class::cast)
-                        .filter(c -> name.equals(c.getRelativeName(Project.class)))
-                        .forEachOrdered(consumer::accept);
-            });
+            traverseOver(project)
+                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
+                    .filter(HasName.class::isInstance)
+                    .map(d -> (Document & HasName) d)
+                    .filter(c -> name.equals(relativeName(c, Project.class)))
+                    .forEachOrdered(consumer::accept);
+        });
 
-            speedment.getProjectComponent().setProject(project);
+        speedment.getProjectComponent().setProject(project);
 
-        } catch (IOException ioe) {
-            throw new SpeedmentException("Failed to read config file", ioe);
-        }
     }
 
     protected <ENTITY> void put(Manager<ENTITY> manager) {
@@ -457,7 +460,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         }
         // Replace the metadata model with an immutable version (potentially much faster)
         final Project project = speedment.getProjectComponent().getProject();
-        final Project immutableProject = new ImmutableProject(project);
+        final Project immutableProject = ImmutableProject.wrap(project);
         speedment.getProjectComponent().setProject(immutableProject);
         //
         return speedment;

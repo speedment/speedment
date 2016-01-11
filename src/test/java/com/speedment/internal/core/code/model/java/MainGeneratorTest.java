@@ -16,8 +16,11 @@
  */
 package com.speedment.internal.core.code.model.java;
 
+import com.speedment.config.db.Project;
+import com.speedment.internal.codegen.base.Meta;
+import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.MainGenerator;
-import org.junit.Ignore;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 
 /**
@@ -31,7 +34,15 @@ public class MainGeneratorTest extends SimpleModelTest {
     public void testAccept() {
         System.out.println("accept");
 
-        final MainGenerator instance = new MainGenerator(speedment);
+        final MainGenerator instance = new MainGenerator(speedment) {
+            
+            @Override
+            protected void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
+                System.out.println("Processing "+meta.getModel().getName());
+                // Do nothing on file...
+            }
+            
+        };
         instance.accept(project);
     }
 

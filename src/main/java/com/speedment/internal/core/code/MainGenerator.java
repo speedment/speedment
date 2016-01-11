@@ -33,7 +33,6 @@ import com.speedment.event.AfterGenerate;
 import com.speedment.event.BeforeGenerate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 import com.speedment.internal.util.Statistics;
 import java.io.IOException;
@@ -49,7 +48,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
@@ -57,7 +55,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public final class MainGenerator implements Consumer<Project> {
+public class MainGenerator implements Consumer<Project> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
     private final AtomicInteger fileCounter = new AtomicInteger(0);
@@ -113,7 +111,7 @@ public final class MainGenerator implements Consumer<Project> {
         return fileCounter.get();
     }
     
-    public static void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
+    protected void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
         requireNonNull(meta);
         
         final String fname = project.getPackageLocation()

@@ -34,7 +34,7 @@ import java.nio.file.Path;
 @Api(version = "2.3")
 public final class DocumentTranscoder {
     
-    public static final String ROOT = "project";
+    public static final String ROOT = "config";
     
     public static String save(Project project) throws SpeedmentException {
         final Gson gson   = new Gson();

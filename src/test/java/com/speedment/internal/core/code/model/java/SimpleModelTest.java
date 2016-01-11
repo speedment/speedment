@@ -29,8 +29,14 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.config.db.trait.HasName;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import com.speedment.internal.core.config.dbms.MySqlDbmsType;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
+import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.core.platform.SpeedmentFactory;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
 import static java.util.stream.Collectors.joining;
@@ -57,11 +63,19 @@ public abstract class SimpleModelTest {
     }
 
     private String name(String s) {
-        return quote("name") + " : " + quote(s);
+        return quote(HasName.NAME) + " : " + quote(s);
+    }
+
+    private String typeMapper(Class<? extends TypeMapper> tmc) {
+        return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
+    }
+
+    private String dbTypeName(String dbmsTypeName) {
+        return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
     }
 
     private String array(String name, String... s) {
-        return quote(name) + " : [\n" + Stream.of(s).collect(joining(",\n")) + "\n]";
+        return quote(name) + " : [\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n]";
     }
 
     private String objectWithKey(String name, String... s) {
@@ -69,11 +83,11 @@ public abstract class SimpleModelTest {
     }
 
     private String object(String... s) {
-        return "{\n" + Stream.of(s).collect(joining(",\n")) + "\n}";
+        return "{\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n}";
     }
 
     @Before
-    public void setUp() {
+    public void simpleModelTestSetUp() {
 
         final String json = "{"
                 + objectWithKey(DocumentTranscoder.ROOT,
@@ -81,6 +95,7 @@ public abstract class SimpleModelTest {
                         array(Project.DBMSES,
                                 object(
                                         name("myDbms"),
+                                        dbTypeName(StandardDbmsType.defaultType().getName()),
                                         array(Dbms.SCHEMAS,
                                                 object(
                                                         name("mySchema"),
@@ -89,7 +104,8 @@ public abstract class SimpleModelTest {
                                                                         name(TABLE_NAME),
                                                                         array(Table.COLUMNS,
                                                                                 object(
-                                                                                        name(COLUMN_NAME)
+                                                                                        name(COLUMN_NAME),
+                                                                                        typeMapper(StringIdentityMapper.class)
                                                                                 )
                                                                         ),
                                                                         array(Table.PRIMARY_KEY_COLUMNS,
@@ -104,15 +120,14 @@ public abstract class SimpleModelTest {
                                 )
                         )
                 )
-                +"}";
+                + "}";
 
         System.out.println(json);
-        
+
         project = DocumentTranscoder.load(json);
-        
+
         System.out.println(project);
-        
-        
+
         speedment = SpeedmentFactory.newSpeedmentInstance();
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();

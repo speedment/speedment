@@ -83,7 +83,7 @@ public final class DocumentUtil {
 
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from, Function<String, String> nameMapper) {
         requireNonNulls(document, from, nameMapper);
-        final StringJoiner sj = new StringJoiner(".", "", ".").setEmptyValue("");
+        final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
         final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
         for (final Document parent : ancestors) {
