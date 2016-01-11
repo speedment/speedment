@@ -16,35 +16,40 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static java.util.Collections.unmodifiableMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
-    private final Column column;
+    private final String name;
     private final String foreignColumnName;
     private final String foreignTableName;
     private final Column foreignColumn;
     private final Table foreignTable;
-    
-
-    public ImmutableForeignKeyColumn(ImmutableForeignKey parent, ForeignKeyColumn fkc) {
-        super(parent, unmodifiableMap(fkc.getData()));
+    private final Column column;
+  
+    public ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
+        super(parent, fkc);
         
-        this.foreignColumnName = fkc.getForeignColumnName();
-        this.foreignTableName  = fkc.getForeignTableName();
-        this.foreignColumn     = fkc.findForeignColumn();
+        this.name              = (String) fkc.get(NAME);
+        this.foreignColumnName = (String) fkc.get(FOREIGN_COLUMN_NAME);
+        this.foreignTableName  = (String) fkc.get(FOREIGN_TABLE_NAME);
+        this.foreignColumn     = ForeignKeyColumn.super.findForeignColumn();
+        this.foreignTable      = ForeignKeyColumn.super.findForeignTable();
+        this.column            = ForeignKeyColumn.super.findColumn();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -53,50 +58,27 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     }
 
     @Override
-    public void setForeignColumnName(String foreignColumnName) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
     public String getForeignTableName() {
         return foreignTableName;
     }
 
     @Override
-    public void setForeignTableName(String foreignTableName) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<ForeignKey> getParent() {
-        return parent;
-    }
-
-    @Override
-    public Column getForeignColumn() {
+    public Column findForeignColumn() {
         return foreignColumn;
     }
 
     @Override
-    public Table getForeignTable() {
+    public Table findForeignTable() {
         return foreignTable;
     }
 
     @Override
-    public void resolve() {
-        foreignTable = ancestor(Schema.class).orElseThrow(
-                thereIsNo(
-                        Table.class,
-                        Schema.class,
-                        getForeignTableName()
-                )
-        ).find(Table.class, getForeignTableName());
-        foreignColumn = foreignTable.findColumn(foreignColumnName);
+    public Column findColumn() {
+        return column;
     }
-
+    
+    @Override
+    public Optional<ForeignKey> getParent() {
+        return super.getParent().map(ForeignKey.class::cast);
+    }
 }

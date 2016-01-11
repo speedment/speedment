@@ -1,6 +1,6 @@
 package com.speedment.internal.core.config.db;
 
-import com.speedment.config.BaseDocument;
+import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;

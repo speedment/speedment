@@ -18,7 +18,7 @@ package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
 import com.speedment.component.PasswordComponent;
-import com.speedment.config.DocumentTranscoder;
+import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;

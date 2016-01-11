@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.speedment.config;
+package com.speedment.internal.core.config.db.immutable;
 
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.internal.core.config.BaseDocument;
+import com.speedment.config.Document;
+import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

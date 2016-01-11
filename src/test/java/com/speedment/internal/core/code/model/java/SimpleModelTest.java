@@ -22,7 +22,7 @@
 package com.speedment.internal.core.code.model.java;
 
 import com.speedment.Speedment;
-import com.speedment.config.DocumentTranscoder;
+import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;

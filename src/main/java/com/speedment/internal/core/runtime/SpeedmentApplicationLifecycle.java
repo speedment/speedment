@@ -27,7 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
-import com.speedment.config.DocumentTranscoder;
+import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;

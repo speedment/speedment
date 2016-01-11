@@ -19,46 +19,43 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.internal.core.config.aspects.ColumnableHelper;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import java.util.Map;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public final class ImmutablePrimaryKeyColumn extends ImmutableAbstractOrdinalConfigEntity implements PrimaryKeyColumn, ColumnableHelper {
+public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implements PrimaryKeyColumn {
 
-    private final Optional<Table> parent;
-    private Column column; // Which column is this PK refering to?
+    private final boolean enabled;
+    private final String name;
+    private final Column column;
 
-    public ImmutablePrimaryKeyColumn(Table parent, PrimaryKeyColumn primaryKeyColumn) {
-        super(requireNonNull(primaryKeyColumn).getName(), primaryKeyColumn.isEnabled(), primaryKeyColumn.isExpanded(), primaryKeyColumn.getOrdinalPosition());
-        requireNonNull(parent);
-        // Fields
-        this.parent = Optional.of(parent);
-    }
-
-    @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
+    public ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
+        super(parent, pkc);
+        this.enabled = (boolean) pkc.get(ENABLED);
+        this.name    = (String) pkc.get(NAME);
+        this.column  = PrimaryKeyColumn.super.findColumn();
     }
 
     @Override
     public Optional<Table> getParent() {
-        return parent;
+        return super.getParent().map(Table.class::cast);
     }
 
     @Override
-    public Column getColumn() {
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Column findColumn() {
         return column;
     }
-
-    @Override
-    public void resolve() {
-        column = ColumnableHelper.super.getColumn();
-    }
-
 }

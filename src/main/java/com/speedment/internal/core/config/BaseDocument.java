@@ -1,10 +1,10 @@
-package com.speedment.config;
+package com.speedment.internal.core.config;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.Document;
 import static com.speedment.internal.util.document.DocumentUtil.childrenOf;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
-import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

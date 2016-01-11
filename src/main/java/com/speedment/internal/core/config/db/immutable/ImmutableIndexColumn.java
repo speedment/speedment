@@ -19,29 +19,31 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
-import com.speedment.config.aspects.Parent;
-import com.speedment.internal.core.config.aspects.ColumnableHelper;
 import com.speedment.config.db.parameters.OrderType;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static java.util.Objects.requireNonNull;
+import java.util.Map;
 import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public final class ImmutableIndexColumn extends ImmutableAbstractOrdinalConfigEntity implements IndexColumn, ColumnableHelper {
+public final class ImmutableIndexColumn extends ImmutableDocument implements IndexColumn {
 
-    private final Optional<Index> parent;
+    private final String name;
     private final OrderType orderType;
-    private Column column;
+    private final Column column;
 
-    public ImmutableIndexColumn(Index parent, IndexColumn indexColumn) {
-        super(requireNonNull(indexColumn).getName(), indexColumn.isEnabled(), indexColumn.isExpanded(), indexColumn.getOrdinalPosition());
-        requireNonNull(parent);
-        // Fields
-        this.parent = Optional.of(parent);
-        this.orderType = indexColumn.getOrderType();
+    public ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> indexColumn) {
+        super(parent, indexColumn);
+        
+        this.name      = (String) indexColumn.get(NAME);
+        this.orderType = (OrderType) indexColumn.get(ORDER_TYPE);
+        this.column    = IndexColumn.super.findColumn();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -50,28 +52,12 @@ public final class ImmutableIndexColumn extends ImmutableAbstractOrdinalConfigEn
     }
 
     @Override
-    public void setOrderType(OrderType orderType) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<Index> getParent() {
-        return parent;
-    }
-
-    @Override
-    public Column getColumn() {
+    public Column findColumn() {
         return column;
     }
 
     @Override
-    public void resolve() {
-        this.column = ColumnableHelper.super.getColumn();
+    public Optional<Index> getParent() {
+        return super.getParent().map(Index.class::cast);
     }
-
 }

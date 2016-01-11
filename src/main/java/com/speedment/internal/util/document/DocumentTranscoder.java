@@ -1,4 +1,4 @@
-package com.speedment.config;
+package com.speedment.internal.util.document;
 
 import com.speedment.config.db.Project;
 import com.google.gson.Gson;

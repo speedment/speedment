@@ -1,6 +1,5 @@
 package com.speedment.internal.core.config;
 
-import com.speedment.config.BaseDocument;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasParent;
 import java.util.Map;

@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
@@ -26,21 +25,15 @@ import java.util.function.BiFunction;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class ImmutableForeignKey extends ImmutableDocument implements ForeignKey {
 
     private final String name;
     private final boolean enabled;
-    
-    public ImmutableForeignKey(ImmutableTable parent, ForeignKey foreignKey) {
-        super(parent, unmodifiableMap(foreignKey.getData()));
-        this.name    = foreignKey.getName();
-        this.enabled = foreignKey.isEnabled();
-    }
-    
+
     public ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
-        super(parent, unmodifiableMap(data));
+        super(parent, data);
         this.name    = (String) data.get(NAME);
         this.enabled = (Boolean) data.get(ENABLED);
     }
@@ -57,7 +50,7 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
 
     @Override
     public BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor() {
-        return ImmutableForeignKeyColumn::new;
+        return (parent, map) -> new ImmutableForeignKeyColumn((ImmutableForeignKey) parent, map);
     }
     
     @Override

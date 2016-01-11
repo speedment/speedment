@@ -16,12 +16,9 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.Document;
-import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
+import com.speedment.internal.core.stream.OptionalUtil;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -29,22 +26,36 @@ import java.util.function.BiFunction;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
+    private final boolean enabled;
+    private final String name;
     private final String typeName;
     private final Optional<String> ipAddress;
     private final OptionalInt port;
     private final Optional<String> username;
 
-    public ImmutableDbms(ImmutableProject parent, Dbms dbms) {
-        super(parent, dbms.getData());
+    public ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
+        super(parent, dbms);
 
-        this.typeName  = dbms.getTypeName();
-        this.ipAddress = dbms.getIpAddress();
-        this.port      = dbms.getPort();
-        this.username  = dbms.getUsername();
+        this.enabled   = (boolean) dbms.get(ENABLED);
+        this.name      = (String) dbms.get(NAME);
+        this.typeName  = (String) dbms.get(TYPE_NAME);
+        this.ipAddress = Optional.ofNullable((String) dbms.get(IP_ADDRESS));
+        this.port      = OptionalUtil.ofNullable((Integer) dbms.get(PORT));
+        this.username  = Optional.ofNullable((String) dbms.get(USERNAME));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -69,7 +80,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     @Override
     public BiFunction<Dbms, Map<String, Object>, ImmutableSchema> schemaConstructor() {
-        return ImmutableSchema::new;
+        return (parent, map) -> new ImmutableSchema((ImmutableDbms) parent, map);
     }
 
     @Override

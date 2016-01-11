@@ -16,18 +16,20 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.ImmutableDocument;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
+import java.util.Map;
 import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class ImmutableColumn extends ImmutableDocument implements Column {
 
+    private final boolean enabled;
+    private final String name;
     private final boolean nullable;
     private final boolean autoincrement;
     private final Optional<String> alias;
@@ -36,15 +38,28 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final String databaseType;
     private final Class<?> databaseTypeObject;
 
-    public ImmutableColumn(ImmutableTable parent, Column column) {
-        super(parent, column.getData());
-        this.nullable              = column.isNullable();
-        this.autoincrement         = column.isAutoIncrement();
-        this.alias                 = column.getAlias();
-        this.typeMapper            = column.getTypeMapper();
-        this.typeMapperObject      = column.findTypeMapper();
-        this.databaseType          = column.getDatabaseType();
-        this.databaseTypeObject    = column.findDatabaseType();
+    public ImmutableColumn(ImmutableTable parent, Map<String, Object> column) {
+        super(parent, column);
+        
+        this.enabled            = (boolean) column.get(ENABLED);
+        this.name               = (String) column.get(NAME);
+        this.nullable           = (boolean) column.get(NULLABLE);
+        this.autoincrement      = (boolean) column.get(AUTO_INCREMENT);
+        this.alias              = Optional.ofNullable((String) column.get(ALIAS));
+        this.typeMapper         = (String) column.get(TYPE_MAPPER);
+        this.databaseType       = (String) column.get(DATABASE_TYPE);
+        this.typeMapperObject   = Column.super.findTypeMapper();
+        this.databaseTypeObject = Column.super.findDatabaseType();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

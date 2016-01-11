@@ -35,7 +35,7 @@ import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;

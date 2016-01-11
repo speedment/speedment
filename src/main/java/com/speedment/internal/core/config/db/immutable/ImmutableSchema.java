@@ -16,156 +16,59 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.internal.core.config.*;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import com.speedment.config.aspects.Nameable;
-import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.ColumnCompressionType;
-import com.speedment.config.parameters.FieldStorageType;
-import com.speedment.config.parameters.StorageEngineType;
-import groovy.lang.Closure;
+import java.util.Map;
 import java.util.Optional;
-import static com.speedment.internal.core.config.db.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
-import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
+import java.util.function.BiFunction;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public final class ImmutableSchema extends ImmutableAbstractNamedConfigEntity implements Schema, ImmutableParentHelper<Table> {
+public final class ImmutableSchema extends ImmutableDocument implements Schema {
 
-    private final Optional<Dbms> parent;
-    private final ChildHolder<Table> children;
+    private final boolean enabled;
+    private final String name;
+    private final Optional<String> alias;
     private final boolean defaultSchema;
-    private final Optional<String> schemaName;
-    private final Optional<String> catalogName;
-    private final FieldStorageType fieldStorageType;
-    private final ColumnCompressionType columnCompressionType;
-    private final StorageEngineType storageEngineType;
 
-    public ImmutableSchema(Dbms parent, Schema schema) {
-        super(requireNonNull(schema).getName(), schema.isExpanded(), schema.isEnabled());
-        // Fields
-        this.parent = Optional.of(parent);
-        this.defaultSchema = schema.isDefaultSchema();
-        this.schemaName = schema.getSchemaName();
-        this.catalogName = schema.getCatalogName();
-        this.fieldStorageType = schema.getFieldStorageType();
-        this.columnCompressionType = schema.getColumnCompressionType();
-        this.storageEngineType = schema.getStorageEngineType();
-        //Children
-        children = childHolderOf(Table.class, schema.stream().map(s -> new ImmutableTable(this, s)));
+    public ImmutableSchema(ImmutableDbms parent, Map<String, Object> schema) {
+        super(parent, schema);
+        this.enabled       = (boolean) schema.get(ENABLED);
+        this.name          = (String) schema.get(NAME);
+        this.alias         = Optional.ofNullable((String) schema.get(ALIAS));
+        this.defaultSchema = (boolean) schema.get(DEFAULT_SCHEMA);
     }
 
     @Override
-    public Boolean isDefaultSchema() {
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Optional<String> getAlias() {
+        return alias;
+    }
+
+    @Override
+    public boolean isDefaultSchema() {
         return defaultSchema;
     }
 
     @Override
-    public void setDefaultSchema(Boolean defaultSchema) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public FieldStorageType getFieldStorageType() {
-        return fieldStorageType;
-    }
-
-    @Override
-    public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public ColumnCompressionType getColumnCompressionType() {
-        return columnCompressionType;
-    }
-
-    @Override
-    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public StorageEngineType getStorageEngineType() {
-        return storageEngineType;
-    }
-
-    @Override
-    public void setStorageEngineType(StorageEngineType storageEngineType) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<String> getCatalogName() {
-        return catalogName;
-    }
-
-    @Override
-    public void setCatalogName(String catalogName) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Optional<String> getSchemaName() {
-        return schemaName;
-    }
-
-    @Override
-    public void setSchemaName(String schemaName) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public void setParent(Parent<?> parent) {
-        throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
     public Optional<Dbms> getParent() {
-        return parent;
+        return super.getParent().map(Dbms.class::cast);
     }
 
     @Override
-    public ChildHolder<Table> getChildren() {
-        return children;
-    }
-    
-    @Override
-    public Stream<? extends Table> stream() {
-        return getChildren().stream().sorted(Nameable.COMPARATOR);
-    }
-
-    @Override
-    public <T extends Table> Stream<T> streamOf(Class<T> childClass) {
-        if (Table.class.isAssignableFrom(childClass)) {
-            return getChildren().stream()
-                .map(child -> {
-                    @SuppressWarnings("unchecked")
-                    final T cast = (T) child;
-                    return cast;
-                }).sorted(Nameable.COMPARATOR);
-        } else {
-            throw new IllegalArgumentException(
-                getClass().getSimpleName() + 
-                " does not have children of type " + 
-                childClass.getSimpleName() + "."
-            );
-        }
-    }
-
-    @Override
-    public Table addNewTable() {
-        return throwNewUnsupportedOperationExceptionImmutable();
-    }
-
-    @Override
-    public Table table(Closure<?> c) {
-        return throwNewUnsupportedOperationExceptionImmutable();
+    public BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor() {
+        return (parent, map) -> new ImmutableTable((ImmutableSchema) parent, map);
     }
 }

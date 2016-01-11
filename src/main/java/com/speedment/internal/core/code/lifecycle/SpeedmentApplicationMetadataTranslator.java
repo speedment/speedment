@@ -17,7 +17,7 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
-import com.speedment.config.DocumentTranscoder;
+import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
 import com.speedment.internal.codegen.lang.models.File;
