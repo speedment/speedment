@@ -42,8 +42,8 @@ import javafx.util.StringConverter;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
-import org.controlsfx.glyphfont.FontAwesome;
-import static java.util.Objects.requireNonNull;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -81,9 +81,8 @@ public final class ConnectController implements Initializable {
             container.getChildren().remove(openContainer);
         }
 
-        final FontAwesome fa = new FontAwesome();
-        buttonOpen.setGraphic(fa.create(FontAwesome.Glyph.FOLDER_OPEN).size(ICON_SIZE));
-        buttonConnect.setGraphic(fa.create(FontAwesome.Glyph.SIGN_IN).size(ICON_SIZE));
+        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
+        buttonConnect.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_IN, ICON_SIZE));
         
         fieldType.setItems(
             getDbmsTypes()
