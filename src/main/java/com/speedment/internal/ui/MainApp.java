@@ -32,6 +32,8 @@ import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.stage.Stage;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -58,7 +60,7 @@ public final class MainApp extends Application {
         final Parameters parameters = getParameters();
         final List<String> params   = parameters.getRaw();
         if (params.isEmpty()) {
-            final UISession session = createSession(stage, UISession.DEFAULT_GROOVY_LOCATION);
+            final UISession session = createSession(stage, UISession.DEFAULT_CONFIG_LOCATION);
             
             if (EmailUtil.hasEmail()) {
                 ConnectController.createAndShow(session);

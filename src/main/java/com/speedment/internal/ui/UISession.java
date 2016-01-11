@@ -32,7 +32,6 @@ import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
-import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
@@ -79,7 +78,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class UISession {
 
-    public final static String DEFAULT_GROOVY_LOCATION = "src/main/groovy/speedment.groovy";
+    public final static String DEFAULT_CONFIG_LOCATION = "src/main/groovy/speedment.groovy";
     
     public enum ReuseStage {
         USE_EXISTING_STAGE,

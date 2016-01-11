@@ -44,6 +44,7 @@ import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static java.util.Objects.requireNonNull;
 import org.controlsfx.glyphfont.FontAwesome;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
