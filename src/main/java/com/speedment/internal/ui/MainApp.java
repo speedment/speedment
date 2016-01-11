@@ -34,6 +34,10 @@ import static javafx.application.Application.launch;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Application.launch;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -71,7 +75,7 @@ public final class MainApp extends Application {
             final String filename   = params.get(0).trim().replace("\\", "/");
             final UISession session = createSession(stage, filename);
             final File file         = new File(filename);
-            session.loadGroovyFile(file, USE_EXISTING_STAGE);
+            session.loadConfigFile(file, USE_EXISTING_STAGE);
         }
     }
     
@@ -82,8 +86,8 @@ public final class MainApp extends Application {
         launch(args);
     }
     
-    private UISession createSession(Stage stage, String groovyLocation) {
-        final UISession session = new UISession(SPEEDMENT, this, stage, groovyLocation);
+    private UISession createSession(Stage stage, String jsonLocation) {
+        final UISession session = new UISession(SPEEDMENT, this, stage, jsonLocation);
         SpeedmentFont.loadAll();
         Statistics.onGuiStarted();
         

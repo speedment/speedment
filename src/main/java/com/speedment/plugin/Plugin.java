@@ -27,7 +27,7 @@ import com.speedment.annotation.Api;
 public interface Plugin {
     
     /**
-     * Returns the name of this plugin as declared in the groovy file.
+     * Returns the name of this plugin as declared in the config file.
      * 
      * @return  the unique name
      */

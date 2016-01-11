@@ -72,7 +72,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? super DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
+    public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
         contextMenuBuilders.put(nodeType, menuBuilder);
     }
 

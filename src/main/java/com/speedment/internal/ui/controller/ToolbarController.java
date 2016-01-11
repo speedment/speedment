@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
 import org.controlsfx.glyphfont.FontAwesome;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

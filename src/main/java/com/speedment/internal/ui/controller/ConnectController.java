@@ -42,8 +42,8 @@ import javafx.util.StringConverter;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
-import static java.util.Objects.requireNonNull;
 import org.controlsfx.glyphfont.FontAwesome;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -159,7 +159,6 @@ public final class ConnectController implements Initializable {
         fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
         
         buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
-
         buttonConnect.setOnAction(ev -> {
             
             // Register password in password component

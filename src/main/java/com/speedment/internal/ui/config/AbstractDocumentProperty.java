@@ -264,7 +264,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      */
     public final <T extends Document> ObservableList<T> observableListOf(String key, Class<T> type) throws SpeedmentException {
         try {
-            final ObservableList<T> list = (ObservableList<T>) documents.get(key);
+            @SuppressWarnings("unchecked")
+            final ObservableList<T> list = 
+                (ObservableList<T>) documents.computeIfAbsent(key,
+                    k -> observableList(new CopyOnWriteArrayList<>())
+                );
             return list;
         } catch (ClassCastException ex) {
             throw new SpeedmentException(

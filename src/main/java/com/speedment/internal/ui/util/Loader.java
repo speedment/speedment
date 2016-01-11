@@ -29,6 +29,7 @@ import java.util.function.Consumer;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  *

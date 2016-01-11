@@ -18,12 +18,6 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.event.ProjectLoaded;
@@ -31,7 +25,12 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.ForeignKeyProperty;
+import com.speedment.internal.ui.config.IndexProperty;
+import com.speedment.internal.ui.config.SchemaProperty;
+import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -52,8 +51,8 @@ import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import static java.util.Objects.requireNonNull;
 import javafx.collections.ListChangeListener;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -72,12 +71,12 @@ public final class ProjectTreeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
         
-        ui.installContextMenu(Project.class,    this::createDefaultContextMenu);
-        ui.installContextMenu(Dbms.class,       this::createDefaultContextMenu);
-        ui.installContextMenu(Schema.class,     this::createDefaultContextMenu);
-        ui.installContextMenu(Table.class,      this::createDefaultContextMenu);
-        ui.installContextMenu(Index.class,      this::createDefaultContextMenu);
-        ui.installContextMenu(ForeignKey.class, this::createDefaultContextMenu);
+        ui.installContextMenu(ProjectProperty.class,    this::createDefaultContextMenu);
+        ui.installContextMenu(DbmsProperty.class,       this::createDefaultContextMenu);
+        ui.installContextMenu(SchemaProperty.class,     this::createDefaultContextMenu);
+        ui.installContextMenu(TableProperty.class,      this::createDefaultContextMenu);
+        ui.installContextMenu(IndexProperty.class,      this::createDefaultContextMenu);
+        ui.installContextMenu(ForeignKeyProperty.class, this::createDefaultContextMenu);
         
         runLater(() -> prepareTree(session.getProject()));
     }

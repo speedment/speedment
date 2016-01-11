@@ -78,7 +78,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class UISession {
 
-    public final static String DEFAULT_CONFIG_LOCATION = "src/main/groovy/speedment.groovy";
+    public final static String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
     
     public enum ReuseStage {
         USE_EXISTING_STAGE,
@@ -93,7 +93,7 @@ public final class UISession {
         file.exists() && 
         file.isFile() && 
         file.canRead() && 
-        file.getName().toLowerCase().endsWith(".groovy");
+        file.getName().toLowerCase().endsWith(".json");
     
     private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file ->
         file != null &&
@@ -113,17 +113,17 @@ public final class UISession {
     
     private File currentlyOpenFile = null;
     
-    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation) {
-        this(speedment, application, stage, defaultGroovyLocation, new ProjectProperty(new ConcurrentHashMap<>()));
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
+        this(speedment, application, stage, defaultConfigLocation, new ProjectProperty(new ConcurrentHashMap<>()));
     }
     
-    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation, Project project) {
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
         requireNonNull(project);
         
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
-        this.defaultJsonLocation = requireNonNull(defaultGroovyLocation);
+        this.defaultJsonLocation   = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty(project.stream().toConcurrentMap());
         this.propertySheetFactory  = new PropertySheetFactory();
         this.fontAwesome           = new FontAwesome();
@@ -174,8 +174,8 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E openProject(ReuseStage reuse) {
         return on(event -> {
             final FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open .groovy File");
-            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+            fileChooser.setTitle("Open .json File");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
             
             Optional.ofNullable(Settings.inst().get("project_location"))
                 .map(File::new)
@@ -184,7 +184,7 @@ public final class UISession {
             
             final File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
-                loadGroovyFile(file, reuse);
+                loadConfigFile(file, reuse);
             }
         });
     }
@@ -193,9 +193,9 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E saveProject() {
         return on(event -> {
             if (currentlyOpenFile == null) {
-                saveGroovyFile();
+                saveConfigFile();
             } else {
-                saveGroovyFile(currentlyOpenFile);
+                saveConfigFile(currentlyOpenFile);
             }
         });
     }
@@ -203,7 +203,7 @@ public final class UISession {
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
         return on(event -> {
-            saveGroovyFile();
+            saveConfigFile();
         });
     }
     
@@ -255,7 +255,7 @@ public final class UISession {
                 currentlyOpenFile = new File(defaultJsonLocation);
             }
             
-            saveGroovyFile(currentlyOpenFile);
+            saveConfigFile(currentlyOpenFile);
             
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
@@ -297,6 +297,8 @@ public final class UISession {
     }
     
     public void showError(String title, String message, final Throwable ex) {
+        LOGGER.error(ex, message);
+
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
         scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
@@ -318,6 +320,8 @@ public final class UISession {
     }
     
     public Optional<ButtonType> showWarning(String title, String message) {
+        LOGGER.warn(message);
+        
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
         scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
@@ -408,7 +412,7 @@ public final class UISession {
         return false;
     }
     
-    public void loadGroovyFile(File file, ReuseStage reuse) {
+    public void loadConfigFile(File file, ReuseStage reuse) {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
                 final Project p = DocumentTranscoder.load(file.toPath());
@@ -448,7 +452,7 @@ public final class UISession {
             }
         } else {
             showError(
-                "Could not read .groovy file", 
+                "Could not read .json file", 
                 "The file '" + file.getAbsoluteFile().getName() + 
                 "' could not be read.", 
                 null
@@ -456,11 +460,11 @@ public final class UISession {
         }
     }
     
-    private void saveGroovyFile() {
+    private void saveConfigFile() {
         final FileChooser fileChooser = new FileChooser();
         
-        fileChooser.setTitle("Save Groovy File");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+        fileChooser.setTitle("Save JSON File");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         
         if (currentlyOpenFile == null) {
             final Path path   = Paths.get(defaultJsonLocation);
@@ -485,15 +489,15 @@ public final class UISession {
         
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            if (!file.getName().endsWith(".groovy")) {
-                file = new File(file.getAbsolutePath() + ".groovy");
+            if (!file.getName().endsWith(".json")) {
+                file = new File(file.getAbsolutePath() + ".json");
             }
             
-            saveGroovyFile(file);
+            saveConfigFile(file);
         }
     }
     
-    private void saveGroovyFile(File file) {
+    private void saveConfigFile(File file) {
         final Path path   = file.toPath();
         final Path parent = path.getParent();
 

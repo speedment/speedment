@@ -37,6 +37,7 @@ import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import javafx.beans.binding.Bindings;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

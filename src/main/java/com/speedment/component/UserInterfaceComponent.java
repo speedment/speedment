@@ -98,7 +98,7 @@ public interface UserInterfaceComponent extends Component {
      * @param nodeType    the interface main type of the node
      * @param menuBuilder the builder to use
      */
-    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? super DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
+    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
     
     /**
      * If a builder exists for the interface main type of the specified node,
@@ -113,7 +113,7 @@ public interface UserInterfaceComponent extends Component {
     <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC node);
     
     @FunctionalInterface
-    interface ContextMenuBuilder<NODE extends DocumentProperty> {
-        Optional<ContextMenu> build(TreeCell<DocumentProperty> treeCell, NODE node);
+    interface ContextMenuBuilder<DOC extends DocumentProperty> {
+        Optional<ContextMenu> build(TreeCell<DocumentProperty> treeCell, DOC node);
     }
 }

@@ -18,7 +18,7 @@ package com.speedment.internal.core.runtime;
 
 /**
  * This interface defines how a Speedment application can obtain its
- * configuration meta data. For example, in a form of a groovy file
+ * configuration meta data. For example, in a form of a json file
  *
  * @author pemi
  * @since 2.0
