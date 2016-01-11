@@ -30,22 +30,22 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
 
     private final boolean enabled;
     private final String name;
+    private final Optional<String> alias;
     private final boolean nullable;
     private final boolean autoincrement;
-    private final Optional<String> alias;
     private final String typeMapper;
     private final TypeMapper<?, ?> typeMapperObject;
     private final String databaseType;
     private final Class<?> databaseTypeObject;
 
-    public ImmutableColumn(ImmutableTable parent, Map<String, Object> column) {
+    ImmutableColumn(ImmutableTable parent, Map<String, Object> column) {
         super(parent, column);
         
         this.enabled            = (boolean) column.get(ENABLED);
         this.name               = (String) column.get(NAME);
+        this.alias              = Optional.ofNullable((String) column.get(ALIAS));
         this.nullable           = (boolean) column.get(NULLABLE);
         this.autoincrement      = (boolean) column.get(AUTO_INCREMENT);
-        this.alias              = Optional.ofNullable((String) column.get(ALIAS));
         this.typeMapper         = (String) column.get(TYPE_MAPPER);
         this.databaseType       = (String) column.get(DATABASE_TYPE);
         this.typeMapperObject   = Column.super.findTypeMapper();

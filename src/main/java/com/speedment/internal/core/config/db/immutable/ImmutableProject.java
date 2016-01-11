@@ -20,9 +20,13 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.util.Collections.unmodifiableSet;
 import java.util.Optional;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,8 +39,10 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     private final String packageName;
     private final String packageLocation;
     private final Optional<Path> configPath;
+    
+    private final Set<ImmutableDbms> dbmses;
 
-    public ImmutableProject(Map<String, Object> project) {
+    ImmutableProject(Map<String, Object> project) {
         super(project);
 
         this.enabled         = (boolean) project.get(ENABLED);
@@ -44,6 +50,8 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         this.packageName     = (String) project.get(PACKAGE_NAME);
         this.packageLocation = (String) project.get(PACKAGE_LOCATION);
         this.configPath      = Optional.ofNullable((String) project.get(CONFIG_PATH)).map(Paths::get);
+        
+        this.dbmses = unmodifiableSet(Project.super.dbmses().map(ImmutableDbms.class::cast).collect(toSet()));
     }
 
     @Override
@@ -74,5 +82,14 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     @Override
     public BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor() {
         return (parent, map) -> new ImmutableDbms((ImmutableProject) parent, map);
+    }
+
+    @Override
+    public Stream<ImmutableDbms> dbmses() {
+        return dbmses.stream();
+    }
+    
+    public static ImmutableProject wrap(Project project) {
+        return new ImmutableProject(project.getData());
     }
 }

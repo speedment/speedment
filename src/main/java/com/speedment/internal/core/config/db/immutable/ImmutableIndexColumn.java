@@ -30,20 +30,27 @@ import java.util.Optional;
 public final class ImmutableIndexColumn extends ImmutableDocument implements IndexColumn {
 
     private final String name;
+    private final int ordinalPosition;
     private final OrderType orderType;
     private final Column column;
 
-    public ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> indexColumn) {
-        super(parent, indexColumn);
+    ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
+        super(parent, ic);
         
-        this.name      = (String) indexColumn.get(NAME);
-        this.orderType = (OrderType) indexColumn.get(ORDER_TYPE);
-        this.column    = IndexColumn.super.findColumn();
+        this.name            = (String) ic.get(NAME);
+        this.ordinalPosition = (int) ic.get(ORDINAL_POSITION);
+        this.orderType       = (OrderType) ic.get(ORDER_TYPE);
+        this.column          = IndexColumn.super.findColumn();
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int getOrdinalPosition() {
+        return ordinalPosition;
     }
 
     @Override

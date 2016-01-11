@@ -8,7 +8,6 @@ import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
-import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.internal.core.config.db.mutator.IndexMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.util.Map;

@@ -20,8 +20,8 @@ import com.speedment.internal.core.config.db.mutator.PrimaryKeyColumnMutator;
 public interface PrimaryKeyColumn extends 
         Document,
         HasParent<Table>,
-        HasName,
         HasEnabled,
+        HasName,
         HasOrdinalPosition,
         HasColumn,
         HasMainInterface,

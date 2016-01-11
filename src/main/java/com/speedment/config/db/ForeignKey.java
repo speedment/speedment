@@ -48,5 +48,4 @@ public interface ForeignKey extends
     default ForeignKeyMutator mutator() {
         return DocumentMutator.of(this);
     }
-
 }

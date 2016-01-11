@@ -21,7 +21,11 @@ import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
+import static java.util.Collections.unmodifiableSet;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -31,11 +35,15 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
 
     private final String name;
     private final boolean enabled;
+    
+    private final Set<ImmutableForeignKeyColumn> foreignKeyColumns;
 
-    public ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
+    ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
         this.name    = (String) data.get(NAME);
         this.enabled = (Boolean) data.get(ENABLED);
+        
+        this.foreignKeyColumns = unmodifiableSet(ForeignKey.super.foreignKeyColumns().map(ImmutableForeignKeyColumn.class::cast).collect(toSet()));
     }
 
     @Override
@@ -51,6 +59,11 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
     @Override
     public BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor() {
         return (parent, map) -> new ImmutableForeignKeyColumn((ImmutableForeignKey) parent, map);
+    }
+
+    @Override
+    public Stream<ImmutableForeignKeyColumn> foreignKeyColumns() {
+        return foreignKeyColumns.stream();
     }
     
     @Override

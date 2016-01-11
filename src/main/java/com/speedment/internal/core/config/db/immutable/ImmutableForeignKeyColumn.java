@@ -30,16 +30,18 @@ import java.util.Optional;
 public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
     private final String name;
+    private final int ordinalPosition;
     private final String foreignColumnName;
     private final String foreignTableName;
     private final Column foreignColumn;
     private final Table foreignTable;
     private final Column column;
   
-    public ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
+    ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, fkc);
         
         this.name              = (String) fkc.get(NAME);
+        this.ordinalPosition   = (int) fkc.get(ORDINAL_POSITION);
         this.foreignColumnName = (String) fkc.get(FOREIGN_COLUMN_NAME);
         this.foreignTableName  = (String) fkc.get(FOREIGN_TABLE_NAME);
         this.foreignColumn     = ForeignKeyColumn.super.findForeignColumn();
@@ -50,6 +52,11 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int getOrdinalPosition() {
+        return ordinalPosition;
     }
 
     @Override

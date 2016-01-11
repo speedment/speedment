@@ -19,10 +19,14 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.internal.core.stream.OptionalUtil;
+import static java.util.Collections.unmodifiableSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.function.BiFunction;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -32,20 +36,26 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     private final boolean enabled;
     private final String name;
+    private final Optional<String> alias;
     private final String typeName;
     private final Optional<String> ipAddress;
     private final OptionalInt port;
     private final Optional<String> username;
+    
+    private final Set<ImmutableSchema> schemas;
 
-    public ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
+    ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
         super(parent, dbms);
 
         this.enabled   = (boolean) dbms.get(ENABLED);
         this.name      = (String) dbms.get(NAME);
+        this.alias     = Optional.ofNullable((String) dbms.get(ALIAS));
         this.typeName  = (String) dbms.get(TYPE_NAME);
         this.ipAddress = Optional.ofNullable((String) dbms.get(IP_ADDRESS));
         this.port      = OptionalUtil.ofNullable((Integer) dbms.get(PORT));
         this.username  = Optional.ofNullable((String) dbms.get(USERNAME));
+        
+        this.schemas   = unmodifiableSet(Dbms.super.schemas().map(ImmutableSchema.class::cast).collect(toSet()));
     }
 
     @Override
@@ -56,6 +66,11 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Optional<String> getAlias() {
+        return alias;
     }
 
     @Override
@@ -81,6 +96,11 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     @Override
     public BiFunction<Dbms, Map<String, Object>, ImmutableSchema> schemaConstructor() {
         return (parent, map) -> new ImmutableSchema((ImmutableDbms) parent, map);
+    }
+
+    @Override
+    public Stream<ImmutableSchema> schemas() {
+        return schemas.stream();
     }
 
     @Override

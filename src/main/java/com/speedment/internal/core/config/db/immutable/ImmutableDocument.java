@@ -73,7 +73,7 @@ public class ImmutableDocument extends BaseDocument {
         }).stream().map(c -> (T) c);
     }
     
-    public static ImmutableDocument from(Document document) {
+    public static ImmutableDocument wrap(Document document) {
         return new ImmutableDocument(document.getData());
     }
 }

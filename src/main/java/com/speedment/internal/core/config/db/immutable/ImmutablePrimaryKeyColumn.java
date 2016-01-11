@@ -30,13 +30,15 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
 
     private final boolean enabled;
     private final String name;
+    private final int ordinalPosition;
     private final Column column;
 
-    public ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
+    ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
         super(parent, pkc);
-        this.enabled = (boolean) pkc.get(ENABLED);
-        this.name    = (String) pkc.get(NAME);
-        this.column  = PrimaryKeyColumn.super.findColumn();
+        this.enabled         = (boolean) pkc.get(ENABLED);
+        this.name            = (String) pkc.get(NAME);
+        this.ordinalPosition = (int) pkc.get(ORDINAL_POSITION);
+        this.column          = PrimaryKeyColumn.super.findColumn();
     }
 
     @Override
@@ -52,6 +54,11 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int getOrdinalPosition() {
+        return ordinalPosition;
     }
 
     @Override

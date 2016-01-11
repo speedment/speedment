@@ -22,9 +22,13 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import static java.util.Collections.unmodifiableSet;
 import java.util.Optional;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,12 +39,22 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     private final boolean enabled;
     private final String name;
     private final Optional<String> alias;
+    
+    private final Set<ImmutableColumn> columns;
+    private final Set<ImmutableIndex> indexes;
+    private final Set<ImmutableForeignKey> foreignKeys;
+    private final Set<ImmutablePrimaryKeyColumn> primaryKeyColumns;
 
-    public ImmutableTable(ImmutableSchema parent, Map<String, Object> table) {
+    ImmutableTable(ImmutableSchema parent, Map<String, Object> table) {
         super(parent, table);
         this.enabled = (boolean) table.get(ENABLED);
         this.name    = (String) table.get(NAME);
         this.alias   = Optional.ofNullable((String) table.get(ALIAS));
+        
+        this.columns           = unmodifiableSet(Table.super.columns().map(ImmutableColumn.class::cast).collect(toSet()));
+        this.indexes           = unmodifiableSet(Table.super.indexes().map(ImmutableIndex.class::cast).collect(toSet()));
+        this.foreignKeys       = unmodifiableSet(Table.super.foreignKeys().map(ImmutableForeignKey.class::cast).collect(toSet()));
+        this.primaryKeyColumns = unmodifiableSet(Table.super.primaryKeyColumns().map(ImmutablePrimaryKeyColumn.class::cast).collect(toSet()));
     }
 
     @Override
@@ -76,6 +90,26 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     @Override
     public BiFunction<Table, Map<String, Object>, ? extends PrimaryKeyColumn> primaryKeyColumnConstructor() {
         return (parent, map) -> new ImmutablePrimaryKeyColumn((ImmutableTable) parent, map);
+    }
+
+    @Override
+    public Stream<ImmutableColumn> columns() {
+        return columns.stream();
+    }
+
+    @Override
+    public Stream<ImmutableIndex> indexes() {
+        return indexes.stream();
+    }
+
+    @Override
+    public Stream<ImmutableForeignKey> foreignKeys() {
+        return foreignKeys.stream();
+    }
+
+    @Override
+    public Stream<ImmutablePrimaryKeyColumn> primaryKeyColumns() {
+        return primaryKeyColumns.stream();
     }
 
     @Override
