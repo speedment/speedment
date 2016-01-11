@@ -53,9 +53,9 @@ public interface Dbms extends
         PORT       = "port",
         USERNAME   = "username",
         SCHEMAS    = "schemas";
-    
+        
     default String getTypeName() {
-        return (String) get(TYPE_NAME).get();
+        return getAsString(TYPE_NAME).get();
     }
     
     /**
