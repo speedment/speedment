@@ -71,8 +71,8 @@ public class BaseDocument implements Document {
 
     @Override
     public OptionalLong getAsLong(String key) {
-        final Long value = (Long) config.get(key);
-        return value == null ? OptionalLong.empty() : OptionalLong.of(value);
+        final Double value = (Double) config.get(key);
+        return value == null ? OptionalLong.empty() : OptionalLong.of(value.longValue());
     }
 
     @Override
@@ -83,8 +83,8 @@ public class BaseDocument implements Document {
 
     @Override
     public OptionalInt getAsInt(String key) {
-        final Integer value = (Integer) config.get(key);
-        return value == null ? OptionalInt.empty() : OptionalInt.of(value);
+        final Double value = (Double) config.get(key);
+        return value == null ? OptionalInt.empty() : OptionalInt.of(value.intValue());
     }
     
     @Override
@@ -94,7 +94,13 @@ public class BaseDocument implements Document {
 
     @Override
     public void put(String key, Object value) {
-        config.put(key, value);
+        requireNonNull(value);
+        
+        if (value instanceof Number) {
+            config.put(key, ((Number) value).doubleValue());
+        } else {
+            config.put(key, value);
+        }
     }
     
     @Override

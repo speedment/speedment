@@ -30,8 +30,8 @@ public interface HasOrderType extends Document {
     final String ORDER_TYPE = "orderType";
 
     default OrderType getOrderType() {
-        return get(ORDER_TYPE)
-            .map(OrderType.class::cast)
+        return getAsString(ORDER_TYPE)
+            .map(OrderType::valueOf)
             .orElse(OrderType.ASC);
     }
 }
