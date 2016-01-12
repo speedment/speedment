@@ -24,6 +24,13 @@ import com.speedment.config.Document;
  */
 public interface HasMainInterface {
 
+        /**
+     * Returns the {@code Class} of the interface of this node.
+     * <p>
+     * This should <b>not</b> be overridden by implementing classes!
+     *
+     * @return the main interface class
+     */
     Class<? extends Document> mainInterface();
     
 }

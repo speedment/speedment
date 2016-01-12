@@ -35,6 +35,12 @@ import java.util.stream.Stream;
 @Api(version = "2.3")
 public interface Document {
     
+    /**
+     * Returns the parent of this Document or {@link Optional#empty()} if the Document
+     * does not have a parent.
+     * 
+     * @return 
+     */
     Optional<? extends Document> getParent();
     
     Map<String, Object> getData();

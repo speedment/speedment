@@ -86,6 +86,22 @@ public final class DocumentUtil {
         return child;
     }
 
+    /**
+     * Returns the relative name for the given Document up to the point given by the
+     * parent Class by successively applying the provided nameMapper onto the
+     * Node names.
+     * <p>
+     * For example, {@code relativeName(column, Dbms.class)} would return the
+     * String "dbms_name.schema_name.table_name.column_name".
+     *
+     * @param <T> parent type
+     * @param <D> Document type
+     * @param document to use
+     * @param from class
+     * @param nameMapper to apply to all names encountered during traversal
+     * @return the relative name for this Node from the point given by the
+     * parent Class
+     */
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from, Function<String, String> nameMapper) {
         requireNonNulls(document, from, nameMapper);
         final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
@@ -102,7 +118,21 @@ public final class DocumentUtil {
         nameFrom(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
         return sj.toString();
     }
-
+    
+    /**
+     * Returns the relative name for the given Document up to the point given by the
+     * parent Class.
+     * <p>
+     * For example, {@code relativeName(column, Dbms.class)} would return the
+     * String "dbms_name.schema_name.table_name.column_name".
+     *
+     * @param <T> parent type
+     * @param <D> Document type
+     * @param document to use
+     * @param from class
+     * @return the relative name for this Node from the point given by the
+     * parent Class
+     */
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from) {
         return relativeName(document, from, s -> s);
     }

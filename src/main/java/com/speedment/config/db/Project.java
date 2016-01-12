@@ -26,6 +26,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ProjectMutator;
+import com.speedment.internal.ui.UISession;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,10 +48,17 @@ public interface Project extends
         HasMainInterface,
         HasMutator<ProjectMutator> {
 
-    final String PACKAGE_NAME = "packageName",
+    final String 
+            PACKAGE_NAME = "packageName",
             PACKAGE_LOCATION = "packageLocation",
             CONFIG_PATH = "configPath",
             DBMSES = "dbmses";
+    
+    final String 
+            DEFAULT_PACKAGE_NAME = "com.speedment.example",
+            DEFAULT_PACKAGE_LOCATION = "src/main/java/";
+    
+           
 
     /**
      * Returns the name of the generated package where this project will be
@@ -59,7 +67,7 @@ public interface Project extends
      * @return the name of the generated package
      */
     default String getPackageName() {
-        return getAsString(PACKAGE_NAME).orElse("com.speedment.example");
+        return getAsString(PACKAGE_NAME).orElse(DEFAULT_PACKAGE_NAME);
     }
 
     /**
@@ -68,15 +76,15 @@ public interface Project extends
      * @return the package location
      */
     default String getPackageLocation() {
-        return getAsString(PACKAGE_LOCATION).orElse("src/main/java/");
+        return getAsString(PACKAGE_LOCATION).orElse(DEFAULT_PACKAGE_LOCATION);
     }
 
     /**
-     * Returns the path to the groovy configuration file for this project. The
+     * Returns the path to the configuration file for this project. The
      * path may not be set at the time of the calling and the result may
      * therefore be {@code empty}.
      *
-     * @return the path to the groovy configuration file
+     * @return the path to the configuration file
      */
     default Optional<Path> getConfigPath() {
         return getAsString(CONFIG_PATH).map(Paths::get);
@@ -91,6 +99,12 @@ public interface Project extends
         return children(DBMSES, dbmsConstructor());
     }
 
+    /**
+     * Creates and adds a new {@link Dbms} as a child to this node in the
+     * configuration tree.
+     *
+     * @return the newly added child
+     */
     default Dbms addNewDbms() {
         return dbmsConstructor().apply(this, newDocument(this, DBMSES));
     }
@@ -119,5 +133,22 @@ public interface Project extends
             return defaultName;
         }
     }
+
+    /**
+     * Locates the table with the specified full name in this project. The name
+     * should be separated by dots (.) and have exactly three parts; the name of
+     * the {@link Dbms}, the name of the {@link Schema} and the name of the
+     * {@link Table}. If the inputed name is malformed, an
+     * {@code IllegalArgumentException} will be thrown.
+     * <p>
+     * Example of a valid name: {@code db0.socialnetwork.image}
+     * <p>
+     * If no table matching the specified name was found, an exception is also
+     * thrown.
+     *
+     * @param fullName the full name of the table
+     * @return the table found
+     */
+    Table findTableByName(String fullName);
 
 }
