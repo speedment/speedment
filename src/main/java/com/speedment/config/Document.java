@@ -34,58 +34,58 @@ import java.util.stream.Stream;
  */
 @Api(version = "2.3")
 public interface Document {
-    
+
     /**
-     * Returns the parent of this Document or {@link Optional#empty()} if the Document
-     * does not have a parent.
-     * 
-     * @return 
+     * Returns the parent of this Document or {@link Optional#empty()} if the
+     * Document does not have a parent.
+     *
+     * @return
      */
     Optional<? extends Document> getParent();
-    
+
     Map<String, Object> getData();
-    
+
     Optional<Object> get(String key);
-    
+
     OptionalBoolean getAsBoolean(String key);
-    
+
     OptionalLong getAsLong(String key);
-    
+
     OptionalDouble getAsDouble(String key);
-    
+
     OptionalInt getAsInt(String key);
-    
+
     Optional<String> getAsString(String key);
-    
+
     void put(String key, Object value);
-    
+
     default MapStream<String, Object> stream() {
         return MapStream.of(getData());
     }
-    
+
     default <P extends Document, T extends Document> Stream<T> children(
-        String key, BiFunction<P, Map<String, Object>, T> constructor) {
-        
-        final List<Map<String, Object>> list = 
-            (List<Map<String, Object>>) get(key).orElse(null);
-        
+            String key, BiFunction<P, Map<String, Object>, T> constructor) {
+
+        final List<Map<String, Object>> list
+                = (List<Map<String, Object>>) get(key).orElse(null);
+
         if (list == null) {
             return Stream.empty();
         } else {
             return list.stream().map(map -> constructor.apply((P) this, map));
         }
     }
-    
+
     Stream<? extends Document> children();
-    
+
     default Stream<Document> ancestors() {
         final Stream.Builder<Document> stream = Stream.builder();
         Document parent = this;
-        
+
         while ((parent = parent.getParent().orElse(null)) != null) {
             stream.add(parent);
         }
-        
+
         return stream.build();
     }
 }

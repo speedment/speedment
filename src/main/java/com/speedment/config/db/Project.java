@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -134,6 +135,8 @@ public interface Project extends
         }
     }
 
+     static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
+    
     /**
      * Locates the table with the specified full name in this project. The name
      * should be separated by dots (.) and have exactly three parts; the name of
@@ -149,6 +152,34 @@ public interface Project extends
      * @param fullName the full name of the table
      * @return the table found
      */
-    Table findTableByName(String fullName);
+    
+
+    default Table findTableByName(String fullName) {
+
+        final String[] parts = SPLIT_PATTERN.split(fullName);
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException(
+                "fullName should consist of three parts separated by dots. "
+                + "These are dbms-name, schema-name and table-name."
+            );
+        }
+
+        final String dbmsName = parts[0],
+            schemaName = parts[1],
+            tableName = parts[2];
+       
+        return dbmses()
+            .filter(d -> dbmsName.equals(d.getName()))
+            .findAny()
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Could not find dbms: '" + dbmsName + "'."))
+            .schemas().filter(s -> schemaName.equals(s.getName())).findAny()
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Could not find schema: '" + schemaName + "'."))
+            .tables().filter(t -> tableName.equals(t.getName())).findAny()
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Could not find table: '" + tableName + "'."));
+    }
 
 }
