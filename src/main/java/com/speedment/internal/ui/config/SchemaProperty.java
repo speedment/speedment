@@ -16,14 +16,15 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
@@ -42,11 +43,11 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
-            HasAliasProperty.super.getUiVisibleProperties(),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new BooleanPropertyItem(
                     defaultSchemaProperty(),       
@@ -85,6 +86,8 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     
     @Override
     public TableProperty addNewTable() {
-        return (TableProperty) Schema.super.addNewTable();
+        final TableProperty created = new TableProperty(this, new ConcurrentHashMap<>());
+        tablesProperty().add(created);
+        return created;
     }
 }

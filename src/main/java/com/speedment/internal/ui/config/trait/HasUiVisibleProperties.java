@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config.trait;
 
+import com.speedment.Speedment;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -24,5 +25,5 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public interface HasUiVisibleProperties {
-    Stream<PropertySheet.Item> getUiVisibleProperties();
+    Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment);
 }

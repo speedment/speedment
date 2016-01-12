@@ -16,11 +16,10 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.Document;
-import com.speedment.stream.MapStream;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -43,7 +42,7 @@ public final class DefaultDocumentProperty extends AbstractDocumentProperty {
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.empty();
     }
 }

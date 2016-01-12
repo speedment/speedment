@@ -16,12 +16,14 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
@@ -40,10 +42,10 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new BooleanPropertyItem(
                     uniqueProperty(),       
@@ -82,6 +84,8 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
 
     @Override
     public IndexColumnProperty addNewIndexColumn() {
-        return (IndexColumnProperty) Index.super.addNewIndexColumn();
+        final IndexColumnProperty created = new IndexColumnProperty(this, new ConcurrentHashMap<>());
+        indexColumnsProperty().add(created);
+        return created;
     }
 }

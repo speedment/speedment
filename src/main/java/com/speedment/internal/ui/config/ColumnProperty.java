@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
@@ -54,14 +55,14 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
-            HasAliasProperty.super.getUiVisibleProperties(),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new TypeMapperPropertyItem(
-                    null,
+                    speedment,
                     Optional.ofNullable(findTypeMapper())
                         .map(tm -> (Class) tm.getDatabaseType())
                         .orElse(findDatabaseType()),
@@ -118,21 +119,29 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {
         @Override
         public String toString(TypeMapper<?, ?> typeMapper) {
-            return typeMapper.getClass().getName();
+            if (typeMapper == null) {
+                return null;
+            } else {
+                return typeMapper.getClass().getName();
+            }
         }
 
         @Override
         public TypeMapper<?, ?> fromString(String className) {
-            try {
-                @SuppressWarnings("unchecked")
-                final TypeMapper<?, ?> typeMapper = (TypeMapper<?, ?>) Class.forName(className).newInstance();
-                return typeMapper;
-            } catch (final ClassNotFoundException ex) {
-                throw new SpeedmentException("Could not find type-mapper class: '" + className + "'.", ex);
-            } catch (InstantiationException ex) {
-                throw new SpeedmentException("Could not instantiate type-mapper class: '" + className + "'.", ex);
-            } catch (IllegalAccessException ex) {
-                throw new SpeedmentException("Could not access type-mapper class: '" + className + "'.", ex);
+            if (className == null) {
+                return null;
+            } else {
+                try {
+                    @SuppressWarnings("unchecked")
+                    final TypeMapper<?, ?> typeMapper = (TypeMapper<?, ?>) Class.forName(className).newInstance();
+                    return typeMapper;
+                } catch (final ClassNotFoundException ex) {
+                    throw new SpeedmentException("Could not find type-mapper class: '" + className + "'.", ex);
+                } catch (InstantiationException ex) {
+                    throw new SpeedmentException("Could not instantiate type-mapper class: '" + className + "'.", ex);
+                } catch (IllegalAccessException ex) {
+                    throw new SpeedmentException("Could not access type-mapper class: '" + className + "'.", ex);
+                }
             }
         }
     };

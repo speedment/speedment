@@ -16,12 +16,14 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
@@ -39,11 +41,11 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
-            HasAliasProperty.super.getUiVisibleProperties()
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment)
         ).flatMap(s -> s);
     }
     
@@ -116,21 +118,29 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
 
     @Override
     public ColumnProperty addNewColumn() {
-        return (ColumnProperty) Table.super.addNewColumn();
+        final ColumnProperty created = new ColumnProperty(this, new ConcurrentHashMap<>());
+        columnsProperty().add(created);
+        return created;
     }
 
     @Override
     public IndexProperty addNewIndex() {
-        return (IndexProperty) Table.super.addNewIndex();
+        final IndexProperty created = new IndexProperty(this, new ConcurrentHashMap<>());
+        indexesProperty().add(created);
+        return created;
     }
 
     @Override
     public ForeignKeyProperty addNewForeignKey() {
-        return (ForeignKeyProperty) Table.super.addNewForeignKey();
+        final ForeignKeyProperty created = new ForeignKeyProperty(this, new ConcurrentHashMap<>());
+        foreignKeysProperty().add(created);
+        return created;
     }
 
     @Override
     public PrimaryKeyColumnProperty addNewPrimaryKeyColumn() {
-        return (PrimaryKeyColumnProperty) Table.super.addNewPrimaryKeyColumn();
+        final PrimaryKeyColumnProperty created = new PrimaryKeyColumnProperty(this, new ConcurrentHashMap<>());
+        primaryKeyColumnsProperty().add(created);
+        return created;
     }
 }

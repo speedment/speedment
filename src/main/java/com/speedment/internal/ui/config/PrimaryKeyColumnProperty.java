@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
@@ -39,10 +40,10 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.concat(
-            HasColumnProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties()
+            HasColumnProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment)
         );
     }
 }

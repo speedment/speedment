@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
@@ -26,6 +27,7 @@ import com.speedment.internal.ui.property.StringPropertyItem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -48,10 +50,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new StringPropertyItem(
                     packageNameProperty(),
@@ -103,7 +105,9 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     
     @Override
     public DbmsProperty addNewDbms() {
-        return (DbmsProperty) Project.super.addNewDbms();
+        final DbmsProperty created = new DbmsProperty(this, new ConcurrentHashMap<>());
+        dbmsesProperty().add(created);
+        return created;
     }
     
     @Override

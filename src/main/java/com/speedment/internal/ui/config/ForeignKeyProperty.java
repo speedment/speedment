@@ -16,11 +16,13 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
@@ -42,10 +44,10 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.concat(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties()
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment)
         );
     }
 
@@ -69,6 +71,8 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     
     @Override
     public ForeignKeyColumnProperty addNewForeignKeyColumn() {
-        return (ForeignKeyColumnProperty) ForeignKey.super.addNewForeignKeyColumn();
+        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this, new ConcurrentHashMap<>());
+        foreignKeyColumnsProperty().add(created);
+        return created;
     }
 }

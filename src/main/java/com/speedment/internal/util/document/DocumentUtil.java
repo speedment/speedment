@@ -70,10 +70,10 @@ public final class DocumentUtil {
         final List<Map<String, Object>> children = document.get(key)
             .map(list -> (List<Map<String, Object>>) list)
             .orElseGet(() -> {
-            final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
-            document.put(key, list);
-            return list;
-        });
+                final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
+                document.put(key, list);
+                return list;
+            });
         
         final Map<String, Object> child = new ConcurrentHashMap<>();
         children.add(child);

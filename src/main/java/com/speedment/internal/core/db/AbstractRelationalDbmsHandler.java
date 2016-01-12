@@ -221,8 +221,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected void tables(final Connection connection, Schema schema) {
-        requireNonNull(connection);
-        requireNonNull(schema);
+        requireNonNulls(connection, schema);
         LOGGER.info("Parsing " + schema.toString());
         
         try {

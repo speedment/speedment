@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config.trait;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.parameters.OrderType;
 import com.speedment.config.db.trait.*;
 import com.speedment.internal.ui.config.DocumentProperty;
@@ -35,7 +36,7 @@ public interface HasOrderTypeProperty extends DocumentProperty {
     }
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties() {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new EnumPropertyItem<>(
                 OrderType.class,

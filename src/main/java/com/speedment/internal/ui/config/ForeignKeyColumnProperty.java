@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
@@ -43,9 +44,9 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasColumnProperty.super.getUiVisibleProperties(),
+            HasColumnProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new StringPropertyItem(
                     foreignTableNameProperty(), 

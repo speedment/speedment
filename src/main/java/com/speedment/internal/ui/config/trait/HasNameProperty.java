@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config.trait;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
@@ -34,7 +35,7 @@ public interface HasNameProperty extends DocumentProperty {
     }
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties() {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 

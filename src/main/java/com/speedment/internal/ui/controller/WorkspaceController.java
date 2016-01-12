@@ -17,7 +17,6 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.config.Document;
 import com.speedment.event.TreeSelectionChange;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.property.AbstractPropertyItem;
@@ -36,7 +35,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import javafx.beans.binding.Bindings;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -66,7 +64,7 @@ public final class WorkspaceController implements Initializable {
                     
                     if (treeItem != null) {
                         final DocumentProperty node = treeItem.getValue();
-                        node.getUiVisibleProperties()
+                        node.getUiVisibleProperties(session.getSpeedment())
                             .forEachOrdered(properties::add);
                     }
                 }

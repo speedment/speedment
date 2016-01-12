@@ -18,18 +18,13 @@ package com.speedment.internal.ui.property;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.util.EditorsUtil;
-import static java.util.Comparator.comparing;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNull;
-import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNull;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 
@@ -64,6 +59,14 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
             .sorted(comparing(TypeMapper::getLabel))
             .collect(toList());
+        
+        if (mappers.isEmpty()) {
+            throw new SpeedmentException(
+                "Created TypeMapperPropertyItem to illustrate type '" + 
+                type.getSimpleName() + 
+                "' but no mappers was found."
+            );
+        }
         
         return EditorsUtil.createChoiceEditorWithConverter(
             this, mappers, TypeMapper::getLabel

@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
@@ -25,7 +26,9 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
@@ -45,10 +48,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(),
-            HasEnabledProperty.super.getUiVisibleProperties(),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 // TODO: Add DbmsType
                 new StringPropertyItem(
@@ -110,6 +113,8 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     
     @Override
     public SchemaProperty addNewSchema() {
-        return (SchemaProperty) Dbms.super.addNewSchema();
+        final SchemaProperty created = new SchemaProperty(this, new ConcurrentHashMap<>());
+        schemasProperty().add(created);
+        return created;
     }
 }
