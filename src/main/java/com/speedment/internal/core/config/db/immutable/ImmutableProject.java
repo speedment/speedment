@@ -18,6 +18,11 @@ package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.util.document.DocumentDbUtil;
+import com.speedment.internal.util.document.DocumentUtil;
+import com.speedment.stream.MapStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.util.Collections.unmodifiableSet;
@@ -41,6 +46,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     private final Optional<Path> configPath;
     
     private final Set<ImmutableDbms> dbmses;
+    private final Map<String, ImmutableTable> tablesByName;
 
     ImmutableProject(Map<String, Object> project) {
         super(project);
@@ -52,6 +58,10 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         this.configPath      = Optional.ofNullable((String) project.get(CONFIG_PATH)).map(Paths::get);
         
         this.dbmses = unmodifiableSet(Project.super.dbmses().map(ImmutableDbms.class::cast).collect(toSet()));
+        this.tablesByName = MapStream.fromValues(
+            DocumentDbUtil.traverseOver(this, ImmutableTable.class),
+            table -> DocumentUtil.relativeName(table, Dbms.class)
+        ).toMap();
     }
 
     @Override
@@ -87,6 +97,21 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     @Override
     public Stream<ImmutableDbms> dbmses() {
         return dbmses.stream();
+    }
+
+    @Override
+    public ImmutableTable findTableByName(String fullName) {
+        final ImmutableTable table = tablesByName.get(fullName);
+        
+        if (table == null) {
+            throw new SpeedmentException(
+                "Unable to find table '" + 
+                fullName + 
+                "' in immutable config model."
+            );
+        }
+        
+        return table;
     }
     
     public static ImmutableProject wrap(Project project) {
