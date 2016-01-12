@@ -9,11 +9,11 @@ import static com.speedment.config.db.trait.HasName.NAME;
  */
 public interface HasChildren extends Document {
 
-    default <C extends Document & HasName> String defaultNameFor(Class<C> childClass) {
+    default <C extends Document & HasName & HasMainInterface> String defaultNameFor(C childDocument) {
         int counter = 1;
         String nameCandidate;
         do {
-            nameCandidate = childClass.getSimpleName() + counter++;
+            nameCandidate = childDocument.mainInterface().getSimpleName() + counter++;
         } while (
             children()
                 .map(child -> child.getAsString(NAME))

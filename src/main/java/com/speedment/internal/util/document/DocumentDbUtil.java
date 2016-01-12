@@ -17,6 +17,7 @@
 package com.speedment.internal.util.document;
 
 import com.speedment.Speedment;
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
@@ -30,6 +31,8 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.util.StreamComposition;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -40,9 +43,54 @@ public final class DocumentDbUtil {
 
     public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
         return speedment.getDbmsHandlerComponent().findByName(dbms.getTypeName())
-                .orElseThrow(() -> new SpeedmentException("Unable to find the database type "+dbms.getTypeName()));
+                .orElseThrow(() -> new SpeedmentException("Unable to find the database type " + dbms.getTypeName()));
     }
-    
+
+    public static Stream<? extends Document> traverseOver(Project project) {
+        return Stream.concat(project.dbmses(), project.dbmses().flatMap(DocumentDbUtil::traverseOver));
+    }
+
+    public static Stream<? extends Document> traverseOver(Dbms dbms) {
+        return Stream.concat(dbms.schemas(), dbms.schemas().flatMap(DocumentDbUtil::traverseOver));
+    }
+
+    public static Stream<? extends Document> traverseOver(Schema schema) {
+        return Stream.concat(schema.tables(), schema.tables().flatMap(DocumentDbUtil::traverseOver));
+    }
+
+    public static Stream<? extends Document> traverseOver(Table table) {
+        return StreamComposition.concat(
+                Stream.concat(table.columns(), table.columns().flatMap(DocumentDbUtil::traverseOver)),
+                Stream.concat(table.primaryKeyColumns(), table.primaryKeyColumns().flatMap(DocumentDbUtil::traverseOver)),
+                Stream.concat(table.indexes(), table.indexes().flatMap(DocumentDbUtil::traverseOver)),
+                Stream.concat(table.foreignKeys(), table.foreignKeys().flatMap(DocumentDbUtil::traverseOver))
+        );
+    }
+
+    public static Stream<? extends Document> traverseOver(Column column) {
+        return Stream.empty();
+    }
+
+    public static Stream<? extends Document> traverseOver(PrimaryKeyColumn primaryKeyColumn) {
+        return Stream.empty();
+    }
+
+    public static Stream<? extends Document> traverseOver(Index index) {
+        return Stream.concat(index.indexColumns(), index.indexColumns().flatMap(DocumentDbUtil::traverseOver));
+    }
+
+    public static Stream<? extends Document> traverseOver(IndexColumn indexColumn) {
+        return Stream.empty();
+    }
+
+    public static Stream<? extends Document> traverseOver(ForeignKey foreignKey) {
+        return Stream.concat(foreignKey.foreignKeyColumns(), foreignKey.foreignKeyColumns().flatMap(DocumentDbUtil::traverseOver));
+    }
+
+    public static Stream<? extends Document> traverseOver(ForeignKeyColumn foreignKeyColumn) {
+        return Stream.empty();
+    }
+
     public static <T> Stream<T> traverseOver(Project project, Class<T> clazz) {
         if (Dbms.class.isAssignableFrom(clazz)) {
             return project.dbmses().map(clazz::cast);
@@ -118,6 +166,14 @@ public final class DocumentDbUtil {
         return Stream.empty();
     }
 
+    public static Stream<? extends Document> typedChildrenOf(Table table) {
+        final Stream.Builder<Document> sb = Stream.builder();
+        table.columns().forEachOrdered(sb::accept);
+        table.primaryKeyColumns().forEachOrdered(sb::accept);
+        table.indexes().forEachOrdered(sb::accept);
+        table.foreignKeys().forEachOrdered(sb::accept);
+        return sb.build();
+    }
 
 //    public static Class<? extends Document> mainInterfaceClass(Document document) {
 //        return Stream.of(
@@ -137,7 +193,6 @@ public final class DocumentDbUtil {
 //                .orElseThrow(() -> new SpeedmentException("Unable to find main interface for " + document));
 //
 //    }
-
 //    
 //    
 //    public static <T, P, C, B> Stream<T> traverseOver(

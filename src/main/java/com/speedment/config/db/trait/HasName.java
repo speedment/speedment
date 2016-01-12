@@ -52,7 +52,7 @@ public interface HasName extends Document, HasMainInterface {
             
             final String defaultName = getParent()
                 .map(HasChildren.class::cast)
-                .map(parent -> parent.defaultNameFor(getClass()))
+                .map(parent -> parent.defaultNameFor(this))
                 .get();
 
             getData().put(NAME, defaultName);

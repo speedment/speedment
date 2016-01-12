@@ -20,8 +20,10 @@ import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.Trees;
+import com.speedment.stream.MapStream;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -41,10 +43,13 @@ import java.util.stream.Stream;
 public final class DocumentUtil {
 
     @SuppressWarnings("unchecked")
-
     public static Stream<? extends Document> traverseOver(Document document) {
         requireNonNull(document);
-        return Trees.traverse(document, d -> (Stream<Document>) d.children(), Trees.TraversalOrder.DEPTH_FIRST_PRE);
+        return Trees.traverse(
+                document,
+                d -> (Stream<Document>) d.children(),
+                Trees.TraversalOrder.DEPTH_FIRST_PRE
+        );
     }
     
     public static <E extends Document> Optional<E> ancestor(Document document, final Class<E> clazz) {
@@ -54,18 +59,18 @@ public final class DocumentUtil {
                 .map(p -> (E) p)
                 .findFirst();
     }
-    
+
     @SuppressWarnings("unchecked")
     public static <E extends Document> Stream<Document> childrenOf(Document document, BiFunction<Document, Map<String, Object>, E> childConstructor) {
         return document.stream().values()
-            .filter(obj -> obj instanceof List<?>)
-            .map(list -> (List<Object>) list)
-            .flatMap(list -> list.stream())
-            .filter(obj -> obj instanceof Map<?, ?>)
-            .map(map -> (Map<String, Object>) map)
-            .map(map -> childConstructor.apply(document, map));
+                .filter(obj -> obj instanceof List<?>)
+                .map(list -> (List<Object>) list)
+                .flatMap(list -> list.stream())
+                .filter(obj -> obj instanceof Map<?, ?>)
+                .map(map -> (Map<String, Object>) map)
+                .map(map -> childConstructor.apply(document, map));
     }
-    
+
     public static Map<String, Object> newDocument(Document document, String key) {
         final List<Map<String, Object>> children = document.get(key)
             .map(list -> (List<Map<String, Object>>) list)
@@ -77,7 +82,7 @@ public final class DocumentUtil {
         
         final Map<String, Object> child = new ConcurrentHashMap<>();
         children.add(child);
-        
+
         return child;
     }
 
@@ -105,7 +110,7 @@ public final class DocumentUtil {
     private static Optional<String> nameFrom(Document document) {
         return Cast.cast(document, HasName.class).map(HasName::getName);
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */

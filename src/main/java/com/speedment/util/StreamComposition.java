@@ -32,7 +32,7 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * Utility methods for making sure composed streams are closed properly.
- * 
+ *
  * @author pemi
  */
 @Api(version = "2.2")
@@ -109,6 +109,32 @@ public class StreamComposition {
         }
         concatStream.onClose(() -> composedClose(streams));
         return concatStream;
+    }
+
+    /**
+     * Creates a concatenated Stream whose elements are are all the
+     * elements of the streams in sequential order. The resulting Stream is
+     * ordered if all of the input streams are ordered, and parallel if at least
+     * one of the input streams are parallel.
+     *
+     * <p>
+     * Streams are processed one at at time. When one is exhausted, a new one
+     * will start. Parallelism is only supported within the individual streams
+     * provided.
+     * <p>
+     * N.B. Use caution when constructing streams from repeated concatenation.
+     * Accessing an element of a deeply concatenated stream can result in deep
+     * call chains, or even {@code StackOverflowException}.
+     *
+     * @param <T> The type of stream elements
+     * @param streams to concatenate
+     * @return the concatenation of the input streams
+     */
+    @SuppressWarnings("varargs")
+    @SafeVarargs // Creating a Stream of an array is safe.
+    public static <T> Stream<T> concat(Stream<T>... streams) {
+        requireNonNulls(streams);
+        return Stream.of(streams).flatMap(Function.identity());
     }
 
     public StreamComposition() {
