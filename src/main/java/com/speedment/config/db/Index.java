@@ -18,6 +18,7 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasChildren;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
@@ -40,6 +41,7 @@ public interface Index extends
         HasParent<Table>,
         HasEnabled,
         HasName,
+        HasChildren,
         HasMainInterface,
         HasMutator<IndexMutator> {
 

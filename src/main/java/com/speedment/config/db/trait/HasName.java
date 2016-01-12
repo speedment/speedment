@@ -18,17 +18,48 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.exception.SpeedmentException;
+import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface HasName extends Document {
-    
+public interface HasName extends Document, HasMainInterface {
+
     final String NAME = "name";
-    
-    default String getName() {
-        return (String) get(NAME).get();
+
+    /**
+     * Gets the name of this Document. If no name is present, this method might
+     * create a name if the parent implements the {@link HasChildren} interface.
+     * If it does not and this document is unnamed, an
+     * {@link SpeedmentException} is called.
+     *
+     * @return the name of this Document
+     * @throws SpeedmentException if no name is specified and the parent can't
+     * generate one
+     */
+    default String getName() throws SpeedmentException {
+        final Optional<String> name = getAsString(NAME);
+
+        if (name.isPresent()) {
+            return name.get();
+        } else if (this instanceof HasParent<?>
+                && getParent().map(Object::getClass).filter(HasChildren.class::isInstance).isPresent()) {
+            return name.orElseGet(() -> {
+                final String defaultName = getParent()
+                        .map(HasChildren.class::cast)
+                        .map(parent -> parent.defaultNameFor(getClass()))
+                        .get();
+
+                getData().put(NAME, defaultName);
+                return defaultName;
+            });
+        } else {
+            throw new SpeedmentException(
+                    "A name is required for node of type '" + getClass().getSimpleName() + "'."
+            );
+        }
     }
 }

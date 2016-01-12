@@ -58,7 +58,8 @@ public final class DocumentTranscoder {
     
     public static Project load(Path location) throws SpeedmentException {
         try {
-            return load(new String(Files.readAllBytes(location)));
+            final byte[] content = Files.readAllBytes(location);
+            return load(new String(content));
         } catch (final IOException ex) {
             throw new SpeedmentException(
                 "Could not load json-file from path '" + location + "'."

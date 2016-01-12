@@ -19,6 +19,7 @@ package com.speedment.config.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
+import com.speedment.config.db.trait.HasChildren;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
@@ -43,6 +44,7 @@ public interface Dbms extends
         HasParent<Project>,
         HasEnabled,
         HasName,
+        HasChildren,
         HasAlias,
         HasMainInterface,
         HasMutator<DbmsMutator> {

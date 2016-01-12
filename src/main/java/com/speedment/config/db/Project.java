@@ -18,10 +18,12 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasChildren;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ProjectMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
@@ -37,19 +39,18 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
-public interface Project extends 
+public interface Project extends
         Document,
         HasEnabled,
         HasName,
+        HasChildren,
         HasMainInterface,
         HasMutator<ProjectMutator> {
-    
-    final String 
-        PACKAGE_NAME     = "packageName",
-        PACKAGE_LOCATION = "packageLocation",
-        CONFIG_PATH      = "configPath",
-        DBMSES           = "dbmses";
-    
+
+    final String PACKAGE_NAME = "packageName",
+            PACKAGE_LOCATION = "packageLocation",
+            CONFIG_PATH = "configPath",
+            DBMSES = "dbmses";
 
     /**
      * Returns the name of the generated package where this project will be
@@ -81,24 +82,42 @@ public interface Project extends
         return getAsString(CONFIG_PATH).map(Paths::get);
     }
 
+    /**
+     * Return a {@link Stream} of all dbmses that exists in this Project.
+     *
+     * @return a {@link Stream} of all dbmses that exists in this Project
+     */
     default Stream<? extends Dbms> dbmses() {
         return children(DBMSES, dbmsConstructor());
     }
-    
+
     default Dbms addNewDbms() {
         return dbmsConstructor().apply(this, newDocument(this, DBMSES));
     }
-    
+
     BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor();
 
     @Override
     default Class<Project> mainInterface() {
         return Project.class;
     }
-    
+
     @Override
     default ProjectMutator mutator() {
         return DocumentMutator.of(this);
     }
-    
+
+    @Override
+    default String getName() throws SpeedmentException {
+        final Optional<String> name = getAsString(NAME);
+
+        if (name.isPresent()) {
+            return name.get();
+        } else {
+            final String defaultName = Project.class.getSimpleName();
+            getData().put(NAME, defaultName);
+            return defaultName;
+        }
+    }
+
 }
