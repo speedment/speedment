@@ -45,20 +45,21 @@ public interface HasName extends Document, HasMainInterface {
 
         if (name.isPresent()) {
             return name.get();
-        } else if (this instanceof HasParent<?>
-                && getParent().map(Object::getClass).filter(HasChildren.class::isInstance).isPresent()) {
-            return name.orElseGet(() -> {
-                final String defaultName = getParent()
-                        .map(HasChildren.class::cast)
-                        .map(parent -> parent.defaultNameFor(getClass()))
-                        .get();
+            
+        } else if (getParent()
+            .filter(HasChildren.class::isInstance)
+            .isPresent()) {
+            
+            final String defaultName = getParent()
+                .map(HasChildren.class::cast)
+                .map(parent -> parent.defaultNameFor(getClass()))
+                .get();
 
-                getData().put(NAME, defaultName);
-                return defaultName;
-            });
+            getData().put(NAME, defaultName);
+            return defaultName;
         } else {
             throw new SpeedmentException(
-                    "A name is required for node of type '" + getClass().getSimpleName() + "'."
+                "A name is required for node of type '" + getClass().getSimpleName() + "'."
             );
         }
     }
