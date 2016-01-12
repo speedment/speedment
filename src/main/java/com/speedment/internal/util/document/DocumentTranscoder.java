@@ -18,6 +18,7 @@ package com.speedment.internal.util.document;
 
 import com.speedment.config.db.Project;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
@@ -37,7 +38,7 @@ public final class DocumentTranscoder {
     public static final String ROOT = "config";
     
     public static String save(Project project) throws SpeedmentException {
-        final Gson gson   = new Gson();
+        final Gson gson   = newGson();
         final String json = gson.toJson(project);
         return json;
     }
@@ -52,7 +53,7 @@ public final class DocumentTranscoder {
     }
     
     public static Project load(String json) throws SpeedmentException {
-        final Gson gson = new Gson();
+        final Gson gson = newGson();
         return gson.fromJson(json, ProjectImpl.class);
     }
     
@@ -65,6 +66,12 @@ public final class DocumentTranscoder {
                 "Could not load json-file from path '" + location + "'."
             );
         }
+    }
+    
+    private static Gson newGson() {
+        return new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
     }
     
     private DocumentTranscoder() { instanceNotAllowed(getClass()); }
