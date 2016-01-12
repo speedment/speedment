@@ -23,43 +23,44 @@ import com.speedment.internal.ui.util.EditorsUtil;
 import java.util.List;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
-import javafx.beans.property.Property;
 import org.controlsfx.property.editor.PropertyEditor;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
+import javafx.beans.property.StringProperty;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMapper<?, ?>, Property<TypeMapper<?, ?>>> {
+public final class TypeMapperStringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
     
     private final Speedment speedment;
     private final Class<?> type;
     
-    public TypeMapperPropertyItem(Speedment speedment, Class<?> type, Property<TypeMapper<?, ?>> property, String name, String description) {
+    public TypeMapperStringPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description) {
         this(speedment, type, property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
     }
 
-    public TypeMapperPropertyItem(Speedment speedment, Class<?> type, Property<TypeMapper<?, ?>> property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public TypeMapperStringPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
         super(property, name, description, decorator);
         this.speedment = requireNonNull(speedment);
         this.type      = requireNonNull(type);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Class<TypeMapper<?, ?>> getType() {
-        return (Class<TypeMapper<?, ?>>) (Class<?>) TypeMapper.class;
+    public Class<String> getType() {
+        return String.class;
     }
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        System.out.println("Initial value: " + getValue().getLabel());
+        System.out.println("Initial value: " + getValue());
         
-        final List<TypeMapper<?, ?>> mappers = speedment.getTypeMapperComponent().stream()
+        final List<String> mappers = speedment.getTypeMapperComponent().stream()
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
             .sorted(comparing(TypeMapper::getLabel))
+            .map(TypeMapper::getClass)
+            .map(Class::getName)
             .collect(toList());
         
         if (mappers.isEmpty()) {
@@ -71,7 +72,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
         }
 
         return EditorsUtil.createChoiceEditorWithConverter(
-            this, mappers, TypeMapper::getLabel
+            this, mappers, clazz -> speedment.getTypeMapperComponent().get(clazz).get().getLabel()
         );
     }
 }

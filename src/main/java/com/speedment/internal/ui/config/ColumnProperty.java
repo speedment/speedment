@@ -30,6 +30,7 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
+import com.speedment.internal.ui.property.TypeMapperStringPropertyItem;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -61,12 +62,12 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
             HasNameProperty.super.getUiVisibleProperties(speedment),
             HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
-                new TypeMapperPropertyItem(
+                new TypeMapperStringPropertyItem(
                     speedment,
                     Optional.ofNullable(findTypeMapper())
                         .map(tm -> (Class) tm.getDatabaseType())
                         .orElse(findDatabaseType()),
-                    typeMapperObjectProperty(),
+                    typeMapperProperty(),
                     "JDBC Type to Java",
                     "The class that will be used to map types between the database and the generated code."
                 ),
@@ -97,15 +98,16 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     }
   
     public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
-        final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>();
-        pathProperty.setValue(TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get()));
-        
-        Bindings.bindBidirectional(
-            typeMapperProperty(), 
-            pathProperty,
-            TYPE_MAPPER_CONVERTER
+        final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>(
+            TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get())
         );
         
+        pathProperty.addListener((ob, o, n) -> {
+            System.out.println("Type mapper changed from '" + o + "' to '" + n + "'.");
+        });
+        
+        typeMapperProperty().bindBidirectional(pathProperty, TYPE_MAPPER_CONVERTER);
+
         return pathProperty;
     }
 

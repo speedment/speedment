@@ -57,9 +57,9 @@ public final class EditorsUtil {
         final ObservableList<T> observable = observableArrayList(alternatives);
         
         final ChoiceBox<String> choice = new ChoiceBox<>(labels);
+        choice.getSelectionModel().select(converter.apply((T) item.getValue()));
         
         return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {
-
             @Override
             protected ObservableValue<T> getObservableValue() {
                 return Bindings.valueAt(observable, getEditor().getSelectionModel().selectedIndexProperty());
