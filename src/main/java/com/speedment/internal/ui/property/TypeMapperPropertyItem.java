@@ -67,7 +67,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<TypeMappe
                 "' but no mappers was found."
             );
         }
-        
+
         return EditorsUtil.createChoiceEditorWithConverter(
             this, mappers, TypeMapper::getLabel
         );

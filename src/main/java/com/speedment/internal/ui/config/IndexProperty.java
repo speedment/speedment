@@ -44,8 +44,8 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new BooleanPropertyItem(
                     uniqueProperty(),       

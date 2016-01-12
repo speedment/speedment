@@ -50,8 +50,8 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 // TODO: Add DbmsType
                 new StringPropertyItem(

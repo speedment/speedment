@@ -42,8 +42,8 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.concat(
-            HasColumnProperty.super.getUiVisibleProperties(speedment),
-            HasEnabledProperty.super.getUiVisibleProperties(speedment)
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasColumnProperty.super.getUiVisibleProperties(speedment)
         );
     }
 }

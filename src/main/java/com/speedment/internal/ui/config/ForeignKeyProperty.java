@@ -46,8 +46,8 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.concat(
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasEnabledProperty.super.getUiVisibleProperties(speedment)
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment)
         );
     }
 

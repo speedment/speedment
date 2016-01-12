@@ -43,8 +43,8 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasAliasProperty.super.getUiVisibleProperties(speedment)
         ).flatMap(s -> s);
     }

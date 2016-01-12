@@ -57,8 +57,8 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
             HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new TypeMapperPropertyItem(
@@ -98,10 +98,11 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
   
     public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
         final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>();
+        pathProperty.setValue(TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get()));
         
         Bindings.bindBidirectional(
             typeMapperProperty(), 
-            pathProperty, 
+            pathProperty,
             TYPE_MAPPER_CONVERTER
         );
         
