@@ -73,10 +73,10 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     
     @Override
     public Stream<IndexColumnProperty> indexColumns() {
-        return (Stream<IndexColumnProperty>) Index.super.indexColumns();
+        return indexColumnsProperty().stream();
     }
     
-    public ObservableList<IndexColumnProperty> indexColumnProperties() {
+    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
         return observableListOf(INDEX_COLUMNS, IndexColumnProperty.class);
     }
 

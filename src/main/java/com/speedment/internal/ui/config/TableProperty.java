@@ -46,6 +46,22 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
             HasAliasProperty.super.getUiVisibleProperties()
         ).flatMap(s -> s);
     }
+    
+    public ObservableList<ColumnProperty> columnsProperty() {
+        return observableListOf(COLUMNS, ColumnProperty.class);
+    }
+    
+    public ObservableList<IndexProperty> indexesProperty() {
+        return observableListOf(INDEXES, IndexProperty.class);
+    }
+    
+    public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
+        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty.class);
+    }
+    
+    public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
+        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty.class);
+    }
 
     @Override
     public BiFunction<Table, Map<String, Object>, ColumnProperty> columnConstructor() {
@@ -80,38 +96,22 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     
     @Override
     public Stream<? extends ColumnProperty> columns() {
-        return (Stream<ColumnProperty>) Table.super.columns();
+        return columnsProperty().stream();
     }
 
     @Override
     public Stream<? extends IndexProperty> indexes() {
-        return (Stream<IndexProperty>) Table.super.indexes();
+        return indexesProperty().stream();
     }
 
     @Override
     public Stream<? extends ForeignKeyProperty> foreignKeys() {
-        return (Stream<ForeignKeyProperty>) Table.super.foreignKeys();
+        return foreignKeysProperty().stream();
     }
 
     @Override
     public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
-        return (Stream<PrimaryKeyColumnProperty>) Table.super.primaryKeyColumns();
-    }
-    
-    public ObservableList<ColumnProperty> columnsProperty() {
-        return observableListOf(COLUMNS, ColumnProperty.class);
-    }
-    
-    public ObservableList<IndexProperty> indexesProperty() {
-        return observableListOf(INDEXES, IndexProperty.class);
-    }
-    
-    public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
-        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty.class);
-    }
-    
-    public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
-        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty.class);
+        return primaryKeyColumnsProperty().stream();
     }
 
     @Override

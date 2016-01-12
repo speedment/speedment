@@ -1,6 +1,7 @@
 package com.speedment.config.db.trait;
 
 import com.speedment.config.Document;
+import static com.speedment.config.db.trait.HasName.NAME;
 
 /**
  *
@@ -15,9 +16,7 @@ public interface HasChildren extends Document {
             nameCandidate = childClass.getSimpleName() + counter++;
         } while (
             children()
-                .filter(HasName.class::isInstance)
-                .map(HasName.class::cast)
-                .map(HasName::getName)
+                .map(child -> child.getAsString(NAME))
                 .anyMatch(nameCandidate::equals)
         );
         

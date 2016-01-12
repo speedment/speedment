@@ -60,6 +60,10 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     public final BooleanProperty defaultSchemaProperty() {
         return booleanPropertyOf(DEFAULT_SCHEMA);
     }
+    
+    public ObservableList<TableProperty> tablesProperty() {
+        return observableListOf(TABLES, TableProperty.class);
+    }
 
     @Override
     public BiFunction<Schema, Map<String, Object>, TableProperty> tableConstructor() {
@@ -76,13 +80,9 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     
     @Override
     public Stream<TableProperty> tables() {
-        return (Stream<TableProperty>) Schema.super.tables();
+        return tablesProperty().stream();
     }
     
-    public ObservableList<TableProperty> tableProperties() {
-        return observableListOf(TABLES, TableProperty.class);
-    }
-
     @Override
     public TableProperty addNewTable() {
         return (TableProperty) Schema.super.addNewTable();

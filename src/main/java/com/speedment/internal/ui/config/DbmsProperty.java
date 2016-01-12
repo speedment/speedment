@@ -85,14 +85,14 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     public final StringProperty usernameProperty() {
         return stringPropertyOf(USERNAME);
     }
+    
+    public ObservableList<SchemaProperty> schemasProperty() {
+        return observableListOf(SCHEMAS, SchemaProperty.class);
+    }
 
     @Override
     public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
         return SchemaProperty::new;
-    }
-    
-    public ObservableList<SchemaProperty> schemasProperty() {
-        return observableListOf(SCHEMAS, SchemaProperty.class);
     }
     
     @Override
@@ -105,7 +105,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     
     @Override
     public Stream<SchemaProperty> schemas() {
-        return (Stream<SchemaProperty>) Dbms.super.schemas();
+        return schemasProperty().stream();
     }
     
     @Override

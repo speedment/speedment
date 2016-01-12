@@ -67,15 +67,15 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
         ).flatMap(s -> s);
     }
     
-    public final StringProperty packageNameProperty() {
+    public StringProperty packageNameProperty() {
         return stringPropertyOf(PACKAGE_NAME);
     }
 
-    public final StringProperty packageLocationProperty() {
+    public StringProperty packageLocationProperty() {
         return stringPropertyOf(PACKAGE_LOCATION);
     }
 
-    public final ObjectProperty<Path> configPathProperty() {
+    public ObjectProperty<Path> configPathProperty() {
         final ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
         
         Bindings.bindBidirectional(
@@ -86,6 +86,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
         
         return pathProperty;
     }
+    
+    public ObservableList<DbmsProperty> dbmsesProperty() {
+        return observableListOf(DBMSES, DbmsProperty.class);
+    }
 
     @Override
     public BiFunction<Project, Map<String, Object>, DbmsProperty> dbmsConstructor() {
@@ -94,13 +98,9 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
 
     @Override
     public Stream<DbmsProperty> dbmses() {
-        return (Stream<DbmsProperty>) Project.super.dbmses();
+        return dbmsesProperty().stream();
     }
     
-    public ObservableList<DbmsProperty> dbmsesProperty() {
-        return observableListOf(DBMSES, DbmsProperty.class);
-    }
-
     @Override
     public DbmsProperty addNewDbms() {
         return (DbmsProperty) Project.super.addNewDbms();

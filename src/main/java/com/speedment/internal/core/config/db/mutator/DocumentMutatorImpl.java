@@ -17,7 +17,6 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.Document;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,9 +33,6 @@ public class DocumentMutatorImpl implements DocumentMutator {
 
     @Override
     public void put(String key, Object value) {
-//        if (value == null) {
-//            document.remove(key);
-//        }
         document.put(key, value);
     }
 

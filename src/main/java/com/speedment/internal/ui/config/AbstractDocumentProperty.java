@@ -48,6 +48,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -112,52 +113,77 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                 // Removal events should not be processed.
                 if (change.wasAdded()) {
                     final Object added = change.getValueAdded();
-            
-                    @SuppressWarnings("unchecked")
-                    final Property<Object> p = (Property<Object>) properties.get(change.getKey());
-            
-                    // If there is already a property on the specified key, it's
-                    // value should be updated to match the new value of the map
-                    if (p != null) {
-                        p.setValue(added);
+                    
+                    // If the added value is a List, it might be a candidate for 
+                    // a new child document 
+                    if (added instanceof List<?>) {
+                        @SuppressWarnings("unchecked")
+                        final List<Object> addedList = (List<Object>) added;
                         
-                    // If there is no property on the specified key but the added
-                    // value is a List, it might be a candidate for a child document 
-                    } else {
-                        if (added instanceof List<?>) {
-                            
-                            @SuppressWarnings("unchecked")
-                            final List<Object> addedList = (List<Object>) added;
-                            
-                            synchronized(documents) {
-                                final ObservableList<DocumentProperty> l = documents.get(change.getKey());
-                                
-                                // If no observable list have been created on
-                                // the specified key yet andthe proposed list
-                                // can de considered a document, create a new
-                                // list for it.
-                                if (l == null) {
-                                    final List<DocumentProperty> children = addedList.stream()
-                                        .filter(Map.class::isInstance)
-                                        .map(obj -> (Map<String, Object>) obj)
-                                        .map(obj -> createDocument(change.getKey(), obj))
-                                        .collect(toList());
+                        synchronized(documents) {
+                            final ObservableList<DocumentProperty> l = documents.get(change.getKey());
 
-                                    if (!children.isEmpty()) {
-                                        final ObservableList<DocumentProperty> observableChildren = observableList(new CopyOnWriteArrayList<>(children));
-                                        documents.put(change.getKey(), observableChildren);
-                                    }
-                                    
-                                // An observable list already exists on the
-                                // specified key. Create document views of the
-                                // added elements and insert them into the list.
-                                } else {
-                                    addedList.stream()
-                                        .filter(Map.class::isInstance)
-                                        .map(obj -> (Map<String, Object>) obj)
-                                        .map(obj -> createDocument(change.getKey(), obj))
-                                        .forEachOrdered(l::add);
+                            // If no observable list have been created on
+                            // the specified key yet and the proposed list
+                            // can de considered a document, create a new
+                            // list for it.
+                            if (l == null) {
+                                final List<DocumentProperty> children = addedList.stream()
+                                    .filter(Map.class::isInstance)
+                                    .map(obj -> (Map<String, Object>) obj)
+                                    .map(obj -> createDocument(change.getKey(), obj))
+                                    .collect(toList());
+
+                                if (!children.isEmpty()) {
+                                    documents.put(change.getKey(), createListOnKey(
+                                        change.getKey(), 
+                                        observableList(new CopyOnWriteArrayList<>(children))
+                                    ));
                                 }
+
+                            // An observable list already exists on the
+                            // specified key. Create document views of the
+                            // added elements and insert them into the list.
+                            } else {
+                                addedList.stream()
+                                    .filter(Map.class::isInstance)
+                                    .map(obj -> (Map<String, Object>) obj)
+                                    .map(obj -> createDocument(change.getKey(), obj))
+                                    .forEachOrdered(l::add);
+                            }
+                        }
+                        
+                    // If it is not a list, it should be considered a property.
+                    } else {
+                        synchronized (properties) {
+                            @SuppressWarnings("unchecked")
+                            final Property<Object> p = (Property<Object>) properties.get(change.getKey());
+
+                            // If there is already a property on the specified key, it's
+                            // value should be updated to match the new value of the map
+                            if (p != null) {
+                                p.setValue(added);
+
+                            // There is no property on the specified key since 
+                            // before. Create it.
+                            } else {
+                                final Property<? extends Object> newProperty;
+                                
+                                if (added instanceof String) {
+                                    newProperty = new SimpleStringProperty((String) added);
+                                } else if (added instanceof Boolean) {
+                                    newProperty = new SimpleBooleanProperty((Boolean) added);
+                                } else if (added instanceof Integer) {
+                                    newProperty = new SimpleIntegerProperty((Integer) added);
+                                } else if (added instanceof Long) {
+                                    newProperty = new SimpleLongProperty((Long) added);
+                                } else if (added instanceof Double) {
+                                    newProperty = new SimpleDoubleProperty((Double) added);
+                                } else {
+                                    newProperty = new SimpleObjectProperty(added);
+                                }
+                                
+                                properties.put(change.getKey(), newProperty);
                             }
                         }
                     }
@@ -262,13 +288,12 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      *                             type as {@link #createDocument(java.lang.String, java.util.Map) createDocument}
      *                             generated.
      */
-    public final <T extends Document> ObservableList<T> observableListOf(String key, Class<T> type) throws SpeedmentException {
+    public final <T extends DocumentProperty> ObservableList<T> observableListOf(String key, Class<T> type) throws SpeedmentException {
         try {
             @SuppressWarnings("unchecked")
-            final ObservableList<T> list = 
-                (ObservableList<T>) documents.computeIfAbsent(key,
-                    k -> observableList(new CopyOnWriteArrayList<>())
-                );
+            final ObservableList<T> list = (ObservableList<T>)
+                documents.computeIfAbsent(key, k -> createListOnKey(k, observableList(new CopyOnWriteArrayList<>())));
+
             return list;
         } catch (ClassCastException ex) {
             throw new SpeedmentException(
@@ -309,5 +334,36 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         });
         
         return property;
+    }
+    
+    private <T extends DocumentProperty> ObservableList<T> createListOnKey(String key, ObservableList<T> list) {
+            
+        list.addListener((ListChangeListener.Change<? extends T> change) -> {
+            synchronized (silenced) {
+                silenced.set(true);
+
+                @SuppressWarnings("unchecked")
+                final List<Map<String, Object>> rawList = 
+                    (List<Map<String, Object>>) config.get(key);
+
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (final T added : change.getAddedSubList()) {
+                            rawList.add(added.getData());
+                        }
+                    }
+
+                    if (change.wasRemoved()) {
+                        for (final T removed : change.getRemoved()) {
+                            rawList.remove(removed.getData());
+                        }
+                    }
+                }
+
+                silenced.set(false);
+            }
+        });
+
+        return list;
     }
 }

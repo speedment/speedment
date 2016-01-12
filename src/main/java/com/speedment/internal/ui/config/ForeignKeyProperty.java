@@ -17,7 +17,6 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -36,6 +35,10 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
 
     public ForeignKeyProperty(Table parent, Map<String, Object> data) {
         super(parent, data);
+    }
+    
+    public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
+        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty.class);
     }
     
     @Override
@@ -61,15 +64,11 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     
     @Override
     public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
-        return (Stream<ForeignKeyColumnProperty>) ForeignKey.super.foreignKeyColumns();
+        return foreignKeyColumnsProperty().stream();
     }
     
     @Override
     public ForeignKeyColumnProperty addNewForeignKeyColumn() {
         return (ForeignKeyColumnProperty) ForeignKey.super.addNewForeignKeyColumn();
-    }
-    
-    public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
-        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty.class);
     }
 }
