@@ -59,7 +59,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
     
     public final BooleanProperty defaultSchemaProperty() {
-        return booleanPropertyOf(DEFAULT_SCHEMA);
+        return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
     }
     
     public ObservableList<TableProperty> tablesProperty() {

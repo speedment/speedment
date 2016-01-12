@@ -28,10 +28,10 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasNameProperty extends DocumentProperty {
+public interface HasNameProperty extends DocumentProperty, HasName {
 
     default StringProperty nameProperty() {
-        return stringPropertyOf(HasName.NAME);
+        return stringPropertyOf(HasName.NAME, HasName.super::getName);
     }
 
     @Override

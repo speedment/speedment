@@ -70,18 +70,18 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
     
     public StringProperty packageNameProperty() {
-        return stringPropertyOf(PACKAGE_NAME);
+        return stringPropertyOf(PACKAGE_NAME, Project.super::getPackageName);
     }
 
     public StringProperty packageLocationProperty() {
-        return stringPropertyOf(PACKAGE_LOCATION);
+        return stringPropertyOf(PACKAGE_LOCATION, Project.super::getPackageLocation);
     }
 
     public ObjectProperty<Path> configPathProperty() {
         final ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
         
         Bindings.bindBidirectional(
-            stringPropertyOf(CONFIG_PATH), 
+            stringPropertyOf(CONFIG_PATH, () -> null), 
             pathProperty, 
             PATH_CONVERTER
         );

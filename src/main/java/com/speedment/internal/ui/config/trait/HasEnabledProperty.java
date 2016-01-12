@@ -28,10 +28,10 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil
  */
-public interface HasEnabledProperty extends DocumentProperty {
+public interface HasEnabledProperty extends DocumentProperty, HasEnabled {
     
     default BooleanProperty enabledProperty() {
-        return booleanPropertyOf(HasEnabled.ENABLED);
+        return booleanPropertyOf(HasEnabled.ENABLED, HasEnabled.super::isEnabled);
     }
     
     @Override

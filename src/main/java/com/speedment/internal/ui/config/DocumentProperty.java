@@ -18,6 +18,11 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -33,17 +38,17 @@ import javafx.collections.ObservableList;
  */
 public interface DocumentProperty extends Document, HasUiVisibleProperties {
     
-    StringProperty stringPropertyOf(String key);
+    StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty);
     
-    IntegerProperty integerPropertyOf(String key);
+    IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty);
     
-    LongProperty longPropertyOf(String key);
+    LongProperty longPropertyOf(String key, LongSupplier ifEmpty);
     
-    DoubleProperty doublePropertyOf(String key);
+    DoubleProperty doublePropertyOf(String key, DoubleSupplier ifEmpty);
     
-    BooleanProperty booleanPropertyOf(String key);
+    BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty);
     
-    <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type);
+    <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty);
 
     @Override
     Stream<? extends DocumentProperty> children();

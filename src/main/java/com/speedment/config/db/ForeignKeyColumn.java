@@ -42,8 +42,9 @@ public interface ForeignKeyColumn extends
         HasMainInterface,
         HasMutator<ForeignKeyColumnMutator> {
 
-    final String FOREIGN_TABLE_NAME = "foreignTableName",
-            FOREIGN_COLUMN_NAME = "foreignColumnName";
+    final String 
+        FOREIGN_TABLE_NAME = "foreignTableName",
+        FOREIGN_COLUMN_NAME = "foreignColumnName";
 
     /**
      * Returns the name of the foreign column referenced by this column.

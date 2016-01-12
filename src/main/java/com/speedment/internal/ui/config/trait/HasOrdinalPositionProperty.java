@@ -24,9 +24,9 @@ import javafx.beans.property.IntegerProperty;
  *
  * @author Emil Forslund
  */
-public interface HasOrdinalPositionProperty extends DocumentProperty {
+public interface HasOrdinalPositionProperty extends DocumentProperty, HasOrdinalPosition {
     
     default IntegerProperty ordinalPositionProperty() {
-        return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION);
+        return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
     }
 }

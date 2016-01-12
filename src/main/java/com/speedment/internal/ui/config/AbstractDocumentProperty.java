@@ -30,6 +30,11 @@ import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
@@ -236,33 +241,33 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
     
     @Override
-    public final StringProperty stringPropertyOf(String key) {
-        return (StringProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleStringProperty(getAsString(k).orElse(null))));
+    public final StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty) {
+        return (StringProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleStringProperty(getAsString(k).orElseGet(ifEmpty))));
     }
     
     @Override
-    public final IntegerProperty integerPropertyOf(String key) {
-        return (IntegerProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleIntegerProperty(getAsInt(k).orElse(0))));
+    public final IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty) {
+        return (IntegerProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleIntegerProperty(getAsInt(k).orElseGet(ifEmpty))));
     }
     
     @Override
-    public final LongProperty longPropertyOf(String key) {
-        return (LongProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleLongProperty(getAsLong(k).orElse(0L))));
+    public final LongProperty longPropertyOf(String key, LongSupplier ifEmpty) {
+        return (LongProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleLongProperty(getAsLong(k).orElseGet(ifEmpty))));
     }
     
     @Override
-    public final DoubleProperty doublePropertyOf(String key) {
-        return (DoubleProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleDoubleProperty(getAsDouble(k).orElse(0d))));
+    public final DoubleProperty doublePropertyOf(String key, DoubleSupplier ifEmpty) {
+        return (DoubleProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleDoubleProperty(getAsDouble(k).orElseGet(ifEmpty))));
     }
     
     @Override
-    public final BooleanProperty booleanPropertyOf(String key) {
-        return (BooleanProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleBooleanProperty(getAsBoolean(k).orElse(false))));
+    public final BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty) {
+        return (BooleanProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleBooleanProperty(getAsBoolean(k).orElse(ifEmpty.getAsBoolean()))));
     }
     
     @Override
-    public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type) {
-        return (ObjectProperty<T>) properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(type.cast(get(k).orElse(null)))));
+    public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) {
+        return (ObjectProperty<T>) properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(type.cast(get(k).orElseGet(ifEmpty)))));
     }
     
     /**

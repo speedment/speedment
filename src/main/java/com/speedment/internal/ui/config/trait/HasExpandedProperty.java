@@ -16,18 +16,23 @@
  */
 package com.speedment.internal.ui.config.trait;
 
+import com.speedment.config.db.trait.HasChildren;
 import com.speedment.internal.ui.config.DocumentProperty;
 import javafx.beans.property.BooleanProperty;
 
 /**
  *
- * @author Emil
+ * @author Emil Forslund
  */
 public interface HasExpandedProperty extends DocumentProperty {
     
     final String EXPANDED = "expanded";
-    
+
     default BooleanProperty expandedProperty() {
-        return booleanPropertyOf(EXPANDED);
+        return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);
+    }
+    
+    default boolean isExpandedByDefault() {
+        return this instanceof HasChildren;
     }
 }

@@ -74,19 +74,19 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
     
     public final StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME);
+        return stringPropertyOf(TYPE_NAME, Dbms.super::getTypeName);
     }
 
     public final StringProperty ipAddressProperty() {
-        return stringPropertyOf(IP_ADDRESS);
+        return stringPropertyOf(IP_ADDRESS, () -> null);
     }
 
     public final IntegerProperty portProperty() {
-        return integerPropertyOf(PORT);
+        return integerPropertyOf(PORT, () -> 0);
     }
 
     public final StringProperty usernameProperty() {
-        return stringPropertyOf(USERNAME);
+        return stringPropertyOf(USERNAME, () -> null);
     }
     
     public ObservableList<SchemaProperty> schemasProperty() {

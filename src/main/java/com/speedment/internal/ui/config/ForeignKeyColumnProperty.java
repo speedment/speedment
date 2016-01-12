@@ -63,11 +63,11 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     public final StringProperty foreignTableNameProperty() {
-        return stringPropertyOf(FOREIGN_TABLE_NAME);
+        return stringPropertyOf(FOREIGN_TABLE_NAME, () -> null);
     }
 
     public final StringProperty foreignColumnNameProperty() {
-        return stringPropertyOf(FOREIGN_COLUMN_NAME);
+        return stringPropertyOf(FOREIGN_COLUMN_NAME, () -> null);
     }
 
     public final ObjectBinding<Table> foreignTableProperty() {

@@ -57,7 +57,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
     
     public final BooleanProperty uniqueProperty() {
-        return booleanPropertyOf(UNIQUE);
+        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
     }
 
     @Override

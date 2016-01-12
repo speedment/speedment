@@ -27,8 +27,9 @@ import com.speedment.config.Document;
 public interface HasEnabled extends Document {
     
     final String ENABLED = "enabled";
+    final boolean ENABLED_DEFAULT = true;
     
     default boolean isEnabled() {
-        return getAsBoolean(ENABLED).orElse(true);
+        return getAsBoolean(ENABLED).orElse(ENABLED_DEFAULT);
     }
 }

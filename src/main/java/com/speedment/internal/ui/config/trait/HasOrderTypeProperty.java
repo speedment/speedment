@@ -29,10 +29,10 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasOrderTypeProperty extends DocumentProperty {
+public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     
     default ObjectProperty<OrderType> orderTypeProperty() {
-        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class);
+        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class, HasOrderType.super::getOrderType);
     }
 
     @Override
