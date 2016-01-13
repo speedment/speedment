@@ -17,6 +17,7 @@
 package com.speedment.internal.util.document;
 
 import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.Trees;
@@ -104,15 +105,15 @@ public final class DocumentUtil {
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from, Function<String, String> nameMapper) {
         requireNonNulls(document, from, nameMapper);
         final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
-        final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
+        final List<HasName> ancestors = document.ancestors().filter(HasName.class::isInstance).map(HasName.class::cast)/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
-        for (final Document parent : ancestors) {
+        for (final HasName parent : ancestors) {
             if (add || from.isAssignableFrom(parent.getClass())) {
-                nameFrom(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
+                sj.add(nameMapper.apply(nameFrom(parent)));
                 add = true;
             }
         }
-        nameFrom(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
+        sj.add(nameMapper.apply(nameFrom(document)));
         return sj.toString();
     }
     
@@ -123,19 +124,21 @@ public final class DocumentUtil {
      * For example, {@code relativeName(column, Dbms.class)} would return the
      * String "dbms_name.schema_name.table_name.column_name".
      *
-     * @param <T> parent type
-     * @param <D> Document type
      * @param document to use
      * @param from class
      * @return the relative name for this Node from the point given by the
      * parent Class
      */
-    public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from) {
+    public static String relativeName(HasName document, final Class<? extends HasName> from) {
         return relativeName(document, from, s -> s);
     }
 
-    private static Optional<String> nameFrom(Document document) {
-        return Cast.cast(document, HasName.class).map(HasName::getName);
+    private static String nameFrom(HasName document) {
+        if (document instanceof HasAlias) {
+            return ((HasAlias) document).getJavaName();
+        } else {
+            return document.getName();
+        }
     }
 
     /**
