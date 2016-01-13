@@ -35,7 +35,7 @@ import com.speedment.config.db.trait.HasName;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.config.dbms.MySqlDbmsType;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
-import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
+import com.speedment.config.db.mapper.identity.StringIdentityMapper;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import java.util.stream.Stream;
 import org.junit.Before;
