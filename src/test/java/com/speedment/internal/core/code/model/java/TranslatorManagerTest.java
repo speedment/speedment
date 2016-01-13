@@ -19,25 +19,23 @@ package com.speedment.internal.core.code.model.java;
 import com.speedment.config.db.Project;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.MainGenerator;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.speedment.internal.core.code.TranslatorManager;
 import org.junit.Test;
 
 /**
  *
  * @author pemi
  */
-public class MainGeneratorTest extends SimpleModelTest {
+public class TranslatorManagerTest extends SimpleModelTest {
 
     @Test
-    
     public void testAccept() {
         System.out.println("accept");
 
-        final MainGenerator instance = new MainGenerator(speedment) {
+        final TranslatorManager instance = new TranslatorManager(speedment) {
             
             @Override
-            protected void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
+            public void writeToFile(Project project, Meta<File, String> meta) {
                 System.out.println("Processing "+meta.getModel().getName());
                 // Do nothing on file...
             }

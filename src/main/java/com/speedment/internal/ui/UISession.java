@@ -24,7 +24,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.code.MainGenerator;
+import com.speedment.internal.core.code.TranslatorManager;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
@@ -71,6 +71,8 @@ import javafx.util.Pair;
 import org.controlsfx.glyphfont.FontAwesome;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -261,7 +263,7 @@ public final class UISession {
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
-            final MainGenerator instance = new MainGenerator(speedment);
+            final TranslatorManager instance = new TranslatorManager(speedment);
             
             try {
                 instance.accept(project);

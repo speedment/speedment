@@ -19,6 +19,7 @@ package com.speedment.event.trait;
 import com.speedment.annotation.Api;
 import com.speedment.event.Event;
 import com.speedment.internal.codegen.base.Generator;
+import com.speedment.internal.core.code.TranslatorManager;
 
 /**
  *
@@ -28,4 +29,5 @@ import com.speedment.internal.codegen.base.Generator;
 @Api(version = "2.3")
 public interface GeneratorEvent extends Event {
     Generator generator();
+    TranslatorManager translatorManager();
 }

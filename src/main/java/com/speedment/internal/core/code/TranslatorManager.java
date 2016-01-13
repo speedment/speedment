@@ -56,14 +56,14 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public class MainGenerator implements Consumer<Project> {
+public class TranslatorManager implements Consumer<Project> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(MainGenerator.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManager.class);
     private final AtomicInteger fileCounter = new AtomicInteger(0);
     
     private final Speedment speedment;
     
-    public MainGenerator(Speedment speedment) {
+    public TranslatorManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
     }
 
@@ -78,7 +78,7 @@ public class MainGenerator implements Consumer<Project> {
         fileCounter.set(0);
         Formatting.tab("    ");
         
-        speedment.getEventComponent().notify(new BeforeGenerate(project, gen));
+        speedment.getEventComponent().notify(new BeforeGenerate(project, gen, this));
 
         translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
@@ -94,7 +94,7 @@ public class MainGenerator implements Consumer<Project> {
         gen.metaOn(translators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
-        ).forEach(meta -> writeToFile(project, meta, fileCounter));
+        ).forEach(meta -> writeToFile(project, meta));
 
         final List<Table> tables = traverseOver(project, Table.class)
             .filter(HasEnabled::test)
@@ -105,14 +105,14 @@ public class MainGenerator implements Consumer<Project> {
             fileCounter.incrementAndGet();
         });
         
-        speedment.getEventComponent().notify(new AfterGenerate(project, gen));
+        speedment.getEventComponent().notify(new AfterGenerate(project, gen, this));
     }
 
     public int getFilesCreated() {
         return fileCounter.get();
     }
     
-    protected void writeToFile(Project project, Meta<File, String> meta, AtomicInteger fileCounter) {
+    public void writeToFile(Project project, Meta<File, String> meta) {
         requireNonNull(meta);
         
         final String fname = project.getPackageLocation()

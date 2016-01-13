@@ -21,6 +21,7 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
 import com.speedment.event.trait.GeneratorEvent;
 import com.speedment.internal.codegen.base.Generator;
+import com.speedment.internal.core.code.TranslatorManager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,10 +34,12 @@ public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     
     private final Project project;
     private final Generator generator;
+    private final TranslatorManager translatorManager;
 
-    public AfterGenerate(Project project, Generator generator) {
-        this.project   = requireNonNull(project);
-        this.generator = requireNonNull(generator);
+    public AfterGenerate(Project project, Generator generator, TranslatorManager translatorManager) {
+        this.project           = requireNonNull(project);
+        this.generator         = requireNonNull(generator);
+        this.translatorManager = requireNonNull(translatorManager);
     }
     
     @Override
@@ -47,5 +50,10 @@ public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     @Override
     public Generator generator() {
         return generator;
+    }
+    
+    @Override
+    public TranslatorManager translatorManager() {
+        return translatorManager;
     }
 }
