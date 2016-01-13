@@ -17,8 +17,8 @@
 package com.speedment.internal.util.document;
 
 import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.Trees;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.List;
@@ -99,8 +99,10 @@ public final class DocumentUtil {
      * @return the relative name for this Node from the point given by the
      * parent Class
      */
-    public static <T extends Document & HasName, D extends Document & HasName>
-            String relativeName(D document, final Class<T> from) {
+    public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
+            final D document,
+            final Class<T> from
+    ) {
         return relativeName(document, from, Function.identity());
     }
 
@@ -120,8 +122,11 @@ public final class DocumentUtil {
      * @return the relative name for this Node from the point given by the
      * parent Class
      */
-    public static <T extends Document & HasName, D extends Document & HasName>
-            String relativeName(D document, final Class<T> from, Function<String, String> nameMapper) {
+    public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
+            final D document, 
+            final Class<T> from,
+            final Function<String, String> nameMapper
+    ) {
         return relativeName(document, from, ".", nameMapper);
     }
 
@@ -143,29 +148,40 @@ public final class DocumentUtil {
      * @return the relative name for this Node from the point given by the
      * parent Class
      */
-    public static <T extends Document & HasName, D extends Document & HasName>
-            String relativeName(
-                    D document,
-                    final Class<T> from,
-                    CharSequence separator,
-                    Function<String, String> nameMapper
-            ) {
-        requireNonNulls(document, from, separator, nameMapper);
-        final StringJoiner sj = new StringJoiner(separator).setEmptyValue("");
-        final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
+    public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
+            final D document,
+            final Class<T> from,
+            final CharSequence separator,
+            final Function<String, String> nameMapper
+    ) {
+        requireNonNulls(document, from, nameMapper);
+        final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
+        final List<HasName> ancestors = document.ancestors()
+                .filter(HasName.class::isInstance)
+                .map(HasName.class::cast)
+                .collect(toList());
         boolean add = false;
-        for (final Document parent : ancestors) {
+        for (final HasName parent : ancestors) {
             if (add || from.isAssignableFrom(parent.getClass())) {
-                nameFrom(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
+                sj.add(nameMapper.apply(nameFrom(parent)));
                 add = true;
             }
         }
-        nameFrom(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
+        sj.add(nameMapper.apply(nameFrom(document)));
         return sj.toString();
     }
 
-    private static Optional<String> nameFrom(Document document) {
-        return Cast.cast(document, HasName.class).map(HasName::getName);
+    public static String relativeName(HasName document, final Class<? extends HasName> from) {
+        return relativeName(document, from, s -> s);
+
+    }
+
+    private static String nameFrom(HasName document) {
+        if (document instanceof HasAlias) {
+            return ((HasAlias) document).getJavaName();
+        } else {
+            return document.getName();
+        }
     }
 
     /**
