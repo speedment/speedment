@@ -31,7 +31,7 @@ import org.controlsfx.control.PropertySheet;
 public interface HasAliasProperty extends DocumentProperty, HasAlias {
 
     default StringProperty aliasProperty() {
-        return stringPropertyOf(HasAlias.ALIAS, HasAlias.super::getName);
+        return stringPropertyOf(HasAlias.ALIAS, () -> null);
     }
 
     @Override
