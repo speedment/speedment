@@ -21,6 +21,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.Cast;
 import com.speedment.internal.util.Trees;
 import com.speedment.stream.MapStream;
+import static com.speedment.util.CollectorUtil.toReversedList;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.AbstractMap;
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -108,10 +110,9 @@ public final class DocumentUtil {
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(D document, final Class<T> from, Function<String, String> nameMapper) {
         requireNonNulls(document, from, nameMapper);
         final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
-        final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
+        final List<Document> ancestors = document.ancestors().collect(toReversedList());
         boolean add = false;
-        for (int i = ancestors.size() - 1; i >= 0; i--) {
-            final Document parent = ancestors.get(i);
+        for (final Document parent:ancestors) {
             if (add || from.isAssignableFrom(parent.getClass())) {
                 nameOf(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
                 add = true;
