@@ -95,12 +95,12 @@ public class BaseDocument implements Document {
     @Override
     public void put(String key, Object value) {
         requireNonNull(value);
-        
-        if (value instanceof Number) {
-            config.put(key, ((Number) value).doubleValue());
-        } else {
+//        
+//        if (value instanceof Number) {
+//            config.put(key, ((Number) value).doubleValue());
+//        } else {
             config.put(key, value);
-        }
+//        }
     }
     
     @Override
