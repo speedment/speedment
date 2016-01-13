@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import com.speedment.Entity;
-import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**

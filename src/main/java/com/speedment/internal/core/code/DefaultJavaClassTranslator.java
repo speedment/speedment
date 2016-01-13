@@ -46,6 +46,8 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
+import com.speedment.internal.util.document.DocumentDbUtil;
+import com.speedment.util.StreamComposition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,8 +62,7 @@ import static java.util.Objects.requireNonNull;
  * @param <C> ConfigEntity type.
  * @param <J> Java type (Interface or Class) to generate
  */
-public abstract class DefaultJavaClassTranslator
-        <C extends Document & HasName & HasEnabled & HasMainInterface, J extends ClassOrInterface<J>>
+public abstract class DefaultJavaClassTranslator<C extends Document & HasName & HasEnabled & HasMainInterface, J extends ClassOrInterface<J>>
         implements JavaClassTranslator<C> {
 
     public static final String GETTER_METHOD_PREFIX = "get",
@@ -214,7 +215,7 @@ public abstract class DefaultJavaClassTranslator
                     ForeignKey.class
             ).forEachOrdered(ifType
                     -> aquireList(ifType)
-                    .forEach(actor -> table().children()
+                    .forEach(actor -> DocumentDbUtil.typedChildrenOf(table())
                             .filter(HasEnabled::test)
                             .filter(ifType::isInstance)
                             .forEachOrdered(c -> actor.accept(i, c)))

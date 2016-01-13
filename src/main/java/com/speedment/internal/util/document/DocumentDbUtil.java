@@ -29,6 +29,8 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
@@ -167,12 +169,12 @@ public final class DocumentDbUtil {
     }
 
     public static Stream<? extends Document> typedChildrenOf(Table table) {
-        final Stream.Builder<Document> sb = Stream.builder();
-        table.columns().forEachOrdered(sb::accept);
-        table.primaryKeyColumns().forEachOrdered(sb::accept);
-        table.indexes().forEachOrdered(sb::accept);
-        table.foreignKeys().forEachOrdered(sb::accept);
-        return sb.build();
+        return StreamComposition.concat(
+                table.columns().map(Document.class::cast),
+                table.primaryKeyColumns().map(Document.class::cast),
+                table.indexes().map(Document.class::cast),
+                table.foreignKeys().map(Document.class::cast)
+        );
     }
 
 //    public static Class<? extends Document> mainInterfaceClass(Document document) {
