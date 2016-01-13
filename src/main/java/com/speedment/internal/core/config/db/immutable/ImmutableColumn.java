@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.internal.core.config.db.ColumnImpl;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,18 +39,20 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final String databaseType;
     private final Class<?> databaseTypeObject;
 
-    ImmutableColumn(ImmutableTable parent, Map<String, Object> column) {
-        super(parent, column);
+    ImmutableColumn(ImmutableTable parent, Map<String, Object> data) {
+        super(parent, data);
         
-        this.enabled            = (boolean) column.get(ENABLED);
-        this.name               = (String) column.get(NAME);
-        this.alias              = Optional.ofNullable((String) column.get(ALIAS));
-        this.nullable           = (boolean) column.get(NULLABLE);
-        this.autoincrement      = (boolean) column.get(AUTO_INCREMENT);
-        this.typeMapper         = (String) column.get(TYPE_MAPPER);
-        this.databaseType       = (String) column.get(DATABASE_TYPE);
-        this.typeMapperObject   = Column.super.findTypeMapper();
-        this.databaseTypeObject = Column.super.findDatabaseType();
+        final Column prototype = new ColumnImpl(parent, data);
+        
+        this.enabled            = prototype.isEnabled();
+        this.name               = prototype.getName();
+        this.alias              = prototype.getAlias();
+        this.nullable           = prototype.isNullable();
+        this.autoincrement      = prototype.isAutoIncrement();
+        this.typeMapper         = prototype.getTypeMapper();
+        this.databaseType       = prototype.getDatabaseType();
+        this.typeMapperObject   = prototype.findTypeMapper();
+        this.databaseTypeObject = prototype.findDatabaseType();
     }
 
     @Override

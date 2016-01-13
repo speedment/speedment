@@ -22,12 +22,13 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import static java.util.Collections.unmodifiableSet;
+import com.speedment.internal.core.config.db.TableImpl;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -40,21 +41,24 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     private final String name;
     private final Optional<String> alias;
     
-    private final Set<ImmutableColumn> columns;
-    private final Set<ImmutableIndex> indexes;
-    private final Set<ImmutableForeignKey> foreignKeys;
-    private final Set<ImmutablePrimaryKeyColumn> primaryKeyColumns;
+    private final List<ImmutableColumn> columns;
+    private final List<ImmutableIndex> indexes;
+    private final List<ImmutableForeignKey> foreignKeys;
+    private final List<ImmutablePrimaryKeyColumn> primaryKeyColumns;
 
     ImmutableTable(ImmutableSchema parent, Map<String, Object> table) {
         super(parent, table);
-        this.enabled = (boolean) table.get(ENABLED);
-        this.name    = (String) table.get(NAME);
-        this.alias   = Optional.ofNullable((String) table.get(ALIAS));
         
-        this.columns           = unmodifiableSet(Table.super.columns().map(ImmutableColumn.class::cast).collect(toSet()));
-        this.indexes           = unmodifiableSet(Table.super.indexes().map(ImmutableIndex.class::cast).collect(toSet()));
-        this.foreignKeys       = unmodifiableSet(Table.super.foreignKeys().map(ImmutableForeignKey.class::cast).collect(toSet()));
-        this.primaryKeyColumns = unmodifiableSet(Table.super.primaryKeyColumns().map(ImmutablePrimaryKeyColumn.class::cast).collect(toSet()));
+        final Table prototype = new TableImpl(parent, table);
+        
+        this.enabled = prototype.isEnabled();
+        this.name    = prototype.getName();
+        this.alias   = prototype.getAlias();
+        
+        this.columns           = unmodifiableList(Table.super.columns().map(ImmutableColumn.class::cast).collect(toList()));
+        this.indexes           = unmodifiableList(Table.super.indexes().map(ImmutableIndex.class::cast).collect(toList()));
+        this.foreignKeys       = unmodifiableList(Table.super.foreignKeys().map(ImmutableForeignKey.class::cast).collect(toList()));
+        this.primaryKeyColumns = unmodifiableList(Table.super.primaryKeyColumns().map(ImmutablePrimaryKeyColumn.class::cast).collect(toList()));
     }
 
     @Override

@@ -46,4 +46,7 @@ public final class Lazy<T> {
         return value;
     }
 
+    public static <T> Lazy<T> create() {
+        return new Lazy<>();
+    }
 }

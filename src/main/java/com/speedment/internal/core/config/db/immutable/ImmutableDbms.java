@@ -18,14 +18,14 @@ package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
-import com.speedment.internal.core.stream.OptionalUtil;
-import static java.util.Collections.unmodifiableSet;
+import com.speedment.internal.core.config.db.DbmsImpl;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.Set;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -42,20 +42,22 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final OptionalInt port;
     private final Optional<String> username;
     
-    private final Set<ImmutableSchema> schemas;
+    private final List<ImmutableSchema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
         super(parent, dbms);
 
-        this.enabled   = (boolean) dbms.get(ENABLED);
-        this.name      = (String) dbms.get(NAME);
-        this.alias     = Optional.ofNullable((String) dbms.get(ALIAS));
-        this.typeName  = (String) dbms.get(TYPE_NAME);
-        this.ipAddress = Optional.ofNullable((String) dbms.get(IP_ADDRESS));
-        this.port      = OptionalUtil.ofNullable((Integer) dbms.get(PORT));
-        this.username  = Optional.ofNullable((String) dbms.get(USERNAME));
+        final Dbms prototype = new DbmsImpl(parent, dbms);
         
-        this.schemas   = unmodifiableSet(Dbms.super.schemas().map(ImmutableSchema.class::cast).collect(toSet()));
+        this.enabled   = prototype.isEnabled();
+        this.name      = prototype.getName();
+        this.alias     = prototype.getAlias();
+        this.typeName  = prototype.getTypeName();
+        this.ipAddress = prototype.getIpAddress();
+        this.port      = prototype.getPort();
+        this.username  = prototype.getUsername();
+        
+        this.schemas   = unmodifiableList(Dbms.super.schemas().map(ImmutableSchema.class::cast).collect(toList()));
     }
 
     @Override

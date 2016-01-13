@@ -19,12 +19,13 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import static java.util.Collections.unmodifiableSet;
+import com.speedment.internal.core.config.db.SchemaImpl;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -38,16 +39,19 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
     private final Optional<String> alias;
     private final boolean defaultSchema;
     
-    private final Set<ImmutableTable> tables;
+    private final List<ImmutableTable> tables;
 
     ImmutableSchema(ImmutableDbms parent, Map<String, Object> schema) {
         super(parent, schema);
-        this.enabled       = (boolean) schema.get(ENABLED);
-        this.name          = (String) schema.get(NAME);
-        this.alias         = Optional.ofNullable((String) schema.get(ALIAS));
-        this.defaultSchema = (boolean) schema.get(DEFAULT_SCHEMA);
         
-        this.tables = unmodifiableSet(Schema.super.tables().map(ImmutableTable.class::cast).collect(toSet()));
+        final Schema prototype = new SchemaImpl(parent, schema);
+        
+        this.enabled       = prototype.isEnabled();
+        this.name          = prototype.getName();
+        this.alias         = prototype.getAlias();
+        this.defaultSchema = prototype.isDefaultSchema();
+        
+        this.tables = unmodifiableList(Schema.super.tables().map(ImmutableTable.class::cast).collect(toList()));
     }
 
     @Override

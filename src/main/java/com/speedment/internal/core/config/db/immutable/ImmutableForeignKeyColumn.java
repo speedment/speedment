@@ -20,6 +20,8 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
+import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
+import com.speedment.internal.util.Lazy;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,20 +35,24 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     private final int ordinalPosition;
     private final String foreignColumnName;
     private final String foreignTableName;
-    private final Column foreignColumn;
-    private final Table foreignTable;
-    private final Column column;
+    
+    private final Lazy<Column> foreignColumn;
+    private final Lazy<Table> foreignTable;
+    private final Lazy<Column> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, fkc);
         
-        this.name              = (String) fkc.get(NAME);
-        this.ordinalPosition   = (int) fkc.get(ORDINAL_POSITION);
-        this.foreignColumnName = (String) fkc.get(FOREIGN_COLUMN_NAME);
-        this.foreignTableName  = (String) fkc.get(FOREIGN_TABLE_NAME);
-        this.foreignColumn     = ForeignKeyColumn.super.findForeignColumn();
-        this.foreignTable      = ForeignKeyColumn.super.findForeignTable();
-        this.column            = ForeignKeyColumn.super.findColumn();
+        final ForeignKeyColumn prototype = new ForeignKeyColumnImpl(parent, fkc);
+        
+        this.name              = prototype.getName();
+        this.ordinalPosition   = prototype.getOrdinalPosition();
+        this.foreignTableName  = prototype.getForeignTableName();
+        this.foreignColumnName = prototype.getForeignColumnName();
+        
+        this.foreignTable      = Lazy.create();
+        this.foreignColumn     = Lazy.create();
+        this.column            = Lazy.create();
     }
 
     @Override
@@ -71,17 +77,17 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
 
     @Override
     public Column findForeignColumn() {
-        return foreignColumn;
+        return foreignColumn.getOrCompute(ForeignKeyColumn.super::findForeignColumn);
     }
 
     @Override
     public Table findForeignTable() {
-        return foreignTable;
+        return foreignTable.getOrCompute(ForeignKeyColumn.super::findForeignTable);
     }
 
     @Override
     public Column findColumn() {
-        return column;
+        return column.getOrCompute(ForeignKeyColumn.super::findColumn);
     }
     
     @Override

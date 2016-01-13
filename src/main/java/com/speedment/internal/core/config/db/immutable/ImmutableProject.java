@@ -18,19 +18,18 @@ package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentUtil;
 import com.speedment.stream.MapStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import static java.util.Collections.unmodifiableSet;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -45,19 +44,21 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     private final String packageLocation;
     private final Optional<Path> configPath;
     
-    private final Set<ImmutableDbms> dbmses;
+    private final List<ImmutableDbms> dbmses;
     private final Map<String, ImmutableTable> tablesByName;
 
     ImmutableProject(Map<String, Object> project) {
         super(project);
-
-        this.enabled         = (boolean) project.get(ENABLED);
-        this.name            = (String) project.get(NAME);
-        this.packageName     = (String) project.get(PACKAGE_NAME);
-        this.packageLocation = (String) project.get(PACKAGE_LOCATION);
-        this.configPath      = Optional.ofNullable((String) project.get(CONFIG_PATH)).map(Paths::get);
         
-        this.dbmses = unmodifiableSet(Project.super.dbmses().map(ImmutableDbms.class::cast).collect(toSet()));
+        final Project prototype = new ProjectImpl(project);
+
+        this.enabled         = prototype.isEnabled();
+        this.name            = prototype.getName();
+        this.packageName     = prototype.getPackageName();
+        this.packageLocation = prototype.getPackageName();
+        this.configPath      = prototype.getConfigPath();
+        
+        this.dbmses = unmodifiableList(Project.super.dbmses().map(ImmutableDbms.class::cast).collect(toList()));
         this.tablesByName = MapStream.fromValues(
             DocumentDbUtil.traverseOver(this, ImmutableTable.class),
             table -> DocumentUtil.relativeName(table, Dbms.class)

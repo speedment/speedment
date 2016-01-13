@@ -20,6 +20,8 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.parameters.OrderType;
+import com.speedment.internal.core.config.db.IndexColumnImpl;
+import com.speedment.internal.util.Lazy;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,15 +34,18 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     private final String name;
     private final int ordinalPosition;
     private final OrderType orderType;
-    private final Column column;
+    private final Lazy<Column> column;
 
     ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
         super(parent, ic);
         
-        this.name            = (String) ic.get(NAME);
-        this.ordinalPosition = (int) ic.get(ORDINAL_POSITION);
-        this.orderType       = (OrderType) ic.get(ORDER_TYPE);
-        this.column          = IndexColumn.super.findColumn();
+        final IndexColumn prototype = new IndexColumnImpl(parent, ic);
+        
+        this.name            = prototype.getName();
+        this.ordinalPosition = prototype.getOrdinalPosition();
+        this.orderType       = prototype.getOrderType();
+        
+        this.column          = Lazy.create();
     }
 
     @Override
@@ -60,7 +65,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
 
     @Override
     public Column findColumn() {
-        return column;
+        return column.getOrCompute(IndexColumn.super::findColumn);
     }
 
     @Override

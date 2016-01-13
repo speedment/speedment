@@ -19,12 +19,13 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
-import static java.util.Collections.unmodifiableSet;
+import com.speedment.internal.core.config.db.IndexImpl;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -37,15 +38,18 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     private final String name;
     private final boolean unique;
     
-    private final Set<ImmutableIndexColumn> indexColumns;
+    private final List<ImmutableIndexColumn> indexColumns;
     
     ImmutableIndex(ImmutableTable parent, Map<String, Object> index) {
         super(parent, index);
-        this.enabled = (boolean) index.get(ENABLED);
-        this.name    = (String) index.get(NAME);
-        this.unique  = (boolean) index.get(UNIQUE);
         
-        this.indexColumns = unmodifiableSet(Index.super.indexColumns().map(ImmutableIndexColumn.class::cast).collect(toSet()));
+        final Index prototype = new IndexImpl(parent, index);
+        
+        this.enabled = prototype.isEnabled();
+        this.name    = prototype.getName();
+        this.unique  = prototype.isUnique();
+        
+        this.indexColumns = unmodifiableList(Index.super.indexColumns().map(ImmutableIndexColumn.class::cast).collect(toList()));
     }
 
     @Override
