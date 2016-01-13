@@ -29,12 +29,9 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
