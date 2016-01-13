@@ -37,7 +37,7 @@ public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     default ObjectProperty<OrderType> orderTypeProperty() {
         final String defaultValue = HasOrderType.super.getOrderType().name();
         final StringProperty strProperty = stringPropertyOf(HasOrderType.ORDER_TYPE, () -> defaultValue);
-        final ObjectProperty<OrderType> objProperty = new SimpleObjectProperty(OrderType.valueOf(defaultValue));
+        final ObjectProperty<OrderType> objProperty = new SimpleObjectProperty<>(OrderType.valueOf(defaultValue));
         
         strProperty.bindBidirectional(objProperty, new StringConverter<OrderType>() {
             @Override

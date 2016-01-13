@@ -73,8 +73,9 @@ public interface ForeignKeyColumn extends
      * @return the foreign {@link Table} referenced by this
      */
     default Table findForeignTable() throws SpeedmentException {
-        final Schema schema = (Schema) ancestors()
-                .filter(doc -> Schema.class.isAssignableFrom(doc.getClass()))
+        final Schema schema = ancestors()
+                .filter(Schema.class::isInstance)
+                .map(Schema.class::cast)
                 .findFirst()
                 .orElseThrow(() -> new SpeedmentException(
                         "A foreign key in the config tree references a table that "

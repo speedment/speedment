@@ -20,6 +20,8 @@ import com.google.gson.reflect.TypeToken;
 import com.speedment.annotation.Api;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +42,7 @@ public interface Document {
      * Returns the parent of this Document or {@link Optional#empty()} if the
      * Document does not have a parent.
      *
-     * @return
+     * @return the parent
      */
     Optional<? extends Document> getParent();
 
@@ -74,21 +76,22 @@ public interface Document {
         if (list == null) {
             return Stream.empty();
         } else {
-            return list.stream().map(map -> constructor.apply((P) this, map));
+            @SuppressWarnings("unchecked")
+            final P thizz = (P)this;
+            return list.stream().map(map -> constructor.apply(thizz, map));
         }
     }
 
     Stream<? extends Document> children();
 
     default Stream<Document> ancestors() {
-        final Stream.Builder<Document> stream = Stream.builder();
+        final List<Document> ancestors = new ArrayList<>();
         Document parent = this;
-
         while ((parent = parent.getParent().orElse(null)) != null) {
-            stream.add(parent);
+            ancestors.add(parent);
         }
-
-        return stream.build();
+        Collections.reverse(ancestors);
+        return ancestors.stream();
     }
     
     @SuppressWarnings("unchecked")

@@ -237,7 +237,7 @@ public final class UISession {
                 
                 if (schemaName.isPresent()) {
                     project.dbmses()
-                        .map(dbms -> (DbmsProperty) dbms)
+                        .map(DbmsProperty.class::cast)
                         .forEach(dbms -> loadFromDatabase(dbms, schemaName.get()));
                 } else {
                     showError(

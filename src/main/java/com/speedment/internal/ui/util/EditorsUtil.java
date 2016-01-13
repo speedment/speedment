@@ -57,7 +57,9 @@ public final class EditorsUtil {
         final ObservableList<T> observable = observableArrayList(alternatives);
         
         final ChoiceBox<String> choice = new ChoiceBox<>(labels);
-        choice.getSelectionModel().select(converter.apply((T) item.getValue()));
+        @SuppressWarnings("unchecked")
+        final T itemValue = (T)item.getValue();
+        choice.getSelectionModel().select(converter.apply(itemValue));
         
         return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {
             @Override

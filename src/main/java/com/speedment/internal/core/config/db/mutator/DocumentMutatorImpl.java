@@ -18,6 +18,7 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.Document;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -42,7 +42,7 @@ public final class ColumnMutator extends DocumentMutatorImpl implements Document
         put(AUTO_INCREMENT, autoIncrement);
     }
 
-    public void setTypeMapper(TypeMapper typeMapper) {
+    public void setTypeMapper(TypeMapper<?, ?> typeMapper) {
         put(TYPE_MAPPER, typeMapper.getClass().getName());
     }
 

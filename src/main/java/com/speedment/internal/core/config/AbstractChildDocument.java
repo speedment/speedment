@@ -32,6 +32,7 @@ public abstract class AbstractChildDocument<PARENT extends Document> extends Bas
         super(parent, data);
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public Optional<PARENT> getParent() {
         return (Optional<PARENT>) super.getParent();

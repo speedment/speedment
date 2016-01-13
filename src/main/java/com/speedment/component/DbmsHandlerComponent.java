@@ -26,8 +26,8 @@ import java.util.stream.Stream;
 /**
  * This class is a pluggable factory that produces
  * {@link DbmsHandler DbmsHandlers} for a given Dbms. The DbmsHandler is
- * obtained via the {@link #get(com.speedment.config.Dbms) } method and if an
- * existing DbmsHandler can not be found, the {@link #make(com.speedment.config.Dbms)
+ * obtained via the {@link #get(com.speedment.config.db.Dbms) } method and if an
+ * existing DbmsHandler can not be found, the {@link #make(com.speedment.config.db.Dbms)
  * } method is called to provide a new instance.
  *
  * @author pemi
@@ -38,10 +38,10 @@ public interface DbmsHandlerComponent extends Component {
 
     /**
      * Installs a new {@link DbmsType} so that handlers can be created using the
-     * {@link #make(com.speedment.config.Dbms) } method.
+     * {@link #make(com.speedment.config.db.Dbms) } method.
      * <p>
      * The type will be indexed by its name as returned by
-     * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name,
+     * {@link DbmsType#getName() }. If multiple {@code DbmsTypes} share name,
      * only the most recently installed will be saved.
      *
      * @param dbmsType the type to install

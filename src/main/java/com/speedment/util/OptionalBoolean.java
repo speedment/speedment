@@ -75,8 +75,9 @@ public enum OptionalBoolean {
     
     public void ifPresent(BooleanConsumer consumer) {
         switch (this) {
-            case FALSE : consumer.accept(false);
-            case TRUE  : consumer.accept(true);
+            case FALSE : { consumer.accept(false); break;}
+            case TRUE  : { consumer.accept(true); break;}
+            default: // do nothing
         }
     }
 }

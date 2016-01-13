@@ -19,7 +19,6 @@ package com.speedment.internal.ui.config;
 import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
-import com.speedment.stream.MapStream;
 import com.speedment.util.OptionalBoolean;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +51,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableList;
 
 /**
  *
@@ -77,7 +76,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     /**
      * An internal map of the properties that have been created by this class.
      * Two different properties must never be returned for the same key. A
-     * property in this map must be configered to listen for changes in the
+     * property in this map must be configured to listen for changes in the
      * raw map before being inserted into the map.
      */
     private final transient Map<String, Property<?>> properties;
@@ -136,7 +135,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                             if (l == null) {
                                 final List<DocumentProperty> children = addedList.stream()
                                     .filter(Map.class::isInstance)
-                                    .map(obj -> (Map<String, Object>) obj)
+                                    .map(DOCUMENT_TYPE::cast)
                                     .map(obj -> createDocument(change.getKey(), obj))
                                     .collect(toList());
 
@@ -153,7 +152,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                             } else {
                                 addedList.stream()
                                     .filter(Map.class::isInstance)
-                                    .map(obj -> (Map<String, Object>) obj)
+                                    .map(DOCUMENT_TYPE::cast)
                                     .map(obj -> createDocument(change.getKey(), obj))
                                     .forEachOrdered(l::add);
                             }
@@ -186,7 +185,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                                 } else if (added instanceof Double) {
                                     newProperty = new SimpleDoubleProperty((Double) added);
                                 } else {
-                                    newProperty = new SimpleObjectProperty(added);
+                                    newProperty = new SimpleObjectProperty<>(added);
                                 }
                                 
                                 properties.put(change.getKey(), newProperty);
@@ -266,6 +265,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         return (BooleanProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleBooleanProperty(getAsBoolean(k).orElse(ifEmpty.getAsBoolean()))));
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) {
         return (ObjectProperty<T>) properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(type.cast(get(k).orElseGet(ifEmpty)))));
@@ -295,7 +295,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         return monitor.runWithoutGeneratingEvents(() -> {
             try {
                 @SuppressWarnings("unchecked")
-                final List<T> existing = ((List<Map<String, Object>>) config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
+                final List<T> existing = DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
                     .stream().map(child -> constructor.apply((P) this, child))
                     .collect(toList());
 
@@ -325,11 +325,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     @Override
     public final Stream<DocumentProperty> children() {
         return stream()
-            .filterValue(obj -> obj instanceof List<?>)
+            .filterValue(List.class::isInstance)
             .mapValue(list -> (List<Object>) list)
             .flatMapValue(list -> list.stream())
             .filterValue(obj -> obj instanceof Map<?, ?>)
-            .mapValue(map -> (Map<String, Object>) map)
+            .mapValue(DOCUMENT_TYPE::cast)
             .mapValue((key, value) -> createDocument(key, value))
             .values();
     }
@@ -351,8 +351,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
             list.addListener((ListChangeListener.Change<? extends T> change) -> {
                 monitor.runWithoutGeneratingEvents(() -> {
                     @SuppressWarnings("unchecked")
-                    final List<Map<String, Object>> rawList = 
-                        (List<Map<String, Object>>) config.get(key);
+                    final List<Map<String, Object>> rawList = DOCUMENT_LIST_TYPE.cast(config.get(key));
 
                     while (change.next()) {
                         if (change.wasAdded()) {

@@ -27,20 +27,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import java.util.function.Function;
 
 /**
  *
  * @author Emil Forslund
  */
 public class ImmutableDocument extends BaseDocument {
-    
+
     private final transient Map<String, List<Document>> children;
-    
+
     protected ImmutableDocument(Map<String, Object> data) {
         super(Collections.unmodifiableMap(data));
         children = new ConcurrentHashMap<>();
     }
-    
+
     protected ImmutableDocument(ImmutableDocument parent, Map<String, Object> data) {
         super(parent, Collections.unmodifiableMap(data));
         children = new ConcurrentHashMap<>();
@@ -58,22 +59,27 @@ public class ImmutableDocument extends BaseDocument {
 
     @Override
     public <P extends Document, T extends Document> Stream<T> children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
+
+        @SuppressWarnings("unchecked")
+        final Function<Document, T> typeMapper = d -> (T) d;
+
         return children.computeIfAbsent(key, k -> {
-            final List<Map<String, Object>> list = 
-                (List<Map<String, Object>>) get(k).orElse(null);
+            final List<Map<String, Object>> list = get(k).map(DOCUMENT_LIST_TYPE::cast).orElse(null);
 
             if (list == null) {
                 return new ArrayList<>();
             } else {
+                @SuppressWarnings("unchecked")
+                final P thizz = (P) this;
                 return list.stream()
-                    .map(Collections::unmodifiableMap)
-                    .map(data -> constructor.apply((P) this, data))
-                    .map(Document.class::cast)
-                    .collect(toList());
+                        .map(Collections::unmodifiableMap)
+                        .map(data -> constructor.apply(thizz, data))
+                        .map(Document.class::cast)
+                        .collect(toList());
             }
-        }).stream().map(c -> (T) c);
+        }).stream().map(typeMapper);
     }
-    
+
     public static ImmutableDocument wrap(Document document) {
         return new ImmutableDocument(document.getData());
     }

@@ -66,7 +66,7 @@ public abstract class SimpleModelTest {
         return quote(HasName.NAME) + " : " + quote(s);
     }
 
-    private String typeMapper(Class<? extends TypeMapper> tmc) {
+    private String typeMapper(Class<? extends TypeMapper<?,?>> tmc) {
         return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
     }
 

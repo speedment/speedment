@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
  */
 public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Schema {
 
-    public SchemaImpl(Dbms parent, Map data) {
+    public SchemaImpl(Dbms parent, Map<String, Object> data) {
         super(parent, data);
     }
 

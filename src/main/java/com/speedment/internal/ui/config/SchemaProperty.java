@@ -38,7 +38,7 @@ import org.controlsfx.control.PropertySheet;
 public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms> 
     implements Schema, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
-    public SchemaProperty(Dbms parent, Map data) {
+    public SchemaProperty(Dbms parent, Map<String, Object> data) {
         super(parent, data);
     }
     

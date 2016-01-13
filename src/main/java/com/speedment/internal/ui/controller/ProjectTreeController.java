@@ -108,11 +108,11 @@ public final class ProjectTreeController implements Initializable {
         
         final TreeItem<DocumentProperty> branch = new TreeItem<>(doc);
         branch.expandedProperty().bindBidirectional(doc.expandedProperty());
-
+        
         doc.children()
-            .filter(d -> d instanceof DocumentProperty)
-            .filter(d -> d instanceof HasExpandedProperty)
-            .map(d -> (P) d)
+            .filter(DocumentProperty.class::isInstance)
+            .filter(HasExpandedProperty.class::isInstance)
+            .map(d -> (DocumentProperty & HasExpandedProperty) d)
             .map(this::branch)
             .forEachOrdered(branch.getChildren()::add);
 

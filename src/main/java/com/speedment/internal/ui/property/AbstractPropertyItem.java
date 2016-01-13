@@ -48,7 +48,7 @@ public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T
     
     protected abstract PropertyEditor<?> createUndecoratedEditor();
     
-    public final PropertyEditor createEditor() {
+    public final PropertyEditor<?> createEditor() {
         final PropertyEditor<?> editor = createUndecoratedEditor();
         decorator.accept(editor);
         return editor;

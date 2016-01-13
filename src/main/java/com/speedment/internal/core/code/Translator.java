@@ -46,6 +46,22 @@ import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A component that can translate a {@link Node} into something else. This
@@ -184,7 +200,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
         return getNode()
                 //.ancestor(clazz)
                 .ancestors()
-                .filter(d -> clazz.isAssignableFrom(d.getClass()))
+                .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException(
