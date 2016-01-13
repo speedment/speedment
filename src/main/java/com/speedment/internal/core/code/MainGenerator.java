@@ -29,6 +29,7 @@ import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTr
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.event.AfterGenerate;
 import com.speedment.event.BeforeGenerate;
 import com.speedment.internal.logging.Logger;
@@ -83,7 +84,7 @@ public class MainGenerator implements Consumer<Project> {
         translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
         traverseOver(project, Table.class)
-            .filter(Table::isEnabled)
+            .filter(HasEnabled::test)
             .forEach(table -> {
                 translators.add(new EntityTranslator(speedment, gen, table));
                 translators.add(new EntityImplTranslator(speedment, gen, table));
@@ -96,7 +97,7 @@ public class MainGenerator implements Consumer<Project> {
         ).forEach(meta -> writeToFile(project, meta, fileCounter));
 
         final List<Table> tables = traverseOver(project, Table.class)
-            .filter(Table::isEnabled)
+            .filter(HasEnabled::test)
             .collect(toList());
 
         gen.metaOn(tables, File.class).forEach(meta -> {

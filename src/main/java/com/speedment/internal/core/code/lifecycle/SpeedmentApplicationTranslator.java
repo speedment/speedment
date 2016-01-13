@@ -36,8 +36,8 @@ import static com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMet
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import com.speedment.stream.MapStream;
 import java.util.List;
@@ -64,7 +64,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
         requireNonNull(file);
         
         final Map<String, List<Table>> nameMap = traverseOver(project(), Table.class)
-                .filter(Table::isEnabled)
+                .filter(HasEnabled::test)
                 .collect(Collectors.groupingBy(Table::getName));
         
         final Set<String> ambigousNames = MapStream.of(nameMap)
@@ -79,7 +79,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
                 .add("loadAndSetProject();");
         
         traverseOver(project(), Table.class)
-                .filter(Table::isEnabled)
+                .filter(HasEnabled::test)
                 .forEachOrdered(t -> {
                     EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
                     final Type managerType = entityManagerImplTranslator.getImplType();

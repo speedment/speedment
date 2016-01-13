@@ -230,19 +230,12 @@ public final class ProjectTreeController implements Initializable {
                     ui.createContextMenu(this, (DocumentProperty & HasMainInterface) item)
                         .ifPresent(this::setContextMenu);
                 }
-
-                if (item instanceof HasEnabled) {
-                    @SuppressWarnings("unchecked")
-                    final HasEnabled withEnabled = (HasEnabled) item;
-                    
-                    if (withEnabled.isEnabled()) 
-                        enable(); 
-                    else 
-                        disable();
-                } else {
-                    enable(); 
-                }
                 
+                if (HasEnabled.test(item)) {
+                    enable();
+                } else {
+                    disable();
+                }
             }
         }
     }

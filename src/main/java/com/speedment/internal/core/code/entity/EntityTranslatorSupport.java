@@ -28,6 +28,7 @@ import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.field.ComparableField;
 import com.speedment.field.ComparableForeignKeyField;
 import com.speedment.field.StringForeignKeyField;
@@ -207,7 +208,7 @@ public final class EntityTranslatorSupport {
         requireNonNull(table);
         requireNonNull(column);
         return table.foreignKeys()
-            .filter(ForeignKey::isEnabled)
+            .filter(HasEnabled::test)
             .flatMap(ForeignKey::foreignKeyColumns)
             .filter(fkc -> fkc.findColumn().equals(column))
             .findFirst();

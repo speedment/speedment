@@ -25,6 +25,7 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javafx.scene.Node;
@@ -124,7 +125,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @see Enableable#isEnabled()
      */
     default Stream<? extends Column> columns() {
-        return table().columns().filter(Column::isEnabled);
+        return table().columns().filter(HasEnabled::test);
     }
 
     /**
@@ -136,7 +137,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @see Enableable#isEnabled()
      */
     default Stream<? extends Index> indexes() {
-        return table().indexes().filter(Index::isEnabled);
+        return table().indexes().filter(HasEnabled::test);
     }
 
     /**
@@ -148,7 +149,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @see Enableable#isEnabled()
      */
     default Stream<? extends ForeignKey> foreignKeys() {
-        return table().foreignKeys().filter(ForeignKey::isEnabled);
+        return table().foreignKeys().filter(HasEnabled::test);
     }
 
     /**
@@ -160,7 +161,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @see Enableable#isEnabled()
      */
     default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return table().primaryKeyColumns().filter(PrimaryKeyColumn::isEnabled);
+        return table().primaryKeyColumns().filter(HasEnabled::test);
     }
 
     /**

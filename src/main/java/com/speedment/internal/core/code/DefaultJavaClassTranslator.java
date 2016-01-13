@@ -222,7 +222,7 @@ public abstract class DefaultJavaClassTranslator
 
             if (Table.class.equals(getNode().mainInterface())) {
                 schema().tables()
-                        .filter(Table::isEnabled)
+                        .filter(HasEnabled::test)
                         .flatMap(t -> t.foreignKeys())
                         .filter(fk -> fk.foreignKeyColumns()
                                 //.filter(ForeignKeyColumn::isEnabled)
