@@ -20,7 +20,6 @@ import com.speedment.Speedment;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
-import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.Map;
@@ -32,7 +31,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table> 
-    implements PrimaryKeyColumn, HasNameProperty, HasEnabledProperty, 
+    implements PrimaryKeyColumn, HasNameProperty, 
     HasOrdinalPositionProperty, HasColumnProperty {
 
     public PrimaryKeyColumnProperty(Table parent, Map<String, Object> data) {
@@ -41,9 +40,6 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
     
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.concat(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasColumnProperty.super.getUiVisibleProperties(speedment)
-        );
+        return HasColumnProperty.super.getUiVisibleProperties(speedment);
     }
 }

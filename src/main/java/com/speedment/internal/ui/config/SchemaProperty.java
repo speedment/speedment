@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
@@ -56,6 +57,11 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
                 )
             )
         ).flatMap(s -> s);
+    }
+    
+    @Override
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
     }
     
     public final BooleanProperty defaultSchemaProperty() {

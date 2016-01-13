@@ -30,7 +30,6 @@ import java.util.Optional;
  */
 public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implements PrimaryKeyColumn {
 
-    private final boolean enabled;
     private final String name;
     private final int ordinalPosition;
     
@@ -41,7 +40,6 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         
         final PrimaryKeyColumn prototype = new PrimaryKeyColumnImpl(parent, pkc);
         
-        this.enabled         = prototype.isEnabled();
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();
         
@@ -51,11 +49,6 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     @Override
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     @Override

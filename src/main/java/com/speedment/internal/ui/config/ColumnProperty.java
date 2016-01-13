@@ -81,6 +81,11 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
         ).flatMap(s -> s);
     }
 
+    @Override
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
+    }
+
     public BooleanProperty nullableProperty() {
         return booleanPropertyOf(NULLABLE, Column.super::isNullable);
     }

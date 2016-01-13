@@ -19,7 +19,7 @@ package com.speedment.internal.ui.config.trait;
 import com.speedment.Speedment;
 import com.speedment.config.db.trait.*;
 import com.speedment.internal.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
@@ -30,16 +30,18 @@ import org.controlsfx.control.PropertySheet;
  */
 public interface HasAliasProperty extends DocumentProperty, HasAlias {
 
+    StringProperty nameProperty();
+    
     default StringProperty aliasProperty() {
         return stringPropertyOf(HasAlias.ALIAS, () -> null);
     }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            new StringPropertyItem(
-                aliasProperty(), 
-                "Alias", 
+        return Stream.of(new DefaultStringPropertyItem(
+                aliasProperty(),
+                nameProperty(),
+                "Java Alias", 
                 "The name that will be used for this in generated code."
             )
         );

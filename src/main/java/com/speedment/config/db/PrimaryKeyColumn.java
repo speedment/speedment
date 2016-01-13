@@ -19,7 +19,6 @@ package com.speedment.config.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasColumn;
-import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
@@ -36,7 +35,6 @@ import com.speedment.internal.core.config.db.mutator.PrimaryKeyColumnMutator;
 public interface PrimaryKeyColumn extends 
         Document,
         HasParent<Table>,
-        HasEnabled,
         HasName,
         HasOrdinalPosition,
         HasColumn,
