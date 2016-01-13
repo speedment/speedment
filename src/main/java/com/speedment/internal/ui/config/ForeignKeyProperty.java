@@ -40,7 +40,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
-        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty.class);
+        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty::new);
     }
     
     @Override

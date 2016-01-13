@@ -90,7 +90,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
     
     public ObservableList<DbmsProperty> dbmsesProperty() {
-        return observableListOf(DBMSES, DbmsProperty.class);
+        return observableListOf(DBMSES, DbmsProperty::new);
     }
 
     @Override

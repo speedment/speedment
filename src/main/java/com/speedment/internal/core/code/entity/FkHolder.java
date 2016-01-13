@@ -26,7 +26,6 @@ import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
@@ -36,7 +35,6 @@ import static java.util.Objects.requireNonNull;
  */
 final class FkHolder {
 
-    private final ForeignKey fk;
     private final ForeignKeyColumn fkc;
     private final Column column;
     private final Table table;
@@ -48,7 +46,6 @@ final class FkHolder {
     FkHolder(Speedment speedment, Generator generator, ForeignKey fk) {
         requireNonNull(speedment);
         requireNonNull(generator);
-        this.fk = requireNonNull(fk);
         fkc = fk.foreignKeyColumns()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have an enabled ForeignKeyColumn"));

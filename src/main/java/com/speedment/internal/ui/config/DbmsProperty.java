@@ -26,7 +26,6 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
@@ -74,7 +73,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
     
     public final StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME, Dbms.super::getTypeName);
+        return stringPropertyOf(TYPE_NAME, () -> null);
     }
 
     public final StringProperty ipAddressProperty() {
@@ -90,7 +89,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
     
     public ObservableList<SchemaProperty> schemasProperty() {
-        return observableListOf(SCHEMAS, SchemaProperty.class);
+        return observableListOf(SCHEMAS, SchemaProperty::new);
     }
 
     @Override

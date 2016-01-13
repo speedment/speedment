@@ -239,6 +239,8 @@ public final class ProjectTreeController implements Initializable {
                         enable(); 
                     else 
                         disable();
+                } else {
+                    enable(); 
                 }
                 
             }

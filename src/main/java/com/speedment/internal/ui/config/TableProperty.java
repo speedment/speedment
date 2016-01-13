@@ -50,19 +50,19 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
     
     public ObservableList<ColumnProperty> columnsProperty() {
-        return observableListOf(COLUMNS, ColumnProperty.class);
+        return observableListOf(COLUMNS, ColumnProperty::new);
     }
     
     public ObservableList<IndexProperty> indexesProperty() {
-        return observableListOf(INDEXES, IndexProperty.class);
+        return observableListOf(INDEXES, IndexProperty::new);
     }
     
     public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
-        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty.class);
+        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty::new);
     }
     
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
-        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty.class);
+        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty::new);
     }
 
     @Override

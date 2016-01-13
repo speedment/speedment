@@ -63,7 +63,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
     
     public ObservableList<TableProperty> tablesProperty() {
-        return observableListOf(TABLES, TableProperty.class);
+        return observableListOf(TABLES, TableProperty::new);
     }
 
     @Override

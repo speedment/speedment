@@ -70,6 +70,8 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import org.controlsfx.glyphfont.FontAwesome;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import com.speedment.stream.MapStream;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -114,7 +116,7 @@ public final class UISession {
     private File currentlyOpenFile = null;
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
-        this(speedment, application, stage, defaultConfigLocation, new ProjectProperty(new ConcurrentHashMap<>()));
+        this(speedment, application, stage, defaultConfigLocation, newEmptyProject());
     }
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
@@ -544,4 +546,10 @@ public final class UISession {
     }
     
     private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
+    
+    private static ProjectProperty newEmptyProject() {
+        final Map<String, Object> projectMap = new ConcurrentHashMap<>();
+        projectMap.put("name", "Project");
+        return new ProjectProperty(projectMap);
+    }
 }

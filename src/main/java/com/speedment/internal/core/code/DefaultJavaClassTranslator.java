@@ -215,10 +215,8 @@ public abstract class DefaultJavaClassTranslator
             ).forEachOrdered(ifType
                     -> aquireList(ifType)
                     .forEach(actor -> table().children()
-                            .filter(HasEnabled.class::isInstance)
-                            .map(HasEnabled.class::cast)
+                            .filter(HasEnabled::test)
                             .filter(ifType::isInstance)
-                            .filter(HasEnabled::isEnabled)
                             .forEachOrdered(c -> actor.accept(i, c)))
             );
 

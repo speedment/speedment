@@ -30,6 +30,7 @@ import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -280,28 +281,36 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      * implementation created by 
      * {@link #createDocument(java.lang.String, java.util.Map) createDocument}.
      * 
-     * @param <T>   the document type
-     * @param key   the key to look at
-     * @param type  the type of document to return
-     * @return      an observable list of the documents under that key
+     * @param <P>          the type of this class
+     * @param <T>          the document type
+     * @param key          the key to look at
+     * @param constructor  the constructor to use to create the children views
+     * @return             an observable list of the documents under that key
      * 
      * @throws SpeedmentException  if the specified {@code type} is not the same
      *                             type as {@link #createDocument(java.lang.String, java.util.Map) createDocument}
      *                             generated.
      */
-    public final <T extends DocumentProperty> ObservableList<T> observableListOf(String key, Class<T> type) throws SpeedmentException {
-        try {
-            @SuppressWarnings("unchecked")
-            final ObservableList<T> list = (ObservableList<T>)
-                documents.computeIfAbsent(key, k -> prepareListOnKey(k, observableList(new CopyOnWriteArrayList<>())));
+    public final <P extends DocumentProperty, T extends DocumentProperty> ObservableList<T> observableListOf(String key, BiFunction<P, Map<String, Object>, T> constructor) throws SpeedmentException {
+        return monitor.runWithoutGeneratingEvents(() -> {
+            try {
+                @SuppressWarnings("unchecked")
+                final List<T> existing = ((List<Map<String, Object>>) config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
+                    .stream().map(child -> constructor.apply((P) this, child))
+                    .collect(toList());
 
-            return list;
-        } catch (ClassCastException ex) {
-            throw new SpeedmentException(
-                "Requested an ObservableList on key '" + key + 
-                "' of a different type than 'createDocument' created.", ex
-            );
-        }
+                @SuppressWarnings("unchecked")
+                final ObservableList<T> list = (ObservableList<T>)
+                    documents.computeIfAbsent(key, k -> prepareListOnKey(k, observableList(new CopyOnWriteArrayList<>(existing))));
+
+                return list;
+            } catch (ClassCastException ex) {
+                throw new SpeedmentException(
+                    "Requested an ObservableList on key '" + key + 
+                    "' of a different type than 'createDocument' created.", ex
+                );
+            }
+        });
     }
 
     @Override
@@ -338,14 +347,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     private <T extends DocumentProperty> ObservableList<T> prepareListOnKey(String key, ObservableList<T> list) {
             
         monitor.runWithoutGeneratingEvents(() -> {
-        
-            config.computeIfAbsent(key, k -> {
-                return new CopyOnWriteArrayList<>(list.stream()
-                    .map(Document::getData)
-                    .collect(toList())
-                );
-            });
-            
+
             list.addListener((ListChangeListener.Change<? extends T> change) -> {
                 monitor.runWithoutGeneratingEvents(() -> {
                     @SuppressWarnings("unchecked")
@@ -380,13 +382,21 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         public boolean isEventsEnabled() {
             return !silence.get();
         }
-
+        
         public void runWithoutGeneratingEvents(Runnable runnable) {
+            runWithoutGeneratingEvents(() -> {runnable.run(); return null;});
+        }
+
+        public <T> T runWithoutGeneratingEvents(Supplier<T> runnable) {
+            final T result;
+            
             synchronized (silence) {
                 silence.set(true);
-                runnable.run();
+                result = runnable.get();
                 silence.set(false);
             }
+            
+            return result;
         }
     }
 }

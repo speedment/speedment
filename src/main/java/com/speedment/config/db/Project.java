@@ -23,7 +23,6 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ProjectMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
@@ -121,20 +120,7 @@ public interface Project extends
         return DocumentMutator.of(this);
     }
 
-    @Override
-    default String getName() throws SpeedmentException {
-        final Optional<String> name = getAsString(NAME);
-
-        if (name.isPresent()) {
-            return name.get();
-        } else {
-            final String defaultName = Project.class.getSimpleName();
-            getData().put(NAME, defaultName);
-            return defaultName;
-        }
-    }
-
-     static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
+    static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
     
     /**
      * Locates the table with the specified full name in this project. The name

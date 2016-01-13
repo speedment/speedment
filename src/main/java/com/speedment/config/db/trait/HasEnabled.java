@@ -32,4 +32,10 @@ public interface HasEnabled extends Document {
     default boolean isEnabled() {
         return getAsBoolean(ENABLED).orElse(ENABLED_DEFAULT);
     }
+    
+    static boolean test(Document doc) {
+        if (doc instanceof HasEnabled) {
+            return ((HasEnabled) doc).isEnabled();
+        } else return true;
+    }
 }

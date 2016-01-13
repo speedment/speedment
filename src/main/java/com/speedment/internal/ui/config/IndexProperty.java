@@ -79,7 +79,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
     
     public ObservableList<IndexColumnProperty> indexColumnsProperty() {
-        return observableListOf(INDEX_COLUMNS, IndexColumnProperty.class);
+        return observableListOf(INDEX_COLUMNS, IndexColumnProperty::new);
     }
 
     @Override
