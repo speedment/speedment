@@ -132,5 +132,4 @@ public interface Column extends
     default ColumnMutator mutator() {
         return DocumentMutator.of(this);
     }
-
 }

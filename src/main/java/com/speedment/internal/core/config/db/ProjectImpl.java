@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 public final class ProjectImpl extends BaseDocument implements Project {
 
     public ProjectImpl(Map<String, Object> data) {
-        super(data);
+        super(null, data);
     }
 
     @Override

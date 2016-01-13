@@ -20,6 +20,9 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
+import java.util.Map;
 
 /**
  *
@@ -44,5 +47,16 @@ public interface HasColumn extends Document, HasName {
                 .orElseThrow(() -> new IllegalStateException(
                         "A non-existing column '" + getName() + "' was referenced."
                 ));
+    }
+    
+    static HasColumn of(Document document) {
+        return viewOf(document, HasColumn.class, HasColumnView::new);
+    }
+}
+
+class HasColumnView extends AbstractTraitView implements HasColumn {
+
+    HasColumnView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
     }
 }

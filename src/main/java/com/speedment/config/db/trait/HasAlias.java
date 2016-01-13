@@ -18,6 +18,9 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -37,4 +40,14 @@ public interface HasAlias extends Document, HasName {
         return getAlias().orElse(getName());
     }
     
+    static HasAlias of(Document document) {
+        return viewOf(document, HasAlias.class, HasAliasView::new);
+    }
+}
+
+class HasAliasView extends AbstractTraitView implements HasAlias {
+
+    HasAliasView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
+    }
 }

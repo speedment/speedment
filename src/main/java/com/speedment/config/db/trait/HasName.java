@@ -19,6 +19,9 @@ package com.speedment.config.db.trait;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -62,5 +65,16 @@ public interface HasName extends Document, HasMainInterface {
                 "A name is required for node of type '" + getClass().getSimpleName() + "'."
             );
         }
+    }
+    
+    static HasName of(Document document) {
+        return viewOf(document, HasName.class, HasNameView::new);
+    }
+}
+
+class HasNameView extends AbstractTraitView implements HasName {
+
+    HasNameView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
     }
 }

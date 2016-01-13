@@ -18,6 +18,9 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
+import java.util.Map;
 
 /**
  *
@@ -37,5 +40,16 @@ public interface HasEnabled extends Document {
         if (doc instanceof HasEnabled) {
             return ((HasEnabled) doc).isEnabled();
         } else return true;
+    }
+    
+    static HasEnabled of(Document document) {
+        return viewOf(document, HasEnabled.class, HasEnabledView::new);
+    }
+}
+
+class HasEnabledView extends AbstractTraitView implements HasEnabled {
+
+    HasEnabledView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
     }
 }

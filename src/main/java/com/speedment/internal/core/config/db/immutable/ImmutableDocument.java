@@ -38,7 +38,7 @@ public class ImmutableDocument extends BaseDocument {
     private final transient Map<String, List<Document>> children;
 
     protected ImmutableDocument(Map<String, Object> data) {
-        super(Collections.unmodifiableMap(data));
+        super(null, Collections.unmodifiableMap(data));
         children = new ConcurrentHashMap<>();
     }
 

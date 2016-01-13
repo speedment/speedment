@@ -38,14 +38,9 @@ public class BaseDocument implements Document {
     
     private final transient Document parent; // Nullable
     private final Map<String, Object> config;
-    
-    public BaseDocument(Map<String, Object> data) {
-        this.parent = null;
-        this.config = requireNonNull(data);
-    }
-    
+
     public BaseDocument(Document parent, Map<String, Object> data) {
-        this.parent = requireNonNull(parent);
+        this.parent = parent;
         this.config = requireNonNull(data);
     }
 

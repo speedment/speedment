@@ -18,8 +18,11 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
 import static com.speedment.stream.MapStream.comparing;
 import java.util.Comparator;
+import java.util.Map;
 
 /**
  *
@@ -42,5 +45,16 @@ public interface HasOrdinalPosition extends Document {
      */
     default int getOrdinalPosition() {
         return getAsInt(ORDINAL_POSITION).orElse(0);
+    }
+    
+    static HasOrdinalPosition of(Document document) {
+        return viewOf(document, HasOrdinalPosition.class, HasOrdinalPositionView::new);
+    }
+}
+
+class HasOrdinalPositionView extends AbstractTraitView implements HasOrdinalPosition {
+
+    HasOrdinalPositionView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
     }
 }

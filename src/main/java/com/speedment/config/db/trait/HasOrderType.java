@@ -19,6 +19,9 @@ package com.speedment.config.db.trait;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.parameters.OrderType;
+import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
+import static com.speedment.internal.util.document.TraitUtil.viewOf;
+import java.util.Map;
 
 /**
  *
@@ -33,5 +36,16 @@ public interface HasOrderType extends Document {
         return getAsString(ORDER_TYPE)
             .map(OrderType::valueOf)
             .orElse(OrderType.ASC);
+    }
+    
+    static HasOrderType of(Document document) {
+        return viewOf(document, HasOrderType.class, HasOrderTypeView::new);
+    }
+}
+
+class HasOrderTypeView extends AbstractTraitView implements HasOrderType {
+
+    HasOrderTypeView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
+        super(parent, data, mainInterface);
     }
 }
