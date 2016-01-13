@@ -24,6 +24,8 @@ import com.speedment.stream.MapStream;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -33,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -51,7 +54,7 @@ public final class DocumentUtil {
                 Trees.TraversalOrder.DEPTH_FIRST_PRE
         );
     }
-    
+
     public static <E extends Document> Optional<E> ancestor(Document document, final Class<E> clazz) {
         requireNonNulls(document, clazz);
         return document.ancestors()
@@ -73,13 +76,13 @@ public final class DocumentUtil {
 
     public static Map<String, Object> newDocument(Document document, String key) {
         final List<Map<String, Object>> children = document.get(key)
-            .map(list -> (List<Map<String, Object>>) list)
-            .orElseGet(() -> {
-                final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
-                document.put(key, list);
-                return list;
-            });
-        
+                .map(list -> (List<Map<String, Object>>) list)
+                .orElseGet(() -> {
+                    final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
+                    document.put(key, list);
+                    return list;
+                });
+
         final Map<String, Object> child = new ConcurrentHashMap<>();
         children.add(child);
 
@@ -87,9 +90,9 @@ public final class DocumentUtil {
     }
 
     /**
-     * Returns the relative name for the given Document up to the point given by the
-     * parent Class by successively applying the provided nameMapper onto the
-     * Node names.
+     * Returns the relative name for the given Document up to the point given by
+     * the parent Class by successively applying the provided nameMapper onto
+     * the Node names.
      * <p>
      * For example, {@code relativeName(column, Dbms.class)} would return the
      * String "dbms_name.schema_name.table_name.column_name".
@@ -107,21 +110,21 @@ public final class DocumentUtil {
         final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
         final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
-        for (final Document parent : ancestors) {
-            if (from.isAssignableFrom(parent.getClass())) {
+        for (int i = ancestors.size() - 1; i >= 0; i--) {
+            final Document parent = ancestors.get(i);
+            if (add || from.isAssignableFrom(parent.getClass())) {
+                nameOf(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
                 add = true;
             }
-            if (add) {
-                nameFrom(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
-            }
         }
-        nameFrom(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
+
+        nameOf(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
         return sj.toString();
     }
-    
+
     /**
-     * Returns the relative name for the given Document up to the point given by the
-     * parent Class.
+     * Returns the relative name for the given Document up to the point given by
+     * the parent Class.
      * <p>
      * For example, {@code relativeName(column, Dbms.class)} would return the
      * String "dbms_name.schema_name.table_name.column_name".
@@ -137,7 +140,7 @@ public final class DocumentUtil {
         return relativeName(document, from, s -> s);
     }
 
-    private static Optional<String> nameFrom(Document document) {
+    private static Optional<String> nameOf(Document document) {
         return Cast.cast(document, HasName.class).map(HasName::getName);
     }
 
