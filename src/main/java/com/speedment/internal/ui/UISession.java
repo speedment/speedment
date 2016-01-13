@@ -70,7 +70,6 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import org.controlsfx.glyphfont.FontAwesome;
 import static com.speedment.internal.util.TextUtil.alignRight;
-import com.speedment.stream.MapStream;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 

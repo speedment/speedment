@@ -215,20 +215,20 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
 
     @Override
     public OptionalLong getAsLong(String key) {
-        final Long value = (Long) config.get(key);
-        return value == null ? OptionalLong.empty() : OptionalLong.of(value);
+        final Number value = (Number) config.get(key);
+        return value == null ? OptionalLong.empty() : OptionalLong.of(value.longValue());
     }
 
     @Override
     public OptionalDouble getAsDouble(String key) {
-        final Double value = (Double) config.get(key);
-        return value == null ? OptionalDouble.empty() : OptionalDouble.of(value);
+        final Number value = (Number) config.get(key);
+        return value == null ? OptionalDouble.empty() : OptionalDouble.of(value.doubleValue());
     }
 
     @Override
     public OptionalInt getAsInt(String key) {
-        final Integer value = (Integer) config.get(key);
-        return value == null ? OptionalInt.empty() : OptionalInt.of(value);
+        final Number value = (Number) config.get(key);
+        return value == null ? OptionalInt.empty() : OptionalInt.of(value.intValue());
     }
     
     @Override
