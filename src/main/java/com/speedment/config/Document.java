@@ -16,6 +16,7 @@
  */
 package com.speedment.config;
 
+import com.google.gson.reflect.TypeToken;
 import com.speedment.annotation.Api;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
@@ -66,8 +67,9 @@ public interface Document {
     default <P extends Document, T extends Document> Stream<T> children(
             String key, BiFunction<P, Map<String, Object>, T> constructor) {
 
-        final List<Map<String, Object>> list
-                = (List<Map<String, Object>>) get(key).orElse(null);
+        final List<Map<String, Object>> list = get(key)
+            .map(DOCUMENT_LIST_TYPE::cast)
+            .orElse(null);
 
         if (list == null) {
             return Stream.empty();
@@ -88,4 +90,10 @@ public interface Document {
 
         return stream.build();
     }
+    
+    @SuppressWarnings("unchecked")
+    static Class<Map<String, Object>> DOCUMENT_TYPE = (Class<Map<String, Object>>) new TypeToken<Map<String, Object>>(){}.getRawType();
+    
+    @SuppressWarnings("unchecked")
+    static Class<List<Map<String, Object>>> DOCUMENT_LIST_TYPE = (Class<List<Map<String, Object>>>) new TypeToken<List<Map<String, Object>>>(){}.getRawType();
 }

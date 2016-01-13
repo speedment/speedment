@@ -108,11 +108,9 @@ public final class DocumentUtil {
         final List<Document> ancestors = document.ancestors()/*.map(p -> (Parent<?>) p)*/.collect(toList());
         boolean add = false;
         for (final Document parent : ancestors) {
-            if (from.isAssignableFrom(parent.getClass())) {
-                add = true;
-            }
-            if (add) {
+            if (add || from.isAssignableFrom(parent.getClass())) {
                 nameFrom(parent).ifPresent(n -> sj.add(nameMapper.apply(n)));
+                add = true;
             }
         }
         nameFrom(document).ifPresent(n -> sj.add(nameMapper.apply(n)));
