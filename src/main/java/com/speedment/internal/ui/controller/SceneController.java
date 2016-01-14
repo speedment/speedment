@@ -33,7 +33,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,10 +57,11 @@ public final class SceneController implements Initializable {
             top.getChildren().add(MenubarController.create(session));
             top.getChildren().add(ToolbarController.create(session));
             horizontal.getItems().add(0, ProjectTreeController.create(session));
+            horizontal.getItems().add(2, PreviewController.create(session));
             vertical.getItems().add(WorkspaceController.create(session));
             vertical.getItems().add(OutputController.create(session));
             
-            horizontal.setDividerPositions(0.2, 0.8);
+            horizontal.setDividerPositions(0.2, 0.7);
             vertical.setDividerPositions(0.7, 0.3);
         });
     }
