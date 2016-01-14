@@ -18,6 +18,7 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.Project;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
 import static com.speedment.internal.util.document.TraitUtil.viewOf;
@@ -48,25 +49,28 @@ public interface HasName extends Document, HasMainInterface {
 
         if (name.isPresent()) {
             return name.get();
-            
+
         } else if (getParent()
-            .filter(HasChildren.class::isInstance)
-            .isPresent()) {
-            
+                .filter(HasChildren.class::isInstance)
+                .isPresent()) {
+
             final String defaultName = getParent()
-                .map(HasChildren.class::cast)
-                .map(parent -> parent.defaultNameFor(this))
-                .get();
+                    .map(HasChildren.class::cast)
+                    .map(parent -> parent.defaultNameFor(this))
+                    .get();
 
             getData().put(NAME, defaultName);
             return defaultName;
+        } else if (this instanceof Project) {
+            return Project.class.getSimpleName();
         } else {
+
             throw new SpeedmentException(
-                "A name is required for node of type '" + getClass().getSimpleName() + "'."
+                    "A name is required for node of type '" + getClass().getSimpleName() + "'."
             );
         }
     }
-    
+
     static HasName of(Document document) {
         return viewOf(document, HasName.class, HasNameView::new);
     }

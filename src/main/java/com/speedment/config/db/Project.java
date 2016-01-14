@@ -55,7 +55,8 @@ public interface Project extends
     
     final String 
             DEFAULT_PACKAGE_NAME = "com.speedment.example",
-            DEFAULT_PACKAGE_LOCATION = "src/main/java/";
+            DEFAULT_PACKAGE_LOCATION = "src/main/java/",
+            DEFAULT_PROJECT_NAME = Project.class.getSimpleName();
     
            
 

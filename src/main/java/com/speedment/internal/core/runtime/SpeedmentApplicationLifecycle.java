@@ -18,12 +18,10 @@ package com.speedment.internal.core.runtime;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.config.db.Dbms;
-import com.speedment.annotation.External;
 import com.speedment.config.db.Project;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
@@ -35,17 +33,11 @@ import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
-import static com.speedment.internal.util.Beans.beanPropertyName;
-import com.speedment.internal.util.Trees;
-import com.speedment.internal.util.document.DocumentUtil;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentUtil.traverseOver;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +45,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import javafx.scene.Node;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -373,8 +365,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Class<? extends Document> clazz = t2.get0();
             @SuppressWarnings("unchecked")
             final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
-            traverseOver(project)
-                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
+            System.out.println("Class "+clazz.getSimpleName());
+            DocumentDbUtil.traverseOver(project)
+                    .peek(System.out::println)
+                    .filter(clazz::isInstance)
                     .map(Document.class::cast)
                     .forEachOrdered(consumer::accept);
         });
@@ -387,8 +381,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             @SuppressWarnings("unchecked")
             final Consumer<Document> consumer = (Consumer<Document>) t3.get2();
 
-            traverseOver(project)
-                    .filter(c -> clazz.isAssignableFrom(c.getClass()))
+            DocumentDbUtil.traverseOver(project)
+                    .filter(clazz::isInstance)
                     .filter(HasName.class::isInstance)
                     .map(d -> (Document & HasName) d)
                     .filter(c -> name.equals(relativeName(c, Project.class)))
@@ -461,6 +455,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         // Replace the metadata model with an immutable version (potentially much faster)
         final Project project = speedment.getProjectComponent().getProject();
         final Project immutableProject = ImmutableProject.wrap(project);
+        
+        
+        final String json = DocumentTranscoder.save(immutableProject);
+        
         speedment.getProjectComponent().setProject(immutableProject);
         //
         return speedment;

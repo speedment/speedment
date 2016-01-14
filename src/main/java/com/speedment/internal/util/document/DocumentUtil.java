@@ -19,7 +19,9 @@ package com.speedment.internal.util.document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.lang.models.Value;
 import com.speedment.internal.util.Trees;
+import com.speedment.stream.MapStream;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,20 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.NoSuchElementException;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -123,7 +138,7 @@ public final class DocumentUtil {
      * parent Class
      */
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
-            final D document, 
+            final D document,
             final Class<T> from,
             final Function<String, String> nameMapper
     ) {
@@ -174,6 +189,41 @@ public final class DocumentUtil {
     public static String relativeName(HasName document, final Class<? extends HasName> from) {
         return relativeName(document, from, s -> s);
 
+    }
+
+    public static Supplier<NoSuchElementException> newNoSuchElementExceptionFor(Document document, String key) {
+        return () -> new NoSuchElementException(
+                "An element with the key '"
+                + key
+                + "' could not be found in "
+                + document
+                + " ("
+                + Optional.of(document)
+                .filter(HasName.class::isInstance)
+                .map(HasName.class::cast)
+                .map(HasName::getName)
+                .orElse("")
+                + ")"
+        );
+    }
+
+    private static final Function<Object, Object> VALUE_MAPPER = o -> {
+        if (o instanceof List) {
+            return "[" + ((List) o).size() + "]";
+        } else {
+            return o;
+        }
+    };
+
+    public static String toStringHelper(Document document) {
+
+        return document.getClass().getSimpleName()
+                + "{"
+                + MapStream.of(document.getData())
+                .mapValue(VALUE_MAPPER)
+                .map((k, v) -> "\"" + k + "\": " + v.toString())
+                .collect(joining(", "))
+                + "}";
     }
 
     private static String nameFrom(HasName document) {

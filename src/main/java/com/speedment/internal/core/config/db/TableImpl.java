@@ -23,6 +23,7 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -55,4 +56,10 @@ public class TableImpl extends AbstractChildDocument<Schema> implements Table {
     public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
         return PrimaryKeyColumnImpl::new;
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

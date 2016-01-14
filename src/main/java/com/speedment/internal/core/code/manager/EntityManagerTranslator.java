@@ -39,6 +39,9 @@ import com.speedment.component.ProjectComponent;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

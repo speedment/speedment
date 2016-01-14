@@ -20,6 +20,7 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.SchemaImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +35,12 @@ import java.util.stream.Stream;
  */
 public final class ImmutableSchema extends ImmutableDocument implements Schema {
 
-    private final boolean enabled;
-    private final String name;
-    private final Optional<String> alias;
-    private final boolean defaultSchema;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient Optional<String> alias;
+    private final transient boolean defaultSchema;
     
-    private final List<ImmutableTable> tables;
+    private final transient List<ImmutableTable> tables;
 
     ImmutableSchema(ImmutableDbms parent, Map<String, Object> schema) {
         super(parent, schema);
@@ -88,4 +89,10 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
     public Stream<ImmutableTable> tables() {
         return tables.stream();
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }     
+    
 }

@@ -22,6 +22,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
@@ -38,14 +39,14 @@ import java.util.stream.Stream;
  */
 public final class ImmutableProject extends ImmutableDocument implements Project {
 
-    private final boolean enabled;
-    private final String name;
-    private final String packageName;
-    private final String packageLocation;
-    private final Optional<Path> configPath;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient String packageName;
+    private final transient String packageLocation;
+    private final transient Optional<Path> configPath;
     
-    private final List<ImmutableDbms> dbmses;
-    private final Map<String, ImmutableTable> tablesByName;
+    private final transient List<ImmutableDbms> dbmses;
+    private final transient Map<String, ImmutableTable> tablesByName;
 
     ImmutableProject(Map<String, Object> project) {
         super(project);
@@ -118,4 +119,10 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     public static ImmutableProject wrap(Project project) {
         return new ImmutableProject(project.getData());
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

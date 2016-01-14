@@ -26,6 +26,7 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
@@ -116,4 +117,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
         schemasProperty().add(created);
         return created;
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }
+    
 }

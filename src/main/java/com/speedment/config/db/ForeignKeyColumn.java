@@ -27,6 +27,7 @@ import com.speedment.config.db.trait.HasParent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  *
@@ -52,7 +53,8 @@ public interface ForeignKeyColumn extends
      * @return the name of the foreign column
      */
     default String getForeignTableName() {
-        return (String) get(FOREIGN_TABLE_NAME).get();
+        return getAsString(FOREIGN_TABLE_NAME)
+                .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_TABLE_NAME));
     }
 
     /**
@@ -61,7 +63,8 @@ public interface ForeignKeyColumn extends
      * @return the name of the foreign table
      */
     default String getForeignColumnName() {
-        return (String) get(FOREIGN_COLUMN_NAME).get();
+        return getAsString(FOREIGN_COLUMN_NAME)
+                .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_COLUMN_NAME));
     }
 
     /**

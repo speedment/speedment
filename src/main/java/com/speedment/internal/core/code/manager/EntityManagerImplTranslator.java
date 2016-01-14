@@ -55,6 +55,15 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

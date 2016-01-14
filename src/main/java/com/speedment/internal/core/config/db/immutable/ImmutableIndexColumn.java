@@ -22,6 +22,7 @@ import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.parameters.OrderType;
 import com.speedment.internal.core.config.db.IndexColumnImpl;
 import com.speedment.internal.util.Lazy;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,10 +32,10 @@ import java.util.Optional;
  */
 public final class ImmutableIndexColumn extends ImmutableDocument implements IndexColumn {
 
-    private final String name;
-    private final int ordinalPosition;
-    private final OrderType orderType;
-    private final Lazy<Column> column;
+    private final transient String name;
+    private final transient int ordinalPosition;
+    private final transient OrderType orderType;
+    private final transient Lazy<Column> column;
 
     ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
         super(parent, ic);
@@ -72,4 +73,10 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     public Optional<Index> getParent() {
         return super.getParent().map(Index.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

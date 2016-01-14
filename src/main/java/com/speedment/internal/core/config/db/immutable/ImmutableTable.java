@@ -23,6 +23,7 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.TableImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Optional;
@@ -37,14 +38,14 @@ import java.util.stream.Stream;
  */
 public final class ImmutableTable extends ImmutableDocument implements Table {
 
-    private final boolean enabled;
-    private final String name;
-    private final Optional<String> alias;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient Optional<String> alias;
     
-    private final List<ImmutableColumn> columns;
-    private final List<ImmutableIndex> indexes;
-    private final List<ImmutableForeignKey> foreignKeys;
-    private final List<ImmutablePrimaryKeyColumn> primaryKeyColumns;
+    private final transient List<ImmutableColumn> columns;
+    private final transient List<ImmutableIndex> indexes;
+    private final transient List<ImmutableForeignKey> foreignKeys;
+    private final transient List<ImmutablePrimaryKeyColumn> primaryKeyColumns;
 
     ImmutableTable(ImmutableSchema parent, Map<String, Object> table) {
         super(parent, table);
@@ -120,4 +121,10 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     public Optional<Schema> getParent() {
         return super.getParent().map(Schema.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }
