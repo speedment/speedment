@@ -22,17 +22,18 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.model.java.SimpleModelTest;
+import com.speedment.internal.core.code.model.java.SimpleModel;
 import com.speedment.config.db.Table;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;
 import org.junit.Test;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *
  * @author pemi
  */
-public class EntityTranslatorTest extends SimpleModelTest {
+public class EntityTranslatorTest extends SimpleModel {
 
     @Test
     public void testApply() {

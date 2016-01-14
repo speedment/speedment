@@ -21,126 +21,23 @@
  */
 package com.speedment.internal.core.code.model.java;
 
-import com.speedment.Speedment;
-import com.speedment.internal.util.document.DocumentTranscoder;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.config.db.trait.HasName;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import com.speedment.internal.core.config.dbms.MySqlDbmsType;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
-import com.speedment.config.db.mapper.identity.StringIdentityMapper;
-import com.speedment.internal.core.platform.SpeedmentFactory;
-import java.util.stream.Stream;
-import org.junit.Before;
-import static java.util.stream.Collectors.joining;
+import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *
  * @author pemi
  */
-public abstract class SimpleModelTest {
-
-    protected static final String TABLE_NAME = "user";
-    protected static final String COLUMN_NAME = "first_name";
-
-    protected Speedment speedment;
-    protected Project project;
-    protected Dbms dbms;
-    protected Schema schema;
-    protected Table table;
-    protected Column column;
-    protected PrimaryKeyColumn pkColumn;
-
-    private String quote(String s) {
-        return "\"" + s + "\"";
+public class SimpleModelTest extends SimpleModel {
+    
+    @Test
+    public void testModel() {
+        assertNotNull(project);
+        assertNotNull(dbms);
+        assertNotNull(schema);
+        assertNotNull(table);
+        assertNotNull(column);
+        assertNotNull(pkColumn);
     }
-
-    private String name(String s) {
-        return quote(HasName.NAME) + " : " + quote(s);
-    }
-
-    private String typeMapper(Class<? extends TypeMapper<?,?>> tmc) {
-        return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
-    }
-
-    private String dbTypeName(String dbmsTypeName) {
-        return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
-    }
-
-    private String array(String name, String... s) {
-        return quote(name) + " : [\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n]";
-    }
-
-    private String objectWithKey(String name, String... s) {
-        return quote(name) + " : " + object(s);
-    }
-
-    private String object(String... s) {
-        return "{\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n}";
-    }
-
-    @Before
-    public void simpleModelTestSetUp() {
-
-        final String json = "{"
-                + objectWithKey(DocumentTranscoder.ROOT,
-                        name("myProject"),
-                        array(Project.DBMSES,
-                                object(
-                                        name("myDbms"),
-                                        dbTypeName(StandardDbmsType.defaultType().getName()),
-                                        array(Dbms.SCHEMAS,
-                                                object(
-                                                        name("mySchema"),
-                                                        array(Schema.TABLES,
-                                                                object(
-                                                                        name(TABLE_NAME),
-                                                                        array(Table.COLUMNS,
-                                                                                object(
-                                                                                        name(COLUMN_NAME),
-                                                                                        typeMapper(StringIdentityMapper.class)
-                                                                                )
-                                                                        ),
-                                                                        array(Table.PRIMARY_KEY_COLUMNS,
-                                                                                object(
-                                                                                        name(COLUMN_NAME)
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
-                )
-                + "}";
-
-        System.out.println(json);
-
-        project = DocumentTranscoder.load(json);
-
-        System.out.println(project);
-
-        speedment = SpeedmentFactory.newSpeedmentInstance();
-//        project = new ProjectImpl(speedment);
-//        dbms = project.addNewDbms();
-//        schema = dbms.addNewSchema();
-//        table = schema.addNewTable();
-//        column = table.addNewColumn();
-//        pkColumn = table.addNewPrimaryKeyColumn();
-//
-//        project.setName("myProject");
-//        dbms.setName("myDbms");
-//        schema.setName("myCoolApp");
-//        table.setName(TABLE_NAME);
-//        column.setName(COLUMN_NAME);
-//        pkColumn.setName(COLUMN_NAME);
-    }
+       
 }

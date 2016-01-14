@@ -45,9 +45,9 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import com.speedment.util.StreamComposition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -322,5 +322,9 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         });
 
         return constructor;
+    }
+    
+    public String asJavaCode() {
+        return getCodeGenerator().on(get()).orElseThrow(() -> new SpeedmentException("Unable to generate Java code"));
     }
 }

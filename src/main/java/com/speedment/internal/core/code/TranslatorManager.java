@@ -50,6 +50,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -60,9 +61,9 @@ public class TranslatorManager implements Consumer<Project> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManager.class);
     private final AtomicInteger fileCounter = new AtomicInteger(0);
-    
+
     private final Speedment speedment;
-    
+
     public TranslatorManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
     }
@@ -71,53 +72,53 @@ public class TranslatorManager implements Consumer<Project> {
     public void accept(Project project) {
         requireNonNull(project);
         Statistics.onGenerate();
-        
+
         final List<Translator<?, File>> translators = new ArrayList<>();
         final Generator gen = new JavaGenerator();
-        
+
         fileCounter.set(0);
         Formatting.tab("    ");
-        
+
         speedment.getEventComponent().notify(new BeforeGenerate(project, gen, this));
 
         translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
         translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
         traverseOver(project, Table.class)
-            .filter(HasEnabled::test)
-            .forEach(table -> {
-                translators.add(new EntityTranslator(speedment, gen, table));
-                translators.add(new EntityImplTranslator(speedment, gen, table));
-                translators.add(new EntityManagerImplTranslator(speedment, gen, table));
-            });
+                .filter(HasEnabled::test)
+                .forEach(table -> {
+                    translators.add(new EntityTranslator(speedment, gen, table));
+                    translators.add(new EntityImplTranslator(speedment, gen, table));
+                    translators.add(new EntityManagerImplTranslator(speedment, gen, table));
+                });
 
         gen.metaOn(translators.stream()
-            .map(Translator::get)
-            .collect(Collectors.toList())
+                .map(Translator::get)
+                .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta));
 
         final List<Table> tables = traverseOver(project, Table.class)
-            .filter(HasEnabled::test)
-            .collect(toList());
+                .filter(HasEnabled::test)
+                .collect(toList());
 
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
             fileCounter.incrementAndGet();
         });
-        
+
         speedment.getEventComponent().notify(new AfterGenerate(project, gen, this));
     }
 
     public int getFilesCreated() {
         return fileCounter.get();
     }
-    
+
     public void writeToFile(Project project, Meta<File, String> meta) {
         requireNonNull(meta);
-        
+
         final String fname = project.getPackageLocation()
-        + "/"
-        + meta.getModel().getName();
+                + "/"
+                + meta.getModel().getName();
         final String content = meta.getResult();
         final Path path = Paths.get(fname);
         path.getParent().toFile().mkdirs();
@@ -140,20 +141,20 @@ public class TranslatorManager implements Consumer<Project> {
         requireNonNull(project);
         requireNonNull(gen);
         requireNonNull(meta);
-        
+
         final Optional<String> content = gen.on(meta.getResult());
 
         if (content.isPresent()) {
             final String fname
-                = project.getPackageLocation()
-                + "/" + meta.getResult().getName();
+                    = project.getPackageLocation()
+                    + "/" + meta.getResult().getName();
 
             final Path path = Paths.get(fname);
             path.getParent().toFile().mkdirs();
 
             try {
                 Files.write(path,
-                    content.get().getBytes(StandardCharsets.UTF_8)
+                        content.get().getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException ex) {
                 LOGGER.error(ex, "Failed to create file " + fname);
