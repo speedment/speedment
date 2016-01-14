@@ -31,7 +31,6 @@ import java.util.Optional;
  */
 public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implements PrimaryKeyColumn {
 
-    private final transient boolean enabled;
     private final transient String name;
     private final transient int ordinalPosition;
     
@@ -42,21 +41,14 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         
         final PrimaryKeyColumn prototype = new PrimaryKeyColumnImpl(parent, pkc);
         
-        this.enabled         = prototype.isEnabled();
         this.name            = prototype.getName();
-        this.ordinalPosition = prototype.getOrdinalPosition();
-        
+        this.ordinalPosition = prototype.getOrdinalPosition();        
         this.column          = Lazy.create();
     }
 
     @Override
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     @Override

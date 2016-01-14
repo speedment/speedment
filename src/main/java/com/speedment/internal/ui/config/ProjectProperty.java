@@ -26,6 +26,7 @@ import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
@@ -37,6 +38,7 @@ import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -55,17 +57,17 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new StringPropertyItem(
+            Stream.of(new DefaultStringPropertyItem(
                     packageNameProperty(),
+                    new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
                     "Package Name",
                     "The name of the package to place all generated files in. This should be a fully qualified java package name."
                 ),
-                new StringPropertyItem(
+                new DefaultStringPropertyItem(
                     packageLocationProperty(),
+                    new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
                     "Package Location",
                     "The folder to store all generated files in. This should be a relative name from the working directory."
                 )

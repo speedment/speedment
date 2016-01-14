@@ -23,11 +23,16 @@ import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import com.speedment.internal.ui.property.PreviewPropertyItem;
+import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javax.annotation.Generated;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -46,7 +51,23 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
         return Stream.of(
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment)
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(new PreviewPropertyItem(
+                Bindings.createStringBinding(
+                    () -> 
+                        isEnabled() ? 
+                            "@" + Generated.class.getSimpleName() + "(\"speedment\")\n" +
+                            "public interface " + javaTypeName(getJavaName()) + " extends Entity<" + javaTypeName(getJavaName()) + "> {" +
+                            "    ...\n" +
+                            "}" :
+                            "(No code is generated for disabled nodes.)",
+                    enabledProperty(), 
+                    aliasProperty(),
+                    nameProperty()
+                ), 
+                "Preview", 
+                "This is a simple preview to give you a hint of how the parameters will affect the generated code."
+            ))
         ).flatMap(s -> s);
     }
     
@@ -64,6 +85,11 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
         return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty::new);
+    }
+    
+    @Override
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
     }
 
     @Override
