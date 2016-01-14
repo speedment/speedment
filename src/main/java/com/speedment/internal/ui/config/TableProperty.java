@@ -22,6 +22,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
@@ -149,4 +150,10 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
         primaryKeyColumnsProperty().add(created);
         return created;
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

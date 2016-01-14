@@ -21,6 +21,7 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.PrimaryKeyColumnImpl;
 import com.speedment.internal.util.Lazy;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,10 +31,10 @@ import java.util.Optional;
  */
 public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implements PrimaryKeyColumn {
 
-    private final String name;
-    private final int ordinalPosition;
+    private final transient String name;
+    private final transient int ordinalPosition;
     
-    private final Lazy<Column> column;
+    private final transient Lazy<Column> column;
 
     ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
         super(parent, pkc);
@@ -41,8 +42,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         final PrimaryKeyColumn prototype = new PrimaryKeyColumnImpl(parent, pkc);
         
         this.name            = prototype.getName();
-        this.ordinalPosition = prototype.getOrdinalPosition();
-        
+        this.ordinalPosition = prototype.getOrdinalPosition();        
         this.column          = Lazy.create();
     }
 
@@ -65,4 +65,10 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     public Column findColumn() {
         return column.getOrCompute(PrimaryKeyColumn.super::findColumn);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

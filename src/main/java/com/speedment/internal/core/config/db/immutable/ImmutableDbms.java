@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.internal.core.config.db.DbmsImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,15 @@ import java.util.stream.Stream;
  */
 public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
-    private final boolean enabled;
-    private final String name;
-    private final Optional<String> alias;
-    private final String typeName;
-    private final Optional<String> ipAddress;
-    private final OptionalInt port;
-    private final Optional<String> username;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient Optional<String> alias;
+    private final transient String typeName;
+    private final transient Optional<String> ipAddress;
+    private final transient OptionalInt port;
+    private final transient Optional<String> username;
     
-    private final List<ImmutableSchema> schemas;
+    private final transient List<ImmutableSchema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
         super(parent, dbms);
@@ -109,4 +110,10 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     public Optional<Project> getParent() {
         return super.getParent().map(Project.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }    
+    
 }

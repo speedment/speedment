@@ -20,6 +20,7 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.core.config.db.ColumnImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,15 +30,15 @@ import java.util.Optional;
  */
 public final class ImmutableColumn extends ImmutableDocument implements Column {
 
-    private final boolean enabled;
-    private final String name;
-    private final Optional<String> alias;
-    private final boolean nullable;
-    private final boolean autoincrement;
-    private final String typeMapper;
-    private final TypeMapper<?, ?> typeMapperObject;
-    private final String databaseType;
-    private final Class<?> databaseTypeObject;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient Optional<String> alias;
+    private final transient boolean nullable;
+    private final transient boolean autoincrement;
+    private final transient String typeMapper;
+    private final transient String databaseType;
+    private final transient TypeMapper<?, ?> typeMapperObject;
+    private final transient Class<?> databaseTypeObject;
 
     ImmutableColumn(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
@@ -104,4 +105,10 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }
+    
 }

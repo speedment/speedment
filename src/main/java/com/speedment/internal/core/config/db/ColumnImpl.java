@@ -20,14 +20,21 @@ import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import java.util.Map;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class ColumnImpl extends AbstractChildDocument<Table> implements Column {
-        
+
     public ColumnImpl(Table parent, Map<String, Object> data) {
         super(parent, data);
     }
+
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }
+
 }

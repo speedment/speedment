@@ -29,6 +29,7 @@ import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.internal.core.config.db.mutator.ColumnMutator;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  *
@@ -78,7 +79,7 @@ public interface Column extends
      * @return the mapper class
      */
     default String getTypeMapper() {
-        return getAsString(TYPE_MAPPER).get();
+        return getAsString(TYPE_MAPPER).orElseThrow(newNoSuchElementExceptionFor(this, TYPE_MAPPER));
     }
 
     /**
@@ -105,7 +106,7 @@ public interface Column extends
      * @return the database type class
      */
     default String getDatabaseType() {
-        return getAsString(DATABASE_TYPE).get();
+        return getAsString(DATABASE_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, DATABASE_TYPE));
     }
 
     /**

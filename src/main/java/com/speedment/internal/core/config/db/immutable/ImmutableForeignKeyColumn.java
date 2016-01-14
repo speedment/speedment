@@ -22,6 +22,7 @@ import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.internal.util.Lazy;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,14 +32,14 @@ import java.util.Optional;
  */
 public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
-    private final String name;
-    private final int ordinalPosition;
-    private final String foreignColumnName;
-    private final String foreignTableName;
+    private final transient String name;
+    private final transient int ordinalPosition;
+    private final transient String foreignColumnName;
+    private final transient String foreignTableName;
     
-    private final Lazy<Column> foreignColumn;
-    private final Lazy<Table> foreignTable;
-    private final Lazy<Column> column;
+    private final transient Lazy<Column> foreignColumn;
+    private final transient Lazy<Table> foreignTable;
+    private final transient Lazy<Column> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, fkc);
@@ -94,4 +95,10 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     public Optional<ForeignKey> getParent() {
         return super.getParent().map(ForeignKey.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

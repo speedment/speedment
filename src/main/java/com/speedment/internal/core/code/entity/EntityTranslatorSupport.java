@@ -59,6 +59,12 @@ import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

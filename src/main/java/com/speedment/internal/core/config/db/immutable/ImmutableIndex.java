@@ -20,6 +20,7 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.IndexImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,11 @@ import java.util.stream.Stream;
  */
 public final class ImmutableIndex extends ImmutableDocument implements Index {
     
-    private final boolean enabled;
-    private final String name;
-    private final boolean unique;
+    private final transient boolean enabled;
+    private final transient String name;
+    private final transient boolean unique;
     
-    private final List<ImmutableIndexColumn> indexColumns;
+    private final transient List<ImmutableIndexColumn> indexColumns;
     
     ImmutableIndex(ImmutableTable parent, Map<String, Object> index) {
         super(parent, index);
@@ -81,4 +82,10 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

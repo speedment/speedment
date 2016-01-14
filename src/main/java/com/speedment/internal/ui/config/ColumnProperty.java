@@ -30,6 +30,7 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -149,4 +150,10 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
             }
         }
     };
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }
+    
 }

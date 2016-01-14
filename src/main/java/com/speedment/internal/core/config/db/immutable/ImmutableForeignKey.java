@@ -20,6 +20,7 @@ import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.ForeignKeyImpl;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.Map;
 import java.util.Optional;
@@ -34,10 +35,10 @@ import java.util.stream.Stream;
  */
 public final class ImmutableForeignKey extends ImmutableDocument implements ForeignKey {
 
-    private final String name;
-    private final boolean enabled;
+    private final transient String name;
+    private final transient boolean enabled;
     
-    private final List<ImmutableForeignKeyColumn> foreignKeyColumns;
+    private final transient List<ImmutableForeignKeyColumn> foreignKeyColumns;
 
     ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
@@ -74,4 +75,10 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
     }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }

@@ -19,12 +19,16 @@ package com.speedment.internal.ui.config;
 import com.speedment.Speedment;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
+import static com.speedment.config.db.Project.DEFAULT_PROJECT_NAME;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
+import static com.speedment.config.db.trait.HasName.NAME;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -131,4 +135,16 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
             return Paths.get(string);
         }
     };
+    
+    // Must implement getName because Project does not have any parent.
+    @Override
+    public String getName() throws SpeedmentException {
+        return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
+    }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    } 
+    
 }
