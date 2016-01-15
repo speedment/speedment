@@ -22,7 +22,9 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.JavaLanguage.javaPacketName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.JavaLanguage.javaPackageName;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -209,9 +211,9 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
     default String basePackageName() {
         final String packName = project().getPackageName().toLowerCase() + ".";
         if (getNode() instanceof Project) {
-            return packName + javaPacketName(project().getName());
+            return packName + javaPackageName(project().getName());
         } else {
-            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPacketName);
+            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPackageName);
         }
     }
 

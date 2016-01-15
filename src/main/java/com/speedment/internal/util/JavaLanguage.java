@@ -30,6 +30,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -158,7 +160,7 @@ public final class JavaLanguage {
         return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
     }
 
-    public static String javaPacketName(final String externalName) {
+    public static String javaPackageName(final String externalName) {
         requireNonNull(externalName);
         return replaceIfIllegalJavaIdentifierCharacter(
                 replaceIfJavaUsedWord(externalName)

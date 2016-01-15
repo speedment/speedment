@@ -65,6 +65,14 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -83,9 +91,8 @@ public final class EntityTranslatorSupport {
         requireNonNull(table);
         final Project project = ancestor(table, Project.class).get();
 
-        return Type.of(
-            project.getPackageName().toLowerCase() + DOT
-            + relativeName(table, Project.class, JavaLanguage::javaPacketName) + DOT
+        return Type.of(project.getPackageName().toLowerCase() + DOT
+            + relativeName(table, Project.class, JavaLanguage::javaPackageName) + DOT
             + javaTypeName(table.getName())
         );
     }
