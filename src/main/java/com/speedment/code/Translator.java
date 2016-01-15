@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.code;
+package com.speedment.code;
 
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;

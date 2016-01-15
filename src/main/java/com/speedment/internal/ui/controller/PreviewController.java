@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.Speedment;
+import com.speedment.code.Translator;
 import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.Document;
@@ -27,7 +28,6 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.Translator;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
@@ -37,9 +37,7 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.TableProperty;
-import com.speedment.internal.ui.config.preview.PreviewNode;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;

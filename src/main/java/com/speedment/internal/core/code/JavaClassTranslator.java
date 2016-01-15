@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.Translator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasMainInterface;

@@ -33,10 +33,12 @@ import java.util.function.Supplier;
  */
 public final class Lazy<T> {
 
-    private T value;
+    private volatile T value;
 
     public T getOrCompute(Supplier<T> supplier) {
-        return value == null ? maybeCompute(supplier) : value;
+        // With this local variable, we only need to do one volatile read most of the times
+        final T result = value;  
+        return result == null ? maybeCompute(supplier) : result;
     }
 
     private synchronized T maybeCompute(Supplier<T> supplier) {

@@ -78,16 +78,18 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
                 .add("super.onInit();")
                 .add("loadAndSetProject();");
         
+        final String methodName = "applyAndPut";
+        
         traverseOver(project(), Table.class)
                 .filter(HasEnabled::test)
                 .forEachOrdered(t -> {
                     EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
                     final Type managerType = entityManagerImplTranslator.getImplType();
                     if (ambigousNames.contains(t.getName())) {
-                        onInit.add("put(new " + managerType.getName() + "(speedment));");
+                        onInit.add(methodName+"("+managerType.getName() + "::new);");
                     } else {
                         file.add(Import.of(managerType));
-                        onInit.add("put(new " + entityManagerImplTranslator.managerTypeName() + "Impl(speedment));");
+                        onInit.add(methodName+"(" + entityManagerImplTranslator.managerTypeName() + "Impl::new);");
                     }
                     
                 });

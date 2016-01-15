@@ -48,6 +48,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,7 +118,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().mainInterface().getSimpleName()+ " "+relativeName(getNode(), Project.class) + "." + GENERATED_JAVADOC_MESSAGE)
                 .add(AUTHOR.setValue("Speedment"));
     }
 
