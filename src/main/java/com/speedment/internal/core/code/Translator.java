@@ -30,37 +30,9 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javafx.scene.Node;
 import com.speedment.config.db.trait.HasMainInterface;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.codegen.base.Generator;
+import com.speedment.internal.codegen.base.Meta;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -208,4 +180,14 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
                         + " and does not have a parent that is a " + clazz.getSimpleName()
                 ));
     }
+    
+    default Meta<R, String> generate() {
+        return getCodeGenerator().metaOn(get()).findFirst().orElseThrow(() -> new SpeedmentException("Unable to generate Java code"));
+    }
+    
+    default String toCode() {
+        return generate().getResult();
+    }
+    
+    Generator getCodeGenerator();
 }

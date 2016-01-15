@@ -36,11 +36,8 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.SqlManager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**

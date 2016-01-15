@@ -127,12 +127,14 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
         @Override
         public String toString(Path p) {
-            return p.toString();
+            if (p == null) return null;
+            else return p.toString();
         }
 
         @Override
         public Path fromString(String string) {
-            return Paths.get(string);
+            if (string == null) return null;
+            else return Paths.get(string);
         }
     };
     

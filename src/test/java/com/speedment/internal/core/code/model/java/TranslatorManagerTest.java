@@ -24,7 +24,6 @@ import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.TranslatorManager;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import org.junit.Test;
-import static org.junit.Assert.fail;
 
 /**
  *
@@ -54,7 +53,7 @@ public class TranslatorManagerTest extends SimpleModel {
         final Generator gen = new JavaGenerator();
         final EntityTranslator entityTranslator = new EntityTranslator(speedment, gen, table);
                      
-        final String result = entityTranslator.asJavaCode();
+        final String result = entityTranslator.toCode();
         
         System.out.println(result);
         

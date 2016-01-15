@@ -121,6 +121,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
                 .add(AUTHOR.setValue("Speedment"));
     }
 
+    @Override
     public Generator getCodeGenerator() {
         return codeGenerator;
     }
@@ -322,9 +323,5 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         });
 
         return constructor;
-    }
-    
-    public String asJavaCode() {
-        return getCodeGenerator().on(get()).orElseThrow(() -> new SpeedmentException("Unable to generate Java code"));
     }
 }

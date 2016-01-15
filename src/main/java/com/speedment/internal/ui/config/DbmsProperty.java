@@ -24,15 +24,17 @@ import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
@@ -45,6 +47,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
 
     public DbmsProperty(Project parent, Map<String, Object> data) {
         super(parent, data);
+        FXCollections.observableArrayList();
     }
     
     @Override
@@ -54,8 +57,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
             HasNameProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 // TODO: Add DbmsType
-                new StringPropertyItem(
-                    ipAddressProperty(),       
+                new DefaultStringPropertyItem(
+                    ipAddressProperty(), 
+                    new SimpleStringProperty("127.0.0.1"),
                     "IP Address",                  
                     "The ip of the database host."
                 ),
@@ -64,8 +68,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
                     "Port",                  
                     "The port of the database on the database host."
                 ),
-                new StringPropertyItem(
-                    usernameProperty(),      
+                new DefaultStringPropertyItem(
+                    usernameProperty(),
+                    new SimpleStringProperty("root"),
                     "Username",                  
                     "The username to use when connecting to the database."
                 )
