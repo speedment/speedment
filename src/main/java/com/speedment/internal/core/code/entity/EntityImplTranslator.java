@@ -202,7 +202,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                 .add(toString(file))
                 .add(equalsMethod())
                 .add(hashCodeMethod())
-                .add(Method.of("getEntityClass_", Type.of(java.lang.Class.class).add(Generic.of().add(ENTITY.getType()))).public_().add(OVERRIDE)
+                .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(ENTITY.getType()))).public_().add(OVERRIDE)
                         .add("return " + ENTITY.getName() + ".class;")
                 );
 
@@ -212,7 +212,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
     private Method copy() {
         return Method.of("copy", ENTITY.getType()).public_().add(OVERRIDE)
-                .add("return new " + ENTITY.getImplName() + "(getSpeedment_(), this);");
+                .add("return new " + ENTITY.getImplName() + "(speedment(), this);");
 
     }
 

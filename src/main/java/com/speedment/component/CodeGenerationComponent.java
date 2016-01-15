@@ -109,7 +109,7 @@ public interface CodeGenerationComponent extends Component {
      * registered key.
      *
      * @param <T> Document type
-     * @param document
+     * @param document to use when making translators
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
@@ -121,8 +121,8 @@ public interface CodeGenerationComponent extends Component {
      * included in the Stream.
      *
      * @param <T> Document type
-     * @param document
-     * @param hasKey
+     * @param document to use when making translators
+     * @param hasKey key
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
@@ -137,8 +137,8 @@ public interface CodeGenerationComponent extends Component {
      * included in the Stream.
      *
      * @param <T> Document type
-     * @param document
-     * @param key
+     * @param document to use when making translators
+     * @param key key
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
