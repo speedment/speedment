@@ -35,7 +35,6 @@ import java.util.Optional;
  */
 public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
 
-//    private final CodeGenerator cg;
     public class ClassType {
 
         private ClassType(String typeName, String implTypeName) {

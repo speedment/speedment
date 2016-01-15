@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
@@ -35,6 +36,7 @@ import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.internal.core.platform.component.impl.CodeGenerationComponentImpl;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
@@ -79,6 +81,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private EventComponent eventComponent;
     private UserInterfaceComponent userInterfaceComponent;
     private PasswordComponent passwordComponent;
+    private CodeGenerationComponent codeGenerationComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -96,6 +99,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
         put(PasswordComponentImpl::new);
+        put(CodeGenerationComponentImpl::new);
     }
     
     private SpeedmentImpl(SpeedmentImpl prototype) {
@@ -175,6 +179,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof PasswordComponent) {
             passwordComponent = castOrFail(item, PasswordComponent.class);
+        }
+        if (item instanceof CodeGenerationComponent) {
+            codeGenerationComponent = castOrFail(item, CodeGenerationComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -276,6 +283,11 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public PasswordComponent getPasswordComponent() {
         return passwordComponent;
+    }
+    
+    @Override
+    public CodeGenerationComponent getCodeGenerationComponent() {
+        return codeGenerationComponent;
     }
 
     @Override

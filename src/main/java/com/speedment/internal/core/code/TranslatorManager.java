@@ -16,7 +16,9 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.Translator;
 import com.speedment.Speedment;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.internal.codegen.util.Formatting;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
@@ -50,7 +52,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -81,15 +82,20 @@ public class TranslatorManager implements Consumer<Project> {
 
         speedment.getEventComponent().notify(new BeforeGenerate(project, gen, this));
 
-        translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
-        translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
+        final CodeGenerationComponent cgc = speedment.getCodeGenerationComponent();
+        
+        cgc.translators(project).forEachOrdered(translators::add);
+        
+//        translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
+//        translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
         traverseOver(project, Table.class)
                 .filter(HasEnabled::test)
                 .forEach(table -> {
-                    translators.add(new EntityTranslator(speedment, gen, table));
-                    translators.add(new EntityImplTranslator(speedment, gen, table));
-                    translators.add(new EntityManagerImplTranslator(speedment, gen, table));
+                    cgc.translators(table).forEachOrdered(translators::add);
+//                    translators.add(new EntityTranslator(speedment, gen, table));
+//                    translators.add(new EntityImplTranslator(speedment, gen, table));
+//                    translators.add(new EntityManagerImplTranslator(speedment, gen, table));
                 });
 
         gen.metaOn(translators.stream()

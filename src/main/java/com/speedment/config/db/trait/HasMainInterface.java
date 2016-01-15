@@ -22,7 +22,7 @@ import com.speedment.config.Document;
  *
  * @author Per Minborg
  */
-public interface HasMainInterface {
+public interface HasMainInterface extends Document {
 
         /**
      * Returns the {@code Class} of the interface of this node.

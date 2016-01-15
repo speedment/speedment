@@ -393,6 +393,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     }
 
+    protected <ENTITY> void applyAndPut(Function<Speedment, Manager<ENTITY>> constructor) {
+        put(constructor.apply(speedment));
+    }
+    
     protected <ENTITY> void put(Manager<ENTITY> manager) {
         speedment.getManagerComponent().put(manager);
     }

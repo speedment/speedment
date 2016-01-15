@@ -16,7 +16,11 @@
  */
 package com.speedment.internal.core.code.model.java;
 
+import com.speedment.code.StandardTranslatorKey;
+import com.speedment.code.Translator;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.java.JavaGenerator;
@@ -24,7 +28,6 @@ import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.TranslatorManager;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import org.junit.Test;
-import static org.junit.Assert.fail;
 
 /**
  *
@@ -51,14 +54,21 @@ public class TranslatorManagerTest extends SimpleModel {
     @Test
     public void testPreview() {
         System.out.println("preview");
+
+        final Translator<Table, File> translator = speedment.getCodeGenerationComponent()
+                .translators(table, StandardTranslatorKey.ENTITY)
+                .findAny()
+                .get();
+
+        //Todo: translator.toCode();
+        
         final Generator gen = new JavaGenerator();
         final EntityTranslator entityTranslator = new EntityTranslator(speedment, gen, table);
-                     
+
         final String result = entityTranslator.asJavaCode();
-        
+
         System.out.println(result);
-        
-        
+
     }
 
 }

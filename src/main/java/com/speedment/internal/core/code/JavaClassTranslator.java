@@ -16,25 +16,12 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.Translator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
