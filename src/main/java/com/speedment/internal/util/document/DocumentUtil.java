@@ -218,7 +218,7 @@ public final class DocumentUtil {
     public static String toStringHelper(Document document) {
 
         return document.getClass().getSimpleName()
-                + "{"
+                + " {"
                 + MapStream.of(document.getData())
                 .mapValue(VALUE_MAPPER)
                 .map((k, v) -> "\"" + k + "\": " + v.toString())
