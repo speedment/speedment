@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,7 @@
 package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no

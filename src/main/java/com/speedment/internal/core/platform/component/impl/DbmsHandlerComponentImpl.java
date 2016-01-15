@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,16 +17,19 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.exception.SpeedmentException;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -52,8 +55,11 @@ public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent imp
 
     @Override
     public DbmsHandler make(final Dbms dbms) {
-        requireNonNull(dbms);
-        return dbms.getType().makeDbmsHandler(getSpeedment(), dbms);
+        requireNonNull(dbms);      
+        final String dbmsTypeName = dbms.getTypeName();
+        final DbmsType dbmsType = findByName(dbmsTypeName)
+                .orElseThrow(() -> new SpeedmentException("Unable to find a DbmsType with name "+dbmsTypeName));
+        return dbmsType.makeDbmsHandler(getSpeedment(), dbms);
     }
 
     @Override

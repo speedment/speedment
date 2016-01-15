@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,14 +16,12 @@
  */
 package com.speedment.encoder;
 
-import com.speedment.config.Column;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.Manager;
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.internal.util.JavaLanguage.javaVariableName;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +30,79 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -213,11 +284,9 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         requireNonNull(manager);
 
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
         final Table table = manager.getTable();
 
-        table
-            .streamOfColumns()
+        table.columns()
             .forEachOrdered(c
                 -> formatter.put(
                     javaVariableName(c.getName()),
@@ -248,8 +317,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Set<String> fieldNames = Stream.of(fields).map(FieldTrait::getColumnName).collect(toSet());
         final Table table = manager.getTable();
 
-        table
-            .streamOfColumns()
+        table.columns()
             .filter(c -> fieldNames.contains(c.getName()))
             .forEachOrdered(c
                 -> formatter.put(

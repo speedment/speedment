@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -60,18 +60,14 @@ public final class AboutController implements Initializable {
         title.setFont(SpeedmentFont.HEADER.get());
         version.setText(SpeedmentVersion.getImplementationVersion());
         external.setText(
-              "Apache 2:\n"
-            + "groovy-all (2.4.0)\n"
-            + "fontawesomefx (8.6)\n"
+              "GPL 2 with FOSS exception:\n"
+            + "• mysql-connector-java (5.1.34)\n"
             + "\n"
-            + "GPL 2 with FOSS exception:\n"
-            + "mysql-connector-java (5.1.34)\n"
-            + "\n"
-            + "Creative Commons 2.5:\n"
-            + "silk (1.3)\n"
+            + "• Creative Commons 2.5:\n"
+            + "• silk (1.3)\n"
             + "\n"
             + "BSD 3-Clause License:\n"
-            + "controlsfx (8.40.10)"
+            + "• controlsfx (8.40.10)"
         );
         
         close.setOnAction(ev -> dialog.close());

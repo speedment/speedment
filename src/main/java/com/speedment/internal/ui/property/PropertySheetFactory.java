@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,8 @@
  */
 package com.speedment.internal.ui.property;
 
-import com.speedment.internal.ui.config.AbstractNodeProperty;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -29,18 +30,36 @@ import org.controlsfx.control.PropertySheet.Item;
  */
 public final class PropertySheetFactory {
     
-    private final Map<Class<?>, Function<AbstractNodeProperty, ObservableList<Item>>> constructors;
+    private final Map<Class<?>, Function<DocumentProperty, ObservableList<Item>>> constructors;
     
     public PropertySheetFactory() {
         this.constructors = new ConcurrentHashMap<>();
     }
     
-    public PropertySheetFactory install(Class<?> type, Function<AbstractNodeProperty, ObservableList<Item>> propertylister) {
+    public PropertySheetFactory install(Class<?> type, Function<DocumentProperty, ObservableList<Item>> propertylister) {
         this.constructors.put(type, propertylister);
         return this;
     }
         
-    public ObservableList<Item> build(AbstractNodeProperty node) {
-        return constructors.get(node.getInterfaceMainClass()).apply(node);
+    public ObservableList<Item> build(DocumentProperty node) {
+        final Function<DocumentProperty, ObservableList<Item>> constructor;
+        
+        if (node instanceof HasMainInterface) {
+            @SuppressWarnings("unchecked")
+            final HasMainInterface withMainInterface = (HasMainInterface) node;
+            constructor = constructors.get(withMainInterface.mainInterface());
+        } else {
+            constructor = constructors.get(node.getClass());
+        }
+        
+        if (constructor == null) {
+            throw new IllegalArgumentException(
+                "The specified document '" + node + 
+                "' of type '" + node.getClass() + 
+                "' does not have a mainInterface()-method."
+            );
+        }
+        
+        return constructor.apply(node);
     }
 }

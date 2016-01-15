@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.EntityManager;
@@ -27,6 +28,7 @@ import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
+import com.speedment.component.PasswordComponent;
 import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
@@ -34,7 +36,8 @@ import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
-import static com.speedment.internal.core.config.immutable.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.internal.core.platform.component.impl.CodeGenerationComponentImpl;
+import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
@@ -43,6 +46,7 @@ import com.speedment.internal.core.platform.component.impl.JavaTypeMapperCompone
 import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
+import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PluginComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
@@ -56,8 +60,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -78,6 +80,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private PluginComponent pluginComponent;
     private EventComponent eventComponent;
     private UserInterfaceComponent userInterfaceComponent;
+    private PasswordComponent passwordComponent;
+    private CodeGenerationComponent codeGenerationComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -94,6 +98,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(PluginComponentImpl::new);
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
+        put(PasswordComponentImpl::new);
+        put(CodeGenerationComponentImpl::new);
     }
     
     private SpeedmentImpl(SpeedmentImpl prototype) {
@@ -170,6 +176,12 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof UserInterfaceComponent) {
             userInterfaceComponent = castOrFail(item, UserInterfaceComponent.class);
+        }
+        if (item instanceof PasswordComponent) {
+            passwordComponent = castOrFail(item, PasswordComponent.class);
+        }
+        if (item instanceof CodeGenerationComponent) {
+            codeGenerationComponent = castOrFail(item, CodeGenerationComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -266,6 +278,16 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public UserInterfaceComponent getUserInterfaceComponent() {
         return userInterfaceComponent;
+    }
+    
+    @Override
+    public PasswordComponent getPasswordComponent() {
+        return passwordComponent;
+    }
+    
+    @Override
+    public CodeGenerationComponent getCodeGenerationComponent() {
+        return codeGenerationComponent;
     }
 
     @Override

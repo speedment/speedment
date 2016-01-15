@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,92 +17,40 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.OrderType;
-import com.speedment.exception.SpeedmentException;
-import java.util.Optional;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.internal.ui.config.trait.HasColumnProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.config.trait.HasOrderTypeProperty;
+import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import java.util.Map;
 import java.util.stream.Stream;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class IndexColumnProperty extends AbstractNodeProperty implements IndexColumn, ChildHelper<IndexColumn, Index> {
+public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index> 
+    implements IndexColumn, HasNameProperty, HasOrdinalPositionProperty,
+    HasOrderTypeProperty, HasColumnProperty {
     
-    private final Property<OrderType> orderType;
-    
-    private Index parent;
-    private int ordinalPosition;
-    
-    public IndexColumnProperty(Speedment speedment) {
-        super(speedment);
-        orderType = new SimpleObjectProperty<>();
-    }
-    
-    public IndexColumnProperty(Speedment speedment, Index parent, IndexColumn prototype) {
-        super(speedment, prototype);
-        orderType       = new SimpleObjectProperty<>(prototype.getOrderType());
-        ordinalPosition = prototype.getOrdinalPosition();
-        this.parent = parent;
+    public IndexColumnProperty(Index parent, Map<String, Object> data) {
+        super(parent, data);
     }
     
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.of();
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.concat(
+            HasColumnProperty.super.getUiVisibleProperties(speedment),
+            HasOrderTypeProperty.super.getUiVisibleProperties(speedment)
+        );
     }
     
     @Override
-    public Optional<Index> getParent() {
-        return Optional.ofNullable(parent);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Index) {
-            this.parent = (Index) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
-    }
-
-    @Override
-    public void setOrderType(OrderType orderType) {
-        this.orderType.setValue(orderType);
-    }
-
-    @Override
-    public OrderType getOrderType() {
-        return orderType.getValue();
-    }
+    public String toString() {
+        return toStringHelper(this);
+    }     
     
-    public Property<OrderType> orderTypeProperty() {
-        return orderType;
-    }
-
-    @Override
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
-
-    @Override
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-    
-    @Override
-    public Column getColumn() {
-        return ancestor(Table.class)
-            .orElseThrow(() -> new SpeedmentException(
-                "Found no ancestor table from this "
-                + getClass().getSimpleName() + "."
-            )).findColumn(getName());
-    }
 }

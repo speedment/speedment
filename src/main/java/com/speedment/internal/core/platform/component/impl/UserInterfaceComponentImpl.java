@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,8 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +43,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     
     private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
-    private final ObservableList<TreeItem<AbstractNodeProperty>> selectedTreeItems;
+    private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
     private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
     private final StringProperty stylesheet;
     
@@ -61,7 +62,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems() {
+    public ObservableList<TreeItem<DocumentProperty>> getSelectedTreeItems() {
         return selectedTreeItems;
     }
 
@@ -71,21 +72,21 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     }
 
     @Override
-    public <NODE extends AbstractNodeProperty> void installContextMenu(Class<? super NODE> nodeType, ContextMenuBuilder<NODE> menuBuilder) {
+    public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
         contextMenuBuilders.put(nodeType, menuBuilder);
     }
 
     @Override
-    public <NODE extends AbstractNodeProperty> Optional<ContextMenu> createContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node) {
+    public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
         @SuppressWarnings("unchecked")
-        final UserInterfaceComponent.ContextMenuBuilder<NODE> builder = 
-            (UserInterfaceComponent.ContextMenuBuilder<NODE>) 
-            contextMenuBuilders.get(node.getInterfaceMainClass());
+        final UserInterfaceComponent.ContextMenuBuilder<DOC> builder = 
+            (UserInterfaceComponent.ContextMenuBuilder<DOC>) 
+            contextMenuBuilders.get(doc.mainInterface());
         
         if (builder == null) {
             return Optional.empty();
         } else {
-            return builder.build(treeCell, node);
+            return builder.build(treeCell, doc);
         }
     }
 

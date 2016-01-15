@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,10 +33,12 @@ import java.util.function.Supplier;
  */
 public final class Lazy<T> {
 
-    private T value;
+    private volatile T value;
 
     public T getOrCompute(Supplier<T> supplier) {
-        return value == null ? maybeCompute(supplier) : value;
+        // With this local variable, we only need to do one volatile read most of the times
+        final T result = value;  
+        return result == null ? maybeCompute(supplier) : result;
     }
 
     private synchronized T maybeCompute(Supplier<T> supplier) {
@@ -46,4 +48,7 @@ public final class Lazy<T> {
         return value;
     }
 
+    public static <T> Lazy<T> create() {
+        return new Lazy<>();
+    }
 }

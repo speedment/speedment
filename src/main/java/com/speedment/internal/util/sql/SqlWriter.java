@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.sql;
 
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.db.crud.Create;
 import com.speedment.db.crud.CrudOperation;
 import static com.speedment.db.crud.CrudOperation.Type.CREATE;
@@ -253,7 +253,7 @@ public final class SqlWriter {
      * @return       the formatted table name
      */
     private static String formatTableName(Table table) {
-        return table.getTableName().orElse(table.getName());
+        return table.getName();
     }
 
     /**

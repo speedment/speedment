@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,9 +18,10 @@ package com.speedment.event;
 
 import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.event.trait.GeneratorEvent;
 import com.speedment.internal.codegen.base.Generator;
+import com.speedment.internal.core.code.TranslatorManager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,10 +34,12 @@ public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     
     private final Project project;
     private final Generator generator;
+    private final TranslatorManager translatorManager;
 
-    public AfterGenerate(Project project, Generator generator) {
-        this.project   = requireNonNull(project);
-        this.generator = requireNonNull(generator);
+    public AfterGenerate(Project project, Generator generator, TranslatorManager translatorManager) {
+        this.project           = requireNonNull(project);
+        this.generator         = requireNonNull(generator);
+        this.translatorManager = requireNonNull(translatorManager);
     }
     
     @Override
@@ -47,5 +50,10 @@ public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     @Override
     public Generator generator() {
         return generator;
+    }
+    
+    @Override
+    public TranslatorManager translatorManager() {
+        return translatorManager;
     }
 }

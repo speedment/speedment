@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,9 +18,8 @@ package com.speedment.internal.core.manager;
 
 import com.speedment.Speedment;
 import com.speedment.component.CrudHandlerComponent;
-import com.speedment.config.Column;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.db.crud.Result;
 import com.speedment.db.crud.Selector;
@@ -192,7 +191,7 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return        values mapped to column names
      */
     private Map<String, Object> valuesFor(ENTITY entity) {
-        return MapStream.fromStream(table.streamOfColumns(), 
+        return MapStream.fromStream(table.columns(), 
             col -> col.getName(), 
             col -> get(entity, col)
         ).toMap();
@@ -207,9 +206,9 @@ public abstract class AbstractCrudManager<ENTITY> extends AbstractManager<ENTITY
      * @return       the column of the primary key
      */
     private static Column findColumnOfPrimaryKey(Table table) {
-        return table.streamOfPrimaryKeyColumns().findFirst()
+        return table.primaryKeyColumns().findFirst()
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find any primary key in table '" + table.getName() + "'."
-            )).getColumn();
+            )).findColumn();
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,165 +17,82 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Ordinable;
-import com.speedment.config.aspects.Parent;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import groovy.lang.Closure;
-import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class IndexProperty extends AbstractParentProperty<Index, IndexColumn> implements Index, ChildHelper<Index, Table> {
-    
-    private final ObservableSet<IndexColumn> indexColumnChildren;
-    private final BooleanProperty unique;
-    
-    private Table parent;
-    
-    public IndexProperty(Speedment speedment) {
-        super(speedment);
-        indexColumnChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
-        unique              = new SimpleBooleanProperty();
-    }
-    
-    public IndexProperty(Speedment speedment, Table parent, Index prototype) {
-        super(speedment, prototype);
-        indexColumnChildren = copyChildrenFrom(prototype, IndexColumn.class, IndexColumnProperty::new);
-        unique              = new SimpleBooleanProperty(prototype.isUnique());
-        this.parent = parent;
+public final class IndexProperty extends AbstractChildDocumentProperty<Table> 
+    implements Index, HasEnabledProperty, HasNameProperty {
+
+    public IndexProperty(Table parent, Map<String, Object> data) {
+        super(parent, data);
     }
     
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new BooleanPropertyItem(
-                unique,
-                "Is Unique",
-                "True if elements in this index are unique."
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new BooleanPropertyItem(
+                    uniqueProperty(),       
+                    "Is Unique",
+                    "True if elements in this index are unique."
+                )
             )
-        );
+        ).flatMap(s -> s);
     }
     
-    @Override
-    public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
+    public final BooleanProperty uniqueProperty() {
+        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Table) {
-            this.parent = (Table) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
+    public BiFunction<Index, Map<String, Object>, IndexColumnProperty> indexColumnConstructor() {
+        return IndexColumnProperty::new;
+    }
+
+    @Override
+    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+        switch (key) {
+            case INDEX_COLUMNS : return new IndexColumnProperty(this, data);
+            default            : return super.createDocument(key, data);
         }
     }
     
     @Override
-    public ObservableList<IndexColumn> children() {
-        return createChildrenView(indexColumnChildren);
+    public Stream<IndexColumnProperty> indexColumns() {
+        return indexColumnsProperty().stream();
     }
     
-    @Override
-    public void setUnique(Boolean unique) {
-        this.unique.setValue(unique);
+    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
+        return observableListOf(INDEX_COLUMNS, IndexColumnProperty::new);
     }
 
     @Override
-    public Boolean isUnique() {
-        return unique.getValue();
-    }
-    
-    public BooleanProperty uniqueProperty() {
-        return unique;
-    }
-
-    @Override
-    public IndexColumn addNewIndexColumn() {
-        final IndexColumn indexColumn = new IndexColumnProperty(getSpeedment());
-        add(indexColumn);
-        return indexColumn;
+    public IndexColumnProperty addNewIndexColumn() {
+        final IndexColumnProperty created = new IndexColumnProperty(this, new ConcurrentHashMap<>());
+        indexColumnsProperty().add(created);
+        return created;
     }
     
     @Override
-    public IndexColumn indexColumn(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewIndexColumn());
-    }
+    public String toString() {
+        return toStringHelper(this);
+    }     
     
-    @Override
-    public Optional<IndexColumn> add(IndexColumn child) throws IllegalStateException {
-        requireNonNull(child);
-        return indexColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
-    }
-    
-    @Override
-    public Optional<IndexColumn> remove(IndexColumn child) {
-        requireNonNull(child);
-        if (indexColumnChildren.remove(child)) {
-            child.setParent(null);
-            return Optional.of(child);
-        } else return Optional.empty();
-    }
-
-    @Override
-    public Stream<IndexColumn> stream() {
-        return indexColumnChildren.stream().sorted(Ordinable.COMPARATOR);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IndexColumn> Stream<T> streamOf(Class<T> childType) {
-        requireNonNull(childType);
-        
-        if (IndexColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) indexColumnChildren.stream().sorted(Ordinable.COMPARATOR);
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-    
-    @Override
-    public int count() {
-        return indexColumnChildren.size();
-    }
-
-    @Override
-    public int countOf(Class<? extends IndexColumn> childType) {
-        if (IndexColumn.class.isAssignableFrom(childType)) {
-            return indexColumnChildren.size();
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IndexColumn> T find(Class<T> childType, String name) throws SpeedmentException {
-        requireNonNull(childType);
-        requireNonNull(name);
-        
-        if (IndexColumn.class.isAssignableFrom(childType)) {
-            return (T) indexColumnChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
 }

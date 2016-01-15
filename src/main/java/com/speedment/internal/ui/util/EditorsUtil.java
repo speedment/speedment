@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -57,9 +57,11 @@ public final class EditorsUtil {
         final ObservableList<T> observable = observableArrayList(alternatives);
         
         final ChoiceBox<String> choice = new ChoiceBox<>(labels);
+        @SuppressWarnings("unchecked")
+        final T itemValue = (T)item.getValue();
+        choice.getSelectionModel().select(converter.apply(itemValue));
         
         return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {
-
             @Override
             protected ObservableValue<T> getObservableValue() {
                 return Bindings.valueAt(observable, getEditor().getSelectionModel().selectedIndexProperty());

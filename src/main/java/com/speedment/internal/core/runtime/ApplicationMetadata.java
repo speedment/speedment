@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,7 @@ package com.speedment.internal.core.runtime;
 
 /**
  * This interface defines how a Speedment application can obtain its
- * configuration meta data. For example, in a form of a groovy file
+ * configuration meta data. For example, in a form of a json file
  *
  * @author pemi
  * @since 2.0

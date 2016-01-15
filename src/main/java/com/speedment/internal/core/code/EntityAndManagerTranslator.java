@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@ import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -35,7 +35,6 @@ import java.util.Optional;
  */
 public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
 
-//    private final CodeGenerator cg;
     public class ClassType {
 
         private ClassType(String typeName, String implTypeName) {
@@ -95,12 +94,12 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
             //throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
 
-        final Class<?> first = primaryKeyColumns().findFirst().get().getColumn().getTypeMapper().getJavaType();
+        final Class<?> first = primaryKeyColumns().findFirst().get().findColumn().findTypeMapper().getJavaType();
 
         if (pks == 1) {
             return Type.of(first);
         } else {
-            if (primaryKeyColumns().allMatch(c -> c.getColumn().getTypeMapper().getJavaType().equals(first))) {
+            if (primaryKeyColumns().allMatch(c -> c.findColumn().findTypeMapper().getJavaType().equals(first))) {
                 return DefaultType.list(Type.of(first));
             } else {
                 return DefaultType.list(DefaultType.WILDCARD);

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,11 +16,16 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.Translator;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.config.Project;
-import com.speedment.config.Node;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguage;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.JavaLanguage.javaPackageName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -31,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @param <T> The Node type
  */
-public interface JavaClassTranslator<T extends Node> extends Translator<T, File> {
+public interface JavaClassTranslator<T extends HasName & HasMainInterface> extends Translator<T, File> {
 
     /**
      * Returns the name of the current node formatted as a java variable.
@@ -63,7 +68,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from.
      * @return the node name as a variable
      */
-    default String variableName(Node node) {
+    default String variableName(HasName node) {
         requireNonNull(node);
         return JavaLanguage.javaVariableName(node.getName());
     }
@@ -98,7 +103,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from
      * @return the node name as a type
      */
-    default String typeName(Node node) {
+    default String typeName(HasName node) {
         return JavaLanguage.javaTypeName(requireNonNull(node).getName());
     }
 
@@ -134,7 +139,7 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
      * @param node the node to retrieve the name from
      * @return the node name as a manager type
      */
-    default String managerTypeName(Node node) {
+    default String managerTypeName(HasName node) {
         return typeName(node) + "Manager";
     }
 
@@ -206,9 +211,9 @@ public interface JavaClassTranslator<T extends Node> extends Translator<T, File>
     default String basePackageName() {
         final String packName = project().getPackageName().toLowerCase() + ".";
         if (getNode() instanceof Project) {
-            return packName + project().getName();
+            return packName + javaPackageName(project().getName());
         } else {
-            return packName + getNode().getRelativeName(Project.class, JavaLanguage::javaPacketName);
+            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPackageName);
         }
     }
 

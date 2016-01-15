@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,12 +21,16 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.core.code.manager.EntityManagerTranslator;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
-import static java.util.Objects.requireNonNull;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Table;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -34,7 +38,6 @@ import java.util.stream.Stream;
  */
 final class FkHolder {
 
-    private final ForeignKey fk;
     private final ForeignKeyColumn fkc;
     private final Column column;
     private final Table table;
@@ -46,15 +49,13 @@ final class FkHolder {
     FkHolder(Speedment speedment, Generator generator, ForeignKey fk) {
         requireNonNull(speedment);
         requireNonNull(generator);
-        this.fk = requireNonNull(fk);
-        fkc = fk.stream()
-            .filter(ForeignKeyColumn::isEnabled)
+        fkc = fk.foreignKeyColumns()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("FK " + fk.getName() + " does not have an enabled ForeignKeyColumn"));
-        column = fkc.getColumn();
-        table = column.ancestor(Table.class).get();
-        foreignColumn = fkc.getForeignColumn();
-        foreignTable = fkc.getForeignTable();
+        column = fkc.findColumn();
+        table = ancestor(column, Table.class).get();
+        foreignColumn = fkc.findForeignColumn();
+        foreignTable = fkc.findForeignTable();
         emt = new EntityManagerTranslator(speedment, generator, getTable());
         foreignEmt = new EntityManagerTranslator(speedment, generator, getForeignTable());
     }

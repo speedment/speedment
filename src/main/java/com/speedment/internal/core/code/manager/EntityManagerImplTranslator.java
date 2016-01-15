@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,18 +33,21 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.V
 import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -52,6 +55,15 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -74,7 +86,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         return new ClassBuilder(MANAGER.getImplName())
             .addColumnConsumer((i, c) -> {
 
-                final TypeMapper<?, ?> mapper = c.getTypeMapper();
+                final TypeMapper<?, ?> mapper = c.findTypeMapper();
                 final java.lang.Class<?> javaType = mapper.getJavaType();
                 final java.lang.Class<?> dbType = mapper.getDatabaseType();
                 final Type mapperType = Type.of(TypeMapper.class).add(Generic.of().add(Type.of(dbType))).add(Generic.of().add(Type.of(javaType)));
@@ -104,7 +116,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
                 .add("return " + SPEEDMENT_VARIABLE_NAME
                     + ".getProjectComponent()"
-                    + ".getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
+                    + ".getProject().findTableByName(\"" + relativeName(table(), Dbms.class) + "\");"))
             .
             add(defaultReadEntity(file))
             .add(Method.of("newInstance", ENTITY.getType())
@@ -154,7 +166,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         final AtomicInteger position = new AtomicInteger(1);
         columns().forEachOrdered(c -> {
 
-            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbms().getType(), c.getTypeMapper().getDatabaseType());
+            final JavaTypeMapping<?> mapping = mapperComponent.apply(dbmsTypeOf(speedment, dbms()), c.findTypeMapper().getDatabaseType());
             final StringBuilder sb = new StringBuilder()
                 .append("entity.set")
                 .append(typeName(c))
@@ -237,8 +249,8 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
                 columns()
-                .peek(c -> file.add(Import.of(Type.of(c.getTypeMapper().getJavaType()))))
-                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
+                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.findTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
             ));
     }
@@ -255,13 +267,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                 break;
             }
             case 1: {
-                method.add("return entity.get" + typeName(primaryKeyColumns().findFirst().get().getColumn()) + "();");
+                method.add("return entity.get" + typeName(primaryKeyColumns().findFirst().get().findColumn()) + "();");
                 break;
             }
             default: {
                 file.add(Import.of(Type.of(Arrays.class)));
                 method.add(primaryKeyColumns()
-                    .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                    .map(pkc -> "entity.get" + typeName(pkc.findColumn()) + "()")
                     .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
                 );
                 break;

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,12 +17,13 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.exception.SpeedmentException;
-import java.util.Optional;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.trait.HasColumnProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -30,57 +31,22 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class PrimaryKeyColumnProperty extends AbstractNodeProperty implements PrimaryKeyColumn, ChildHelper<PrimaryKeyColumn, Table> {
+public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table> 
+    implements PrimaryKeyColumn, HasNameProperty, 
+    HasOrdinalPositionProperty, HasColumnProperty {
 
-    private Table parent;
-    private int ordinalPosition;
-    
-    public PrimaryKeyColumnProperty(Speedment speedment) {
-        super(speedment);
-    }
-    
-    public PrimaryKeyColumnProperty(Speedment speedment, Table parent, PrimaryKeyColumn prototype) {
-        super(speedment, prototype);
-        ordinalPosition = prototype.getOrdinalPosition();
-        this.parent = parent;
+    public PrimaryKeyColumnProperty(Table parent, Map<String, Object> data) {
+        super(parent, data);
     }
     
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.empty();
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return HasColumnProperty.super.getUiVisibleProperties(speedment);
     }
     
     @Override
-    public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Table) {
-            this.parent = (Table) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
-    }
-
-    @Override
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
-
-    @Override
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
+    public String toString() {
+        return toStringHelper(this);
+    } 
     
-    @Override
-    public Column getColumn() {
-        return ancestor(Table.class)
-            .orElseThrow(() -> new SpeedmentException(
-                "Found no ancestor table from this "
-                + getClass().getSimpleName() + "."
-            )).findColumn(getName());
-    }
 }

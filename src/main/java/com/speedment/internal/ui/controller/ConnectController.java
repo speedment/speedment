@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,18 +16,12 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.config.parameters.DbmsType;
-import com.speedment.db.DbmsHandler;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.util.Settings;
-import com.speedment.internal.util.Trees;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -48,6 +42,8 @@ import javafx.util.StringConverter;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -84,7 +80,7 @@ public final class ConnectController implements Initializable {
         if (Settings.inst().get("hide_open_option", true)) {
             container.getChildren().remove(openContainer);
         }
-        
+
         buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
         buttonConnect.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_IN, ICON_SIZE));
         
@@ -131,9 +127,8 @@ public final class ConnectController implements Initializable {
             fieldUser.textProperty()
         ));
 
-        final DbmsProperty dbms = new DbmsProperty(session.getSpeedment());
-        dbms.setParent(session.getProject());
-        session.getProject().add(dbms);
+        @SuppressWarnings("unchecked")
+        final DbmsProperty dbms = session.getProject().addNewDbms();
         
         Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
             @Override
@@ -153,7 +148,6 @@ public final class ConnectController implements Initializable {
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
         dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
-        dbms.passwordProperty().bindBidirectional(fieldPass.textProperty());
         dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
         
         fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
@@ -164,9 +158,14 @@ public final class ConnectController implements Initializable {
         fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
         
         buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
-
         buttonConnect.setOnAction(ev -> {
-            session.getProject().setName(fieldSchema.getText());
+            
+            // Register password in password component
+            session.getSpeedment().getPasswordComponent()
+                .put(fieldName.getText(), fieldPass.getText());
+            
+            
+            session.getProject().nameProperty().setValue(fieldSchema.getText());
             
             Settings.inst().set("last_known_schema", fieldSchema.getText());
             Settings.inst().set("last_known_dbtype", dbms.getTypeName());

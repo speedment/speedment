@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,18 +17,19 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.trait.HasColumnProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
-import java.util.Optional;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import java.util.Map;
 import java.util.stream.Stream;
-import javafx.beans.binding.Bindings;
+import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
 
@@ -36,132 +37,51 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ForeignKeyColumnProperty extends AbstractNodeProperty implements ForeignKeyColumn, ChildHelper<ForeignKeyColumn, ForeignKey> {
-    
-    private final StringProperty foreignColumnName;
-    private final StringProperty foreignTableName;
-    
-    private int ordinalPosition;
-    private ForeignKey parent;
-    
-    public ForeignKeyColumnProperty(Speedment speedment) {
-        super(speedment);
-        foreignColumnName = new SimpleStringProperty();
-        foreignTableName  = new SimpleStringProperty();
-    }
-    
-    public ForeignKeyColumnProperty(Speedment speedment, ForeignKey parent, ForeignKeyColumn prototype) {
-        super(speedment, prototype);
-        this.foreignColumnName = new SimpleStringProperty(prototype.getForeignColumnName());
-        this.foreignTableName  = new SimpleStringProperty(prototype.getForeignTableName());
-        this.ordinalPosition   = prototype.getOrdinalPosition();
-        this.parent            = parent;
+public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey> 
+    implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
+
+    public ForeignKeyColumnProperty(ForeignKey parent, Map<String, Object> data) {
+        super(parent, data);
     }
     
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new StringPropertyItem(
-                foreignTableName, 
-                "Foreign Table Name",
-                "The name of the database table that this foreign key references."
-            ),
-            new StringPropertyItem(
-                foreignColumnName, 
-                "Foreign Column Name",
-                "The name of the database column that this foreign key references."
+            HasColumnProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new StringPropertyItem(
+                    foreignTableNameProperty(), 
+                    "Foreign Table Name",
+                    "The name of the database table that this foreign key references."
+                ),
+                new StringPropertyItem(
+                    foreignColumnNameProperty(), 
+                    "Foreign Column Name",
+                    "The name of the database column that this foreign key references."
+                )
             )
-        );
-    }
-    
-    @Override
-    public Optional<ForeignKey> getParent() {
-        return Optional.ofNullable(parent);
+        ).flatMap(s -> s);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof ForeignKeyProperty) {
-            this.parent = (ForeignKeyProperty) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
+    public final StringProperty foreignTableNameProperty() {
+        return stringPropertyOf(FOREIGN_TABLE_NAME, () -> null);
     }
 
-    @Override
-    public void setForeignColumnName(String foreignColumnName) {
-        this.foreignColumnName.setValue(foreignColumnName);
+    public final StringProperty foreignColumnNameProperty() {
+        return stringPropertyOf(FOREIGN_COLUMN_NAME, () -> null);
     }
 
-    @Override
-    public String getForeignColumnName() {
-        return foreignColumnName.getValue();
-    }
-    
-    public StringProperty foreignColumnNameProperty() {
-        return foreignColumnName;
-    }
-    
-    @Override
-    public Column getForeignColumn() {
-        return foreignColumnProperty().getValue();
-    }
-    
-    public ObjectBinding<Column> foreignColumnProperty() {
-        return Bindings.createObjectBinding(() -> 
-            getForeignTable().findColumn(foreignColumnName.getValue()),
-            foreignTableName,
-            foreignColumnName
-        );
-    }
-    
-    @Override
-    public void setForeignTableName(String foreignTableName) {
-        this.foreignTableName.setValue(foreignTableName);
+    public final ObjectBinding<Table> foreignTableProperty() {
+        return createObjectBinding(this::findForeignTable, foreignTableNameProperty());
     }
 
-    @Override
-    public String getForeignTableName() {
-        return foreignTableName.getValue();
-    }
-    
-    public StringProperty foreignTableNameProperty() {
-        return foreignTableName;
+    public final ObjectBinding<Column> foreignColumnProperty() {
+        return createObjectBinding(this::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
     }
     
     @Override
-    public Table getForeignTable() {
-        return foreignTableProperty().getValue();
-    }
+    public String toString() {
+        return toStringHelper(this);
+    } 
     
-    public ObjectBinding<Table> foreignTableProperty() {
-        return Bindings.createObjectBinding(() -> 
-            getParent()
-                .flatMap(ForeignKey::getParent)
-                .flatMap(Table::getParent)
-                .map(schema -> schema.find(Table.class, foreignTableName.getValue()))
-                .orElse(null),
-            foreignTableName
-        );
-    }
-
-    @Override
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
-
-    @Override
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-    
-    @Override
-    public Column getColumn() {
-        return ancestor(Table.class)
-            .orElseThrow(() -> new SpeedmentException(
-                "Found no ancestor table from this "
-                + getClass().getSimpleName() + "."
-            )).findColumn(getName());
-    }
 }

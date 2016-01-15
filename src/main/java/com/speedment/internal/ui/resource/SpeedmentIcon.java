@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,27 +16,28 @@
  */
 package com.speedment.internal.ui.resource;
 
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Index;
-import com.speedment.config.IndexColumn;
-import com.speedment.config.Node;
-import com.speedment.config.PluginData;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
+import com.speedment.config.Document;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.internal.ui.config.trait.HasIconPath;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -100,15 +101,13 @@ public enum SpeedmentIcon {
 		NODE_ICONS.put(ForeignKeyColumn.class, FOREIGN_KEY_COLUMN);
 		NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
 		NODE_ICONS.put(Project.class, PROJECT);
-//		NODE_ICONS.put(ProjectManager.class, PROJECT_MANAGER);
-        NODE_ICONS.put(PluginData.class, PLUGIN_DATA);
 	}
     
     public Image load() {
 		return new Image(getFileInputStream());
 	}
 
-    public Image load(Node node) {
+    public Image load(Document node) {
 		return new Image(getFileInputStream(node));
 	}
     
@@ -116,14 +115,18 @@ public enum SpeedmentIcon {
 		return new ImageView(load());
 	}
 	
-	public ImageView view(Node node) {
+	public ImageView view(Document node) {
 		return new ImageView(load(node));
 	}
 	
-	public static ImageView forNode(Node node) {
+	public static ImageView forNode(Document node) {
         requireNonNull(node);
         
-        final Optional<String> path = node.getIconPath();
+        final Optional<String> path = Optional.of(node)
+            .filter(HasIconPath.class::isInstance)
+            .map(HasIconPath.class::cast)
+            .map(HasIconPath::getIconPath);
+        
         if (path.isPresent()) {
             final InputStream stream = SpeedmentIcon.class.getResourceAsStream(path.get());
             if (stream != null) {
@@ -136,7 +139,13 @@ public enum SpeedmentIcon {
             }
         }
         
-        final SpeedmentIcon icon = NODE_ICONS.get(node.getInterfaceMainClass());
+        final SpeedmentIcon icon = NODE_ICONS.get(Optional.of(node)
+            .filter(HasMainInterface.class::isInstance)
+            .map(HasMainInterface.class::cast)
+            .map(HasMainInterface::mainInterface)
+            .orElse(node.getClass())
+        );
+        
         if (icon != null) {
             return icon.view();
         } else {
@@ -147,15 +156,14 @@ public enum SpeedmentIcon {
 	}
     
     private SpeedmentIcon(String filename) {
-        requireNonNull(filename);
-		this.filename = filename;
+		this.filename = requireNonNull(filename);
 	}
     
     private InputStream getFileInputStream() {
         return getFileInputStream(null);
     }
 
-    private InputStream getFileInputStream(Node node) {
+    private InputStream getFileInputStream(Document node) {
 		final InputStream stream = getClass().getResourceAsStream(filename);
 		
 		if (stream == null) {

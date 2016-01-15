@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,259 +17,143 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.Node;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.config.mapper.TypeMapper;
-import com.speedment.config.parameters.ColumnCompressionType;
-import com.speedment.config.parameters.FieldStorageType;
+import com.speedment.config.db.Column;
+import static com.speedment.config.db.Column.AUTO_INCREMENT;
+import static com.speedment.config.db.Column.DATABASE_TYPE;
+import static com.speedment.config.db.Column.NULLABLE;
+import static com.speedment.config.db.Column.TYPE_MAPPER;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
+import com.speedment.internal.ui.config.trait.HasAliasProperty;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
+import static javafx.beans.binding.Bindings.createObjectBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractNodeProperty implements Column, ChildHelper<Column, Table>, RestExposableHelper {
+public final class ColumnProperty extends AbstractChildDocumentProperty<Table> 
+    implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty {
     
-    private final Property<TypeMapper<?, ?>> typeMapper;
-    private final BooleanProperty nullable;
-    private final BooleanProperty autoIncrement;
-    private final StringProperty alias;
-    private final Property<FieldStorageType> fieldStorageType;
-    private final Property<ColumnCompressionType> columnCompressionType;
-    private final Property<Class<?>> databaseType;
-    
-    private final BooleanProperty exposedInRest;
-    
-    private Table parent;
-    private int ordinalPosition;
-    
-    public ColumnProperty(Speedment speedment) {
-        super(speedment);
-        typeMapper            = new SimpleObjectProperty<>();
-        nullable              = new SimpleBooleanProperty();
-        autoIncrement         = new SimpleBooleanProperty();
-        alias                 = new SimpleStringProperty();
-        fieldStorageType      = new SimpleObjectProperty<>();
-        columnCompressionType = new SimpleObjectProperty<>();
-        databaseType          = new SimpleObjectProperty<>();
-        exposedInRest         = new SimpleBooleanProperty();
-        setDefaults();
+    public ColumnProperty(Table parent, Map<String, Object> data) {
+        super(parent, data);
     }
     
-    public ColumnProperty(Speedment speedment, Table parent, Column prototype) {
-        super(speedment, prototype);
-        
-        this.typeMapper            = new SimpleObjectProperty<>(prototype.getTypeMapper());
-        this.nullable              = new SimpleBooleanProperty(prototype.isNullable());
-        this.autoIncrement         = new SimpleBooleanProperty(prototype.isAutoincrement());
-        this.alias                 = new SimpleStringProperty(prototype.getAlias().orElse(null));
-        this.fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
-        this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
-        this.ordinalPosition       = prototype.getOrdinalPosition();
-        this.databaseType          = new SimpleObjectProperty<>(prototype.getDatabaseType());
-        this.exposedInRest         = new SimpleBooleanProperty(prototype.isExposedInRest());
-        
-        this.parent = parent;
-    }
-    
-    private void setDefaults() {
-        setNullable(true);
-        setAutoincrement(false);
-        setFieldStorageType(FieldStorageType.INHERIT);
-        setColumnCompressionType(ColumnCompressionType.INHERIT);
-        setDatabaseType(Object.class);
-        setTypeMapper(new StringIdentityMapper());
-    }
-
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.of(
-            new StringPropertyItem(
-                alias,       
-                "Alias",                  
-                "The name to use in the generated code to represent this entity."
-            ),
-            new TypeMapperPropertyItem(
-                getSpeedment(),
-                Optional.ofNullable(getTypeMapper())
-                    .map(tm -> (Class) tm.getDatabaseType())
-                    .orElse(getDatabaseType()),
-                typeMapper,
-                "JDBC Type to Java",
-                "The class that will be used to map types between the database and the generated code."
-            ),
-            new BooleanPropertyItem(
-                nullable,
-                "Is Nullable",
-                "If this column can hold 'null'-values or not."
-            ),
-            new BooleanPropertyItem(
-                autoIncrement,
-                "Is Auto Incrementing",
-                "If this column will increment automatically for each new entity."
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(new TypeMapperPropertyItem(
+                    speedment,
+                    Optional.ofNullable(findTypeMapper())
+                        .map(tm -> (Class) tm.getDatabaseType())
+                        .orElse(findDatabaseType()),
+                    typeMapperProperty(),
+                    "JDBC Type to Java",
+                    "The class that will be used to map types between the database and the generated code."
+                ),
+                new BooleanPropertyItem(
+                    nullableProperty(),
+                    "Is Nullable",
+                    "If this column can hold 'null'-values or not."
+                ),
+                new BooleanPropertyItem(
+                    autoIncrementProperty(),
+                    "Is Auto Incrementing",
+                    "If this column will increment automatically for each new entity."
+                )
             )
-        );
-    }
-    
-    @Override
-    public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
+        ).flatMap(s -> s);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Table) {
-            this.parent = (Table) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
-    }
-    
-    @Override
-    public void setTypeMapper(TypeMapper<?, ?> typeMapper) {
-        this.typeMapper.setValue(typeMapper);
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setTypeMapper(Class<?> typeMapperClass) {
-        if (typeMapperClass == null) {
-            this.typeMapper.setValue(null);
-        } else {
-            try {
-                setTypeMapper((TypeMapper<?, ?>) typeMapperClass.newInstance());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                throw new SpeedmentException(
-                    "Could not instantiate the specified mapper '" + 
-                    typeMapperClass.getSimpleName() + 
-                    "' using it's default constructor."
-                );
-            }
-        }
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
     }
 
-    @Override
-    public TypeMapper<?, ?> getTypeMapper() {
-        return typeMapper.getValue();
-    }
-    
-    public Property<TypeMapper<?, ?>> typeMapperProperty() {
-        return typeMapper;
-    }
-
-    @Override
-    public void setNullable(Boolean nullable) {
-        this.nullable.setValue(nullable);
-    }
-
-    @Override
-    public Boolean isNullable() {
-        return nullable.getValue();
-    }
-    
     public BooleanProperty nullableProperty() {
-        return nullable;
+        return booleanPropertyOf(NULLABLE, Column.super::isNullable);
     }
 
-    @Override
-    public void setAutoincrement(Boolean autoIncrement) {
-        this.autoIncrement.setValue(autoIncrement);
+    public BooleanProperty autoIncrementProperty() {
+        return booleanPropertyOf(AUTO_INCREMENT, Column.super::isAutoIncrement);
     }
-
-    @Override
-    public Boolean isAutoincrement() {
-        return autoIncrement.getValue();
-    }
-    
-    public BooleanProperty autBooleanProperty() {
-        return autoIncrement;
-    }
-    
-    @Override
-    public void setAlias(String alias) {
-        this.alias.setValue(alias);
-    }
-
-    @Override
-    public Optional<String> getAlias() {
-        return Optional.ofNullable(alias.getValue());
-    }
-    
-    public StringProperty aliasProperty() {
-        return alias;
-    }
-
-    @Override
-    public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        this.fieldStorageType.setValue(fieldStorageType);
-    }
-
-    @Override
-    public FieldStorageType getFieldStorageType() {
-        return fieldStorageType.getValue();
-    }
-    
-    public Property<FieldStorageType> fieldStorageTypeProperty() {
-        return fieldStorageType;
-    }
-    
-    @Override
-    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        this.columnCompressionType.setValue(columnCompressionType);
-    }
-
-    @Override
-    public ColumnCompressionType getColumnCompressionType() {
-        return columnCompressionType.getValue();
-    }
-    
-    public Property<ColumnCompressionType> columnCompressionTypeProperty() {
-        return columnCompressionType;
-    }
-
-    @Override
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
-
-    @Override
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-
-    @Override
-    public void setDatabaseType(Class<?> databaseType) {
-        this.databaseType.setValue(databaseType);
-    }
-
-    @Override
-    public Class<?> getDatabaseType() {
-        return databaseType.getValue();
-    }
-    
-    public Property<Class<?>> databaseTypeProperty() {
-        return databaseType;
+ 
+    public StringProperty typeMapperProperty() {
+        return stringPropertyOf(TYPE_MAPPER, Column.super::getTypeMapper);
     }
   
-    @Override
-    public BooleanProperty exposedInRestProperty() {
-        return exposedInRest;
+    public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
+        final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>(
+            TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get())
+        );
+        
+        pathProperty.addListener((ob, o, n) -> {
+            System.out.println("Type mapper changed from '" + o + "' to '" + n + "'.");
+        });
+        
+        typeMapperProperty().bindBidirectional(pathProperty, TYPE_MAPPER_CONVERTER);
+
+        return pathProperty;
     }
+
+    public StringProperty databaseTypeProperty() {
+        return stringPropertyOf(DATABASE_TYPE, Column.super::getDatabaseType);
+    }
+
+    public ObjectBinding<Class<?>> databaseTypeObjectProperty() {
+        return createObjectBinding(this::findDatabaseType, databaseTypeProperty());
+    }
+    
+    private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {
+        @Override
+        public String toString(TypeMapper<?, ?> typeMapper) {
+            if (typeMapper == null) {
+                return null;
+            } else {
+                return typeMapper.getClass().getName();
+            }
+        }
+
+        @Override
+        public TypeMapper<?, ?> fromString(String className) {
+            if (className == null) {
+                return null;
+            } else {
+                try {
+                    @SuppressWarnings("unchecked")
+                    final TypeMapper<?, ?> typeMapper = (TypeMapper<?, ?>) Class.forName(className).newInstance();
+                    return typeMapper;
+                } catch (final ClassNotFoundException ex) {
+                    throw new SpeedmentException("Could not find type-mapper class: '" + className + "'.", ex);
+                } catch (InstantiationException ex) {
+                    throw new SpeedmentException("Could not instantiate type-mapper class: '" + className + "'.", ex);
+                } catch (IllegalAccessException ex) {
+                    throw new SpeedmentException("Could not access type-mapper class: '" + className + "'.", ex);
+                }
+            }
+        }
+    };
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
+    }
+    
 }
