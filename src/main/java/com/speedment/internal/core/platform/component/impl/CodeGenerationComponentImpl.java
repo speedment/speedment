@@ -36,18 +36,16 @@ import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.stream.MapStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.speedment.internal.util.JavaLanguageNamer;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
 public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
 
     private Generator generator;
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorConstructor<HasMainInterface>>> map;
-    private Supplier<JavaLanguageNamer> javaLanguageSupplier;
+    private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
@@ -118,7 +116,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     }
 
     @Override
-    public void setJavaLanguageNamerSupplier(Supplier<JavaLanguageNamer> supplier) {
+    public void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier) {
         this.javaLanguageSupplier = supplier;
     }
  

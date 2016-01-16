@@ -148,6 +148,6 @@ public interface CodeGenerationComponent extends Component {
     
     JavaLanguageNamer javaLanguageNamer();
     
-    void setJavaLanguageNamerSupplier(Supplier<JavaLanguageNamer> supplier);
+    void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
 
 }
