@@ -32,16 +32,22 @@ import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
+import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.stream.MapStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import com.speedment.internal.util.JavaLanguageNamer;
+import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
 
     private Generator generator;
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorConstructor<HasMainInterface>>> map;
+    private Supplier<JavaLanguageNamer> javaLanguageSupplier;
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
@@ -52,6 +58,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
         put(Table.class, MANAGER_IMPL, EntityManagerImplTranslator::new);
         put(Project.class, SPEEDMENT_APPLICATION, SpeedmentApplicationTranslator::new);
         put(Project.class, SPEEDMENT_APPLICATION_METADATA, SpeedmentApplicationMetadataTranslator::new);
+        javaLanguageSupplier = DefaultJavaLanguageNamer::new;
     }
 
     @Override
@@ -105,4 +112,14 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
                 .map(constructor -> ((TranslatorConstructor<T>) constructor).apply(getSpeedment(), generator, document));
     }
 
+    @Override
+    public JavaLanguageNamer javaLanguageNamer() {
+        return javaLanguageSupplier.get();
+    }
+
+    @Override
+    public void setJavaLanguageNamerSupplier(Supplier<JavaLanguageNamer> supplier) {
+        this.javaLanguageSupplier = supplier;
+    }
+ 
 }

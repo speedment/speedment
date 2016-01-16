@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <ENTITY> Entity type for this Manager
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
 
     // Entity Inspection
@@ -418,4 +418,11 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
     ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
     ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+
+    /**
+     * Returns the {@link Speedment} instance for this Manager.
+     *
+     * @return the {@link Speedment} instance for this Manager
+     */
+    Speedment speedment();
 }

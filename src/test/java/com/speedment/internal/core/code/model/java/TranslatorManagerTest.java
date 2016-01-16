@@ -20,12 +20,11 @@ import com.speedment.code.StandardTranslatorKey;
 import com.speedment.code.Translator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
-import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
-import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.TranslatorManager;
-import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.util.JavaLanguageNamer;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -59,12 +58,16 @@ public class TranslatorManagerTest extends SimpleModel {
                 .findAny()
                 .get();
 
-        //Todo: translator.toCode();
+        final String code = translator.toCode();
+        System.out.println(code);
         
-        final Generator gen = new JavaGenerator();
-        final EntityTranslator entityTranslator = new EntityTranslator(speedment, gen, table); 
-        final String result = entityTranslator.toCode();
-        System.out.println(result);
+        JavaLanguageNamer javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
+        
+        assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaVariableName(column.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaTypeName(column.getName())));
+        
 
     }
 
