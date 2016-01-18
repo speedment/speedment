@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.db.trait.*;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
@@ -34,6 +35,11 @@ public interface HasAliasProperty extends DocumentProperty, HasAlias {
     
     default StringProperty aliasProperty() {
         return stringPropertyOf(HasAlias.ALIAS, () -> null);
+    }
+    
+    @Override
+    default Optional<String> getAlias() {
+        return Optional.ofNullable(aliasProperty().get());
     }
 
     @Override

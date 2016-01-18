@@ -22,12 +22,15 @@ import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
+import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -78,20 +81,40 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
         ).flatMap(s -> s);
     }
     
-    public final StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME, () -> null);
+    public StringProperty typeNameProperty() {
+        return stringPropertyOf(TYPE_NAME,  () -> Dbms.super.getTypeName());
     }
 
-    public final StringProperty ipAddressProperty() {
-        return stringPropertyOf(IP_ADDRESS, () -> null);
+    @Override
+    public String getTypeName() {
+        return typeNameProperty().get();
     }
 
-    public final IntegerProperty portProperty() {
-        return integerPropertyOf(PORT, () -> 0);
+    public StringProperty ipAddressProperty() {
+        return stringPropertyOf(IP_ADDRESS,  () -> Dbms.super.getIpAddress().orElse(null));
     }
 
-    public final StringProperty usernameProperty() {
-        return stringPropertyOf(USERNAME, () -> null);
+    @Override
+    public Optional<String> getIpAddress() {
+        return Optional.ofNullable(ipAddressProperty().get());
+    }
+
+    public IntegerProperty portProperty() {
+        return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
+    }
+
+    @Override
+    public OptionalInt getPort() {
+        return OptionalUtil.ofNullable(portProperty().get());
+    }
+
+    public StringProperty usernameProperty() {
+        return stringPropertyOf(USERNAME, () -> Dbms.super.getUsername().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getUsername() {
+        return Optional.ofNullable(usernameProperty().get());
     }
     
     public ObservableList<SchemaProperty> schemasProperty() {
@@ -104,7 +127,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     }
     
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected DocumentProperty createDocument(String key, Map<String, Object> data) {
         switch (key) {
             case SCHEMAS : return new SchemaProperty(this, data);
             default      : return super.createDocument(key, data);
@@ -127,5 +150,4 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     public String toString() {
         return toStringHelper(this);
     }
-    
 }

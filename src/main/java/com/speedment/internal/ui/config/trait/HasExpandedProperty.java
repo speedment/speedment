@@ -32,6 +32,10 @@ public interface HasExpandedProperty extends DocumentProperty {
         return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);
     }
     
+    default boolean isExpanded() {
+        return expandedProperty().get();
+    }
+    
     default boolean isExpandedByDefault() {
         return this instanceof HasChildren;
     }

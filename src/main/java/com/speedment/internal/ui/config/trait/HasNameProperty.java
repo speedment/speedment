@@ -18,6 +18,7 @@ package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.stream.Stream;
@@ -32,6 +33,11 @@ public interface HasNameProperty extends DocumentProperty, HasName {
 
     default StringProperty nameProperty() {
         return stringPropertyOf(HasName.NAME, HasName.super::getName);
+    }
+
+    @Override
+    default String getName() throws SpeedmentException {
+        return nameProperty().get();
     }
 
     @Override

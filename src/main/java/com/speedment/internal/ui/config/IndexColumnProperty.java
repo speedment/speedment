@@ -51,6 +51,5 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
     @Override
     public String toString() {
         return toStringHelper(this);
-    }     
-    
+    }
 }

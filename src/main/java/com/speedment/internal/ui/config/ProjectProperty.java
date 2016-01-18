@@ -27,11 +27,11 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -79,8 +79,18 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
         return stringPropertyOf(PACKAGE_NAME, Project.super::getPackageName);
     }
 
+    @Override
+    public String getPackageName() {
+        return packageNameProperty().get();
+    }
+
     public StringProperty packageLocationProperty() {
         return stringPropertyOf(PACKAGE_LOCATION, Project.super::getPackageLocation);
+    }
+
+    @Override
+    public String getPackageLocation() {
+        return packageLocationProperty().get();
     }
 
     public ObjectProperty<Path> configPathProperty() {
@@ -93,6 +103,11 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
         );
         
         return pathProperty;
+    }
+
+    @Override
+    public Optional<Path> getConfigPath() {
+        return Optional.ofNullable(configPathProperty().get());
     }
     
     public ObservableList<DbmsProperty> dbmsesProperty() {

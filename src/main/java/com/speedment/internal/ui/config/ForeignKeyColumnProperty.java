@@ -21,6 +21,7 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
@@ -64,24 +65,43 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     public final StringProperty foreignTableNameProperty() {
-        return stringPropertyOf(FOREIGN_TABLE_NAME, () -> null);
+        return stringPropertyOf(FOREIGN_TABLE_NAME, ForeignKeyColumn.super::getForeignTableName);
+    }
+
+    @Override
+    public String getForeignTableName() {
+        return foreignTableNameProperty().get();
     }
 
     public final StringProperty foreignColumnNameProperty() {
-        return stringPropertyOf(FOREIGN_COLUMN_NAME, () -> null);
+        return stringPropertyOf(FOREIGN_COLUMN_NAME, ForeignKeyColumn.super::getForeignColumnName);
+    }
+
+    @Override
+    public String getForeignColumnName() {
+        return foreignColumnNameProperty().get();
     }
 
     public final ObjectBinding<Table> foreignTableProperty() {
         return createObjectBinding(this::findForeignTable, foreignTableNameProperty());
     }
 
+    @Override
+    public Table findForeignTable() throws SpeedmentException {
+        return foreignTableProperty().get();
+    }
+
     public final ObjectBinding<Column> foreignColumnProperty() {
         return createObjectBinding(this::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
+    }
+
+    @Override
+    public Column findForeignColumn() throws SpeedmentException {
+        return foreignColumnProperty().get();
     }
     
     @Override
     public String toString() {
         return toStringHelper(this);
-    } 
-    
+    }
 }

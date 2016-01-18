@@ -29,6 +29,11 @@ import javafx.beans.binding.ObjectBinding;
 public interface HasColumnProperty extends DocumentProperty, HasColumn, HasNameProperty {
     
     default ObjectBinding<Column> columnProperty() {
-        return createObjectBinding(this::findColumn, nameProperty());
+        return createObjectBinding(HasColumn.super::findColumn, nameProperty());
+    }
+
+    @Override
+    default Column findColumn() {
+        return columnProperty().get();
     }
 }

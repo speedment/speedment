@@ -55,6 +55,11 @@ public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     }
 
     @Override
+    default OrderType getOrderType() {
+        return orderTypeProperty().get();
+    }
+
+    @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new EnumPropertyItem<>(

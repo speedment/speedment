@@ -47,6 +47,5 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
     @Override
     public String toString() {
         return toStringHelper(this);
-    } 
-    
+    }
 }

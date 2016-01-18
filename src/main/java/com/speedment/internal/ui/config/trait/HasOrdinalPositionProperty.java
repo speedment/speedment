@@ -29,4 +29,9 @@ public interface HasOrdinalPositionProperty extends DocumentProperty, HasOrdinal
     default IntegerProperty ordinalPositionProperty() {
         return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
     }
+
+    @Override
+    default int getOrdinalPosition() {
+        return ordinalPositionProperty().get();
+    }
 }

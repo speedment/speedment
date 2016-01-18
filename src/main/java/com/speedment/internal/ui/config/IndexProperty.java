@@ -57,8 +57,13 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
         ).flatMap(s -> s);
     }
     
-    public final BooleanProperty uniqueProperty() {
+    public BooleanProperty uniqueProperty() {
         return booleanPropertyOf(UNIQUE, Index.super::isUnique);
+    }
+
+    @Override
+    public boolean isUnique() {
+        return uniqueProperty().get();
     }
 
     @Override
@@ -67,7 +72,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
 
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected DocumentProperty createDocument(String key, Map<String, Object> data) {
         switch (key) {
             case INDEX_COLUMNS : return new IndexColumnProperty(this, data);
             default            : return super.createDocument(key, data);
@@ -93,6 +98,5 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     @Override
     public String toString() {
         return toStringHelper(this);
-    }     
-    
+    }
 }

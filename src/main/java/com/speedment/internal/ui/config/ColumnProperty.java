@@ -91,34 +91,65 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
         return booleanPropertyOf(NULLABLE, Column.super::isNullable);
     }
 
+    @Override
+    public boolean isNullable() {
+        return nullableProperty().get();
+    }
+
     public BooleanProperty autoIncrementProperty() {
         return booleanPropertyOf(AUTO_INCREMENT, Column.super::isAutoIncrement);
+    }
+
+    @Override
+    public boolean isAutoIncrement() {
+        return autoIncrementProperty().get();
     }
  
     public StringProperty typeMapperProperty() {
         return stringPropertyOf(TYPE_MAPPER, Column.super::getTypeMapper);
+    }
+
+    @Override
+    public String getTypeMapper() {
+        return typeMapperProperty().get();
     }
   
     public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
         final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>(
             TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get())
         );
-        
-        pathProperty.addListener((ob, o, n) -> {
-            System.out.println("Type mapper changed from '" + o + "' to '" + n + "'.");
-        });
-        
+
         typeMapperProperty().bindBidirectional(pathProperty, TYPE_MAPPER_CONVERTER);
 
         return pathProperty;
+    }
+
+    @Override
+    public TypeMapper<?, ?> findTypeMapper() {
+        return typeMapperObjectProperty().getValue();
     }
 
     public StringProperty databaseTypeProperty() {
         return stringPropertyOf(DATABASE_TYPE, Column.super::getDatabaseType);
     }
 
+    @Override
+    public String getDatabaseType() {
+        return databaseTypeProperty().get();
+    }
+
     public ObjectBinding<Class<?>> databaseTypeObjectProperty() {
         return createObjectBinding(this::findDatabaseType, databaseTypeProperty());
+    }
+
+    @Override
+    public Class<?> findDatabaseType() {
+        return databaseTypeObjectProperty().get();
+    }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
     }
     
     private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {
@@ -150,10 +181,4 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
             }
         }
     };
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }
-    
 }
