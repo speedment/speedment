@@ -45,4 +45,9 @@ public final class DefaultDocumentProperty extends AbstractDocumentProperty {
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.empty();
     }
+
+    @Override
+    public Class<? extends Document> mainInterface() {
+        return Document.class;
+    }
 }
