@@ -17,6 +17,7 @@
 package com.speedment.internal.util.testing;
 
 import com.speedment.Manager;
+import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
@@ -92,7 +93,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         this.remover = remover;
         return this;
     }
-    
+
     @Override
     public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder) {
         this.finder = finder;
@@ -223,6 +224,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     @Override
     public boolean isStopped() {
         return inner.isStopped();
+    }
+
+    @Override
+    public Speedment speedment() {
+        return inner.speedment();
     }
 
 }

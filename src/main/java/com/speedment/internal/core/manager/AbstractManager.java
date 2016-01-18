@@ -23,10 +23,7 @@ import com.speedment.field.ComparableField;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -116,6 +113,11 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     @Override
     public Lifecyclable.State getState() {
         return state;
+    }
+
+    @Override
+    public Speedment speedment() {
+        return speedment;
     }
 
 }

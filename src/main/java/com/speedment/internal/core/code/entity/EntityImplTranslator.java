@@ -37,7 +37,6 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.BOOLEAN_PRIMITIVE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.INT_PRIMITIVE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
-import com.speedment.internal.util.JavaLanguage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +46,11 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
+import com.speedment.internal.util.JavaLanguageNamer;
+import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
@@ -106,7 +110,9 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
 //999                file.add(Import.of(fu.getForeignEmt().ENTITY.getType()));
                     fu.imports().forEachOrdered(file::add);
-                    final String methodName = EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
+                    final String methodName = EntityTranslatorSupport.FIND + 
+                            EntityTranslatorSupport.pluralis(fu.getTable(), javaLanguageNamer()) +
+                            "By" + typeName(fu.getColumn());
                     // Record for later use in the construction of aggregate streamers
                     fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
                     final Type returnType = Type.of(Stream.class).add(fu.getEmt().GENERIC_OF_ENTITY);
@@ -114,7 +120,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                             //.add("return " + managerTypeName(fu.getTable()) + ".get()")
                             .add("return " + MANAGER_OF_METHOD + "(" + typeName(fu.getTable()) + ".class)")
                             //.add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
-                            .add("        .stream().filter(" + typeName(fu.getTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
+                            .add("        .stream().filter(" + typeName(fu.getTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
                     i.add(method);
                 })
                 .addForeignKeyConsumer((i, fk) -> {
@@ -134,11 +140,10 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     if (fu.getColumn().isNullable()) {
                         final String varName = variableName(fu.getColumn())+"_";
                         method.add("return get" + typeName(fu.getColumn()) + "()")
-                                .add(indent(
-                                        //".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
+                                .add(indent(//".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
 
                                         ".flatMap(" + varName + " -> " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).findAny("
-                                        + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ", " + varName + "));"
+                                        + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getName()) + ", " + varName + "));"
                                 //                                        ".flatMap(" + varName + " -> " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).stream()\n" + indent(
                                 //                                                ".filter(" + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n"
                                 //                                                + ".findAny()"
@@ -149,7 +154,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                         //method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
 
                         method.add("return " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).findAny("
-                                + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ", get" + typeName(fu.getColumn()) + "())\n"
+                                + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getName()) + ", get" + typeName(fu.getColumn()) + "())\n"
                                 + indent(".orElseThrow(() -> new SpeedmentException(\n" + indent(
                                         "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
                                 ) + "));\n"
@@ -181,7 +186,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
                 final Method method = Method.of(
-                        EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable),
+                        EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable, javaLanguageNamer()),
                         Type.of(Stream.class).add(Generic.of().setLowerBound(typeName(referencingTable)))
                 ).public_().add(OVERRIDE);
 
@@ -202,7 +207,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                 .add(toString(file))
                 .add(equalsMethod())
                 .add(hashCodeMethod())
-                .add(Method.of("getEntityClass_", Type.of(java.lang.Class.class).add(Generic.of().add(ENTITY.getType()))).public_().add(OVERRIDE)
+                .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(ENTITY.getType()))).public_().add(OVERRIDE)
                         .add("return " + ENTITY.getName() + ".class;")
                 );
 
@@ -212,7 +217,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
     private Method copy() {
         return Method.of("copy", ENTITY.getType()).public_().add(OVERRIDE)
-                .add("return new " + ENTITY.getImplName() + "(getSpeedment_(), this);");
+                .add("return new " + ENTITY.getImplName() + "(speedment(), this);");
 
     }
 

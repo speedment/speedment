@@ -110,7 +110,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled columns
      * @see Column
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Column> columns() {
         return table().columns().filter(HasEnabled::test);
@@ -122,7 +122,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled indexes
      * @see Index
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Index> indexes() {
         return table().indexes().filter(HasEnabled::test);
@@ -134,7 +134,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled foreign keys
      * @see ForeignKey
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends ForeignKey> foreignKeys() {
         return table().foreignKeys().filter(HasEnabled::test);
@@ -146,7 +146,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled primary key columns
      * @see PrimaryKeyColumn
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
         return table().primaryKeyColumns().filter(HasEnabled::test);

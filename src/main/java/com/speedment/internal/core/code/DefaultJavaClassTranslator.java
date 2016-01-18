@@ -45,8 +45,8 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
+import com.speedment.internal.util.JavaLanguageNamer;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
@@ -76,11 +76,13 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     private final C configEntity;
     private final Generator codeGenerator;
     private final Speedment speedment;
+    private final JavaLanguageNamer javaLanguageNamer;
 
     public DefaultJavaClassTranslator(Speedment speedment, Generator codeGenerator, C configEntity) {
         this.speedment = requireNonNull(speedment);
         this.configEntity = requireNonNull(configEntity);
         this.codeGenerator = requireNonNull(codeGenerator);
+        this.javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
     }
 
     @Override
@@ -118,7 +120,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().mainInterface().getSimpleName()+ " "+relativeName(getNode(), Project.class) + "." + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().mainInterface().getSimpleName() + " " + relativeName(getNode(), Project.class) + "." + GENERATED_JAVADOC_MESSAGE)
                 .add(AUTHOR.setValue("Speedment"));
     }
 
@@ -325,4 +327,10 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
 
         return constructor;
     }
+
+    @Override
+    public JavaLanguageNamer javaLanguageNamer() {
+        return javaLanguageNamer;
+    }
+
 }

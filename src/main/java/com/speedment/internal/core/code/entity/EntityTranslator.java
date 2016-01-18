@@ -35,8 +35,6 @@ import static com.speedment.internal.codegen.util.Formatting.shortName;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.Dbms;
 import com.speedment.internal.core.code.entity.EntityTranslatorSupport.ReferenceFieldType;
-import static com.speedment.internal.util.JavaLanguage.javaStaticFieldName;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +42,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import com.speedment.Entity;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
@@ -99,7 +96,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                 })
                 // Fields
                 .addColumnConsumer((i, c) -> {
-                    final ReferenceFieldType ref = EntityTranslatorSupport.getReferenceFieldType(file, table(), c, ENTITY.getType());
+                    final ReferenceFieldType ref = EntityTranslatorSupport.getReferenceFieldType(file, table(), c, ENTITY.getType(), javaLanguageNamer());
 
                     final Type entityType = ENTITY.getType();
                     final String shortEntityName = ENTITY.getName();
@@ -112,7 +109,7 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                         finder = EntityTranslatorSupport.getForeignKey(table(), c)
                                 .map(fkc -> {
                                     return ", fk -> fk.find"
-                                            + javaTypeName(c.getName())
+                                            + javaLanguageNamer().javaTypeName(c.getName())
                                             + "().orElse(null)";
                                 }).orElse("");
                     } else {
@@ -121,14 +118,14 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                                 .map(fkc -> {
                                     return ", "
                                             + shortEntityName + "::find"
-                                            + javaTypeName(c.getName());
+                                            + javaLanguageNamer().javaTypeName(c.getName());
 
                                 }).orElse("");
                     }
                     final String setter = ", " + shortEntityName + "::set" + typeName(c);
 
                     file.add(Import.of(ref.implType));
-                    i.add(Field.of(javaStaticFieldName(c.getName()), ref.type)
+                    i.add(Field.of(javaLanguageNamer().javaStaticFieldName(c.getName()), ref.type)
                             .public_().final_().static_()
                             .set(new ReferenceValue(
                                     "new " + shortName(ref.implType.getName())
@@ -156,7 +153,9 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
                     file.add(imp);
 
                     fu.imports().forEachOrdered(file::add);
-                    final String methodName = EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(fu.getTable()) + "By" + typeName(fu.getColumn());
+                    final String methodName = EntityTranslatorSupport.FIND
+                            + EntityTranslatorSupport.pluralis(fu.getTable(), javaLanguageNamer())
+                            + "By" + typeName(fu.getColumn());
                     // Record for later use in the construction of aggregate streamers
                     fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
                     final Type returnType = Type.of(Stream.class).add(fu.getEmt().GENERIC_OF_ENTITY);
@@ -223,7 +222,8 @@ public final class EntityTranslator extends EntityAndManagerTranslator<Interface
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
-                final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable), Type.of(Stream.class).add(new GenericImpl(typeName(referencingTable))));
+                final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
+                        javaLanguageNamer()), Type.of(Stream.class).add(new GenericImpl(typeName(referencingTable))));
 //                    .default_();
 //                if (methodNames.size() == 1) {
 //                    method.add("return " + methodNames.get(0) + "();");

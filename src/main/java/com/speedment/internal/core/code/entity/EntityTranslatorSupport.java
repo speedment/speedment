@@ -45,7 +45,6 @@ import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.util.Pluralis;
-import com.speedment.internal.util.JavaLanguage;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -54,23 +53,9 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.DOT;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
+import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -87,13 +72,14 @@ public final class EntityTranslatorSupport {
         instanceNotAllowed(getClass());
     }
 
-    public static Type getEntityType(Table table) {
+    public static Type getEntityType(Table table, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(table);
+        requireNonNull(javaLanguageNamer);
         final Project project = ancestor(table, Project.class).get();
 
         return Type.of(project.getPackageName().toLowerCase() + DOT
-            + relativeName(table, Project.class, JavaLanguage::javaPackageName) + DOT
-            + javaTypeName(table.getName())
+            + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
+            + javaLanguageNamer.javaTypeName(table.getName())
         );
     }
 
@@ -107,11 +93,18 @@ public final class EntityTranslatorSupport {
         }
     }
 
-    public static ReferenceFieldType getReferenceFieldType(File file, Table table, Column column, Type entityType) {
+    public static ReferenceFieldType getReferenceFieldType(
+            File file,
+            Table table,
+            Column column,
+            Type entityType,
+            JavaLanguageNamer javaLanguageNamer
+    ) {
         requireNonNull(file);
         requireNonNull(table);
         requireNonNull(column);
         requireNonNull(entityType);
+        requireNonNull(javaLanguageNamer);
 
         final Class<?> mapping = column.findTypeMapper().getJavaType();
 
@@ -119,7 +112,7 @@ public final class EntityTranslatorSupport {
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(fkc.findForeignTable());
+                final Type fkType = getEntityType(fkc.findForeignTable(), javaLanguageNamer);
 
                 file.add(Import.of(fkType));
 
@@ -187,8 +180,9 @@ public final class EntityTranslatorSupport {
         });
     }
 
-    public static String pluralis(Table table) {
-        return Pluralis.INSTANCE.pluralizeJavaIdentifier(JavaLanguage.javaTypeName(requireNonNull(table).getName()));
+    public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {
+        requireNonNull(table);
+        return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getName()), javaLanguageNamer);
     }
 
     public static Method toJson() {

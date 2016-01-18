@@ -21,10 +21,7 @@ import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.JavaLanguage.javaPackageName;
+import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -38,6 +35,7 @@ import static java.util.Objects.requireNonNull;
  */
 public interface JavaClassTranslator<T extends HasName & HasMainInterface> extends Translator<T, File> {
 
+    
     /**
      * Returns the name of the current node formatted as a java variable.
      * <p>
@@ -70,7 +68,7 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      */
     default String variableName(HasName node) {
         requireNonNull(node);
-        return JavaLanguage.javaVariableName(node.getName());
+        return javaLanguageNamer().javaVariableName(node.getName());
     }
 
     /**
@@ -104,7 +102,7 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * @return the node name as a type
      */
     default String typeName(HasName node) {
-        return JavaLanguage.javaTypeName(requireNonNull(node).getName());
+        return javaLanguageNamer().javaTypeName(requireNonNull(node).getName());
     }
 
     /**
@@ -211,9 +209,9 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
     default String basePackageName() {
         final String packName = project().getPackageName().toLowerCase() + ".";
         if (getNode() instanceof Project) {
-            return packName + javaPackageName(project().getName());
+            return packName + javaLanguageNamer().javaPackageName(project().getName());
         } else {
-            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPackageName);
+            return packName + relativeName(getNode(), Project.class, javaLanguageNamer()::javaPackageName);
         }
     }
 
@@ -227,4 +225,7 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
     default String baseDirectoryName() {
         return basePackageName().replace(".", "/");
     }
+    
+    JavaLanguageNamer javaLanguageNamer();
+    
 }

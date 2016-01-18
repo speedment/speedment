@@ -17,7 +17,6 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.code.StandardTranslatorKey;
 import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.Translator;
 import com.speedment.code.TranslatorKey;
@@ -25,6 +24,8 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.File;
 import java.util.stream.Stream;
+import com.speedment.internal.util.JavaLanguageNamer;
+import java.util.function.Supplier;
 
 /**
  * This Component interface is used for Speedmens's code generation.
@@ -109,7 +110,7 @@ public interface CodeGenerationComponent extends Component {
      * registered key.
      *
      * @param <T> Document type
-     * @param document
+     * @param document to use when making translators
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
@@ -121,8 +122,8 @@ public interface CodeGenerationComponent extends Component {
      * included in the Stream.
      *
      * @param <T> Document type
-     * @param document
-     * @param hasKey
+     * @param document to use when making translators
+     * @param hasKey key
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
@@ -137,11 +138,16 @@ public interface CodeGenerationComponent extends Component {
      * included in the Stream.
      *
      * @param <T> Document type
-     * @param document
-     * @param key
+     * @param document to use when making translators
+     * @param key key
      * @return a Stream of newly created {@code Translator Translators} for the
      * given Document
      */
     <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document, String key);
+    
+    
+    JavaLanguageNamer javaLanguageNamer();
+    
+    void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
 
 }
