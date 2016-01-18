@@ -40,14 +40,10 @@ import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -55,24 +51,6 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
@@ -95,7 +73,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     @Override
     protected Class make(File file) {
 
-        return new ClassBuilder(MANAGER.getImplName())
+        return new ClassBuilder(manager.getImplName())
             .addColumnConsumer((i, c) -> {
 
                 final TypeMapper<?, ?> mapper = c.findTypeMapper();
@@ -113,16 +91,16 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .build()
             .public_()
             .setSupertype(Type.of(AbstractSqlManager.class)
-                .add(Generic.of().add(ENTITY.getType()))
+                .add(Generic.of().add(entity.getType()))
             )
-            .call(i -> file.add(Import.of(ENTITY.getImplType())))
+            .call(i -> file.add(Import.of(entity.getImplType())))
             .add(Constructor.of()
                 .public_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setSqlEntityMapper(this::defaultReadEntity);"))
-            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(GENERIC_OF_ENTITY)).public_().add(OVERRIDE)
-                .add("return " + ENTITY.getName() + ".class;"))
+            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(genericOfEntity)).public_().add(OVERRIDE)
+                .add("return " + entity.getName() + ".class;"))
             .add(generateGet(file))
             .add(generateSet(file))
             .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
@@ -131,10 +109,10 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                     + ".getProject().findTableByName(\"" + relativeName(table(), Dbms.class) + "\");"))
             .
             add(defaultReadEntity(file))
-            .add(Method.of("newInstance", ENTITY.getType())
+            .add(Method.of("newInstance", entity.getType())
                 .public_().add(OVERRIDE)
-                .add("return new " + Formatting.shortName(ENTITY.getImplType().getName()) + "(" + SPEEDMENT_VARIABLE_NAME + ");")
-                .call($ -> file.add(Import.of(ENTITY.getImplType())))
+                .add("return new " + Formatting.shortName(entity.getImplType().getName()) + "(" + SPEEDMENT_VARIABLE_NAME + ");")
+                .call($ -> file.add(Import.of(entity.getImplType())))
             )
             .add(generatePrimaryKeyFor(file));
     }
@@ -167,10 +145,10 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
         file.add(Import.of(Type.of(SQLException.class)));
         file.add(Import.of(Type.of(SpeedmentException.class)));
 
-        final Method method = Method.of("defaultReadEntity", ENTITY.getType())
+        final Method method = Method.of("defaultReadEntity", entity.getType())
             .protected_()
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
-            .add("final " + ENTITY.getName() + " entity = newInstance();");
+            .add("final " + entity.getName() + " entity = newInstance();");
 
         final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
@@ -230,7 +208,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     @Override
     protected String getFileName() {
-        return MANAGER.getImplName();
+        return manager.getImplName();
     }
 
     @Override
@@ -239,13 +217,13 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     }
 
     public Type getImplType() {
-        return MANAGER.getImplType();
+        return manager.getImplType();
     }
 
     protected Method generateGet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("get", OBJECT).public_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()))
+            .add(Field.of("entity", entity.getType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add("switch (column.getName()) " + block(
                 columns().map(c -> "case \"" + c.getName() + "\" : return entity." + GETTER_METHOD_PREFIX + typeName(c) + "();").collect(Collectors.joining(nl()))
@@ -256,7 +234,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     protected Method generateSet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("set", VOID).public_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()))
+            .add(Field.of("entity", entity.getType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
@@ -269,7 +247,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).public_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()));
+            .add(Field.of("entity", entity.getType()));
 
         final int count = (int) primaryKeyColumns().count();
         switch (count) {

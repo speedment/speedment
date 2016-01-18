@@ -25,7 +25,6 @@ import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.config.db.Table;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
@@ -72,18 +71,16 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
         }
     }
 
-    public final ClassType ENTITY = new ClassType("", "Impl"),
-            BUILDER = new ClassType("Builder", "Impl"),
-            CONFIG = new ClassType("Config", "Impl"),
-            MANAGER = new ClassType("Manager", "Impl");
-//            FIELD = new ClassType("Field", "Impl");
+    protected final ClassType entity = new ClassType("", "Impl"),
+            builder = new ClassType("Builder", "Impl"),
+            config = new ClassType("Config", "Impl"),
+            manager = new ClassType("Manager", "Impl");
 
-    public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
-            GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
-            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType());
-            //GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
+    protected final Generic genericOfPk = Generic.of().add(typeOfPK()),
+            genericOfEntity = Generic.of().add(entity.getType()),
+            genericOfManager = Generic.of().add(manager.getType());
 
-    public EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
+    protected EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);
     }
 
@@ -106,5 +103,13 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
                 return DefaultType.list(DefaultType.WILDCARD);
             }
         }
+    }
+    
+    public final ClassType entity() {
+        return entity;
+    }
+    
+    public final Generic genericOfEntity() {
+        return genericOfEntity;
     }
 }

@@ -94,11 +94,11 @@ public final class EntityTranslatorSupport {
     }
 
     public static ReferenceFieldType getReferenceFieldType(
-            File file,
-            Table table,
-            Column column,
-            Type entityType,
-            JavaLanguageNamer javaLanguageNamer
+        File file,
+        Table table,
+        Column column,
+        Type entityType,
+        JavaLanguageNamer javaLanguageNamer
     ) {
         requireNonNull(file);
         requireNonNull(table);
