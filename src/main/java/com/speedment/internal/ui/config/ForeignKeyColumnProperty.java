@@ -83,7 +83,7 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     public final ObjectBinding<Table> foreignTableProperty() {
-        return createObjectBinding(this::findForeignTable, foreignTableNameProperty());
+        return createObjectBinding(ForeignKeyColumn.super::findForeignTable, foreignTableNameProperty());
     }
 
     @Override
@@ -92,7 +92,7 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     public final ObjectBinding<Column> foreignColumnProperty() {
-        return createObjectBinding(this::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
+        return createObjectBinding(ForeignKeyColumn.super::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
     }
 
     @Override
