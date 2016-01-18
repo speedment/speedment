@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -37,7 +38,7 @@ import javafx.collections.ObservableList;
  *
  * @author Emil Forslund
  */
-public interface DocumentProperty extends Document, HasUiVisibleProperties, Observable {
+public interface DocumentProperty extends Document, HasUiVisibleProperties, HasMainInterface, Observable {
     
     StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty);
     

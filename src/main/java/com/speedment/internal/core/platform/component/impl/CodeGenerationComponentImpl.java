@@ -24,6 +24,7 @@ import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
@@ -80,7 +81,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     }
 
     private <T extends HasMainInterface> Map<String, TranslatorConstructor<HasMainInterface>> aquireMap(Class<T> clazz) {
-        return map.computeIfAbsent(clazz, $ -> new ConcurrentHashMap<>());
+        return map.computeIfAbsent(clazz, s -> new ConcurrentHashMap<>());
     }
 
     @Override
@@ -89,18 +90,12 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     }
 
     @Override
-    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document, String key) {
-        return translators(document, key::equals);
+    public <T extends HasMainInterface> Translator<T, File> findTranslator(T document, String key) {
+        return translators(document, key::equals)
+            .findAny()
+            .orElseThrow(noTranslatorFound(document, key));
     }
 
-//    @Override
-//    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
-//        return MapStream.of(map)
-//                .filterKey(c -> c.isInstance(document))
-//                .values()
-//                .flatMap(m -> m.values().stream())
-//                .map(constructor -> ((TranslatorConstructor<T>) constructor).apply(getSpeedment(), generator, document));
-//    }
     private <T extends HasMainInterface> Stream<? extends Translator<T, File>>
             translators(T document, Predicate<String> nameFilter) {
         return MapStream.of(map)
@@ -120,4 +115,11 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
         this.javaLanguageSupplier = supplier;
     }
  
+    private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
+        return () -> new SpeedmentException(
+            "Found no translator with key '" + 
+            key + "' for document '" + 
+            doc.mainInterface().getSimpleName() + "'."
+        );
+    }
 }
