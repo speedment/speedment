@@ -28,6 +28,8 @@ import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;
 import org.junit.Test;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *

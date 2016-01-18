@@ -16,16 +16,17 @@
  */
 package com.speedment.internal.ui.config;
 
-import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.util.OptionalBoolean;
+import static java.util.Collections.newSetFromMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -37,6 +38,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -94,6 +96,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      * {@code config} should be ignored as the change is created internally.
      */
     private final transient EventMonitor monitor;
+    
+    /**
+     * Invalidation listeners required by the {@code Observable} interface.
+     */
+    private final transient Set<InvalidationListener> listeners;
 
     /**
      * Wraps the specified raw map in an observable map so that any changes to
@@ -108,6 +115,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         this.properties = new ConcurrentHashMap<>();
         this.documents  = new ConcurrentHashMap<>();
         this.monitor    = new EventMonitor();
+        this.listeners  = newSetFromMap(new ConcurrentHashMap<>());
         
         this.config.addListener((MapChangeListener.Change<? extends String, ? extends Object> change) -> {
             
@@ -203,41 +211,51 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
     
     @Override
-    public Optional<Object> get(String key) {
+    public final Optional<Object> get(String key) {
         return Optional.ofNullable(config.get(key));
     }
     
     @Override
-    public OptionalBoolean getAsBoolean(String key) {
+    public final OptionalBoolean getAsBoolean(String key) {
         return OptionalBoolean.ofNullable((Boolean) config.get(key));
     }
 
     @Override
-    public OptionalLong getAsLong(String key) {
+    public final OptionalLong getAsLong(String key) {
         final Number value = (Number) config.get(key);
         return value == null ? OptionalLong.empty() : OptionalLong.of(value.longValue());
     }
 
     @Override
-    public OptionalDouble getAsDouble(String key) {
+    public final OptionalDouble getAsDouble(String key) {
         final Number value = (Number) config.get(key);
         return value == null ? OptionalDouble.empty() : OptionalDouble.of(value.doubleValue());
     }
 
     @Override
-    public OptionalInt getAsInt(String key) {
+    public final OptionalInt getAsInt(String key) {
         final Number value = (Number) config.get(key);
         return value == null ? OptionalInt.empty() : OptionalInt.of(value.intValue());
     }
     
     @Override
-    public Optional<String> getAsString(String key) {
+    public final Optional<String> getAsString(String key) {
         return get(key).map(String.class::cast);
     }
 
     @Override
-    public void put(String key, Object value) {
+    public final void put(String key, Object value) {
         config.put(key, value);
+    }
+
+    @Override
+    public final void addListener(InvalidationListener listener) {
+        listeners.add(listener);
+    }
+    
+    @Override
+    public final void removeListener(InvalidationListener listener) {
+        listeners.remove(listener);
     }
     
     @Override
@@ -333,9 +351,21 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
             .mapValue((key, value) -> createDocument(key, value))
             .values();
     }
+
+    @Override
+    public final void invalidate() {
+        getParent()
+            .filter(DocumentProperty.class::isInstance)
+            .map(DocumentProperty.class::cast)
+            .ifPresent(DocumentProperty::invalidate);
+        
+        listeners.forEach(listener -> listener.invalidated(this));
+    }
     
     private <T, P extends Property<T>> P prepare(String key, P property) {
         property.addListener((ObservableValue<? extends T> observable, T oldValue, T newValue) -> {
+            invalidate();
+            
             monitor.runWithoutGeneratingEvents(() -> 
                 config.put(key, newValue)
             );
@@ -349,6 +379,8 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         monitor.runWithoutGeneratingEvents(() -> {
 
             list.addListener((ListChangeListener.Change<? extends T> change) -> {
+                invalidate();
+                
                 monitor.runWithoutGeneratingEvents(() -> {
                     @SuppressWarnings("unchecked")
                     final List<Map<String, Object>> rawList = DOCUMENT_LIST_TYPE.cast(config.get(key));

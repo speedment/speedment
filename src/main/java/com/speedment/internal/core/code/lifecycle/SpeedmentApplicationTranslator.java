@@ -38,14 +38,14 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

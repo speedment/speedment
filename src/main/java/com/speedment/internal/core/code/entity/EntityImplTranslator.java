@@ -54,6 +54,14 @@ import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

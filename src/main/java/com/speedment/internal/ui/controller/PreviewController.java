@@ -60,6 +60,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -159,12 +160,7 @@ public final class PreviewController implements Initializable {
                             return "(No code is generated for disabled nodes.)";
                         }
                     },
-                    table.columnsProperty(),
-                    table.indexesProperty(),
-                    table.foreignKeysProperty(),
-                    table.enabledProperty(),
-                    table.aliasProperty(),
-                    table.nameProperty()
+                    table
                 );
 
                 loadPreview(text);
@@ -179,12 +175,7 @@ public final class PreviewController implements Initializable {
                             return "(No code is generated for disabled nodes.)";
                         }
                     },
-                    project.dbmsesProperty(),
-                    project.enabledProperty(),
-                    project.nameProperty(),
-                    project.configPathProperty(),
-                    project.packageLocationProperty(),
-                    project.packageNameProperty()
+                    project
                 );
 
                 loadPreview(text);

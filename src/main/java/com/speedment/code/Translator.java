@@ -25,6 +25,7 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -48,11 +49,20 @@ import static java.util.Objects.requireNonNull;
 public interface Translator<T extends Document & HasMainInterface, R> extends Supplier<R> {
 
     /**
-     * The node being translated.
+     * The document being translated.
      *
-     * @return the node
+     * @return  the document
      */
-    T getNode();
+    T getDocument();
+    
+    /**
+     * The document being translated wrapped in a {@link HasAlias}.
+     * 
+     * @return  the document
+     */
+    default HasAlias getAliasDocument() {
+        return HasAlias.of(getDocument());
+    }
 
     /**
      * Return this node or any ancestral node that is a {@link Project}. If no
@@ -163,20 +173,20 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      */
     default <E extends Document> E getGenericConfigEntity(Class<E> clazz) {
         requireNonNull(clazz);
-        if (clazz.isAssignableFrom(getNode().mainInterface())) {
+        if (clazz.isAssignableFrom(getDocument().mainInterface())) {
             @SuppressWarnings("unchecked")
-            final E result = (E) getNode();
+            final E result = (E) getDocument();
             return result;
         }
 
-        return getNode()
+        return getDocument()
                 //.ancestor(clazz)
                 .ancestors()
                 .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException(
-                        getNode() + " is not a " + clazz.getSimpleName()
+                        getDocument() + " is not a " + clazz.getSimpleName()
                         + " and does not have a parent that is a " + clazz.getSimpleName()
                 ));
     }

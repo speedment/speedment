@@ -64,6 +64,18 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

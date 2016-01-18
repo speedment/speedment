@@ -34,7 +34,6 @@ import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.Initalizer;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 

@@ -24,6 +24,7 @@ import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -36,7 +37,7 @@ import javafx.collections.ObservableList;
  *
  * @author Emil Forslund
  */
-public interface DocumentProperty extends Document, HasUiVisibleProperties {
+public interface DocumentProperty extends Document, HasUiVisibleProperties, Observable {
     
     StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty);
     
@@ -54,4 +55,6 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties {
     Stream<? extends DocumentProperty> children();
     
     Stream<ObservableList<DocumentProperty>> childrenProperty();
+    
+    void invalidate();
 }

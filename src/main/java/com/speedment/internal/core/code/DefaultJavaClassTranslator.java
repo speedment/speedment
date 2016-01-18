@@ -48,13 +48,13 @@ import com.speedment.config.db.trait.HasName;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import com.speedment.internal.util.JavaLanguageNamer;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -86,7 +86,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     }
 
     @Override
-    public C getNode() {
+    public C getDocument() {
         return configEntity;
     }
 
@@ -120,7 +120,7 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().mainInterface().getSimpleName() + " " + relativeName(getNode(), Project.class) + "." + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getDocument().mainInterface().getSimpleName() + " " + relativeName(getDocument(), Project.class) + "." + GENERATED_JAVADOC_MESSAGE)
                 .add(AUTHOR.setValue("Speedment"));
     }
 
@@ -225,13 +225,13 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
                             .forEachOrdered(c -> actor.accept(i, c)))
             );
 
-            if (Table.class.equals(getNode().mainInterface())) {
+            if (Table.class.equals(getDocument().mainInterface())) {
                 schema().tables()
                         .filter(HasEnabled::test)
                         .flatMap(t -> t.foreignKeys())
                         .filter(fk -> fk.foreignKeyColumns()
                                 //.filter(ForeignKeyColumn::isEnabled)
-                                .filter(fkc -> fkc.getForeignTableName().equals(getNode().getName()))
+                                .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
                                 .findFirst()
                                 .isPresent()
                         )
