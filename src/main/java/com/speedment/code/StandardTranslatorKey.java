@@ -25,24 +25,25 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public interface StandardTranslatorKey {
+public final class StandardTranslatorKey {
 
-    final TranslatorKey<Project> 
+    public final static TranslatorKey<Project> 
             SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication"),
             SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata");
     
-    final TranslatorKey<Table> 
+    public final static TranslatorKey<Table> 
             ENTITY = new TranslatorKeyImpl<>("Entity"),
             ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl"),
             MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl");
 
     
-    static Stream<TranslatorKey<Project>> projectTranslatorKeys() {
+    public static Stream<TranslatorKey<Project>> projectTranslatorKeys() {
         return Stream.of(SPEEDMENT_APPLICATION, SPEEDMENT_APPLICATION_METADATA);
     }
     
-    static Stream<TranslatorKey<Table>> tableTranslatorKeys() {
+    public static Stream<TranslatorKey<Table>> tableTranslatorKeys() {
         return Stream.of(ENTITY, ENTITY_IMPL, MANAGER_IMPL);
     }
 
+    private StandardTranslatorKey() {}
 }

@@ -24,7 +24,7 @@ import com.speedment.config.db.trait.HasMainInterface;
  * @author Per Minborg
  * @param <T> Document type
  */
-public class TranslatorKeyImpl<T extends HasMainInterface> implements TranslatorKey<T> {
+public final class TranslatorKeyImpl<T extends HasMainInterface> implements TranslatorKey<T> {
 
     private final String key;
 
@@ -37,4 +37,8 @@ public class TranslatorKeyImpl<T extends HasMainInterface> implements Translator
         return key;
     }
 
+    @Override
+    public String toString() {
+        return key;
+    }
 }

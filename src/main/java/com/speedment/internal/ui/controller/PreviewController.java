@@ -16,24 +16,14 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.Speedment;
 import com.speedment.code.StandardTranslatorKey;
-import com.speedment.code.Translator;
 import com.speedment.code.TranslatorKey;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.config.Document;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.event.PreviewEvent;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.core.code.entity.EntityImplTranslator;
-import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DocumentProperty;
@@ -59,8 +49,10 @@ import javafx.scene.web.WebView;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.value.WeakChangeListener;
 import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
+import javafx.beans.value.ChangeListener;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -119,16 +111,16 @@ public final class PreviewController implements Initializable {
                         }
                         
                         target.getSelectionModel().select(0);
-                        events.notify(new PreviewEvent(document, nodes));
+//                        events.notify(new PreviewEvent(document, nodes));
                     }
                 }
             });
 
         // When the preview component is repainted, bind its content to the 
         // correct document
-        events.on(PreviewEvent.class, ev -> {
-            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
-        });
+//        events.on(PreviewEvent.class, ev -> {
+//            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
+//        });
         
         // React on changes in the dropdown list
         target.getSelectionModel().selectedItemProperty().addListener((ob, o, selected) -> {
@@ -208,11 +200,14 @@ public final class PreviewController implements Initializable {
             for (int i = 0; i < preview.length; i++) {
                 final int j = i;
                 
-                preview[i].addListener(new WeakChangeListener<>((ob, o, newText) -> {
+                final ChangeListener<String> change = (ob, o, newText) -> {
                     updateElement(j, newText);
-                }));
-
-                updateElement(i, preview[i].get());
+                };
+                
+                preview[j].addListener(change);
+                updateElement(j, preview[j].get());
+                
+                runLater(() -> onLoad.add(() -> preview[j].removeListener(change)));
             }
         });
         
@@ -227,63 +222,12 @@ public final class PreviewController implements Initializable {
 
     private void updateElement(int index, String newText) {
         final WebEngine engine = web.getEngine();
-        engine.getDocument().getElementById("code_" + index).setTextContent(newText);
-        engine.executeScript("Prism.highlightAll()");
-    }
-    
-    @FunctionalInterface
-    private interface TranslatorConstructor<DOC extends Document> {
-        Translator create(Speedment speedment, Generator gen, DOC document);
-    }
-    
-    private enum ProjectTarget implements TranslatorConstructor<Project> {
-        
-        APPLICATION          ("Application", SpeedmentApplicationTranslator::new),
-        APPLICATION_METADATA ("Application Metadata", SpeedmentApplicationMetadataTranslator::new);
-        
-        private final String label;
-        private final TranslatorConstructor<Project> constructor;
-        
-        private ProjectTarget(String label, TranslatorConstructor<Project> constructor) {
-            this.label       = label;
-            this.constructor = constructor;
-        }
-
-        @Override
-        public Translator create(Speedment speedment, Generator gen, Project document) {
-            return constructor.create(speedment, gen, document);
-        }
-
-        @Override
-        public String toString() {
-            return label;
+        final Element element = engine.getDocument().getElementById("code_" + index);
+        if (element != null) {
+            element.setTextContent(newText);
+            engine.executeScript("Prism.highlightAll()");
         }
     }
-    
-    private enum TableTarget implements TranslatorConstructor<Table> {
-        
-        ENTITY              ("Entity", EntityTranslator::new),
-        ENTITY_IMPL         ("Entity Implementation", EntityImplTranslator::new),
-        ENTITY_MANAGER_IMPL ("Manager Implementation", EntityManagerImplTranslator::new);
-        
-        private final String label;
-        private final TranslatorConstructor<Table> constructor;
-        
-        private TableTarget(String label, TranslatorConstructor<Table> constructor) {
-            this.label       = label;
-            this.constructor = constructor;
-        }
-
-        @Override
-        public Translator create(Speedment speedment, Generator gen, Table document) {
-            return constructor.create(speedment, gen, document);
-        }
-        
-        @Override
-        public String toString() {
-            return label;
-        }
-    } 
 
     private final static String
         ELEMENT_PREFIX = "<pre class=\"line-numbers\"><code id=\"code_",
