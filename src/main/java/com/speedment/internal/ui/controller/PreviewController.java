@@ -101,15 +101,13 @@ public final class PreviewController implements Initializable {
                         if (document instanceof Project) {
                             target.setItems(FXCollections.observableArrayList(
                                 Stream.of(ProjectTarget.values())
-                                    .map(t -> (TranslatorConstructor<? extends Document>) t)
-                                    .map(t -> (TranslatorConstructor<Document>) t)
+                                    .map(PreviewController::castConstructor)
                                     .collect(toList())
                             ));
                         } else if (document instanceof Table) {
                             target.setItems(FXCollections.observableArrayList(
                                 Stream.of(TableTarget.values())
-                                    .map(t -> (TranslatorConstructor<? extends Document>) t)
-                                    .map(t -> (TranslatorConstructor<Document>) t)
+                                    .map(PreviewController::castConstructor)
                                     .collect(toList())
                             ));
                         }
@@ -193,6 +191,12 @@ public final class PreviewController implements Initializable {
                 filename.setText("");
             }
         }
+    }
+    
+    private static <T extends Document> TranslatorConstructor<Document> castConstructor(TranslatorConstructor<T> constructor) {
+        @SuppressWarnings("unchecked")
+        final TranslatorConstructor<? extends Document> casted = constructor;
+        return (TranslatorConstructor<Document>) casted;
     }
     
     public static Node create(UISession session) {
