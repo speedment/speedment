@@ -145,6 +145,11 @@ public interface CodeGenerationComponent extends Component {
      */
     <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document, String key);
     
+    /**
+     * Returns the current {@link JavaLanguageNamer} used by Speedment.
+     * 
+     * @return the current {@link JavaLanguageNamer} used by Speedment
+     */
     
     JavaLanguageNamer javaLanguageNamer();
     

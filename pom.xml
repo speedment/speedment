@@ -126,6 +126,12 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+                     
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
+            </plugin>
             
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -283,6 +289,16 @@
             </build>
         </profile>
     </profiles>
+        
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
         
     <dependencies>
 
