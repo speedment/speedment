@@ -45,8 +45,8 @@ public interface HasNameProperty extends DocumentProperty, HasName {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 
-                "Name", 
-                "The name of the persisted entity represented by this node."
+                "Database Name", 
+                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
             )
         );
     }

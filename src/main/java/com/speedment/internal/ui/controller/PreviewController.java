@@ -30,6 +30,7 @@ import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.internal.ui.util.Loader;
@@ -246,7 +247,7 @@ public final class PreviewController implements Initializable {
     private enum ProjectTarget implements TranslatorConstructor<Project> {
         
         APPLICATION          ("Application", SpeedmentApplicationTranslator::new),
-        APPLICATION_METADATA ("Application Metadata", SpeedmentApplicationTranslator::new);
+        APPLICATION_METADATA ("Application Metadata", SpeedmentApplicationMetadataTranslator::new);
         
         private final String label;
         private final TranslatorConstructor<Project> constructor;

@@ -27,6 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,8 +59,13 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(new DefaultStringPropertyItem(
+            Stream.of(
+                new StringPropertyItem(
+                    nameProperty(), 
+                    "Project Name", 
+                    "The name that should be used for this project."
+                ),
+                new DefaultStringPropertyItem(
                     packageNameProperty(),
                     new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
                     "Package Name",
