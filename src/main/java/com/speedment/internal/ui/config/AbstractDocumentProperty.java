@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -340,11 +341,15 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         return new DefaultDocumentProperty(this, data);
     } 
     
+    @SuppressWarnings("unchecked")
+    private static final Function<Object, List<Object>> UNCHECKED_LIST_CASTER =
+        dp -> (List<Object>)dp;
+    
     @Override
     public final Stream<DocumentProperty> children() {
         return stream()
             .filterValue(List.class::isInstance)
-            .mapValue(list -> (List<Object>) list)
+            .mapValue(UNCHECKED_LIST_CASTER)
             .flatMapValue(list -> list.stream())
             .filterValue(obj -> obj instanceof Map<?, ?>)
             .mapValue(DOCUMENT_TYPE::cast)

@@ -70,6 +70,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
         this.generator = generator;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor) {
         aquireMap(clazz).put(key, (TranslatorConstructor<HasMainInterface>) constructor);
@@ -92,10 +93,11 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     @Override
     public <T extends HasMainInterface> Translator<T, File> findTranslator(T document, String key) {
         return translators(document, key::equals)
-            .findAny()
-            .orElseThrow(noTranslatorFound(document, key));
+                .findAny()
+                .orElseThrow(noTranslatorFound(document, key));
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends HasMainInterface> Stream<? extends Translator<T, File>>
             translators(T document, Predicate<String> nameFilter) {
         return MapStream.of(map)
@@ -114,12 +116,12 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     public void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier) {
         this.javaLanguageSupplier = supplier;
     }
- 
+
     private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
         return () -> new SpeedmentException(
-            "Found no translator with key '" + 
-            key + "' for document '" + 
-            doc.mainInterface().getSimpleName() + "'."
+                "Found no translator with key '"
+                + key + "' for document '"
+                + doc.mainInterface().getSimpleName() + "'."
         );
     }
 }
