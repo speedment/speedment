@@ -139,7 +139,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     }
 
     public ObjectBinding<Class<?>> databaseTypeObjectProperty() {
-        return createObjectBinding(this::findDatabaseType, databaseTypeProperty());
+        return createObjectBinding(Column.super::findDatabaseType, databaseTypeProperty());
     }
 
     @Override
