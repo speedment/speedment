@@ -19,7 +19,6 @@ package com.speedment.internal.util.document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.codegen.lang.models.Value;
 import com.speedment.internal.util.Trees;
 import com.speedment.stream.MapStream;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
@@ -33,18 +32,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.NoSuchElementException;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -170,7 +159,7 @@ public final class DocumentUtil {
             final Function<String, String> nameMapper
     ) {
         requireNonNulls(document, from, nameMapper);
-        final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
+        final StringJoiner sj = new StringJoiner(separator).setEmptyValue("");
         final List<HasName> ancestors = document.ancestors()
                 .filter(HasName.class::isInstance)
                 .map(HasName.class::cast)

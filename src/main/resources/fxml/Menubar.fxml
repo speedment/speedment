@@ -25,6 +25,14 @@
                 <MenuItem fx:id="mbGenerate" mnemonicParsing="false" text="Generate" />
             </items>
         </Menu>
+        <Menu fx:id="menuWindow" mnemonicParsing="false" text="Window">
+            <items>
+                <MenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
+                <MenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
+                <MenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
+                <MenuItem fx:id="mbPreview" mnemonicParsing="false" text="Preview" />
+            </items>
+        </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
             <items>
                 <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />

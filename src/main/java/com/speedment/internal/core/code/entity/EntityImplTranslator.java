@@ -55,7 +55,6 @@ import static java.util.Objects.requireNonNull;
 public final class EntityImplTranslator extends EntityAndManagerTranslator<Class> {
 
     public static final String SPEEDMENT_NAME = "speedment";
-    private static final String MANAGER_METHOD = "manager_";
     private static final String MANAGER_OF_METHOD = "managerOf_";
 
     public EntityImplTranslator(Speedment speedment, Generator cg, Table configEntity) {

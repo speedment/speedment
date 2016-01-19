@@ -27,7 +27,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -43,6 +42,10 @@ public final class MenubarController implements Initializable {
     private @FXML MenuItem mbSaveAs;
     private @FXML MenuItem mbQuit;
     private @FXML MenuItem mbGenerate;
+    private @FXML MenuItem mbProjectTree;
+    private @FXML MenuItem mbWorkspace;
+    private @FXML MenuItem mbOutput;
+    private @FXML MenuItem mbPreview;
     private @FXML MenuItem mbGitHub;
     private @FXML MenuItem mbAbout;
     
@@ -58,7 +61,14 @@ public final class MenubarController implements Initializable {
         mbSave.setGraphic(SilkIcon.DISK.view());
         mbSaveAs.setGraphic(SilkIcon.DISK_MULTIPLE.view());
         mbQuit.setGraphic(SilkIcon.DOOR_IN.view());
+        
         mbGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT.view());
+        
+        mbProjectTree.setGraphic(SilkIcon.APPLICATION_SIDE_TREE.view());
+        mbWorkspace.setGraphic(SilkIcon.APPLICATION_FORM.view());
+        mbOutput.setGraphic(SilkIcon.APPLICATION_XP_TERMINAL.view());
+        mbPreview.setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
+        
         mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
         mbAbout.setGraphic(SilkIcon.INFORMATION.view());
         
@@ -67,7 +77,14 @@ public final class MenubarController implements Initializable {
         mbSave.setOnAction(session.saveProject());
         mbSaveAs.setOnAction(session.saveProjectAs());
         mbQuit.setOnAction(session.quit());
+        
         mbGenerate.setOnAction(session.generate());
+        
+        mbProjectTree.setOnAction(session.toggleProjectTree());
+        mbWorkspace.setOnAction(session.toggleWorkspace());
+        mbOutput.setOnAction(session.toggleOutput());
+        mbPreview.setOnAction(session.togglePreview());
+        
         mbGitHub.setOnAction(session.showGithub());
         mbAbout.setOnAction(ev -> {
             AboutController.createAndShow(session);

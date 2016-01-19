@@ -69,11 +69,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import org.controlsfx.glyphfont.FontAwesome;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.SplitPane;
 
 /**
  *
@@ -291,6 +292,87 @@ public final class UISession {
                 LOGGER.error(ex, "Error! Failed to generate code.");
                 
                 showError("Failed to generate code", ex.getMessage(), ex);
+            }
+        });
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleProjectTree() {
+        return toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleWorkspace() {
+        return toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleOutput() {
+        return toggle("output", hiddenOutput, StoredNode.InsertAt.END);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E togglePreview() {
+        return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
+    }
+    
+    private final static class StoredNode {
+        
+        private enum InsertAt {
+            BEGINNING, END
+        }
+        
+        private final Node node;
+        private final SplitPane parent;
+
+        private StoredNode(Node node, SplitPane parent) {
+            this.node             = requireNonNull(node);
+            this.parent           = requireNonNull(parent);
+        }
+    }
+    
+    private final ObjectProperty<StoredNode>
+        hiddenProjectTree = new SimpleObjectProperty<>(),
+        hiddenWorkspace   = new SimpleObjectProperty<>(),
+        hiddenOutput      = new SimpleObjectProperty<>(),
+        hiddenPreview     = new SimpleObjectProperty<>();
+    
+    private <T extends Event, E extends EventHandler<T>>  E toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
+        return on(event -> {
+            final SplitPane parent;
+            final Node node;
+            
+            if (hidden.get() == null) {
+                node = this.stage.getScene().lookup("#" + cssId);
+            
+                if (node != null) {
+                    Node n = node;
+                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
+                    parent = (SplitPane) n;
+                    
+                    if (parent != null) {
+                        parent.getItems().remove(node);
+                        hidden.set(new StoredNode(node, parent));
+                    } else {
+                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
+                    }
+                } else {
+                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
+                }
+            } else {
+                parent = hidden.get().parent;
+                
+                if (parent != null) {
+                    node = hidden.get().node;
+
+                    switch (insertAt) {
+                        case BEGINNING : parent.getItems().add(0, node); break;
+                        case END       : parent.getItems().add(node); break;
+                        default : throw new UnsupportedOperationException(
+                            "Unknown InsertAt enum constant '" + insertAt + "'."
+                        );
+                    }
+
+                    hidden.set(null);
+                } else {
+                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
+                }
             }
         });
     }
