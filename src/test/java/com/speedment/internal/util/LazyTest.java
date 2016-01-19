@@ -68,7 +68,7 @@ public class LazyTest {
 
     @Before
     public void setUp() {
-        instance = new Lazy<>();
+        instance = Lazy.create();
     }
 
     @After
@@ -95,7 +95,7 @@ public class LazyTest {
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         for (int i = 0; i < 10000; i++) {
-            final Lazy<Long> lazy = new Lazy<>();
+            final Lazy<Long> lazy = Lazy.create();
             final Callable<Long> callable = () -> {
                 return lazy.getOrCompute(() -> Thread.currentThread().getId());
             };
