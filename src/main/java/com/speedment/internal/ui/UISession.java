@@ -71,6 +71,8 @@ import javafx.util.Pair;
 import org.controlsfx.glyphfont.FontAwesome;
 import java.util.Map;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -90,7 +92,7 @@ public final class UISession {
     }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static double DIALOG_PANE_ICON_SIZE = 48.0;
+    private final static String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
@@ -400,7 +402,7 @@ public final class UISession {
         
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         alert.showAndWait();
     }
     
@@ -418,7 +420,7 @@ public final class UISession {
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
     }
@@ -427,7 +429,7 @@ public final class UISession {
         final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(fontAwesome.create(FontAwesome.Glyph.LOCK).size(DIALOG_PANE_ICON_SIZE));
+        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
         
