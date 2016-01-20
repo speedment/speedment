@@ -68,7 +68,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import org.controlsfx.glyphfont.FontAwesome;
 import java.util.Map;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -115,7 +114,6 @@ public final class UISession {
     private final String defaultConfigLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
-    private final FontAwesome fontAwesome;
     
     private File currentlyOpenFile = null;
     
@@ -132,7 +130,6 @@ public final class UISession {
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty(project.stream().toConcurrentMap());
         this.propertySheetFactory  = new PropertySheetFactory();
-        this.fontAwesome           = new FontAwesome();
     }
     
     public Speedment getSpeedment() {
