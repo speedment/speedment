@@ -18,6 +18,7 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
@@ -89,6 +90,8 @@ public final class ConnectController implements Initializable {
                 .map(DbmsType::getName)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList))
         );
+        
+        fieldType.getSelectionModel().select(StandardDbmsType.defaultType().getName());
 
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
             if (!observable.getValue().isEmpty()) {

@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.DEFAULT_PROJECT_NAME;
@@ -24,6 +25,7 @@ import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
 import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
@@ -132,7 +134,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     
     @Override
     public DbmsProperty addNewDbms() {
-        final DbmsProperty created = new DbmsProperty(this, new ConcurrentHashMap<>());
+        final Map<String, Object> defaultMap = new ConcurrentHashMap<>();
+        defaultMap.put(Dbms.TYPE_NAME, StandardDbmsType.defaultType().getName());
+        
+        final DbmsProperty created = new DbmsProperty(this, defaultMap);
         dbmsesProperty().add(created);
         return created;
     }
@@ -168,6 +173,5 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     @Override
     public String toString() {
         return toStringHelper(this);
-    } 
-    
+    }
 }

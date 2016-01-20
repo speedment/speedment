@@ -28,6 +28,7 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.util.NullUtil.requireKeys;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -37,7 +38,6 @@ import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
@@ -49,8 +49,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
     implements Dbms, HasEnabledProperty, HasNameProperty {
 
     public DbmsProperty(Project parent, Map<String, Object> data) {
-        super(parent, data);
-        FXCollections.observableArrayList();
+        super(parent, requireKeys(data, Dbms.TYPE_NAME));
     }
     
     @Override

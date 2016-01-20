@@ -263,13 +263,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     
     @Override
     public final StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty) {
-        System.out.println("Requesting string property of key: '" + key + "'.");
         return (StringProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleStringProperty(getAsString(k).orElseGet(ifEmpty))));
     }
     
     @Override
     public final IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty) {
-        System.out.println("Requesting int property of key: '" + key + "'.");
         return (IntegerProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleIntegerProperty(getAsInt(k).orElseGet(ifEmpty))));
     }
     
@@ -391,15 +389,13 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
     
     private <T, P extends Property<T>> P prepare(String key, P property) {
-        System.out.println("Preparing key: '" + key + "'");
-        
-//        property.addListener((ObservableValue<? extends T> observable, T oldValue, T newValue) -> {
-//            monitor.runWithoutGeneratingEvents(() -> 
-//                config.put(key, newValue)
-//            );
-//            
-//            invalidate();
-//        });
+        property.addListener((ObservableValue<? extends T> observable, T oldValue, T newValue) -> {
+            monitor.runWithoutGeneratingEvents(() -> 
+                config.put(key, newValue)
+            );
+            
+            invalidate();
+        });
         
         return property;
     }
@@ -447,11 +443,9 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         public <T> T runWithoutGeneratingEvents(Supplier<T> runnable) {
             final T result;
             synchronized (silence) {
-                System.out.println("Entering monitor");
                 silence.set(true);
                 result = runnable.get();
                 silence.set(false);
-                System.out.println("Leaving monitor");
             }
             
             return result;

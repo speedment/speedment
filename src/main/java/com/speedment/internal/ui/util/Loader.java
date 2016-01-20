@@ -54,8 +54,8 @@ public final class Loader {
             final Parent loaded = loader.load();
             consumer.accept(control);
             return loaded;
-        } catch (Exception ex) { // TODO IOException
-            throw new SpeedmentException(ex);
+        } catch (final IOException ex) {
+            throw new SpeedmentException("Failed to load FXML file '" + filename + "'.", ex);
         }
 	}
     

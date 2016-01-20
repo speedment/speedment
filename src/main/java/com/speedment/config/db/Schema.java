@@ -52,12 +52,12 @@ public interface Schema extends
 
     /**
      * Returns {@code true} if this schema is the default one, else
-     * {@code false}.
+     * {@code false}. Default value is {@code true}.
      *
      * @return {@code true} if default, else {@code false}
      */
     default boolean isDefaultSchema() {
-        return getAsBoolean(DEFAULT_SCHEMA).orElse(false);
+        return getAsBoolean(DEFAULT_SCHEMA).orElse(true);
     }
 
     default Stream<? extends Table> tables() {

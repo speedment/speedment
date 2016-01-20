@@ -27,6 +27,7 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.util.NullUtil.requireKeys;
 import java.util.Map;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -42,7 +43,7 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
 
     public ForeignKeyColumnProperty(ForeignKey parent, Map<String, Object> data) {
-        super(parent, data);
+        super(parent, requireKeys(data, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
     }
     
     @Override
