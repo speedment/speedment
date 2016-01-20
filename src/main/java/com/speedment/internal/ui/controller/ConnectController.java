@@ -91,10 +91,8 @@ public final class ConnectController implements Initializable {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList))
         );
         
-        fieldType.getSelectionModel().select(StandardDbmsType.defaultType().getName());
-
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
-            if (!observable.getValue().isEmpty()) {
+            if (!next.isEmpty()) {
                 final DbmsType item = findDbmsType(next)
                     .orElseThrow(() -> dbmsTypeNotInstalledException(next));
 
@@ -113,23 +111,7 @@ public final class ConnectController implements Initializable {
                 fieldPort.textProperty().setValue("" + item.getDefaultPort());
             }
         });
-
-        buttonConnect.disableProperty().bind(createBooleanBinding(
-            () -> fieldHost.textProperty().getValue().isEmpty()
-            ||    fieldPort.textProperty().getValue().isEmpty()
-            ||    fieldType.getSelectionModel().isEmpty()
-            ||    fieldName.textProperty().getValue().isEmpty()
-            ||    fieldSchema.textProperty().getValue().isEmpty()
-            ||    fieldUser.textProperty().getValue().isEmpty(), 
-
-            fieldHost.textProperty(),
-            fieldPort.textProperty(),
-            fieldType.selectionModelProperty(),
-            fieldName.textProperty(),
-            fieldSchema.textProperty(),
-            fieldUser.textProperty()
-        ));
-
+        
         @SuppressWarnings("unchecked")
         final DbmsProperty dbms = session.getProject().addNewDbms();
         
@@ -146,19 +128,18 @@ public final class ConnectController implements Initializable {
                 } else return Integer.parseInt(string);
             }
         });
+        
+        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
+        fieldPort.setText(Settings.inst().get("last_known_port", ""));
+        fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
+        fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
+        fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
+        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", StandardDbmsType.defaultType().getName()));
 
         dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
         dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
-        dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
-        
-        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
-        fieldPort.setText(Settings.inst().get("last_known_port", ""));
-        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", ""));
-        fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
-        fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
-        fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
         
         buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
         buttonConnect.setOnAction(ev -> {
@@ -182,6 +163,22 @@ public final class ConnectController implements Initializable {
                 SceneController.createAndShow(session);
             }
         });
+        
+        buttonConnect.disableProperty().bind(createBooleanBinding(
+            () -> fieldHost.textProperty().getValue().isEmpty()
+            ||    fieldPort.textProperty().getValue().isEmpty()
+            ||    fieldType.getSelectionModel().isEmpty()
+            ||    fieldName.textProperty().getValue().isEmpty()
+            ||    fieldSchema.textProperty().getValue().isEmpty()
+            ||    fieldUser.textProperty().getValue().isEmpty(), 
+
+            fieldHost.textProperty(),
+            fieldPort.textProperty(),
+            fieldType.selectionModelProperty(),
+            fieldName.textProperty(),
+            fieldSchema.textProperty(),
+            fieldUser.textProperty()
+        ));
     }
     
     public static void createAndShow(UISession session) {
