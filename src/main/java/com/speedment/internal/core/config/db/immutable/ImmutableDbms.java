@@ -20,6 +20,7 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.internal.core.config.db.DbmsImpl;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.util.NullUtil.requireKeys;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final transient List<ImmutableSchema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
-        super(parent, dbms);
+        super(parent, requireKeys(dbms, Dbms.TYPE_NAME));
 
         final Dbms prototype = new DbmsImpl(parent, dbms);
         

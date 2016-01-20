@@ -23,6 +23,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.internal.util.Lazy;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.util.NullUtil.requireKeys;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     private final transient Lazy<Column> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
-        super(parent, fkc);
+        super(parent, requireKeys(fkc, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
         
         final ForeignKeyColumn prototype = new ForeignKeyColumnImpl(parent, fkc);
         
