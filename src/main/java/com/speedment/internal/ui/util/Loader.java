@@ -26,7 +26,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -55,7 +54,7 @@ public final class Loader {
             final Parent loaded = loader.load();
             consumer.accept(control);
             return loaded;
-        } catch (IOException ex) {
+        } catch (Exception ex) { // TODO IOException
             throw new SpeedmentException(ex);
         }
 	}

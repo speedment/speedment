@@ -182,16 +182,11 @@ public final class DocumentUtil {
 
     public static Supplier<NoSuchElementException> newNoSuchElementExceptionFor(Document document, String key) {
         return () -> new NoSuchElementException(
-                "An element with the key '"
-                + key
-                + "' could not be found in "
-                + document
-                + " ("
-                + Optional.of(document)
-                .filter(HasName.class::isInstance)
-                .map(HasName.class::cast)
-                .map(HasName::getName)
-                .orElse("")
+                "An attribute with the key '" + key
+                + "' could not be found in " + document
+                + " with name (" + Optional.ofNullable(document)
+                    .flatMap(doc -> doc.getAsString("name"))
+                    .orElse("null")
                 + ")"
         );
     }

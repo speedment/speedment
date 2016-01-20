@@ -19,6 +19,7 @@ package com.speedment.internal.ui.config;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.util.OptionalBoolean;
+import java.util.ArrayList;
 import static java.util.Collections.newSetFromMap;
 import java.util.List;
 import java.util.Map;
@@ -262,11 +263,13 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     
     @Override
     public final StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty) {
+        System.out.println("Requesting string property of key: '" + key + "'.");
         return (StringProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleStringProperty(getAsString(k).orElseGet(ifEmpty))));
     }
     
     @Override
     public final IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty) {
+        System.out.println("Requesting int property of key: '" + key + "'.");
         return (IntegerProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleIntegerProperty(getAsInt(k).orElseGet(ifEmpty))));
     }
     
@@ -312,18 +315,17 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      *                             generated.
      */
     public final <P extends DocumentProperty, T extends DocumentProperty> ObservableList<T> observableListOf(String key, BiFunction<P, Map<String, Object>, T> constructor) throws SpeedmentException {
-        return monitor.runWithoutGeneratingEvents(() -> {
+        
+        // The reason why the results are copied to a separate list before being
+        // used in the statement below is to guarantee that only one method is
+        // using the monitor the same tame.
+        final List<T> existing = new ArrayList<>();
+        
+        monitor.runWithoutGeneratingEvents(() -> {
             try {
-                @SuppressWarnings("unchecked")
-                final List<T> existing = DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
+                DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
                     .stream().map(child -> constructor.apply((P) this, child))
-                    .collect(toList());
-
-                @SuppressWarnings("unchecked")
-                final ObservableList<T> list = (ObservableList<T>)
-                    documents.computeIfAbsent(key, k -> prepareListOnKey(k, observableList(new CopyOnWriteArrayList<>(existing))));
-
-                return list;
+                    .forEach(existing::add);
             } catch (ClassCastException ex) {
                 throw new SpeedmentException(
                     "Requested an ObservableList on key '" + key + 
@@ -331,6 +333,19 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                 );
             }
         });
+        
+        try {
+            @SuppressWarnings("unchecked")
+            final ObservableList<T> list = (ObservableList<T>)
+                documents.computeIfAbsent(key, k -> prepareListOnKey(k, observableList(new CopyOnWriteArrayList<>(existing))));
+
+            return list;
+        } catch (ClassCastException ex) {
+            throw new SpeedmentException(
+                "Requested an ObservableList on key '" + key + 
+                "' of a different type than 'createDocument' created.", ex
+            );
+        }
     }
 
     /**
@@ -376,44 +391,42 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
     
     private <T, P extends Property<T>> P prepare(String key, P property) {
-        property.addListener((ObservableValue<? extends T> observable, T oldValue, T newValue) -> {
-            invalidate();
-            
-            monitor.runWithoutGeneratingEvents(() -> 
-                config.put(key, newValue)
-            );
-        });
+        System.out.println("Preparing key: '" + key + "'");
+        
+//        property.addListener((ObservableValue<? extends T> observable, T oldValue, T newValue) -> {
+//            monitor.runWithoutGeneratingEvents(() -> 
+//                config.put(key, newValue)
+//            );
+//            
+//            invalidate();
+//        });
         
         return property;
     }
     
     private <T extends DocumentProperty> ObservableList<T> prepareListOnKey(String key, ObservableList<T> list) {
-            
-        monitor.runWithoutGeneratingEvents(() -> {
 
-            list.addListener((ListChangeListener.Change<? extends T> change) -> {
-                invalidate();
-                
-                monitor.runWithoutGeneratingEvents(() -> {
-                    @SuppressWarnings("unchecked")
-                    final List<Map<String, Object>> rawList = DOCUMENT_LIST_TYPE.cast(config.get(key));
+        list.addListener((ListChangeListener.Change<? extends T> change) -> {
+            monitor.runWithoutGeneratingEvents(() -> {
+                @SuppressWarnings("unchecked")
+                final List<Map<String, Object>> rawList = DOCUMENT_LIST_TYPE.cast(config.get(key));
 
-                    while (change.next()) {
-                        if (change.wasAdded()) {
-                            for (final T added : change.getAddedSubList()) {
-                                rawList.add(added.getData());
-                            }
-                        }
-
-                        if (change.wasRemoved()) {
-                            for (final T removed : change.getRemoved()) {
-                                rawList.remove(removed.getData());
-                            }
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (final T added : change.getAddedSubList()) {
+                            rawList.add(added.getData());
                         }
                     }
-                });
+
+                    if (change.wasRemoved()) {
+                        for (final T removed : change.getRemoved()) {
+                            rawList.remove(removed.getData());
+                        }
+                    }
+                }
             });
-        
+            
+            invalidate();
         });
 
         return list;
@@ -433,11 +446,12 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
 
         public <T> T runWithoutGeneratingEvents(Supplier<T> runnable) {
             final T result;
-            
             synchronized (silence) {
+                System.out.println("Entering monitor");
                 silence.set(true);
                 result = runnable.get();
                 silence.set(false);
+                System.out.println("Leaving monitor");
             }
             
             return result;
