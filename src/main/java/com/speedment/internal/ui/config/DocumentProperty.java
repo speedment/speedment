@@ -33,6 +33,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
@@ -55,7 +56,7 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
     @Override
     Stream<? extends DocumentProperty> children();
     
-    Stream<ObservableList<DocumentProperty>> childrenProperty();
+    ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty();
     
     void invalidate();
 }

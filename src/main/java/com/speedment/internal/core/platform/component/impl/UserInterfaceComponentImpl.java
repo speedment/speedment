@@ -20,9 +20,14 @@ import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.stream.MapStream;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import static java.util.stream.Collectors.toList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -31,6 +36,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
 import static javafx.collections.FXCollections.observableArrayList;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -44,7 +51,7 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
-    private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
+    private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     private final StringProperty stylesheet;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
@@ -73,20 +80,40 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
 
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
-        contextMenuBuilders.put(nodeType, menuBuilder);
+        contextMenuBuilders.computeIfAbsent(nodeType, k -> new CopyOnWriteArrayList<>()).add(menuBuilder);
     }
 
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
-        @SuppressWarnings("unchecked")
-        final UserInterfaceComponent.ContextMenuBuilder<DOC> builder = 
-            (UserInterfaceComponent.ContextMenuBuilder<DOC>) 
-            contextMenuBuilders.get(doc.mainInterface());
+        requireNonNulls(treeCell, doc);
         
-        if (builder == null) {
+        @SuppressWarnings("unchecked")
+        final List<UserInterfaceComponent.ContextMenuBuilder<DOC>> builders = 
+            (List<UserInterfaceComponent.ContextMenuBuilder<DOC>>) 
+            MapStream.of(contextMenuBuilders)
+                .filterKey(clazz -> clazz.isAssignableFrom(doc.getClass()))
+                .values()
+                .flatMap(List::stream)
+                .map(builder -> (UserInterfaceComponent.ContextMenuBuilder<DOC>) builder)
+                .collect(toList());
+        
+        final ContextMenu menu = new ContextMenu();
+        for (int i = 0; i < builders.size(); i++) {
+            final List<MenuItem> items = builders.get(i)
+                .build(treeCell, doc)
+                .collect(toList());
+            
+            if (i > 0 && !items.isEmpty()) {
+                menu.getItems().add(new SeparatorMenuItem());
+            }
+            
+            items.forEach(menu.getItems()::add);
+        }
+        
+        if (menu.getItems().isEmpty()) {
             return Optional.empty();
         } else {
-            return builder.build(treeCell, doc);
+            return Optional.ofNullable(menu);
         }
     }
 

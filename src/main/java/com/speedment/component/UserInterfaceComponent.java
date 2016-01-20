@@ -22,9 +22,11 @@ import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
@@ -114,6 +116,6 @@ public interface UserInterfaceComponent extends Component {
     
     @FunctionalInterface
     interface ContextMenuBuilder<DOC extends DocumentProperty> {
-        Optional<ContextMenu> build(TreeCell<DocumentProperty> treeCell, DOC node);
+        Stream<MenuItem> build(TreeCell<DocumentProperty> treeCell, DOC doc);
     }
 }

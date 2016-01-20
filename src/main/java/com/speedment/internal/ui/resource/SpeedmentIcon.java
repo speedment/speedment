@@ -137,17 +137,18 @@ public enum SpeedmentIcon {
 
         final SpeedmentIcon icon = NODE_ICONS.get(
                 Optional.of(node)
-                .filter(HasMainInterface.class::isInstance)
-                .map(HasMainInterface.class::cast)
-                .map(HasMainInterface::mainInterface)
-                .orElse(node.getClass())
+                    .filter(HasMainInterface.class::isInstance)
+                    .map(HasMainInterface.class::cast)
+                    .map(HasMainInterface::mainInterface)
+                    .orElse(node.getClass())
         );
 
         if (icon != null) {
             return icon.view();
+        } else {
+            LOGGER.error("Found no predefined icon for node type '" + node.getClass().getSimpleName() + "'.");
+            return SilkIcon.HELP.view();
         }
-        LOGGER.error("Found no predefined icon for node type '" + node.getClass().getSimpleName() + "'.");
-        return SilkIcon.HELP.view();
     }
 
     private SpeedmentIcon(String filename) {

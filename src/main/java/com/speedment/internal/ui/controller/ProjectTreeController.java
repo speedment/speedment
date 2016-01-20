@@ -33,6 +33,7 @@ import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasIconPath;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.resource.SilkIcon;
 import com.speedment.internal.util.document.DocumentUtil;
@@ -47,15 +48,17 @@ import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import java.util.Optional;
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.collections.ListChangeListener;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -118,30 +121,43 @@ public final class ProjectTreeController implements Initializable {
             .map(d -> (DocumentProperty & HasExpandedProperty) d)
             .map(this::branch)
             .forEachOrdered(branch.getChildren()::add);
-
-        // TODO: React when new new child types are added to the tree
-        doc.childrenProperty()
-            .forEach(list -> list.addListener((ListChangeListener.Change<? extends DocumentProperty> c) -> {
-                
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    c.getAddedSubList().stream()
+        
+        final ListChangeListener<? super DocumentProperty> onListChange = (ListChangeListener.Change<? extends DocumentProperty> change) -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    change.getAddedSubList().stream()
                         .filter(HasExpandedProperty.class::isInstance)
                         .map(d -> branch((DocumentProperty & HasExpandedProperty) d))
                         .forEachOrdered(branch.getChildren()::add);
-                } else if (c.wasRemoved()) {
-                    c.getRemoved().stream()
+                }
+                
+                if (change.wasRemoved()) {
+                    change.getRemoved().stream()
                         .forEach(val -> branch.getChildren()
                             .removeIf(item -> val.equals(item.getValue()))
                         );
                 }
             }
-        }));
+        };
+        
+        doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
+            if (change.wasAdded()) {
+                change.getValueAdded().addListener(onListChange);
+                change.getValueAdded().stream()
+                    .filter(HasExpandedProperty.class::isInstance)
+                    .map(d -> branch((DocumentProperty & HasExpandedProperty) d))
+                    .forEachOrdered(branch.getChildren()::add);
+            }
+        });
+        
+        doc.childrenProperty()
+            .values()
+            .forEach(list -> list.addListener(onListChange));
 
         return branch;
     }
     
-    private <DOC extends DocumentProperty> Optional<ContextMenu> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
+    private <DOC extends DocumentProperty> Stream<MenuItem> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
         
         final MenuItem expandAll = new MenuItem("Expand All", SilkIcon.BOOK_OPEN.view());
         final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
@@ -158,7 +174,7 @@ public final class ProjectTreeController implements Initializable {
                 .forEach(doc -> ((HasExpandedProperty) doc).expandedProperty().setValue(false));
         });
         
-        return Optional.of(new ContextMenu(expandAll, collapseAll));
+        return Stream.of(expandAll, collapseAll);
     }
     
     public static Node create(UISession session) {
@@ -175,6 +191,7 @@ public final class ProjectTreeController implements Initializable {
         private final UserInterfaceComponent ui;
         
         public DocumentPropertyCell(UserInterfaceComponent ui) {
+            this.ui = requireNonNull(ui);
             
             // Listener should be initiated with a listener attached
             // that removes enabled-listeners attached to the previous
@@ -190,10 +207,7 @@ public final class ProjectTreeController implements Initializable {
                     final HasEnabledProperty hasEnabled = (HasEnabledProperty) n;
                     hasEnabled.enabledProperty().addListener(change);
                 }
-
             });
-            
-            this.ui = requireNonNull(ui);
         }
 
         private void disable() {
@@ -218,7 +232,16 @@ public final class ProjectTreeController implements Initializable {
 
                 disable();
             } else {
-                setGraphic(SpeedmentIcon.forNode(item));
+                final ImageView icon;
+                
+                if (item instanceof HasIconPath) {
+                    final HasIconPath hasIcon = (HasIconPath) item;
+                    icon = new ImageView(new Image(hasIcon.getIconPath()));
+                } else {
+                    icon = SpeedmentIcon.forNode(item);
+                }
+                
+                setGraphic(icon);
                 
                 if (item instanceof HasNameProperty) {
                     @SuppressWarnings("unchecked")

@@ -20,14 +20,13 @@ import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
-import static com.speedment.config.db.Column.NULLABLE;
-import static com.speedment.config.db.Column.TYPE_MAPPER;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.config.trait.HasNullableProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
@@ -47,33 +46,29 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractChildDocumentProperty<Table> 
-    implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty {
-    
+public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
+    implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty, HasNullableProperty {
+
     public ColumnProperty(Table parent, Map<String, Object> data) {
         super(parent, data);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
             HasAliasProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(new TypeMapperPropertyItem(
+            HasNullableProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new TypeMapperPropertyItem(
                     speedment,
                     Optional.ofNullable(findTypeMapper())
-                        .map(tm -> (Class) tm.getDatabaseType())
-                        .orElse(findDatabaseType()),
+                    .map(tm -> (Class) tm.getDatabaseType())
+                    .orElse(findDatabaseType()),
                     typeMapperProperty(),
                     "JDBC Type to Java",
                     "The class that will be used to map types between the database and the generated code."
-                ),
-                new BooleanPropertyItem(
-                    nullableProperty(),
-                    "Is Nullable",
-                    "If this column can hold 'null'-values or not."
-                ),
-                new BooleanPropertyItem(
+                ), new BooleanPropertyItem(
                     autoIncrementProperty(),
                     "Is Auto Incrementing",
                     "If this column will increment automatically for each new entity."
@@ -87,15 +82,6 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
         return HasNameProperty.super.nameProperty();
     }
 
-    public BooleanProperty nullableProperty() {
-        return booleanPropertyOf(NULLABLE, Column.super::isNullable);
-    }
-
-    @Override
-    public boolean isNullable() {
-        return nullableProperty().get();
-    }
-
     public BooleanProperty autoIncrementProperty() {
         return booleanPropertyOf(AUTO_INCREMENT, Column.super::isAutoIncrement);
     }
@@ -104,7 +90,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     public boolean isAutoIncrement() {
         return autoIncrementProperty().get();
     }
- 
+
     public StringProperty typeMapperProperty() {
         return stringPropertyOf(TYPE_MAPPER, Column.super::getTypeMapper);
     }
@@ -113,7 +99,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     public String getTypeMapper() {
         return typeMapperProperty().get();
     }
-  
+
     public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
         final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>(
             TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get())
@@ -146,12 +132,12 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
     public Class<?> findDatabaseType() {
         return databaseTypeObjectProperty().get();
     }
-    
+
     @Override
     public String toString() {
         return toStringHelper(this);
     }
-    
+
     private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {
         @Override
         public String toString(TypeMapper<?, ?> typeMapper) {

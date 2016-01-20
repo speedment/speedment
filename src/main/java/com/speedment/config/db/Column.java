@@ -18,11 +18,11 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
-import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
@@ -30,6 +30,7 @@ import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.internal.core.config.db.mutator.ColumnMutator;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
+import com.speedment.config.db.trait.HasNullable;
 
 /**
  *
@@ -42,24 +43,14 @@ public interface Column extends
         HasEnabled,
         HasName,
         HasAlias,
+        HasNullable,
         HasOrdinalPosition,
         HasMainInterface,
         HasMutator<ColumnMutator> {
 
-    final String NULLABLE = "nullable",
-            AUTO_INCREMENT = "autoIncrement",
+    final String AUTO_INCREMENT = "autoIncrement",
             TYPE_MAPPER = "typeMapper",
             DATABASE_TYPE = "databaseType";
-
-    /**
-     * Returns whether or not this column can hold <code>null</code> values.
-     *
-     * @return  <code>true</code> if null values are tolerated, else
-     * <code>false</code>
-     */
-    default boolean isNullable() {
-        return getAsBoolean(NULLABLE).orElse(true);
-    }
 
     /**
      * Returns whether or not this column will auto increment when new values

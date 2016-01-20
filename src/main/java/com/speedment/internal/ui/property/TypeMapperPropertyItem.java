@@ -54,8 +54,6 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        System.out.println("Initial value: " + getValue());
-        
         final List<String> mappers = speedment.getTypeMapperComponent().stream()
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
             .sorted(comparing(TypeMapper::getLabel))
