@@ -74,12 +74,12 @@ public final class DocumentUtil {
                 .map(map -> childConstructor.apply(document, map));
     }
 
-    public static Map<String, Object> newDocument(Document document, String key) {
-        final List<Map<String, Object>> children = document.get(key)
+    public static Map<String, Object> newDocument(Document parent, String key) {
+        final List<Map<String, Object>> children = parent.get(key)
                 .map(Document.DOCUMENT_LIST_TYPE::cast)
                 .orElseGet(() -> {
                     final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
-                    document.put(key, list);
+                    parent.put(key, list);
                     return list;
                 });
 

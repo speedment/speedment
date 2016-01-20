@@ -18,6 +18,7 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -72,8 +73,13 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     
     @Override
     public ForeignKeyColumnProperty addNewForeignKeyColumn() {
-        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this, new ConcurrentHashMap<>());
+        final Map<String, Object> child = new ConcurrentHashMap<>();
+        child.put(ForeignKeyColumn.FOREIGN_COLUMN_NAME, "");
+        child.put(ForeignKeyColumn.FOREIGN_TABLE_NAME, "");
+        
+        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this, child);
         foreignKeyColumnsProperty().add(created);
+        
         return created;
     }
     
