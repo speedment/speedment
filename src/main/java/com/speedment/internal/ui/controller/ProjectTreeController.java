@@ -44,7 +44,6 @@ import javafx.scene.Node;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import static javafx.scene.control.SelectionMode.MULTIPLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -55,6 +54,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -95,7 +95,7 @@ public final class ProjectTreeController implements Initializable {
 
         Bindings.bindContent(ui.getSelectedTreeItems(), hierarchy.getSelectionModel().getSelectedItems());
         hierarchy.setCellFactory(view -> new DocumentPropertyCell(ui));
-        hierarchy.getSelectionModel().setSelectionMode(MULTIPLE);
+        hierarchy.getSelectionModel().setSelectionMode(SINGLE);
         
         populateTree(project);
     }
