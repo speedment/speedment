@@ -110,7 +110,7 @@ public final class UISession {
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
-    private final String defaultJsonLocation;
+    private final String defaultConfigLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
     private final FontAwesome fontAwesome;
@@ -127,7 +127,7 @@ public final class UISession {
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
-        this.defaultJsonLocation   = requireNonNull(defaultConfigLocation);
+        this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty(project.stream().toConcurrentMap());
         this.propertySheetFactory  = new PropertySheetFactory();
         this.fontAwesome           = new FontAwesome();
@@ -159,7 +159,7 @@ public final class UISession {
             try {
                 final Stage newStage = new Stage();
                 final Speedment newSpeedment = speedment.newInstance();
-                final UISession session = new UISession(newSpeedment, application, newStage, defaultJsonLocation);
+                final UISession session = new UISession(newSpeedment, application, newStage, defaultConfigLocation);
 
                 ConnectController.createAndShow(session);
             } catch (Exception e) {
@@ -256,7 +256,7 @@ public final class UISession {
             clearLog();
             
             if (currentlyOpenFile == null) {
-                currentlyOpenFile = new File(defaultJsonLocation);
+                currentlyOpenFile = new File(defaultConfigLocation);
             }
             
             saveConfigFile(currentlyOpenFile);
@@ -511,7 +511,7 @@ public final class UISession {
                             newSpeedment, 
                             application, 
                             newStage, 
-                            defaultJsonLocation, 
+                            defaultConfigLocation, 
                             p
                         );
                         
@@ -552,7 +552,7 @@ public final class UISession {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         
         if (currentlyOpenFile == null) {
-            final Path path   = Paths.get(defaultJsonLocation);
+            final Path path   = Paths.get(defaultConfigLocation);
             final Path parent = path.getParent();
             
             try {
@@ -565,7 +565,7 @@ public final class UISession {
             */}
             
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(defaultJsonLocation);
+            fileChooser.setInitialFileName(defaultConfigLocation);
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());

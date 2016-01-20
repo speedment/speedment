@@ -28,14 +28,8 @@ import com.speedment.internal.util.EmailUtil;
 import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
 
@@ -57,7 +51,7 @@ public final class MainApp extends Application {
         requireNonNull(stage);
         
         if (SPEEDMENT == null) {
-            LOGGER.info("Creating new Speedment instance for GUI session.");
+            LOGGER.info("Creating new Speedment instance for UI session.");
             SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
         }
         
@@ -86,8 +80,8 @@ public final class MainApp extends Application {
         launch(args);
     }
     
-    private UISession createSession(Stage stage, String jsonLocation) {
-        final UISession session = new UISession(SPEEDMENT, this, stage, jsonLocation);
+    private UISession createSession(Stage stage, String configLocation) {
+        final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
         SpeedmentFont.loadAll();
         Statistics.onGuiStarted();
         
