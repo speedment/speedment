@@ -56,13 +56,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import static javafx.collections.FXCollections.observableMap;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableList;
+import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
 /**
  *
@@ -90,8 +90,9 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     /**
      * An internal map of the {@link DocumentProperty Document Properties} that 
      * have been created by this class. Once a list is associated with a 
-     * particular key, it should never be removed. It should be configured to
-     * listen to changes in the raw map before being inserted into this map.
+     * particular key, it should never be removed. A new list should be 
+     * configured to listen to changes in the raw map before being inserted into 
+     * this map.
      */
     private final transient ObservableMap<String, ObservableList<DocumentProperty>> documents;
     
@@ -157,6 +158,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                                         observableList(new CopyOnWriteArrayList<>(children))
                                     ));
                                 }
+                                
+                                // Since the key did not exist already, there
+                                // are no listeners that will be triggered by
+                                // this modification.
+                                invalidate();
 
                             // An observable list already exists on the
                             // specified key. Create document views of the
@@ -201,6 +207,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                                 }
                                 
                                 properties.put(change.getKey(), newProperty);
+                                
+                                // Since the key did not exist already, there
+                                // are no listeners that will be triggered by
+                                // this modification.
+                                invalidate();
                             }
                         }
                     }
@@ -209,9 +220,27 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         });
     }
 
+    /**
+     * Returns an unmodifiable view of the raw data of this document. To modify
+     * a value in this map, the appropriate {@code Property} or 
+     * {@code ObservableList} should be used.
+     * <p>
+     * These are the methods that should be used for modification:
+     * <ul>
+     *     <li>{@link #put(String, Object)}
+     *     <li>{@link #stringPropertyOf(String, Supplier)}
+     *     <li>{@link #integerPropertyOf(String, Supplier)}
+     *     <li>{@link #longPropertyOf(String, Supplier)}
+     *     <li>{@link #doublePropertyOf(String, Supplier)}
+     *     <li>{@link #objectPropertyOf(String, Class, Supplier)}
+     *     <li>{@link #observableListOf(String, Class, Supplier)}
+     * </ul>
+     * 
+     * @return  the raw data
+     */
     @Override
-    public final Map<String, Object> getData() {
-        return config;
+    public final ObservableMap<String, Object> getData() {
+        return unmodifiableObservableMap(config);
     }
     
     @Override
@@ -247,9 +276,15 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         return get(key).map(String.class::cast);
     }
 
+    /**
+     * Updates a value in the raw map and marks the specified 
+     * @param key
+     * @param value 
+     */
     @Override
     public final void put(String key, Object value) {
         config.put(key, value);
+        invalidate();
     }
 
     @Override
@@ -313,7 +348,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      *                             type as {@link #createDocument(java.lang.String, java.util.Map) createDocument}
      *                             generated.
      */
+    @Override
     public final <P extends DocumentProperty, T extends DocumentProperty> ObservableList<T> observableListOf(String key, BiFunction<P, Map<String, Object>, T> constructor) throws SpeedmentException {
+        
+        // Make sure the component is invalidated if a new key was introduced.
+        final AtomicBoolean dirty = new AtomicBoolean(false);
         
         // The reason why the results are copied to a separate list before being
         // used in the statement below is to guarantee that only one method is
@@ -322,8 +361,11 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         
         monitor.runWithoutGeneratingEvents(() -> {
             try {
-                DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> new CopyOnWriteArrayList<>()))
-                    .stream().map(child -> constructor.apply((P) this, child))
+                DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> {
+                    dirty.set(true);
+                    return new CopyOnWriteArrayList<>();
+                })).stream()
+                    .map(child -> constructor.apply((P) this, child))
                     .forEach(existing::add);
             } catch (ClassCastException ex) {
                 throw new SpeedmentException(
@@ -344,6 +386,10 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                 "Requested an ObservableList on key '" + key + 
                 "' of a different type than 'createDocument' created.", ex
             );
+        } finally {
+            if (dirty.get()) {
+                invalidate();
+            }
         }
     }
 
@@ -356,12 +402,12 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
      */
     @Override
     public ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
-        return FXCollections.unmodifiableObservableMap(documents);
+        return unmodifiableObservableMap(documents);
     }
 
     protected DocumentProperty createDocument(String key, Map<String, Object> data) {
         return new DefaultDocumentProperty(this, data);
-    } 
+    }
     
     @SuppressWarnings("unchecked")
     private static final Function<Object, List<Object>> UNCHECKED_LIST_CASTER =
@@ -388,6 +434,10 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
             .values();
     }
 
+    /**
+     * Mark this component and all components above it as invalidated so that
+     * any events observing the tree will know the state has changed.
+     */
     @Override
     public final void invalidate() {
         getParent()

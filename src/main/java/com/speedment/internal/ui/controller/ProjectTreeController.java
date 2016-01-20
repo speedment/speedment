@@ -140,6 +140,7 @@ public final class ProjectTreeController implements Initializable {
         
         doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
             if (change.wasAdded()) {
+                System.out.println("New key '" + change.getKey() + "' was added.");
                 change.getValueAdded().addListener(onListChange);
                 change.getValueAdded().stream()
                     .filter(HasExpandedProperty.class::isInstance)
