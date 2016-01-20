@@ -21,6 +21,7 @@ import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.util.OptionalBoolean;
 import java.util.ArrayList;
 import static java.util.Collections.newSetFromMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -366,15 +367,24 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     private static final Function<Object, List<Object>> UNCHECKED_LIST_CASTER =
         dp -> (List<Object>)dp;
     
+    /**
+     * Returns a list of all children instantiated using 
+     * {@link #createDocument(String, Map) createDocument} in alphabetical order 
+     * based on the key they belong to. The internal order will be the order 
+     * they have in the list.
+     * 
+     * @return a stream of the children
+     */
     @Override
     public final Stream<DocumentProperty> children() {
         return stream()
             .filterValue(List.class::isInstance)
             .mapValue(UNCHECKED_LIST_CASTER)
-            .flatMapValue(list -> list.stream())
-            .filterValue(obj -> obj instanceof Map<?, ?>)
+            .flatMapValue(List::stream)
+            .filterValue(DOCUMENT_TYPE::isInstance)
             .mapValue(DOCUMENT_TYPE::cast)
-            .mapValue((key, value) -> createDocument(key, value))
+            .mapValue(this::createDocument)
+            .sortedByKey(Comparator.naturalOrder())
             .values();
     }
 

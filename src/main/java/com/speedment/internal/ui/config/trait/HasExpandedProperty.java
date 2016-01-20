@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.ui.config.trait;
 
-import com.speedment.config.db.trait.HasChildren;
 import com.speedment.internal.ui.config.DocumentProperty;
 import javafx.beans.property.BooleanProperty;
 
@@ -37,6 +36,6 @@ public interface HasExpandedProperty extends DocumentProperty {
     }
     
     default boolean isExpandedByDefault() {
-        return this instanceof HasChildren;
+        return true;
     }
 }

@@ -96,6 +96,11 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
     }
     
     @Override
+    public boolean isExpandedByDefault() {
+        return false;
+    }
+    
+    @Override
     public String toString() {
         return toStringHelper(this);
     }

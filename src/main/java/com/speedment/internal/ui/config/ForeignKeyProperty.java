@@ -82,6 +82,11 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
         
         return created;
     }
+
+    @Override
+    public boolean isExpandedByDefault() {
+        return false;
+    }
     
     @Override
     public String toString() {
