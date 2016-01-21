@@ -17,14 +17,12 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.db.mutator.ColumnMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -48,7 +46,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractChildDocumentProperty<Table>
+public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty>
     implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty, HasNullableProperty {
 
     public ColumnProperty(Table parent, Map<String, Object> data) {

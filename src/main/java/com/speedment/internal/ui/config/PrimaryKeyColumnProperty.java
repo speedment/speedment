@@ -31,7 +31,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table> 
+public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty> 
     implements PrimaryKeyColumn, HasNameProperty, 
     HasOrdinalPositionProperty, HasColumnProperty {
 

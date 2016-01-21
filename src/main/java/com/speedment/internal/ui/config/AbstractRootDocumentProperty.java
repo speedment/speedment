@@ -23,9 +23,11 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author        Emil Forslund
+ * @param <THIS>  this class type
  */
-public abstract class AbstractRootDocumentProperty extends AbstractDocumentProperty {
+public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>> 
+    extends AbstractDocumentProperty<THIS> {
     
     public AbstractRootDocumentProperty(Map<String, Object> data) {
         super(data);

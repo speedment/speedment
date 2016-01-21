@@ -34,7 +34,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table> 
+public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table, ForeignKeyProperty> 
     implements ForeignKey, HasEnabledProperty, HasNameProperty {
 
     public ForeignKeyProperty(Table parent, Map<String, Object> data) {
@@ -42,7 +42,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
-        return observableListOf(FOREIGN_KEY_COLUMNS, ForeignKeyColumnProperty::new);
+        return observableListOf(FOREIGN_KEY_COLUMNS);
     }
     
     @Override
@@ -59,10 +59,10 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
 
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected final BiFunction<ForeignKeyProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
         switch (key) {
-            case FOREIGN_KEY_COLUMNS : return new ForeignKeyColumnProperty(this, data);
-            default                  : return super.createDocument(key, data);
+            case FOREIGN_KEY_COLUMNS : return ForeignKeyColumnProperty::new;
+            default                  : return super.constructorForKey(key);
         }
     }
     

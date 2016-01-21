@@ -51,7 +51,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ProjectProperty extends AbstractRootDocumentProperty 
+public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
     implements Project, HasEnabledProperty, HasNameProperty {
 
     public ProjectProperty(Map<String, Object> data) {
@@ -119,7 +119,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
     
     public ObservableList<DbmsProperty> dbmsesProperty() {
-        return observableListOf(DBMSES, DbmsProperty::new);
+        return observableListOf(DBMSES);
     }
 
     @Override
@@ -143,10 +143,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     }
     
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected final BiFunction<ProjectProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
         switch (key) {
-            case DBMSES : return new DbmsProperty(this, data);
-            default     : return super.createDocument(key, data);
+            case DBMSES : return DbmsProperty::new;
+            default     : return super.constructorForKey(key);
         }
     }
     
@@ -167,7 +167,8 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     // Must implement getName because Project does not have any parent.
     @Override
     public String getName() throws SpeedmentException {
-        return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
+        return getAsString(NAME)
+            .orElse(DEFAULT_PROJECT_NAME);
     }
     
     @Override

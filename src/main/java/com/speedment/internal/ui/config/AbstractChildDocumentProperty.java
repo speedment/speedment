@@ -21,19 +21,28 @@ import com.speedment.config.db.trait.HasParent;
 import java.util.Map;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.function.BiFunction;
 
 /**
  *
  * @author          Emil Forslund
  * @param <PARENT>  the parent type
+ * @param <THIS>    the type of this class
  */
-public abstract class AbstractChildDocumentProperty<PARENT extends Document> extends AbstractDocumentProperty implements HasParent<PARENT> {
+public abstract class AbstractChildDocumentProperty
+    <PARENT extends Document, THIS extends AbstractChildDocumentProperty<? super PARENT, ? super THIS>> 
+    extends AbstractDocumentProperty<THIS> implements HasParent<PARENT> {
     
     private final PARENT parent;
     
     public AbstractChildDocumentProperty(PARENT parent, Map<String, Object> data) {
         super(data);
         this.parent = requireNonNull(parent);
+    }
+
+    @Override
+    protected BiFunction<THIS, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+        return (BiFunction<THIS, Map<String, Object>, DocumentProperty>) super.constructorForKey(key);
     }
 
     @Override

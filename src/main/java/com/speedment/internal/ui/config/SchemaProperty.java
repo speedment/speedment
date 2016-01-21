@@ -37,7 +37,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms> 
+public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty> 
     implements Schema, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
     public SchemaProperty(Dbms parent, Map<String, Object> data) {
@@ -75,7 +75,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
     
     public ObservableList<TableProperty> tablesProperty() {
-        return observableListOf(TABLES, TableProperty::new);
+        return observableListOf(TABLES);
     }
 
     @Override
@@ -84,10 +84,10 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
 
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected final BiFunction<SchemaProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
         switch (key) {
-            case TABLES : return new TableProperty(this, data);
-            default     : return super.createDocument(key, data);
+            case TABLES : return TableProperty::new;
+            default     : return super.constructorForKey(key);
         }
     }
     

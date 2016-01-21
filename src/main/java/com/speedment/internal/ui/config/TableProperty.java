@@ -35,7 +35,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class TableProperty extends AbstractChildDocumentProperty<Schema> 
+public final class TableProperty extends AbstractChildDocumentProperty<Schema, TableProperty> 
     implements Table, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
     public TableProperty(Schema parent, Map<String, Object> data) {
@@ -52,19 +52,19 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
     
     public ObservableList<ColumnProperty> columnsProperty() {
-        return observableListOf(COLUMNS, ColumnProperty::new);
+        return observableListOf(COLUMNS);
     }
     
     public ObservableList<IndexProperty> indexesProperty() {
-        return observableListOf(INDEXES, IndexProperty::new);
+        return observableListOf(INDEXES);
     }
     
     public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
-        return observableListOf(FOREIGN_KEYS, ForeignKeyProperty::new);
+        return observableListOf(FOREIGN_KEYS);
     }
     
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
-        return observableListOf(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnProperty::new);
+        return observableListOf(PRIMARY_KEY_COLUMNS);
     }
     
     @Override
@@ -93,13 +93,13 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
     }
 
     @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
+    protected final BiFunction<TableProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
         switch (key) {
-            case COLUMNS             : return new ColumnProperty(this, data);
-            case INDEXES             : return new IndexProperty(this, data);
-            case FOREIGN_KEYS        : return new ForeignKeyProperty(this, data);
-            case PRIMARY_KEY_COLUMNS : return new PrimaryKeyColumnProperty(this, data);
-            default                  : return super.createDocument(key, data);
+            case COLUMNS             : return ColumnProperty::new;
+            case INDEXES             : return IndexProperty::new;
+            case FOREIGN_KEYS        : return ForeignKeyProperty::new;
+            case PRIMARY_KEY_COLUMNS : return PrimaryKeyColumnProperty::new;
+            default                  : return super.constructorForKey(key);
         }
     }
     

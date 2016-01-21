@@ -39,7 +39,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey> 
+public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
     implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
 
     public ForeignKeyColumnProperty(ForeignKey parent, Map<String, Object> data) {

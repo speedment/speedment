@@ -66,9 +66,10 @@ import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
 /**
  *
- * @author Emil Forslund
+ * @author        Emil Forslund
+ * @param <THIS>  the type of this class
  */
-public abstract class AbstractDocumentProperty implements DocumentProperty, HasExpandedProperty {
+public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> implements DocumentProperty, HasExpandedProperty {
     
     /**
      * An observable map containing all the raw data that should be serialized
@@ -264,9 +265,10 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
 
     /**
-     * Updates a value in the raw map and marks the specified 
-     * @param key
-     * @param value 
+     * Updates a value in the raw map and marks this instance as invalidated.
+     * 
+     * @param key    the key
+     * @param value  the new value
      */
     @Override
     public final void put(String key, Object value) {
@@ -332,26 +334,19 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     
     /**
      * Returns an observable list of all the child documents under a specified
-     * key. 
+     * key.
      * <p>
      * The implementation of the document is governed by the 
-     * {@link #createDocument(java.lang.String, java.util.Map) createDocument} 
-     * method. The specified {@code type} parameter must therefore match the
-     * implementation created by 
      * {@link #createDocument(java.lang.String, java.util.Map) createDocument}.
+     * The class reference sent to this method as a parameter must match the
+     * type produced on this key by {@link #constructorForKey(String)}.
      * 
-     * @param <P>          the type of this class
-     * @param <T>          the document type
-     * @param key          the key to look at
-     * @param constructor  the constructor to use to create the children views
-     * @return             an observable list of the documents under that key
-     * 
-     * @throws SpeedmentException  if the specified {@code type} is not the same
-     *                             type as {@link #createDocument(java.lang.String, java.util.Map) createDocument}
-     *                             generated.
+     * @param <T>  result type
+     * @param key  the key to look at
+     * @return     an observable list of the documents under that key
      */
     @Override
-    public final <P extends DocumentProperty, T extends DocumentProperty> ObservableList<T> observableListOf(String key, BiFunction<P, Map<String, Object>, T> constructor) throws SpeedmentException {
+    public final <T extends DocumentProperty> ObservableList<T> observableListOf(String key) {
         
         // Make sure the component is invalidated if a new key was introduced.
         final AtomicBoolean dirty = new AtomicBoolean(false);
@@ -362,29 +357,24 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         final List<T> existing = new ArrayList<>();
         
         monitor.runWithoutGeneratingEvents(() -> {
-            try {
-                DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> {
-                    dirty.set(true);
-                    return new CopyOnWriteArrayList<>();
-                })).stream()
-                    .map(child -> constructor.apply((P) this, child))
-                    .forEach(existing::add);
-            } catch (final ClassCastException ex) {
-                throw new SpeedmentException(
-                    "Requested an ObservableList on key '" + key + 
-                    "' of a different type than 'createDocument' created.", ex
-                );
-            }
+            DOCUMENT_LIST_TYPE.cast(config.computeIfAbsent(key, k -> {
+                dirty.set(true);
+                return new CopyOnWriteArrayList<>();
+            })).stream()
+                .map(child -> (T) createDocument(key, child))
+                .forEach(existing::add);
         });
         
         try {
-            @SuppressWarnings("unchecked")
-            final ObservableList<T> list = (ObservableList<T>)
-                documents.computeIfAbsent(key, k -> prepareListOnKey(
-                    k, observableList(new CopyOnWriteArrayList<>(existing))
-                ));
+            synchronized(documents) {
+                @SuppressWarnings("unchecked")
+                final ObservableList<T> list = (ObservableList<T>)
+                    documents.computeIfAbsent(key, k -> prepareListOnKey(
+                        k, observableList(new CopyOnWriteArrayList<>(existing))
+                    ));
 
-            return list;
+                return list;
+            }
         } catch (final ClassCastException ex) {
             throw new SpeedmentException(
                 "Requested an ObservableList on key '" + key + 
@@ -408,14 +398,35 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     public ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
         return unmodifiableObservableMap(documents);
     }
-
-    protected DocumentProperty createDocument(String key, Map<String, Object> data) {
-        return new DefaultDocumentProperty(this, data);
+    
+    /**
+     * Specifies the constructor that should be used to instantiate children of
+     * this class.
+     * 
+     * @param key the key of the child in this document
+     * @return    constructor to be used on that key
+     */
+    protected BiFunction<THIS, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+            return DefaultDocumentProperty::new;
+        }
+        
+    /**
+     * Create a new observable document on the specified key with the specified
+     * data. This document will automatically be used as parent.
+     * 
+     * @param key   the key of the child
+     * @param data  the data to instantiate it with
+     * @return      the created observable child
+     */
+    private DocumentProperty createDocument(String key, Map<String, Object> data) {
+        @SuppressWarnings("unchecked")
+        final THIS self = (THIS) this;
+        return constructorForKey(key).apply(self, data);
     }
     
     @SuppressWarnings("unchecked")
     private static final Function<Object, List<Object>> UNCHECKED_LIST_CASTER =
-        dp -> (List<Object>)dp;
+        dp -> (List<Object>) dp;
     
     /**
      * Returns a list of all children instantiated using 
@@ -434,7 +445,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
             .mapValue(l -> l.get(0))
             .filterValue(DOCUMENT_TYPE::isInstance)
             .mapValue(DOCUMENT_TYPE::cast)
-            .mapValue((k, v) -> observableListOf(k, (parent, data) -> createDocument(k, data)))
+            .mapValue((k, v) -> observableListOf(k))
             .flatMapValue(ObservableList::stream)
             .sortedByKey(Comparator.naturalOrder())
             .values();

@@ -32,7 +32,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index> 
+public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index, IndexColumnProperty> 
     implements IndexColumn, HasNameProperty, HasOrdinalPositionProperty,
     HasOrderTypeProperty, HasColumnProperty {
     

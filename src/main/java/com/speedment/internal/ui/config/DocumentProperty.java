@@ -141,25 +141,14 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
     
     /**
      * Returns an observable list of all the child documents under a specified
-     * key. 
-     * <p>
-     * The implementation of the document is governed by the 
-     * {@link #createDocument(java.lang.String, java.util.Map) createDocument} 
-     * method. The specified {@code type} parameter must therefore match the
-     * implementation created by 
-     * {@link #createDocument(java.lang.String, java.util.Map) createDocument}.
+     * key.
      * 
-     * @param <P>          the type of this class
-     * @param <T>          the document type
-     * @param key          the key to look at
-     * @param constructor  the constructor to use to create the children views
-     * @return             an observable list of the documents under that key
-     * 
-     * @throws SpeedmentException  if the specified {@code type} is not the same
-     *                             type as {@link #createDocument(java.lang.String, java.util.Map) createDocument}
-     *                             generated.
+     * @param <T>  result type
+     * @param key  the key to look at
+     * @param type the expected result type
+     * @return     an observable list of the documents under that key
      */
-    <P extends DocumentProperty, T extends DocumentProperty> ObservableList<T> observableListOf(String key, BiFunction<P, Map<String, Object>, T> constructor) throws SpeedmentException;
+    <T extends DocumentProperty> ObservableList<T> observableListOf(String key/*, Class<T> type*/);
 
     /**
      * Returns a list of all children instantiated using 
