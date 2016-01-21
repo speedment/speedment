@@ -124,7 +124,20 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
      */
     BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty);
     
-    <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty);
+    /**
+     * Wraps the specified object value in a property so that changes to it can
+     * be observed. Any changes to the returned property will be reflected back
+     * to the raw map.
+     * 
+     * @param <T>      type of the value
+     * @param key      the key
+     * @param type     type of the value used for casting
+     * @param ifEmpty  a supplier for the initial value should the key not 
+     *                 already exist
+     * @return         the specified attribute wrapped in a {@code Property}
+     * @throws         SpeedmentException if the type is not what expected
+     */
+    <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) throws SpeedmentException;
     
     /**
      * Returns an observable list of all the child documents under a specified
@@ -179,4 +192,10 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
      * any events observing the tree will know the state has changed.
      */
     void invalidate();
+    
+    /**
+     * Goes through all {@code ObservableList ObservableLists} in the tree and
+     * make sure every one has been initalized.
+     */
+    void prepare();
 }

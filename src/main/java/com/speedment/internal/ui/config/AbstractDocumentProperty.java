@@ -221,26 +221,13 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     }
 
     /**
-     * Returns an unmodifiable view of the raw data of this document. To modify
-     * a value in this map, the appropriate {@code Property} or 
-     * {@code ObservableList} should be used.
-     * <p>
-     * These are the methods that should be used for modification:
-     * <ul>
-     *     <li>{@link #put(String, Object)}
-     *     <li>{@link #stringPropertyOf(String, Supplier)}
-     *     <li>{@link #integerPropertyOf(String, Supplier)}
-     *     <li>{@link #longPropertyOf(String, Supplier)}
-     *     <li>{@link #doublePropertyOf(String, Supplier)}
-     *     <li>{@link #objectPropertyOf(String, Class, Supplier)}
-     *     <li>{@link #observableListOf(String, Class, Supplier)}
-     * </ul>
+     * Returns the raw data of this document.
      * 
      * @return  the raw data
      */
     @Override
-    public final ObservableMap<String, Object> getData() {
-        return unmodifiableObservableMap(config);
+    public final Map<String, Object> getData() {
+        return config;
     }
     
     @Override
@@ -324,8 +311,23 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
     
     @SuppressWarnings("unchecked")
     @Override
-    public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) {
-        return (ObjectProperty<T>) properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(type.cast(get(k).orElseGet(ifEmpty)))));
+    public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) throws SpeedmentException {
+        try {
+            return (ObjectProperty<T>) properties.computeIfAbsent(key, 
+                k -> prepare(k, 
+                    new SimpleObjectProperty<>(
+                        type.cast(get(k)
+                            .orElseGet(ifEmpty)
+                        )
+                    )
+                )
+            );
+        } catch (final ClassCastException ex) {
+            throw new SpeedmentException(
+                "Requested property '" + key + 
+                "' of wrong type '" + type.getSimpleName() + "'.", ex
+            );
+        }
     }
     
     /**
@@ -367,7 +369,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
                 })).stream()
                     .map(child -> constructor.apply((P) this, child))
                     .forEach(existing::add);
-            } catch (ClassCastException ex) {
+            } catch (final ClassCastException ex) {
                 throw new SpeedmentException(
                     "Requested an ObservableList on key '" + key + 
                     "' of a different type than 'createDocument' created.", ex
@@ -378,10 +380,12 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         try {
             @SuppressWarnings("unchecked")
             final ObservableList<T> list = (ObservableList<T>)
-                documents.computeIfAbsent(key, k -> prepareListOnKey(k, observableList(new CopyOnWriteArrayList<>(existing))));
+                documents.computeIfAbsent(key, k -> prepareListOnKey(
+                    k, observableList(new CopyOnWriteArrayList<>(existing))
+                ));
 
             return list;
-        } catch (ClassCastException ex) {
+        } catch (final ClassCastException ex) {
             throw new SpeedmentException(
                 "Requested an ObservableList on key '" + key + 
                 "' of a different type than 'createDocument' created.", ex
@@ -429,7 +433,7 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
             .flatMapValue(List::stream)
             .filterValue(DOCUMENT_TYPE::isInstance)
             .mapValue(DOCUMENT_TYPE::cast)
-            .mapValue(this::createDocument)
+            .mapValue(this::createDocument) // TODO Will create new instances!!!!!!!!!!!!
             .sortedByKey(Comparator.naturalOrder())
             .values();
     }

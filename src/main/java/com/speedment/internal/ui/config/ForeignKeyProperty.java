@@ -88,6 +88,12 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
         return false;
     }
     
+    
+    @Override
+    public void prepare() {
+        foreignKeyColumns().forEach(DocumentProperty::prepare);
+    }
+    
     @Override
     public String toString() {
         return toStringHelper(this);

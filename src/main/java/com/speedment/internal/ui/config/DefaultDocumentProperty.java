@@ -50,4 +50,7 @@ public final class DefaultDocumentProperty extends AbstractDocumentProperty {
     public Class<? extends Document> mainInterface() {
         return Document.class;
     }
+    
+    @Override
+    public void prepare() { /* Do nothing since this document has no known children. */ }
 }

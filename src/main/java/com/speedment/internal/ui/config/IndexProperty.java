@@ -100,6 +100,12 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
         return false;
     }
     
+    
+    @Override
+    public void prepare() {
+        indexColumns().forEach(DocumentProperty::prepare);
+    }
+    
     @Override
     public String toString() {
         return toStringHelper(this);

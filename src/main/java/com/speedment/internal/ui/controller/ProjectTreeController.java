@@ -20,6 +20,7 @@ import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.event.ProjectLoaded;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
@@ -51,6 +52,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.control.MenuItem;
 import javafx.collections.ListChangeListener;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -97,6 +99,7 @@ public final class ProjectTreeController implements Initializable {
         hierarchy.setCellFactory(view -> new DocumentPropertyCell(ui));
         hierarchy.getSelectionModel().setSelectionMode(SINGLE);
         
+        project.prepare();
         populateTree(project);
     }
     
@@ -110,22 +113,19 @@ public final class ProjectTreeController implements Initializable {
     private <P extends DocumentProperty & HasExpandedProperty> TreeItem<DocumentProperty> branch(P doc) {
         requireNonNull(doc);
         
+        System.out.println("Creating branch of " + doc.mainInterface().getSimpleName() + " '" + HasName.of(doc).getName() + "'.");
+        
         final TreeItem<DocumentProperty> branch = new TreeItem<>(doc);
         branch.expandedProperty().bindBidirectional(doc.expandedProperty());
         
-        doc.children()
-            .filter(DocumentProperty.class::isInstance)
-            .filter(HasExpandedProperty.class::isInstance)
-            .map(d -> (DocumentProperty & HasExpandedProperty) d)
-            .map(this::branch)
-            .forEachOrdered(branch.getChildren()::add);
-        
         final ListChangeListener<? super DocumentProperty> onListChange = (ListChangeListener.Change<? extends DocumentProperty> change) -> {
+            System.out.println("A child list in " + HasName.of(doc).getName() + " was modified.");
             while (change.next()) {
                 if (change.wasAdded()) {
                     change.getAddedSubList().stream()
                         .filter(HasExpandedProperty.class::isInstance)
-                        .map(d -> branch((DocumentProperty & HasExpandedProperty) d))
+                        .map(d -> (DocumentProperty & HasExpandedProperty) d)
+                        .map(this::branch)
                         .forEachOrdered(branch.getChildren()::add);
                 }
                 
@@ -138,17 +138,39 @@ public final class ProjectTreeController implements Initializable {
             }
         };
         
+        // Create a branch for every child
+        doc.children()
+            .filter(HasExpandedProperty.class::isInstance)
+            .map(d -> (DocumentProperty & HasExpandedProperty) d)
+            .map(this::branch)
+            .forEachOrdered(branch.getChildren()::add);
+ 
+        //  Listen to changes in the actual map
         doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
             if (change.wasAdded()) {
-                System.out.println("New key '" + change.getKey() + "' was added.");
+                System.out.println("New key '" + change.getKey() + "' in " + doc.mainInterface().getSimpleName() + " '" + HasName.of(doc).getName() + "' was added.");
+                
+                // Listen for changes in the added list
                 change.getValueAdded().addListener(onListChange);
+                
+                // Create a branch for every child
                 change.getValueAdded().stream()
                     .filter(HasExpandedProperty.class::isInstance)
-                    .map(d -> branch((DocumentProperty & HasExpandedProperty) d))
+                    .map(d -> (DocumentProperty & HasExpandedProperty) d)
+                    .map(this::branch)
                     .forEachOrdered(branch.getChildren()::add);
             }
         });
         
+        System.out.println(doc.mainInterface().getSimpleName() + 
+            " '" + HasName.of(doc).getName() + 
+            "' children are: " + doc.childrenProperty().entrySet()
+                .stream()
+                .map(s -> "{" + s.getKey() + ":" + s.getValue() + "}")
+                .collect(joining(", "))
+        );
+        
+        // Listen to changes in every list inside the map
         doc.childrenProperty()
             .values()
             .forEach(list -> list.addListener(onListChange));

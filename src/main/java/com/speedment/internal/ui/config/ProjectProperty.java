@@ -174,4 +174,9 @@ public final class ProjectProperty extends AbstractRootDocumentProperty
     public String toString() {
         return toStringHelper(this);
     }
+    
+    @Override
+    public void prepare() {
+        dbmses().forEach(DocumentProperty::prepare);
+    }
 }

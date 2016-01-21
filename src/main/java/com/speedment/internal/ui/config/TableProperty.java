@@ -151,9 +151,17 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema>
         return created;
     }
     
+    
+    @Override
+    public void prepare() {
+        columns().forEach(DocumentProperty::prepare);
+        indexes().forEach(DocumentProperty::prepare);
+        foreignKeys().forEach(DocumentProperty::prepare);
+        primaryKeyColumns().forEach(DocumentProperty::prepare);
+    }
+    
     @Override
     public String toString() {
         return toStringHelper(this);
-    } 
-    
+    }
 }

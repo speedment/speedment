@@ -105,4 +105,7 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     public String toString() {
         return toStringHelper(this);
     }
+    
+    @Override
+    public void prepare() { /* Do nothing since this document has no known children. */ }
 }
