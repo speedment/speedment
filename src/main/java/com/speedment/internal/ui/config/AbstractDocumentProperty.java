@@ -430,14 +430,16 @@ public abstract class AbstractDocumentProperty implements DocumentProperty, HasE
         return stream()
             .filterValue(List.class::isInstance)
             .mapValue(UNCHECKED_LIST_CASTER)
-            .flatMapValue(List::stream)
+            .filterValue(l -> !l.isEmpty())
+            .mapValue(l -> l.get(0))
             .filterValue(DOCUMENT_TYPE::isInstance)
             .mapValue(DOCUMENT_TYPE::cast)
-            .mapValue(this::createDocument) // TODO Will create new instances!!!!!!!!!!!!
+            .mapValue((k, v) -> observableListOf(k, (parent, data) -> createDocument(k, data)))
+            .flatMapValue(ObservableList::stream)
             .sortedByKey(Comparator.naturalOrder())
             .values();
     }
-
+    
     /**
      * Mark this component and all components above it as invalidated so that
      * any events observing the tree will know the state has changed.
