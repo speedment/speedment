@@ -52,7 +52,4 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
     public String toString() {
         return toStringHelper(this);
     }
-    
-    @Override
-    public void prepare() { /* Do nothing since this document has no known children. */ }
 }

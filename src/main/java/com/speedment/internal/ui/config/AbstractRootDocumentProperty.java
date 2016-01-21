@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * @author        Emil Forslund
  * @param <THIS>  this class type
  */
-public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>> 
+public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>>
     extends AbstractDocumentProperty<THIS> {
     
     public AbstractRootDocumentProperty(Map<String, Object> data) {
@@ -34,7 +34,7 @@ public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocu
     }
 
     @Override
-    public final Optional<? extends Document> getParent() {
+    public final Optional<? extends DocumentProperty> getParent() {
         return Optional.empty();
     }
 

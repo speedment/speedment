@@ -99,7 +99,6 @@ public final class ProjectTreeController implements Initializable {
         hierarchy.setCellFactory(view -> new DocumentPropertyCell(ui));
         hierarchy.getSelectionModel().setSelectionMode(SINGLE);
         
-        project.prepare();
         populateTree(project);
     }
     

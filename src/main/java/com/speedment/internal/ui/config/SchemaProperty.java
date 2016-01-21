@@ -103,12 +103,6 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
         return created;
     }
     
-    
-    @Override
-    public void prepare() {
-        tables().forEach(DocumentProperty::prepare);
-    }
-    
     @Override
     public String toString() {
         return toStringHelper(this);

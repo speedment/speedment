@@ -145,12 +145,6 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
         return created;
     }
     
-    
-    @Override
-    public void prepare() {
-        schemas().forEach(DocumentProperty::prepare);
-    }
-    
     @Override
     public String toString() {
         return toStringHelper(this);

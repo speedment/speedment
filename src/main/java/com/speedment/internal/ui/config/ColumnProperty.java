@@ -167,7 +167,4 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
             }
         }
     };
-
-    @Override
-    public void prepare() { /* Do nothing since this document has no known children. */ }
 }

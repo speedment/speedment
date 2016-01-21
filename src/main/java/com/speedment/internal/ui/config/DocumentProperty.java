@@ -19,6 +19,7 @@ package com.speedment.internal.ui.config;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -62,7 +63,10 @@ import javafx.collections.ObservableMap;
  * 
  * @author Emil Forslund
  */
-public interface DocumentProperty extends Document, HasUiVisibleProperties, HasMainInterface, Observable {
+public interface DocumentProperty extends Document, 
+        HasUiVisibleProperties, 
+        HasMainInterface,
+        Observable {
     
     /**
      * Wraps the specified String value in a property so that changes to it can
@@ -145,10 +149,9 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
      * 
      * @param <T>  result type
      * @param key  the key to look at
-     * @param type the expected result type
      * @return     an observable list of the documents under that key
      */
-    <T extends DocumentProperty> ObservableList<T> observableListOf(String key/*, Class<T> type*/);
+    <T extends DocumentProperty> ObservableList<T> observableListOf(String key);
 
     /**
      * Returns a list of all children instantiated using 
@@ -181,10 +184,4 @@ public interface DocumentProperty extends Document, HasUiVisibleProperties, HasM
      * any events observing the tree will know the state has changed.
      */
     void invalidate();
-    
-    /**
-     * Goes through all {@code ObservableList ObservableLists} in the tree and
-     * make sure every one has been initalized.
-     */
-    void prepare();
 }
