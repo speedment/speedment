@@ -407,10 +407,49 @@ public final class SingletonStream<T> implements Stream<T> {
         };
     }
 
+    // Java 9 Stream features
+    /**
+     * Returns, if this stream is ordered, a stream consisting of the longest
+     * prefix of elements taken from this stream that match the given predicate.
+     *
+     * @param predicate - a non-interfering, stateless predicate to apply to
+     * elements to determine the longest prefix of elements.
+     * @return the new stream
+     */
+    public Stream<T> takeWhile(Predicate<? super T> predicate) {
+        if (predicate.test(element)) {
+            return this;
+        } else {
+            return Stream.empty();
+        }
+    }
+
+    /**
+     * Returns, if this stream is ordered, a stream consisting of the remaining
+     * elements of this stream after dropping the longest prefix of elements
+     * that match the given predicate. Otherwise returns, if this stream is
+     * unordered, a stream consisting of the remaining elements of this stream
+     * after dropping a subset of elements that match the given predicate.
+     *
+     * @param predicate - a non-interfering, stateless predicate to apply to
+     * elements to determine the longest prefix of elements.
+     *
+     * @return new new stream
+     */
+    public Stream<T> dropWhile(Predicate<? super T> predicate) {
+        if (predicate.test(element)) {
+            return Stream.empty();
+        } else {
+            return this;
+        }
+    }
+
+    ;
+    
+    
     //
     // Optional like implementations
     //
-    
     /**
      * If a value is present in this {@code SingletonStream}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
@@ -450,6 +489,45 @@ public final class SingletonStream<T> implements Stream<T> {
         }
     }
 
+    /**
+     * If a value is present, performs the given action with the value,
+     * otherwise performs the given empty-based action.
+     *
+     * @param action the action to be performed, if a value is present
+     * @param emptyAction the empty-based action to be performed, if no value is
+     * present
+     * @throws NullPointerException if a value is present and the given action
+     * is null, or no value is present and the given empty-based action is null.
+     */
+    public void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction) {
+        requireNonNull(action);
+        requireNonNull(emptyAction);
+        if (element != null) {
+            action.accept(element);
+        } else {
+            emptyAction.run();
+        }
+    }
+
+    /**
+     * If a value is present, returns a SingletonStream describing the value,
+     * otherwise returns a SingletonStream produced by the supplying function.
+     *
+     * @param supplier - the supplying function that produces an SingletonStream
+     * to be returned
+     * @return an Optional describing the value of this Optional, if a value is
+     * present, otherwise an Optional produced by the supplying function.
+     * @throws NullPointerException if the supplying function is null or
+     * produces a null result
+     */
+    public SingletonStream<T> or(Supplier<SingletonStream<T>> supplier) {
+        requireNonNull(supplier);
+        if (element == null) {
+            return this;
+        } else {
+            return requireNonNull(supplier.get());
+        }
+    }
 
     /**
      * Return the value if present, otherwise return {@code other}.
