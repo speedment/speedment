@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.internal.util;
+package com.speedment.internal.util.stream;
 
+import com.speedment.internal.util.stream.SingletonStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -37,29 +38,34 @@ import static org.junit.Assert.*;
  * @author Per Minborg
  */
 public class SingletonStreamTest {
-    
+
     private SingletonStream<String> instance;
-    
+
     public SingletonStreamTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         instance = SingletonStream.of("A");
     }
-    
+
     @After
     public void tearDown() {
     }
 
+       @Test
+    public void testSome() {
+        instance.map("A"::indexOf).distinct().unordered().forEach(System.out::println);
+    }
+    
     /**
      * Test of of method, of class SingletonStream.
      */
@@ -81,15 +87,6 @@ public class SingletonStreamTest {
     }
 
     /**
-     * Test of empty method, of class SingletonStream.
-     */
-    @Test
-    public void testEmpty() {
-        System.out.println("empty");
-        assertFalse(instance.empty().isPresent());
-    }
-
-    /**
      * Test of filter method, of class SingletonStream.
      */
     @Test
@@ -105,8 +102,12 @@ public class SingletonStreamTest {
     @Test
     public void testMap() {
         System.out.println("map");
-        String binLen = instance.map(String::length).map(Integer::toBinaryString).get();
-        assertEquals("1", binLen);
+        final Optional<String> binLen = instance.map(String::length).map(Integer::toBinaryString).findFirst();
+        assertEquals(Optional.of("1"), binLen);
+
+        Optional<String> r = SingletonStream.of("C").map(s -> null).map(a -> "Olle").findAny();
+        assertEquals(Optional.of("Olle"), r);
+
     }
 
     /**
@@ -117,10 +118,8 @@ public class SingletonStreamTest {
         System.out.println("mapToInt");
         assertEquals(1, instance.mapToInt(String::length).sum());
     }
-    
-    // TODO: Implement the test cases below!
-    
 
+    // TODO: Implement the test cases below!
 //    @Test
 //    public void testMapToLong() {
 //        System.out.println("mapToLong");
@@ -734,5 +733,4 @@ public class SingletonStreamTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
-    
 }
