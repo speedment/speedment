@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util.stream;
 
+import static com.speedment.internal.util.stream.SingletonUtil.*;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -57,9 +58,6 @@ import java.util.stream.Stream;
  */
 public final class SingletonStream<T> implements Stream<T> {
 
-    private static final int SIZE = 1;
-    private static final boolean STRICT = false;
-
     private final T element;
 
     private SingletonStream(T element) {
@@ -98,7 +96,7 @@ public final class SingletonStream<T> implements Stream<T> {
         if (STRICT) {
             return toStream().mapToInt(mapper);
         }
-        return IntStream.of(mapper.applyAsInt(element));
+        return SingletonIntStream.of(mapper.applyAsInt(element));
     }
 
     @Override
@@ -121,22 +119,40 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return toStream().flatMap(mapper);
+        requireNonNull(mapper);
+        if (STRICT) {
+            return toStream().flatMap(mapper);
+        }
+        @SuppressWarnings("unchecked")
+        final Stream<R> result = (Stream<R>) mapper.apply(element);
+        return result;
     }
 
     @Override
     public IntStream flatMapToInt(Function<? super T, ? extends IntStream> mapper) {
-        return toStream().flatMapToInt(mapper);
+        requireNonNull(mapper);
+        if (STRICT) {
+            return toStream().flatMapToInt(mapper);
+        }
+        return mapper.apply(element);
     }
 
     @Override
     public LongStream flatMapToLong(Function<? super T, ? extends LongStream> mapper) {
-        return toStream().flatMapToLong(mapper);
+        requireNonNull(mapper);
+        if (STRICT) {
+            return toStream().flatMapToLong(mapper);
+        }
+        return mapper.apply(element);
     }
 
     @Override
     public DoubleStream flatMapToDouble(Function<? super T, ? extends DoubleStream> mapper) {
-        return toStream().flatMapToDouble(mapper);
+        requireNonNull(mapper);
+        if (STRICT) {
+            return toStream().flatMapToDouble(mapper);
+        }
+        return mapper.apply(element);
     }
 
     @Override
@@ -183,11 +199,13 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public void forEach(Consumer<? super T> action) {
+        requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public void forEachOrdered(Consumer<? super T> action) {
+        requireNonNull(action);
         action.accept(element);
     }
 
@@ -199,6 +217,7 @@ public final class SingletonStream<T> implements Stream<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
+        requireNonNull(generator);
         final A[] result = generator.apply(SIZE);
         result[0] = (A) element;
         return result;
@@ -206,6 +225,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public T reduce(T identity, BinaryOperator<T> accumulator) {
+        requireNonNull(accumulator);
         return accumulator.apply(identity, element);
     }
 
@@ -217,12 +237,15 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
+        requireNonNull(accumulator);
         // the combiner is never used in a non-parallell stream
         return accumulator.apply(identity, element);
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
+        requireNonNull(supplier);
+        requireNonNull(accumulator);
         final R value = supplier.get();
         accumulator.accept(value, element);
         // the combiner is never used in a non-parallell stream
@@ -231,6 +254,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
+        requireNonNull(collector);
         final A value = collector.supplier().get();
         collector.accumulator().accept(value, element);
         // the combiner is never used in a non-parallell stream
@@ -254,16 +278,19 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
         return !predicate.test(element);
     }
 
@@ -420,6 +447,7 @@ public final class SingletonStream<T> implements Stream<T> {
      * @return the new stream
      */
     public Stream<T> takeWhile(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
         if (predicate.test(element)) {
             return this;
         } else {
@@ -440,6 +468,7 @@ public final class SingletonStream<T> implements Stream<T> {
      * @return new new stream
      */
     public Stream<T> dropWhile(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
         if (predicate.test(element)) {
             return empty();
         } else {

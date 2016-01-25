@@ -54,7 +54,6 @@ import java.util.function.*;
 import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
