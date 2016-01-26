@@ -1,6 +1,5 @@
 package com.speedment.internal.util.stream;
 
-import com.speedment.internal.core.stream.StreamUtil;
 import java.util.IntSummaryStatistics;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.stream.SingletonUtil.*;

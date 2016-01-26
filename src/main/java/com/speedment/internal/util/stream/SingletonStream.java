@@ -64,10 +64,27 @@ public final class SingletonStream<T> implements Stream<T> {
         this.element = element;
     }
 
+    /**
+     * Creates and returns an optimized sequential {@link Stream} implementation
+     * with only a single element.
+     *
+     * @param element the single element
+     * @param <T> the type of the stream elements
+     * @return a singleton sequential stream
+     */
     public static <T> SingletonStream<T> of(T element) {
         return new SingletonStream<>(element);
     }
 
+    /**
+     * Creates and returns an optimized sequential {@link Stream} implementation
+     * with only a single element if the element is non-null. if the element is
+     * null, an empty Stream is returned.
+     *
+     * @param element the single element or null
+     * @param <T> the type of the stream elements
+     * @return a singleton sequential stream
+     */
     public static <T> Stream<T> ofNullable(T element) {
         return element == null ? empty() : of(element);
     }
