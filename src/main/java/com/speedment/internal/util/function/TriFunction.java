@@ -2,7 +2,8 @@ package com.speedment.internal.util.function;
 
 /**
  * Represents a function that accepts three arguments and produces a result.
- * This is the three-arity specialization of {@link Function}.
+ * This is the three-arity specialization of
+ * {@link java.util.function.Function}.
  * <p>
  * @param <T> the type of the first argument to the function
  * @param <U> the type of the second argument to the function
