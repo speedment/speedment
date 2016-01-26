@@ -128,7 +128,7 @@ public final class UISession {
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
-        this.project               = new ProjectProperty(project.stream().toConcurrentMap());
+        this.project               = new ProjectProperty(new ConcurrentHashMap<>(project.getData()));
         this.propertySheetFactory  = new PropertySheetFactory();
     }
     
@@ -518,7 +518,7 @@ public final class UISession {
                         break;
 
                     case USE_EXISTING_STAGE :
-                        project.getData().putAll(p.getData());
+                        project.mergeWith(p);
                         SceneController.createAndShow(this);
                         break;
 

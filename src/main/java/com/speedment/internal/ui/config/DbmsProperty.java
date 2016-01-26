@@ -126,7 +126,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
 
     @Override
-    protected BiFunction<DbmsProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected BiFunction<DbmsProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         switch (key) {
             case SCHEMAS : return SchemaProperty::new;
             default      : return super.constructorForKey(key);

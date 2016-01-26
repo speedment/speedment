@@ -30,6 +30,7 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.internal.util.document.DocumentMerger;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,6 +57,12 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
 
     public ProjectProperty(Map<String, Object> data) {
         super(data);
+    }
+    
+    public void mergeWith(Project project) {
+        DocumentMerger.merge(this, project, (parent, key, data) -> 
+            ((AbstractDocumentProperty<?>) parent).createChild(key, data)
+        );
     }
     
     @Override
@@ -143,7 +150,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
     
     @Override
-    protected final BiFunction<ProjectProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected final BiFunction<ProjectProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         switch (key) {
             case DBMSES : return DbmsProperty::new;
             default     : return super.constructorForKey(key);

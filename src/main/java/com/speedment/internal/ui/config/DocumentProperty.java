@@ -18,8 +18,8 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -35,6 +35,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -66,6 +67,7 @@ import javafx.collections.ObservableMap;
 public interface DocumentProperty extends Document, 
         HasUiVisibleProperties, 
         HasMainInterface,
+        HasName,
         Observable {
     
     /**
@@ -178,6 +180,20 @@ public interface DocumentProperty extends Document,
      * @return  all view of all children made visible so far
      */
     ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty();
+    
+    /**
+     * Creates a new child on the specified key with the specified data and 
+     * returns it. This method can be overriden by subclasses to create better
+     * implementations.
+     * <p>
+     * Warning! This method is only intended to be called internally and does
+     * not properly configure created children in the responsive model.
+     * 
+     * @param key   the key to create the child on
+     * @param data  the initial data
+     * @return      the created child
+     */
+//    DocumentProperty createChild(String key, Map<String, Object> data);
     
     /**
      * Mark this component and all components above it as invalidated so that

@@ -93,7 +93,7 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
     }
 
     @Override
-    protected final BiFunction<TableProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected final BiFunction<TableProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         switch (key) {
             case COLUMNS             : return ColumnProperty::new;
             case INDEXES             : return IndexProperty::new;

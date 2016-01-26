@@ -41,8 +41,8 @@ public abstract class AbstractChildDocumentProperty
     }
 
     @Override
-    protected BiFunction<THIS, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
-        return (BiFunction<THIS, Map<String, Object>, DocumentProperty>) super.constructorForKey(key);
+    protected BiFunction<THIS, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
+        return (BiFunction<THIS, Map<String, Object>, AbstractDocumentProperty>) super.constructorForKey(key);
     }
 
     @Override

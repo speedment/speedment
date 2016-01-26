@@ -27,7 +27,8 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class DefaultDocumentProperty extends AbstractDocumentProperty {
+public final class DefaultDocumentProperty extends 
+    AbstractDocumentProperty<DefaultDocumentProperty> {
     
     private final Document parent;
     

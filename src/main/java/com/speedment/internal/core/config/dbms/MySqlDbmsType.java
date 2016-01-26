@@ -23,7 +23,6 @@ import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;

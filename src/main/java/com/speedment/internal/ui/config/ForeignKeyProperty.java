@@ -59,7 +59,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
 
     @Override
-    protected final BiFunction<ForeignKeyProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected final BiFunction<ForeignKeyProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         switch (key) {
             case FOREIGN_KEY_COLUMNS : return ForeignKeyColumnProperty::new;
             default                  : return super.constructorForKey(key);

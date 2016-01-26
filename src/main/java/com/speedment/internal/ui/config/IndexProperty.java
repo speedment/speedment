@@ -17,7 +17,6 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import static com.speedment.config.db.ForeignKey.FOREIGN_KEY_COLUMNS;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
@@ -73,7 +72,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
     }
 
     @Override
-    protected final BiFunction<IndexProperty, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected final BiFunction<IndexProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         switch (key) {
             case INDEX_COLUMNS : return IndexColumnProperty::new;
             default            : return super.constructorForKey(key);

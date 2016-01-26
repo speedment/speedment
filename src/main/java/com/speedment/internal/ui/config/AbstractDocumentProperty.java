@@ -18,6 +18,7 @@ package com.speedment.internal.ui.config;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.stream.MapStream;
 import com.speedment.util.OptionalBoolean;
 import static java.util.Collections.newSetFromMap;
@@ -57,7 +58,6 @@ import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import javafx.collections.ListChangeListener;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -67,11 +67,11 @@ import javafx.collections.ObservableMap;
  * @param <THIS>  the type of the implementing class
  */
 public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> 
-    implements DocumentProperty, HasExpandedProperty {
+    implements DocumentProperty, HasExpandedProperty, HasNameProperty {
  
     private final Map<String, Object> config;
     private final transient ObservableMap<String, Property<?>> properties;
-    private final transient ObservableMap<String, ObservableList<DocumentProperty>> children;
+    private final transient ObservableMap<String, ObservableList<AbstractDocumentProperty>> children;
     
     /**
      * Invalidation listeners required by the {@code Observable} interface.
@@ -85,106 +85,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
         children   = observableMap(new ConcurrentHashMap<>());
         listeners  = newSetFromMap(new ConcurrentHashMap<>());
 
-        // Create properties and children for every existing value
-        for (final Map.Entry<String, Object> entry : config.entrySet()) {
-            final String key = entry.getKey();
-            final Object val = entry.getValue();
-            
-            // Check if the specified value could be considered a child.
-            boolean wasChild = false;
-            if (val instanceof List<?>) {
-                @SuppressWarnings("unchecked")
-                final List<Object> list = (List<Object>) val;
-                
-                if (!list.isEmpty()) {
-                    final Object first = list.get(0);
-                    
-                    if (first instanceof Map<?, ?>) {
-                        @SuppressWarnings("unchecked")
-                        final Map<String, Object> childData = 
-                            (Map<String, Object>) first;
-                        
-                        children.computeIfAbsent(key, k -> {
-                            final ObservableList<DocumentProperty> newList =
-                                observableList(new CopyOnWriteArrayList<>());
-
-                            return newList;
-                        }).add(createChild(key, childData));
-                        
-                        wasChild = true;
-                    }
-                }
-            }
-            
-            // If the value did not meet the conditions to be considered a
-            // child, consider it a property.
-            if (!wasChild) {
-                final Property<?> prop;
-                if (val instanceof String) {
-                    @SuppressWarnings("unchecked")
-                    final String casted = (String) val;
-                    prop = new SimpleStringProperty(casted);
-                } else if (val instanceof Boolean) {
-                    @SuppressWarnings("unchecked")
-                    final Boolean casted = (Boolean) val;
-                    prop = new SimpleBooleanProperty(casted);
-                } else if (val instanceof Integer) {
-                    @SuppressWarnings("unchecked")
-                    final Integer casted = (Integer) val;
-                    prop = new SimpleIntegerProperty(casted);
-                } else if (val instanceof Long) {
-                    @SuppressWarnings("unchecked")
-                    final Long casted = (Long) val;
-                    prop = new SimpleLongProperty(casted);
-                } else if (val instanceof Number) {
-                    @SuppressWarnings("unchecked")
-                    final Number casted = (Number) val;
-                    prop = new SimpleDoubleProperty(casted.doubleValue());
-                } else {
-                    prop = new SimpleObjectProperty<>(val);
-                }
-
-                properties.put(key, addListeners(key, prop));
-            }
-        }
-        
-        MapStream.of(children).forEach(this::addListeners);
-        
-        properties.addListener((MapChangeListener.Change<? extends String, ? extends Property<?>> change) -> {
-            final String key = change.getKey();
-            
-            // Put the initial value of the property into the source map.
-            if (change.wasAdded()) {
-                final Property<?> prop = change.getValueAdded();
-                config.put(key, prop.getValue());
-            }
-            
-            // If the change resulted in a key being dropped, throw an exception
-            // since removal of keys are not supported.
-            if (change.wasRemoved()) {
-                throw new SpeedmentException(
-                    "DocumentProperty " + getClass().getSimpleName() + 
-                    " was modified so that property key '" + key +
-                    "' was removed. Removal of keys are not allowed in this " +
-                    "implementation."
-                );
-            }
-        });
-        
-        children.addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> mapChange) -> {
-            final String key = mapChange.getKey();
-
-            // If the change resulted in a key being dropped, throw an exception
-            // since removal of keys are not supported.
-            if (mapChange.wasRemoved()) {
-                throw new SpeedmentException(
-                    "DocumentProperty " + getClass().getSimpleName() + 
-                    " was modified so that children key '" + key +
-                    "' was removed. Removal of keys are not allowed in this " +
-                    "implementation."
-                );
-            }
-        });
+        loadFrom(children, data);
     }
 
     @Override
@@ -194,33 +95,51 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     
     @Override
     public final void put(String key, Object val) {
-        @SuppressWarnings("unchecked")
-        final Property<Object> property = (Property<Object>)
-            properties.computeIfAbsent(key, k -> {
-                final Property<?> prop;
-                
-                if (val instanceof String) {
-                    prop = new SimpleStringProperty();
-                } else if (val instanceof Boolean) {
-                    prop = new SimpleBooleanProperty();
-                } else if (val instanceof Integer) {
-                    prop = new SimpleIntegerProperty();
-                } else if (val instanceof Long) {
-                    prop = new SimpleLongProperty();
-                } else if (val instanceof Number) {
-                    prop = new SimpleDoubleProperty();
+        if (val instanceof List<?>) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) val;
+            
+            for (final Object o : list) {
+                if (o instanceof Map<?, ?>) {
+                    @SuppressWarnings("unchecked")
+                    final Map<String, Object> data = (Map<String, Object>) o;
+                    observableListOf(key).add(createChild(key, data));
                 } else {
-                    prop = new SimpleObjectProperty<>();
+                    throw new SpeedmentException(
+                        "A list that could not be considered a child document was " +
+                        "added to the " + mainInterface().getSimpleName() + "."
+                    );
                 }
-                
-                @SuppressWarnings("unchecked")
-                final Property<Object> result = 
-                    (Property<Object>) addListeners(k, prop);
-                
-                return result;
-            });
-        
-        property.setValue(val);
+            }
+        } else {
+            @SuppressWarnings("unchecked")
+            final Property<Object> property = (Property<Object>)
+                properties.computeIfAbsent(key, k -> {
+                    final Property<?> prop;
+
+                    if (val instanceof String) {
+                        prop = new SimpleStringProperty();
+                    } else if (val instanceof Boolean) {
+                        prop = new SimpleBooleanProperty();
+                    } else if (val instanceof Integer) {
+                        prop = new SimpleIntegerProperty();
+                    } else if (val instanceof Long) {
+                        prop = new SimpleLongProperty();
+                    } else if (val instanceof Number) {
+                        prop = new SimpleDoubleProperty();
+                    } else {
+                        prop = new SimpleObjectProperty<>();
+                    }
+
+                    @SuppressWarnings("unchecked")
+                    final Property<Object> result = 
+                        (Property<Object>) addListeners(k, prop);
+
+                    return result;
+                });
+
+            property.setValue(val);
+        }
     }
 
     @Override
@@ -330,7 +249,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     
     @Override
     public final ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
-        return unmodifiableObservableMap(children);
+        return unmodifiableObservableMap(
+            (ObservableMap<String, ObservableList<DocumentProperty>>) 
+            (ObservableMap<String, ?>) 
+            children
+        );
     }
 
     @Override
@@ -365,14 +288,102 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @param key  the key
      * @return     constructor for children under the key
      */
-    protected BiFunction<THIS, Map<String, Object>, DocumentProperty> constructorForKey(String key) {
+    protected BiFunction<THIS, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
         return DefaultDocumentProperty::new;
     }
     
-    private DocumentProperty createChild(String key, Map<String, Object> data) {
+    /**
+     * Creates a new child on the specified key with the specified data and 
+     * returns it. This method can be overriden by subclasses to create better
+     * implementations.
+     * <p>
+     * Warning! This method is only intended to be called internally and does
+     * not properly configure created children in the responsive model.
+     * 
+     * @param key   the key to create the child on
+     * @param data  the initial data
+     * @return      the created child
+     */
+    protected final AbstractDocumentProperty createChild(String key, Map<String, Object> data) {
         @SuppressWarnings("unchecked")
         final THIS self = (THIS) this;
         return constructorForKey(key).apply(self, data);
+    }
+    
+    private void loadFrom(ObservableMap<String, ObservableList<AbstractDocumentProperty>> children, Map<String, Object> data) {
+        // Load properties and children for every existing value
+        for (final Map.Entry<String, Object> entry : data.entrySet()) {
+            final String key = entry.getKey();
+            final Object val = entry.getValue();
+            
+            // Check if the specified value could be considered a child.
+            boolean wasChild = false;
+            if (val instanceof List<?>) {
+                @SuppressWarnings("unchecked")
+                final List<Object> list = (List<Object>) val;
+                
+                if (!list.isEmpty()) {
+                    final Object first = list.get(0);
+                    
+                    if (first instanceof Map<?, ?>) {
+                        @SuppressWarnings("unchecked")
+                        final List<Map<String, Object>> castedList = 
+                            (List<Map<String, Object>>) (List<?>) list;
+                        
+                        final ObservableList<AbstractDocumentProperty> docList =
+                            children.computeIfAbsent(key, k -> {
+                                final ObservableList<AbstractDocumentProperty> newList =
+                                    observableList(new CopyOnWriteArrayList<>());
+
+                                return newList;
+                            });
+                        
+                        castedList.stream()
+                            .map(child -> createChild(key, child))
+                            .forEachOrdered(docList::add);
+                        
+                        wasChild = true;
+                    }
+                }
+            }
+            
+            // If the value did not meet the conditions to be considered a
+            // child, consider it a property.
+            if (!wasChild) {
+                @SuppressWarnings("unchecked")
+                final Property<Object> property = (Property<Object>) 
+                    properties.computeIfAbsent(key, k -> {
+                        final Property<?> prop;
+                        if (val instanceof String) {
+                            @SuppressWarnings("unchecked")
+                            final String casted = (String) val;
+                            prop = new SimpleStringProperty(casted);
+                        } else if (val instanceof Boolean) {
+                            @SuppressWarnings("unchecked")
+                            final Boolean casted = (Boolean) val;
+                            prop = new SimpleBooleanProperty(casted);
+                        } else if (val instanceof Integer) {
+                            @SuppressWarnings("unchecked")
+                            final Integer casted = (Integer) val;
+                            prop = new SimpleIntegerProperty(casted);
+                        } else if (val instanceof Long) {
+                            @SuppressWarnings("unchecked")
+                            final Long casted = (Long) val;
+                            prop = new SimpleLongProperty(casted);
+                        } else if (val instanceof Number) {
+                            @SuppressWarnings("unchecked")
+                            final Number casted = (Number) val;
+                            prop = new SimpleDoubleProperty(casted.doubleValue());
+                        } else {
+                            prop = new SimpleObjectProperty<>(val);
+                        }
+
+                        return addListeners(key, prop);
+                    });
+                
+                property.setValue(val);
+            }
+        }
     }
     
     private <T> Property<T> addListeners(String key, Property<T> property) {
@@ -383,7 +394,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
         return property;
     }
     
-    private ObservableList<DocumentProperty> addListeners(String key, ObservableList<DocumentProperty> list) {
+    private ObservableList<AbstractDocumentProperty> addListeners(String key, ObservableList<AbstractDocumentProperty> list) {
         // When an observable children list under a specific key is
         // modified, the new children must be inserted into the source
         // equivalent as well.
