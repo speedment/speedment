@@ -23,6 +23,7 @@ import com.speedment.Manager;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
 import com.speedment.component.EventComponent;
 import com.speedment.component.JavaTypeMapperComponent;
@@ -40,6 +41,7 @@ import com.speedment.internal.core.platform.component.impl.CodeGenerationCompone
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
+import com.speedment.internal.core.platform.component.impl.DocumentPropertyComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.EventComponentImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
@@ -62,12 +64,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
@@ -88,6 +84,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private UserInterfaceComponent userInterfaceComponent;
     private PasswordComponent passwordComponent;
     private CodeGenerationComponent codeGenerationComponent;
+    private DocumentPropertyComponent documentPropertyComponent;
 
     SpeedmentImpl() {
         put(ManagerComponentImpl::new);
@@ -106,6 +103,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(UserInterfaceComponentImpl::new);
         put(PasswordComponentImpl::new);
         put(CodeGenerationComponentImpl::new);
+        put(DocumentPropertyComponentImpl::new);
     }
     
     private SpeedmentImpl(SpeedmentImpl prototype) {
@@ -188,6 +186,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof CodeGenerationComponent) {
             codeGenerationComponent = castOrFail(item, CodeGenerationComponent.class);
+        }
+        if (item instanceof DocumentPropertyComponent) {
+            documentPropertyComponent = castOrFail(item, DocumentPropertyComponent.class);
         }
         return put(item, Component::getComponentClass);
     }
@@ -294,6 +295,11 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public CodeGenerationComponent getCodeGenerationComponent() {
         return codeGenerationComponent;
+    }
+    
+    @Override
+    public DocumentPropertyComponent getDocumentPropertyComponent() {
+        return documentPropertyComponent;
     }
 
     @Override
