@@ -22,11 +22,16 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+import com.speedment.internal.util.sql.SqlTypeInfo;
+
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -53,6 +58,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
         DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
         return result.toString();
     };
+    private static final Set<SqlTypeInfo> DATA_TYPES = new HashSet<>();
 
     public MariaDbDbmsType() {
 
@@ -70,7 +76,8 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
                 Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
                 DBMS_MAPPER,
                 RESULTSET_TABLE_SCHEMA,
-                CONNECTION_URL_GENERATOR
+                CONNECTION_URL_GENERATOR,
+                DATA_TYPES
         );
     }
     private static final MySqlSpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
