@@ -507,7 +507,6 @@ public final class UISession {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
                 final Project p = DocumentTranscoder.load(file.toPath());
-                System.out.println("Created project: " + DocumentTranscoder.save(p));
 
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :

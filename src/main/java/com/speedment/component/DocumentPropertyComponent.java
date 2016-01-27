@@ -67,7 +67,7 @@ public interface DocumentPropertyComponent extends Component {
         FOREIGN_KEYS        = concat(TABLES, Table.FOREIGN_KEYS),
         FOREIGN_KEY_COLUMNS = concat(FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS),
         INDEXES             = concat(TABLES, Table.INDEXES),
-        INDEX_COLUMNS       = concat(FOREIGN_KEYS, Index.INDEX_COLUMNS);
+        INDEX_COLUMNS       = concat(INDEXES, Index.INDEX_COLUMNS);
     
     /**
      * Functional interface that describes a constructor for an observable 

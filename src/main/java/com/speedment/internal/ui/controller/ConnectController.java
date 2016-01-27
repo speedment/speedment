@@ -46,7 +46,6 @@ import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -21,10 +21,12 @@ import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DbmsMutator;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.config.AbstractChildDocumentProperty;
+import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
@@ -36,6 +38,10 @@ import com.speedment.internal.ui.config.PrimaryKeyColumnProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
+import com.speedment.internal.util.document.DocumentMerger;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -51,27 +57,41 @@ import static org.junit.Assert.*;
 public class DocumentPropertyComponentImplTest {
     
     private Speedment speedment;
-    private DocumentPropertyComponent componenet;
+    private DocumentPropertyComponent component;
     
     @Before
     public void setUp() {
         speedment = new DefaultSpeedmentApplicationLifecycle().build();
-        componenet = speedment.getDocumentPropertyComponent();
+        component = speedment.getDocumentPropertyComponent();
+    }
+    
+    @Test
+    public void testStructure() {
+        final Field root;
+        try {
+            root = DocumentPropertyComponentImpl.class.getDeclaredField("root");
+            root.setAccessible(true);
+            
+            final Method toString = root.getDeclaringClass().getMethod("toString");
+            System.out.println(toString.invoke(root.get(component)));
+        } catch (final NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
+            throw new SpeedmentException("Could not call toString on component", ex);
+        }
     }
 
     @Test
     public void testDefaultInstallments() {
 
-        final DocumentProperty project = componenet.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
-        final DocumentProperty dbms = componenet.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
-        final DocumentProperty schema = componenet.getConstructor(DocumentPropertyComponent.SCHEMAS).create(dbms);
-        final DocumentProperty table = componenet.getConstructor(DocumentPropertyComponent.TABLES).create(schema);
-        final DocumentProperty column = componenet.getConstructor(DocumentPropertyComponent.COLUMNS).create(table);
-        final DocumentProperty index = componenet.getConstructor(DocumentPropertyComponent.INDEXES).create(table);
-        final DocumentProperty indexColumn = componenet.getConstructor(DocumentPropertyComponent.INDEX_COLUMNS).create(index);
-        final DocumentProperty foreignKey = componenet.getConstructor(DocumentPropertyComponent.FOREIGN_KEYS).create(table);
-        final DocumentProperty foreignKeyColumn = componenet.getConstructor(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS).create(foreignKey);
-        final DocumentProperty primaryKey = componenet.getConstructor(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS).create(table);
+        final DocumentProperty project = component.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
+        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
+        final DocumentProperty schema = component.getConstructor(DocumentPropertyComponent.SCHEMAS).create(dbms);
+        final DocumentProperty table = component.getConstructor(DocumentPropertyComponent.TABLES).create(schema);
+        final DocumentProperty column = component.getConstructor(DocumentPropertyComponent.COLUMNS).create(table);
+        final DocumentProperty index = component.getConstructor(DocumentPropertyComponent.INDEXES).create(table);
+        final DocumentProperty indexColumn = component.getConstructor(DocumentPropertyComponent.INDEX_COLUMNS).create(index);
+        final DocumentProperty foreignKey = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEYS).create(table);
+        final DocumentProperty foreignKeyColumn = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS).create(foreignKey);
+        final DocumentProperty primaryKey = component.getConstructor(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS).create(table);
         
         assertEquals("Make sure ProjectProperty is used by default: ", ProjectProperty.class, project.getClass());
         assertEquals("Make sure DbmsProperty is used by default: ", DbmsProperty.class, dbms.getClass());
@@ -87,10 +107,10 @@ public class DocumentPropertyComponentImplTest {
     
     @Test
     public void testAlternateInstallments() {
-        componenet.setConstructor(parent -> new AlternativeDbms((Project) parent), DocumentPropertyComponent.DBMSES);
+        component.setConstructor(parent -> new AlternativeDbms((Project) parent), DocumentPropertyComponent.DBMSES);
         
-        final DocumentProperty project = componenet.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
-        final DocumentProperty dbms = componenet.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
+        final DocumentProperty project = component.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
+        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
         
         assertEquals(ProjectProperty.class, project.getClass());
         assertEquals(AlternativeDbms.class, dbms.getClass());

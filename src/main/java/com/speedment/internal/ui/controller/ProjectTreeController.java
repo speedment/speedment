@@ -112,13 +112,10 @@ public final class ProjectTreeController implements Initializable {
     private <P extends DocumentProperty & HasExpandedProperty> TreeItem<DocumentProperty> branch(P doc) {
         requireNonNull(doc);
         
-        System.out.println("Creating branch of " + doc.mainInterface().getSimpleName() + " '" + HasName.of(doc).getName() + "'.");
-        
         final TreeItem<DocumentProperty> branch = new TreeItem<>(doc);
         branch.expandedProperty().bindBidirectional(doc.expandedProperty());
         
         final ListChangeListener<? super DocumentProperty> onListChange = (ListChangeListener.Change<? extends DocumentProperty> change) -> {
-            System.out.println("A child list in " + HasName.of(doc).getName() + " was modified.");
             while (change.next()) {
                 if (change.wasAdded()) {
                     change.getAddedSubList().stream()
@@ -147,7 +144,6 @@ public final class ProjectTreeController implements Initializable {
         //  Listen to changes in the actual map
         doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
             if (change.wasAdded()) {
-                System.out.println("New key '" + change.getKey() + "' in " + doc.mainInterface().getSimpleName() + " '" + HasName.of(doc).getName() + "' was added.");
                 
                 // Listen for changes in the added list
                 change.getValueAdded().addListener(onListChange);
@@ -160,14 +156,6 @@ public final class ProjectTreeController implements Initializable {
                     .forEachOrdered(branch.getChildren()::add);
             }
         });
-        
-        System.out.println(doc.mainInterface().getSimpleName() + 
-            " '" + HasName.of(doc).getName() + 
-            "' children are: " + doc.childrenProperty().entrySet()
-                .stream()
-                .map(s -> "{" + s.getKey() + ":" + s.getValue() + "}")
-                .collect(joining(", "))
-        );
         
         // Listen to changes in every list inside the map
         doc.childrenProperty()

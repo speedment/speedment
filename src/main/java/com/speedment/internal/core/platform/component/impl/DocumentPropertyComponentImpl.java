@@ -64,7 +64,6 @@ public final class DocumentPropertyComponentImpl extends Apache2AbstractComponen
     @Override
     public AbstractComponent initialize() {
         
-        System.out.println("Initializing DocumentPropertyComponenet.....");
         root.find().set((parent) -> new ProjectProperty());
         root.find(DBMSES).set(parent -> new DbmsProperty((Project) parent));
         root.find(SCHEMAS).set(parent -> new SchemaProperty((Dbms) parent));
@@ -81,7 +80,6 @@ public final class DocumentPropertyComponentImpl extends Apache2AbstractComponen
     
     @Override
     public <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, String... keyPath) {
-        System.out.println("Setting constructor to use on key path: '" + Arrays.asList(keyPath) + "'.");
         root.find(keyPath).set(constructor);
     }
 
@@ -126,6 +124,11 @@ public final class DocumentPropertyComponentImpl extends Apache2AbstractComponen
                     "iterator is outside the specified keyPath."
                 );
             }
+        }
+
+        @Override
+        public String toString() {
+            return children.toString();
         }
     }
     
