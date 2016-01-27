@@ -123,7 +123,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
-                final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);                
+                final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }
@@ -174,10 +174,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         LOGGER.info("Reading metadata from " + dbms.toString());
         final List<Schema> schemas = new ArrayList<>();
         try {
-        	        	
-			typeMapping = !dbms.getType().getDataTypes().isEmpty() ? readTypeMap(dbms
-					.getType().getDataTypes()) : readTypeMapFromDB(connection);
-        	
+            typeMapping = readTypeMapFromDB(connection);
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
                     final String schemaName = rs.getString(getDbms().getType().getResultSetTableSchema());
@@ -565,12 +562,5 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         };
 
     }
-    
-	protected Map<String, Class<?>> readTypeMap(Set<SqlTypeInfo> typeInfos) {
-		requireNonNull(typeInfos);
-		final Map<String, Class<?>> result = new ConcurrentHashMap<>();
-		typeInfos.forEach(typeInfo -> result.put(typeInfo.getSqlTypeName(),
-				speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo)));
-		return result;
-	}
+
 }

@@ -21,7 +21,6 @@ import com.speedment.annotation.Api;
 import com.speedment.config.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-import com.speedment.internal.util.sql.SqlTypeInfo;
 
 import java.util.Optional;
 import java.util.Set;
@@ -213,7 +212,5 @@ public interface DbmsType {
     Function<Dbms, String> getConnectionUrlGenerator();
 
     SpeedmentPredicateView getSpeedmentPredicateView();
-   
-    Set<SqlTypeInfo> getDataTypes();
 
 }
