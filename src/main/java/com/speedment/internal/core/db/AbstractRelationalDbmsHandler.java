@@ -431,7 +431,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected String jdbcSchemaLookupName(Schema schema) {
-        return null;
+        return schema.getName();
     }
 
     protected String jdbcCatalogLookupName(Schema schema) {
