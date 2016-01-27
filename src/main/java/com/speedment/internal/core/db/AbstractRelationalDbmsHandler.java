@@ -178,7 +178,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         LOGGER.info("Reading metadata from " + dbms.toString());
         
         try {
-            sqlTypeMapping = readTypeMapFromDB(connection);
+			sqlTypeMapping = !dbmsTypeOf(speedment, dbms).getDataTypes()
+					.isEmpty() ? readTypeMap(dbmsTypeOf(speedment, dbms)
+					.getDataTypes()) : readTypeMapFromDB(connection);
+        	
+           // sqlTypeMapping = readTypeMapFromDB(connection);
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
 
@@ -586,5 +590,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected interface TableChildMutator<T, U> {
         void mutate(T t, U u) throws SQLException;
     }
-
+    
+	protected Map<String, Class<?>> readTypeMap(Set<SqlTypeInfo> typeInfos) {
+		requireNonNull(typeInfos);
+		final Map<String, Class<?>> result = new ConcurrentHashMap<>();
+		typeInfos.forEach(typeInfo -> result.put(typeInfo.getSqlTypeName(),
+				speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo)));
+		return result;
+	}
 }

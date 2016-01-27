@@ -20,7 +20,10 @@ import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.DbmsHandler;
+import com.speedment.internal.util.sql.SqlTypeInfo;
+
 import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -46,6 +49,7 @@ public abstract class AbstractDbmsType implements DbmsType {
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
     private final String resultSetTableSchema;
     private final Function<Dbms,String> connectionUrlGenerator;
+    private final Set<SqlTypeInfo> dataTypes;
 
     protected AbstractDbmsType(
         String name,
@@ -61,7 +65,8 @@ public abstract class AbstractDbmsType implements DbmsType {
         Set<String> schemaExcludeSet,
         BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
         String resultSetTableSchema,
-        Function<Dbms,String> connectionUrlGenerator) {
+        Function<Dbms,String> connectionUrlGenerator,
+        Set<SqlTypeInfo> dataTypes) {
 
         this.name = requireNonNull(name);
         this.driverManagerName = requireNonNull(driverManagerName);
@@ -77,6 +82,7 @@ public abstract class AbstractDbmsType implements DbmsType {
         this.dbmsMapper = requireNonNull(dbmsMapper);
         this.resultSetTableSchema = requireNonNull(resultSetTableSchema);
         this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
+        this.dataTypes = dataTypes;
     }
 
     @Override
@@ -170,4 +176,9 @@ public abstract class AbstractDbmsType implements DbmsType {
     public Function<Dbms, String> getConnectionUrlGenerator() {
         return connectionUrlGenerator;
     }
+    
+    @Override
+	public Set<SqlTypeInfo> getDataTypes() {
+		return dataTypes;
+	}
 }
