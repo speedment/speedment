@@ -23,11 +23,14 @@ import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMut
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class ForeignKeyColumnMutator extends DocumentMutatorImpl implements DocumentMutator, HasNameMutator, HasOrdinalPositionMutator {
+public class ForeignKeyColumnMutator<DOC extends ForeignKeyColumn> extends DocumentMutatorImpl<DOC> implements 
+        HasNameMutator<DOC>, 
+        HasOrdinalPositionMutator<DOC> {
 
-    ForeignKeyColumnMutator(ForeignKeyColumn foreignKeyColumn) {
+    public ForeignKeyColumnMutator(DOC foreignKeyColumn) {
         super(foreignKeyColumn);
     }
     

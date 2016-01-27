@@ -25,12 +25,9 @@ import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ProjectMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -89,27 +86,34 @@ public interface Project extends
     default Optional<Path> getConfigPath() {
         return getAsString(CONFIG_PATH).map(Paths::get);
     }
-
+    
     /**
-     * Return a {@link Stream} of all dbmses that exists in this Project.
+     * Return a {@code Stream} of all dbmses that exists in this Project.
      *
-     * @return a {@link Stream} of all dbmses that exists in this Project
+     * @return all dbmses
      */
-    default Stream<? extends Dbms> dbmses() {
-        return children(DBMSES, dbmsConstructor());
-    }
+    Stream<? extends Dbms> dbmses();
 
-    /**
-     * Creates and adds a new {@link Dbms} as a child to this node in the
-     * configuration tree.
-     *
-     * @return the newly added child
-     */
-    default Dbms addNewDbms() {
-        return dbmsConstructor().apply(this, newDocument(this, DBMSES));
-    }
-
-    BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor();
+//    /**
+//     * Return a {@link Stream} of all dbmses that exists in this Project.
+//     *
+//     * @return a {@link Stream} of all dbmses that exists in this Project
+//     */
+//    default Stream<? extends Dbms> dbmses() {
+//        return children(DBMSES, dbmsConstructor());
+//    }
+//
+//    /**
+//     * Creates and adds a new {@link Dbms} as a child to this node in the
+//     * configuration tree.
+//     *
+//     * @return the newly added child
+//     */
+//    default Dbms addNewDbms() {
+//        return dbmsConstructor().apply(this, newDocument(this, DBMSES));
+//    }
+//
+//    BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor();
 
     @Override
     default Class<Project> mainInterface() {

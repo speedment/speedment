@@ -26,9 +26,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.IndexMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -58,16 +55,23 @@ public interface Index extends
     default boolean isUnique() {
         return getAsBoolean(UNIQUE).orElse(false);
     }
+    
+    /**
+     * Creates a stream of index columns located in this document.
+     * 
+     * @return  index columns
+     */
+    Stream<? extends IndexColumn> indexColumns();
 
-    default Stream<? extends IndexColumn> indexColumns() {
-        return children(INDEX_COLUMNS, indexColumnConstructor());
-    }
-
-    default IndexColumn addNewIndexColumn() {
-        return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
-    }
-
-    BiFunction<Index, Map<String, Object>, ? extends IndexColumn> indexColumnConstructor();
+//    default Stream<? extends IndexColumn> indexColumns() {
+//        return children(INDEX_COLUMNS, indexColumnConstructor());
+//    }
+//
+//    default IndexColumn addNewIndexColumn() {
+//        return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
+//    }
+//
+//    BiFunction<Index, Map<String, Object>, ? extends IndexColumn> indexColumnConstructor();
 
     @Override
     default Class<Index> mainInterface() {

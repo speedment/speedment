@@ -476,7 +476,7 @@ public final class UISession {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(usernamePassword -> {
-            dbms.usernameProperty().setValue(usernamePassword.getKey());
+            dbms.mutator().setUsername(usernamePassword.getKey());
             speedment.getPasswordComponent().put(dbms, usernamePassword.getValue());
         });
     }

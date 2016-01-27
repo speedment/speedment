@@ -21,9 +21,10 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface HasEnabledMutator extends DocumentMutator {
+public interface HasEnabledMutator<DOC extends HasEnabled> extends DocumentMutator<DOC> {
     
     default void setEnabled(Boolean enabled) {
         put(HasEnabled.ENABLED, enabled);

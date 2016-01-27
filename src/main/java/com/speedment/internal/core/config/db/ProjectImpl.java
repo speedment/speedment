@@ -21,10 +21,8 @@ import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -35,6 +33,12 @@ public final class ProjectImpl extends BaseDocument implements Project {
 
     public ProjectImpl(Map<String, Object> data) {
         super(null, data);
+    }
+    
+    @Override
+    public String getName() throws SpeedmentException {
+        // Must implement getName because Project does not have any parent.
+        return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
     }
 
     @Override
@@ -48,19 +52,7 @@ public final class ProjectImpl extends BaseDocument implements Project {
     }
 
     @Override
-    public BiFunction<Project, Map<String, Object>, Dbms> dbmsConstructor() {
-        return DbmsImpl::new;
+    public Stream<? extends Dbms> dbmses() {
+        return children(DBMSES, DbmsImpl::new);
     }
-
-    // Must implement getName because Project does not have any parent.
-    @Override
-    public String getName() throws SpeedmentException {
-        return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
-    }
-
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }
-
 }

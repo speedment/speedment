@@ -21,12 +21,11 @@ import com.speedment.component.DocumentPropertyComponent;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.TablePropertyMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -41,20 +40,6 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
 
     public TableProperty(Schema parent) {
         super(parent);
-    }
-    
-    @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.TABLES, key);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment)
-        ).flatMap(s -> s);
     }
     
     public ObservableList<ColumnProperty> columnsProperty() {
@@ -77,38 +62,6 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
     }
-
-    @Override
-    @Deprecated
-    public BiFunction<Table, Map<String, Object>, ColumnProperty> columnConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-
-    @Override
-    @Deprecated
-    public BiFunction<Table, Map<String, Object>, IndexProperty> indexConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-
-    @Override
-    @Deprecated
-    public BiFunction<Table, Map<String, Object>, ForeignKeyProperty> foreignKeyConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-
-    @Override
-    @Deprecated
-    public BiFunction<Table, Map<String, Object>, PrimaryKeyColumnProperty> primaryKeyColumnConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
     
     @Override
     public Stream<? extends ColumnProperty> columns() {
@@ -129,37 +82,23 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
     public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
         return primaryKeyColumnsProperty().stream();
     }
-
+    
     @Override
-    public ColumnProperty addNewColumn() {
-        final ColumnProperty created = new ColumnProperty(this);
-        columnsProperty().add(created);
-        return created;
-    }
-
-    @Override
-    public IndexProperty addNewIndex() {
-        final IndexProperty created = new IndexProperty(this);
-        indexesProperty().add(created);
-        return created;
-    }
-
-    @Override
-    public ForeignKeyProperty addNewForeignKey() {
-        final ForeignKeyProperty created = new ForeignKeyProperty(this);
-        foreignKeysProperty().add(created);
-        return created;
-    }
-
-    @Override
-    public PrimaryKeyColumnProperty addNewPrimaryKeyColumn() {
-        final PrimaryKeyColumnProperty created = new PrimaryKeyColumnProperty(this);
-        primaryKeyColumnsProperty().add(created);
-        return created;
+    public TablePropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment)
+        ).flatMap(s -> s);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.TABLES, key);
     }
 }

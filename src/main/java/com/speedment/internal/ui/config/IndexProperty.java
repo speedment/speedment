@@ -21,12 +21,11 @@ import com.speedment.component.DocumentPropertyComponent;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.IndexPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -43,9 +42,32 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
         super(parent);
     }
     
+    public BooleanProperty uniqueProperty() {
+        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
+    }
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.INDEXES, key);
+    public boolean isUnique() {
+        return uniqueProperty().get();
+    }
+
+    @Override
+    public Stream<IndexColumnProperty> indexColumns() {
+        return indexColumnsProperty().stream();
+    }
+    
+    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
+        return observableListOf(INDEX_COLUMNS);
+    }
+    
+    @Override
+    public boolean isExpandedByDefault() {
+        return false;
+    }
+    
+    @Override
+    public IndexPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -63,46 +85,8 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
         ).flatMap(s -> s);
     }
     
-    public BooleanProperty uniqueProperty() {
-        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
-    }
-
     @Override
-    public boolean isUnique() {
-        return uniqueProperty().get();
-    }
-
-    @Override
-    @Deprecated
-    public BiFunction<Index, Map<String, Object>, IndexColumnProperty> indexColumnConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-    
-    @Override
-    public Stream<IndexColumnProperty> indexColumns() {
-        return indexColumnsProperty().stream();
-    }
-    
-    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
-        return observableListOf(INDEX_COLUMNS);
-    }
-
-    @Override
-    public IndexColumnProperty addNewIndexColumn() {
-        final IndexColumnProperty created = new IndexColumnProperty(this);
-        indexColumnsProperty().add(created);
-        return created;
-    }
-    
-    @Override
-    public boolean isExpandedByDefault() {
-        return false;
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.INDEXES, key);
     }
 }

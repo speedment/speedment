@@ -21,6 +21,7 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
+import com.speedment.util.FloatSupplier;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
@@ -32,10 +33,10 @@ import java.util.stream.Stream;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -51,6 +52,7 @@ import javafx.collections.ObservableMap;
  *     <li>{@link #integerPropertyOf(String, Supplier)}
  *     <li>{@link #longPropertyOf(String, Supplier)}
  *     <li>{@link #doublePropertyOf(String, Supplier)}
+ *     <li>{@link #floatPropertyOf(String, Supplier)}
  *     <li>{@link #objectPropertyOf(String, Class, Supplier)}
  * </ul>
  * <p>
@@ -117,6 +119,18 @@ public interface DocumentProperty extends Document,
      * @return         the specified attribute wrapped in a {@code Property}
      */
     DoubleProperty doublePropertyOf(String key, DoubleSupplier ifEmpty);
+    
+    /**
+     * Wraps the specified float value in a property so that changes to it can
+     * be observed. Any changes to the returned property will be reflected back
+     * to the raw map.
+     * 
+     * @param key      the key
+     * @param ifEmpty  a supplier for the initial value should the key not 
+     *                 already exist
+     * @return         the specified attribute wrapped in a {@code Property}
+     */
+    FloatProperty floatPropertyOf(String key, FloatSupplier ifEmpty);
     
     /**
      * Wraps the specified boolean value in a property so that changes to it can

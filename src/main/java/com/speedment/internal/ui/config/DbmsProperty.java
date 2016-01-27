@@ -25,15 +25,14 @@ import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
 import com.speedment.internal.core.stream.OptionalUtil;
+import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -50,39 +49,6 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
 
     public DbmsProperty(Project parent) {
         super(parent);
-    }
-    
-    @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.DBMSES, key);
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                // TODO: Add DbmsType
-                new DefaultStringPropertyItem(
-                    ipAddressProperty(), 
-                    new SimpleStringProperty("127.0.0.1"),
-                    "IP Address",                  
-                    "The ip of the database host."
-                ),
-                new IntegerPropertyItem(
-                    portProperty(),       
-                    "Port",                  
-                    "The port of the database on the database host."
-                ),
-                new DefaultStringPropertyItem(
-                    usernameProperty(),
-                    new SimpleStringProperty("root"),
-                    "Username",                  
-                    "The username to use when connecting to the database."
-                )
-            )
-        ).flatMap(s -> s);
     }
     
     public StringProperty typeNameProperty() {
@@ -126,27 +92,45 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
 
     @Override
-    @Deprecated
-    public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-    
-    @Override
     public Stream<SchemaProperty> schemas() {
         return schemasProperty().stream();
     }
     
     @Override
-    public SchemaProperty addNewSchema() {
-        final SchemaProperty created = new SchemaProperty(this);
-        schemasProperty().add(created);
-        return created;
+    public DbmsPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                // TODO: Add DbmsType
+                new DefaultStringPropertyItem(
+                    ipAddressProperty(), 
+                    new SimpleStringProperty("127.0.0.1"),
+                    "IP Address",                  
+                    "The ip of the database host."
+                ),
+                new IntegerPropertyItem(
+                    portProperty(),       
+                    "Port",                  
+                    "The port of the database on the database host."
+                ),
+                new DefaultStringPropertyItem(
+                    usernameProperty(),
+                    new SimpleStringProperty("root"),
+                    "Username",                  
+                    "The username to use when connecting to the database."
+                )
+            )
+        ).flatMap(s -> s);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.DBMSES, key);
     }
 }

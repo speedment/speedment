@@ -17,15 +17,12 @@
 package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Index;
-import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.IndexImpl;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -50,7 +47,7 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
         this.name    = prototype.getName();
         this.unique  = prototype.isUnique();
         
-        this.indexColumns = unmodifiableList(Index.super.indexColumns().map(ImmutableIndexColumn.class::cast).collect(toList()));
+        this.indexColumns = unmodifiableList(super.children(INDEX_COLUMNS, ImmutableIndexColumn::new).collect(toList()));
     }
 
     @Override
@@ -69,11 +66,6 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     }
 
     @Override
-    public BiFunction<Index, Map<String, Object>, ? extends IndexColumn> indexColumnConstructor() {
-        return (parent, map) -> new ImmutableIndexColumn((ImmutableIndex) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableIndexColumn> indexColumns() {
         return indexColumns.stream();
     }
@@ -82,10 +74,4 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

@@ -18,17 +18,25 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.Schema;
 import static com.speedment.config.db.Schema.DEFAULT_SCHEMA;
+import static com.speedment.config.db.Schema.TABLES;
+import com.speedment.config.db.Table;
+import com.speedment.internal.core.config.db.TableImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class SchemaMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator, HasAliasMutator {
+public class SchemaMutator<DOC extends Schema> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC>, 
+        HasAliasMutator<DOC> {
 
-    SchemaMutator(Schema schema) {
+    public SchemaMutator(DOC schema) {
         super(schema);
     }
 
@@ -36,4 +44,7 @@ public final class SchemaMutator extends DocumentMutatorImpl implements Document
         put(DEFAULT_SCHEMA, defaultSchema);
     }
     
+    public Table addNewTable() {
+        return new TableImpl(document(), newDocument(document(), TABLES));
+    }
 }

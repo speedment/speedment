@@ -20,7 +20,11 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.util.NumericProperty;
+import com.speedment.internal.ui.util.SimpleNumericProperty;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
+import com.speedment.util.FloatSupplier;
 import com.speedment.util.OptionalBoolean;
 import java.util.Arrays;
 import static java.util.Collections.newSetFromMap;
@@ -36,6 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -43,14 +48,12 @@ import java.util.stream.Stream;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -164,25 +167,39 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty) {
         return (StringProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleStringProperty(ifEmpty.get())));
     }
+    
+    @Override
+    public final BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty) {
+        return (BooleanProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleBooleanProperty(ifEmpty.getAsBoolean())));
+    }
 
     @Override
     public final IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty) {
-        return (IntegerProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleIntegerProperty(ifEmpty.getAsInt())));
+        return numericPropertyOf(key, ifEmpty::getAsInt, NumericProperty::asIntegerProperty);
     }
 
     @Override
     public final LongProperty longPropertyOf(String key, LongSupplier ifEmpty) {
-        return (LongProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleLongProperty(ifEmpty.getAsLong())));
+        return numericPropertyOf(key, ifEmpty::getAsLong, NumericProperty::asLongProperty);
     }
 
     @Override
     public final DoubleProperty doublePropertyOf(String key, DoubleSupplier ifEmpty) {
-        return (DoubleProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleDoubleProperty(ifEmpty.getAsDouble())));
+        return numericPropertyOf(key, ifEmpty::getAsDouble, NumericProperty::asDoubleProperty);
     }
-
+    
     @Override
-    public final BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty) {
-        return (BooleanProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleBooleanProperty(ifEmpty.getAsBoolean())));
+    public final FloatProperty floatPropertyOf(String key, FloatSupplier ifEmpty) {
+        return numericPropertyOf(key, ifEmpty::getAsFloat, NumericProperty::asFloatProperty);
+    }
+    
+    private <T extends Property<? extends Number>> T numericPropertyOf(String key, Supplier<? extends Number> ifEmpty, Function<NumericProperty, T> wrapper) {
+        final NumericProperty property = (NumericProperty) properties
+            .computeIfAbsent(key, k -> 
+                addListeners(k, new SimpleNumericProperty(ifEmpty.get()))
+            );
+        
+        return wrapper.apply(property);
     }
 
     @Override
@@ -237,6 +254,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     @Override
     public final void removeListener(InvalidationListener listener) {
         listeners.remove(listener);
+    }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
     }
     
     /**

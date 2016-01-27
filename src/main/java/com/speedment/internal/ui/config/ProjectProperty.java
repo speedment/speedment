@@ -24,17 +24,16 @@ import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
 import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import com.speedment.internal.util.document.DocumentMerger;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -59,33 +58,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
     
     @Override
-    protected String[] keyPathEndingWith(String key) {
-        return new String[] {key};
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new StringPropertyItem(
-                    nameProperty(), 
-                    "Project Name", 
-                    "The name that should be used for this project."
-                ),
-                new DefaultStringPropertyItem(
-                    packageNameProperty(),
-                    new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
-                    "Package Name",
-                    "The name of the package to place all generated files in. This should be a fully qualified java package name."
-                ),
-                new DefaultStringPropertyItem(
-                    packageLocationProperty(),
-                    new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
-                    "Package Location",
-                    "The folder to store all generated files in. This should be a relative name from the working directory."
-                )
-            )
-        ).flatMap(s -> s);
+    public String getName() throws SpeedmentException {
+        // Must implement getName because Project does not have any parent.
+        return getAsString(NAME)
+            .orElse(DEFAULT_PROJECT_NAME);
     }
     
     public StringProperty packageNameProperty() {
@@ -128,23 +104,43 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     @Override
-    @Deprecated
-    public BiFunction<Project, Map<String, Object>, DbmsProperty> dbmsConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-
-    @Override
     public Stream<DbmsProperty> dbmses() {
         return dbmsesProperty().stream();
     }
     
     @Override
-    public DbmsProperty addNewDbms() {
-        final DbmsProperty created = new DbmsProperty(this);
-        dbmsesProperty().add(created);
-        return created;
+    public ProjectPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new StringPropertyItem(
+                    nameProperty(), 
+                    "Project Name", 
+                    "The name that should be used for this project."
+                ),
+                new DefaultStringPropertyItem(
+                    packageNameProperty(),
+                    new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
+                    "Package Name",
+                    "The name of the package to place all generated files in. This should be a fully qualified java package name."
+                ),
+                new DefaultStringPropertyItem(
+                    packageLocationProperty(),
+                    new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
+                    "Package Location",
+                    "The folder to store all generated files in. This should be a relative name from the working directory."
+                )
+            )
+        ).flatMap(s -> s);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return new String[] {key};
     }
     
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
@@ -160,16 +156,4 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             else return Paths.get(string);
         }
     };
-    
-    // Must implement getName because Project does not have any parent.
-    @Override
-    public String getName() throws SpeedmentException {
-        return getAsString(NAME)
-            .orElse(DEFAULT_PROJECT_NAME);
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }
 }

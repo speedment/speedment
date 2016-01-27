@@ -21,9 +21,10 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface HasOrdinalPositionMutator extends DocumentMutator {
+public interface HasOrdinalPositionMutator<DOC extends HasOrdinalPosition> extends DocumentMutator<DOC> {
     
     default void setOrdinalPosition(Integer ordinalPosition) {
         put(HasOrdinalPosition.ORDINAL_POSITION, ordinalPosition);

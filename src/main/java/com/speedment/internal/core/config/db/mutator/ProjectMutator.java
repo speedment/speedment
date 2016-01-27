@@ -18,18 +18,24 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.*;
 import static com.speedment.config.db.Project.CONFIG_PATH;
+import static com.speedment.config.db.Project.DBMSES;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
+import com.speedment.internal.core.config.db.DbmsImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class ProjectMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator {
+public class ProjectMutator<DOC extends Project> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC> {
 
-    ProjectMutator(Project project) {
+    public ProjectMutator(DOC project) {
         super(project);
     }
     
@@ -45,8 +51,7 @@ public final class ProjectMutator extends DocumentMutatorImpl implements Documen
         put(CONFIG_PATH, configPath);
     }
     
-    public void add(Dbms dbms) {
-        
+    public Dbms addNewDbms() {
+        return new DbmsImpl(document(), newDocument(document(), DBMSES));
     }
-
 }

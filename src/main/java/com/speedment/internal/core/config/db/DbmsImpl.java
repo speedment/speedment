@@ -20,9 +20,8 @@ import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,13 +34,7 @@ public final class DbmsImpl extends AbstractChildDocument<Project> implements Db
     }
 
     @Override
-    public BiFunction<Dbms, Map<String, Object>, Schema> schemaConstructor() {
-        return SchemaImpl::new;
+    public Stream<? extends Schema> schemas() {
+        return children(SCHEMAS, SchemaImpl::new);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }
-
 }

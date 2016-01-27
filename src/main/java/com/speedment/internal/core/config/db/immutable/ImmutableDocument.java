@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.config.Document;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -78,6 +79,11 @@ public class ImmutableDocument extends BaseDocument {
                         .collect(toList());
             }
         }).stream().map(typeMapper);
+    }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
     }
 
     public static ImmutableDocument wrap(Document document) {

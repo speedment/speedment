@@ -26,11 +26,16 @@ import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMut
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class ColumnMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator, HasAliasMutator, HasOrdinalPositionMutator {
+public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC>, 
+        HasAliasMutator<DOC>, 
+        HasOrdinalPositionMutator<DOC> {
 
-    ColumnMutator(Column column) {
+    public ColumnMutator(DOC column) {
         super(column);
     }
 
@@ -49,5 +54,4 @@ public final class ColumnMutator extends DocumentMutatorImpl implements Document
     public void setDatabaseType(Class<?> databaseType) {
         put(DATABASE_TYPE, databaseType.getName());
     }
-
 }

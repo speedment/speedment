@@ -17,17 +17,27 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.ForeignKey;
+import static com.speedment.config.db.ForeignKey.FOREIGN_KEY_COLUMNS;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class ForeignKeyMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator {
+public class ForeignKeyMutator<DOC extends ForeignKey> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC> {
 
-    ForeignKeyMutator(ForeignKey foreignKey) {
+    public ForeignKeyMutator(DOC foreignKey) {
         super(foreignKey);
     }
 
+    public ForeignKeyColumn addNewForeignKeyColumn() {
+        return new ForeignKeyColumnImpl(document(), newDocument(document(), FOREIGN_KEY_COLUMNS));
+    }
 }

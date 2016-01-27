@@ -31,10 +31,4 @@ public final class PrimaryKeyColumnImpl extends AbstractChildDocument<Table> imp
     public PrimaryKeyColumnImpl(Table parent, Map<String, Object> data) {
         super(parent, data);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

@@ -18,6 +18,7 @@ package com.speedment.internal.core.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasParent;
+import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,9 +33,15 @@ public abstract class AbstractChildDocument<PARENT extends Document> extends Bas
         super(parent, data);
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public Optional<PARENT> getParent() {
-        return (Optional<PARENT>) super.getParent();
+        @SuppressWarnings("unchecked")
+        final Optional<PARENT> parent = (Optional<PARENT>) super.getParent();
+        return parent;
+    }
+    
+    @Override
+    public String toString() {
+        return toStringHelper(this);
     }
 }

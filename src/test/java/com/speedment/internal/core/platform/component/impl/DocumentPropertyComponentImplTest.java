@@ -16,17 +16,15 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.Component;
 import com.speedment.component.DocumentPropertyComponent;
+import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DbmsMutator;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.config.AbstractChildDocumentProperty;
-import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
@@ -38,7 +36,6 @@ import com.speedment.internal.ui.config.PrimaryKeyColumnProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
-import com.speedment.internal.util.document.DocumentMerger;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -129,18 +126,17 @@ public class DocumentPropertyComponentImplTest {
 
         @Override
         public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public BiFunction<Dbms, Map<String, Object>, ? extends Schema> schemaConstructor() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new UnsupportedOperationException("Not required by test.");
         }
 
         @Override
         public DbmsMutator mutator() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new UnsupportedOperationException("Not required by test.");
         }
-        
+
+        @Override
+        public Stream<? extends Schema> schemas() {
+            throw new UnsupportedOperationException("Not required by test.");
+        }
     }
 }

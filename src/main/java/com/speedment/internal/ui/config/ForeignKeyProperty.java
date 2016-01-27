@@ -21,11 +21,10 @@ import com.speedment.component.DocumentPropertyComponent;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ForeignKeyPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
@@ -41,13 +40,23 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
         super(parent);
     }
     
-    @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
-    }
-    
     public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
         return observableListOf(FOREIGN_KEY_COLUMNS);
+    }
+    
+    @Override
+    public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
+        return foreignKeyColumnsProperty().stream();
+    }
+
+    @Override
+    public boolean isExpandedByDefault() {
+        return false;
+    }
+    
+    @Override
+    public ForeignKeyPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -59,33 +68,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     @Override
-    public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
-        return foreignKeyColumnsProperty().stream();
-    }
-    
-    @Override
-    @Deprecated
-    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumnProperty> foreignKeyColumnConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-    
-    @Override
-    public ForeignKeyColumnProperty addNewForeignKeyColumn() {
-        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this);
-        foreignKeyColumnsProperty().add(created);
-        
-        return created;
-    }
-
-    @Override
-    public boolean isExpandedByDefault() {
-        return false;
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
     }
 }

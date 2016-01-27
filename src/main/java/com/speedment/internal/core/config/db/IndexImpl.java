@@ -20,9 +20,8 @@ import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,13 +34,7 @@ public final class IndexImpl extends AbstractChildDocument<Table> implements Ind
     }
 
     @Override
-    public BiFunction<Index, Map<String, Object>, IndexColumn> indexColumnConstructor() {
-        return IndexColumnImpl::new;
+    public Stream<? extends IndexColumn> indexColumns() {
+        return children(INDEX_COLUMNS, IndexColumnImpl::new);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
 }

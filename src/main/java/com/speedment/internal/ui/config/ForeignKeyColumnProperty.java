@@ -27,13 +27,14 @@ import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
 
 /**
  *
@@ -44,30 +45,6 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
 
     public ForeignKeyColumnProperty(ForeignKey parent) {
         super(parent);
-    }
-
-    @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasColumnProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new StringPropertyItem(
-                    foreignTableNameProperty(), 
-                    "Foreign Table Name",
-                    "The name of the database table that this foreign key references."
-                ),
-                new StringPropertyItem(
-                    foreignColumnNameProperty(), 
-                    "Foreign Column Name",
-                    "The name of the database column that this foreign key references."
-                )
-            )
-        ).flatMap(s -> s);
     }
 
     public final StringProperty foreignTableNameProperty() {
@@ -107,7 +84,31 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
+    public ForeignKeyColumnPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(
+            HasColumnProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new StringPropertyItem(
+                    foreignTableNameProperty(), 
+                    "Foreign Table Name",
+                    "The name of the database table that this foreign key references."
+                ),
+                new StringPropertyItem(
+                    foreignColumnNameProperty(), 
+                    "Foreign Column Name",
+                    "The name of the database column that this foreign key references."
+                )
+            )
+        ).flatMap(s -> s);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
     }
 }

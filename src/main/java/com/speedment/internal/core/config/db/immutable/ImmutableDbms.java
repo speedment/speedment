@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -59,7 +58,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         this.port      = prototype.getPort();
         this.username  = prototype.getUsername();
         
-        this.schemas   = unmodifiableList(Dbms.super.schemas().map(ImmutableSchema.class::cast).collect(toList()));
+        this.schemas   = unmodifiableList(super.children(SCHEMAS, ImmutableSchema::new).collect(toList()));
     }
 
     @Override
@@ -98,11 +97,6 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     }
 
     @Override
-    public BiFunction<Dbms, Map<String, Object>, ImmutableSchema> schemaConstructor() {
-        return (parent, map) -> new ImmutableSchema((ImmutableDbms) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableSchema> schemas() {
         return schemas.stream();
     }
@@ -115,6 +109,5 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     @Override
     public String toString() {
         return toStringHelper(this);
-    }    
-    
+    }
 }

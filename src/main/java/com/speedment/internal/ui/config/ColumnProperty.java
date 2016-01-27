@@ -30,8 +30,6 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasNullableProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -43,45 +41,24 @@ import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
+import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty>
-    implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty, HasNullableProperty {
+public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements 
+        Column, 
+        HasEnabledProperty, 
+        HasNameProperty, 
+        HasAliasProperty, 
+        HasNullableProperty, 
+        HasOrdinalPositionProperty {
 
     public ColumnProperty(Table parent) {
         super(parent);
-    }
-
-    @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.COLUMNS, key);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
-            HasNullableProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new TypeMapperPropertyItem(
-                    speedment,
-                    Optional.ofNullable(findTypeMapper())
-                    .map(tm -> (Class) tm.getDatabaseType())
-                    .orElse(findDatabaseType()),
-                    typeMapperProperty(),
-                    "JDBC Type to Java",
-                    "The class that will be used to map types between the database and the generated code."
-                ), new BooleanPropertyItem(
-                    autoIncrementProperty(),
-                    "Is Auto Incrementing",
-                    "If this column will increment automatically for each new entity."
-                )
-            )
-        ).flatMap(s -> s);
     }
 
     @Override
@@ -141,8 +118,37 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     @Override
-    public String toString() {
-        return toStringHelper(this);
+    public ColumnPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
+    }
+    
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
+            HasNullableProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                new TypeMapperPropertyItem(
+                    speedment,
+                    Optional.ofNullable(findTypeMapper())
+                    .map(tm -> (Class) tm.getDatabaseType())
+                    .orElse(findDatabaseType()),
+                    typeMapperProperty(),
+                    "JDBC Type to Java",
+                    "The class that will be used to map types between the database and the generated code."
+                ), new BooleanPropertyItem(
+                    autoIncrementProperty(),
+                    "Is Auto Incrementing",
+                    "If this column will increment automatically for each new entity."
+                )
+            )
+        ).flatMap(s -> s);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.COLUMNS, key);
     }
 
     private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {

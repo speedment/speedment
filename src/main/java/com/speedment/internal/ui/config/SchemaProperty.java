@@ -21,14 +21,12 @@ import com.speedment.component.DocumentPropertyComponent;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.SchemaPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -47,8 +45,31 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     }
 
     @Override
-    protected String[] keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.SCHEMAS, key);
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
+    }
+    
+    public final BooleanProperty defaultSchemaProperty() {
+        return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
+    }
+
+    @Override
+    public boolean isDefaultSchema() {
+        return defaultSchemaProperty().get();
+    }
+    
+    public ObservableList<TableProperty> tablesProperty() {
+        return observableListOf(TABLES);
+    }
+    
+    @Override
+    public Stream<TableProperty> tables() {
+        return tablesProperty().stream();
+    }
+    
+    @Override
+    public SchemaPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -68,45 +89,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     }
     
     @Override
-    public StringProperty nameProperty() {
-        return HasNameProperty.super.nameProperty();
-    }
-    
-    public final BooleanProperty defaultSchemaProperty() {
-        return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
-    }
-
-    @Override
-    public boolean isDefaultSchema() {
-        return defaultSchemaProperty().get();
-    }
-    
-    public ObservableList<TableProperty> tablesProperty() {
-        return observableListOf(TABLES);
-    }
-
-    @Override
-    @Deprecated
-    public BiFunction<Schema, Map<String, Object>, TableProperty> tableConstructor() {
-        throw new UnsupportedOperationException(
-            "Constructing is now handled using DocumentPropertyController."
-        );
-    }
-    
-    @Override
-    public Stream<TableProperty> tables() {
-        return tablesProperty().stream();
-    }
-    
-    @Override
-    public TableProperty addNewTable() {
-        final TableProperty created = new TableProperty(this);
-        tablesProperty().add(created);
-        return created;
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.SCHEMAS, key);
     }
 }

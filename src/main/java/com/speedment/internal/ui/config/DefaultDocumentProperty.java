@@ -55,7 +55,7 @@ public final class DefaultDocumentProperty extends
     public Optional<? extends Document> getParent() {
         return Optional.ofNullable(parent);
     }
-
+    
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.empty();

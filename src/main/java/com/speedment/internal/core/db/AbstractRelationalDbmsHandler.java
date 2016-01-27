@@ -194,7 +194,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final String name = Optional.ofNullable(schemaName).orElse(catalogName);
                         if (filterCriteria.test(name)) {
-                            final Schema schema = dbms.addNewSchema();
+                            final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(name);
                         }
                     }
@@ -206,7 +206,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     final String schemaName = catalogResultSet.getString(1);
                     if (filterCriteria.test(schemaName)) {
                         if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
-                            final Schema schema = dbms.addNewSchema();
+                            final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(schemaName);
                         }
                     }
@@ -242,7 +242,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
                         }
                     }
-                    final Table table = schema.addNewTable();
+                    final Table table = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
                     table.mutator().setName(tableName);
                 }
@@ -305,7 +305,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
         };
         
-        tableChilds(table::addNewColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewColumn, supplier, mutator);
     }
 
     protected void primaryKeyColumns(Connection connection, Table table) {
@@ -325,7 +325,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
         
-        tableChilds(table::addNewPrimaryKeyColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator);
     }
 
     protected void indexes(final Connection connection, Table table) {
@@ -348,7 +348,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             index.mutator().setName(indexName);
             index.mutator().setUnique(unique);
 
-            final IndexColumn indexColumn = index.addNewIndexColumn();
+            final IndexColumn indexColumn = index.mutator().addNewIndexColumn();
             indexColumn.mutator().setName(rs.getString("COLUMN_NAME"));
             indexColumn.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
             final String ascOrDesc = rs.getString("ASC_OR_DESC");
@@ -362,7 +362,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
         };
         
-        tableChilds(table::addNewIndex, supplier, mutator);
+        tableChilds(table.mutator()::addNewIndex, supplier, mutator);
     }
 
     protected void foreignKeys(final Connection connection, Table table) {
@@ -391,7 +391,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //                return newForeigKey;
 //            });
 
-            final ForeignKeyColumn foreignKeyColumn = foreignKey.addNewForeignKeyColumn();
+            final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
             final ForeignKeyColumnMutator fkcMutator = foreignKeyColumn.mutator();
             fkcMutator.setName(rs.getString("FKCOLUMN_NAME"));
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
@@ -399,7 +399,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
         };
         
-        tableChilds(table::addNewForeignKey, supplier, mutator);
+        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator);
     }
 
     protected <T> void tableChilds(Supplier<T> childSupplier, SqlSupplier<ResultSet> resultSetSupplier, TableChildMutator<T, ResultSet> resultSetMutator) {

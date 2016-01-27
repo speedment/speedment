@@ -21,9 +21,10 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface HasNameMutator extends DocumentMutator {
+public interface HasNameMutator<DOC extends HasName> extends DocumentMutator<DOC> {
     
     default void setName(String name) {
         put(HasName.NAME, name);

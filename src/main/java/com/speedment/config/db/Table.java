@@ -27,10 +27,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.TableMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -52,22 +49,50 @@ public interface Table extends
             INDEXES = "indexes",
             FOREIGN_KEYS = "foreignKeys",
             PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
+    
+    /**
+     * Creates a stream of columns located in this document.
+     * 
+     * @return  columns
+     */
+    Stream<? extends Column> columns();
+    
+    /**
+     * Creates a stream of indexes located in this document.
+     * 
+     * @return  indexes
+     */
+    Stream<? extends Index> indexes();
+    
+    /**
+     * Creates a stream of foreign keys located in this document.
+     * 
+     * @return  foreign keys
+     */
+    Stream<? extends ForeignKey> foreignKeys();
+    
+    /**
+     * Creates a stream of primary key columns located in this document.
+     * 
+     * @return  primary key columns
+     */
+    Stream<? extends PrimaryKeyColumn> primaryKeyColumns();
 
-    default Stream<? extends Column> columns() {
-        return children(COLUMNS, columnConstructor());
-    }
-
-    default Stream<? extends Index> indexes() {
-        return children(INDEXES, indexConstructor());
-    }
-
-    default Stream<? extends ForeignKey> foreignKeys() {
-        return children(FOREIGN_KEYS, foreignKeyConstructor());
-    }
-
-    default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return children(PRIMARY_KEY_COLUMNS, primaryKeyColumnConstructor());
-    }
+//    default Stream<? extends Column> columns() {
+//        return children(COLUMNS, columnConstructor());
+//    }
+//
+//    default Stream<? extends Index> indexes() {
+//        return children(INDEXES, indexConstructor());
+//    }
+//
+//    default Stream<? extends ForeignKey> foreignKeys() {
+//        return children(FOREIGN_KEYS, foreignKeyConstructor());
+//    }
+//
+//    default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
+//        return children(PRIMARY_KEY_COLUMNS, primaryKeyColumnConstructor());
+//    }
 
     default Optional<? extends Column> findColumn(String name) {
         return columns().filter(child -> child.getName().equals(name)).findAny();
@@ -85,29 +110,29 @@ public interface Table extends
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
     }
 
-    default Column addNewColumn() {
-        return columnConstructor().apply(this, newDocument(this, COLUMNS));
-    }
-
-    default Index addNewIndex() {
-        return indexConstructor().apply(this, newDocument(this, INDEXES));
-    }
-
-    default ForeignKey addNewForeignKey() {
-        return foreignKeyConstructor().apply(this, newDocument(this, FOREIGN_KEYS));
-    }
-
-    default PrimaryKeyColumn addNewPrimaryKeyColumn() {
-        return primaryKeyColumnConstructor().apply(this, newDocument(this, PRIMARY_KEY_COLUMNS));
-    }
-
-    BiFunction<Table, Map<String, Object>, ? extends Column> columnConstructor();
-
-    BiFunction<Table, Map<String, Object>, ? extends Index> indexConstructor();
-
-    BiFunction<Table, Map<String, Object>, ? extends ForeignKey> foreignKeyConstructor();
-
-    BiFunction<Table, Map<String, Object>, ? extends PrimaryKeyColumn> primaryKeyColumnConstructor();
+//    default Column addNewColumn() {
+//        return columnConstructor().apply(this, newDocument(this, COLUMNS));
+//    }
+//
+//    default Index addNewIndex() {
+//        return indexConstructor().apply(this, newDocument(this, INDEXES));
+//    }
+//
+//    default ForeignKey addNewForeignKey() {
+//        return foreignKeyConstructor().apply(this, newDocument(this, FOREIGN_KEYS));
+//    }
+//
+//    default PrimaryKeyColumn addNewPrimaryKeyColumn() {
+//        return primaryKeyColumnConstructor().apply(this, newDocument(this, PRIMARY_KEY_COLUMNS));
+//    }
+//
+//    BiFunction<Table, Map<String, Object>, ? extends Column> columnConstructor();
+//
+//    BiFunction<Table, Map<String, Object>, ? extends Index> indexConstructor();
+//
+//    BiFunction<Table, Map<String, Object>, ? extends ForeignKey> foreignKeyConstructor();
+//
+//    BiFunction<Table, Map<String, Object>, ? extends PrimaryKeyColumn> primaryKeyColumnConstructor();
 
     @Override
     default Class<Table> mainInterface() {
@@ -118,5 +143,4 @@ public interface Table extends
     default TableMutator mutator() {
         return DocumentMutator.of(this);
     }
-
 }

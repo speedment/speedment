@@ -19,7 +19,6 @@ package com.speedment.internal.core.config.db;
 import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
 
 /**
@@ -30,10 +29,5 @@ public final class ForeignKeyColumnImpl extends AbstractChildDocument<ForeignKey
 
     public ForeignKeyColumnImpl(ForeignKey parent, Map<String, Object> data) {
         super(parent, data);
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
+    }   
 }
