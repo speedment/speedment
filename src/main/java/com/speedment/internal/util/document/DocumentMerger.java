@@ -17,6 +17,7 @@ package com.speedment.internal.util.document;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.internal.ui.config.DocumentProperty;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
@@ -182,7 +183,7 @@ public final class DocumentMerger {
      */
     @FunctionalInterface
     public interface DocumentConstructor {
-        DocumentProperty create(DocumentProperty parent, String key, Map<String, Object> data);
+        DocumentProperty create(DocumentProperty parent, String key);
     }
     
     /**
@@ -383,18 +384,28 @@ public final class DocumentMerger {
                 }
             }
             
-            // If the document has not yet been added, create it and add it to
-            // the end.
-            if (existingIndex < 0) {
-                target.add(constructor.create(parent, key, document.getData()));
+            // If it exists, remove it, else create it.
+            final DocumentProperty existing = (existingIndex < 0)
+                ? createWithConstructor()
+                : target.remove(existingIndex);
             
-            // If it already exists, move it to the end of the list and merge in
-            // the new changes.
-            } else {
-                final DocumentProperty existing = target.remove(existingIndex);
-                merge(existing, document, constructor);
-                target.add(existing);
-            }
+            merge(existing, document, constructor);
+            target.add(existing);
+        }
+        
+        private DocumentProperty createWithConstructor() {
+            final DocumentProperty inst = constructor.create(parent, key);
+            
+            // Name need to be set manually before the two documents are merged
+            inst.stringPropertyOf(HasName.NAME, () -> null)
+                .setValue(document.getAsString(HasName.NAME)
+                    .orElseThrow(() -> new SpeedmentException(
+                        "Attempting to merge by moving document without name. " + 
+                        document
+                    ))
+                );
+            
+            return inst;
         }
     }
     

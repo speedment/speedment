@@ -17,6 +17,8 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
@@ -24,7 +26,6 @@ import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
@@ -38,8 +39,13 @@ import org.controlsfx.control.PropertySheet;
 public final class TableProperty extends AbstractChildDocumentProperty<Schema, TableProperty> 
     implements Table, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
-    public TableProperty(Schema parent, Map<String, Object> data) {
-        super(parent, data);
+    public TableProperty(Schema parent) {
+        super(parent);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.TABLES, key);
     }
 
     @Override
@@ -73,34 +79,35 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
     }
 
     @Override
+    @Deprecated
     public BiFunction<Table, Map<String, Object>, ColumnProperty> columnConstructor() {
-        return ColumnProperty::new;
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
 
     @Override
+    @Deprecated
     public BiFunction<Table, Map<String, Object>, IndexProperty> indexConstructor() {
-        return IndexProperty::new;
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
 
     @Override
+    @Deprecated
     public BiFunction<Table, Map<String, Object>, ForeignKeyProperty> foreignKeyConstructor() {
-        return ForeignKeyProperty::new;
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
 
     @Override
+    @Deprecated
     public BiFunction<Table, Map<String, Object>, PrimaryKeyColumnProperty> primaryKeyColumnConstructor() {
-        return PrimaryKeyColumnProperty::new;
-    }
-
-    @Override
-    protected final BiFunction<TableProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case COLUMNS             : return ColumnProperty::new;
-            case INDEXES             : return IndexProperty::new;
-            case FOREIGN_KEYS        : return ForeignKeyProperty::new;
-            case PRIMARY_KEY_COLUMNS : return PrimaryKeyColumnProperty::new;
-            default                  : return super.constructorForKey(key);
-        }
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
     
     @Override
@@ -125,28 +132,28 @@ public final class TableProperty extends AbstractChildDocumentProperty<Schema, T
 
     @Override
     public ColumnProperty addNewColumn() {
-        final ColumnProperty created = new ColumnProperty(this, new ConcurrentHashMap<>());
+        final ColumnProperty created = new ColumnProperty(this);
         columnsProperty().add(created);
         return created;
     }
 
     @Override
     public IndexProperty addNewIndex() {
-        final IndexProperty created = new IndexProperty(this, new ConcurrentHashMap<>());
+        final IndexProperty created = new IndexProperty(this);
         indexesProperty().add(created);
         return created;
     }
 
     @Override
     public ForeignKeyProperty addNewForeignKey() {
-        final ForeignKeyProperty created = new ForeignKeyProperty(this, new ConcurrentHashMap<>());
+        final ForeignKeyProperty created = new ForeignKeyProperty(this);
         foreignKeysProperty().add(created);
         return created;
     }
 
     @Override
     public PrimaryKeyColumnProperty addNewPrimaryKeyColumn() {
-        final PrimaryKeyColumnProperty created = new PrimaryKeyColumnProperty(this, new ConcurrentHashMap<>());
+        final PrimaryKeyColumnProperty created = new PrimaryKeyColumnProperty(this);
         primaryKeyColumnsProperty().add(created);
         return created;
     }

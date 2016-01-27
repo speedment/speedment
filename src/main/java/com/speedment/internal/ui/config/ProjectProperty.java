@@ -17,7 +17,6 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.DEFAULT_PROJECT_NAME;
@@ -25,7 +24,6 @@ import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
 import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
@@ -36,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -55,14 +52,15 @@ import org.controlsfx.control.PropertySheet;
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
     implements Project, HasEnabledProperty, HasNameProperty {
 
-    public ProjectProperty(Map<String, Object> data) {
-        super(data);
+    public void merge(Speedment speedment, Project project) {
+        DocumentMerger.merge(this, project, (parent, key) -> 
+            ((AbstractDocumentProperty<?>) parent).createChild(speedment, key)
+        );
     }
     
-    public void mergeWith(Project project) {
-        DocumentMerger.merge(this, project, (parent, key, data) -> 
-            ((AbstractDocumentProperty<?>) parent).createChild(key, data)
-        );
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return new String[] {key};
     }
     
     @Override
@@ -130,8 +128,11 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     @Override
+    @Deprecated
     public BiFunction<Project, Map<String, Object>, DbmsProperty> dbmsConstructor() {
-        return DbmsProperty::new;
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
 
     @Override
@@ -141,20 +142,9 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     
     @Override
     public DbmsProperty addNewDbms() {
-        final Map<String, Object> defaultMap = new ConcurrentHashMap<>();
-        defaultMap.put(Dbms.TYPE_NAME, StandardDbmsType.defaultType().getName());
-        
-        final DbmsProperty created = new DbmsProperty(this, defaultMap);
+        final DbmsProperty created = new DbmsProperty(this);
         dbmsesProperty().add(created);
         return created;
-    }
-    
-    @Override
-    protected final BiFunction<ProjectProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case DBMSES : return DbmsProperty::new;
-            default     : return super.constructorForKey(key);
-        }
     }
     
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {

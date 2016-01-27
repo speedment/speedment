@@ -22,6 +22,7 @@ import com.speedment.config.db.Project;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
+import com.speedment.component.ComponentConstructor;
 import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
@@ -29,25 +30,25 @@ import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentUtil.traverseOver;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -67,14 +68,12 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
 
     private ApplicationMetadata speedmentApplicationMetadata;
-    private Path configPath;
 
     protected final Speedment speedment;
 
     public SpeedmentApplicationLifecycle() {
         super();
         speedment = SpeedmentFactory.newSpeedmentInstance();
-        configPath = null;
         withsNamed = newList();
         withsAll = newList();
     }
@@ -265,28 +264,17 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return self();
     }
 
-//    /**
-//     * Adds a (and replaces any existing) {@link Component} to the Speedment
-//     * runtime platform.
-//     *
-//     * @param component to add/replace
-//     * @return this instance
-//     */
-    // NOTE: SINCE Speedment is not available at this time, the method has been removed
-//    public T with(final Component component) {
-//        speedment.put(requireNonNull(component));
-//        return self();
-//    }
     /**
      * Adds a (and replaces any existing) {@link Component} to the Speedment
      * runtime platform by applying the provided component mapper with the
      * internal Speedment instance.
      *
-     * @param componentMapper to use when adding/replacing a component
-     * @return this instance
+     * @param <C>              the component type
+     * @param componentMapper  to use when adding/replacing a component
+     * @return                 this instance
      */
-    public T with(final Function<Speedment, Component> componentMapper) {
-        speedment.put(requireNonNull(componentMapper).apply(speedment));
+    public <C extends Component> T with(final ComponentConstructor<C> componentMapper) {
+        speedment.put(requireNonNull(componentMapper).create(speedment));
         return self();
     }
 
@@ -318,48 +306,17 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * Builds up the complete Project meta data tree.
      */
     protected void loadAndSetProject() {
-        final Optional<Path> oPath = getConfigPath();
+        final ApplicationMetadata meta = getSpeedmentApplicationMetadata();
         final Project project;
-        if (oPath.isPresent()) {
-            project = DocumentTranscoder.load(oPath.get());
+        if (meta != null) {
+            project = DocumentTranscoder.load(meta.getMetadata());
         } else {
-            project = DocumentTranscoder.load(getSpeedmentApplicationMetadata().getMetadata());
+            LOGGER.warn("Creating empty project since no metadata is present.");
+            final Map<String, Object> data = new ConcurrentHashMap<>();
+            data.put(HasName.NAME, "Project");
+            project = new ProjectImpl(data);
         }
 
-        // Apply overridden values from the system properties (if any)
-        //final Function<Document, Stream<Node>> traverser = n -> n.asParent().map(p -> p.stream()).orElse(Stream.empty()).map(c -> (Node) c);
-
-        /*
-
-            DocumentUtil.traverseOver(project)
-//            Trees.traverse(project, traverser, Trees.TraversalOrder.DEPTH_FIRST_PRE)
-                    .forEach((Document node) -> {
-                        final Class<?> clazz = node.getClass();
-                        node.stream().filterValue(o->List.class.isInstance(o))
-                                
-                        final String path = "speedment.project." + relativeName(node, Project.class) + "." + beanPropertyName(method);
-                        
-                        MethodsParser.streamOfExternalSetters(clazz).forEach(method -> {
-                            final String path = "speedment.project." + node.getRelativeName(Project.class) + "." + beanPropertyName(method);
-                            Optional.ofNullable(System.getProperty(path)).ifPresent(propString -> {
-                                final External external = MethodsParser.getExternalFor(method, clazz);
-                                final Class<?> targetJavaType = external.type();
-                                final Object val = speedment
-                                        .getJavaTypeMapperComponent()
-                                        .apply(targetJavaType)
-                                        .parse(propString);
-                                //final Object val = StandardJavaTypeMapping.parse(targetJavaType, propString);
-                                try {
-                                    method.invoke(node, val);
-                                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                                    throw new SpeedmentException("Unable to invoke " + method + " for " + node + " with argument " + val + " (" + propString + ")");
-                                }
-                            });
-                        }
-                        );
-                    });
-
-         */
         // Apply overidden item (if any) for all ConfigEntities of a given class
         withsAll.forEach(t2 -> {
             final Class<? extends Document> clazz = t2.get0();
@@ -417,30 +374,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return speedmentApplicationMetadata;
     }
 
-    /**
-     * Sets the Path from where the meta data configuration shall be retrieved.
-     * If no Path at all shall be used, a value of {@code null} can be used.
-     *
-     * @param configPath to use
-     * @return this instance
-     */
-    public T setConfigPath(Path configPath) {
-        // configPath nullable
-        this.configPath = configPath;
-        return self();
-    }
-
-    /**
-     * Returns the currently configured Path for meta data, or Optional.empty()
-     * of no Path is set.
-     *
-     * @return the currently configured Path for meta data, or Optional.empty()
-     * of no Path is set
-     */
-    protected Optional<Path> getConfigPath() {
-        return Optional.ofNullable(configPath);
-    }
-
     @Override
     public T start() {
         Statistics.onNodeStarted();
@@ -456,24 +389,18 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         if (!isStarted()) {
             start();
         }
-        // Replace the metadata model with an immutable version (potentially much faster)
+        
+        // If a project has been set for the lifecycle, wrap it in an immutable
+        // for performance reasons.
         final Project project = speedment.getProjectComponent().getProject();
-        final Project immutableProject = ImmutableProject.wrap(project);
+        if (project != null) {
+            final Project immutableProject = ImmutableProject.wrap(project);
+            speedment.getProjectComponent().setProject(immutableProject);
+        }
         
-        
-        final String json = DocumentTranscoder.save(immutableProject);
-        
-        speedment.getProjectComponent().setProject(immutableProject);
-        //
         return speedment;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + ", path=" + getConfigPath().toString();
-    }
-
-    // Utilities
     /**
      * Support method to do something with all managers i separate threads.
      * Useful if, for example, initialization is lengthy.

@@ -18,10 +18,8 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasParent;
-import java.util.Map;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
-import java.util.function.BiFunction;
 
 /**
  *
@@ -35,14 +33,8 @@ public abstract class AbstractChildDocumentProperty
     
     private final PARENT parent;
     
-    public AbstractChildDocumentProperty(PARENT parent, Map<String, Object> data) {
-        super(data);
+    public AbstractChildDocumentProperty(PARENT parent) {
         this.parent = requireNonNull(parent);
-    }
-
-    @Override
-    protected BiFunction<THIS, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        return (BiFunction<THIS, Map<String, Object>, AbstractDocumentProperty>) super.constructorForKey(key);
     }
 
     @Override

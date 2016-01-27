@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
@@ -27,13 +28,12 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import static com.speedment.util.NullUtil.requireKeys;
-import java.util.Map;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 
 /**
  *
@@ -42,8 +42,13 @@ import org.controlsfx.control.PropertySheet;
 public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
     implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
 
-    public ForeignKeyColumnProperty(ForeignKey parent, Map<String, Object> data) {
-        super(parent, requireKeys(data, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
+    public ForeignKeyColumnProperty(ForeignKey parent) {
+        super(parent);
+    }
+
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
     }
     
     @Override

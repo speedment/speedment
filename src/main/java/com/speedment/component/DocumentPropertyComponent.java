@@ -24,8 +24,9 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -38,20 +39,45 @@ import java.util.function.Function;
 @Api(version = "2.3")
 public interface DocumentPropertyComponent extends Component {
     
-    final String[]
-        DBMSES              = {Project.DBMSES},
-        SCHEMAS             = {Project.DBMSES, Dbms.SCHEMAS},
-        TABLES              = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES},
-        COLUMNS             = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.COLUMNS},
-        PRIMARY_KEY_COLUMNS = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.PRIMARY_KEY_COLUMNS},
-        FOREIGN_KEYS        = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.FOREIGN_KEYS},
-        FOREIGN_KEY_COLUMNS = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS},
-        INDEXES             = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.INDEXES},
-        INDEX_COLUMNS       = {Project.DBMSES, Dbms.SCHEMAS, Schema.TABLES, Table.FOREIGN_KEYS, Index.INDEX_COLUMNS};
+    /**
+     * Returns a new string array with the specified trail added to the end of
+     * the specified array. If trail is null, the original array is returned.
+     * 
+     * @param keys   the array to concatenate
+     * @param trail  the string to append
+     * @return       the new array
+     */
+    static String[] concat(String[] keys, String trail) {
+        if (trail == null) {
+            return keys;
+        } else {
+            final String[] newArray = Arrays.copyOf(keys, keys.length + 1);
+            newArray[keys.length] = trail;
+            return newArray;
+        }
+    }
     
+    final String[]
+        PROJECTS            = {},
+        DBMSES              = {Project.DBMSES},
+        SCHEMAS             = concat(DBMSES, Dbms.SCHEMAS),
+        TABLES              = concat(SCHEMAS, Schema.TABLES),
+        COLUMNS             = concat(TABLES, Table.COLUMNS),
+        PRIMARY_KEY_COLUMNS = concat(TABLES, Table.PRIMARY_KEY_COLUMNS),
+        FOREIGN_KEYS        = concat(TABLES, Table.FOREIGN_KEYS),
+        FOREIGN_KEY_COLUMNS = concat(FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS),
+        INDEXES             = concat(TABLES, Table.INDEXES),
+        INDEX_COLUMNS       = concat(FOREIGN_KEYS, Index.INDEX_COLUMNS);
+    
+    /**
+     * Functional interface that describes a constructor for an observable 
+     * document.
+     * 
+     * @param <PARENT>  the parent type
+     */
     @FunctionalInterface
     public interface Constructor<PARENT extends DocumentProperty> {
-        DocumentProperty create(PARENT parent, Map<String, Object> data);
+        AbstractDocumentProperty create(PARENT parent);
     }
 
     /**
@@ -87,8 +113,9 @@ public interface DocumentPropertyComponent extends Component {
      * the path specified by {@code keyPath}. To change the implementation, use 
      * {@link #setConstructor(Function, String[])}.
      * 
+     * @param <PARENT>  the parent type
      * @param keyPath   the path of the constructor
      * @return          the created document
      */
-    Constructor<?> getConstructor(String... keyPath);
+    <PARENT extends DocumentProperty> Constructor<PARENT> getConstructor(String... keyPath);
 }

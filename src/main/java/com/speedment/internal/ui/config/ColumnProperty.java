@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.Column;
 import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
@@ -30,7 +31,7 @@ import com.speedment.internal.ui.config.trait.HasNullableProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -41,6 +42,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 
 /**
  *
@@ -49,8 +51,13 @@ import org.controlsfx.control.PropertySheet;
 public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty>
     implements Column, HasEnabledProperty, HasNameProperty, HasAliasProperty, HasNullableProperty {
 
-    public ColumnProperty(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public ColumnProperty(Table parent) {
+        super(parent);
+    }
+
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.COLUMNS, key);
     }
 
     @Override

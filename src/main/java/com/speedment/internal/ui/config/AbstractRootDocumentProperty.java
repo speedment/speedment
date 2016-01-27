@@ -17,7 +17,6 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -28,10 +27,6 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>>
     extends AbstractDocumentProperty<THIS> {
-    
-    public AbstractRootDocumentProperty(Map<String, Object> data) {
-        super(data);
-    }
 
     @Override
     public final Optional<? extends DocumentProperty> getParent() {

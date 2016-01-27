@@ -17,14 +17,14 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
@@ -37,8 +37,13 @@ import org.controlsfx.control.PropertySheet;
 public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table, ForeignKeyProperty> 
     implements ForeignKey, HasEnabledProperty, HasNameProperty {
 
-    public ForeignKeyProperty(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public ForeignKeyProperty(Table parent) {
+        super(parent);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
     }
     
     public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
@@ -52,19 +57,6 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
             HasNameProperty.super.getUiVisibleProperties(speedment)
         );
     }
-
-    @Override
-    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumnProperty> foreignKeyColumnConstructor() {
-        return ForeignKeyColumnProperty::new;
-    }
-
-    @Override
-    protected final BiFunction<ForeignKeyProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case FOREIGN_KEY_COLUMNS : return ForeignKeyColumnProperty::new;
-            default                  : return super.constructorForKey(key);
-        }
-    }
     
     @Override
     public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
@@ -72,12 +64,16 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     @Override
+    @Deprecated
+    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumnProperty> foreignKeyColumnConstructor() {
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
+    }
+    
+    @Override
     public ForeignKeyColumnProperty addNewForeignKeyColumn() {
-        final Map<String, Object> child = new ConcurrentHashMap<>();
-        child.put(ForeignKeyColumn.FOREIGN_COLUMN_NAME, "");
-        child.put(ForeignKeyColumn.FOREIGN_TABLE_NAME, "");
-        
-        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this, child);
+        final ForeignKeyColumnProperty created = new ForeignKeyColumnProperty(this);
         foreignKeyColumnsProperty().add(created);
         
         return created;
@@ -91,5 +87,5 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     @Override
     public String toString() {
         return toStringHelper(this);
-    }     
+    }
 }

@@ -17,6 +17,8 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
@@ -24,7 +26,6 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
@@ -38,8 +39,13 @@ import org.controlsfx.control.PropertySheet;
 public final class IndexProperty extends AbstractChildDocumentProperty<Table, IndexProperty> 
     implements Index, HasEnabledProperty, HasNameProperty {
 
-    public IndexProperty(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public IndexProperty(Table parent) {
+        super(parent);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.INDEXES, key);
     }
     
     @Override
@@ -67,16 +73,11 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
     }
 
     @Override
+    @Deprecated
     public BiFunction<Index, Map<String, Object>, IndexColumnProperty> indexColumnConstructor() {
-        return IndexColumnProperty::new;
-    }
-
-    @Override
-    protected final BiFunction<IndexProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case INDEX_COLUMNS : return IndexColumnProperty::new;
-            default            : return super.constructorForKey(key);
-        }
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
     
     @Override
@@ -90,7 +91,7 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
 
     @Override
     public IndexColumnProperty addNewIndexColumn() {
-        final IndexColumnProperty created = new IndexColumnProperty(this, new ConcurrentHashMap<>());
+        final IndexColumnProperty created = new IndexColumnProperty(this);
         indexColumnsProperty().add(created);
         return created;
     }

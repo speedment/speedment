@@ -27,8 +27,8 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DbmsMutator;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -58,7 +58,7 @@ public interface Dbms extends
         SCHEMAS    = "schemas";
         
     default String getTypeName() {
-        return getAsString(TYPE_NAME).orElseThrow(newNoSuchElementExceptionFor(this, TYPE_NAME));
+        return getAsString(TYPE_NAME).orElse(StandardDbmsType.defaultType().getName());
     }
     
     /**

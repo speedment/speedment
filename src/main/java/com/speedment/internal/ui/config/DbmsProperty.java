@@ -17,6 +17,8 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
@@ -28,11 +30,9 @@ import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import static com.speedment.util.NullUtil.requireKeys;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
@@ -48,8 +48,13 @@ import org.controlsfx.control.PropertySheet;
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
     implements Dbms, HasEnabledProperty, HasNameProperty {
 
-    public DbmsProperty(Project parent, Map<String, Object> data) {
-        super(parent, requireKeys(data, Dbms.TYPE_NAME));
+    public DbmsProperty(Project parent) {
+        super(parent);
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.DBMSES, key);
     }
     
     @Override
@@ -121,16 +126,11 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
 
     @Override
+    @Deprecated
     public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
-        return SchemaProperty::new;
-    }
-
-    @Override
-    protected BiFunction<DbmsProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case SCHEMAS : return SchemaProperty::new;
-            default      : return super.constructorForKey(key);
-        }
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
     
     @Override
@@ -140,7 +140,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     
     @Override
     public SchemaProperty addNewSchema() {
-        final SchemaProperty created = new SchemaProperty(this, new ConcurrentHashMap<>());
+        final SchemaProperty created = new SchemaProperty(this);
         schemasProperty().add(created);
         return created;
     }

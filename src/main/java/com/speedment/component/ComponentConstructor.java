@@ -26,7 +26,7 @@ import com.speedment.annotation.Api;
  * @since      2.3
  */
 @Api(version="2.3")
-public interface ComponentBuilder<C extends Component> {
-    ComponentBuilder<C> withSpeedment(Speedment speedment);
-    C build();
+@FunctionalInterface
+public interface ComponentConstructor<C extends Component> {
+    C create(Speedment speedment);
 }

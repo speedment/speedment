@@ -17,8 +17,8 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.Document;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
@@ -30,11 +30,25 @@ import org.controlsfx.control.PropertySheet;
 public final class DefaultDocumentProperty extends 
     AbstractDocumentProperty<DefaultDocumentProperty> {
     
-    private final Document parent;
+    private final AbstractDocumentProperty parent;
+    private final String key;
     
-    public DefaultDocumentProperty(Document parent, Map<String, Object> data) {
-        super(data);
-        this.parent = parent;
+    public DefaultDocumentProperty(AbstractDocumentProperty parent, String key) {
+        this.parent = parent; // Can be null.
+        this.key    = key;    // Can be null.
+    }
+    
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        if (parent == null) {
+            if (key == null) {
+                return new String[0];
+            } else {
+                return new String[] {key};
+            }
+        } else {
+            return concat(parent.keyPathEndingWith(this.key), key);
+        }
     }
 
     @Override

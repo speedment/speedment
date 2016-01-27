@@ -46,7 +46,7 @@ public interface Index extends
         HasMutator<IndexMutator> {
 
     final String UNIQUE = "unique",
-            INDEX_COLUMNS = "indexColumns";
+        INDEX_COLUMNS = "indexColumns";
 
     /**
      * Returns whether or not this index is an {@code UNIQUE} index.

@@ -17,6 +17,8 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
@@ -40,8 +42,13 @@ import org.controlsfx.control.PropertySheet;
 public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty> 
     implements Schema, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
-    public SchemaProperty(Dbms parent, Map<String, Object> data) {
-        super(parent, data);
+    public SchemaProperty(Dbms parent) {
+        super(parent);
+    }
+
+    @Override
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.SCHEMAS, key);
     }
     
     @Override
@@ -79,16 +86,11 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     }
 
     @Override
+    @Deprecated
     public BiFunction<Schema, Map<String, Object>, TableProperty> tableConstructor() {
-        return TableProperty::new;
-    }
-
-    @Override
-    protected final BiFunction<SchemaProperty, Map<String, Object>, AbstractDocumentProperty> constructorForKey(String key) {
-        switch (key) {
-            case TABLES : return TableProperty::new;
-            default     : return super.constructorForKey(key);
-        }
+        throw new UnsupportedOperationException(
+            "Constructing is now handled using DocumentPropertyController."
+        );
     }
     
     @Override
@@ -98,7 +100,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     
     @Override
     public TableProperty addNewTable() {
-        final TableProperty created = new TableProperty(this, new ConcurrentHashMap<>());
+        final TableProperty created = new TableProperty(this);
         tablesProperty().add(created);
         return created;
     }

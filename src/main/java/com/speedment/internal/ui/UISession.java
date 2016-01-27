@@ -25,6 +25,7 @@ import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.code.TranslatorManager;
+import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
@@ -57,7 +58,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -68,14 +68,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import java.util.Map;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -118,18 +117,21 @@ public final class UISession {
     private File currentlyOpenFile = null;
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
-        this(speedment, application, stage, defaultConfigLocation, newEmptyProject());
+        this(speedment, application, stage, defaultConfigLocation, null);
     }
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
-        requireNonNull(project);
-        
+
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
-        this.project               = new ProjectProperty(new ConcurrentHashMap<>(project.getData()));
+        this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
+        
+        if (project != null) {
+            this.project.merge(speedment, project);
+        }
     }
     
     public Speedment getSpeedment() {
@@ -483,8 +485,13 @@ public final class UISession {
         try {
             dbms.schemasProperty().clear();
             
-            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
+            final Project newProject = new ProjectImpl(dbms.getParent().get().getData());
+            final Dbms newDbms = newProject.dbmses().filter(d -> d.getName().equals(dbms.getName())).findAny().get();
+            
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
+            
+            project.merge(speedment, newProject);
             
             return true;
         } catch (final Exception ex) {
@@ -500,6 +507,7 @@ public final class UISession {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
                 final Project p = DocumentTranscoder.load(file.toPath());
+                System.out.println("Created project: " + DocumentTranscoder.save(p));
 
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :
@@ -518,7 +526,7 @@ public final class UISession {
                         break;
 
                     case USE_EXISTING_STAGE :
-                        project.mergeWith(p);
+                        project.merge(speedment, p);
                         SceneController.createAndShow(this);
                         break;
 
@@ -628,10 +636,4 @@ public final class UISession {
     }
     
     private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
-    
-    private static ProjectProperty newEmptyProject() {
-        final Map<String, Object> projectMap = new ConcurrentHashMap<>();
-        projectMap.put("name", "Project");
-        return new ProjectProperty(projectMap);
-    }
 }
