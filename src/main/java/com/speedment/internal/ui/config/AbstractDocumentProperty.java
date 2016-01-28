@@ -306,6 +306,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     private <T> Property<T> addListeners(String key, Property<T> property) {
         property.addListener((ob, o, n) -> {
             config.put(key, n);
+            invalidate();
         });
         
         return property;
@@ -340,6 +341,8 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
                         .forEachOrdered(source::add);
                 }
             }
+            
+            invalidate();
         });
         
         return list;
