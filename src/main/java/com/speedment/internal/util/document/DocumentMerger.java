@@ -61,10 +61,6 @@ public final class DocumentMerger {
         for (final String key : newKeys) {
             final Object proposedValue = proposed.getData().get(key);
             
-            if (key.equals("typeMapper")) {
-                System.out.println("Merge suggested that " + existing.toString() + ".typeMapper -> '" + proposedValue + "'.");
-            }
-            
             // Check if the proposed value fulfills the requirements to be
             // considered a list of child documents.
             boolean wasChild = false;
