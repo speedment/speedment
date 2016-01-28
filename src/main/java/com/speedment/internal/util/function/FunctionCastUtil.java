@@ -1,47 +1,22 @@
+/**
+ *
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.internal.util.function;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.BinaryOperator;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleFunction;
-import java.util.function.DoublePredicate;
-import java.util.function.DoubleToIntFunction;
-import java.util.function.DoubleToLongFunction;
-import java.util.function.DoubleUnaryOperator;
-import java.util.function.Function;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-import java.util.function.IntPredicate;
-import java.util.function.IntSupplier;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongConsumer;
-import java.util.function.LongFunction;
-import java.util.function.LongPredicate;
-import java.util.function.LongSupplier;
-import java.util.function.LongToDoubleFunction;
-import java.util.function.LongToIntFunction;
-import java.util.function.LongUnaryOperator;
-import java.util.function.ObjDoubleConsumer;
-import java.util.function.ObjIntConsumer;
-import java.util.function.ObjLongConsumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleBiFunction;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntBiFunction;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongBiFunction;
-import java.util.function.ToLongFunction;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 /**
  *
@@ -49,171 +24,172 @@ import java.util.function.UnaryOperator;
  */
 public class FunctionCastUtil {
 
-    public static <T, U> BiConsumer<T, U> as(BiConsumer<T, U> item) {
-        return item;
+    public static <T, U> BiConsumer<T, U> asBiConsumer(BiConsumer<T, U> biConsumer) {
+        return biConsumer;
     }
 
-    public static <T, U, R> BiFunction<T, U, R> as(BiFunction<T, U, R> item) {
-        return item;
+    public static <T, U, R> BiFunction<T, U, R> asBiFunction(BiFunction<T, U, R> biFunction) {
+        return biFunction;
     }
 
-    public static <T> BinaryOperator<T> as(BinaryOperator<T> item) {
-        return item;
+    public static <T> BinaryOperator<T> asBinaryOperator(BinaryOperator<T> binaryOperator) {
+        return binaryOperator;
     }
 
-    public static <T, U> BiPredicate<T, U> as(BiPredicate<T, U> item) {
-        return item;
+    public static <T, U> BiPredicate<T, U> asBiPredicate(BiPredicate<T, U> biPredicate) {
+        return biPredicate;
     }
 
-    public static BooleanSupplier as(BooleanSupplier item) {
-        return item;
+    public static BooleanSupplier asBooleanSupplier(BooleanSupplier booleanSupplier) {
+        return booleanSupplier;
     }
 
-    public static <T> Consumer<T> as(Consumer<T> item) {
-        return item;
+    public static <T> Consumer<T> asConsumer(Consumer<T> consumer) {
+        return consumer;
     }
 
-    public static DoubleBinaryOperator as(DoubleBinaryOperator item) {
-        return item;
+    public static DoubleBinaryOperator asDoubleBinaryOperator(DoubleBinaryOperator doubleBinaryOperator) {
+        return doubleBinaryOperator;
     }
 
-    public static DoubleConsumer as(DoubleConsumer item) {
-        return item;
+    public static DoubleConsumer asDoubleConsumer(DoubleConsumer doubleConsumer) {
+        return doubleConsumer;
     }
 
-    public static <R> DoubleFunction<R> as(DoubleFunction<R> item) {
-        return item;
+    public static <R> DoubleFunction<R> asDoubleFunction(DoubleFunction<R> doubleFunction) {
+        return doubleFunction;
     }
 
-    public static DoublePredicate as(DoublePredicate item) {
-        return item;
+    public static DoublePredicate asDoublePredicate(DoublePredicate doublePredicate) {
+        return doublePredicate;
     }
 
-    public static DoubleToIntFunction as(DoubleToIntFunction item) {
-        return item;
+    public static DoubleToIntFunction asDoubleToIntFunction(DoubleToIntFunction doubleToIntFunctiontem) {
+        return doubleToIntFunctiontem;
     }
 
-    public static DoubleToLongFunction as(DoubleToLongFunction item) {
-        return item;
+    public static DoubleToLongFunction asDoubleToLongFunction(DoubleToLongFunction doubleToLongFunction) {
+        return doubleToLongFunction;
     }
 
-    public static DoubleUnaryOperator as(DoubleUnaryOperator item) {
-        return item;
+    public static DoubleUnaryOperator asDoubleUnaryOperator(DoubleUnaryOperator doubleUnaryOperator) {
+        return doubleUnaryOperator;
     }
 
-    public static <T, R> Function<T, R> as(Function<T, R> item) {
-        return item;
+    public static <T, R> Function<T, R> asFunction(Function<T, R> function) {
+        return function;
     }
 
-    public static IntBinaryOperator as(IntBinaryOperator item) {
-        return item;
+    public static IntBinaryOperator asIntBinaryOperator(IntBinaryOperator intBinaryOperator) {
+        return intBinaryOperator;
     }
 
-    public static IntConsumer as(IntConsumer item) {
-        return item;
+    public static IntConsumer asIntConsumer(IntConsumer intConsumer) {
+        return intConsumer;
     }
 
-    public static <R> IntFunction<R> as(IntFunction<R> item) {
-        return item;
+    public static <R> IntFunction<R> asIntFunction(IntFunction<R> intFunction) {
+        return intFunction;
     }
 
-    public static IntPredicate as(IntPredicate item) {
-        return item;
+    public static IntPredicate asIntPredicate(IntPredicate intPredicate) {
+        return intPredicate;
     }
 
-    public static IntSupplier as(IntSupplier item) {
-        return item;
+    public static IntSupplier asIntSupplier(IntSupplier intSupplier) {
+        return intSupplier;
     }
 
-    public static IntToDoubleFunction as(IntToDoubleFunction item) {
-        return item;
+    public static IntToDoubleFunction asIntToDoubleFunction(IntToDoubleFunction intToDoubleFunction) {
+        return intToDoubleFunction;
     }
 
-    public static IntToLongFunction as(IntToLongFunction item) {
-        return item;
+    public static IntToLongFunction asIntToLongFunction(IntToLongFunction intToLongFunction) {
+        return intToLongFunction;
     }
 
-    public static IntUnaryOperator as(IntUnaryOperator item) {
-        return item;
+    public static IntUnaryOperator asIntUnaryOperator(IntUnaryOperator intUnaryOperator) {
+        return intUnaryOperator;
     }
 
-    public static LongBinaryOperator as(LongBinaryOperator item) {
-        return item;
+    public static LongBinaryOperator asLongBinaryOperator(LongBinaryOperator longBinaryOperator) {
+        return longBinaryOperator;
     }
 
-    public static LongConsumer as(LongConsumer item) {
-        return item;
+    public static LongConsumer asLongConsumer(LongConsumer longConsumer) {
+        return longConsumer;
     }
 
-    public static <R> LongFunction<R> as(LongFunction<R> item) {
-        return item;
+    public static <R> LongFunction<R> asLongFunction(LongFunction<R> longFunction) {
+        return longFunction;
     }
 
-    public static LongPredicate as(LongPredicate item) {
-        return item;
+    public static LongPredicate asLongPredicate(LongPredicate longPredicate) {
+        return longPredicate;
     }
 
-    public static <T> LongSupplier as(LongSupplier item) {
-        return item;
+    public static <T> LongSupplier asLongSupplier(LongSupplier longSupplier) {
+        return longSupplier;
     }
 
-    public static LongToDoubleFunction as(LongToDoubleFunction item) {
-        return item;
+    public static LongToDoubleFunction asLongToDoubleFunction(LongToDoubleFunction longToDoubleFunction) {
+        return longToDoubleFunction;
     }
 
-    public static LongToIntFunction as(LongToIntFunction item) {
-        return item;
+    public static LongToIntFunction asLongToIntFunction(LongToIntFunction longToIntFunction) {
+        return longToIntFunction;
     }
 
-    public static LongUnaryOperator as(LongUnaryOperator item) {
-        return item;
+    public static LongUnaryOperator asLongUnaryOperator(LongUnaryOperator longUnaryOperator) {
+        return longUnaryOperator;
     }
 
-    public static <T> ObjDoubleConsumer<T> as(ObjDoubleConsumer<T> item) {
-        return item;
+    public static <T> ObjDoubleConsumer<T> asObjDoubleConsumer(ObjDoubleConsumer<T> objDoubleConsumer) {
+        return objDoubleConsumer;
     }
 
-    public static <T> ObjIntConsumer<T> as(ObjIntConsumer<T> item) {
-        return item;
+    public static <T> ObjIntConsumer<T> asObjIntConsumer(ObjIntConsumer<T> objIntConsumer) {
+        return objIntConsumer;
     }
 
-    public static <T> ObjLongConsumer<T> as(ObjLongConsumer<T> item) {
-        return item;
+    public static <T> ObjLongConsumer<T> asObjLongConsumer(ObjLongConsumer<T> objLongConsumer) {
+        return objLongConsumer;
     }
 
-    public static <T> Predicate<T> as(Predicate<T> item) {
-        return item;
+    public static <T> Predicate<T> asPredicate(Predicate<T> predicate) {
+        return predicate;
     }
 
-    public static <T> Supplier<T> as(Supplier<T> item) {
-        return item;
+    public static <T> Supplier<T> asSupplier(Supplier<T> supplier) {
+        return supplier;
     }
 
-    public static <T, U> ToDoubleBiFunction<T, U> as(ToDoubleBiFunction<T, U> item) {
-        return item;
+    public static <T, U> ToDoubleBiFunction<T, U> asToDoubleBiFunction(ToDoubleBiFunction<T, U> toDoubleBiFunction) {
+        return toDoubleBiFunction;
     }
 
-    public static <T> ToDoubleFunction<T> as(ToDoubleFunction<T> item) {
-        return item;
+    public static <T> ToDoubleFunction<T> asToDoubleFunction(ToDoubleFunction<T> toDoubleFunction) {
+        return toDoubleFunction;
     }
 
-    public static <T, U> ToIntBiFunction<T, U> as(ToIntBiFunction<T, U> item) {
-        return item;
+    public static <T, U> ToIntBiFunction<T, U> asToIntBiFunction(ToIntBiFunction<T, U> toIntBiFunction) {
+        return toIntBiFunction;
     }
 
-    public static <T> ToIntFunction<T> as(ToIntFunction<T> item) {
-        return item;
+    public static <T> ToIntFunction<T> asToIntFunction(ToIntFunction<T> ioIntFunction) {
+        return ioIntFunction;
     }
 
-    public static <T, U> ToLongBiFunction<T,U> as(ToLongBiFunction<T,U> item) {
-        return item;
+    public static <T, U> ToLongBiFunction<T, U> asToLongBiFunction(ToLongBiFunction<T, U> toLongBiFunction) {
+        return toLongBiFunction;
     }
 
-    public static <T> ToLongFunction<T> as(ToLongFunction<T> item) {
-        return item;
+    public static <T> ToLongFunction<T> asToLongFunction(ToLongFunction<T> toLongFunction) {
+        return toLongFunction;
     }
-    public static <T> UnaryOperator<T> as(UnaryOperator<T> item) {
-        return item;
+
+    public static <T> UnaryOperator<T> asUnaryOperator(UnaryOperator<T> unaryOperator) {
+        return unaryOperator;
     }
 
     private FunctionCastUtil() {
