@@ -48,7 +48,7 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
  *
  * @author pemi
  */
-public final class EntityTranslator extends EntityAndManagerTranslator<Interface> {
+public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
     public EntityTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);

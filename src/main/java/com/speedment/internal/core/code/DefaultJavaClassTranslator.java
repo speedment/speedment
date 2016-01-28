@@ -258,7 +258,6 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         public com.speedment.internal.codegen.lang.models.Class newInstance(String name) {
             return com.speedment.internal.codegen.lang.models.Class.of(name);
         }
-
     }
 
     protected class InterfaceBuilder extends Builder<Interface> {
@@ -271,7 +270,6 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         public Interface newInstance(String name) {
             return Interface.of(name);
         }
-
     }
 
     public Field fieldFor(Column c) {
@@ -283,7 +281,6 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     }
 
     public enum CopyConstructorMode {
-
         SETTER, FIELD, BUILDER;
     }
 
