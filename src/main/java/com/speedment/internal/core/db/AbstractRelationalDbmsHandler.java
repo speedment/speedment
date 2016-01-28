@@ -182,7 +182,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
             sqlTypeMapping = !preSet.isEmpty() ? readTypeMapFromSet(preSet) : readTypeMapFromDB(connection);
 
-            // sqlTypeMapping = readTypeMapFromDB(connection);
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
 
@@ -598,10 +597,5 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         SqlTypeInfo::getSqlTypeName,
                         sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
                 );
-
-//        final Map<String, Class<?>> result = new ConcurrentHashMap<>();
-//        typeInfos.forEach(typeInfo -> result.put(typeInfo.getSqlTypeName(),
-//                speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo)));
-//        return result;
     }
 }
