@@ -70,8 +70,8 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     @Override
-    public Table findForeignTable() throws SpeedmentException {
-        return foreignTableProperty().get();
+    public TableProperty findForeignTable() throws SpeedmentException {
+        return (TableProperty) foreignTableProperty().get();
     }
 
     public final ObjectBinding<Column> foreignColumnProperty() {
@@ -79,8 +79,8 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
 
     @Override
-    public Column findForeignColumn() throws SpeedmentException {
-        return foreignColumnProperty().get();
+    public ColumnProperty findForeignColumn() throws SpeedmentException {
+        return (ColumnProperty) foreignColumnProperty().get();
     }
     
     @Override

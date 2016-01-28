@@ -61,6 +61,10 @@ public final class DocumentMerger {
         for (final String key : newKeys) {
             final Object proposedValue = proposed.getData().get(key);
             
+            if (key.equals("typeMapper")) {
+                System.out.println("Merge suggested that " + existing.toString() + ".typeMapper -> '" + proposedValue + "'.");
+            }
+            
             // Check if the proposed value fulfills the requirements to be
             // considered a list of child documents.
             boolean wasChild = false;
@@ -96,23 +100,23 @@ public final class DocumentMerger {
                 if (proposedValue instanceof String) {
                     @SuppressWarnings("unchecked")
                     final String casted = (String) proposedValue;
-                    existing.stringPropertyOf(key, () -> casted).setValue(casted);
+                    existing.stringPropertyOf(key, () -> casted);
                 } else if (proposedValue instanceof Boolean) {
                     @SuppressWarnings("unchecked")
                     final Boolean casted = (Boolean) proposedValue;
-                    existing.booleanPropertyOf(key, () -> casted).setValue(casted);
+                    existing.booleanPropertyOf(key, () -> casted);
                 } else if (proposedValue instanceof Integer) {
                     @SuppressWarnings("unchecked")
                     final Integer casted = (Integer) proposedValue;
-                    existing.integerPropertyOf(key, () -> casted).setValue(casted);
+                    existing.integerPropertyOf(key, () -> casted);
                 } else if (proposedValue instanceof Long) {
                     @SuppressWarnings("unchecked")
                     final Long casted = (Long) proposedValue;
-                    existing.longPropertyOf(key, () -> casted).setValue(casted);
+                    existing.longPropertyOf(key, () -> casted);
                 } else if (proposedValue instanceof Number) {
                     @SuppressWarnings("unchecked")
                     final Double casted = ((Number) proposedValue).doubleValue();
-                    existing.doublePropertyOf(key, () -> casted).setValue(casted);
+                    existing.doublePropertyOf(key, () -> casted);
                 } else {
                     @SuppressWarnings("unchecked")
                     final Class<Object> type = (Class<Object>) proposedValue.getClass();
