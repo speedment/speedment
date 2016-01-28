@@ -165,12 +165,12 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     
     @Override
     public final StringProperty stringPropertyOf(String key, Supplier<String> ifEmpty) {
-        return (StringProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleStringProperty(ifEmpty.get())));
+        return (StringProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleStringProperty(), ifEmpty.get()));
     }
     
     @Override
     public final BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty) {
-        return (BooleanProperty) properties.computeIfAbsent(key, k -> addListeners(k, new SimpleBooleanProperty(ifEmpty.getAsBoolean())));
+        return (BooleanProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleBooleanProperty(), ifEmpty.getAsBoolean()));
     }
 
     @Override
@@ -196,7 +196,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     private <T extends Property<? extends Number>> T numericPropertyOf(String key, Supplier<? extends Number> ifEmpty, Function<NumericProperty, T> wrapper) {
         final NumericProperty property = (NumericProperty) properties
             .computeIfAbsent(key, k -> 
-                addListeners(k, new SimpleNumericProperty(ifEmpty.get()))
+                prepare(k, new SimpleNumericProperty(), ifEmpty.get())
             );
         
         return wrapper.apply(property);
@@ -206,7 +206,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) throws SpeedmentException {
         @SuppressWarnings("unchecked")
         final ObjectProperty<T> prop = (ObjectProperty<T>) 
-            properties.computeIfAbsent(key, k -> addListeners(k, new SimpleObjectProperty<>(ifEmpty.get())));
+            properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(), ifEmpty.get()));
         
         return prop;
     }
@@ -301,13 +301,16 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @param <T>       the type of the property
      * @param key       the key of the property
      * @param property  the property to listen to
+     * @param value     the initial value of this property
      * @return          the same property but with listener attached
      */
-    private <T> Property<T> addListeners(String key, Property<T> property) {
+    private <T> Property<T> prepare(String key, Property<T> property, T value) {
         property.addListener((ob, o, n) -> {
             config.put(key, n);
             invalidate();
         });
+        
+        property.setValue(value);
         
         return property;
     }

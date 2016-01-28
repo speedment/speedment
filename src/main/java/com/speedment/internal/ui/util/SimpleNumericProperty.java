@@ -37,6 +37,10 @@ public final class SimpleNumericProperty implements NumericProperty {
     
     private final Property<Number> wrapped;
     
+    public SimpleNumericProperty() {
+        this.wrapped = new SimpleObjectProperty<>();
+    }
+    
     public SimpleNumericProperty(Number initialValue) {
         this.wrapped = new SimpleObjectProperty<>(initialValue);
     }
