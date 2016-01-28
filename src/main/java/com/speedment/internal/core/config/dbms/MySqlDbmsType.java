@@ -58,7 +58,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
         return result.toString();
     };
-    private static final Set<SqlTypeInfo> DATA_TYPES = new HashSet<>();
+    private static final Set<SqlTypeInfo> DATA_TYPES = Collections.unmodifiableSet(new HashSet<>());
 
     public MySqlDbmsType() {
 

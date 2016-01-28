@@ -16,29 +16,24 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.Speedment;
-import com.speedment.config.db.Dbms;
-import com.speedment.db.DbmsHandler;
-import com.speedment.internal.core.db.MySqlDbmsHandler;
-import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
-import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-import com.speedment.internal.util.sql.SqlTypeInfo;
-
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.Speedment;
+import com.speedment.config.db.Dbms;
+import com.speedment.db.DbmsHandler;
+import com.speedment.internal.core.db.MySqlDbmsHandler;
+import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
+import com.speedment.internal.util.sql.SqlTypeInfo;
 
 /**
  *
@@ -60,7 +55,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
         DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
         return result.toString();
     };
-    private static final Set<SqlTypeInfo> DATA_TYPES = new HashSet<>();
+    private static final Set<SqlTypeInfo> DATA_TYPES = Collections.unmodifiableSet(new HashSet<>());
 
     public MariaDbDbmsType() {
 
