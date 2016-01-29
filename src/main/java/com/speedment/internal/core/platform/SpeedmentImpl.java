@@ -21,6 +21,7 @@ import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.component.CodeGenerationComponent;
+import com.speedment.component.ComponentConstructor;
 import com.speedment.component.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
@@ -55,6 +56,8 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import static com.speedment.internal.util.Cast.castOrFail;
 import com.speedment.stream.MapStream;
 import java.lang.reflect.Constructor;
@@ -104,21 +107,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(PasswordComponentImpl::new);
         put(CodeGenerationComponentImpl::new);
         put(DocumentPropertyComponentImpl::new);
-    }
-    
-    private SpeedmentImpl(SpeedmentImpl prototype) {
-        this();
-        MapStream.of(prototype.stream())
-            .mapValue(c -> {
-                try {
-                    final Class<? extends Component> clazz = c.getClass();
-                    final Constructor<? extends Component> constr = clazz.getConstructor(Speedment.class);
-                    final Component comp = constr.newInstance(this);
-                    return comp;
-                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }).values().forEach(this::put);
     }
 
     @Override
@@ -276,34 +264,55 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     public PluginComponent getPluginComponent() {
         return pluginComponent;
     }
-    
+
     @Override
     public EventComponent getEventComponent() {
         return eventComponent;
     }
-    
+
     @Override
     public UserInterfaceComponent getUserInterfaceComponent() {
         return userInterfaceComponent;
     }
-    
+
     @Override
     public PasswordComponent getPasswordComponent() {
         return passwordComponent;
     }
-    
+
     @Override
     public CodeGenerationComponent getCodeGenerationComponent() {
         return codeGenerationComponent;
     }
-    
+
     @Override
     public DocumentPropertyComponent getDocumentPropertyComponent() {
         return documentPropertyComponent;
     }
 
     @Override
-    public Speedment newInstance() {
-        return new SpeedmentImpl(this);
+    public Speedment copyWithSameTypeOfComponents() {
+        final SpeedmentApplicationLifecycle<?> lifecycle = new DefaultSpeedmentApplicationLifecycle();
+
+        stream()
+                .map(Entry::getValue)
+                .map(this::componentConstructor)
+                .forEach(lifecycle::with);
+
+        return lifecycle.build();
     }
+
+    private ComponentConstructor componentConstructor(Component component) {
+        final Class<? extends Component> clazz = component.getClass();
+        return s -> {
+            try {
+                final Constructor<? extends Component> constr = clazz.getConstructor(Speedment.class);
+                return constr.newInstance(s);
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        };
+
+    }
+
 }

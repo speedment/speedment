@@ -132,7 +132,7 @@ public interface Speedment {
      * 
      * @return  the new instance
      */
-    Speedment newInstance();
+    Speedment copyWithSameTypeOfComponents();
 
     default EntityManager getEntityManager() {
         return get(EntityManager.class);
