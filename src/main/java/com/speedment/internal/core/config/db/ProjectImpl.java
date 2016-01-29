@@ -35,6 +35,10 @@ public final class ProjectImpl extends BaseDocument implements Project {
         super(null, data);
     }
     
+    public ProjectImpl(Document parent, Map<String, Object> data) {
+        super(null, data);
+    }
+    
     @Override
     public String getName() throws SpeedmentException {
         // Must implement getName because Project does not have any parent.

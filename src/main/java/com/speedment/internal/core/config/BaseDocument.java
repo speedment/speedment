@@ -22,14 +22,11 @@ import static com.speedment.internal.util.document.DocumentUtil.childrenOf;
 import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

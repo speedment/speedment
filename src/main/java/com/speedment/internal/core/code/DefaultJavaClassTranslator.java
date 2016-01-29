@@ -17,6 +17,7 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.Speedment;
+import com.speedment.code.Translator;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.internal.codegen.lang.models.AnnotationUsage;
@@ -41,13 +42,20 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.lang.models.Enum;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
+import com.speedment.internal.core.config.BaseDocument;
+import com.speedment.internal.core.config.db.ColumnImpl;
+import com.speedment.internal.core.config.db.DbmsImpl;
+import com.speedment.internal.core.config.db.ForeignKeyImpl;
+import com.speedment.internal.core.config.db.IndexImpl;
+import com.speedment.internal.core.config.db.ProjectImpl;
+import com.speedment.internal.core.config.db.SchemaImpl;
+import com.speedment.internal.core.config.db.TableImpl;
 import com.speedment.internal.util.JavaLanguageNamer;
-import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +63,11 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.stream.MapStream;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 /**
  *
@@ -83,12 +89,20 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
     private final Generator codeGenerator;
     private final Speedment speedment;
     private final JavaLanguageNamer javaLanguageNamer;
+    
+    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners;
+    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners;
+    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners;
 
     public DefaultJavaClassTranslator(Speedment speedment, Generator codeGenerator, C configEntity) {
         this.speedment = requireNonNull(speedment);
         this.configEntity = requireNonNull(configEntity);
         this.codeGenerator = requireNonNull(codeGenerator);
         this.javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
+        
+        this.classListeners = new CopyOnWriteArrayList<>();
+        this.interfaceListeners = new CopyOnWriteArrayList<>();
+        this.enumListeners = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -139,124 +153,191 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         return false;
     }
 
-    protected abstract class Builder<T extends ClassOrInterface<T>> {
+    @Override
+    public void onClass(Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>> action) {
+        classListeners.add(action);
+    }
 
+    @Override
+    public void onInterface(Consumer<Builder<Interface>> action) {
+        interfaceListeners.add(action);
+    }
+
+    @Override
+    public void onEnum(Consumer<Builder<Enum>> action) {
+        enumListeners.add(action);
+    }
+
+    @Override
+    public Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners() {
+        return classListeners.stream();
+    }
+
+    @Override
+    public Stream<Consumer<Builder<Interface>>> interfaceListeners() {
+        return interfaceListeners.stream();
+    }
+
+    @Override
+    public Stream<Consumer<Builder<Enum>>> enumListeners() {
+        return enumListeners.stream();
+    }
+
+    protected abstract class AbstractBuilder<T extends ClassOrInterface<T>> implements Translator.Builder<T> {
+
+        private final static String PROJECTS = "projects";
         private final String name;
-        private final Map<Class<?>, List<BiConsumer<T, ? extends Document>>> map;
+        private final Map<String, List<BiConsumer<T, Document>>> map;
 
         // Special for this case
         private final List<BiConsumer<T, ForeignKey>> foreignKeyReferencesThisTableConsumers;
 
-        public Builder(String name) {
+        public AbstractBuilder(String name) {
             this.name = requireNonNull(name);
             this.map = new HashMap<>();
             this.foreignKeyReferencesThisTableConsumers = new ArrayList<>();
         }
 
-        public Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer) {
-            aquireListAndAdd(Project.class, requireNonNull(consumer));
+        @Override
+        public <P extends Document, D extends Document> Builder<T> addConsumer(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer) {
+            aquireListAndAdd(key, wrap(consumer, constructor));
             return this;
         }
 
-        public Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer) {
-            aquireListAndAdd(Dbms.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addProjectConsumer(BiConsumer<T, Project> consumer) {
+            aquireListAndAdd(PROJECTS, wrap(consumer, ProjectImpl::new));
             return this;
         }
 
-        public Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer) {
-            aquireListAndAdd(Schema.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer) {
+            aquireListAndAdd(Project.DBMSES, wrap(consumer, DbmsImpl::new));
             return this;
         }
 
-        public Builder<T> addTableConsumer(BiConsumer<T, Table> consumer) {
-            aquireListAndAdd(Table.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer) {
+            aquireListAndAdd(Dbms.SCHEMAS, wrap(consumer, SchemaImpl::new));
             return this;
         }
 
-        public Builder<T> addColumnConsumer(BiConsumer<T, Column> consumer) {
-            aquireListAndAdd(Column.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addTableConsumer(BiConsumer<T, Table> consumer) {
+            aquireListAndAdd(Schema.TABLES, wrap(consumer, TableImpl::new));
             return this;
         }
 
-        public Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer) {
-            aquireListAndAdd(Index.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addColumnConsumer(BiConsumer<T, Column> consumer) {
+            aquireListAndAdd(Table.COLUMNS, wrap(consumer, ColumnImpl::new));
             return this;
         }
 
-        public Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer) {
-            aquireListAndAdd(ForeignKey.class, requireNonNull(consumer));
+        @Override
+        public AbstractBuilder<T> addIndexConsumer(BiConsumer<T, Index> consumer) {
+            aquireListAndAdd(Table.INDEXES, wrap(consumer, IndexImpl::new));
             return this;
         }
 
-        public Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
+        @Override
+        public AbstractBuilder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer) {
+            aquireListAndAdd(Table.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
+            return this;
+        }
+        
+        private <P extends Document, D extends Document> BiConsumer<T, Document> wrap(BiConsumer<T, D> consumer, BiFunction<P, Map<String, Object>, D> constructor) {
+            return (t, doc) -> {
+                @SuppressWarnings("unchecked")
+                final P parent = (P) doc.getParent().orElse(null);
+                consumer.accept(t, constructor.apply(parent, doc.getData()));
+            };
+        }
+
+        @Override
+        public AbstractBuilder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
             foreignKeyReferencesThisTableConsumers.add(requireNonNull(consumer));
             return this;
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Document> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
-            aquireList(requireNonNull(clazz))
-                    .add(requireNonNull((BiConsumer<T, Document>) consumer));
+        protected void aquireListAndAdd(String key, BiConsumer<T, Document> consumer) {
+            aquireList(key).add(requireNonNull((BiConsumer<T, Document>) consumer));
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Document> List<BiConsumer<T, C>> aquireList(Class<?> clazz) {
-            return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(requireNonNull(clazz), $ -> new ArrayList<>());
+        protected <C extends Document> List<BiConsumer<T, C>> aquireList(String key) {
+            return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(key, $ -> new CopyOnWriteArrayList<>());
         }
 
-        public <D extends Document & HasMainInterface> void act(T item, D document) {
-            aquireList(document.mainInterface())
-                    .forEach(c -> c.accept(requireNonNull(item), requireNonNull(document)));
+        public <D extends Document & HasMainInterface> void act(String key, T item, D document) {
+            aquireList(key).forEach(c -> 
+                c.accept(requireNonNull(item), requireNonNull(document))
+            );
         }
 
         public abstract T newInstance(String name);
 
         public T build() {
             final T i = newInstance(name);
-            act(i, project());
-            act(i, dbms());
-            act(i, schema());
-            act(i, table());
+            act(PROJECTS, i, project());
+            act(Project.DBMSES, i, dbms());
+            act(Dbms.SCHEMAS, i, schema());
+            act(Schema.TABLES, i, table());
 
-            Stream.of(
-                    PrimaryKeyColumn.class,
-                    Index.class,
-                    Column.class,
-                    ForeignKey.class
-            ).forEachOrdered(ifType
-                    -> aquireList(ifType)
-                    .forEach(actor -> DocumentDbUtil.typedChildrenOf(table())
-                            .filter(HasEnabled::test)
-                            .filter(ifType::isInstance)
-                            .forEachOrdered(c -> actor.accept(i, c)))
-            );
+            MapStream.of(map)
+                .flatMapValue(List::stream)
+                .forEachOrdered((key, actor) -> 
+                    table().childrenByKey()
+                        .filterKey(key::equals)
+                        .values()
+                        .map(data -> new BaseDocument(table(), data))
+                        .filter(HasEnabled::test)
+                        .forEachOrdered(c -> actor.accept(i, c))
+                );
 
             if (Table.class.equals(getDocument().mainInterface())) {
                 schema().tables()
-                        .filter(HasEnabled::test)
-                        .flatMap(t -> t.foreignKeys())
-                        .filter(fk -> fk.foreignKeyColumns()
-                                //.filter(ForeignKeyColumn::isEnabled)
-                                .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
-                                .findFirst()
-                                .isPresent()
+                    .filter(HasEnabled::test)
+                    .flatMap(t -> t.foreignKeys())
+                    .filter(fk -> fk.foreignKeyColumns()
+                        .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
+                        .findFirst()
+                        .isPresent()
+                    )
+                    .forEachOrdered(fk
+                        -> foreignKeyReferencesThisTableConsumers.forEach(
+                            c -> c.accept(i, fk)
                         )
-                        .forEachOrdered(fk
-                                -> foreignKeyReferencesThisTableConsumers.forEach(
-                                        c -> c.accept(i, fk)
-                                )
-                        );
+                    );
             }
 
             i.add(generated());
             return i;
         }
-
     }
 
-    protected class ClassBuilder extends Builder<com.speedment.internal.codegen.lang.models.Class> {
+    protected final ClassBuilder newClassBuilder(String name) {
+        final ClassBuilder builder = new ClassBuilder(name);
+        classListeners().forEachOrdered(action -> action.accept(builder));
+        return builder;
+    }
+    
+    protected final InterfaceBuilder newInterfaceBuilder(String name) {
+        final InterfaceBuilder builder = new InterfaceBuilder(name);
+        interfaceListeners().forEachOrdered(action -> action.accept(builder));
+        return builder;
+    }
+    
+    protected final EnumBuilder newEnumBuilder(String name) {
+        final EnumBuilder builder = new EnumBuilder(name);
+        enumListeners().forEachOrdered(action -> action.accept(builder));
+        return builder;
+    }
+    
+    protected final class ClassBuilder extends AbstractBuilder<com.speedment.internal.codegen.lang.models.Class> {
 
-        public ClassBuilder(String name) {
+        private ClassBuilder(String name) {
             super(name);
         }
 
@@ -266,15 +347,27 @@ public abstract class DefaultJavaClassTranslator<C extends Document & HasName & 
         }
     }
 
-    protected class InterfaceBuilder extends Builder<Interface> {
+    protected final class InterfaceBuilder extends AbstractBuilder<Interface> {
 
-        public InterfaceBuilder(String name) {
+        private InterfaceBuilder(String name) {
             super(name);
         }
 
         @Override
         public Interface newInstance(String name) {
             return Interface.of(name);
+        }
+    }
+    
+    protected final class EnumBuilder extends AbstractBuilder<Enum> {
+
+        private EnumBuilder(String name) {
+            super(name);
+        }
+
+        @Override
+        public Enum newInstance(String name) {
+            return Enum.of(name);
         }
     }
 

@@ -36,6 +36,7 @@ import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

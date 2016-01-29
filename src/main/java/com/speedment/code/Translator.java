@@ -34,7 +34,12 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 /**
  * A component that can translate a {@link Document} into something else. This
@@ -63,7 +68,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return  the document
      */
     default HasAlias getAliasDocument() {
-        return HasAlias.of(getDocument());
+        return HasAlias.of(Translator.this.getDocument());
     }
 
     /**
@@ -73,7 +78,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return the project node
      */
     default Project project() {
-        return getGenericConfigEntity(Project.class);
+        return getDocument(Project.class);
     }
 
     /**
@@ -83,7 +88,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return the dbms node
      */
     default Dbms dbms() {
-        return getGenericConfigEntity(Dbms.class);
+        return getDocument(Dbms.class);
     }
 
     /**
@@ -93,7 +98,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return the schema node
      */
     default Schema schema() {
-        return getGenericConfigEntity(Schema.class);
+        return getDocument(Schema.class);
     }
 
     /**
@@ -103,7 +108,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return the table node
      */
     default Table table() {
-        return getGenericConfigEntity(Table.class);
+        return getDocument(Table.class);
     }
 
     /**
@@ -113,7 +118,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @return the column node
      */
     default Column column() {
-        return getGenericConfigEntity(Column.class);
+        return getDocument(Column.class);
     }
 
     /**
@@ -173,22 +178,22 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @param clazz the class to match
      * @return the node found
      */
-    default <E extends Document> E getGenericConfigEntity(Class<E> clazz) {
+    default <E extends Document> E getDocument(Class<E> clazz) {
         requireNonNull(clazz);
-        if (clazz.isAssignableFrom(getDocument().mainInterface())) {
+        if (clazz.isAssignableFrom(Translator.this.getDocument().mainInterface())) {
             @SuppressWarnings("unchecked")
-            final E result = (E) getDocument();
+            final E result = (E) Translator.this.getDocument();
             return result;
         }
 
-        return getDocument()
+        return Translator.this.getDocument()
                 //.ancestor(clazz)
                 .ancestors()
                 .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException(
-                        getDocument() + " is not a " + clazz.getSimpleName()
+                        Translator.this.getDocument() + " is not a " + clazz.getSimpleName()
                         + " and does not have a parent that is a " + clazz.getSimpleName()
                 ));
     }
@@ -202,4 +207,24 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
     }
     
     Generator getCodeGenerator();
+ 
+    void onClass(Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>> action);
+    void onInterface(Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>> action);
+    void onEnum(Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>> action);
+    
+    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners();
+    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners();
+    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners();
+    
+    interface Builder<T extends ClassOrInterface<T>> {
+        <P extends Document, D extends Document> Builder<T> addConsumer(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer);
+        Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer);
+        Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer);
+        Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer);
+        Builder<T> addTableConsumer(BiConsumer<T, Table> consumer);
+        Builder<T> addColumnConsumer(BiConsumer<T, Column> consumer);
+        Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer);
+        Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer);
+        Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer);
+    }
 }

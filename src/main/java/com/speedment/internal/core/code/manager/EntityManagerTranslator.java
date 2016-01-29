@@ -52,7 +52,7 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
 
     @Override
     protected Interface make(File file) {
-        return new InterfaceBuilder(manager.getName()).build()
+        return newInterfaceBuilder(manager.getName()).build()
             .public_()
             .add(Type.of(SqlManager.class).add(genericOfEntity))
             .add(generatePrimaryKeyFor(file))

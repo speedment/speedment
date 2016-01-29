@@ -25,6 +25,8 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.
