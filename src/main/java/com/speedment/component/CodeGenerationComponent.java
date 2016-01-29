@@ -19,6 +19,7 @@ package com.speedment.component;
 import com.speedment.annotation.Api;
 import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.Translator;
+import com.speedment.code.TranslatorDecorator;
 import com.speedment.code.TranslatorKey;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
@@ -84,6 +85,28 @@ public interface CodeGenerationComponent extends Component {
      * type
      */
     <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor);
+    
+    /**
+     * Adds a new {@code TranslatorDecorator} for the given class/key pair.
+     *
+     * @param <T>        Type of Document
+     * @param clazz      Class of the Document
+     * @param tKey       translatorKey to use
+     * @param decorator  the new decorator
+     */
+    default <T extends HasMainInterface> void add(Class<T> clazz, TranslatorKey<T> tKey, TranslatorDecorator<T> decorator) {
+        add(clazz, tKey.getKey(), decorator);
+    }
+
+    /**
+     * Adds a new {@code TranslatorDecorator} for the given class/key pair.
+     *
+     * @param <T>        Type of Document
+     * @param clazz      Class of the Document
+     * @param key        key to use
+     * @param decorator  the new decorator
+     */
+    <T extends HasMainInterface> void add(Class<T> clazz, String key, TranslatorDecorator<T> decorator);
 
     /**
      * Removes the {@code TranslatorConstructor} for the given class/key pair.

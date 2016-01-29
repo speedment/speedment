@@ -17,13 +17,17 @@
 package com.speedment.code;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.codegen.lang.models.File;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author     Emil Forslund
+ * @param <T>  the document type
+ * @since      2.3
  */
 @Api(version = "2.3")
-public interface TranslatorDecorator {
-
+@FunctionalInterface
+public interface TranslatorDecorator<T extends HasMainInterface> {
+    void apply(Translator<T, File> translator);
 }

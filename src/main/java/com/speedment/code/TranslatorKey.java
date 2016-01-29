@@ -16,13 +16,16 @@
  */
 package com.speedment.code;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
 
 /**
  *
  * @author Per Minborg
  * @param <T> Document type
+ * @since 2.3
  */
+@Api(version = "2.3")
 public interface TranslatorKey<T extends HasMainInterface> {
 
     String getKey();

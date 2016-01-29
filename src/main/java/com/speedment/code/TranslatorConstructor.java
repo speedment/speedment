@@ -31,7 +31,5 @@ import com.speedment.internal.codegen.lang.models.File;
 @Api(version = "2.3")
 @FunctionalInterface
 public interface TranslatorConstructor<T extends HasMainInterface> {
-
-    Translator<T, File> apply(Speedment speedment, Generator cg, T document);
-
+    Translator<T, File> apply(Speedment speedment, Generator gen, T document);
 }
