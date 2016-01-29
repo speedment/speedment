@@ -66,7 +66,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
         requireNonNull(file);
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Class newClass = newClassBuilder(entity.getImplName())
+        final Class newClass = newClassBuilder(file, entity.getImplName())
             // Getters
             .addColumnConsumer((cl, c) -> {
 

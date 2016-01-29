@@ -32,7 +32,11 @@ import java.util.Optional;
 import java.util.Set;
 import javafx.collections.ObservableList;
 import static java.util.Objects.requireNonNull;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
+import javafx.beans.property.Property;
 
 /**
  * A utility class for merging two documents to preserve maximum amount of
@@ -94,30 +98,20 @@ public final class DocumentMerger {
             // If it wasn't a key used for child documents, consider it a 
             // property.
             if (!wasChild) {
-                if (proposedValue instanceof String) {
-                    @SuppressWarnings("unchecked")
-                    final String casted = (String) proposedValue;
-                    existing.stringPropertyOf(key, () -> casted).setValue(casted);
-                } else if (proposedValue instanceof Boolean) {
-                    @SuppressWarnings("unchecked")
-                    final Boolean casted = (Boolean) proposedValue;
-                    existing.booleanPropertyOf(key, () -> casted).setValue(casted);
-                } else if (proposedValue instanceof Integer) {
-                    @SuppressWarnings("unchecked")
-                    final Integer casted = (Integer) proposedValue;
-                    existing.integerPropertyOf(key, () -> casted).setValue(casted);
-                } else if (proposedValue instanceof Long) {
-                    @SuppressWarnings("unchecked")
-                    final Long casted = (Long) proposedValue;
-                    existing.longPropertyOf(key, () -> casted).setValue(casted);
-                } else if (proposedValue instanceof Number) {
-                    @SuppressWarnings("unchecked")
-                    final Double casted = ((Number) proposedValue).doubleValue();
-                    existing.doublePropertyOf(key, () -> casted).setValue(casted);
-                } else {
-                    @SuppressWarnings("unchecked")
-                    final Class<Object> type = (Class<Object>) proposedValue.getClass();
-                    existing.objectPropertyOf(key, type, () -> proposedValue).setValue(proposedValue);
+                
+                if (setProperty(String.class,  proposedValue, casted -> existing.stringPropertyOf(key, () -> casted))
+                ||  setProperty(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
+                ||  setProperty(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
+                ||  setProperty(Long.class,    proposedValue, casted -> existing.longPropertyOf(key, () -> casted))
+                ||  setProperty(Float.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(Byte.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(Short.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key, (Class<Object>) casted.getClass(), () -> casted))) {}
+                else {
+                    throw new SpeedmentException(
+                        "Property was not of any known type."
+                    );
                 }
             }
         }
@@ -220,6 +214,45 @@ public final class DocumentMerger {
         } else {
             return namesEqual;
         }
+    }
+    
+    /**
+     * Sets a property generated with the specified getter to a value if it is
+     * of the correct type and the setting would not break any bindings. If a
+     * binding would be broken, a {@link SpeedmentException} is thrown.
+     * 
+     * @param <T>             the expected type of the value
+     * @param <P>             the property type
+     * @param type            the expected type of the value
+     * @param value           the value
+     * @param propertyGetter  getter for the property
+     * @return                {@code true} if a value was set, else {@code false}
+     */
+    private static <T, P extends Property<? super T>> boolean setProperty(
+            Class<T> type, 
+            Object value,
+            Function<T, P> propertyGetter) {
+        
+        if (type.isInstance(value)) {
+            final T casted = type.cast(value);
+            final P property = propertyGetter.apply(casted);
+            
+            if (!Objects.equals(casted, property.getValue())) {
+                if (property.isBound()) {
+                    throw new SpeedmentException(
+                        "Attempting to set bound " + 
+                        type.getSimpleName() + "Property " +
+                        " to new value '" + casted + "'."
+                    );
+                } else {
+                    property.setValue(casted);
+                }
+            }
+            
+            return true;
+        }
+        
+        return false;
     }
    
     /**

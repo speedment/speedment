@@ -64,10 +64,10 @@ import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.stream.MapStream;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 /**
  *
@@ -90,9 +90,9 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     private final Speedment speedment;
     private final JavaLanguageNamer javaLanguageNamer;
     
-    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners;
-    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners;
-    private final List<Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners;
+    private final List<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners;
+    private final List<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners;
+    private final List<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners;
 
     public DefaultJavaClassTranslator(Speedment speedment, Generator codeGenerator, DOC configEntity) {
         this.speedment = requireNonNull(speedment);
@@ -159,32 +159,32 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     @Override
-    public void onClass(Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>> action) {
+    public void onClass(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>> action) {
         classListeners.add(action);
     }
 
     @Override
-    public void onInterface(Consumer<Builder<Interface>> action) {
+    public void onInterface(BiConsumer<File, Builder<Interface>> action) {
         interfaceListeners.add(action);
     }
 
     @Override
-    public void onEnum(Consumer<Builder<Enum>> action) {
+    public void onEnum(BiConsumer<File, Builder<Enum>> action) {
         enumListeners.add(action);
     }
 
     @Override
-    public Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners() {
+    public Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners() {
         return classListeners.stream();
     }
 
     @Override
-    public Stream<Consumer<Builder<Interface>>> interfaceListeners() {
+    public Stream<BiConsumer<File, Builder<Interface>>> interfaceListeners() {
         return interfaceListeners.stream();
     }
 
     @Override
-    public Stream<Consumer<Builder<Enum>>> enumListeners() {
+    public Stream<BiConsumer<File, Builder<Enum>>> enumListeners() {
         return enumListeners.stream();
     }
 
@@ -322,21 +322,24 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         }
     }
 
-    protected final ClassBuilder newClassBuilder(String name) {
-        final ClassBuilder builder = new ClassBuilder(name);
-        classListeners().forEachOrdered(action -> action.accept(builder));
+    protected final ClassBuilder newClassBuilder(File file, String className) {
+        requireNonNulls(file, className);
+        final ClassBuilder builder = new ClassBuilder(className);
+        classListeners().forEachOrdered(action -> action.accept(file, builder));
         return builder;
     }
     
-    protected final InterfaceBuilder newInterfaceBuilder(String name) {
-        final InterfaceBuilder builder = new InterfaceBuilder(name);
-        interfaceListeners().forEachOrdered(action -> action.accept(builder));
+    protected final InterfaceBuilder newInterfaceBuilder(File file, String interfaceName) {
+        requireNonNulls(file, interfaceName);
+        final InterfaceBuilder builder = new InterfaceBuilder(interfaceName);
+        interfaceListeners().forEachOrdered(action -> action.accept(file, builder));
         return builder;
     }
     
-    protected final EnumBuilder newEnumBuilder(String name) {
-        final EnumBuilder builder = new EnumBuilder(name);
-        enumListeners().forEachOrdered(action -> action.accept(builder));
+    protected final EnumBuilder newEnumBuilder(File file, String enumName) {
+        requireNonNulls(file, enumName);
+        final EnumBuilder builder = new EnumBuilder(enumName);
+        enumListeners().forEachOrdered(action -> action.accept(file, builder));
         return builder;
     }
     

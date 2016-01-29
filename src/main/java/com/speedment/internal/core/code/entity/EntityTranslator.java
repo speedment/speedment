@@ -58,7 +58,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
     protected Interface make(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Interface iface = newInterfaceBuilder(entity.getName())
+        final Interface iface = newInterfaceBuilder(file, entity.getName())
             // Getters
             .addColumnConsumer((i, c) -> {
                 final Type retType;

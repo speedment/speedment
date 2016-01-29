@@ -72,7 +72,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     @Override
     protected Class make(File file) {
 
-        return newClassBuilder(manager.getImplName())
+        return newClassBuilder(file, manager.getImplName())
             .addColumnConsumer((i, c) -> {
 
                 final TypeMapper<?, ?> mapper = c.findTypeMapper();

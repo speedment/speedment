@@ -35,11 +35,11 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import com.speedment.internal.codegen.lang.models.File;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 /**
  * A component that can translate a {@link Document} into something else. This
@@ -208,13 +208,13 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
     
     Generator getCodeGenerator();
  
-    void onClass(Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>> action);
-    void onInterface(Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>> action);
-    void onEnum(Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>> action);
+    void onClass(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>> action);
+    void onInterface(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Interface>> action);
+    void onEnum(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Enum>> action);
     
-    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners();
-    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners();
-    Stream<Consumer<Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners();
+    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners();
+    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners();
+    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners();
     
     interface Builder<T extends ClassOrInterface<T>> {
         <P extends Document, D extends Document> Builder<T> addConsumer(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer);
