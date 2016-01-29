@@ -36,7 +36,9 @@
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
             <items>
                 <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />
-                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About" />
+                <MenuItem fx:id="mbGitter" mnemonicParsing="false" text="Open Gitter-page" />
+                <MenuItem fx:id="mbComponents" mnemonicParsing="false" text="Components..." />
+                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About..." />
             </items>
         </Menu>
     </menus>

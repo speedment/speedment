@@ -27,6 +27,9 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.File;
 import java.util.stream.Stream;
 import com.speedment.internal.util.JavaLanguageNamer;
+import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -37,7 +40,6 @@ import java.util.function.Supplier;
  */
 @Api(version = "2.3")
 public interface CodeGenerationComponent extends Component {
-
 
     @Override
     default Class<CodeGenerationComponent> getComponentClass() {
@@ -85,14 +87,14 @@ public interface CodeGenerationComponent extends Component {
      * type
      */
     <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor);
-    
+
     /**
      * Adds a new {@code TranslatorDecorator} for the given class/key pair.
      *
-     * @param <T>        Type of Document
-     * @param clazz      Class of the Document
-     * @param tKey       translatorKey to use
-     * @param decorator  the new decorator
+     * @param <T> Type of Document
+     * @param clazz Class of the Document
+     * @param tKey translatorKey to use
+     * @param decorator the new decorator
      */
     default <T extends HasMainInterface> void add(Class<T> clazz, TranslatorKey<T> tKey, TranslatorDecorator<T> decorator) {
         add(clazz, tKey.getKey(), decorator);
@@ -101,10 +103,10 @@ public interface CodeGenerationComponent extends Component {
     /**
      * Adds a new {@code TranslatorDecorator} for the given class/key pair.
      *
-     * @param <T>        Type of Document
-     * @param clazz      Class of the Document
-     * @param key        key to use
-     * @param decorator  the new decorator
+     * @param <T> Type of Document
+     * @param clazz Class of the Document
+     * @param key key to use
+     * @param decorator the new decorator
      */
     <T extends HasMainInterface> void add(Class<T> clazz, String key, TranslatorDecorator<T> decorator);
 
@@ -152,8 +154,8 @@ public interface CodeGenerationComponent extends Component {
      * given Document
      * @throws SpeedmentException if the specified translator did not exist
      */
-    default <T extends HasMainInterface> Translator<T, File> 
-        findTranslator(T document, TranslatorKey<T> hasKey) throws SpeedmentException {
+    default <T extends HasMainInterface> Translator<T, File>
+            findTranslator(T document, TranslatorKey<T> hasKey) throws SpeedmentException {
         return CodeGenerationComponent.this.findTranslator(document, hasKey.getKey());
     }
 
@@ -165,20 +167,21 @@ public interface CodeGenerationComponent extends Component {
      * @param <T> Document type
      * @param document to use when making translators
      * @param key key
-     * @return the newly created {@code Translator Translators} for the
-     * given Document
+     * @return the newly created {@code Translator Translators} for the given
+     * Document
      * @throws SpeedmentException if the specified translator did not exist
      */
     <T extends HasMainInterface> Translator<T, File> findTranslator(T document, String key) throws SpeedmentException;
-    
+
     /**
      * Returns the current {@link JavaLanguageNamer} used by Speedment.
-     * 
+     *
      * @return the current {@link JavaLanguageNamer} used by Speedment
      */
-    
     JavaLanguageNamer javaLanguageNamer();
-    
+
     void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
+
+    Stream<Entry<Class<? extends HasMainInterface>, Set<String>>> stream();
 
 }

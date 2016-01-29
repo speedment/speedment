@@ -33,65 +33,83 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class MenubarController implements Initializable {
-    
+
     private final UISession session;
-    
-    private @FXML MenuItem mbNew;
-    private @FXML MenuItem mbOpen;
-    private @FXML MenuItem mbSave;
-    private @FXML MenuItem mbSaveAs;
-    private @FXML MenuItem mbQuit;
-    private @FXML MenuItem mbGenerate;
-    private @FXML MenuItem mbProjectTree;
-    private @FXML MenuItem mbWorkspace;
-    private @FXML MenuItem mbOutput;
-    private @FXML MenuItem mbPreview;
-    private @FXML MenuItem mbGitHub;
-    private @FXML MenuItem mbAbout;
-    
+
+    private @FXML
+    MenuItem mbNew;
+    private @FXML
+    MenuItem mbOpen;
+    private @FXML
+    MenuItem mbSave;
+    private @FXML
+    MenuItem mbSaveAs;
+    private @FXML
+    MenuItem mbQuit;
+    private @FXML
+    MenuItem mbGenerate;
+    private @FXML
+    MenuItem mbProjectTree;
+    private @FXML
+    MenuItem mbWorkspace;
+    private @FXML
+    MenuItem mbOutput;
+    private @FXML
+    MenuItem mbPreview;
+    private @FXML
+    MenuItem mbGitter;
+    private @FXML
+    MenuItem mbGitHub;
+    private @FXML
+    MenuItem mbComponents;
+    private @FXML
+    MenuItem mbAbout;
+
     private MenubarController(UISession session) {
         this.session = requireNonNull(session);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+
         mbNew.setGraphic(SpeedmentIcon.NEW_PROJECT.view());
         mbOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT.view());
         mbSave.setGraphic(SilkIcon.DISK.view());
         mbSaveAs.setGraphic(SilkIcon.DISK_MULTIPLE.view());
         mbQuit.setGraphic(SilkIcon.DOOR_IN.view());
-        
+
         mbGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT.view());
-        
+
         mbProjectTree.setGraphic(SilkIcon.APPLICATION_SIDE_TREE.view());
         mbWorkspace.setGraphic(SilkIcon.APPLICATION_FORM.view());
         mbOutput.setGraphic(SilkIcon.APPLICATION_XP_TERMINAL.view());
         mbPreview.setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
-        
+
+        mbGitter.setGraphic(SilkIcon.USER_COMMENT.view());
         mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
+        mbComponents.setGraphic(SilkIcon.BRICKS.view());
         mbAbout.setGraphic(SilkIcon.INFORMATION.view());
-        
+
         mbNew.setOnAction(session.newProject());
         mbOpen.setOnAction(session.openProject());
         mbSave.setOnAction(session.saveProject());
         mbSaveAs.setOnAction(session.saveProjectAs());
         mbQuit.setOnAction(session.quit());
-        
+
         mbGenerate.setOnAction(session.generate());
-        
+
         mbProjectTree.setOnAction(session.toggleProjectTree());
         mbWorkspace.setOnAction(session.toggleWorkspace());
         mbOutput.setOnAction(session.toggleOutput());
         mbPreview.setOnAction(session.togglePreview());
-        
+
+        mbGitter.setOnAction(session.showGitter());
         mbGitHub.setOnAction(session.showGithub());
-        mbAbout.setOnAction(ev -> {
-            AboutController.createAndShow(session);
-        });
+        mbComponents.setOnAction(ev -> ComponentsController.createAndShow(session));
+        mbAbout.setOnAction(ev -> AboutController.createAndShow(session));
     }
-    
+
     public static Node create(UISession session) {
         return Loader.create(session, "Menubar", MenubarController::new);
-	}
+    }
 }

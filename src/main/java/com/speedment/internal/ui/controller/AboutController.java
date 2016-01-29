@@ -63,7 +63,7 @@ public final class AboutController implements Initializable {
               "GPL 2 with FOSS exception:\n"
             + "• mysql-connector-java (5.1.34)\n"
             + "\n"
-            + "• Creative Commons 2.5:\n"
+            + "Creative Commons 2.5:\n"
             + "• silk (1.3)\n"
             + "\n"
             + "BSD 3-Clause License:\n"

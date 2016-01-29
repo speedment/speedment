@@ -20,14 +20,24 @@ import com.speedment.annotation.Api;
 
 /**
  * Trait used to separate open source from commercial components.
- * 
+ *
  * @author pemi
  */
 @Api(version = "2.2")
 public interface License {
 
+    /**
+     * Returns the license name.
+     *
+     * @return the license name
+     */
     String getName();
 
+    /**
+     * Returns if this is a commercial license.
+     *
+     * @return if this is a commercial license`
+     */
     boolean isCommercial();
 
 }

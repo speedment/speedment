@@ -618,8 +618,16 @@ public final class UISession {
     }
     
     @SuppressWarnings("unchecked")
+    public <T extends Event, E extends EventHandler<T>> E showGitter() {
+        return on(event -> browse(GITTER_URI));
+    }
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        return on(event -> application.getHostServices().showDocument(GITHUB_URI));
+        return on(event -> browse(GITHUB_URI));
+    }
+    
+    private void browse(String url) {
+        application.getHostServices().showDocument(url);
     }
     
     private <T extends Event, E extends EventHandler<T>> E on(Consumer<T> listener) {
@@ -635,4 +643,5 @@ public final class UISession {
     }
     
     private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
+    private final static String GITTER_URI = "https://gitter.im/speedment/speedment/";
 }
