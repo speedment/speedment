@@ -159,6 +159,7 @@ public final class UISession {
         return on(event -> {
             try {
                 final Stage newStage = new Stage();
+                final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
                 final UISession session = new UISession(newSpeedment, application, newStage, defaultConfigLocation);
 
                 ConnectController.createAndShow(session);
@@ -510,6 +511,7 @@ public final class UISession {
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :
                         final Stage newStage = new Stage();
+                        final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
                         
                         final UISession session = new UISession(
                             newSpeedment, 
