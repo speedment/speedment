@@ -32,6 +32,7 @@ import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
@@ -41,8 +42,16 @@ import java.util.stream.Stream;
 public final class DocumentDbUtil {
 
     public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
-        return speedment.getDbmsHandlerComponent().findByName(dbms.getTypeName())
-                .orElseThrow(() -> new SpeedmentException("Unable to find the database type " + dbms.getTypeName()));
+        final String typeName = dbms.getTypeName();
+        return speedment.getDbmsHandlerComponent().findByName(typeName)
+                .orElseThrow(() -> new SpeedmentException(
+                        "Unable to find the database type "
+                        + typeName
+                        + ". The installed types are: "
+                        + speedment.getDbmsHandlerComponent().supportedDbmsTypes()
+                                .map(DbmsType::getName)
+                                .collect(joining(", "))
+                ));
     }
 
     public static Stream<? extends Document> traverseOver(Project project) {
