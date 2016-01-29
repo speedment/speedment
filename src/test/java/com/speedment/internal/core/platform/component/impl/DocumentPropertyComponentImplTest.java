@@ -18,7 +18,6 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
@@ -40,8 +39,6 @@ import com.speedment.internal.ui.config.TableProperty;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 import org.junit.Before;
@@ -72,6 +69,7 @@ public class DocumentPropertyComponentImplTest {
             
             final Method toString = root.getDeclaringClass().getMethod("toString");
             System.out.println(toString.invoke(root.get(component)));
+            
         } catch (final NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new SpeedmentException("Could not call toString on component", ex);
         }

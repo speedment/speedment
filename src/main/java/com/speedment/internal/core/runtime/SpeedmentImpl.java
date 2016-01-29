@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.platform;
+package com.speedment.internal.core.runtime;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
@@ -38,6 +38,7 @@ import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.internal.core.platform.DefaultClassMapper;
 import com.speedment.internal.core.platform.component.impl.CodeGenerationComponentImpl;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
@@ -56,10 +57,7 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
-import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
-import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import static com.speedment.internal.util.Cast.castOrFail;
-import com.speedment.stream.MapStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;

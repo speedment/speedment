@@ -33,10 +33,10 @@ import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.config.db.mapper.identity.StringIdentityMapper;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import java.util.stream.Stream;
 import org.junit.Before;
 import static com.speedment.internal.codegen.util.Formatting.indent;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -131,7 +131,7 @@ public abstract class SimpleModel {
         
         System.out.println(project);
 
-        speedment = SpeedmentFactory.newSpeedmentInstance();
+        speedment = new DefaultSpeedmentApplicationLifecycle().build();
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();
 //        schema = dbms.addNewSchema();

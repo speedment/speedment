@@ -57,6 +57,7 @@ import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -100,11 +101,7 @@ public final class EntityTranslatorSupport {
         Type entityType,
         JavaLanguageNamer javaLanguageNamer
     ) {
-        requireNonNull(file);
-        requireNonNull(table);
-        requireNonNull(column);
-        requireNonNull(entityType);
-        requireNonNull(javaLanguageNamer);
+        requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
         final Class<?> mapping = column.findTypeMapper().getJavaType();
 

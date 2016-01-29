@@ -23,7 +23,6 @@ import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
 import com.speedment.internal.util.document.DocumentTranscoder;
@@ -73,7 +72,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     public SpeedmentApplicationLifecycle() {
         super();
-        speedment = SpeedmentFactory.newSpeedmentInstance();
+        speedment = new SpeedmentImpl();
         withsNamed = newList();
         withsAll = newList();
     }

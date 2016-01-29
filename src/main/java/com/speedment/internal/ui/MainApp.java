@@ -17,7 +17,7 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.internal.core.platform.SpeedmentFactory;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -51,8 +51,8 @@ public final class MainApp extends Application {
         requireNonNull(stage);
         
         if (SPEEDMENT == null) {
-            LOGGER.info("Creating new Speedment instance for UI session.");
-            SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
+            LOGGER.warn("Creating new Speedment instance for UI session.");
+            SPEEDMENT = new DefaultSpeedmentApplicationLifecycle().build();
         }
         
         final Parameters parameters = getParameters();

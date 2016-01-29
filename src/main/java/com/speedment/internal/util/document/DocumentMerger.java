@@ -97,23 +97,23 @@ public final class DocumentMerger {
                 if (proposedValue instanceof String) {
                     @SuppressWarnings("unchecked")
                     final String casted = (String) proposedValue;
-                    existing.stringPropertyOf(key, () -> casted);
+                    existing.stringPropertyOf(key, () -> casted).setValue(casted);
                 } else if (proposedValue instanceof Boolean) {
                     @SuppressWarnings("unchecked")
                     final Boolean casted = (Boolean) proposedValue;
-                    existing.booleanPropertyOf(key, () -> casted);
+                    existing.booleanPropertyOf(key, () -> casted).setValue(casted);
                 } else if (proposedValue instanceof Integer) {
                     @SuppressWarnings("unchecked")
                     final Integer casted = (Integer) proposedValue;
-                    existing.integerPropertyOf(key, () -> casted);
+                    existing.integerPropertyOf(key, () -> casted).setValue(casted);
                 } else if (proposedValue instanceof Long) {
                     @SuppressWarnings("unchecked")
                     final Long casted = (Long) proposedValue;
-                    existing.longPropertyOf(key, () -> casted);
+                    existing.longPropertyOf(key, () -> casted).setValue(casted);
                 } else if (proposedValue instanceof Number) {
                     @SuppressWarnings("unchecked")
                     final Double casted = ((Number) proposedValue).doubleValue();
-                    existing.doublePropertyOf(key, () -> casted);
+                    existing.doublePropertyOf(key, () -> casted).setValue(casted);
                 } else {
                     @SuppressWarnings("unchecked")
                     final Class<Object> type = (Class<Object>) proposedValue.getClass();
@@ -170,7 +170,9 @@ public final class DocumentMerger {
                     final Document second = proposed.get(i);
                     tasks.add(HasName.of(second).getName(), new MergeByMovingTask(parent, second, key, constructor));
                 } else {
-                    // Not possible.
+                    throw new SpeedmentException( // Not possible.
+                        "This stage should never be reached."
+                    );
                 }
             }
         }

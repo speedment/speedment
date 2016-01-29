@@ -41,7 +41,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.sql.ResultSet;
@@ -67,7 +66,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
         super(speedment, cg, configEntity);
-        this.speedment = SpeedmentFactory.newSpeedmentInstance(); // default values from here.. Todo: Make pluggable later
+        this.speedment = speedment;
     }
 
     @Override

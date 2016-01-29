@@ -37,7 +37,6 @@ import com.speedment.internal.ui.config.PrimaryKeyColumnProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Objects.requireNonNull;

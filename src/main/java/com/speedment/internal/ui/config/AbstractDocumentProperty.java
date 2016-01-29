@@ -284,12 +284,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @return           the created child
      */
     protected final AbstractDocumentProperty createChild(Speedment speedment, String key) {
-        
-        final String path = Arrays.asList(keyPathEndingWith(key)).toString();
-        final AbstractDocumentProperty doc = speedment.getDocumentPropertyComponent()
-            .getConstructor(keyPathEndingWith(key))
-            .create(this);
-        
+
         return speedment.getDocumentPropertyComponent()
             .getConstructor(keyPathEndingWith(key))
             .create(this);
