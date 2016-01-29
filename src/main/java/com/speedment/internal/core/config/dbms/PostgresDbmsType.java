@@ -63,6 +63,7 @@ public final class PostgresDbmsType extends AbstractDbmsType {
                 5432,
                 ".",
                 "Database name",
+                "db0",
                 "org.postgresql.Driver",
                 unwrap(DEFAULT_CONNECTOR_PARAMS),
                 JDBC_CONNECTOR_NAME,

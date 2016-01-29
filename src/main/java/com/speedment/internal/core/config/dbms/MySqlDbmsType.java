@@ -68,6 +68,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
                 3306,
                 ".",
                 "Just a name",
+                "db0",
                 "com.mysql.jdbc.Driver",
                 unwrap(DEFAULT_CONNECTOR_PARAMS),
                 JDBC_CONNECTOR_NAME,
