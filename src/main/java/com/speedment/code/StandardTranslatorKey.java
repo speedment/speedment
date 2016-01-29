@@ -16,6 +16,7 @@
  */
 package com.speedment.code;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.TranslatorKeyImpl;
@@ -24,19 +25,20 @@ import java.util.stream.Stream;
 /**
  *
  * @author Per Minborg
+ * @since 2.3
  */
+@Api(version = "2.3")
 public final class StandardTranslatorKey {
 
     public final static TranslatorKey<Project> 
-            SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication"),
-            SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata");
+        SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication"),
+        SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata");
     
     public final static TranslatorKey<Table> 
-            ENTITY = new TranslatorKeyImpl<>("Entity"),
-            ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl"),
-            MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl");
+        ENTITY = new TranslatorKeyImpl<>("Entity"),
+        ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl"),
+        MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl");
 
-    
     public static Stream<TranslatorKey<Project>> projectTranslatorKeys() {
         return Stream.of(SPEEDMENT_APPLICATION, SPEEDMENT_APPLICATION_METADATA);
     }

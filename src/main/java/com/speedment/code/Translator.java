@@ -16,6 +16,7 @@
  */
 package com.speedment.code;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.Document;
@@ -29,7 +30,6 @@ import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javafx.scene.Node;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
@@ -37,15 +37,17 @@ import com.speedment.internal.codegen.base.Meta;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A component that can translate a {@link Node} into something else. This
+ * A component that can translate a {@link Document} into something else. This
  * interface is implemented to generate more files from the same database
  * structure.
  *
  * @author pemi
- * @param <T> the ConfigEntity type to use
+ * @param <T> the Document type to use
  * @param <R> the type to translate into
- * @see Node
+ * @see Document
+ * @since 2.3
  */
+@Api(version = "2.3")
 public interface Translator<T extends Document & HasMainInterface, R> extends Supplier<R> {
 
     /**
