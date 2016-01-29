@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.speedment.internal.util.JavaLanguageNamer;
-import java.util.HashMap;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
@@ -51,7 +50,7 @@ import java.util.function.Supplier;
 public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
 
     private Generator generator;
-    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings>> map;
+    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?>>> map;
     private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
 
     private final static class TranslatorSettings<T extends HasMainInterface> {
@@ -127,7 +126,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     }
 
     private <T extends HasMainInterface> TranslatorSettings<T> aquireTranslatorSettings(Class<T> clazz, String key) {
-        return map.computeIfAbsent(clazz, s -> new ConcurrentHashMap<>()).computeIfAbsent(key, TranslatorSettings::new);
+        return (TranslatorSettings<T>) map.computeIfAbsent(clazz, s -> new ConcurrentHashMap<>()).computeIfAbsent(key, TranslatorSettings::new);
     }
 
     @Override
@@ -150,6 +149,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
                 .filterKey(c -> c.isInstance(document))
                 .values()
                 .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
+                .map(s -> (TranslatorSettings<T>) s)
                 .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
     }
 
