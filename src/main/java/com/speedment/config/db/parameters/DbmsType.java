@@ -82,6 +82,14 @@ public interface DbmsType {
     String getDbmsNameMeaning();
 
     /**
+    * Returns the default name for this {@code DbmsType}. 
+    * For example ‘orcl' (Oracle)
+    *
+    * @return the default dbms name
+    */
+    String getDefaultDbmsName();
+
+    /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
      * implementation.
      *
