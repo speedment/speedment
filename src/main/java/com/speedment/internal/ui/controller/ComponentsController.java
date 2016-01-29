@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.License;
 import com.speedment.Speedment;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.Component;
@@ -30,6 +31,7 @@ import com.speedment.internal.ui.UISession;
 import static com.speedment.internal.util.Cast.cast;
 import static com.speedment.stream.MapStream.comparing;
 import java.net.URL;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -42,8 +44,14 @@ import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.Set;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
 /**
  *
@@ -61,6 +69,8 @@ public final class ComponentsController implements Initializable {
     Button close;
     private @FXML
     Label info;
+    private @FXML
+    TreeView<String> tree;
 
     private Stage dialog;
 
@@ -68,17 +78,77 @@ public final class ComponentsController implements Initializable {
         this.session = requireNonNull(session);
     }
 
+    private class TI extends TreeItem<String> {
+
+        public TI() {
+            setExpanded(true);
+        }
+
+        public TI(String name) {
+            super(name);
+            setExpanded(true);
+        }
+
+    };
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final Speedment speedment = session.getSpeedment();
         title.setTextFill(Color.web("#45a6fc"));
         title.setFont(SpeedmentFont.HEADER.get());
 
-        header.setText("Components for " + speedment.getClass().getSimpleName()+" (0x"+Integer.toHexString(System.identityHashCode(speedment))+')');
+        header.setText("Components for " + speedment.getClass().getSimpleName() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ')');
 
-        info.setText(componentInfoAsString());
+        //info.setText(componentInfoAsString());
+        final TI root = new TI("Speedment (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ')');
+        root.getChildren().addAll(components());
+        tree.setRoot(root);
 
         close.setOnAction(ev -> dialog.close());
+    }
+
+    private List<TI> components() {
+        return session.getSpeedment().components()
+                .sorted(comparing(c -> c.getComponentClass().getSimpleName()))
+                .map(this::treeItem)
+                .collect(toList());
+
+    }
+
+    private TI treeItem(Component c) {
+        final TI result = new TI(c.getComponentClass().getSimpleName());
+        result.getChildren().add(decorate(new TI(c.getClass().getSimpleName() + " (" + c.getVersion() + ") "/*+c.getLicense().getName()*/), c));
+        return result;
+    }
+
+    private TI decorate(TI item, Component c) {
+        cast(c, CodeGenerationComponent.class).ifPresent(cg -> {
+            cg.stream()
+                    .map(Entry::getValue)
+                    .flatMap(Set::stream)
+                    .sorted()
+                    .map(TI::new)
+                    .forEachOrdered(item.getChildren()::add);
+
+        });
+        cast(c, DbmsHandlerComponent.class).ifPresent(dh -> {
+            dh.supportedDbmsTypes()
+                    .map(DbmsType::getName)
+                    .sorted()
+                    .map(TI::new)
+                    .forEachOrdered(item.getChildren()::add);
+
+        });
+        cast(c, TypeMapperComponent.class).ifPresent(tm -> {
+            tm.stream()
+                    .map(TypeMapper::getLabel)
+                    .sorted()
+                    .map(TI::new)
+                    .forEachOrdered(item.getChildren()::add);
+
+        });
+
+        return item;
     }
 
     private String componentInfoAsString() {

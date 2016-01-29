@@ -111,7 +111,7 @@ public interface DocumentPropertyComponent extends Component {
     /**
      * Creates a new observable document using the installed constructor, at
      * the path specified by {@code keyPath}. To change the implementation, use 
-     * {@link #setConstructor(Function, String[])}.
+     * {@link #setConstructor(Constructor, java.lang.String...) }.
      * 
      * @param <PARENT>  the parent type
      * @param keyPath   the path of the constructor

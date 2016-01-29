@@ -31,6 +31,8 @@
     <children>
         <Label fx:id="title" styleClass="header" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
         <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Components" />
+        <TreeView fx:id="tree"/>
+            
         <ScrollPane id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" >
             <content>
                 <Label fx:id="info" alignment="CENTER"  text="a" wrapText="true" />
