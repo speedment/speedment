@@ -27,7 +27,6 @@ import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
 import com.speedment.util.FloatSupplier;
 import com.speedment.util.OptionalBoolean;
-import java.util.Arrays;
 import static java.util.Collections.newSetFromMap;
 import java.util.Comparator;
 import java.util.List;
@@ -338,6 +337,19 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
                     listChange.getAddedSubList().stream()
                         .map(DocumentProperty::getData) // Exactly the same map as is used in the property
                         .forEachOrdered(source::add);
+                }
+                
+                if (listChange.wasRemoved()) {
+                    final List<Map<String, Object>> source = 
+                        (List<Map<String, Object>>) config.computeIfAbsent(
+                            key, k -> new CopyOnWriteArrayList<>()
+                        );
+                    
+                    listChange.getRemoved().stream()
+                        .map(DocumentProperty::getData)
+                        .forEach(removed -> 
+                            source.removeIf(e -> e == removed) // Identity
+                        );
                 }
             }
             
