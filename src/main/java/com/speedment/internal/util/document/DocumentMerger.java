@@ -32,9 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import javafx.collections.ObservableList;
 import static java.util.Objects.requireNonNull;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
 
@@ -101,12 +99,19 @@ public final class DocumentMerger {
                 
                 if (setProperty(String.class,  proposedValue, casted -> existing.stringPropertyOf(key, () -> casted))
                 ||  setProperty(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
+                ||  setProperty(boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
                 ||  setProperty(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
+                ||  setProperty(int.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
                 ||  setProperty(Long.class,    proposedValue, casted -> existing.longPropertyOf(key, () -> casted))
+                ||  setProperty(long.class,    proposedValue, casted -> existing.longPropertyOf(key, () -> casted))
                 ||  setProperty(Float.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(float.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
                 ||  setProperty(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(double.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
                 ||  setProperty(Byte.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(byte.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
                 ||  setProperty(Short.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
+                ||  setProperty(short.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
                 ||  setProperty(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key, (Class<Object>) casted.getClass(), () -> casted))) {}
                 else {
                     throw new SpeedmentException(
@@ -271,7 +276,6 @@ public final class DocumentMerger {
                 
                 if (next.canBeReplaced(name)) {
                     iterator.remove();
-                    break;
                 }
             }
             
