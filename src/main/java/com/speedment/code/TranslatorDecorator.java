@@ -18,7 +18,8 @@ package com.speedment.code;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.core.code.JavaClassTranslator;
 
 /**
  *
@@ -28,6 +29,6 @@ import com.speedment.internal.codegen.lang.models.File;
  */
 @Api(version = "2.3")
 @FunctionalInterface
-public interface TranslatorDecorator<T extends HasMainInterface> {
-    void apply(Translator<T, File> translator);
+public interface TranslatorDecorator<T extends HasName & HasMainInterface> {
+    void apply(JavaClassTranslator<T> translator);
 }

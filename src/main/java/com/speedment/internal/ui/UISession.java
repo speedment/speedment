@@ -74,6 +74,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import com.speedment.internal.util.document.DocumentUtil;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -484,9 +485,9 @@ public final class UISession {
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             dbms.schemasProperty().clear();
-            
-            final Project newProject = new ProjectImpl(dbms.getParent().get().getData());
-            final Dbms newDbms = newProject.dbmses().filter(d -> d.getName().equals(dbms.getName())).findAny().get();
+ 
+            final Project newProject = DocumentUtil.deepCopy(project, ProjectImpl::new);
+            final Dbms newDbms = newProject.dbmses().findAny().get();
             
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             dh.readSchemaMetadata(schemaName::equalsIgnoreCase);

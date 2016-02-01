@@ -25,10 +25,12 @@ import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.core.code.JavaClassTranslator;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
@@ -53,7 +55,7 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?>>> map;
     private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
 
-    private final static class TranslatorSettings<T extends HasMainInterface> {
+    private final static class TranslatorSettings<T extends HasName & HasMainInterface> {
 
         private final String key;
         private final List<TranslatorDecorator<T>> decorators;
@@ -80,8 +82,11 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
             return decorators;
         }
 
-        public Translator<T, File> createDecorated(Speedment speedment, Generator generator, T document) {
-            final Translator<T, File> translator = getConstructor().apply(speedment, generator, document);
+        public JavaClassTranslator<T> createDecorated(Speedment speedment, Generator generator, T document) {
+            @SuppressWarnings("unchecked")
+            final JavaClassTranslator<T> translator = (JavaClassTranslator<T>) 
+                getConstructor().apply(speedment, generator, document);
+            
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
             return translator;
         }
@@ -111,38 +116,38 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor) {
+    public <T extends HasName & HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor) {
         aquireTranslatorSettings(clazz, key).setConstructor(constructor);
     }
 
     @Override
-    public <T extends HasMainInterface> void add(Class<T> clazz, String key, TranslatorDecorator<T> decorator) {
+    public <T extends HasName & HasMainInterface> void add(Class<T> clazz, String key, TranslatorDecorator<T> decorator) {
         aquireTranslatorSettings(clazz, key).decorators().add(decorator);
     }
 
     @Override
-    public <T extends HasMainInterface> void remove(Class<T> clazz, String key) {
+    public <T extends HasName & HasMainInterface> void remove(Class<T> clazz, String key) {
         aquireTranslatorSettings(clazz, key).setConstructor(null);
     }
 
-    private <T extends HasMainInterface> TranslatorSettings<T> aquireTranslatorSettings(Class<T> clazz, String key) {
+    private <T extends HasName & HasMainInterface> TranslatorSettings<T> aquireTranslatorSettings(Class<T> clazz, String key) {
         return (TranslatorSettings<T>) map.computeIfAbsent(clazz, s -> new ConcurrentHashMap<>()).computeIfAbsent(key, TranslatorSettings::new);
     }
 
     @Override
-    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
+    public <T extends HasName & HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
         return translators(document, s -> true);
     }
 
     @Override
-    public <T extends HasMainInterface> Translator<T, File> findTranslator(T document, String key) {
+    public <T extends HasName & HasMainInterface> Translator<T, File> findTranslator(T document, String key) {
         return translators(document, key::equals)
                 .findAny()
                 .orElseThrow(noTranslatorFound(document, key));
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends HasMainInterface> Stream<? extends Translator<T, File>>
+    private <T extends HasName & HasMainInterface> Stream<? extends Translator<T, File>>
             translators(T document, Predicate<String> nameFilter) {
 
         return MapStream.of(map)

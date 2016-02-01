@@ -190,7 +190,48 @@ public final class DocumentUtil {
                 + ")"
         );
     }
+    
+    public static <DOC extends Document> DOC deepCopy(Document document, Function<Map<String, Object>, DOC> constructor) {
+        return constructor.apply(deepCopyMap(document.getData()));
+    }
+    
+    private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {
+        final Map<K, V> copy = new ConcurrentHashMap<>();
+        
+        MapStream.of(original)
+            .mapValue(DocumentUtil::deepCopyObject)
+            .forEachOrdered(copy::put);
+        
+        return copy;
+    }
+    
+    private static <V> List<V> deepCopyList(List<V> original) {
+        final List<V> copy = new CopyOnWriteArrayList<>();
+        
+        original.stream()
+            .map(DocumentUtil::deepCopyObject)
+            .forEachOrdered(copy::add);
+        
+        return copy;
+    }
 
+    private static <V> V deepCopyObject(V original) {
+        if (String.class.isAssignableFrom(original.getClass())
+        ||  Number.class.isAssignableFrom(original.getClass())
+        ||  Boolean.class.isAssignableFrom(original.getClass())
+        ||  Enum.class.isAssignableFrom(original.getClass())) {
+            return original;
+        } else if (List.class.isAssignableFrom(original.getClass())) {
+            return (V) deepCopyList((List<?>) original);
+        } else if (Map.class.isAssignableFrom(original.getClass())) {
+            return (V) deepCopyMap((Map<?, ?>) original);
+        } else {
+            throw new UnsupportedOperationException(
+                "Can't deep copy unknown type '" + original.getClass() + "'."
+            );
+        }
+    }
+    
     private static final Function<Object, Object> VALUE_MAPPER = o -> {
         if (o instanceof List) {
             return "[" + ((List) o).size() + "]";
