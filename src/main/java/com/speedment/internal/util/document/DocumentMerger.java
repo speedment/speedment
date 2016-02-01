@@ -97,22 +97,15 @@ public final class DocumentMerger {
             // property.
             if (!wasChild) {
                 
-                if (setProperty(String.class,  proposedValue, casted -> existing.stringPropertyOf(key, () -> casted))
-                ||  setProperty(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
-                ||  setProperty(boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
-                ||  setProperty(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
-                ||  setProperty(int.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
-                ||  setProperty(Long.class,    proposedValue, casted -> existing.longPropertyOf(key, () -> casted))
-                ||  setProperty(long.class,    proposedValue, casted -> existing.longPropertyOf(key, () -> casted))
-                ||  setProperty(Float.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(float.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(double.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(Byte.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(byte.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(Short.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(short.class,  proposedValue, casted -> existing.doublePropertyOf(key, () -> casted))
-                ||  setProperty(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key, (Class<Object>) casted.getClass(), () -> casted))) {}
+                if (setPropertyIf(String.class,  proposedValue, casted -> existing.stringPropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
+                ||  setPropertyIf(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
+                ||  setPropertyIf(Long.class,    proposedValue, casted -> existing.longPropertyOf(key,    () -> casted))
+                ||  setPropertyIf(Float.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key,  (Class<Object>) casted.getClass(), () -> casted))) {}
                 else {
                     throw new SpeedmentException(
                         "Property was not of any known type."
@@ -233,7 +226,7 @@ public final class DocumentMerger {
      * @param propertyGetter  getter for the property
      * @return                {@code true} if a value was set, else {@code false}
      */
-    private static <T, P extends Property<? super T>> boolean setProperty(
+    private static <T, P extends Property<? super T>> boolean setPropertyIf(
             Class<T> type, 
             Object value,
             Function<T, P> propertyGetter) {

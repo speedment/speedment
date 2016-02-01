@@ -57,6 +57,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import javafx.collections.ListChangeListener;
@@ -300,12 +301,17 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @return          the same property but with listener attached
      */
     private <T> Property<T> prepare(String key, Property<T> property, T value) {
-        property.addListener((ob, o, n) -> {
+        final ChangeListener<T> change = (ob, o, n) -> {
             config.put(key, n);
             invalidate();
-        });
+        };
         
         property.setValue(value);
+        property.addListener(change);
+        
+        if (value != null) {
+            change.changed(property, null, value);
+        }
         
         return property;
     }
