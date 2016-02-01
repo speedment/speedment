@@ -20,6 +20,7 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.internal.util.Lazy;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
@@ -38,9 +39,9 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     private final transient String foreignColumnName;
     private final transient String foreignTableName;
     
-    private final transient Lazy<Column> foreignColumn;
-    private final transient Lazy<Table> foreignTable;
-    private final transient Lazy<Column> column;
+    private final transient Lazy<Optional<ImmutableColumn>> foreignColumn;
+    private final transient Lazy<Optional<ImmutableTable>> foreignTable;
+    private final transient Lazy<Optional<ImmutableColumn>> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, requireKeys(fkc, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
@@ -78,18 +79,27 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     }
 
     @Override
-    public Column findForeignColumn() {
-        return foreignColumn.getOrCompute(ForeignKeyColumn.super::findForeignColumn);
+    public Optional<ImmutableColumn> findForeignColumn() {
+        return foreignColumn.getOrCompute(() ->
+            ForeignKeyColumn.super.findForeignColumn()
+                .map(ImmutableColumn.class::cast)
+        );
     }
 
     @Override
-    public Table findForeignTable() {
-        return foreignTable.getOrCompute(ForeignKeyColumn.super::findForeignTable);
+    public Optional<ImmutableTable> findForeignTable() {
+        return foreignTable.getOrCompute(() ->
+            ForeignKeyColumn.super.findForeignTable()
+                .map(ImmutableTable.class::cast)
+        );
     }
 
     @Override
-    public Column findColumn() {
-        return column.getOrCompute(ForeignKeyColumn.super::findColumn);
+    public Optional<ImmutableColumn> findColumn() {
+        return column.getOrCompute(() ->
+            ForeignKeyColumn.super.findColumn()
+                .map(ImmutableColumn.class::cast)
+        );
     }
     
     @Override
@@ -102,4 +112,11 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
         return toStringHelper(this);
     } 
     
+    private SpeedmentException foreignKeyWasNullException() {
+        return new SpeedmentException(
+            "Could not find referenced immutable foreign column '" + 
+            foreignColumnName + "' in table '" + 
+            foreignTableName + "'."
+        );
+    }
 }

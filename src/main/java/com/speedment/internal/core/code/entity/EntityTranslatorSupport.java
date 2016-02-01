@@ -109,7 +109,14 @@ public final class EntityTranslatorSupport {
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(fkc.findForeignTable(), javaLanguageNamer);
+                final Type fkType = getEntityType(
+                    fkc.findForeignTable().orElseThrow(
+                        () -> new SpeedmentException(
+                            "Could not find referenced foreign table '" + 
+                            fkc.getForeignTableName() + "'."
+                        )), 
+                    javaLanguageNamer
+                );
 
                 file.add(Import.of(fkType));
 

@@ -28,6 +28,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
+import java.util.Optional;
 
 /**
  *
@@ -54,7 +55,7 @@ public interface ForeignKeyColumn extends
      */
     default String getForeignTableName() {
         return getAsString(FOREIGN_TABLE_NAME)
-                .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_TABLE_NAME));
+            .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_TABLE_NAME));
     }
 
     /**
@@ -64,7 +65,7 @@ public interface ForeignKeyColumn extends
      */
     default String getForeignColumnName() {
         return getAsString(FOREIGN_COLUMN_NAME)
-                .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_COLUMN_NAME));
+            .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_COLUMN_NAME));
     }
 
     /**
@@ -75,22 +76,16 @@ public interface ForeignKeyColumn extends
      *
      * @return the foreign {@link Table} referenced by this
      */
-    default Table findForeignTable() throws SpeedmentException {
-        final Schema schema = ancestors()
-                .filter(Schema.class::isInstance)
-                .map(Schema.class::cast)
-                .findFirst()
-                .orElseThrow(() -> new SpeedmentException(
-                        "A foreign key in the config tree references a table that "
-                        + "is not located in the same schema"
-                ));
+    default Optional<? extends Table> findForeignTable() {
+        final Optional<Schema> schema = ancestors()
+            .filter(Schema.class::isInstance)
+            .map(Schema.class::cast)
+            .findFirst();
 
-        return schema.tables()
-                .filter(tab -> tab.getName().equals(getForeignTableName()))
-                .findAny()
-                .orElseThrow(() -> new SpeedmentException(
-                        "A non-existing table '" + getForeignTableName() + "' was referenced."
-                ));
+        return schema.flatMap(s -> s.tables()
+            .filter(tab -> tab.getName().equals(getForeignTableName()))
+            .findAny()
+        );
     }
 
     /**
@@ -101,15 +96,12 @@ public interface ForeignKeyColumn extends
      *
      * @return the foreign {@link Column} referenced by this
      */
-    default Column findForeignColumn() throws SpeedmentException {
+    default Optional<? extends Column> findForeignColumn() {
         return findForeignTable()
-                .columns()
+            .flatMap(table -> table.columns()
                 .filter(col -> col.getName().equals(getForeignColumnName()))
                 .findAny()
-                .orElseThrow(() -> new SpeedmentException(
-                        "A non-existing column '" + getForeignColumnName()
-                        + "' in table '" + getForeignTableName() + "' was referenced."
-                ));
+            );
     }
 
     @Override
@@ -121,5 +113,4 @@ public interface ForeignKeyColumn extends
     default ForeignKeyColumnMutator mutator() {
         return DocumentMutator.of(this);
     }
-
 }

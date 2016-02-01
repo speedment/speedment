@@ -59,7 +59,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import static javafx.collections.FXCollections.observableMap;
-import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -225,11 +224,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     
     @Override
     public final ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
-        return unmodifiableObservableMap(
+        return /*unmodifiableObservableMap(*/
             (ObservableMap<String, ObservableList<DocumentProperty>>) 
-            (ObservableMap<String, ?>) 
+            (ObservableMap<String, ?>)
             children
-        );
+        /*)*/;
     }
 
     @Override

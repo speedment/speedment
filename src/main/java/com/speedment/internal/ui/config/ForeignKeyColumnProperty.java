@@ -18,10 +18,8 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
@@ -35,6 +33,7 @@ import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
+import java.util.Optional;
 
 /**
  *
@@ -65,22 +64,33 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
         return foreignColumnNameProperty().get();
     }
 
-    public final ObjectBinding<Table> foreignTableProperty() {
-        return createObjectBinding(ForeignKeyColumn.super::findForeignTable, foreignTableNameProperty());
+    public final ObjectBinding<TableProperty> foreignTableProperty() {
+        return createObjectBinding(
+            () -> ForeignKeyColumn.super.findForeignTable()
+                .map(TableProperty.class::cast)
+                .orElse(null), 
+            foreignTableNameProperty()
+        );
     }
 
     @Override
-    public TableProperty findForeignTable() throws SpeedmentException {
-        return (TableProperty) foreignTableProperty().get();
+    public Optional<TableProperty> findForeignTable() throws SpeedmentException {
+        return Optional.ofNullable(foreignTableProperty().get());
     }
 
-    public final ObjectBinding<Column> foreignColumnProperty() {
-        return createObjectBinding(ForeignKeyColumn.super::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
+    public final ObjectBinding<ColumnProperty> foreignColumnProperty() {
+        return createObjectBinding(
+            () -> ForeignKeyColumn.super.findForeignColumn()
+                .map(ColumnProperty.class::cast)
+                .orElse(null), 
+            foreignTableNameProperty(),
+            foreignColumnNameProperty()
+        );
     }
 
     @Override
-    public ColumnProperty findForeignColumn() throws SpeedmentException {
-        return (ColumnProperty) foreignColumnProperty().get();
+    public Optional<ColumnProperty> findForeignColumn() throws SpeedmentException {
+        return Optional.ofNullable(foreignColumnProperty().get());
     }
     
     @Override

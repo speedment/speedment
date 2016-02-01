@@ -124,7 +124,7 @@ public final class ProjectTreeController implements Initializable {
                 }
                 
                 if (change.wasRemoved()) {
-                    change.getRemoved().stream()
+                    change.getRemoved()
                         .forEach(val -> branch.getChildren()
                             .removeIf(item -> val.equals(item.getValue()))
                         );

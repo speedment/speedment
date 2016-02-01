@@ -459,7 +459,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                 .map(c -> toDatabaseType(c, entity))
                 .collect(Collectors.toList());
 
-        table.primaryKeyColumns().map(pkc -> pkc.findColumn()).forEachOrdered(c -> values.add(get(entity, c)));
+        table.primaryKeyColumns().map(pkc -> pkc.findColumn().get()).forEachOrdered(c -> values.add(get(entity, c)));
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
@@ -472,7 +472,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" where ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
         final List<Object> values = table.primaryKeyColumns()
-                .map(pk -> toDatabaseType(pk.findColumn(), entity))
+                .map(pk -> toDatabaseType(pk.findColumn().get(), entity))
                 .collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);

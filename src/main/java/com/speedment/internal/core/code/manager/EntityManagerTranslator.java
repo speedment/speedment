@@ -86,11 +86,11 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
             .add(Field.of("entity", entity.getType()));
 
         if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn()) + "();");
+            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.findColumn()) + "()")
+                .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
                 .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }

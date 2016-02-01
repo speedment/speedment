@@ -23,6 +23,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.util.document.TraitUtil.AbstractTraitView;
 import static com.speedment.internal.util.document.TraitUtil.viewOf;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -31,22 +32,16 @@ import java.util.Map;
 @Api(version = "2.3")
 public interface HasColumn extends Document, HasName {
 
-    default Column findColumn() {
-        final Table table = ancestors()
-                .filter(Table.class::isInstance)
-                .map(Table.class::cast)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException(
-                        "A node in the config tree that references a column is"
-                        + "not located inside a table node."
-                ));
-
-        return table.columns()
+    default Optional<? extends Column> findColumn() {
+        return ancestors()
+            .filter(Table.class::isInstance)
+            .map(Table.class::cast)
+            .findFirst()
+            .flatMap(table -> table
+                .columns()
                 .filter(col -> col.getName().equals(getName()))
                 .findAny()
-                .orElseThrow(() -> new IllegalStateException(
-                        "A non-existing column '" + getName() + "' was referenced."
-                ));
+            );
     }
     
     static HasColumn of(Document document) {

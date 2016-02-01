@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.db.Column;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.PrimaryKeyColumnImpl;
@@ -34,7 +33,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     private final transient String name;
     private final transient int ordinalPosition;
     
-    private final transient Lazy<Column> column;
+    private final transient Lazy<Optional<ImmutableColumn>> column;
 
     ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
         super(parent, pkc);
@@ -62,8 +61,11 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     }
 
     @Override
-    public Column findColumn() {
-        return column.getOrCompute(PrimaryKeyColumn.super::findColumn);
+    public Optional<ImmutableColumn> findColumn() {
+        return column.getOrCompute(() ->
+            PrimaryKeyColumn.super.findColumn()
+                .map(ImmutableColumn.class::cast)
+        );
     }
     
     @Override

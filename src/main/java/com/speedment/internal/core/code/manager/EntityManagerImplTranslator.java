@@ -256,13 +256,15 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
                 break;
             }
             case 1: {
-                method.add("return entity.get" + typeName(primaryKeyColumns().findFirst().get().findColumn()) + "();");
+                method.add("return entity.get" + typeName(
+                    primaryKeyColumns().findFirst().get().findColumn().get()
+                ) + "();");
                 break;
             }
             default: {
                 file.add(Import.of(Type.of(Arrays.class)));
                 method.add(primaryKeyColumns()
-                    .map(pkc -> "entity.get" + typeName(pkc.findColumn()) + "()")
+                    .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
                     .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
                 );
                 break;
