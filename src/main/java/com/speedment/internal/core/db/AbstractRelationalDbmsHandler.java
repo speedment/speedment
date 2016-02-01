@@ -280,7 +280,22 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setName(rs.getString("COLUMN_NAME"));
             column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
-            final boolean nullable = rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls;
+            final boolean nullable;
+            final int nullableValue = rs.getInt("NULLABLE");
+            switch (nullableValue) {
+                case DatabaseMetaData.columnNullable:
+                case DatabaseMetaData.columnNullableUnknown: {
+                    nullable = true;
+                    break;
+                }
+                case DatabaseMetaData.columnNoNulls: {
+                    nullable = false;
+                    break;
+                }
+                default:
+                    throw new SpeedmentException("Unknown nullable type " + nullableValue);
+            }
+
             column.mutator().setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
@@ -432,7 +447,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected String jdbcSchemaLookupName(Schema schema) {
-        return schema.getName();
+        return null;
     }
 
     protected String jdbcCatalogLookupName(Schema schema) {

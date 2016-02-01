@@ -45,8 +45,12 @@ import java.util.stream.Stream;
  * An implementation of a Stream that takes exactly one element as its source.
  *
  * This implementation supports optimized implementations of most terminal
- * operations and a some number of intermediate operations. Un-optimized
- * operations just returns a wrapped standard Stream implementation.
+ * operations and a some number of intermediate operations.
+ * <p>
+ * With STRICT mode <code>true</code>, un-optimized intermediate operations just
+ * returns a wrapped standard Stream implementation. With STRICT mode
+ * <code>false</code>, most intermediate operation will be executed eagerly and
+ * will return another optimized SingletonStream.
  *
  * For performance reasons, the Stream does not throw an IllegalStateOperation
  * if methods are called after a terminal operation has been called on the
