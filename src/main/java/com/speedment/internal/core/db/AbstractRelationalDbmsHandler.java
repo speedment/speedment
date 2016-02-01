@@ -56,6 +56,7 @@ import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicBoolean;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -177,6 +178,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void readSchemaMetadata(final Connection connection, Predicate<String> filterCriteria) {
         requireNonNull(connection);
         LOGGER.info("Reading metadata from " + dbms.toString());
+        
+        final Set<String> discardedSchemas = new HashSet<>();
 
         try {
             final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
@@ -194,12 +197,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     } catch (SQLException sqlException) {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
+                    
+                    boolean schemaWasUsed = false;
                     if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final String name = Optional.ofNullable(schemaName).orElse(catalogName);
                         if (filterCriteria.test(name)) {
                             final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(name);
+                            schemaWasUsed = true;
                         }
+                    }
+                    
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(schemaName);
                     }
                 }
             }
@@ -207,11 +217,18 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
+                    
+                    boolean schemaWasUsed = false;
                     if (filterCriteria.test(schemaName)) {
                         if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                             final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(schemaName);
+                            schemaWasUsed = true;
                         }
+                    }
+                    
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(schemaName);
                     }
                 }
             }
@@ -220,7 +237,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             throw new SpeedmentException(sqle);
         }
 
-        dbms.schemas().forEach(schema -> tables(connection, schema));
+        final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);
+        dbms.schemas().forEach(schema -> {
+            tables(connection, schema);
+            atleastOneSchema.set(true);
+        });
+        
+        if (!atleastOneSchema.get()) {
+            throw new SpeedmentException(
+                "Could not find anymatching schema. The following schemas was considered: " + discardedSchemas + "."
+            );
+        }
     }
 
     protected void tables(final Connection connection, Schema schema) {

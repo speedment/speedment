@@ -301,16 +301,15 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      */
     private <T> Property<T> prepare(String key, Property<T> property, T value) {
         final ChangeListener<T> change = (ob, o, n) -> {
-            config.put(key, n);
-            invalidate();
+            if (value != null) {
+                config.put(key, n);
+                invalidate();
+            }
         };
         
         property.setValue(value);
         property.addListener(change);
-        
-        if (value != null) {
-            change.changed(property, null, value);
-        }
+        change.changed(property, null, value);
         
         return property;
     }
