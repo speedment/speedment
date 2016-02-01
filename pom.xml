@@ -32,7 +32,7 @@
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
     <version>2.2.3</version>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -123,6 +123,7 @@
                 </configuration>
             </plugin>
             
+            <!--  Due to OSGi-fying the library, this plugin is not used anymore. Still the library is backward-compatible. >
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -173,6 +174,25 @@
                         </configuration>
                     </execution>
                 </executions> 
+            </plugin>
+            -->
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment Inc.</Bundle-Vendor>
+                        <Bundle-Description>Wrap your database into Java 8!</Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                         </Import-Package>
+                         <Main-Class>${mainClass}</Main-Class>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
