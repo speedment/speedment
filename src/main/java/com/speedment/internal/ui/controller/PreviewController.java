@@ -68,7 +68,7 @@ public final class PreviewController implements Initializable {
     private @FXML TitledPane workspace;
     private @FXML VBox nodes;
     private @FXML TextField filename;
-    private @FXML ChoiceBox<TranslatorKey<DocumentProperty>> target;
+//    private @FXML ChoiceBox<TranslatorKey<DocumentProperty>> target;
     private @FXML WebView web;
     
     private PreviewController(UISession session) {
@@ -79,115 +79,115 @@ public final class PreviewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        final UserInterfaceComponent ui   = session.getSpeedment().getUserInterfaceComponent();
-        final EventComponent events       = session.getSpeedment().getEventComponent();
-        final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
-        
-        web.setZoom(ZOOM_FACTOR);
-
-        // When the user selects a new node, reconfigure the preview component
-        ui.getSelectedTreeItems()
-            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
-                target.setItems(FXCollections.observableArrayList());
-                
-                if (!change.getList().isEmpty()) {
-                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
-                    
-                    if (treeItem != null) {
-                        final DocumentProperty document = treeItem.getValue();
-                        
-                        if (document instanceof Project) {
-                            target.setItems(FXCollections.observableArrayList(
-                                StandardTranslatorKey.projectTranslatorKeys()
-                                    .map(PreviewController::castTranslatorKey)
-                                    .collect(toList())
-                            ));
-                        } else if (document instanceof Table) {
-                            target.setItems(FXCollections.observableArrayList(
-                                StandardTranslatorKey.tableTranslatorKeys()
-                                    .map(PreviewController::castTranslatorKey)
-                                    .collect(toList())
-                            ));
-                        }
-                        
-                        target.getSelectionModel().select(0);
-//                        events.notify(new PreviewEvent(document, nodes));
-                    }
-                }
-            });
-
-        // When the preview component is repainted, bind its content to the 
-        // correct document
-//        events.on(PreviewEvent.class, ev -> {
-//            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
+//        final UserInterfaceComponent ui   = session.getSpeedment().getUserInterfaceComponent();
+//        final EventComponent events       = session.getSpeedment().getEventComponent();
+//        final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
+//        
+//        web.setZoom(ZOOM_FACTOR);
+//
+//        // When the user selects a new node, reconfigure the preview component
+//        ui.getSelectedTreeItems()
+//            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
+//                target.setItems(FXCollections.observableArrayList());
+//                
+//                if (!change.getList().isEmpty()) {
+//                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
+//                    
+//                    if (treeItem != null) {
+//                        final DocumentProperty document = treeItem.getValue();
+//                        
+//                        if (document instanceof Project) {
+//                            target.setItems(FXCollections.observableArrayList(
+//                                StandardTranslatorKey.projectTranslatorKeys()
+//                                    .map(PreviewController::castTranslatorKey)
+//                                    .collect(toList())
+//                            ));
+//                        } else if (document instanceof Table) {
+//                            target.setItems(FXCollections.observableArrayList(
+//                                StandardTranslatorKey.tableTranslatorKeys()
+//                                    .map(PreviewController::castTranslatorKey)
+//                                    .collect(toList())
+//                            ));
+//                        }
+//                        
+//                        target.getSelectionModel().select(0);
+////                        events.notify(new PreviewEvent(document, nodes));
+//                    }
+//                }
+//            });
+//
+//        // When the preview component is repainted, bind its content to the 
+//        // correct document
+////        events.on(PreviewEvent.class, ev -> {
+////            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
+////        });
+//        
+//        // React on changes in the dropdown list
+//        target.getSelectionModel().selectedItemProperty().addListener((ob, o, selected) -> {
+//            if (!ui.getSelectedTreeItems().isEmpty()) {
+//                final TreeItem<DocumentProperty> treeItem = ui.getSelectedTreeItems().get(0);
+//                if (treeItem != null) {
+//                    generatePreview(treeItem.getValue(), selected);
+//                }
+//            }
 //        });
-        
-        // React on changes in the dropdown list
-        target.getSelectionModel().selectedItemProperty().addListener((ob, o, selected) -> {
-            if (!ui.getSelectedTreeItems().isEmpty()) {
-                final TreeItem<DocumentProperty> treeItem = ui.getSelectedTreeItems().get(0);
-                if (treeItem != null) {
-                    generatePreview(treeItem.getValue(), selected);
-                }
-            }
-        });
-        
-        // Create a listener to work off the load queue
-        final WebEngine engine = web.getEngine();
-        engine.getLoadWorker().stateProperty().addListener((ov, old, newState) -> {
-            if (newState == Worker.State.SUCCEEDED) {
-                Runnable task;
-                while ((task = onLoad.poll()) != null) {
-                    task.run();
-                }
-            }
-        });
+//        
+//        // Create a listener to work off the load queue
+//        final WebEngine engine = web.getEngine();
+//        engine.getLoadWorker().stateProperty().addListener((ov, old, newState) -> {
+//            if (newState == Worker.State.SUCCEEDED) {
+//                Runnable task;
+//                while ((task = onLoad.poll()) != null) {
+//                    task.run();
+//                }
+//            }
+//        });
     }
     
-    private <T extends HasMainInterface> void generatePreview(DocumentProperty document, TranslatorKey<DocumentProperty> selection) {
-        if (selection != null) {
-            final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
-            
-            filename.textProperty().bind(Bindings.createStringBinding(() -> {
-                return cgc.findTranslator(document, selection).get().getName();
-            }, document));
-
-            if (document instanceof TableProperty) {
-                final TableProperty table = (TableProperty) document;
-
-                loadPreview(Bindings.createStringBinding(() -> {
-                        if (table.enabledProperty().get()) {
-                            return cgc.findTranslator(document, selection).toCode();
-                        } else {
-                            return "(No code is generated for disabled nodes.)";
-                        }
-                    },
-                    table
-                ));
-            } else if (document instanceof ProjectProperty) {
-                final ProjectProperty project = (ProjectProperty) document;
-
-                loadPreview(Bindings.createStringBinding(
-                    () -> {
-                        if (project.enabledProperty().get()) {
-                            return cgc.findTranslator(document, selection).toCode();
-                        } else {
-                            return "(No code is generated for disabled nodes.)";
-                        }
-                    },
-                    project
-                ));
-            } else {
-                filename.setText("");
-            }
-        }
-    }
-    
-    private static <T extends HasMainInterface> TranslatorKey<DocumentProperty> castTranslatorKey(TranslatorKey<T> key) {
-        @SuppressWarnings("unchecked")
-        final TranslatorKey<DocumentProperty> casted = (TranslatorKey<DocumentProperty>) key;
-        return casted;
-    }
+//    private <T extends HasMainInterface> void generatePreview(DocumentProperty document, TranslatorKey<DocumentProperty> selection) {
+//        if (selection != null) {
+//            final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
+//            
+//            filename.textProperty().bind(Bindings.createStringBinding(() -> {
+//                return cgc.findTranslator(document, selection).get().getName();
+//            }, document));
+//
+//            if (document instanceof TableProperty) {
+//                final TableProperty table = (TableProperty) document;
+//
+//                loadPreview(Bindings.createStringBinding(() -> {
+//                        if (table.enabledProperty().get()) {
+//                            return cgc.findTranslator(document, selection).toCode();
+//                        } else {
+//                            return "(No code is generated for disabled nodes.)";
+//                        }
+//                    },
+//                    table
+//                ));
+//            } else if (document instanceof ProjectProperty) {
+//                final ProjectProperty project = (ProjectProperty) document;
+//
+//                loadPreview(Bindings.createStringBinding(
+//                    () -> {
+//                        if (project.enabledProperty().get()) {
+//                            return cgc.findTranslator(document, selection).toCode();
+//                        } else {
+//                            return "(No code is generated for disabled nodes.)";
+//                        }
+//                    },
+//                    project
+//                ));
+//            } else {
+//                filename.setText("");
+//            }
+//        }
+//    }
+//    
+//    private static <T extends HasMainInterface> TranslatorKey<DocumentProperty> castTranslatorKey(TranslatorKey<T> key) {
+//        @SuppressWarnings("unchecked")
+//        final TranslatorKey<DocumentProperty> casted = (TranslatorKey<DocumentProperty>) key;
+//        return casted;
+//    }
     
     public static Node create(UISession session) {
         return Loader.create(session, "Preview", PreviewController::new);
