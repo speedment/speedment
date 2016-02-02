@@ -58,7 +58,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
     private static final String MANAGER_OF_METHOD = "managerOf_";
 
     public EntityImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+        super(speedment, cg, configEntity, Class::of);
     }
 
     @Override
@@ -66,7 +66,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
         requireNonNull(file);
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Class newClass = newClassBuilder(file, entity.getImplName())
+        final Class newClass = newBuilder(file, entity.getImplName())
             // Getters
             .addColumnConsumer((cl, c) -> {
 

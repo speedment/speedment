@@ -50,15 +50,15 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
  */
 public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
-    public EntityTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    public EntityTranslator(Speedment speedment, Generator gen, Table doc) {
+        super(speedment, gen, doc, Interface::of);
     }
 
     @Override
     protected Interface make(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Interface iface = newInterfaceBuilder(file, entity.getName())
+        final Interface iface = newBuilder(file, entity.getName())
             // Getters
             .addColumnConsumer((i, c) -> {
                 final Type retType;

@@ -37,30 +37,30 @@ import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.codegen.lang.models.File;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A component that can translate a {@link Document} into something else. This
  * interface is implemented to generate more files from the same database
  * structure.
  *
- * @author pemi
- * @param <T> the Document type to use
- * @param <R> the type to translate into
- * @see Document
- * @since 2.3
+ * @author       pemi
+ * @param <DOC>  the Document type to use
+ * @param <T>    the codegen type to make (Class, Interface or Enum)
+ * @see          Document
+ * @since        2.3
  */
 @Api(version = "2.3")
-public interface Translator<T extends Document & HasMainInterface, R> extends Supplier<R> {
+public interface Translator<DOC extends Document & HasMainInterface, T extends ClassOrInterface<T>> extends Supplier<File> {
 
     /**
      * The document being translated.
      *
      * @return  the document
      */
-    T getDocument();
+    DOC getDocument();
     
     /**
      * The document being translated wrapped in a {@link HasAlias}.
@@ -198,7 +198,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
                 ));
     }
     
-    default Meta<R, String> generate() {
+    default Meta<File, String> generate() {
         return getCodeGenerator().metaOn(get()).findFirst().orElseThrow(() -> new SpeedmentException("Unable to generate Java code"));
     }
     
@@ -208,16 +208,14 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
     
     Generator getCodeGenerator();
  
-    void onClass(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>> action);
-    void onInterface(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Interface>> action);
-    void onEnum(BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Enum>> action);
+    void onMake(BiConsumer<File, Builder<T>> action);
     
-    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Class>>> classListeners();
-    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Interface>>> interfaceListeners();
-    Stream<BiConsumer<File, Builder<com.speedment.internal.codegen.lang.models.Enum>>> enumListeners();
+    Stream<BiConsumer<File, Builder<T>>> listeners();
     
     interface Builder<T extends ClassOrInterface<T>> {
-        <P extends Document, D extends Document> Builder<T> addConsumer(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer);
+        <P extends Document, DOC extends Document> Builder<T> 
+        addConsumer(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
+        
         Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer);
         Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer);
         Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer);
@@ -226,5 +224,7 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
         Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer);
         Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer);
         Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer);
+        
+        T build();
     }
 }

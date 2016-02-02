@@ -20,16 +20,17 @@ import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 
 /**
  *
- * @author Per Minborg
- * @param <T> document type
- * @since 2.3
+ * @author       Emil Forslund
+ * @param <DOC>  document type
+ * @param <T>    codegen model type
+ * @since        2.3
  */
 @Api(version = "2.3")
 @FunctionalInterface
-public interface TranslatorConstructor<T extends HasMainInterface> {
-    Translator<T, File> apply(Speedment speedment, Generator gen, T document);
+public interface TranslatorConstructor<DOC extends HasMainInterface, T extends ClassOrInterface<T>> {
+    Translator<DOC, T> apply(Speedment speedment, Generator gen, DOC document);
 }

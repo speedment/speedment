@@ -22,6 +22,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.core.code.TranslatorManager;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static org.junit.Assert.assertTrue;
@@ -53,7 +54,7 @@ public class TranslatorManagerTest extends SimpleModel {
     public void testPreview() {
         System.out.println("preview");
 
-        final Translator<Table, File> translator = speedment.getCodeGenerationComponent()
+        final Translator<Table, Interface> translator = speedment.getCodeGenerationComponent()
                 .findTranslator(table, StandardTranslatorKey.ENTITY);
 
         final String code = translator.toCode();
@@ -65,8 +66,5 @@ public class TranslatorManagerTest extends SimpleModel {
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(column.getName())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(column.getName())));
-        
-
     }
-
 }

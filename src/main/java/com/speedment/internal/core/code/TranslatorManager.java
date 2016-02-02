@@ -69,7 +69,7 @@ public class TranslatorManager implements Consumer<Project> {
         requireNonNull(project);
         Statistics.onGenerate();
 
-        final List<Translator<?, File>> translators = new ArrayList<>();
+        final List<Translator<?, ?>> translators = new ArrayList<>();
         final Generator gen = new JavaGenerator();
 
         fileCounter.set(0);
@@ -80,18 +80,12 @@ public class TranslatorManager implements Consumer<Project> {
         final CodeGenerationComponent cgc = speedment.getCodeGenerationComponent();
         
         cgc.translators(project).forEachOrdered(translators::add);
-        
-//        translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
-//        translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
 
         traverseOver(project, Table.class)
-                .filter(HasEnabled::test)
-                .forEach(table -> {
-                    cgc.translators(table).forEachOrdered(translators::add);
-//                    translators.add(new EntityTranslator(speedment, gen, table));
-//                    translators.add(new EntityImplTranslator(speedment, gen, table));
-//                    translators.add(new EntityManagerImplTranslator(speedment, gen, table));
-                });
+            .filter(HasEnabled::test)
+            .forEach(table -> {
+                cgc.translators(table).forEachOrdered(translators::add);
+            });
 
         gen.metaOn(translators.stream()
                 .map(Translator::get)
