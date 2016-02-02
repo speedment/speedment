@@ -17,6 +17,7 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
@@ -38,6 +39,7 @@ import java.util.OptionalLong;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
@@ -237,6 +239,18 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
             .sortedByKey(Comparator.naturalOrder())
             .flatMapValue(ObservableList::stream)
             .values();
+    }
+
+    @Override
+    @Deprecated
+    public final <P extends Document, T extends Document> Stream<T> 
+    children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
+        return observableListOf(key)
+            .stream()
+            .map(child -> constructor.apply(
+                (P) child.getParent().orElse(null), 
+                child.getData()
+            ));
     }
 
     @Override
