@@ -4,11 +4,11 @@ package com.speedment.internal.util.testing;
  *
  * @author Per Minborg
  */
-public class MemorySnapshot {
+public class MemoryProbe {
 
     private final long free, total, max;
 
-    private MemorySnapshot() {
+    private MemoryProbe() {
         System.gc();
         System.gc();
         final Runtime rt = Runtime.getRuntime();
@@ -17,7 +17,7 @@ public class MemorySnapshot {
         this.max = rt.maxMemory();
     }
 
-    protected MemorySnapshot(long free, long total, long max) {
+    protected MemoryProbe(long free, long total, long max) {
         this.free = free;
         this.total = total;
         this.max = max;
@@ -50,16 +50,16 @@ public class MemorySnapshot {
     }
 
     
-    public MemorySnapshot deltaSinceCreated() {
-        return substract(new MemorySnapshot());
+    public MemoryProbe deltaSinceCreated() {
+        return substract(new MemoryProbe());
     }
     
-    public static MemorySnapshot create() {
-        return new MemorySnapshot();
+    public static MemoryProbe create() {
+        return new MemoryProbe();
     }
 
-    public MemorySnapshot substract(MemorySnapshot operand) {
-        return new MemorySnapshot(free() - operand.free(), total() - operand.total(), max() - operand.max());
+    public MemoryProbe substract(MemoryProbe operand) {
+        return new MemoryProbe(free() - operand.free(), total() - operand.total(), max() - operand.max());
     }
 
 }
