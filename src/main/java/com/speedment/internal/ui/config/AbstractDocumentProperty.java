@@ -293,24 +293,23 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * Adds a listener to the specified property so that changes to it are
      * reflected down to the source map.
      * 
-     * @param <T>       the type of the property
-     * @param key       the key of the property
-     * @param property  the property to listen to
-     * @param value     the initial value of this property
-     * @return          the same property but with listener attached
+     * @param <T>           the type of the property
+     * @param key           the key of the property
+     * @param property      the property to listen to
+     * @param initialValue  the initial value of this property
+     * @return              the same property but with listener attached
      */
-    private <T> Property<T> prepare(String key, Property<T> property, T value) {
-        final ChangeListener<T> change = (ob, o, n) -> {
-            if (value != null) {
-                config.put(key, n);
+    private <T> Property<T> prepare(String key, Property<T> property, T initialValue) {
+        final ChangeListener<T> change = (ob, oldValue, newValue) -> {
+            if (newValue != null) {
+                config.put(key, newValue);
                 invalidate();
             }
         };
         
-        property.setValue(value);
+        property.setValue(initialValue);
         property.addListener(change);
-        change.changed(property, null, value);
-        
+        change.changed(property, null, initialValue);
         return property;
     }
     
