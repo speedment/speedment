@@ -16,18 +16,17 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
-import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.util.Loader;
-import com.speedment.internal.ui.UISession;
-import com.speedment.internal.util.Settings;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
+import static java.util.Objects.requireNonNull;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -40,12 +39,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 
-import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
+import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.util.Loader;
+import com.speedment.internal.util.Settings;
+
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -108,6 +111,8 @@ public final class ConnectController implements Initializable {
                     fieldName.textProperty().setValue(DEFAULT_NAME);
                 }
 
+                fieldName.getTooltip().setText(item.getDbmsNameMeaning());
+
                 fieldPort.textProperty().setValue("" + item.getDefaultPort());
             }
         });
@@ -138,7 +143,7 @@ public final class ConnectController implements Initializable {
         dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
-        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
+        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());        
         
         buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
         buttonConnect.setOnAction(ev -> {
@@ -154,7 +159,7 @@ public final class ConnectController implements Initializable {
             Settings.inst().set("last_known_host", fieldHost.getText());
             Settings.inst().set("last_known_user", fieldUser.getText());
             Settings.inst().set("last_known_name", fieldName.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
+            Settings.inst().set("last_known_port", fieldPort.getText());           
 
             if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
