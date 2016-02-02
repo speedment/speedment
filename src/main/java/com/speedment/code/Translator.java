@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * A component that can translate a {@link Document} into something else. This
@@ -207,6 +208,10 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
     }
     
     Generator getCodeGenerator();
+    
+    default void onMake(Consumer<Builder<T>> action) {
+        onMake((file, builder) -> action.accept(builder));
+    }
  
     void onMake(BiConsumer<File, Builder<T>> action);
     
@@ -214,16 +219,16 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
     
     interface Builder<T extends ClassOrInterface<T>> {
         <P extends Document, DOC extends Document> Builder<T> 
-        addConsumer(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
+        forEvery(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
         
-        Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer);
-        Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer);
-        Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer);
-        Builder<T> addTableConsumer(BiConsumer<T, Table> consumer);
-        Builder<T> addColumnConsumer(BiConsumer<T, Column> consumer);
-        Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer);
-        Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer);
-        Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer);
+        Builder<T> forEveryProject(BiConsumer<T, Project> consumer);
+        Builder<T> forEveryDbms(BiConsumer<T, Dbms> consumer);
+        Builder<T> forEverySchema(BiConsumer<T, Schema> consumer);
+        Builder<T> forEveryTable(BiConsumer<T, Table> consumer);
+        Builder<T> forEveryColumn(BiConsumer<T, Column> consumer);
+        Builder<T> forEveryIndex(BiConsumer<T, Index> consumer);
+        Builder<T> forEveryForeignKey(BiConsumer<T, ForeignKey> consumer);
+        Builder<T> forEveryForeignKeyReferencingThis(BiConsumer<T, ForeignKey> consumer);
         
         T build();
     }

@@ -25,7 +25,6 @@ import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.codegen.lang.models.Constructor;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
@@ -45,7 +44,6 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.codegen.lang.models.Enum;
 import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
 import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.internal.core.config.db.ColumnImpl;
@@ -183,49 +181,49 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         }
 
         @Override
-        public <P extends Document, D extends Document> Builder<T> addConsumer(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer) {
+        public <P extends Document, D extends Document> Builder<T> forEvery(String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer) {
             aquireListAndAdd(key, wrap(consumer, constructor));
             return this;
         }
 
         @Override
-        public BuilderImpl addProjectConsumer(BiConsumer<T, Project> consumer) {
+        public BuilderImpl forEveryProject(BiConsumer<T, Project> consumer) {
             aquireListAndAdd(PROJECTS, wrap(consumer, ProjectImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addDbmsConsumer(BiConsumer<T, Dbms> consumer) {
+        public BuilderImpl forEveryDbms(BiConsumer<T, Dbms> consumer) {
             aquireListAndAdd(Project.DBMSES, wrap(consumer, DbmsImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addSchemaConsumer(BiConsumer<T, Schema> consumer) {
+        public BuilderImpl forEverySchema(BiConsumer<T, Schema> consumer) {
             aquireListAndAdd(Dbms.SCHEMAS, wrap(consumer, SchemaImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addTableConsumer(BiConsumer<T, Table> consumer) {
+        public BuilderImpl forEveryTable(BiConsumer<T, Table> consumer) {
             aquireListAndAdd(Schema.TABLES, wrap(consumer, TableImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addColumnConsumer(BiConsumer<T, Column> consumer) {
+        public BuilderImpl forEveryColumn(BiConsumer<T, Column> consumer) {
             aquireListAndAdd(Table.COLUMNS, wrap(consumer, ColumnImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addIndexConsumer(BiConsumer<T, Index> consumer) {
+        public BuilderImpl forEveryIndex(BiConsumer<T, Index> consumer) {
             aquireListAndAdd(Table.INDEXES, wrap(consumer, IndexImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer) {
+        public BuilderImpl forEveryForeignKey(BiConsumer<T, ForeignKey> consumer) {
             aquireListAndAdd(Table.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
             return this;
         }
@@ -239,7 +237,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         }
 
         @Override
-        public BuilderImpl addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
+        public BuilderImpl forEveryForeignKeyReferencingThis(BiConsumer<T, ForeignKey> consumer) {
             foreignKeyReferencesThisTableConsumers.add(requireNonNull(consumer));
             return this;
         }

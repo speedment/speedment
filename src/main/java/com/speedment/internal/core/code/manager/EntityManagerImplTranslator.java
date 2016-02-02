@@ -73,7 +73,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     protected Class make(File file) {
 
         return newBuilder(file, manager.getImplName())
-            .addColumnConsumer((i, c) -> {
+            .forEveryColumn((i, c) -> {
 
                 final TypeMapper<?, ?> mapper = c.findTypeMapper();
                 final java.lang.Class<?> javaType = mapper.getJavaType();

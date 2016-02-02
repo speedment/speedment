@@ -60,7 +60,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
         final Interface iface = newBuilder(file, entity.getName())
             // Getters
-            .addColumnConsumer((i, c) -> {
+            .forEveryColumn((i, c) -> {
                 final Type retType;
                 if (c.isNullable()) {
                     retType = Type.of(Optional.class).add(
@@ -80,7 +80,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
             })
             // Setters
-            .addColumnConsumer((i, c) -> {
+            .forEveryColumn((i, c) -> {
                 i.add(Method.of(SETTER_METHOD_PREFIX + typeName(c), entity.getType())
                     .add(Field.of(variableName(c), Type.of(c.findTypeMapper().getJavaType())))
                     .set(Javadoc.of("Sets the " + variableName(c) + " of this " + entity.getName() + ". The " + variableName(c) + " field corresponds to the database column "
@@ -92,7 +92,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
             })
             // Fields
-            .addColumnConsumer((i, c) -> {
+            .forEveryColumn((i, c) -> {
                 final ReferenceFieldType ref = EntityTranslatorSupport.getReferenceFieldType(file, table(), c, entity.getType(), javaLanguageNamer());
 
                 final Type entityType = entity.getType();
@@ -141,7 +141,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
             })
             // Add streamers from back pointing FK:s
-            .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
+            .forEveryForeignKeyReferencingThis((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 file.add(Import.of(fu.getEmt().entity().getType()));
 
@@ -182,7 +182,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
                 i.add(method);
             })
-            .addForeignKeyConsumer((i, fk) -> {
+            .forEveryForeignKey((i, fk) -> {
 
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
