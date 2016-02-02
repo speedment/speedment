@@ -112,7 +112,6 @@ public final class ConnectController implements Initializable {
                 }
 
                 fieldName.getTooltip().setText(item.getDbmsNameMeaning());
-
                 fieldPort.textProperty().setValue("" + item.getDefaultPort());
             }
         });
