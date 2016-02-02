@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-final class FkHolder {
+public final class FkHolder {
 
     private final ForeignKey fk;
     private final ForeignKeyColumn fkc;
