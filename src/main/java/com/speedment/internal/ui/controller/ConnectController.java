@@ -147,7 +147,6 @@ public final class ConnectController implements Initializable {
             session.getSpeedment().getPasswordComponent()
                 .put(fieldName.getText(), fieldPass.getText());
             
-            
             session.getProject().nameProperty().setValue(fieldSchema.getText());
             
             Settings.inst().set("last_known_schema", fieldSchema.getText());
