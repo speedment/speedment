@@ -29,7 +29,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.core.code.JavaClassTranslator;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
@@ -52,14 +52,14 @@ import java.util.function.Supplier;
 public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
 
     private Generator generator;
-    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?>>> map;
+    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
     private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
 
-    private final static class TranslatorSettings<T extends HasName & HasMainInterface> {
+    private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
 
         private final String key;
-        private final List<TranslatorDecorator<T>> decorators;
-        private TranslatorConstructor<T> constructor;
+        private final List<TranslatorDecorator<DOC, T>> decorators;
+        private TranslatorConstructor<DOC, T> constructor;
 
         public TranslatorSettings(String key) {
             this.key = requireNonNull(key);
@@ -70,21 +70,21 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
             return key;
         }
 
-        public TranslatorConstructor<T> getConstructor() {
+        public TranslatorConstructor<DOC, T> getConstructor() {
             return constructor;
         }
 
-        public void setConstructor(TranslatorConstructor<T> constructor) {
+        public void setConstructor(TranslatorConstructor<DOC, T> constructor) {
             this.constructor = constructor;
         }
 
-        public List<TranslatorDecorator<T>> decorators() {
+        public List<TranslatorDecorator<DOC, T>> decorators() {
             return decorators;
         }
 
-        public JavaClassTranslator<T> createDecorated(Speedment speedment, Generator generator, T document) {
+        public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
             @SuppressWarnings("unchecked")
-            final JavaClassTranslator<T> translator = (JavaClassTranslator<T>) 
+            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) 
                 getConstructor().apply(speedment, generator, document);
             
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
@@ -116,45 +116,55 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends HasName & HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor) {
-        aquireTranslatorSettings(clazz, key).setConstructor(constructor);
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
+        aquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
     }
 
     @Override
-    public <T extends HasName & HasMainInterface> void add(Class<T> clazz, String key, TranslatorDecorator<T> decorator) {
-        aquireTranslatorSettings(clazz, key).decorators().add(decorator);
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
+        aquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
     }
 
     @Override
-    public <T extends HasName & HasMainInterface> void remove(Class<T> clazz, String key) {
-        aquireTranslatorSettings(clazz, key).setConstructor(null);
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void remove(Class<DOC> docType, String key) {
+        aquireTranslatorSettings(docType, null, key).setConstructor(null);
     }
 
-    private <T extends HasName & HasMainInterface> TranslatorSettings<T> aquireTranslatorSettings(Class<T> clazz, String key) {
-        return (TranslatorSettings<T>) map.computeIfAbsent(clazz, s -> new ConcurrentHashMap<>()).computeIfAbsent(key, TranslatorSettings::new);
+    private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
+        return (TranslatorSettings<DOC, T>) 
+            map.computeIfAbsent(docType, 
+                s -> new ConcurrentHashMap<>()
+            ).computeIfAbsent(key, TranslatorSettings::new);
     }
 
     @Override
-    public <T extends HasName & HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
+    public <DOC extends HasName & HasMainInterface> 
+    Stream<? extends Translator<DOC, ?>> translators(DOC document) {
         return translators(document, s -> true);
     }
 
     @Override
-    public <T extends HasName & HasMainInterface> Translator<T, File> findTranslator(T document, String key) {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    Translator<DOC, T> findTranslator(DOC document, Class<T> modelType, String key) {
         return translators(document, key::equals)
                 .findAny()
+                .map(translator -> (Translator<DOC, T>) translator)
                 .orElseThrow(noTranslatorFound(document, key));
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends HasName & HasMainInterface> Stream<? extends Translator<T, File>>
-            translators(T document, Predicate<String> nameFilter) {
+    private <DOC extends HasName & HasMainInterface> 
+    Stream<? extends Translator<DOC, ?>> translators(DOC document, Predicate<String> nameFilter) {
 
         return MapStream.of(map)
                 .filterKey(c -> c.isInstance(document))
                 .values()
                 .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
-                .map(s -> (TranslatorSettings<T>) s)
+                .map(s -> (TranslatorSettings<DOC, ?>) s)
                 .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
     }
 

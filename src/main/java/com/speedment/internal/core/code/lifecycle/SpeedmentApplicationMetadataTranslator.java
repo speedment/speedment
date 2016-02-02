@@ -36,7 +36,6 @@ import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -48,8 +47,8 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
 
     private final String className = typeName(project()) + "Application" + METADATA;
 
-    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
+    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
+        super(speedment, gen, doc, Class::of);
     }
 
     @Override

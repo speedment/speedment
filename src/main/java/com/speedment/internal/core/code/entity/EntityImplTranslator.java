@@ -58,7 +58,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
     private static final String MANAGER_OF_METHOD = "managerOf_";
 
     public EntityImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+        super(speedment, cg, configEntity, Class::of);
     }
 
     @Override
@@ -66,9 +66,9 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
         requireNonNull(file);
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Class newClass = newClassBuilder(file, entity.getImplName())
+        final Class newClass = newBuilder(file, entity.getImplName())
             // Getters
-            .addColumnConsumer((cl, c) -> {
+            .forEveryColumn((cl, c) -> {
 
                 final Type retType;
                 final String getter;
@@ -88,7 +88,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
             })
             // Setters
-            .addColumnConsumer((cl, c) -> {
+            .forEveryColumn((cl, c) -> {
                 cl
                     .add(Method.of(BUILDER_METHOD_PREFIX + typeName(c), entity.getImplType())
                         .public_().final_()
@@ -98,7 +98,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                         .add("return this;"));
             })
             // Add streamers from back pointing FK:s
-            .addForeignKeyReferencesThisTableConsumer((i, fk) -> {
+            .forEveryForeignKeyReferencingThis((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
 //999                file.add(Import.of(fu.getForeignEmt().ENTITY.getType()));
                 fu.imports().forEachOrdered(file::add);
@@ -115,7 +115,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     .add("        .stream().filter(" + typeName(fu.getTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
                 i.add(method);
             })
-            .addForeignKeyConsumer((i, fk) -> {
+            .forEveryForeignKey((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
 

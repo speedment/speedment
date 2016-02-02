@@ -19,16 +19,18 @@ package com.speedment.code;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.core.code.JavaClassTranslator;
 
 /**
  *
- * @author     Emil Forslund
- * @param <T>  the document type
- * @since      2.3
+ * @author       Emil Forslund
+ * @param <DOC>  the document type
+ * @param <T>    the codegen model type
+ * @since        2.3
  */
 @Api(version = "2.3")
 @FunctionalInterface
-public interface TranslatorDecorator<T extends HasName & HasMainInterface> {
-    void apply(JavaClassTranslator<T> translator);
+public interface TranslatorDecorator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
+    void apply(JavaClassTranslator<DOC, T> translator);
 }

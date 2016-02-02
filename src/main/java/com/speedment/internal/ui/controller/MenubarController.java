@@ -36,34 +36,20 @@ public final class MenubarController implements Initializable {
 
     private final UISession session;
 
-    private @FXML
-    MenuItem mbNew;
-    private @FXML
-    MenuItem mbOpen;
-    private @FXML
-    MenuItem mbSave;
-    private @FXML
-    MenuItem mbSaveAs;
-    private @FXML
-    MenuItem mbQuit;
-    private @FXML
-    MenuItem mbGenerate;
-    private @FXML
-    MenuItem mbProjectTree;
-    private @FXML
-    MenuItem mbWorkspace;
-    private @FXML
-    MenuItem mbOutput;
-    private @FXML
-    MenuItem mbPreview;
-    private @FXML
-    MenuItem mbGitter;
-    private @FXML
-    MenuItem mbGitHub;
-    private @FXML
-    MenuItem mbComponents;
-    private @FXML
-    MenuItem mbAbout;
+    private @FXML MenuItem mbNew;
+    private @FXML MenuItem mbOpen;
+    private @FXML MenuItem mbSave;
+    private @FXML MenuItem mbSaveAs;
+    private @FXML MenuItem mbQuit;
+    private @FXML MenuItem mbGenerate;
+    private @FXML MenuItem mbProjectTree;
+    private @FXML MenuItem mbWorkspace;
+    private @FXML MenuItem mbOutput;
+//    private @FXML MenuItem mbPreview;
+    private @FXML MenuItem mbGitter;
+    private @FXML MenuItem mbGitHub;
+    private @FXML MenuItem mbComponents;
+    private @FXML MenuItem mbAbout;
 
     private MenubarController(UISession session) {
         this.session = requireNonNull(session);
@@ -83,7 +69,7 @@ public final class MenubarController implements Initializable {
         mbProjectTree.setGraphic(SilkIcon.APPLICATION_SIDE_TREE.view());
         mbWorkspace.setGraphic(SilkIcon.APPLICATION_FORM.view());
         mbOutput.setGraphic(SilkIcon.APPLICATION_XP_TERMINAL.view());
-        mbPreview.setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
+//        mbPreview.setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
 
         mbGitter.setGraphic(SilkIcon.USER_COMMENT.view());
         mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
@@ -101,7 +87,7 @@ public final class MenubarController implements Initializable {
         mbProjectTree.setOnAction(session.toggleProjectTree());
         mbWorkspace.setOnAction(session.toggleWorkspace());
         mbOutput.setOnAction(session.toggleOutput());
-        mbPreview.setOnAction(session.togglePreview());
+//        mbPreview.setOnAction(session.togglePreview());
 
         mbGitter.setOnAction(session.showGitter());
         mbGitHub.setOnAction(session.showGithub());

@@ -64,16 +64,16 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
 
-    public EntityManagerImplTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    public EntityManagerImplTranslator(Speedment speedment, Generator gen, Table doc) {
+        super(speedment, gen, doc, Class::of);
         this.speedment = speedment;
     }
 
     @Override
     protected Class make(File file) {
 
-        return newClassBuilder(file, manager.getImplName())
-            .addColumnConsumer((i, c) -> {
+        return newBuilder(file, manager.getImplName())
+            .forEveryColumn((i, c) -> {
 
                 final TypeMapper<?, ?> mapper = c.findTypeMapper();
                 final java.lang.Class<?> javaType = mapper.getJavaType();

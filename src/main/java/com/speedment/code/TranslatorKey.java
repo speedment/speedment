@@ -18,17 +18,29 @@ package com.speedment.code;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 
 /**
  *
- * @author Per Minborg
- * @param <T> Document type
- * @since 2.3
+ * @author      Per Minborg
+ * @param <DOC> Document type
+ * @param <T>   CodeGen main model
+ * @since       2.3
  */
 @Api(version = "2.3")
-public interface TranslatorKey<T extends HasMainInterface> {
+public interface TranslatorKey<DOC extends HasMainInterface, T extends ClassOrInterface<T>> {
 
+    /**
+     * Returns the key that is used to identify this category of translators.
+     * 
+     * @return  the key
+     */
     String getKey();
     
-
+    /**
+     * Returns the CodeGen type that the translator will operate on.
+     * 
+     * @return  codegen main model type
+     */
+    Class<T> getTranslatedType();
 }

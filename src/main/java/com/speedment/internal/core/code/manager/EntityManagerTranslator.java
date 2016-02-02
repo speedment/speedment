@@ -46,13 +46,13 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
  */
 public final class EntityManagerTranslator extends EntityAndManagerTranslator<Interface> {
 
-    public EntityManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    public EntityManagerTranslator(Speedment speedment, Generator gen, Table doc) {
+        super(speedment, gen, doc, Interface::of);
     }
 
     @Override
     protected Interface make(File file) {
-        return newInterfaceBuilder(file, manager.getName()).build()
+        return newBuilder(file, manager.getName()).build()
             .public_()
             .add(Type.of(SqlManager.class).add(genericOfEntity))
             .add(generatePrimaryKeyFor(file))

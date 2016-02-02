@@ -46,8 +46,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -57,8 +55,8 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     
     private final String className = typeName(project()) + "Application";
     
-    public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
+    public SpeedmentApplicationTranslator(Speedment speedment, Generator gen, Project doc) {
+        super(speedment, gen, doc, Class::of);
     }
     
     @Override

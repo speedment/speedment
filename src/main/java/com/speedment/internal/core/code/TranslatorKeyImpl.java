@@ -18,23 +18,34 @@ package com.speedment.internal.core.code;
 
 import com.speedment.code.TranslatorKey;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author Per Minborg
- * @param <T> Document type
+ * @author      Per Minborg
+ * @param <DOC> document type
+ * @param <T>   codegen main model
  */
-public final class TranslatorKeyImpl<T extends HasMainInterface> implements TranslatorKey<T> {
+public final class TranslatorKeyImpl<DOC extends HasMainInterface, T extends ClassOrInterface<T>> 
+        implements TranslatorKey<DOC, T> {
 
     private final String key;
+    private final Class<T> translatedType;
 
-    public TranslatorKeyImpl(String key) {
-        this.key = key;
+    public TranslatorKeyImpl(String key, Class<T> translatedType) {
+        this.key            = requireNonNull(key);
+        this.translatedType = requireNonNull(translatedType);
     }
 
     @Override
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public Class<T> getTranslatedType() {
+        return translatedType;
     }
 
     @Override

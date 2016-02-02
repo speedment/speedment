@@ -22,6 +22,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
@@ -31,12 +32,12 @@ import static java.util.Objects.requireNonNull;
  * The class contains many helper-functions to make the generation process
  * easier.
  *
- * @author pemi
- * @param <T> The Node type
+ * @author       pemi
+ * @param <DOC>  the document type
+ * @param <T>    the codegen model type
  */
-public interface JavaClassTranslator<T extends HasName & HasMainInterface> extends Translator<T, File> {
+public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> extends Translator<DOC, T> {
 
-    
     /**
      * Returns the alias of the current document formatted as a java variable.
      * <p>

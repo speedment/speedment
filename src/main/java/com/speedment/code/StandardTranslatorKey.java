@@ -20,6 +20,9 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.TranslatorKeyImpl;
+import com.speedment.internal.codegen.lang.models.Class;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import com.speedment.internal.codegen.lang.models.Interface;
 import java.util.stream.Stream;
 
 /**
@@ -30,20 +33,22 @@ import java.util.stream.Stream;
 @Api(version = "2.3")
 public final class StandardTranslatorKey {
 
-    public final static TranslatorKey<Project> 
-        SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication"),
-        SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata");
+    public final static TranslatorKey<Project, Class> 
+        SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication", Class.class),
+        SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata", Class.class);
     
-    public final static TranslatorKey<Table> 
-        ENTITY = new TranslatorKeyImpl<>("Entity"),
-        ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl"),
-        MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl");
+    public final static TranslatorKey<Table, Interface> 
+        ENTITY = new TranslatorKeyImpl<>("Entity", Interface.class);
+    
+    public final static TranslatorKey<Table, Class>
+        ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl", Class.class),
+        MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl", Class.class);
 
-    public static Stream<TranslatorKey<Project>> projectTranslatorKeys() {
+    public static Stream<TranslatorKey<Project, Class>> projectTranslatorKeys() {
         return Stream.of(SPEEDMENT_APPLICATION, SPEEDMENT_APPLICATION_METADATA);
     }
     
-    public static Stream<TranslatorKey<Table>> tableTranslatorKeys() {
+    public static Stream<TranslatorKey<Table, ? extends ClassOrInterface<?>>> tableTranslatorKeys() {
         return Stream.of(ENTITY, ENTITY_IMPL, MANAGER_IMPL);
     }
 

@@ -27,15 +27,16 @@ import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.config.db.Table;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  *
- * @author pemi
- * @param <T> Type of item to generate
+ * @author     pemi
+ * @param <T>  type of model to translate into
  */
 public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
 
-    public class ClassType {
+    public final class ClassType {
 
         private ClassType(String typeName, String implTypeName) {
             requireNonNull(typeName);
@@ -80,8 +81,8 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
             genericOfEntity = Generic.of().add(entity.getType()),
             genericOfManager = Generic.of().add(manager.getType());
 
-    protected EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    protected EntityAndManagerTranslator(Speedment speedment, Generator gen, Table doc, Function<String, T> modelConstructor) {
+        super(speedment, gen, doc, modelConstructor);
     }
 
     protected Type typeOfPK() {
@@ -89,7 +90,6 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
 
         if (pks == 0) {
             return DefaultType.list(DefaultType.WILDCARD);
-            //throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
 
         final Class<?> first = primaryKeyColumns().findFirst().get().findColumn().get().findTypeMapper().getJavaType();
