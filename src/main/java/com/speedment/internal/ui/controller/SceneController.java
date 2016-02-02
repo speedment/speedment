@@ -57,7 +57,7 @@ public final class SceneController implements Initializable {
             top.getChildren().add(MenubarController.create(session));
             top.getChildren().add(ToolbarController.create(session));
             horizontal.getItems().add(0, ProjectTreeController.create(session));
-            horizontal.getItems().add(2, PreviewController.create(session));
+//            horizontal.getItems().add(2, PreviewController.create(session));
             vertical.getItems().add(WorkspaceController.create(session));
             vertical.getItems().add(OutputController.create(session));
             
