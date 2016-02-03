@@ -123,7 +123,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
                 file.add(Import.of(ref.implType));
                 i.add(Field.of(javaLanguageNamer().javaStaticFieldName(c.getName()), ref.type)
-                    .public_().final_().static_()
+                    .private_().final_().static_()
                     .set(new ReferenceValue(
                         "new " + shortName(ref.implType.getName())
                         + "<>(\""

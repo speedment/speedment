@@ -52,7 +52,9 @@ public interface Component extends Lifecyclable<Component> {
      */
     License getLicense();
 
-    String getTitle();
+    default String getTitle() {
+        return getComponentClass().getSimpleName();
+    }
 
     String getVersion();
 }
