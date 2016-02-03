@@ -115,27 +115,25 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new StringPropertyItem(
-                    nameProperty(), 
-                    "Project Name", 
-                    "The name that should be used for this project."
-                ),
-                new DefaultStringPropertyItem(
-                    packageNameProperty(),
-                    new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
-                    "Package Name",
-                    "The name of the package to place all generated files in. This should be a fully qualified java package name."
-                ),
-                new DefaultStringPropertyItem(
-                    packageLocationProperty(),
-                    new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
-                    "Package Location",
-                    "The folder to store all generated files in. This should be a relative name from the working directory."
-                )
+        return Stream.of(
+            new StringPropertyItem(
+                nameProperty(), 
+                "Project Name", 
+                "The name that should be used for this project."
+            ),
+            new DefaultStringPropertyItem(
+                packageNameProperty(),
+                new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
+                "Package Name",
+                "The name of the package to place all generated files in. This should be a fully qualified java package name."
+            ),
+            new DefaultStringPropertyItem(
+                packageLocationProperty(),
+                new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
+                "Package Location",
+                "The folder to store all generated files in. This should be a relative name from the working directory."
             )
-        ).flatMap(s -> s);
+        );
     }
     
     @Override
