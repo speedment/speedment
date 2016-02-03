@@ -112,7 +112,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     //.add("return " + managerTypeName(fu.getTable()) + ".get()")
                     .add("return " + MANAGER_OF_METHOD + "(" + typeName(fu.getTable()) + ".class)")
                     //.add("        .stream().filter(" + variableName(fu.getTable()) + " -> Objects.equals(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "(), " + variableName(fu.getTable()) + "." + GETTER_METHOD_PREFIX + typeName(fu.getColumn()) + "()));");
-                    .add("        .stream().filter(" + typeName(fu.getTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getColumn().getName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
+                    .add("        .stream().filter(" + typeName(fu.getTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getColumn().getJavaName()) + ".equal(this." + GETTER_METHOD_PREFIX + typeName(fu.getForeignColumn()) + "()));");
                 i.add(method);
             })
             .forEveryForeignKey((i, fk) -> {
@@ -135,7 +135,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                         .add(indent(//".flatMap(" + varName + " -> " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
 
                             ".flatMap(" + varName + " -> " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).findAny("
-                            + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getName()) + ", " + varName + "));"
+                            + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", " + varName + "));"
                         //                                        ".flatMap(" + varName + " -> " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).stream()\n" + indent(
                         //                                                ".filter(" + typeName(fu.getForeignTable()) + "." + JavaLanguage.javaStaticFieldName(fu.getForeignColumn().getName()) + ".equal(" + varName + "))\n"
                         //                                                + ".findAny()"
@@ -146,7 +146,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
                     //method.add("return " + fu.getForeignEmt().MANAGER.getName() + ".get().stream()\n" + indent(
 
                     method.add("return " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().typeName() + ".class).findAny("
-                        + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getName()) + ", get" + typeName(fu.getColumn()) + "())\n"
+                        + typeName(fu.getForeignTable()) + "." + javaLanguageNamer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", get" + typeName(fu.getColumn()) + "())\n"
                         + indent(".orElseThrow(() -> new SpeedmentException(\n" + indent(
                             "\"Foreign key constraint error. " + typeName(fu.getForeignTable()) + " is set to \" + get" + typeName(fu.getColumn()) + "()\n"
                         ) + "));\n"

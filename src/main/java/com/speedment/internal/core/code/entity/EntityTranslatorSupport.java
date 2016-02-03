@@ -80,7 +80,7 @@ public final class EntityTranslatorSupport {
 
         return Type.of(project.getPackageName().toLowerCase() + DOT
             + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
-            + javaLanguageNamer.javaTypeName(table.getName())
+            + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }
 
@@ -186,7 +186,7 @@ public final class EntityTranslatorSupport {
 
     public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(table);
-        return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getName()), javaLanguageNamer);
+        return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getJavaName()), javaLanguageNamer);
     }
 
     public static Method toJson() {

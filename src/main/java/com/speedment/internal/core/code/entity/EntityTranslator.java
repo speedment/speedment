@@ -106,7 +106,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
                     finder = EntityTranslatorSupport.getForeignKey(table(), c)
                         .map(fkc -> {
                             return ", fk -> fk.find"
-                                + javaLanguageNamer().javaTypeName(c.getName())
+                                + javaLanguageNamer().javaTypeName(c.getJavaName())
                                 + "().orElse(null)";
                         }).orElse("");
                 } else {
@@ -115,19 +115,19 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
                         .map(fkc -> {
                             return ", "
                                 + shortEntityName + "::find"
-                                + javaLanguageNamer().javaTypeName(c.getName());
+                                + javaLanguageNamer().javaTypeName(c.getJavaName());
 
                         }).orElse("");
                 }
                 final String setter = ", " + shortEntityName + "::set" + typeName(c);
 
                 file.add(Import.of(ref.implType));
-                i.add(Field.of(javaLanguageNamer().javaStaticFieldName(c.getName()), ref.type)
+                i.add(Field.of(javaLanguageNamer().javaStaticFieldName(c.getJavaName()), ref.type)
                     .public_().final_().static_()
                     .set(new ReferenceValue(
                         "new " + shortName(ref.implType.getName())
                         + "<>(\""
-                        + c.getName()
+                        + c.getJavaName()
                         + "\", "
                         + getter
                         + setter
