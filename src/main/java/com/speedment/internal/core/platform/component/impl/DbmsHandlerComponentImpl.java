@@ -77,7 +77,9 @@ public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent imp
 
     @Override
     public Stream<DbmsType> supportedDbmsTypes() {
-        return dbmsTypes.values().stream();
+        return dbmsTypes.values().stream()
+            .filter(DbmsType::isSupported);
+            
     }
 
     @Override

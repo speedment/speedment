@@ -40,7 +40,6 @@ public abstract class AbstractDbmsType implements DbmsType {
     private final int defaultPort;
     private final String schemaTableDelimiter;
     private final String dbmsNameMeaning;
-    private final String defaultDbmsName;
     private final String driverName;
     private final String defaultConnectorParameters;
     private final String jdbcConnectorName;
@@ -58,7 +57,6 @@ public abstract class AbstractDbmsType implements DbmsType {
         int defaultPort,
         String schemaTableDelimiter,
         String dbmsNameMeaning,
-        String defaultDbmsName,
         String driverName,
         String defaultConnectorParameters,
         String jdbcConnectorName,
@@ -75,7 +73,6 @@ public abstract class AbstractDbmsType implements DbmsType {
         this.defaultPort = defaultPort;
         this.schemaTableDelimiter = requireNonNull(schemaTableDelimiter);
         this.dbmsNameMeaning = requireNonNull(dbmsNameMeaning);
-        this.defaultDbmsName = defaultDbmsName;
         this.driverName = requireNonNull(driverName);
         this.defaultConnectorParameters = defaultConnectorParameters; // Nullable
         this.jdbcConnectorName = requireNonNull(jdbcConnectorName);
@@ -165,7 +162,17 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return true;
+        try {
+            Class.forName(
+                getDriverName(), 
+                false, 
+                DbmsType.class.getClassLoader()
+            );
+            
+            return true;
+        } catch (final ClassNotFoundException ex) {
+            return false;
+        }
     }
 
     private String escapeIfQuote(String item, boolean isWithinQuotes) {

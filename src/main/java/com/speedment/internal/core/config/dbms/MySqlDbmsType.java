@@ -59,22 +59,21 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     public MySqlDbmsType() {
 
         super(
-                "MySQL",
-                "MySQL-AB JDBC Driver",
-                3306,
-                ".",
-                "Just a name",
-                "db0",
-                "com.mysql.jdbc.Driver",
-                unwrap(DEFAULT_CONNECTOR_PARAMS),
-                JDBC_CONNECTOR_NAME,
-                QUOTE,
-                QUOTE,
-                Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
-                DBMS_MAPPER,
-                RESULTSET_TABLE_SCHEMA,
-                CONNECTION_URL_GENERATOR,
-                Collections.emptySet()
+            "MySQL",
+            "MySQL-AB JDBC Driver",
+            3306,
+            ".",
+            "Just a name",
+            "com.mysql.jdbc.Driver",
+            unwrap(DEFAULT_CONNECTOR_PARAMS),
+            JDBC_CONNECTOR_NAME,
+            QUOTE,
+            QUOTE,
+            Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
+            DBMS_MAPPER,
+            RESULTSET_TABLE_SCHEMA,
+            CONNECTION_URL_GENERATOR,
+            Collections.emptySet()
         );
     }
 

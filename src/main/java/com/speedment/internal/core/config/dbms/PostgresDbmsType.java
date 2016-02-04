@@ -58,22 +58,21 @@ public final class PostgresDbmsType extends AbstractDbmsType {
     public PostgresDbmsType() {
 
         super(
-                "PostgreSQL",
-                "PostgreSQL JDBC Driver",
-                5432,
-                ".",
-                "Database name",
-                "db0",
-                "org.postgresql.Driver",
-                unwrap(DEFAULT_CONNECTOR_PARAMS),
-                JDBC_CONNECTOR_NAME,
-                QUOTE,
-                QUOTE,
-                Stream.of("pg_catalog", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
-                DBMS_MAPPER,
-                RESULTSET_TABLE_SCHEMA,
-                CONNECTION_URL_GENERATOR,
-                DATA_TYPES
+            "PostgreSQL",
+            "PostgreSQL JDBC Driver",
+            5432,
+            ".",
+            "Database name",
+            "org.postgresql.Driver",
+            unwrap(DEFAULT_CONNECTOR_PARAMS),
+            JDBC_CONNECTOR_NAME,
+            QUOTE,
+            QUOTE,
+            Stream.of("pg_catalog", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
+            DBMS_MAPPER,
+            RESULTSET_TABLE_SCHEMA,
+            CONNECTION_URL_GENERATOR,
+            DATA_TYPES
         );
     }
 

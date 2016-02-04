@@ -77,14 +77,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
         return Stream.of(
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new BooleanPropertyItem(
-                    defaultSchemaProperty(),       
-                    "Is Default Schema",
-                    "If this is the default schema that should be used if none other is specified."
-                )
-            )
+            HasAliasProperty.super.getUiVisibleProperties(speedment)
         ).flatMap(s -> s);
     }
     

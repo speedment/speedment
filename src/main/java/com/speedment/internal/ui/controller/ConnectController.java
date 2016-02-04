@@ -137,7 +137,28 @@ public final class ConnectController implements Initializable {
         fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
         fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
         fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
-        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", StandardDbmsType.defaultType().getName()));
+        
+        try {
+            fieldType.getSelectionModel().select(
+                Settings.inst().get(
+                    "last_known_dbtype", 
+                    getDbmsTypes()
+                        .map(DbmsType::getName)
+                        .findFirst()
+                        .orElseThrow(() -> new SpeedmentException(
+                            "Could not find any installed JDBC drivers. Make sure to" +
+                            "include at least one JDBC driver as a dependency in the " +
+                            "projects pom.xml-file."
+                        ))
+                )
+            );
+        } catch (final SpeedmentException ex) {
+            session.showError("Couldn't find any installed JDBC drivers", 
+                ex.getMessage(), ex
+            );
+            
+            throw ex;
+        }
 
         dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());

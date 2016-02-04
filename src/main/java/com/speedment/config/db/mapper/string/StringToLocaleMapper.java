@@ -51,5 +51,4 @@ public class StringToLocaleMapper implements TypeMapper<String, Locale> {
     public boolean isIdentityMapper() {
         return false;
     }
-
 }

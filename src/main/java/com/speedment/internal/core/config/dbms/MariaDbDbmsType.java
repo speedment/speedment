@@ -16,21 +16,20 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
-import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import java.util.Collections;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -56,22 +55,21 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     public MariaDbDbmsType() {
 
         super(
-                "MariaDB",
-                "MariaDB JDBC Driver",
-                3305,
-                ".",
-                "Just a name",
-                "db0",
-                "com.mysql.jdbc.Driver",
-                unwrap(DEFAULT_CONNECTOR_PARAMS),
-                JDBC_CONNECTOR_NAME,
-                QUOTE,
-                QUOTE,
-                Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
-                DBMS_MAPPER,
-                RESULTSET_TABLE_SCHEMA,
-                CONNECTION_URL_GENERATOR,
-                Collections.emptySet()
+            "MariaDB",
+            "MariaDB JDBC Driver",
+            3305,
+            ".",
+            "Just a name",
+            "com.mysql.jdbc.Driver",
+            unwrap(DEFAULT_CONNECTOR_PARAMS),
+            JDBC_CONNECTOR_NAME,
+            QUOTE,
+            QUOTE,
+            Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
+            DBMS_MAPPER,
+            RESULTSET_TABLE_SCHEMA,
+            CONNECTION_URL_GENERATOR,
+            Collections.emptySet()
         );
     }
     private static final MySqlSpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
