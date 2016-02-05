@@ -51,7 +51,7 @@ public class MemoryProbe {
 
     
     public MemoryProbe deltaSinceCreated() {
-        return substract(new MemoryProbe());
+        return new MemoryProbe().substract(this);
     }
     
     public static MemoryProbe create() {
