@@ -34,7 +34,7 @@ public final class MetadataUtil {
                 final StringBuilder sb = new StringBuilder();
                 sb.append("sql = ").append(sql.getQuery()).append("\n");
                 sb.append("params = ").append(sql.getParameters()).append("\n");
-                sb.append("thowable = ").append(sql.getThrowable()
+                sb.append("throwable = ").append(sql.getThrowable()
                     .map(t -> t.getMessage())
                     .orElse("")).append("\n");
                 consumer.accept(sb.toString());
