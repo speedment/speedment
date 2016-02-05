@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
 
@@ -27,18 +28,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="title" styleClass="header" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
+        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Speedment" textAlignment="CENTER" />
         <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Components" />
-        <TreeView fx:id="tree"/>
-            
-        <ScrollPane id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" >
-            <content>
-                <Label fx:id="info" alignment="CENTER"  text="a" wrapText="true" />
-                <!--                <Label fx:id="info" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />-->
-            </content>
-        </ScrollPane>
+        <TreeView fx:id="tree" VBox.vgrow="ALWAYS" />
         <HBox alignment="CENTER_RIGHT">
             <children>
                 <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">

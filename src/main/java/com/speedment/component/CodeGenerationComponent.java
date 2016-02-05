@@ -28,7 +28,7 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import java.util.stream.Stream;
 import com.speedment.internal.util.JavaLanguageNamer;
-import java.util.Map.Entry;
+import com.speedment.stream.MapStream;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -203,5 +203,5 @@ public interface CodeGenerationComponent extends Component {
 
     void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
 
-    Stream<Entry<Class<? extends HasMainInterface>, Set<String>>> stream();
+    MapStream<Class<? extends HasMainInterface>, Set<String>> stream();
 }

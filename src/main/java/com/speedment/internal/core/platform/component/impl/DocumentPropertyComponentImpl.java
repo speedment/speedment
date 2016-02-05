@@ -37,15 +37,18 @@ import com.speedment.internal.ui.config.PrimaryKeyColumnProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
+import com.speedment.license.Software;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DocumentPropertyComponentImpl extends Apache2AbstractComponent implements DocumentPropertyComponent {
+public final class DocumentPropertyComponentImpl extends InternalOpenSourceComponent implements DocumentPropertyComponent {
     
     private final Branch root;
     
@@ -86,6 +89,11 @@ public final class DocumentPropertyComponentImpl extends Apache2AbstractComponen
     @Override
     public Constructor<?> getConstructor(String... keyPath) {
         return root.find(keyPath).get();
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
     
     private final static class Branch {

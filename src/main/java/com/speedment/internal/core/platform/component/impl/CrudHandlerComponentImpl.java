@@ -24,15 +24,17 @@ import com.speedment.db.crud.Result;
 import com.speedment.db.crud.Update;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.CrudHandlerComponent;
+import com.speedment.license.Software;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class CrudHandlerComponentImpl extends Apache2AbstractComponent implements CrudHandlerComponent {
+public final class CrudHandlerComponentImpl extends InternalOpenSourceComponent implements CrudHandlerComponent {
 
     private CreateMethod creator;
     private UpdateMethod updater;
@@ -94,5 +96,10 @@ public final class CrudHandlerComponentImpl extends Apache2AbstractComponent imp
             requireNonNull(operation),
             requireNonNull(mapper)
         );
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

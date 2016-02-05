@@ -21,18 +21,18 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.ManagerComponent;
+import com.speedment.license.Software;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ManagerComponentImpl extends Apache2AbstractComponent implements ManagerComponent {
+public final class ManagerComponentImpl extends InternalOpenSourceComponent implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?>> managersByEntity;
     private final Map<Table, Manager<?>> tableMap;
@@ -74,4 +74,8 @@ public final class ManagerComponentImpl extends Apache2AbstractComponent impleme
         return (Manager<ENTITY>) tableMap.get(table);
     }
 
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
 }

@@ -43,13 +43,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.license.Software;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
-public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
+public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
     private Generator generator;
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
@@ -151,9 +152,9 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
     Translator<DOC, T> findTranslator(DOC document, Class<T> modelType, String key) {
         return translators(document, key::equals)
-                .findAny()
-                .map(translator -> (Translator<DOC, T>) translator)
-                .orElseThrow(noTranslatorFound(document, key));
+            .findAny()
+            .map(translator -> (Translator<DOC, T>) translator)
+            .orElseThrow(noTranslatorFound(document, key));
     }
 
     @SuppressWarnings("unchecked")
@@ -161,11 +162,11 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     Stream<? extends Translator<DOC, ?>> translators(DOC document, Predicate<String> nameFilter) {
 
         return MapStream.of(map)
-                .filterKey(c -> c.isInstance(document))
-                .values()
-                .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
-                .map(s -> (TranslatorSettings<DOC, ?>) s)
-                .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
+            .filterKey(c -> c.isInstance(document))
+            .values()
+            .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
+            .map(s -> (TranslatorSettings<DOC, ?>) s)
+            .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
     }
 
     @Override
@@ -179,17 +180,21 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
     }
 
     @Override
-    public Stream<Map.Entry<Class<? extends HasMainInterface>, Set<String>>> stream() {
+    public MapStream<Class<? extends HasMainInterface>, Set<String>> stream() {
         return MapStream.of(map)
-                .mapValue(Map::keySet)
-                .toMap().entrySet().stream();
+            .mapValue(Map::keySet);
+    }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 
     private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
         return () -> new SpeedmentException(
-                "Found no translator with key '"
-                + key + "' for document '"
-                + doc.mainInterface().getSimpleName() + "'."
+            "Found no translator with key '"
+            + key + "' for document '"
+            + doc.mainInterface().getSimpleName() + "'."
         );
     }
 }

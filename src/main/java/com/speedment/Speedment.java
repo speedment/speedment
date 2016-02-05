@@ -28,7 +28,6 @@ import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
-import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
@@ -73,7 +72,6 @@ public interface Speedment {
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.component.PasswordComponent PasswordComponent}</li>
-     * <li>{@link com.speedment.component.PluginComponent PluginComponent}</li>
      * <li>{@link com.speedment.component.UserInterfaceComponent UserInterfaceComponent}</li>
      * 
      * </ul>
@@ -176,10 +174,6 @@ public interface Speedment {
 
     default TypeMapperComponent getTypeMapperComponent() {
         return get(TypeMapperComponent.class);
-    }
-    
-    default PluginComponent getPluginComponent() {
-        return get(PluginComponent.class);
     }
     
     default EventComponent getEventComponent() {

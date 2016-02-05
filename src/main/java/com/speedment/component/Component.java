@@ -16,43 +16,48 @@
  */
 package com.speedment.component;
 
-import com.speedment.License;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.license.Software;
 
 /**
  * A Component represents the basic functionality for a Speedment Platform
  * Component.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Component extends Lifecyclable<Component> {
 
     /**
      * Returns the Component interface Class this Component implements.
      *
-     * @return the Component interface Class this Component implements
+     * @return the interface class
      */
     Class<? extends Component> getComponentClass();
 
     /**
      * Returns the Speedment platform.
      *
-     * @return the Returns the Speedment platform
+     * @return the Speedment platform
      */
     Speedment getSpeedment();
 
     /**
-     * Returns the license for this Components.
+     * Returns informaion about this components title, version, license and any
+     * dependencies on third-party software that it may have.
      *
-     * @return the license for this Components
+     * @return the software information of this component
      */
-    License getLicense();
-
-    String getTitle();
-
-    String getVersion();
+    Software asSoftware();
+    
+    /**
+     * Returns if this componenet is part of core Speedment or not.
+     * 
+     * @return  {@code true} if this is an internal component
+     */
+    boolean isInternal();
 }

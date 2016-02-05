@@ -19,7 +19,10 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.license.OpenSourceLicense;
+import com.speedment.internal.license.AbstractSoftware;
 import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.List;
@@ -28,6 +31,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -39,12 +43,18 @@ import static javafx.collections.FXCollections.observableArrayList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static javafx.collections.FXCollections.observableArrayList;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static javafx.collections.FXCollections.observableArrayList;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class UserInterfaceComponentImpl extends Apache2AbstractComponent implements UserInterfaceComponent {
+public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
     
     private final static String DEFAULT_STYLESHEET = "/css/speedment.css";
     
@@ -126,4 +136,15 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     public void setStylesheetFile(String filename) {
         this.stylesheet.setValue(filename);
     }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.of(DEPENDENCIES);
+    }
+    
+    private final static Software[] DEPENDENCIES = {
+        AbstractSoftware.with("Silk",          "1.3",     OpenSourceLicense.CC_BY_2_5),
+        AbstractSoftware.with("ControlsFX",    "8.40.10", OpenSourceLicense.BSD_3_CLAUSE),
+        AbstractSoftware.with("FontawesomeFX", "8.8",     OpenSourceLicense.APACHE_2),
+    };
 }

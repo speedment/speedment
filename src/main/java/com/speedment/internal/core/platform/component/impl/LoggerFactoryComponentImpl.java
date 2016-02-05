@@ -20,9 +20,11 @@ import com.speedment.Speedment;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.internal.logging.LoggerFactory;
 import com.speedment.internal.logging.impl.SystemOutLoggerFactory;
+import com.speedment.license.Software;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-public final class LoggerFactoryComponentImpl extends Apache2AbstractComponent implements LoggerFactoryComponent {
+public final class LoggerFactoryComponentImpl extends InternalOpenSourceComponent implements LoggerFactoryComponent {
 
     private LoggerFactory loggerFactory;
 
@@ -39,5 +41,10 @@ public final class LoggerFactoryComponentImpl extends Apache2AbstractComponent i
     @Override
     public void setLoggerFactory(LoggerFactory loggerFactory) {
         this.loggerFactory = Objects.requireNonNull(loggerFactory);
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

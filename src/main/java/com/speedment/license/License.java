@@ -14,17 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment;
+package com.speedment.license;
 
 import com.speedment.annotation.Api;
+import java.net.URL;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 /**
  * Trait used to separate open source from commercial components.
  *
- * @author pemi
+ * @author     Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface License {
+    
+    final Comparator<License> COMPARATOR = 
+        Comparator.comparing(License::isCommercial)
+            .thenComparing(License::getName);
+    
+    enum Commercial {
+        PROPRIETARY,
+        OPEN_SOURCE
+    }
 
     /**
      * Returns the license name.
@@ -32,12 +44,18 @@ public interface License {
      * @return the license name
      */
     String getName();
+    
+    /**
+     * Returns an array of external sources for this license.
+     * 
+     * @return  the license file URLs
+     */
+    Stream<URL> getSources();
 
     /**
      * Returns if this is a commercial license.
      *
      * @return if this is a commercial license`
      */
-    boolean isCommercial();
-
+    Commercial isCommercial();
 }

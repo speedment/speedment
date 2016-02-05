@@ -23,17 +23,19 @@ import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.license.Software;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent implements DbmsHandlerComponent {
+public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
     private final Map<Dbms, DbmsHandler> map;
@@ -88,5 +90,10 @@ public final class DbmsHandlerComponentImpl extends Apache2AbstractComponent imp
         return Optional.ofNullable(
             dbmsTypes.get(dbmsTypeName)
         );
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

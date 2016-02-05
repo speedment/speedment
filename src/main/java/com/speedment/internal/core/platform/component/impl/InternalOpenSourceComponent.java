@@ -17,38 +17,53 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Project;
-import com.speedment.component.ProjectComponent;
+import com.speedment.SpeedmentVersion;
 import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.license.License;
 import com.speedment.license.Software;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
-public final class ProjectComponentImpl extends InternalOpenSourceComponent implements ProjectComponent {
+/**
+ *
+ * @author Emil Forslund
+ */
+abstract class InternalOpenSourceComponent extends AbstractComponent {
 
-    private Project project;
-
-    public ProjectComponentImpl(Speedment speedment) {
+    public InternalOpenSourceComponent(Speedment speedment) {
         super(speedment);
     }
-
+    
     @Override
-    public Project getProject() {
-        return project;
-    }
-
-    @Override
-    public void setProject(Project project) {
-        this.project = requireNonNull(project);
+    public final boolean isInternal() {
+        return true;
     }
     
     @Override
-    public Stream<Software> getDependencies() {
-        return Stream.of(DEPENDENCIES);
+    public final Software asSoftware() {
+        return info;
     }
     
-    private final static Software[] DEPENDENCIES = {
-        AbstractSoftware.with("Gson", "2.5", OpenSourceLicense.APACHE_2)
-    };
+    protected String getTitle() {
+        return getClass().getSimpleName();
+    }
+    
+    protected String getVersion() {
+        return SpeedmentVersion.getImplementationVersion();
+    }
+    
+    protected License getLicense() {
+        return OpenSourceLicense.APACHE_2;
+    }
+    
+    protected Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+    
+    private final transient Software info = AbstractSoftware.with(
+        getTitle(),
+        getVersion(),
+        getLicense(),
+        getDependencies().toArray(Software[]::new)
+    );
 }

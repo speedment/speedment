@@ -17,6 +17,8 @@
 package com.speedment.config.db.mapper;
 
 import com.speedment.annotation.Api;
+import java.util.Comparator;
+import static java.util.Comparator.comparing;
 
 /**
  *
@@ -27,6 +29,10 @@ import com.speedment.annotation.Api;
  */
 @Api(version = "2.2")
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
+    
+    final Comparator<TypeMapper<?, ?>> COMPARATOR = 
+        comparing(TypeMapper<?, ?>::getDatabaseType, comparing(Class<?>::getSimpleName))
+            .thenComparing(TypeMapper::getLabel);
 
     /**
      * Returns the label for this mapper that should appear to the end user.

@@ -31,7 +31,6 @@ import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.component.LoggerFactoryComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
-import com.speedment.component.PluginComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.component.SqlTypeMapperComponent;
@@ -51,7 +50,6 @@ import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponen
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
-import com.speedment.internal.core.platform.component.impl.PluginComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
@@ -80,7 +78,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private ConnectionPoolComponent connectionPoolComponent;
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
-    private PluginComponent pluginComponent;
     private EventComponent eventComponent;
     private UserInterfaceComponent userInterfaceComponent;
     private PasswordComponent passwordComponent;
@@ -99,7 +96,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
-        put(PluginComponentImpl::new);
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
         put(PasswordComponentImpl::new);
@@ -158,9 +154,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         if (item instanceof TypeMapperComponent) {
             typeMapperComponent = castOrFail(item, TypeMapperComponent.class);
         }
-        if (item instanceof PluginComponent) {
-            pluginComponent = castOrFail(item, PluginComponent.class);
-        }
         if (item instanceof EventComponent) {
             eventComponent = castOrFail(item, EventComponent.class);
         }
@@ -192,11 +185,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public void stop() {
         // do nothing yet!
-    }
-
-    @Override
-    public String toString() {
-        return SpeedmentImpl.class.getSimpleName() + " " + components().map(c -> c.getTitle() + "-" + c.getVersion()).collect(joining(", ", "[", "]"));
     }
 
     public void setUnmodifiable() {
@@ -259,11 +247,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     }
 
     @Override
-    public PluginComponent getPluginComponent() {
-        return pluginComponent;
-    }
-
-    @Override
     public EventComponent getEventComponent() {
         return eventComponent;
     }
@@ -298,6 +281,15 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
                 .forEach(lifecycle::with);
 
         return lifecycle.build();
+    }
+    
+    @Override
+    public String toString() {
+        return SpeedmentImpl.class.getSimpleName() + " " + 
+            components()
+                .map(Component::asSoftware)
+                .map(s -> s.getName() + "-" + s.getVersion())
+                .collect(joining(", ", "[", "]"));
     }
 
     private ComponentConstructor componentConstructor(Component component) {

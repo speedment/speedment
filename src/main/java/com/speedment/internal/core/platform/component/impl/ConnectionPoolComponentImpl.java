@@ -22,6 +22,7 @@ import com.speedment.internal.core.pool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.license.Software;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -32,13 +33,15 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.
  *
  * @author pemi
  */
-public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implements ConnectionPoolComponent {
+public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent implements ConnectionPoolComponent {
 
     private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
@@ -201,4 +204,8 @@ public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implem
         return logger;
     }
 
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
 }

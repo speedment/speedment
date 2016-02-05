@@ -410,7 +410,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         requireNonNull(managerConsumer);
         final ManagerComponent mc = speedment.getManagerComponent();
         final List<Thread> threads = mc.stream()
-                .map(mgr -> new Thread(() -> managerConsumer.accept(mgr), mgr.getTable().getName()))
+                .map(mgr -> new Thread(() -> 
+                    managerConsumer.accept(mgr), 
+                    mgr.getTable().getName()
+                ))
                 .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);
@@ -419,7 +422,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void forEachComponentInSeparateThread(Consumer<Component> componentConsumer) {
         requireNonNull(componentConsumer);
         final List<Thread> threads = speedment.components()
-                .map(comp -> new Thread(() -> componentConsumer.accept(comp), comp.getTitle()))
+                .map(comp -> new Thread( // TODO: Change to ExecutorService
+                    () -> componentConsumer.accept(comp), 
+                    comp.asSoftware().getName()
+                ))
                 .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);

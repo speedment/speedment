@@ -627,7 +627,7 @@ public final class UISession {
         return on(event -> browse(GITHUB_URI));
     }
     
-    private void browse(String url) {
+    public void browse(String url) {
         application.getHostServices().showDocument(url);
     }
     

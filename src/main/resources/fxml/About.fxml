@@ -31,7 +31,8 @@
     <children>
         <Label fx:id="title" styleClass="header" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Speedment" textAlignment="CENTER" />
         <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />
-        <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license.\nIt includes software licensed as follows:\n\n" wrapText="true" />
+        <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Speedment is available under the Apache 2 license.
+It includes software licensed under the following terms:" wrapText="true" />
         <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />
         <HBox alignment="CENTER_RIGHT">
             <children>

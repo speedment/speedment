@@ -22,6 +22,8 @@ import com.speedment.config.db.Dbms;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
+import static com.speedment.stream.MapStream.comparing;
+import java.util.Comparator;
 
 import java.util.Optional;
 import java.util.Set;
@@ -38,6 +40,8 @@ import java.util.function.Function;
  */
 @Api(version = "2.2")
 public interface DbmsType {
+    
+    final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
 
     /**
      * Returns the non-null name for this {@code DbmsType}. For example MySQL or

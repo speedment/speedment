@@ -33,15 +33,15 @@ public abstract class AbstractComponent implements Component {
     public AbstractComponent(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
     }
-
+    
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+    
     @Override
     public Speedment getSpeedment() {
         return speedment;
-    }
-
-    @Override
-    public String getTitle() {
-        return getClass().getSimpleName();
     }
     
     @Override
@@ -72,5 +72,4 @@ public abstract class AbstractComponent implements Component {
     public Lifecyclable.State getState() {
         return state;
     }
-
 }
