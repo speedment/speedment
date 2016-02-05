@@ -570,9 +570,8 @@ public final class UISession {
                 Do nothing. Creating the parent directory is purely for
                 the convenience of the user.
             */}
-            
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(defaultConfigLocation);
+            fileChooser.setInitialFileName(path.getFileName().toString());
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());
