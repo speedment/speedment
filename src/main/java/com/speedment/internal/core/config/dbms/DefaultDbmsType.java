@@ -23,6 +23,8 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import java.util.Collections;
+import static java.util.Collections.unmodifiableSet;
+import java.util.HashSet;
 
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -34,7 +36,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public class DefaultDbmsType implements DbmsType {
+public final class DefaultDbmsType implements DbmsType {
 
     private final String name;
     private final String driverManagerName;
@@ -52,7 +54,7 @@ public class DefaultDbmsType implements DbmsType {
     private final SpeedmentPredicateView speedmentPredicateView;
     private final String defaultDbmsName;
 
-    protected DefaultDbmsType(
+    private DefaultDbmsType(
             String name,
             String driverManagerName,
             int defaultPort,
@@ -78,12 +80,12 @@ public class DefaultDbmsType implements DbmsType {
         this.driverName = requireNonNull(driverName);
         this.fieldEncloserStart = requireNonNull(fieldEncloserStart);
         this.fieldEncloserEnd = requireNonNull(fieldEncloserEnd);
-        this.schemaExcludeSet = requireNonNull(schemaExcludeSet);
+        this.schemaExcludeSet = unmodifiableSet(new HashSet(requireNonNull(schemaExcludeSet))); // Defensive copy
         this.dbmsMapper = requireNonNull(dbmsMapper);
         this.resultSetTableSchema = requireNonNull(resultSetTableSchema);
         this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
-        this.dataTypes = dataTypes;
-        this.speedmentPredicateView = speedmentPredicateView;
+        this.dataTypes = unmodifiableSet(new HashSet(requireNonNull(dataTypes))); // Defensive copy
+        this.speedmentPredicateView = requireNonNull(speedmentPredicateView);
         this.defaultDbmsName = defaultDbmsName;
     }
 
@@ -197,6 +199,7 @@ public class DefaultDbmsType implements DbmsType {
         return dataTypes;
     }
 
+    @Override
     public SpeedmentPredicateView getSpeedmentPredicateView() {
         return speedmentPredicateView;
     }
@@ -260,74 +263,74 @@ public class DefaultDbmsType implements DbmsType {
 
         @Override
         public WithDriverName withDbmsNameMeaning(String nameMeaning) {
-            this.dbmsNameMeaning = nameMeaning;
+            this.dbmsNameMeaning = requireNonNull(nameMeaning);
             return this;
         }
 
         @Override
         public WithFieldEncloserStart withDriverName(String driverName) {
-            this.driverName = driverName;
+            this.driverName = requireNonNull(driverName);
             return this;
         }
 
         @Override
         public WithFieldEncloserEnd withFieldEncloserStart(String fieldEncloserStart) {
-            this.fieldEncloserStart = fieldEncloserStart;
+            this.fieldEncloserStart = requireNonNull(fieldEncloserStart);
             return this;
         }
 
         @Override
         public WithDbmsMapper withFieldEncloserEnd(String fieldEncloserEnd) {
-            this.fieldEncloserEnd = fieldEncloserEnd;
+            this.fieldEncloserEnd = requireNonNull(fieldEncloserEnd);
             return this;
         }
 
         @Override
         public WithConnectionUrlGenerator withDbmsMapper(BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper) {
-            this.dbmsMapper = dbmsMapper;
+            this.dbmsMapper = requireNonNull(dbmsMapper);
             return this;
         }
 
         @Override
         public WithSpeedmentPredicateView withConnectionUrlGenerator(Function<Dbms, String> connectionUrlGenerator) {
-            this.connectionUrlGenerator = connectionUrlGenerator;
+            this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
             return this;
         }
 
         @Override
         public Optionals withSpeedmentPredicateView(SpeedmentPredicateView speedmentPredicateView) {
-            this.speedmentPredicateView = speedmentPredicateView;
+            this.speedmentPredicateView = requireNonNull(speedmentPredicateView);
             return this;
         }
 
         /// Optionals
         @Override
         public Optionals withResultSetTableSchema(String resultSetTableSchema) {
-            this.resultSetTableSchema = resultSetTableSchema;
+            this.resultSetTableSchema = requireNonNull(resultSetTableSchema);
             return this;
         }
 
         @Override
         public Optionals withSchemaTableDelimiter(String schemaTableDelimiter) {
-            this.schemaTableDelimiter = schemaTableDelimiter;
+            this.schemaTableDelimiter = requireNonNull(schemaTableDelimiter);
             return this;
         }
 
         @Override
         public Optionals withSchemaExcludeSet(Set<String> schemaExcludeSet) {
-            this.schemaExcludeSet = schemaExcludeSet;
+            this.schemaExcludeSet = requireNonNull(schemaExcludeSet);
             return this;
         }
 
         @Override
         public Optionals withDataTypes(Set<SqlTypeInfo> dataTypes) {
-            this.dataTypes = dataTypes;
+            this.dataTypes = requireNonNull(dataTypes);
             return this;
         }
 
         @Override
         public Optionals withDefaultDbmsName(String defaultDbmsType) {
-            this.defaultDbmsName = defaultDbmsType;
+            this.defaultDbmsName = defaultDbmsType; // Nullable
             return this;
         }
 

@@ -435,6 +435,6 @@ public final class PostgresDbmsType {
                 new SqlTypeInfo("_pg_user_mappings", 2002, 0, 0, (short) 1, true),
                 new SqlTypeInfo("user_mapping_options", 2002, 0, 0, (short) 1, true),
                 new SqlTypeInfo("user_mappings", 2002, 0, 0, (short) 1, true))
-                .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+                .collect(toSet());
     }
 }
