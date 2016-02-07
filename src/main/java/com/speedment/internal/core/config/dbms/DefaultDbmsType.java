@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  *
@@ -135,8 +136,8 @@ public class DefaultDbmsType implements DbmsType {
     }
 
     @Override
-    public String getDefaultDbmsName() {
-        return defaultDbmsName;
+    public Optional<String> getDefaultDbmsName() {
+        return Optional.ofNullable(defaultDbmsName);
     }
 
     @Override
@@ -329,8 +330,7 @@ public class DefaultDbmsType implements DbmsType {
             this.defaultDbmsName = defaultDbmsType;
             return this;
         }
-        
-        
+
         @Override
         public DbmsType build() {
             return new DefaultDbmsType(
@@ -414,7 +414,7 @@ public class DefaultDbmsType implements DbmsType {
         Optionals withSchemaExcludeSet(Set<String> excludeSet);
 
         Optionals withDataTypes(Set<SqlTypeInfo> dataTypes);
-        
+
         Optionals withDefaultDbmsName(String defaultDbmsName);
 
         DbmsType build();
