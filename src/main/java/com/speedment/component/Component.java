@@ -47,7 +47,7 @@ public interface Component extends Lifecyclable<Component> {
     Speedment getSpeedment();
 
     /**
-     * Returns informaion about this components title, version, license and any
+     * Returns information about this components title, version, license and any
      * dependencies on third-party software that it may have.
      *
      * @return the software information of this component
@@ -55,7 +55,7 @@ public interface Component extends Lifecyclable<Component> {
     Software asSoftware();
     
     /**
-     * Returns if this componenet is part of core Speedment or not.
+     * Returns if this Component is part of core Speedment or not.
      * 
      * @return  {@code true} if this is an internal component
      */

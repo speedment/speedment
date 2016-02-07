@@ -30,10 +30,10 @@ import java.util.stream.Stream;
 public interface License {
     
     final Comparator<License> COMPARATOR = 
-        Comparator.comparing(License::isCommercial)
+        Comparator.comparing(License::getType)
             .thenComparing(License::getName);
     
-    enum Commercial {
+    enum Type {
         PROPRIETARY,
         OPEN_SOURCE
     }
@@ -53,9 +53,9 @@ public interface License {
     Stream<URL> getSources();
 
     /**
-     * Returns if this is a commercial license.
+     * Returns the license type.
      *
-     * @return if this is a commercial license`
+     * @return the license type
      */
-    Commercial isCommercial();
+    Type getType();
 }

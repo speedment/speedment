@@ -20,6 +20,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -29,14 +32,14 @@ public abstract class AbstractLicense implements License {
     
     private final String name;
     private final URL[] urls;
-    private final Commercial commercial;
+    private final Type commercial;
 
     public static License openSource(String name, String... sources) {
-        return new AbstractLicense(name, Commercial.OPEN_SOURCE, sources) {};
+        return new AbstractLicense(name, Type.OPEN_SOURCE, sources) {};
     }
     
     public static License proprietary(String name, String... sources) {
-        return new AbstractLicense(name, Commercial.PROPRIETARY, sources) {};
+        return new AbstractLicense(name, Type.PROPRIETARY, sources) {};
     }
     
     @Override
@@ -50,11 +53,11 @@ public abstract class AbstractLicense implements License {
     }
 
     @Override
-    public final Commercial isCommercial() {
+    public final Type getType() {
         return commercial;
     }
     
-    private AbstractLicense(String name, Commercial commercial, String... sources) {
+    private AbstractLicense(String name, Type commercial, String... sources) {
         this.name       = requireNonNull(name);
         this.commercial = requireNonNull(commercial);
         

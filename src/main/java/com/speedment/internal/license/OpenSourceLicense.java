@@ -21,6 +21,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -101,7 +104,7 @@ public enum OpenSourceLicense implements License {
     }
 
     @Override
-    public Commercial isCommercial() {
-        return Commercial.OPEN_SOURCE;
+    public Type getType() {
+        return Type.OPEN_SOURCE;
     }
 }

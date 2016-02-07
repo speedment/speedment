@@ -91,7 +91,7 @@ public interface DbmsType {
     *
     * @return the default dbms name
     */
-    String getDefaultDbmsName();
+    Optional<String> getDefaultDbmsName();
 
     /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
@@ -112,28 +112,28 @@ public interface DbmsType {
      */
     String getDriverName();
 
-    /**
-     * Returns a non-null String representation of the default connector
-     * parameters to be used by this {@code DbmsType}. The connector parameters
-     * can be used to select different modes or to set parameters for the JDBC
-     * connection.
-     *
-     * @return a non-null String representation of the default connector
-     * parameters
-     */
-    Optional<String> getDefaultConnectorParameters();
+//    /**
+//     * Returns a non-null String representation of the default connector
+//     * parameters to be used by this {@code DbmsType}. The connector parameters
+//     * can be used to select different modes or to set parameters for the JDBC
+//     * connection.
+//     *
+//     * @return a non-null String representation of the default connector
+//     * parameters
+//     */
+//    Optional<String> getDefaultConnectorParameters();
 
-    /**
-     * Returns the non-null JDBC connector name to be used by this
-     * {@code DbmsType}. The connector name is the name that is to be placed in
-     * the beginning of the JDBC connector string
-     * "jdbc:{jdbcConnectorName}://some_host". For example "mysql" or
-     * "oracle:thin".
-     *
-     * @return a non-null String representation of the default connector
-     * parameters
-     */
-    String getJdbcConnectorName();
+//    /**
+//     * Returns the non-null JDBC connector name to be used by this
+//     * {@code DbmsType}. The connector name is the name that is to be placed in
+//     * the beginning of the JDBC connector string
+//     * "jdbc:{jdbcConnectorName}://some_host". For example "mysql" or
+//     * "oracle:thin".
+//     *
+//     * @return a non-null String representation of the default connector
+//     * parameters
+//     */
+//    String getJdbcConnectorName();
 
     /**
      * Returns the non-null field encloser start string. The field encloser
