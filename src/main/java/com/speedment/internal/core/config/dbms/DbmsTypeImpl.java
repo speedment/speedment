@@ -29,14 +29,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class DefaultDbmsType implements DbmsType {
+public final class DbmsTypeImpl implements DbmsType {
 
     private final String name;
     private final String driverManagerName;
@@ -54,22 +54,22 @@ public final class DefaultDbmsType implements DbmsType {
     private final SpeedmentPredicateView speedmentPredicateView;
     private final String defaultDbmsName;
 
-    private DefaultDbmsType(
-            String name,
-            String driverManagerName,
-            int defaultPort,
-            String schemaTableDelimiter,
-            String dbmsNameMeaning,
-            String driverName,
-            String fieldEncloserStart,
-            String fieldEncloserEnd,
-            Set<String> schemaExcludeSet,
-            BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
-            String resultSetTableSchema,
-            Function<Dbms, String> connectionUrlGenerator,
-            Set<SqlTypeInfo> dataTypes,
-            SpeedmentPredicateView speedmentPredicateView,
-            String defaultDbmsName
+    private DbmsTypeImpl(
+            final String name,
+            final String driverManagerName,
+            final int defaultPort,
+            final String schemaTableDelimiter,
+            final String dbmsNameMeaning,
+            final String driverName,
+            final String fieldEncloserStart,
+            final String fieldEncloserEnd,
+            final Set<String> schemaExcludeSet,
+            final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
+            final String resultSetTableSchema,
+            final Function<Dbms, String> connectionUrlGenerator,
+            final Set<SqlTypeInfo> dataTypes,
+            final SpeedmentPredicateView speedmentPredicateView,
+            final String defaultDbmsName
     ) {
 
         this.name = requireNonNull(name);
@@ -336,7 +336,7 @@ public final class DefaultDbmsType implements DbmsType {
 
         @Override
         public DbmsType build() {
-            return new DefaultDbmsType(
+            return new DbmsTypeImpl(
                     name,
                     driverManagerName,
                     defaultPort,
@@ -360,51 +360,137 @@ public final class DefaultDbmsType implements DbmsType {
 
     public interface WithName {
 
+        /**
+         * Enters the the non-null name for this {@code DbmsType}. For example
+         * MySQL or Oracle
+         *
+         * @return a builder
+         */
         WithDriverManagerName withName(String name);
     }
 
     public interface WithDriverManagerName {
 
+        /**
+         * Enters the non-null Driver Manager Name for this {@code DbmsType}.
+         * For example "MySQL-AB JDBC Driver" or "Oracle JDBC Driver"
+         *
+         * @return a builder
+         */
         WithDefaultPort withDriverManagerName(String driverManagerName);
     }
 
     public interface WithDefaultPort {
 
+        /**
+         * Enters the default port for this {@code DbmsType}. For example 3306
+         * (MySQL) or 1521 (Oracle)
+         *
+         * @return the default port
+         */
         WithDbmsNameMeaning withDefaultPort(int port);
     }
 
     public interface WithDbmsNameMeaning {
 
+        /**
+         * Enters a textual representation of what the database name is used
+         * for. Some databases (notably MySQL) does not use the database name
+         * for anything whereas other (such as Oracle) are using the name as an
+         * address (i.e. for Oracle the name is used as SID)
+         *
+         * @return a builder
+         */
         WithDriverName withDbmsNameMeaning(String nameMeaning);
     }
 
     public interface WithDriverName {
 
+        /**
+         * Enters the non-null fully qualified JDBC class name for this
+         * {@code DbmsType}. For example "com.mysql.jdbc.Driver" or
+         * "oracle.jdbc.OracleDriver"
+         *
+         * @return a builder
+         */
         WithFieldEncloserStart withDriverName(String driverName);
     }
 
     public interface WithFieldEncloserStart {
 
+        /**
+         * Enters the non-null field encloser start string. The field encloser
+         * start string precedes a database entity name like a table or schema
+         * name when quoted. Quoted names are used to avoid that entity names
+         * collide with reserved keywords like "key" or "user". So a table named
+         * "user" in the "key" schema can be quoted to "key"."user". Examples of
+         * values are '`' for MySQL or '"' for Oracle.
+         *
+         * @return a builder
+         *
+         * @see DbmsType#getFieldEncloserStart(boolean)
+         * @see DbmsType#getFieldEncloserEnd()
+         * @see DbmsType#getFieldEncloserEnd(boolean)
+         */
         WithFieldEncloserEnd withFieldEncloserStart(String start);
     }
 
     public interface WithFieldEncloserEnd {
 
+        /**
+         * Enters the non-null field encloser end string. The field encloser end
+         * string follows a database entity name like a table or schema name
+         * when quoted. Quoted names are used to avoid that entity names collide
+         * with reserved keywords like "key" or "user". So a table named "user"
+         * in the "key" schema can be quoted to "key"."user". Examples of values
+         * are '`' for MySQL or '"' for Oracle.
+         *
+         * @return the non-null field encloser end string
+         *
+         * @see DbmsType#getFieldEncloserStart(boolean)
+         * @see DbmsType#getFieldEncloserEnd()
+         * @see DbmsType#getFieldEncloserEnd(boolean)
+         */
         WithDbmsMapper withFieldEncloserEnd(String end);
     }
 
     public interface WithDbmsMapper {
 
+        /**
+         * Enters the DbmsHandler constructor that are to be used with this
+         * database type. The DbmsHandler is responsible for communicating with
+         * the database in terms of meta data.
+         *
+         * @param mapper to use as constructor of new DbmsHandler instances for
+         * this database type.
+         * @return a builder
+         */
         WithConnectionUrlGenerator withDbmsMapper(BiFunction<Speedment, Dbms, DbmsHandler> mapper);
     }
 
     public interface WithConnectionUrlGenerator {
 
+        /**
+         * Enters the url connector string generator for this type of Dbms. The
+         * generator shall inspect a given Dbms and return a connector string
+         * suitable for that dbms type.
+         *
+         * @param generator to be used when constructing connector strings.
+         * @return a builder
+         */
         WithSpeedmentPredicateView withConnectionUrlGenerator(Function<Dbms, String> generator);
     }
 
     public interface WithSpeedmentPredicateView {
 
+        /**
+         * Enters the SpeedmentPredicateView that shall be used for this type of
+         * Dbms. A SpeedmentPredicateView translates Speedment predicates (e.g.
+         * used in .filter() statements) to actual SQL code.
+         *
+         * @param speedmentPredicateView to use for this Dbms type
+         * @return a builder
+         */
         Optionals withSpeedmentPredicateView(SpeedmentPredicateView speedmentPredicateView);
     }
 
@@ -412,14 +498,49 @@ public final class DefaultDbmsType implements DbmsType {
 
         Optionals withResultSetTableSchema(String resultSetTableSchema);
 
+        /**
+         * Enters the delimiter used between a Schema and a Table for this
+         * {@code DbmsType}. Most {@code DbmsType} are using a "." as a
+         * separator and this is the default value for this property.
+         *
+         * @return a builder
+         */
         Optionals withSchemaTableDelimiter(String delimiter);
 
+        /**
+         * Enters a non-null Set of Strings that represents schema names that
+         * are to be excluded when examining a Dbms for schemas. The set
+         * typically contains names for system tables and similar things. For
+         * example for MySQL, the schemas "MySQL" and "information_schema" are
+         * typically excluded.
+         *
+         * @return a builder
+         */
         Optionals withSchemaExcludeSet(Set<String> excludeSet);
 
+        /**
+         * Enters a non-null Set of database types. This method can be used for
+         * databases that have a slow meta data retrieval function or for
+         * databases that does not support meta data at all.
+         *
+         * @return a builder
+         */
         Optionals withDataTypes(Set<SqlTypeInfo> dataTypes);
 
+        /**
+         * Enters a default name for this {@code DbmsType}. For example ‘orcl'
+         * (Oracle)
+         *
+         * @return a builder
+         */
         Optionals withDefaultDbmsName(String defaultDbmsName);
 
+        /**
+         * Creates and returns a new DbmsType instance with the given
+         * parameters.
+         *
+         * @return a new DbmsType instance
+         */
         DbmsType build();
 
     }

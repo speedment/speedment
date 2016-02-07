@@ -38,6 +38,10 @@ import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 /**
  *
@@ -58,7 +62,7 @@ public final class MySqlDbmsType  {
 
     private static final SpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);    
     
-    public static final DbmsType INSTANCE = DefaultDbmsType.builder()
+    public static final DbmsType INSTANCE = DbmsType.builder()
             // Mandatory parameters
             .withName("MySQL")
             .withDriverManagerName("MySQL-AB JDBC Driver")

@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 import com.speedment.db.DbmsHandler;
+import com.speedment.internal.core.config.dbms.DbmsTypeImpl;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import static com.speedment.stream.MapStream.comparing;
@@ -40,7 +41,7 @@ import java.util.function.Function;
  */
 @Api(version = "2.2")
 public interface DbmsType {
-    
+
     final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
 
     /**
@@ -86,11 +87,11 @@ public interface DbmsType {
     String getDbmsNameMeaning();
 
     /**
-    * Returns the default name for this {@code DbmsType}. 
-    * For example ‘orcl' (Oracle)
-    *
-    * @return the default dbms name
-    */
+     * Returns the default name for this {@code DbmsType}. For example ‘orcl'
+     * (Oracle)
+     *
+     * @return the default dbms name
+     */
     Optional<String> getDefaultDbmsName();
 
     /**
@@ -122,7 +123,6 @@ public interface DbmsType {
 //     * parameters
 //     */
 //    Optional<String> getDefaultConnectorParameters();
-
 //    /**
 //     * Returns the non-null JDBC connector name to be used by this
 //     * {@code DbmsType}. The connector name is the name that is to be placed in
@@ -134,7 +134,6 @@ public interface DbmsType {
 //     * parameters
 //     */
 //    String getJdbcConnectorName();
-
     /**
      * Returns the non-null field encloser start string. The field encloser
      * start string precedes a database entity name like a table or schema name
@@ -225,7 +224,15 @@ public interface DbmsType {
     Function<Dbms, String> getConnectionUrlGenerator();
 
     SpeedmentPredicateView getSpeedmentPredicateView();
-    
+
     Set<SqlTypeInfo> getDataTypes();
+
+    public static DbmsTypeImpl.WithName builder() {
+        return DbmsTypeImpl.builder();
+    }
+
+    public static DbmsTypeImpl.WithDbmsNameMeaning builder(String name, String driverManagerName, int defaultPort) {
+        return builder().withName(name).withDriverManagerName(driverManagerName).withDefaultPort(defaultPort);
+    }
 
 }

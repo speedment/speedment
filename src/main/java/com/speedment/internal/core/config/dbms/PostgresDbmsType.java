@@ -50,7 +50,7 @@ public final class PostgresDbmsType {
 
     private static final SpeedmentPredicateView VIEW = new PostgresSpeedmentPredicateView(QUOTE, QUOTE);
 
-    public static final DbmsType INSTANCE = DefaultDbmsType.builder()
+    public static final DbmsType INSTANCE = DbmsType.builder()
             // Mandatory parameters
             .withName("PostgreSQL")
             .withDriverManagerName("PostgreSQL JDBC Driver")

@@ -43,7 +43,7 @@ public final class MariaDbDbmsType {
 
     private static final SpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
 
-    public static final DbmsType INSTANCE = DefaultDbmsType.builder()
+    public static final DbmsType INSTANCE = DbmsType.builder()
             // Mandatory parameters
             .withName("MariaDB")
             .withDriverManagerName("MariaDB JDBC Driver")
