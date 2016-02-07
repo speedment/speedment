@@ -16,32 +16,14 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
-import java.util.stream.Stream;
-
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 
 /**
  *
