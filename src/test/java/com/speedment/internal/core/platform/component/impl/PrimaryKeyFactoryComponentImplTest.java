@@ -123,7 +123,13 @@ public class PrimaryKeyFactoryComponentImplTest {
     }
 
     private void isImmutable(Runnable r) {
-        AssertUtil.assertThrown(r).isInstanceOf(UnsupportedOperationException.class).test();
+        try {
+            r.run();
+            fail("Did not throw an exception as expected");
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+        //AssertUtil.assertThrown(r).isInstanceOf(UnsupportedOperationException.class).test();
     }
 
 }
