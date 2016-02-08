@@ -17,6 +17,7 @@
 package com.speedment.config.db.parameters;
 
 import com.speedment.annotation.Api;
+import java.util.function.Supplier;
 
 /**
  *
@@ -24,5 +25,59 @@ import com.speedment.annotation.Api;
  */
 @Api(version = "2.2")
 public enum OrderType {
-    ASC, DESC, NONE;
+    ASC {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
+            return ascAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
+            return ascAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
+            ascAternative.run();
+        }
+
+    }, DESC {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
+            return descAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
+            return descAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
+            ascAternative.run();
+        }
+
+    }, NONE {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
+            return noneAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
+            return noneAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
+            ascAternative.run();
+        }
+    };
+
+    public abstract <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative);
+
+    public abstract <T> T select(T ascAternative, T descAternative, T noneAternative);
+
+    public abstract <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative);
+
 }
