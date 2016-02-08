@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -27,7 +28,11 @@ import org.controlsfx.property.editor.PropertyEditor;
 public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
     public StringPropertyItem(StringProperty value, String name, String description) {
-        super(value, name, description);
+        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+    }
+    
+    public StringPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+        super(value, name, description, decorator);
     }
 
     @Override
@@ -36,7 +41,7 @@ public final class StringPropertyItem extends AbstractPropertyItem<String, Strin
     }
 
     @Override
-    public PropertyEditor<?> createEditor() {
+    protected PropertyEditor<?> createUndecoratedEditor() {
         return Editors.createTextEditor(this);
     }
 }

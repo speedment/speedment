@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,34 +18,38 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
-import com.speedment.config.mapper.TypeMapper;
-import com.speedment.internal.core.config.mapper.identity.ArrayIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.BigDecimalIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.BlobIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.BooleanIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.ByteIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.ClobIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.DateIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.DoubleIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.FloatIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.IntegerIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.LongIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.NClobIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.ObjectIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.RefIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.RowIdIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.ShortIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.SQLXMLIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.StringIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.TimeIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.TimestampIdentityMapper;
-import com.speedment.internal.core.config.mapper.identity.URLIdentityMapper;
-import com.speedment.internal.core.config.mapper.string.StringToLocaleMapper;
-import com.speedment.internal.core.config.mapper.string.TrueFalseStringToBooleanMapper;
-import com.speedment.internal.core.config.mapper.string.YesNoStringToBooleanMapper;
-import com.speedment.internal.core.config.mapper.time.DateToLongMapper;
-import com.speedment.internal.core.config.mapper.time.TimeToLongMapper;
-import com.speedment.internal.core.config.mapper.time.TimestampToLongMapper;
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.mapper.identity.ArrayIdentityMapper;
+import com.speedment.config.db.mapper.identity.BigDecimalIdentityMapper;
+import com.speedment.config.db.mapper.identity.BlobIdentityMapper;
+import com.speedment.config.db.mapper.identity.BooleanIdentityMapper;
+import com.speedment.config.db.mapper.identity.ByteIdentityMapper;
+import com.speedment.config.db.mapper.identity.ClobIdentityMapper;
+import com.speedment.config.db.mapper.identity.DateIdentityMapper;
+import com.speedment.config.db.mapper.identity.DoubleIdentityMapper;
+import com.speedment.config.db.mapper.identity.FloatIdentityMapper;
+import com.speedment.config.db.mapper.identity.IntegerIdentityMapper;
+import com.speedment.config.db.mapper.identity.LongIdentityMapper;
+import com.speedment.config.db.mapper.identity.NClobIdentityMapper;
+import com.speedment.config.db.mapper.identity.ObjectIdentityMapper;
+import com.speedment.config.db.mapper.identity.RefIdentityMapper;
+import com.speedment.config.db.mapper.identity.RowIdIdentityMapper;
+import com.speedment.config.db.mapper.identity.ShortIdentityMapper;
+import com.speedment.config.db.mapper.identity.SQLXMLIdentityMapper;
+import com.speedment.config.db.mapper.identity.StringIdentityMapper;
+import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
+import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
+import com.speedment.config.db.mapper.identity.URLIdentityMapper;
+import com.speedment.config.db.mapper.string.StringToLocaleMapper;
+import com.speedment.config.db.mapper.string.TrueFalseStringToBooleanMapper;
+import com.speedment.config.db.mapper.string.YesNoStringToBooleanMapper;
+import com.speedment.config.db.mapper.time.DateToIntMapper;
+import com.speedment.config.db.mapper.time.DateToLongMapper;
+import com.speedment.config.db.mapper.time.TimeToIntMapper;
+import com.speedment.config.db.mapper.time.TimeToLongMapper;
+import com.speedment.config.db.mapper.time.TimestampToIntMapper;
+import com.speedment.config.db.mapper.time.TimestampToLongMapper;
+import com.speedment.license.Software;
 
 import java.util.Map;
 import java.util.Optional;
@@ -58,7 +62,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.2
  */
-public final class TypeMapperComponentImpl extends Apache2AbstractComponent implements TypeMapperComponent {
+public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
 
     private final Map<String, TypeMapper<?, ?>> mappers;
 
@@ -98,6 +102,9 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
         install(DateToLongMapper::new);
         install(TimestampToLongMapper::new);
         install(TimeToLongMapper::new);
+        install(DateToIntMapper::new);
+        install(TimestampToIntMapper::new);
+        install(TimeToIntMapper::new);
         
         // Special string mappers
         install(StringToLocaleMapper::new);
@@ -106,7 +113,7 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
     }
 
     @Override
-    public final void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
+    public void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
         final TypeMapper<?, ?> mapper = typeMapperConstructor.get();
         mappers.put(mapper.getClass().getName(), mapper);
     }
@@ -119,5 +126,10 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
     @Override
     public Optional<TypeMapper<?, ?>> get(String absoluteClassName) {
         return Optional.ofNullable(mappers.get(absoluteClassName));
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

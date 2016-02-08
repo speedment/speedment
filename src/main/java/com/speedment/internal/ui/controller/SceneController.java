@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,7 +33,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,10 +57,11 @@ public final class SceneController implements Initializable {
             top.getChildren().add(MenubarController.create(session));
             top.getChildren().add(ToolbarController.create(session));
             horizontal.getItems().add(0, ProjectTreeController.create(session));
+//            horizontal.getItems().add(2, PreviewController.create(session));
             vertical.getItems().add(WorkspaceController.create(session));
             vertical.getItems().add(OutputController.create(session));
             
-            horizontal.setDividerPositions(0.2, 0.8);
+            horizontal.setDividerPositions(0.2, 0.7);
             vertical.setDividerPositions(0.7, 0.3);
         });
     }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,17 +21,17 @@ import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;
+import com.speedment.license.Software;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EntityManagerImpl extends Apache2AbstractComponent implements EntityManager {
+public final class EntityManagerImpl extends InternalOpenSourceComponent implements EntityManager {
 
     public EntityManagerImpl(Speedment speedment) {
         super(speedment);
@@ -53,6 +53,11 @@ public final class EntityManagerImpl extends Apache2AbstractComponent implements
     public <ENTITY> void remove(ENTITY entity) throws SpeedmentException {
         requireNonNull(entity);
         managerOf(entity).remove(entity);
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {

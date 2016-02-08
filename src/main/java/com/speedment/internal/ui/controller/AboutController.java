@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,11 +17,16 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.SpeedmentVersion;
+import com.speedment.component.Component;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.license.License;
+import com.speedment.license.Software;
+import com.speedment.stream.MapStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,6 +38,11 @@ import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -59,19 +69,24 @@ public final class AboutController implements Initializable {
         title.setTextFill(Color.web("#45a6fc"));
         title.setFont(SpeedmentFont.HEADER.get());
         version.setText(SpeedmentVersion.getImplementationVersion());
+
         external.setText(
-              "Apache 2:\n"
-            + "groovy-all (2.4.0)\n"
-            + "fontawesomefx (8.6)\n"
-            + "\n"
-            + "GPL 2 with FOSS exception:\n"
-            + "mysql-connector-java (5.1.34)\n"
-            + "\n"
-            + "Creative Commons 2.5:\n"
-            + "silk (1.3)\n"
-            + "\n"
-            + "BSD 3-Clause License:\n"
-            + "controlsfx (8.40.10)"
+            MapStream.of(session.getSpeedment().components()
+                .filter(c -> !c.isInternal())
+                .map(Component::asSoftware)
+                .flatMap(software -> 
+                    Stream.concat(
+                        Stream.of(software), 
+                        software.getDependencies()
+                    )
+                ).collect(Collectors.groupingBy(Software::getLicense))
+            ).sortedByKey(License.COMPARATOR)
+             .mapValue(List::stream)
+             .mapValue(softwares -> 
+                 softwares.map(s -> "• " + s.getName() + " (" + s.getVersion() + ")")
+                    .collect(joining("\n"))
+             ).map(e -> e.getKey().getName() + ":\n" + e.getValue())
+              .collect(joining("\n\n"))
         );
         
         close.setOnAction(ev -> dialog.close());

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,6 @@
  */
 package com.speedment.util;
 
-import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,12 +24,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -55,7 +53,7 @@ public enum Pluralis {
         Collections.reverse(rules); // Search the general rules last
     }
 
-    public String pluralizeJavaIdentifier(String javaIdentifier) {
+    public String pluralizeJavaIdentifier(String javaIdentifier, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(javaIdentifier);
         int lastCapitalCharacter = -1;
         for (int i = 0; i < javaIdentifier.length(); i++) {
@@ -69,14 +67,14 @@ public enum Pluralis {
             final String firstPartOfWord = javaIdentifier.substring(0, lastCapitalCharacter);
             final String lastPartOfWord = javaIdentifier.substring(lastCapitalCharacter);
             final String pluralOflastPartOfWord = pluralize(lastPartOfWord);
-            return firstPartOfWord + JavaLanguage.javaTypeName(pluralOflastPartOfWord);
+            return firstPartOfWord + javaLanguageNamer.javaTypeName(pluralOflastPartOfWord);
         }
     }
 
     /**
      * Returns a plural version in normalized form of the given word.
      *
-     * @param word the given singularis word
+     * @param word the given singular word form
      * @return a plural version in normalized form of the given word
      */
     public String pluralize(String word) {

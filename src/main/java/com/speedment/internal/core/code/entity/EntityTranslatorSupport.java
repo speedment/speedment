@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,16 +23,12 @@ import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
-import static com.speedment.internal.codegen.util.Formatting.DOT;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Project;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.field.ComparableField;
 import com.speedment.field.ComparableForeignKeyField;
 import com.speedment.field.StringForeignKeyField;
@@ -40,23 +36,28 @@ import com.speedment.field.StringField;
 import com.speedment.field.ReferenceField;
 import com.speedment.field.ReferenceForeignKeyField;
 import com.speedment.exception.SpeedmentException;
-
 import com.speedment.internal.core.field.ComparableFieldImpl;
 import com.speedment.internal.core.field.ComparableForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringFieldImpl;
 import com.speedment.internal.core.field.ReferenceFieldImpl;
 import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
-
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.util.Pluralis;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
+
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
+import static com.speedment.internal.codegen.util.Formatting.DOT;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.internal.util.JavaLanguageNamer;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -72,14 +73,14 @@ public final class EntityTranslatorSupport {
         instanceNotAllowed(getClass());
     }
 
-    public static Type getEntityType(Table table) {
+    public static Type getEntityType(Table table, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(table);
-        final Project project = table.ancestor(Project.class).get();
+        requireNonNull(javaLanguageNamer);
+        final Project project = ancestor(table, Project.class).get();
 
-        return Type.of(
-            project.getPackageName().toLowerCase() + DOT
-            + table.getRelativeName(Project.class, JavaLanguage::javaPacketName) + DOT
-            + javaTypeName(table.getName())
+        return Type.of(project.getPackageName().toLowerCase() + DOT
+            + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
+            + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }
 
@@ -93,19 +94,29 @@ public final class EntityTranslatorSupport {
         }
     }
 
-    public static ReferenceFieldType getReferenceFieldType(File file, Table table, Column column, Type entityType) {
-        requireNonNull(file);
-        requireNonNull(table);
-        requireNonNull(column);
-        requireNonNull(entityType);
+    public static ReferenceFieldType getReferenceFieldType(
+        File file,
+        Table table,
+        Column column,
+        Type entityType,
+        JavaLanguageNamer javaLanguageNamer
+    ) {
+        requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
-        final Class<?> mapping = column.getTypeMapper().getJavaType();
+        final Class<?> mapping = column.findTypeMapper().getJavaType();
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(fkc.getForeignTable());
+                final Type fkType = getEntityType(
+                    fkc.findForeignTable().orElseThrow(
+                        () -> new SpeedmentException(
+                            "Could not find referenced foreign table '" + 
+                            fkc.getForeignTableName() + "'."
+                        )), 
+                    javaLanguageNamer
+                );
 
                 file.add(Import.of(fkType));
 
@@ -173,8 +184,9 @@ public final class EntityTranslatorSupport {
         });
     }
 
-    public static String pluralis(Table table) {
-        return Pluralis.INSTANCE.pluralizeJavaIdentifier(JavaLanguage.javaTypeName(requireNonNull(table).getName()));
+    public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {
+        requireNonNull(table);
+        return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getJavaName()), javaLanguageNamer);
     }
 
     public static Method toJson() {
@@ -206,11 +218,10 @@ public final class EntityTranslatorSupport {
     public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {
         requireNonNull(table);
         requireNonNull(column);
-        return table.streamOfForeignKeys()
-            .filter(ForeignKey::isEnabled)
-            .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
-            .filter(ForeignKeyColumn::isEnabled)
-            .filter(fkc -> fkc.getColumn().equals(column))
+        return table.foreignKeys()
+            .filter(HasEnabled::test)
+            .flatMap(ForeignKey::foreignKeyColumns)
+            .filter(fkc -> fkc.findColumn().equals(column))
             .findFirst();
     }
 
@@ -253,5 +264,4 @@ public final class EntityTranslatorSupport {
     public static Method removeWithListener(Type entityType) {
         return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
     }
-
 }

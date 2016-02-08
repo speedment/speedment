@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,10 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
+import com.speedment.config.db.Dbms;
 import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.internal.util.sql.SqlTypeInfo;
+import com.speedment.license.Software;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -31,19 +32,13 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
-public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent implements SqlTypeMapperComponent {
+public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponent implements SqlTypeMapperComponent {
 
     private static final Map<String, Class<?>> JAVA_TYPE_MAP = new HashMap<>();
     private static final Class<?> DEFAULT_MAPPING = String.class;
-
-    public SqlTypeMapperComponentImpl(Speedment speedment) {
-        super(speedment);
-    }
-
-    private static void put(String key, Class<?> clazz) {
-        JAVA_TYPE_MAP.put(normalize(key), clazz);
-    }
 
     static {
         put("CHAR", String.class);
@@ -60,15 +55,15 @@ public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent i
         put("REAL", Float.class);
         put("FLOAT", Double.class);
         put("DOUBLE", Double.class);
-//        JAVA_TYPE_MAP.put("BINARY", BYTE_ARRAY_MAPPING);
-//        JAVA_TYPE_MAP.put("VARBINARY", BYTE_ARRAY_MAPPING);
-        //JAVA_TYPE_MAP.put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
+        //put("BINARY", BYTE_ARRAY_MAPPING);
+        //put("VARBINARY", BYTE_ARRAY_MAPPING);
+        //put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
         put("DATE", Date.class);
         put("TIME", Time.class);
         put("TIMESTAMP", Timestamp.class);
         put("CLOB", Clob.class);
         put("BLOB", Blob.class);
-//        JAVA_TYPE_MAP.put("ARRAY", ARRAY_MAPPING);
+        //put("ARRAY", ARRAY_MAPPING);
         put("BOOLEAN", Boolean.class);
 
         //MySQL Specific mappings
@@ -76,7 +71,11 @@ public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent i
 
         //PostgreSQL specific mappings
         put("UUID", UUID.class);
-        //FMDTODO: Add postgresql specific type mappings
+        //TODO: Add postgresql specific type mappings
+    }
+    
+    public SqlTypeMapperComponentImpl(Speedment speedment) {
+        super(speedment);
     }
 
     @Override
@@ -89,16 +88,17 @@ public final class SqlTypeMapperComponentImpl extends Apache2AbstractComponent i
         }
         return DEFAULT_MAPPING;
     }
-
-    private static Optional<String> normalize(Optional<String> string) {
-        if (string.isPresent()) {
-            Optional.of(normalize(string.get()));
-        }
-        return Optional.empty();
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+    
+    private static void put(String key, Class<?> clazz) {
+        JAVA_TYPE_MAP.put(normalize(key), clazz);
     }
 
     private static String normalize(String string) {
         return string.toUpperCase();
     }
-
 }

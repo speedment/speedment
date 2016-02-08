@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,288 +17,120 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
-import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.DbmsType;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
-import com.speedment.internal.core.config.utils.ConfigUtil;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
+import com.speedment.config.db.Dbms;
+import static com.speedment.config.db.Dbms.IP_ADDRESS;
+import static com.speedment.config.db.Dbms.PORT;
+import static com.speedment.config.db.Dbms.USERNAME;
+import com.speedment.config.db.Project;
+import com.speedment.internal.core.stream.OptionalUtil;
+import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
-import groovy.lang.Closure;
-import static java.util.Collections.newSetFromMap;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.OptionalInt;
 import java.util.stream.Stream;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
-import static java.util.Objects.requireNonNull;
-import static javafx.collections.FXCollections.observableSet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DbmsProperty extends AbstractParentProperty<Dbms, Schema> implements Dbms, ChildHelper<Dbms, Project> {
-    
-    private final ObservableSet<Schema> schemaChildren;
-    private final StringProperty ipAddress;
-    private final IntegerProperty port;
-    private final StringProperty username;
-    private final StringProperty password;
-    private final StringProperty typeName;
-    private final ObservableValue<DbmsType> dbmsType;
-    
-    private Project parent;
-    
-    public DbmsProperty(Speedment speedment) {
-        super(speedment);
-        schemaChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
-        ipAddress      = new SimpleStringProperty();
-        port           = new SimpleIntegerProperty();
-        username       = new SimpleStringProperty();
-        password       = new SimpleStringProperty();
-        typeName       = new SimpleStringProperty();
-        dbmsType       = bindDbmsType();
-        setDefaults();
-    }
-    
-    public DbmsProperty(Speedment speedment, Project parent, Dbms prototype) {
-        super(speedment, prototype);
-        this.schemaChildren = copyChildrenFrom(prototype, Schema.class, SchemaProperty::new);
-        this.typeName       = new SimpleStringProperty(prototype.getTypeName());
-        this.dbmsType       = bindDbmsType();
-        this.ipAddress      = new SimpleStringProperty(prototype.getIpAddress().orElse("localhost"));
-        this.port           = new SimpleIntegerProperty(prototype.getPort().orElse(getType().getDefaultPort()));
-        this.username       = new SimpleStringProperty(prototype.getUsername().orElse("root"));
-        this.password       = new SimpleStringProperty(prototype.getPassword().orElse(""));
-        this.parent         = parent;
-    }
-    
-    private void setDefaults() {
-        setType(StandardDbmsType.defaultType());
-        setIpAddress("localhost");
-        setPort(getType().getDefaultPort());
-        setUsername("root");
-        setPassword("");
-    }
-    
-    private ObservableValue<DbmsType> bindDbmsType() {
-        return Bindings.createObjectBinding(() -> 
-            getSpeedment().getDbmsHandlerComponent().findByName(typeName.getValue()).orElse(null),
-            typeName
-        );
-    }
-    
-    @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.of(
-            // TODO: Add DbmsType
-            new StringPropertyItem(
-                ipAddress,       
-                "IP Address",                  
-                "The ip of the database host."
-            ),
-            new IntegerPropertyItem(
-                port,       
-                "Port",                  
-                "The port of the database on the database host."
-            ),
-            new StringPropertyItem(
-                username,      
-                "Username",                  
-                "The username to use when connecting to the database."
-            )
-        );
-    }
-    
-    public void clear() {
-        schemaChildren.clear();
-    }
-    
-    @Override
-    public Optional<Project> getParent() {
-        return Optional.ofNullable(parent);
-    }
+public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
+    implements Dbms, HasEnabledProperty, HasNameProperty {
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Project) {
-            this.parent = (Project) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
-    }
-
-    @Override
-    public ObservableList<Schema> children() {
-        return createChildrenView(schemaChildren);
+    public DbmsProperty(Project parent) {
+        super(parent);
     }
     
-    @Override
-    public Optional<String> getIpAddress() {
-        return Optional.ofNullable(ipAddress.get());
-    }
-
-    @Override
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress.setValue(ipAddress);
-    }
-    
-    public StringProperty ipAddressProperty() {
-        return ipAddress;
-    }
-
-    @Override
-    public Optional<Integer> getPort() {
-        return Optional.ofNullable(port.getValue());
-    }
-
-    @Override
-    public void setPort(Integer port) {
-        this.port.setValue(port);
-    }
-    
-    public IntegerProperty portProperty() {
-        return port;
-    }
-
-    @Override
-    public Optional<String> getUsername() {
-        return Optional.ofNullable(username.get());
-    }
-
-    @Override
-    public void setUsername(String username) {
-        this.username.setValue(username);
-    }
-    
-    public StringProperty usernameProperty() {
-        return username;
-    }
-
-    @Override
-    public Optional<String> getPassword() {
-        return Optional.ofNullable(password.get());
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password.setValue(password);
-    }
-    
-    public StringProperty passwordProperty() {
-        return password;
-    }
-
-    @Override
-    public DbmsType getType() {
-        return dbmsType.getValue();
-    }
-
-    @Override
-    public void setType(DbmsType dbmsType) {
-        this.typeName.setValue(dbmsType.getName());
-    }
-    
-    public ObservableValue<DbmsType> typeProperty() {
-        return dbmsType;
+    public StringProperty typeNameProperty() {
+        return stringPropertyOf(TYPE_NAME,  () -> Dbms.super.getTypeName());
     }
 
     @Override
     public String getTypeName() {
-        return typeName.getValue();
+        return typeNameProperty().get();
+    }
+
+    public StringProperty ipAddressProperty() {
+        return stringPropertyOf(IP_ADDRESS,  () -> Dbms.super.getIpAddress().orElse(null));
     }
 
     @Override
-    public void setTypeName(String name) {
-        this.typeName.setValue(name);
+    public Optional<String> getIpAddress() {
+        return Optional.ofNullable(ipAddressProperty().get());
     }
-    
-    public StringProperty typeNameProperty() {
-        return typeName;
-    }
-    
-    @Override
-    public Schema addNewSchema() {
-        final Schema schema = new SchemaProperty(getSpeedment());
-        add(schema);
-        return schema;
-    }
-    
-    @Override
-    public Schema schema(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewSchema());
-    }
-    
-    @Override
-    public Optional<Schema> add(Schema child) {
-        requireNonNull(child);
-        child.setParent(this);
-        return schemaChildren.add(child) ? Optional.empty() : Optional.of(child);
-    }
-    
-    @Override
-    public Optional<Schema> remove(Schema child) {
-        requireNonNull(child);
-        if (schemaChildren.remove(child)) {
-            child.setParent(null);
-            return Optional.of(child);
-        } else return Optional.empty();
+
+    public IntegerProperty portProperty() {
+        return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
     }
 
     @Override
-    public Stream<Schema> stream() {
-        return schemaChildren.stream().sorted(COMPARATOR);
+    public OptionalInt getPort() {
+        return OptionalUtil.ofNullable(portProperty().get());
+    }
+
+    public StringProperty usernameProperty() {
+        return stringPropertyOf(USERNAME, () -> Dbms.super.getUsername().orElse(null));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Schema> Stream<T> streamOf(Class<T> childType) {
-        requireNonNull(childType);
-        
-        if (Schema.class.isAssignableFrom(childType)) {
-            return (Stream<T>) schemaChildren.stream().sorted(COMPARATOR);
-        } else {
-            throw wrongChildTypeException(childType);
-        }
+    public Optional<String> getUsername() {
+        return Optional.ofNullable(usernameProperty().get());
+    }
+    
+    public ObservableList<SchemaProperty> schemasProperty() {
+        return observableListOf(SCHEMAS);
+    }
+
+    @Override
+    public Stream<SchemaProperty> schemas() {
+        return schemasProperty().stream();
     }
     
     @Override
-    public int count() {
-        return schemaChildren.size();
+    public DbmsPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
-
+    
     @Override
-    public int countOf(Class<? extends Schema> childType) {
-        if (Schema.class.isAssignableFrom(childType)) {
-            return schemaChildren.size();
-        } else {
-            throw wrongChildTypeException(childType);
-        }
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(
+                // TODO: Add DbmsType
+                new DefaultStringPropertyItem(
+                    ipAddressProperty(), 
+                    new SimpleStringProperty("127.0.0.1"),
+                    "IP Address",                  
+                    "The ip of the database host."
+                ),
+                new IntegerPropertyItem(
+                    portProperty(),       
+                    "Port",                  
+                    "The port of the database on the database host."
+                ),
+                new DefaultStringPropertyItem(
+                    usernameProperty(),
+                    new SimpleStringProperty("root"),
+                    "Username",                  
+                    "The username to use when connecting to the database."
+                )
+            )
+        ).flatMap(s -> s);
     }
-
+    
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Schema> T find(Class<T> childType, String name) throws SpeedmentException {
-        requireNonNull(childType);
-        requireNonNull(name);
-        
-        if (Schema.class.isAssignableFrom(childType)) {
-            return (T) schemaChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
-        } else {
-            throw wrongChildTypeException(childType);
-        }
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.DBMSES, key);
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,27 +20,31 @@ import com.speedment.Speedment;
 import com.speedment.component.EventComponent;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
+import com.speedment.license.Software;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EventComponentImpl extends Apache2AbstractComponent implements EventComponent {
+public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
     
-    private final Map<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultEventListeners;
-    private final Map<String, Set<Consumer<? extends Event>>> otherEventListeners;
+    private final Map<DefaultEvent, Set<Consumer<Event>>> defaultEventListeners;
+    private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
     private final Set<Consumer<Event>> anyEventListeners;
     
     public EventComponentImpl(Speedment speedment) {
         super(speedment);
         
-        final EnumMap<DefaultEvent, Set<Consumer<DefaultEvent>>> listeners = new EnumMap<>(DefaultEvent.class);
+        final EnumMap<DefaultEvent, Set<Consumer<Event>>> listeners = 
+            new EnumMap<>(DefaultEvent.class);
+        
         for (final DefaultEvent ev : DefaultEvent.values()) {
             listeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
@@ -52,14 +56,30 @@ public final class EventComponentImpl extends Apache2AbstractComponent implement
 
     @Override
     public void notify(Event event) {
-        final Consumer<Consumer<Event>> notifier = listener -> listener.accept(event);
-        listeners(event).forEach(notifier);
-        anyEventListeners.forEach(notifier);
+        final Set<Consumer<Event>> listeners;
+        
+        if (event instanceof DefaultEvent) {
+            @SuppressWarnings("unchecked")
+            final DefaultEvent ev = (DefaultEvent) event;
+            listeners = defaultListeners(ev);
+        } else {
+            listeners = listeners(event.getClass());
+        }
+
+        listeners.forEach(listener -> listener.accept(event));
+        anyEventListeners.forEach(listener -> listener.accept(event));
     }
 
     @Override
-    public <E extends Event> void on(E event, Consumer<E> action) {
-        listeners(event).add(action);
+    @SuppressWarnings("unchecked")
+    public <E extends Event> void on(Class<E> event, Consumer<E> action) {
+        listeners(event).add((Consumer<Event>) action);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void on(DefaultEvent event, Consumer<DefaultEvent> action) {
+        defaultListeners(event).add((Consumer<Event>) (Object) action);
     }
 
     @Override
@@ -67,21 +87,19 @@ public final class EventComponentImpl extends Apache2AbstractComponent implement
         anyEventListeners.add(action);
     }
     
-    private <E extends Event> Set<Consumer<E>> listeners(E event) {
-        if (event instanceof DefaultEvent) {
-            @SuppressWarnings("unchecked")
-            final DefaultEvent key = (DefaultEvent) event;
-            
-            @SuppressWarnings("unchecked")
-            final Set<Consumer<E>> set = (Set<Consumer<E>>) (Object) defaultEventListeners.get(key);
-            
-            return set;
-        } else {
-            @SuppressWarnings("unchecked")
-            final Set<Consumer<E>> set = (Set<Consumer<E>>) (Object) otherEventListeners
-                .computeIfAbsent(event.name(), ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
-            
-            return set;
-        }
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+    
+    private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {
+        final Set<Consumer<Event>> set = otherEventListeners
+            .computeIfAbsent(event, ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+
+        return set;
+    }
+    
+    private Set<Consumer<Event>> defaultListeners(DefaultEvent event) {
+        return defaultEventListeners.get(event);
     }
 }

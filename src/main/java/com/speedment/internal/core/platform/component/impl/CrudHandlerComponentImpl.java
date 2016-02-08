@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,15 +24,17 @@ import com.speedment.db.crud.Result;
 import com.speedment.db.crud.Update;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.component.CrudHandlerComponent;
+import com.speedment.license.Software;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class CrudHandlerComponentImpl extends Apache2AbstractComponent implements CrudHandlerComponent {
+public final class CrudHandlerComponentImpl extends InternalOpenSourceComponent implements CrudHandlerComponent {
 
     private CreateMethod creator;
     private UpdateMethod updater;
@@ -94,5 +96,10 @@ public final class CrudHandlerComponentImpl extends Apache2AbstractComponent imp
             requireNonNull(operation),
             requireNonNull(mapper)
         );
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

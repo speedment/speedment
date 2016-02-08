@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,7 @@ package com.speedment.event;
 
 import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -28,23 +28,11 @@ import static java.util.Objects.requireNonNull;
  */
 @Api(version="2.3")
 public final class ProjectLoaded implements ProjectEvent {
-    
-    private final static String NAME = "PROJECT_LOADED";
+
     private final Project project;
-    
-    public static ProjectLoaded EVENT = new ProjectLoaded();
-    
-    private ProjectLoaded() {
-        this.project = null;
-    }
     
     public ProjectLoaded(Project project) {
         this.project = requireNonNull(project);
-    }
-
-    @Override
-    public String name() {
-        return NAME;
     }
     
     @Override

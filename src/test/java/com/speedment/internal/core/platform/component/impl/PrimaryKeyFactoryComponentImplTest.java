@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,8 +21,9 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.component.PrimaryKeyFactoryComponent;
-import com.speedment.internal.core.platform.SpeedmentFactory;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.util.AssertUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ import static org.junit.Assert.*;
  */
 public class PrimaryKeyFactoryComponentImplTest {
 
-    private final PrimaryKeyFactoryComponentImpl instance = new PrimaryKeyFactoryComponentImpl(SpeedmentFactory.newSpeedmentInstance());
+    private PrimaryKeyFactoryComponentImpl instance;
     private final Integer k0 = 1;
     private final String k1 = "Arne";
     private final String k2 = "Sven";
@@ -52,23 +53,10 @@ public class PrimaryKeyFactoryComponentImplTest {
     private final Integer k7 = 43;
     private final String k8 = "Objects";
 
-    public PrimaryKeyFactoryComponentImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle().build();
+        instance = new PrimaryKeyFactoryComponentImpl(speedment);
     }
 
     @Test

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -38,7 +38,7 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
         this.speedment = requireNonNull(speedment);
     }
 
-    protected Speedment getSpeedment_() {
+    protected Speedment speedment() {
         return speedment;
     }
    
@@ -82,7 +82,7 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
         return manager_().remove(selfAsEntity(), consumer);
     }
 
-    protected abstract Class<ENTITY> getEntityClass_();
+    protected abstract Class<ENTITY> entityClass();
 
     @SuppressWarnings("unchecked")
     private ENTITY selfAsEntity() {
@@ -90,11 +90,11 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     }
 
     protected Manager<ENTITY> manager_() {
-        return managerOf_(getEntityClass_());
+        return managerOf_(entityClass());
     }
 
     protected <T> Manager<T> managerOf_(Class<T> entityClass) {
-        return getSpeedment_().managerOf(requireNonNull(entityClass));
+        return speedment().managerOf(requireNonNull(entityClass));
     }
         
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,12 +17,13 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuples;
+import com.speedment.license.Software;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -30,8 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
-public final class JavaTypeMapperComponentImpl extends Apache2AbstractComponent implements JavaTypeMapperComponent {
+public final class JavaTypeMapperComponentImpl extends InternalOpenSourceComponent implements JavaTypeMapperComponent {
 
     private final Map<Class<?>, JavaTypeMapping<?>> map;
     private final Map<DbmsType, Map<Class<?>, JavaTypeMapping<?>>> dbmsTypeMap;
@@ -65,6 +67,11 @@ public final class JavaTypeMapperComponentImpl extends Apache2AbstractComponent 
     public <T> JavaTypeMapping<T> apply(Class<T> javaClass) {
         requireNonNull(javaClass);
         return getFromMapOrThrow(map, javaClass, javaClass::getName);
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 
     @SuppressWarnings("unchecked")

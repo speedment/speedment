@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,7 @@ public final class MetadataUtil {
                 final StringBuilder sb = new StringBuilder();
                 sb.append("sql = ").append(sql.getQuery()).append("\n");
                 sb.append("params = ").append(sql.getParameters()).append("\n");
-                sb.append("thowable = ").append(sql.getThrowable()
+                sb.append("throwable = ").append(sql.getThrowable()
                     .map(t -> t.getMessage())
                     .orElse("")).append("\n");
                 consumer.accept(sb.toString());

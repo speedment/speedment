@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
+import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
 import com.speedment.internal.codegen.lang.models.File;
@@ -28,12 +29,12 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import com.speedment.config.Project;
+import com.speedment.config.db.Project;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.Initalizer;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import com.speedment.internal.core.config.utils.GroovyParser;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
+import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -46,8 +47,8 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
 
     private final String className = typeName(project()) + "Application" + METADATA;
 
-    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
+    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
+        super(speedment, gen, doc, Class::of);
     }
 
     @Override
@@ -63,7 +64,8 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
         final Initalizer initializer = Initalizer.of().static_();
         
         //final StringBuilder str = new StringBuilder();
-        GroovyParser.toGroovyLines(project()).forEachOrdered(l -> {
+        Stream.of(DocumentTranscoder.save(project()).split("\\R"))
+        .forEachOrdered(l -> {
             initializer.add("METADATA.append(\"" + 
                 l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
                 "\\n\");"

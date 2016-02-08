@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.config.Column;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.Property.SIZE;
@@ -38,6 +38,34 @@ import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.stream.StreamDecorator;
 import java.util.ArrayList;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
@@ -111,7 +139,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
             @SuppressWarnings("unchecked")
-            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).getTypeMapper();
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).findTypeMapper();
             fragments.get(i).objects()
                     .map(tm::toDatabaseType)
                     .forEach(values::add);
@@ -122,7 +150,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
     
     private Column findColumn(String name) {
-        return manager.getTable().streamOfColumns()
+        return manager.getTable().columns()
                 .filter(c -> name.equals(c.getName()))
                 .findAny().get();
     }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,14 +30,15 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.Table;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import com.speedment.internal.core.manager.sql.SqlManager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -45,51 +46,51 @@ import java.util.stream.Collectors;
  */
 public final class EntityManagerTranslator extends EntityAndManagerTranslator<Interface> {
 
-    public EntityManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    public EntityManagerTranslator(Speedment speedment, Generator gen, Table doc) {
+        super(speedment, gen, doc, Interface::of);
     }
 
     @Override
     protected Interface make(File file) {
-        return new InterfaceBuilder(MANAGER.getName()).build()
+        return newBuilder(file, manager.getName()).build()
             .public_()
-            .add(Type.of(SqlManager.class).add(GENERIC_OF_ENTITY))
+            .add(Type.of(SqlManager.class).add(genericOfEntity))
             .add(generatePrimaryKeyFor(file))
             .call(i -> file.add(Import.of(Type.of(Speedment.class))))
             .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
             .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
                 .add("return " + Speedment.class.getSimpleName()
                     + ".get().get(" + ProjectComponent.class.getSimpleName()
-                    + ".class).getProject().findTableByName(\"" + table().getRelativeName(Dbms.class) + "\");"))
+                    + ".class).getProject().findTableByName(\"" + relativeName(table(), Dbms.class) + "\");"))
             //            .add(Method.of("getTableName", STRING).default_().add(OVERRIDE)
             //                .add("return \"" + table().getRelativeName(project()) + "\";"))
 
-            .add(Method.of("getManagerClass", Type.of(Class.class).add(GENERIC_OF_MANAGER)).default_().add(OVERRIDE)
-                .add("return " + MANAGER.getName() + ".class;"))
-            .add(Method.of("getEntityClass", Type.of(Class.class).add(GENERIC_OF_ENTITY)).default_().add(OVERRIDE)
-                .add("return " + ENTITY.getName() + ".class;"))
+            .add(Method.of("getManagerClass", Type.of(Class.class).add(genericOfManager)).default_().add(OVERRIDE)
+                .add("return " + manager.getName() + ".class;"))
+            .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
+                .add("return " + entity.getName() + ".class;"))
 //            .add(Method.of("getBuilderClass", Type.of(Class.class).add(GENERIC_OF_BUILDER)).default_().add(OVERRIDE)
 //                .add("return " + BUILDER.getName() + ".class;"))
             .add(generateGet(file))
             .add(generateSet(file))
             .call(i -> file.add(Import.of(Type.of(Speedment.class))))
             .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
-            .add(Method.of("get", MANAGER.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
+            .add(Method.of("get", manager.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
                 .add("return " + Speedment.class.getSimpleName()
                     + ".get().get(" + ManagerComponent.class.getSimpleName()
-                    + ".class).manager(" + MANAGER.getName() + ".class);"));
+                    + ".class).manager(" + manager.getName() + ".class);"));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()));
+            .add(Field.of("entity", entity.getType()));
 
         if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().getColumn()) + "();");
+            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.getColumn()) + "()")
+                .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
                 .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
@@ -100,7 +101,7 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
     protected Method generateGet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("get", OBJECT).default_().add(OVERRIDE)
-            .add(Field.of("entity", ENTITY.getType()))
+            .add(Field.of("entity", entity.getType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add("switch (column.getName()) " + block(
                 columns().map(c -> "case \"" + c.getName() + "\" : return entity." + GETTER_METHOD_PREFIX + typeName(c) + "();").collect(Collectors.joining(nl()))
@@ -111,13 +112,13 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
     protected Method generateSet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("set", VOID).default_().add(OVERRIDE)
-            .add(Field.of("entity", BUILDER.getType()))
+            .add(Field.of("entity", builder.getType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(
                 columns()
-                .peek(c -> file.add(Import.of(Type.of(c.getTypeMapper().getJavaType()))))
-                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.getTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
+                .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.findTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
             ));
     }
@@ -129,6 +130,6 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
 
     @Override
     protected String getFileName() {
-        return MANAGER.getName();
+        return manager.getName();
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,8 +21,9 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.internal.core.platform.SpeedmentFactory;
+import com.speedment.Speedment;
 import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -74,7 +75,8 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        instance = new ConnectionPoolComponentImpl(SpeedmentFactory.newSpeedmentInstance()) {
+        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle().build();
+        instance = new ConnectionPoolComponentImpl(speedment) {
 
             @Override
             public Connection newConnection(String uri, String user, String password) throws SQLException {
@@ -90,6 +92,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of getConnection method, of class ConnectionPoolComponentImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetConnection() throws Exception {
@@ -103,6 +106,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of returnConnection method, of class ConnectionPoolComponentImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReturnConnection() throws Exception {
@@ -116,6 +120,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of newConnection method, of class ConnectionPoolComponentImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testNewConnection() throws Exception {

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,9 +26,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  *
@@ -54,8 +54,8 @@ public final class Loader {
             final Parent loaded = loader.load();
             consumer.accept(control);
             return loaded;
-        } catch (IOException ex) {
-            throw new SpeedmentException(ex);
+        } catch (final IOException ex) {
+            throw new SpeedmentException("Failed to load FXML file '" + filename + "'.", ex);
         }
 	}
     

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,8 +27,6 @@ import com.speedment.internal.codegen.lang.models.implementation.FieldImpl;
 import com.speedment.internal.codegen.lang.models.modifiers.FieldModifier;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A model that represents a field in code. This can be either as a method

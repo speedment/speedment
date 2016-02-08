@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,14 +19,19 @@ package com.speedment.stream;
 import com.speedment.annotation.Api;
 import com.speedment.util.CollectorUtil;
 import java.util.AbstractMap;
+import java.util.Collections;
+import static java.util.Collections.newSetFromMap;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.Spliterator;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
@@ -179,6 +184,24 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      */
     public static <K, V> MapStream<K, V> empty() {
         return new MapStream<>(Stream.empty());
+    }
+    
+    /**
+     * Produces a new MapStream by flipping the specified one so that keys 
+     * become values and values become keys. This will consume the supplied
+     * stream.
+     * 
+     * @param <K>       original key type
+     * @param <V>       original value type
+     * @param original  original MapStream
+     * @return          new MapStream with keys and values flipped
+     */
+    public static <K, V> MapStream<V, K> flip(MapStream<K, V> original) {
+        return MapStream.fromStream(
+            original, 
+            Entry::getValue, 
+            Entry::getKey
+        );
     }
 
     /**
@@ -825,6 +848,102 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
     public MapStream<K, V> distinct() {
         inner = inner.distinct();
         return this;
+    }
+    
+    /**
+     * Returns a stream consisting of the distinct elements (according to
+     * {@link Object#equals(Object)}) of this stream based on the key only. If 
+     * the same key is encountered multiple times, only the first occurence will
+     * be allowed to pass.
+     * <p>
+     * This is a stateful intermediate operation.
+     *
+     * @return the new stream
+     */
+    public MapStream<K, V> distinctKeys() {
+        final Set<K> temp = newSetFromMap(new ConcurrentHashMap<>());
+        
+        inner = inner.flatMap(e -> 
+            temp.add(e.getKey()) 
+                ? Stream.of(e) 
+                : Stream.empty()
+        );
+        
+        return this;
+    }
+    
+    /**
+     * Returns a stream consisting of the distinct elements (according to
+     * {@link Object#equals(Object)}) of this stream based on the value only. If 
+     * the same value is encountered multiple times, only the first occurence 
+     * will be allowed to pass.
+     * <p>
+     * This is a stateful intermediate operation.
+     *
+     * @return the new stream
+     */
+    public MapStream<K, V> distinctValues() {
+        final Set<V> temp = newSetFromMap(new ConcurrentHashMap<>());
+        
+        inner = inner.flatMap(e -> 
+            temp.add(e.getValue()) 
+                ? Stream.of(e) 
+                : Stream.empty()
+        );
+        
+        return this;
+    }
+    
+    /**
+     * Returns a stream consisting of the distinct elements (according to
+     * {@link Object#equals(Object)}) of this stream based on the key only. If 
+     * the same key is encountered multiple times, the specified value merger 
+     * will be used to determine which value can pass.
+     * <p>
+     * This operation will consume the wrapped stream and produce a new one. The
+     * complexity of this operation is therefore O(n).
+     * <p>
+     * This is a stateful intermediate operation.
+     *
+     * @param merger  the merging operation to use
+     * @return        the new stream
+     */
+    public MapStream<K, V> distinctKeys(BinaryOperator<V> merger) {
+        final Map<K, V> result = new ConcurrentHashMap<>();
+        
+        inner.forEach(e -> {
+            result.compute(e.getKey(), (k, v) -> 
+                merger.apply(e.getValue(), v)
+            );
+        });
+        
+        return MapStream.of(result);
+    }
+    
+    /**
+     * Returns a stream consisting of the distinct elements (according to
+     * {@link Object#equals(Object)}) of this stream based on the value only. If 
+     * the same value is encountered multiple times, the specified key merger 
+     * will be used to determine which value can pass.
+     * <p>
+     * This operation will consume the wrapped stream and produce a new one. The
+     * complexity of this operation is therefore O(n).
+     * <p>
+     * This is a stateful intermediate operation.
+     *
+     * @param merger  the merging operation to use
+     * @return        the new stream
+     */
+    public MapStream<K, V> distinctValues(BinaryOperator<K> merger) {
+        final Map<V, K> result = new ConcurrentHashMap<>();
+        
+        inner.forEach(e -> {
+            result.compute(e.getValue(), (v, k) -> 
+                merger.apply(e.getKey(), k)
+            );
+        });
+        
+        return MapStream.flip(MapStream.of(result));
     }
 
     /**

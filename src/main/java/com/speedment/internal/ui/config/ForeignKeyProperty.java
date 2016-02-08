@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,138 +17,58 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Ordinable;
-import com.speedment.config.aspects.Parent;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import groovy.lang.Closure;
-import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ForeignKeyPropertyMutator;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.stream.Stream;
-import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ForeignKeyProperty extends AbstractParentProperty<ForeignKey, ForeignKeyColumn> implements ForeignKey, ChildHelper<ForeignKey, Table> {
-    
-    private final ObservableSet<ForeignKeyColumn> foreignKeyColumnChildren;
-    
-    private Table parent;
-    
-    public ForeignKeyProperty(Speedment speedment) {
-        super(speedment);
-        foreignKeyColumnChildren = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
+public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table, ForeignKeyProperty> 
+    implements ForeignKey, HasEnabledProperty, HasNameProperty {
+
+    public ForeignKeyProperty(Table parent) {
+        super(parent);
     }
     
-    public ForeignKeyProperty(Speedment speedment, Table parent, ForeignKey prototype) {
-        super(speedment, prototype);
-        foreignKeyColumnChildren = copyChildrenFrom(prototype, ForeignKeyColumn.class, ForeignKeyColumnProperty::new);
-        this.parent = parent;
+    public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
+        return observableListOf(FOREIGN_KEY_COLUMNS);
     }
     
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
-        return Stream.empty();
-    }
-    
-    @Override
-    public Optional<Table> getParent() {
-        return Optional.ofNullable(parent);
+    public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
+        return foreignKeyColumnsProperty().stream();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Table) {
-            this.parent = (Table) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
+    public boolean isExpandedByDefault() {
+        return false;
     }
     
     @Override
-    public ObservableList<ForeignKeyColumn> children() {
-        return createChildrenView(foreignKeyColumnChildren);
-    }
-
-    @Override
-    public ForeignKeyColumn addNewForeignKeyColumn() {
-        final ForeignKeyColumn column = new ForeignKeyColumnProperty(getSpeedment());
-        add(column);
-        return column;
+    public ForeignKeyPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
-    public ForeignKeyColumn foreignKeyColumn(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewForeignKeyColumn());
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.concat(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment)
+        );
     }
     
     @Override
-    public Optional<ForeignKeyColumn> add(ForeignKeyColumn child) throws IllegalStateException {
-        return foreignKeyColumnChildren.add(child) ? Optional.empty() : Optional.of(child);
-    }
-    
-    @Override
-    public Optional<ForeignKeyColumn> remove(ForeignKeyColumn child) {
-        requireNonNull(child);
-        if (foreignKeyColumnChildren.remove(child)) {
-            child.setParent(null);
-            return Optional.of(child);
-        } else return Optional.empty();
-    }
-
-    @Override
-    public Stream<ForeignKeyColumn> stream() {
-        return foreignKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends ForeignKeyColumn> Stream<T> streamOf(Class<T> childType) {
-        requireNonNull(childType);
-        
-        if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            return (Stream<T>) foreignKeyColumnChildren.stream().sorted(Ordinable.COMPARATOR);
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-    
-    @Override
-    public int count() {
-        return foreignKeyColumnChildren.size();
-    }
-
-    @Override
-    public int countOf(Class<? extends ForeignKeyColumn> childType) {
-        if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            return foreignKeyColumnChildren.size();
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends ForeignKeyColumn> T find(Class<T> childType, String name) throws SpeedmentException {
-        requireNonNull(childType);
-        requireNonNull(name);
-        
-        if (ForeignKeyColumn.class.isAssignableFrom(childType)) {
-            return (T) foreignKeyColumnChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
-        } else {
-            throw wrongChildTypeException(childType);
-        }
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
     }
 }

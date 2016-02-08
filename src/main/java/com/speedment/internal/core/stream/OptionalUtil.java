@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,20 +17,16 @@
 package com.speedment.internal.core.stream;
 
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class OptionalUtil {
-
-    public static <T> Stream<T> from(Optional<T> optional) {
-        requireNonNull(optional);
-        return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
-    }
 
     public static Object unwrap(Object potentiallyOptional) {
         // potentiallyOptional can be null. If it is, null shall be returned
@@ -49,8 +45,58 @@ public final class OptionalUtil {
         return optional.orElse(null);
     }
 
+    public static OptionalLong ofNullable(Long l) {
+        if (l == null) {
+            return OptionalLong.empty();
+        } else {
+            return OptionalLong.of(l);
+        }
+    }
+
+    public static OptionalInt ofNullable(Integer i) {
+        if (i == null) {
+            return OptionalInt.empty();
+        } else {
+            return OptionalInt.of(i);
+        }
+    }
+
+    public static OptionalDouble ofNullable(Double d) {
+        if (d == null) {
+            return OptionalDouble.empty();
+        } else {
+            return OptionalDouble.of(d);
+        }
+    }
+
+    public static OptionalLong parseLong(String value) {
+        if (value == null) {
+            return OptionalLong.empty();
+        } else {
+            return OptionalLong.of(Long.parseLong(value));
+        }
+    }
+
+    public static OptionalInt parseInt(String value) {
+        if (value == null) {
+            return OptionalInt.empty();
+        } else {
+            return OptionalInt.of(Integer.parseInt(value));
+        }
+    }
+
+    public static OptionalDouble parseDouble(String value) {
+        if (value == null) {
+            return OptionalDouble.empty();
+        } else {
+            return OptionalDouble.of(Double.parseDouble(value));
+        }
+    }
+
     /**
      * Utility classes should not be instantiated.
      */
-    private OptionalUtil() { instanceNotAllowed(getClass()); }
+    private OptionalUtil() {
+        instanceNotAllowed(getClass());
+    }
 }

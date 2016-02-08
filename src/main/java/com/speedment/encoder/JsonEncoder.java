@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,15 +16,14 @@
  */
 package com.speedment.encoder;
 
-import com.speedment.config.Column;
-import com.speedment.config.Table;
+import com.speedment.config.db.Table;
 import com.speedment.Manager;
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static com.speedment.internal.util.JavaLanguage.javaVariableName;
+import com.speedment.internal.util.JavaLanguageNamer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +31,31 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -65,20 +89,23 @@ import static java.util.stream.Collectors.joining;
 public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>, String> {
 
     protected final Map<String, Function<ENTITY, String>> getters;
+    private final JavaLanguageNamer javaLanguageNamer;
 
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
+     * @param speedment context to use
      */
-    public JsonEncoder() {
+    public JsonEncoder(Speedment speedment) {
         this.getters = new LinkedHashMap<>();
+        this.javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
     }
 
     // Fields
     @Override
     public <T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
-        final String columnName = jsonField((FieldTrait) field);
+        final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
         final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
@@ -89,7 +116,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
         requireNonNull(field);
         requireNonNull(builder);
-        final String columnName = jsonField((FieldTrait) field);
+        final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
         final ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
@@ -143,7 +170,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     @Override
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
-        getters.remove(jsonField(field));
+        getters.remove(jsonField(field, javaLanguageNamer));
         return this;
     }
 
@@ -157,9 +184,9 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             + "}";
     }
 
-    protected static String jsonField(FieldTrait field) {
+    protected String jsonField(FieldTrait field, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(field);
-        return javaVariableName(field.getColumnName());
+        return javaLanguageNamer.javaVariableName(field.getColumnName());
     }
 
     protected static String jsonValue(Object in) {
@@ -196,7 +223,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
      */
     public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
         requireNonNull(manager);
-        return new JsonEncoder<>();
+        return new JsonEncoder<>(manager.speedment());
     }
 
     /**
@@ -213,14 +240,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         requireNonNull(manager);
 
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
         final Table table = manager.getTable();
 
-        table
-            .streamOfColumns()
+        table.columns()
             .forEachOrdered(c
                 -> formatter.put(
-                    javaVariableName(c.getName()),
+                    formatter.javaLanguageNamer.javaVariableName(c.getName()),
                     entity -> manager.get(entity, c)
                 )
             );
@@ -248,12 +273,11 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Set<String> fieldNames = Stream.of(fields).map(FieldTrait::getColumnName).collect(toSet());
         final Table table = manager.getTable();
 
-        table
-            .streamOfColumns()
+        table.columns()
             .filter(c -> fieldNames.contains(c.getName()))
             .forEachOrdered(c
                 -> formatter.put(
-                    javaVariableName(c.getName()),
+                    formatter.javaLanguageNamer.javaVariableName(c.getName()),
                     entity -> manager.get(entity, c)
                 )
             );

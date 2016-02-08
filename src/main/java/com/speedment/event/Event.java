@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,6 +18,7 @@ package com.speedment.event;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.internal.util.JavaLanguageNamer;
 
 /**
  *
@@ -27,7 +28,9 @@ import com.speedment.annotation.Api;
 @Api(version="2.3")
 public interface Event {
     
-    String name();
+    default String name() {
+        return JavaLanguageNamer.toHumanReadable(getClass().getSimpleName());
+    }
     
     default void publish(Speedment speedment) {
         speedment.getEventComponent().notify(this);

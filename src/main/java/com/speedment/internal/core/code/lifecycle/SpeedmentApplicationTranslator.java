@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,17 +34,18 @@ import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator.METADATA;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
-import com.speedment.config.Project;
-import com.speedment.config.Table;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -54,16 +55,16 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     
     private final String className = typeName(project()) + "Application";
     
-    public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
+    public SpeedmentApplicationTranslator(Speedment speedment, Generator gen, Project doc) {
+        super(speedment, gen, doc, Class::of);
     }
     
     @Override
     protected Class make(File file) {
         requireNonNull(file);
         
-        final Map<String, List<Table>> nameMap = project().traverseOver(Table.class)
-                .filter(Table::isEnabled)
+        final Map<String, List<Table>> nameMap = traverseOver(project(), Table.class)
+                .filter(HasEnabled::test)
                 .collect(Collectors.groupingBy(Table::getName));
         
         final Set<String> ambigousNames = MapStream.of(nameMap)
@@ -77,16 +78,18 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
                 .add("super.onInit();")
                 .add("loadAndSetProject();");
         
-        project().traverseOver(Table.class)
-                .filter(Table::isEnabled)
+        final String methodName = "applyAndPut";
+        
+        traverseOver(project(), Table.class)
+                .filter(HasEnabled::test)
                 .forEachOrdered(t -> {
                     EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
                     final Type managerType = entityManagerImplTranslator.getImplType();
                     if (ambigousNames.contains(t.getName())) {
-                        onInit.add("put(new " + managerType.getName() + "(speedment));");
+                        onInit.add(methodName+"("+managerType.getName() + "::new);");
                     } else {
                         file.add(Import.of(managerType));
-                        onInit.add("put(new " + entityManagerImplTranslator.managerTypeName() + "Impl(speedment));");
+                        onInit.add(methodName+"(" + entityManagerImplTranslator.managerTypeName() + "Impl::new);");
                     }
                     
                 });

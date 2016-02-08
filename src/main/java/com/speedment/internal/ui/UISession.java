@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,20 +17,22 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
+import com.speedment.component.PasswordComponent;
+import com.speedment.internal.util.document.DocumentTranscoder;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
-import com.speedment.internal.core.code.MainGenerator;
-import com.speedment.internal.core.config.utils.GroovyParser;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.code.TranslatorManager;
+import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.config.SchemaProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
@@ -45,8 +47,6 @@ import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.event.Event;
 import java.util.function.Consumer;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.util.Optional;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -55,12 +55,9 @@ import java.util.function.Predicate;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import java.io.IOException;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import java.nio.file.Paths;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -71,6 +68,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.SplitPane;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import com.speedment.internal.util.document.DocumentUtil;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -78,7 +83,7 @@ import javafx.util.Pair;
  */
 public final class UISession {
 
-    public final static String DEFAULT_GROOVY_LOCATION = "src/main/groovy/speedment.groovy";
+    public final static String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
     
     public enum ReuseStage {
         USE_EXISTING_STAGE,
@@ -86,14 +91,14 @@ public final class UISession {
     }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static String DIALOG_PANE_ICON_SIZE = "48px";
+    private final static String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
         file.exists() && 
         file.isFile() && 
         file.canRead() && 
-        file.getName().toLowerCase().endsWith(".groovy");
+        file.getName().toLowerCase().endsWith(".json");
     
     private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file ->
         file != null &&
@@ -106,25 +111,28 @@ public final class UISession {
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
-    private final String defaultGroovyLocation;
+    private final String defaultConfigLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
     
     private File currentlyOpenFile = null;
     
-    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation) {
-        this(speedment, application, stage, defaultGroovyLocation, new ProjectProperty(speedment));
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
+        this(speedment, application, stage, defaultConfigLocation, null);
     }
     
-    public UISession(Speedment speedment, Application application, Stage stage, String defaultGroovyLocation, Project project) {
-        requireNonNull(project);
-        
+    public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
+
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
-        this.defaultGroovyLocation = requireNonNull(defaultGroovyLocation);
-        this.project               = new ProjectProperty(speedment, project);
+        this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
+        this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
+        
+        if (project != null) {
+            this.project.merge(speedment, project);
+        }
     }
     
     public Speedment getSpeedment() {
@@ -152,8 +160,8 @@ public final class UISession {
         return on(event -> {
             try {
                 final Stage newStage = new Stage();
-                final Speedment newSpeedment = speedment.newInstance();
-                final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation);
+                final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
+                final UISession session = new UISession(newSpeedment, application, newStage, defaultConfigLocation);
 
                 ConnectController.createAndShow(session);
             } catch (Exception e) {
@@ -172,8 +180,8 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E openProject(ReuseStage reuse) {
         return on(event -> {
             final FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open .groovy File");
-            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+            fileChooser.setTitle("Open .json File");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
             
             Optional.ofNullable(Settings.inst().get("project_location"))
                 .map(File::new)
@@ -182,7 +190,7 @@ public final class UISession {
             
             final File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
-                loadGroovyFile(file, reuse);
+                loadConfigFile(file, reuse);
             }
         });
     }
@@ -191,9 +199,9 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E saveProject() {
         return on(event -> {
             if (currentlyOpenFile == null) {
-                saveGroovyFile();
+                saveConfigFile();
             } else {
-                saveGroovyFile(currentlyOpenFile);
+                saveConfigFile(currentlyOpenFile);
             }
         });
     }
@@ -201,7 +209,7 @@ public final class UISession {
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
         return on(event -> {
-            saveGroovyFile();
+            saveConfigFile();
         });
     }
     
@@ -219,19 +227,20 @@ public final class UISession {
                 "to the project. Are you sure you want to continue?"
             ).filter(ButtonType.OK::equals).isPresent()) {
                 
-                project.streamOf(Dbms.class)
-                    .filter(dbms -> NO_PASSWORD_SPECIFIED.test(dbms.getPassword()))
+                final PasswordComponent pass = speedment.getPasswordComponent();
+                
+                project.dbmses()
+                    .filter(dbms -> NO_PASSWORD_SPECIFIED.test(pass.get(dbms)))
                     .forEach(dbms -> showPasswordDialog(dbms));
                 
                 final Optional<String> schemaName = project
-                    .traverseOver(Schema.class)
+                    .dbmses().flatMap(Dbms::schemas)
                     .map(Schema::getName)
                     .findAny();
                 
                 if (schemaName.isPresent()) {
-                    project
-                        .streamOf(Dbms.class)
-                        .map(dbms -> (DbmsProperty) dbms)
+                    project.dbmses()
+                        .map(DbmsProperty.class::cast)
                         .forEach(dbms -> loadFromDatabase(dbms, schemaName.get()));
                 } else {
                     showError(
@@ -249,15 +258,15 @@ public final class UISession {
             clearLog();
             
             if (currentlyOpenFile == null) {
-                currentlyOpenFile = new File(defaultGroovyLocation);
+                currentlyOpenFile = new File(defaultConfigLocation);
             }
             
-            saveGroovyFile(currentlyOpenFile);
+            saveConfigFile(currentlyOpenFile);
             
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
-            final MainGenerator instance = new MainGenerator(speedment);
+            final TranslatorManager instance = new TranslatorManager(speedment);
             
             try {
                 instance.accept(project);
@@ -289,11 +298,94 @@ public final class UISession {
         });
     }
     
+    public <T extends Event, E extends EventHandler<T>>  E toggleProjectTree() {
+        return toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleWorkspace() {
+        return toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleOutput() {
+        return toggle("output", hiddenOutput, StoredNode.InsertAt.END);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E togglePreview() {
+        return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
+    }
+    
+    private final static class StoredNode {
+        
+        private enum InsertAt {
+            BEGINNING, END
+        }
+        
+        private final Node node;
+        private final SplitPane parent;
+
+        private StoredNode(Node node, SplitPane parent) {
+            this.node             = requireNonNull(node);
+            this.parent           = requireNonNull(parent);
+        }
+    }
+    
+    private final ObjectProperty<StoredNode>
+        hiddenProjectTree = new SimpleObjectProperty<>(),
+        hiddenWorkspace   = new SimpleObjectProperty<>(),
+        hiddenOutput      = new SimpleObjectProperty<>(),
+        hiddenPreview     = new SimpleObjectProperty<>();
+    
+    private <T extends Event, E extends EventHandler<T>>  E toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
+        return on(event -> {
+            final SplitPane parent;
+            final Node node;
+            
+            if (hidden.get() == null) {
+                node = this.stage.getScene().lookup("#" + cssId);
+            
+                if (node != null) {
+                    Node n = node;
+                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
+                    parent = (SplitPane) n;
+                    
+                    if (parent != null) {
+                        parent.getItems().remove(node);
+                        hidden.set(new StoredNode(node, parent));
+                    } else {
+                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
+                    }
+                } else {
+                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
+                }
+            } else {
+                parent = hidden.get().parent;
+                
+                if (parent != null) {
+                    node = hidden.get().node;
+
+                    switch (insertAt) {
+                        case BEGINNING : parent.getItems().add(0, node); break;
+                        case END       : parent.getItems().add(node); break;
+                        default : throw new UnsupportedOperationException(
+                            "Unknown InsertAt enum constant '" + insertAt + "'."
+                        );
+                    }
+
+                    hidden.set(null);
+                } else {
+                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
+                }
+            }
+        });
+    }
+    
     public void showError(String title, String message) {
         showError(title, message, null);
     }
     
     public void showError(String title, String message, final Throwable ex) {
+        LOGGER.error(ex, message);
+
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
         scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
@@ -307,6 +399,7 @@ public final class UISession {
         } else {
             alert.setTitle("Error");
         }
+        
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
@@ -314,6 +407,8 @@ public final class UISession {
     }
     
     public Optional<ButtonType> showWarning(String title, String message) {
+        LOGGER.warn(message);
+        
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
         scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
@@ -330,12 +425,11 @@ public final class UISession {
         return alert.showAndWait();
     }
     
-    private void showPasswordDialog(Dbms dbms) {
+    private void showPasswordDialog(DbmsProperty dbms) {
         final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
         dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
-        
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
         
@@ -383,19 +477,22 @@ public final class UISession {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(usernamePassword -> {
-            dbms.setUsername(usernamePassword.getKey());
-            dbms.setPassword(usernamePassword.getValue());
+            dbms.mutator().setUsername(usernamePassword.getKey());
+            speedment.getPasswordComponent().put(dbms, usernamePassword.getValue());
         });
     }
     
-    public <NODE extends AbstractNodeProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+    public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
-            dbms.clear();
+            dbms.schemasProperty().clear();
+ 
+            final Project newProject = DocumentUtil.deepCopy(project, ProjectImpl::new);
+            final Dbms newDbms = newProject.dbmses().findAny().get();
             
-            final DbmsHandler dh = dbms.getType().makeDbmsHandler(speedment, dbms);
-            dh.schemas(s -> schemaName.equalsIgnoreCase(s.getName()))
-                .map(schema -> new SchemaProperty(speedment, dbms, schema))
-                .forEachOrdered(dbms::add);
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
+            dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
+            
+            project.merge(speedment, newProject);
             
             return true;
         } catch (final Exception ex) {
@@ -407,22 +504,29 @@ public final class UISession {
         return false;
     }
     
-    public void loadGroovyFile(File file, ReuseStage reuse) {
+    public void loadConfigFile(File file, ReuseStage reuse) {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
-                final Project p = Project.newProject(speedment);
-                GroovyParser.fromGroovy(p, file.toPath());
+                final Project p = DocumentTranscoder.load(file.toPath());
 
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :
                         final Stage newStage = new Stage();
-                        final Speedment newSpeedment = speedment.newInstance();
-                        final UISession session = new UISession(newSpeedment, application, newStage, defaultGroovyLocation, p);
+                        final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
+                        
+                        final UISession session = new UISession(
+                            newSpeedment, 
+                            application, 
+                            newStage, 
+                            defaultConfigLocation, 
+                            p
+                        );
+                        
                         SceneController.createAndShow(session);
                         break;
 
                     case USE_EXISTING_STAGE :
-                        project.loadSettingsFrom(p);
+                        project.merge(speedment, p);
                         SceneController.createAndShow(this);
                         break;
 
@@ -433,14 +537,14 @@ public final class UISession {
                 }
 
                 currentlyOpenFile = file;
-            } catch (IOException | IllegalStateException e) {
-                LOGGER.error(e);
-                log(error(e.getMessage()));
-                showError("Could not load project", e.getMessage(), e);
+            } catch (final SpeedmentException ex) {
+                LOGGER.error(ex);
+                log(error(ex.getMessage()));
+                showError("Could not load project", ex.getMessage(), ex);
             }
         } else {
             showError(
-                "Could not read .groovy file", 
+                "Could not read .json file", 
                 "The file '" + file.getAbsoluteFile().getName() + 
                 "' could not be read.", 
                 null
@@ -448,14 +552,14 @@ public final class UISession {
         }
     }
     
-    private void saveGroovyFile() {
+    private void saveConfigFile() {
         final FileChooser fileChooser = new FileChooser();
         
-        fileChooser.setTitle("Save Groovy File");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Groovy files (*.groovy)", "*.groovy"));
+        fileChooser.setTitle("Save JSON File");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         
         if (currentlyOpenFile == null) {
-            final Path path   = Paths.get(defaultGroovyLocation);
+            final Path path   = Paths.get(defaultConfigLocation);
             final Path parent = path.getParent();
             
             try {
@@ -466,9 +570,8 @@ public final class UISession {
                 Do nothing. Creating the parent directory is purely for
                 the convenience of the user.
             */}
-            
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(defaultGroovyLocation);
+            fileChooser.setInitialFileName(path.getFileName().toString());
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());
@@ -477,15 +580,15 @@ public final class UISession {
         
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            if (!file.getName().endsWith(".groovy")) {
-                file = new File(file.getAbsolutePath() + ".groovy");
+            if (!file.getName().endsWith(".json")) {
+                file = new File(file.getAbsolutePath() + ".json");
             }
             
-            saveGroovyFile(file);
+            saveConfigFile(file);
         }
     }
     
-    private void saveGroovyFile(File file) {
+    private void saveConfigFile(File file) {
         final Path path   = file.toPath();
         final Path parent = path.getParent();
 
@@ -494,8 +597,7 @@ public final class UISession {
                 Files.createDirectories(parent);
             }
 
-            final String groovy = GroovyParser.toGroovy(project);
-            Files.write(path, groovy.getBytes(UTF_8));
+            DocumentTranscoder.save(project, path);
 
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
@@ -516,8 +618,16 @@ public final class UISession {
     }
     
     @SuppressWarnings("unchecked")
+    public <T extends Event, E extends EventHandler<T>> E showGitter() {
+        return on(event -> browse(GITTER_URI));
+    }
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        return on(event -> application.getHostServices().showDocument(GITHUB_URI));
+        return on(event -> browse(GITHUB_URI));
+    }
+    
+    public void browse(String url) {
+        application.getHostServices().showDocument(url);
     }
     
     private <T extends Event, E extends EventHandler<T>> E on(Consumer<T> listener) {
@@ -533,4 +643,5 @@ public final class UISession {
     }
     
     private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
+    private final static String GITTER_URI = "https://gitter.im/speedment/speedment/";
 }
