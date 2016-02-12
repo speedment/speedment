@@ -54,7 +54,7 @@ public enum OrderType {
 
         @Override
         public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
-            ascAternative.run();
+            descAternative.run();
         }
 
     }, NONE {
@@ -70,7 +70,7 @@ public enum OrderType {
 
         @Override
         public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
-            ascAternative.run();
+            noneAternative.run();
         }
     };
 

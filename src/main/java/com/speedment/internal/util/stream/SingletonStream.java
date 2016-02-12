@@ -199,7 +199,7 @@ public final class SingletonStream<T> implements Stream<T> {
     @Override
     public Stream<T> limit(long maxSize) {
         if (maxSize == 0) {
-            return empty();
+            return empty(); // Optimization
         }
         if (maxSize > 0) {
             return this;
@@ -210,7 +210,7 @@ public final class SingletonStream<T> implements Stream<T> {
     @Override
     public Stream<T> skip(long n) {
         if (n == 0) {
-            return this;
+            return this; // Optimization
         }
         if (n > 0) {
             return empty();

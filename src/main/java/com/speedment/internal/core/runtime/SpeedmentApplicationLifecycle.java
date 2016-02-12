@@ -321,9 +321,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Class<? extends Document> clazz = t2.get0();
             @SuppressWarnings("unchecked")
             final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
-            System.out.println("Class "+clazz.getSimpleName());
+            // System.out.println("Class "+clazz.getSimpleName());
             DocumentDbUtil.traverseOver(project)
-                    .peek(System.out::println)
+                    // .peek(System.out::println)
                     .filter(clazz::isInstance)
                     .map(Document.class::cast)
                     .forEachOrdered(consumer::accept);
