@@ -22,7 +22,7 @@ public class OrderTypeTest {
 
     final AtomicBoolean asc = new AtomicBoolean();
     final AtomicBoolean desc = new AtomicBoolean();
-    final AtomicBoolean none = new AtomicBoolean();
+ //   final AtomicBoolean none = new AtomicBoolean();
     final Supplier<String> ascSupplier = () -> {
         asc.set(true);
         return "A";
@@ -31,10 +31,10 @@ public class OrderTypeTest {
         desc.set(true);
         return "B";
     };
-    final Supplier<String> noneSupplier = () -> {
-        none.set(true);
-        return "C";
-    };
+//    final Supplier<String> noneSupplier = () -> {
+//        none.set(true);
+//        return "C";
+//    };
 
     public OrderTypeTest() {
     }
@@ -51,7 +51,7 @@ public class OrderTypeTest {
     public void setUp() {
         asc.set(false);
         desc.set(false);
-        none.set(false);
+       // none.set(false);
     }
 
     @After
@@ -67,69 +67,69 @@ public class OrderTypeTest {
     @Test
     public void testSelectLazilyASC() {
         System.out.println("selectLazily");
-        assertEquals("A", OrderType.ASC.selectLazily(ascSupplier, descSupplier, noneSupplier));
+        assertEquals("A", OrderType.ASC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertAscSelected();
     }
 
     @Test
     public void testSelectLazilyDESC() {
         System.out.println("selectLazily");
-        assertEquals("B", OrderType.DESC.selectLazily(ascSupplier, descSupplier, noneSupplier));
+        assertEquals("B", OrderType.DESC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertDescSelected();
     }
 
-    @Test
-    public void testSelectLazilyNONE() {
-        System.out.println("selectLazily");
-        assertEquals("C", OrderType.NONE.selectLazily(ascSupplier, descSupplier, noneSupplier));
-        assertNoneSelected();
-    }
+//    @Test
+//    public void testSelectLazilyNONE() {
+//        System.out.println("selectLazily");
+//        assertEquals("C", OrderType.NONE.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
+//        assertNoneSelected();
+//    }
 
     @Test
     public void testSelect() {
         System.out.println("select");
-        assertEquals("A", OrderType.ASC.select("A", "B", "C"));
-        assertEquals("B", OrderType.DESC.select("A", "B", "C"));
-        assertEquals("C", OrderType.NONE.select("A", "B", "C"));
+        assertEquals("A", OrderType.ASC.select("A", "B"));
+        assertEquals("B", OrderType.DESC.select("A", "B"));
+        assertEquals("A", OrderType.NONE.select("A", "B"));
     }
 
     @Test
     public void testSelectRunnableASC() {
         System.out.println("selectRunnable");
-        OrderType.ASC.selectRunnable(() -> asc.set(true), () -> desc.set(true), () -> none.set(true));
+        OrderType.ASC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertAscSelected();
     }
 
     @Test
     public void testSelectRunnableDesc() {
         System.out.println("selectRunnable");
-        OrderType.DESC.selectRunnable(() -> asc.set(true), () -> desc.set(true), () -> none.set(true));
+        OrderType.DESC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertDescSelected();
     }
 
-    @Test
-    public void testSelectRunnableNone() {
-        System.out.println("selectRunnable");
-        OrderType.NONE.selectRunnable(() -> asc.set(true), () -> desc.set(true), () -> none.set(true));
-        assertNoneSelected();
-    }
+//    @Test
+//    public void testSelectRunnableNone() {
+//        System.out.println("selectRunnable");
+//        OrderType.NONE.selectRunnable(() -> asc.set(true), () -> desc.set(true));
+//        assertNoneSelected();
+//    }
 
     private void assertAscSelected() {
         assertTrue(asc.get());
         assertFalse(desc.get());
-        assertFalse(none.get());
+        //assertFalse(none.get());
     }
 
     private void assertDescSelected() {
         assertFalse(asc.get());
         assertTrue(desc.get());
-        assertFalse(none.get());
+        //assertFalse(none.get());
     }
 
     private void assertNoneSelected() {
         assertFalse(asc.get());
         assertFalse(desc.get());
-        assertTrue(none.get());
+       // assertTrue(none.get());
     }
 
 }

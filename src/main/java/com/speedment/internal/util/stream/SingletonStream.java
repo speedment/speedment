@@ -384,7 +384,7 @@ public final class SingletonStream<T> implements Stream<T> {
         return Stream.empty();
     }
 
-    private static <E> Iterator<E> singletonIterator(final E e) {
+    public static <E> Iterator<E> singletonIterator(final E e) {
         return new Iterator<E>() {
             private boolean hasNext = true;
 

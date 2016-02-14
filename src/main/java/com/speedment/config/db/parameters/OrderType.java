@@ -27,57 +27,57 @@ import java.util.function.Supplier;
 public enum OrderType {
     ASC {
         @Override
-        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
             return ascAternative.get();
         }
 
         @Override
-        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
+        public <T> T select(T ascAternative, T descAternative) {
             return ascAternative;
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
             ascAternative.run();
         }
 
     }, DESC {
         @Override
-        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
             return descAternative.get();
         }
 
         @Override
-        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
+        public <T> T select(T ascAternative, T descAternative) {
             return descAternative;
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
             descAternative.run();
         }
 
     }, NONE {
         @Override
-        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative) {
-            return noneAternative.get();
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
+            return ascAternative.get();
         }
 
         @Override
-        public <T> T select(T ascAternative, T descAternative, T noneAternative) {
-            return noneAternative;
+        public <T> T select(T ascAternative, T descAternative) {
+            return ascAternative;
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative) {
-            noneAternative.run();
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+            ascAternative.run();
         }
     };
 
-    public abstract <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative, Supplier<T> noneAternative);
+    public abstract <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative);
 
-    public abstract <T> T select(T ascAternative, T descAternative, T noneAternative);
+    public abstract <T> T select(T ascAternative, T descAternative);
 
-    public abstract <T> void selectRunnable(Runnable ascAternative, Runnable descAternative, Runnable noneAternative);
+    public abstract <T> void selectRunnable(Runnable ascAternative, Runnable descAternative);
 
 }
