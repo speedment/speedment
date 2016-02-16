@@ -20,7 +20,8 @@ import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
- * Represents a third-party dependency.
+ * Represents a third-party dependency. This is used to keep track of the 
+ * licenses that are used.
  * 
  * @author Emil Forslund
  * @since  2.3
@@ -60,4 +61,13 @@ public interface Software {
      * @return  external dependencies
      */
     Stream<Software> getDependencies();
+    
+    /**
+     * Returns true if this software represent an internal module in the
+     * Speedment framework that is included in the Speedment Open Source 
+     * license.
+     * 
+     * @return  true if this is an internal software
+     */ 
+    boolean isInternal();
 }

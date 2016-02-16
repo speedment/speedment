@@ -37,9 +37,7 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -72,11 +70,10 @@ public final class AboutController implements Initializable {
 
         external.setText(
             MapStream.of(session.getSpeedment().components()
-                .filter(c -> !c.isInternal())
                 .map(Component::asSoftware)
                 .flatMap(software -> 
                     Stream.concat(
-                        Stream.of(software), 
+                        Stream.of(software).filter(s -> !s.isInternal()), 
                         software.getDependencies()
                     )
                 ).collect(Collectors.groupingBy(Software::getLicense))

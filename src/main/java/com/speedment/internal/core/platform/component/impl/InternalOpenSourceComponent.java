@@ -64,6 +64,7 @@ abstract class InternalOpenSourceComponent extends AbstractComponent {
         getTitle(),
         getVersion(),
         getLicense(),
+        isInternal(),
         getDependencies().toArray(Software[]::new)
     );
 }

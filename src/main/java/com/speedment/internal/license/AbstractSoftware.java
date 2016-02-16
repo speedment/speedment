@@ -29,12 +29,17 @@ public abstract class AbstractSoftware implements Software {
     private final String name;
     private final String version;
     private final License license;
+    private final boolean internal;
     
     public static Software with(String name, String version, License license, Software... dependencies) {
+        return with(name, version, license, false, dependencies);
+    }
+    
+    public static Software with(String name, String version, License license, boolean internal, Software... dependencies) {
         if (dependencies.length == 0) {
-            return new SoftwareLeaf(name, version, license);
+            return new SoftwareLeaf(name, version, license, internal);
         } else {
-            return new SoftwareBranch(name, version, license, dependencies);
+            return new SoftwareBranch(name, version, license, internal, dependencies);
         }
     }
 
@@ -52,19 +57,25 @@ public abstract class AbstractSoftware implements Software {
     public final License getLicense() {
         return license;
     }
+
+    @Override
+    public final boolean isInternal() {
+        return internal;
+    }
     
-    private AbstractSoftware(String name, String version, License license) {
-        this.name    = requireNonNull(name);
-        this.version = requireNonNull(version);
-        this.license = requireNonNull(license);
+    private AbstractSoftware(String name, String version, License license, boolean internal) {
+        this.name     = requireNonNull(name);
+        this.version  = requireNonNull(version);
+        this.license  = requireNonNull(license);
+        this.internal = internal;
     }
     
     private final static class SoftwareBranch extends AbstractSoftware {
         
         private final Software[] dependencies;
 
-        private SoftwareBranch(String name, String version, License license, Software... dependencies) {
-            super(name, version, license);
+        private SoftwareBranch(String name, String version, License license, boolean internal, Software... dependencies) {
+            super(name, version, license, internal);
             this.dependencies = requireNonNull(dependencies);
         }
 
@@ -77,8 +88,8 @@ public abstract class AbstractSoftware implements Software {
     
     private final static class SoftwareLeaf extends AbstractSoftware {
 
-        private SoftwareLeaf(String name, String version, License license) {
-            super(name, version, license);
+        private SoftwareLeaf(String name, String version, License license, boolean internal) {
+            super(name, version, license, internal);
         }
 
         @Override
