@@ -46,11 +46,9 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
@@ -300,7 +298,10 @@ public final class ComponentsController implements Initializable {
         });
 
         final Scene scene = new Scene(root);
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        session.getSpeedment()
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
 
         dialog.setTitle("Components");
         dialog.initModality(APPLICATION_MODAL);

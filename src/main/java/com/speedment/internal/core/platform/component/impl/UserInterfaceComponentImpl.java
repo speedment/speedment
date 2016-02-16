@@ -24,7 +24,6 @@ import com.speedment.internal.license.AbstractSoftware;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,21 +31,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
-import static javafx.collections.FXCollections.observableArrayList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static javafx.collections.FXCollections.observableArrayList;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static javafx.collections.FXCollections.observableArrayList;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -56,13 +48,13 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
     
-    private final static String DEFAULT_STYLESHEET = "/css/speedment.css";
+    private final static String[] DEFAULT_STYLESHEETS = {"/css/speedment.css"};
     
     private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
-    private final StringProperty stylesheet;
+    private final List<String> stylesheets;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
@@ -70,7 +62,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         outputMessages      = observableArrayList();
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
-        stylesheet          = new SimpleStringProperty(DEFAULT_STYLESHEET);
+        stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
     }
 
     @Override
@@ -128,13 +120,13 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     }
 
     @Override
-    public String getStylesheetFile() {
-        return stylesheet.getValue();
+    public Stream<String> stylesheetFiles() {
+        return stylesheets.stream();
     }
 
     @Override
-    public void setStylesheetFile(String filename) {
-        this.stylesheet.setValue(filename);
+    public void addStylesheetFile(String filename) {
+        this.stylesheets.add(filename);
     }
 
     @Override

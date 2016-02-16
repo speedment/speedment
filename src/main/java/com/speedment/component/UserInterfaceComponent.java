@@ -77,18 +77,19 @@ public interface UserInterfaceComponent extends Component {
     ObservableList<Node> getOutputMessages();
     
     /**
-     * Returns the css-file that should be used to style the GUI.
+     * Returns a stream of all the css-file that should be used to style the UI.
      * 
      * @return  the stylesheet
      */
-    String getStylesheetFile();
+    Stream<String> stylesheetFiles();
     
     /**
-     * Returns the css-file used to style the GUI.
+     * Appends an additional stylesheet file to be used when styling the UI.
+     * The specified file can override any rules specified by earlier files.
      * 
      * @param filename  the new css stylesheet
      */
-    void setStylesheetFile(String filename);
+    void addStylesheetFile(String filename);
     
     /**
      * Installs a new context menu builder that will be used in the 

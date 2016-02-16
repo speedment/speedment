@@ -67,7 +67,10 @@ public final class Loader {
         final Parent root = Loader.create(session, filename, constructor, consumer);
         final Scene scene = new Scene(root);
         
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        session.getSpeedment()
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         final Stage stage = session.getStage();
         stage.hide();

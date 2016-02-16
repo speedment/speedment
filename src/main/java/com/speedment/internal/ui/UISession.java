@@ -73,8 +73,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -388,7 +388,11 @@ public final class UISession {
 
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
 
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
@@ -411,7 +415,10 @@ public final class UISession {
         
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
@@ -433,8 +440,11 @@ public final class UISession {
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
         
-        final Scene scene     = pane.getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+        final Scene scene = pane.getScene();
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();

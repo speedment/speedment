@@ -105,7 +105,10 @@ public final class AboutController implements Initializable {
         });
         
         final Scene scene  = new Scene(root);
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        session.getSpeedment()
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         dialog.setTitle("About Speedment");
         dialog.initModality(APPLICATION_MODAL);

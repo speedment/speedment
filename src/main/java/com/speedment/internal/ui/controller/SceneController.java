@@ -80,6 +80,9 @@ public final class SceneController implements Initializable {
         stage.setScene(scene);
         stage.show();
         
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        session.getSpeedment()
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
 	}
 }
