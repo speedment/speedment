@@ -17,6 +17,7 @@ package com.speedment.internal.license;
 
 import com.speedment.license.License;
 import com.speedment.license.Software;
+import java.util.Objects;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
@@ -61,6 +62,29 @@ public abstract class AbstractSoftware implements Software {
     @Override
     public final boolean isInternal() {
         return internal;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.version);
+        hash = 97 * hash + Objects.hashCode(this.license);
+        hash = 97 * hash + (this.internal ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
+        
+        final AbstractSoftware that = (AbstractSoftware) obj;
+        return this.internal == that.internal
+            && Objects.equals(this.name, that.name)
+            && Objects.equals(this.version, that.version)
+            && Objects.equals(this.license, that.license);
     }
     
     private AbstractSoftware(String name, String version, License license, boolean internal) {

@@ -22,6 +22,7 @@ import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.util.Trees;
 import com.speedment.license.License;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
@@ -39,6 +40,12 @@ import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -72,10 +79,11 @@ public final class AboutController implements Initializable {
             MapStream.of(session.getSpeedment().components()
                 .map(Component::asSoftware)
                 .flatMap(software -> 
-                    Stream.concat(
-                        Stream.of(software).filter(s -> !s.isInternal()), 
-                        software.getDependencies()
-                    )
+                    Trees.traverse(software, 
+                        Software::getDependencies, 
+                        Trees.TraversalOrder.DEPTH_FIRST_POST
+                    ).filter(s -> !s.isInternal())
+                     .distinct()
                 ).collect(Collectors.groupingBy(Software::getLicense))
             ).sortedByKey(License.COMPARATOR)
              .mapValue(List::stream)

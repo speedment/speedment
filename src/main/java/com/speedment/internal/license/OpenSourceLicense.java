@@ -19,10 +19,7 @@ package com.speedment.internal.license;
 import com.speedment.license.License;
 import java.net.MalformedURLException;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
