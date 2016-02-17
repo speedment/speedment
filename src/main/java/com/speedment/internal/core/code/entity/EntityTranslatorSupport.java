@@ -42,6 +42,7 @@ import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringFieldImpl;
 import com.speedment.internal.core.field.ReferenceFieldImpl;
 import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
+import com.speedment.internal.util.JavaLanguageNamer;
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.util.Pluralis;
@@ -55,7 +56,6 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.S
 import static com.speedment.internal.codegen.util.Formatting.DOT;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -192,25 +192,26 @@ public final class EntityTranslatorSupport {
     public static Method toJson() {
         return Method.of("toJson", STRING)
             .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the default {@link JsonFormatter}. "
+                "Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}. "
                 + "All of the fields in this Entity will appear in the returned JSON String."
             )
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link JsonFormatter}"))
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}"))
             );
     }
 
     public static Method toJsonExtended(Type entityType) {
         requireNonNull(entityType);
-        final String paramName = "jsonFormatter";
+        final String paramName = "jsonEncoder";
         return Method.of("toJson", STRING)
             .add(Field.of(paramName, Type.of(JsonEncoder.class)
                 .add(Generic.of().add(entityType))))
             .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the provided {@link JsonFormatter}."
-            )
-                .add(PARAM.setValue(paramName).setText("to use as a formatter"))
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link JsonFormatter}"))
-                .add(SEE.setText("JsonFormatter"))
+                    "Returns a JSON representation of this Entity using the provided {@link " + 
+                    JsonEncoder.class.getSimpleName() + "}."
+                )
+                .add(PARAM.setValue(paramName).setText("to use as encoder"))
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link " + JsonEncoder.class.getSimpleName() + "}"))
+                .add(SEE.setText(JsonEncoder.class.getSimpleName()))
             );
 
     }
@@ -221,7 +222,7 @@ public final class EntityTranslatorSupport {
         return table.foreignKeys()
             .filter(HasEnabled::test)
             .flatMap(ForeignKey::foreignKeyColumns)
-            .filter(fkc -> fkc.findColumn().equals(column))
+            .filter(fkc -> column.equals(fkc.findColumn().orElse(null)))
             .findFirst();
     }
 
@@ -229,15 +230,15 @@ public final class EntityTranslatorSupport {
         requireNonNull(name);
         requireNonNull(entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class));
-        //.add("return " + MANAGER.getName() + ".get()." + name + "(this);");
     }
 
     public static Method dbMethodWithListener(String name, Type entityType) {
         requireNonNull(name);
         requireNonNull(entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
-            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class).add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))));
-        //.add("return " + MANAGER.getName() + ".get()." + name + "(this, " + CONSUMER_NAME + ");");
+            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
+                .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
+            ));
     }
 
     public static Method persist(Type entityType) {
@@ -246,7 +247,6 @@ public final class EntityTranslatorSupport {
 
     public static Method update(Type entityType) {
         return EntityTranslatorSupport.dbMethod("update", requireNonNull(entityType));
-
     }
 
     public static Method remove(Type entityType) {

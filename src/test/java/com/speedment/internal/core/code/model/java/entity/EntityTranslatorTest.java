@@ -42,6 +42,22 @@ import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *

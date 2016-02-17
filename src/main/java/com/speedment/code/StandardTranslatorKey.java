@@ -38,18 +38,28 @@ public final class StandardTranslatorKey {
         SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("SpeedmentApplicationMetadata", Class.class);
     
     public final static TranslatorKey<Table, Interface> 
-        ENTITY = new TranslatorKeyImpl<>("Entity", Interface.class);
+        ENTITY = new TranslatorKeyImpl<>("Entity", Interface.class),
+        MANAGER = new TranslatorKeyImpl<>("Manager", Interface.class),
+        GENERATED_ENTITY = new TranslatorKeyImpl<>("Entity", Interface.class),
+        GENERATED_MANAGER = new TranslatorKeyImpl<>("Manager", Interface.class);
     
     public final static TranslatorKey<Table, Class>
         ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl", Class.class),
-        MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl", Class.class);
+        MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl", Class.class),
+        GENERATED_ENTITY_IMPL = new TranslatorKeyImpl<>("EntityImpl", Class.class),
+        GENERATED_MANAGER_IMPL = new TranslatorKeyImpl<>("ManagerImpl", Class.class);
 
     public static Stream<TranslatorKey<Project, Class>> projectTranslatorKeys() {
         return Stream.of(SPEEDMENT_APPLICATION, SPEEDMENT_APPLICATION_METADATA);
     }
     
     public static Stream<TranslatorKey<Table, ? extends ClassOrInterface<?>>> tableTranslatorKeys() {
-        return Stream.of(ENTITY, ENTITY_IMPL, MANAGER_IMPL);
+        return Stream.of(
+            ENTITY, ENTITY_IMPL, 
+            MANAGER, MANAGER_IMPL,
+            GENERATED_ENTITY, GENERATED_ENTITY_IMPL, 
+            GENERATED_MANAGER, GENERATED_MANAGER_IMPL
+        );
     }
 
     private StandardTranslatorKey() {}

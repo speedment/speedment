@@ -33,9 +33,14 @@ import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.core.code.JavaClassTranslator;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.core.code.entity.GeneratedEntityImplTranslator;
+import com.speedment.internal.core.code.entity.GeneratedEntityTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
+import com.speedment.internal.core.code.manager.EntityManagerTranslator;
+import com.speedment.internal.core.code.manager.GeneratedEntityManagerImplTranslator;
+import com.speedment.internal.core.code.manager.GeneratedEntityManagerTranslator;
 import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.stream.MapStream;
 import java.util.Map;
@@ -95,13 +100,21 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
+        
         generator = new JavaGenerator();
-        map = new ConcurrentHashMap<>();
+        map       = new ConcurrentHashMap<>();
+        
         put(Table.class, ENTITY, EntityTranslator::new);
         put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
+        put(Table.class, MANAGER, EntityManagerTranslator::new);
         put(Table.class, MANAGER_IMPL, EntityManagerImplTranslator::new);
+        put(Table.class, GENERATED_ENTITY, GeneratedEntityTranslator::new);
+        put(Table.class, GENERATED_ENTITY_IMPL, GeneratedEntityImplTranslator::new);
+        put(Table.class, GENERATED_MANAGER, GeneratedEntityManagerTranslator::new);
+        put(Table.class, GENERATED_MANAGER_IMPL, GeneratedEntityManagerImplTranslator::new);
         put(Project.class, SPEEDMENT_APPLICATION, SpeedmentApplicationTranslator::new);
         put(Project.class, SPEEDMENT_APPLICATION_METADATA, SpeedmentApplicationMetadataTranslator::new);
+        
         javaLanguageSupplier = DefaultJavaLanguageNamer::new;
     }
 
