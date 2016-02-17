@@ -18,6 +18,7 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
@@ -25,11 +26,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -96,10 +99,29 @@ public interface UserInterfaceComponent extends Component {
      * A branding container.
      */
     interface Brand {
-        String text();
-        Optional<String> imageFile();
-        Color background();
-        Color foreground();
+        
+        String title();
+        String subtitle();
+        Optional<String> logoSmall();
+        Optional<String> logoLarge();
+        
+        static void apply(UISession session, Scene scene) {
+            final Stage stage = session.getStage();
+            final Brand brand = session
+                .getSpeedment()
+                .getUserInterfaceComponent()
+                .getBrand();
+            
+            stage.setTitle(brand.title());
+            brand.logoSmall()
+                .map(Image::new)
+                .ifPresent(stage.getIcons()::add);
+
+            session.getSpeedment()
+                .getUserInterfaceComponent()
+                .stylesheetFiles()
+                .forEachOrdered(scene.getStylesheets()::add);
+        }
     }
     
     /**

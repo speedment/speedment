@@ -27,14 +27,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import static java.util.Objects.requireNonNull;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -49,7 +44,7 @@ public final class ToolbarController implements Initializable {
     private @FXML Button buttonOpen;
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
-    private @FXML Label brand;
+    private @FXML ImageView brand;
     
     private ToolbarController(UISession session) {
         this.session = requireNonNull(session);
@@ -67,12 +62,10 @@ public final class ToolbarController implements Initializable {
         buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
-        final Brand localBrand = session.getSpeedment().getUserInterfaceComponent().getBrand();
-        brand.setText(localBrand.text());
-        localBrand.imageFile().ifPresent(img -> brand.setGraphic(new ImageView(img)));
-        brand.setBackground(new Background(new BackgroundFill(localBrand.background(), CornerRadii.EMPTY, Insets.EMPTY)));
-        brand.setTextFill(localBrand.foreground());
-        
+        final Brand uiBrand = session.getSpeedment().getUserInterfaceComponent().getBrand();
+        uiBrand.logoLarge()
+            .map(Image::new)
+            .ifPresent(brand::setImage);
     }
     
     public static Node create(UISession session) {

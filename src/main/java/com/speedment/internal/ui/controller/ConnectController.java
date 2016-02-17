@@ -41,7 +41,6 @@ import javafx.util.StringConverter;
 
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.util.Loader;

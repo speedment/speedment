@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.internal.ui.resource.SpeedmentIcon;
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import java.net.URL;
@@ -32,6 +32,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -71,18 +73,12 @@ public final class SceneController implements Initializable {
         final Scene scene           = new Scene(root);
         final Stage stage           = session.getStage();
         final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();
-        final boolean screenIsSmall = screen.getWidth() <= 1920;
-
+        final boolean screenIsSmall = screen.getWidth() <= 1600; // TODO Save maximized setting.
+        
         stage.hide();
-        stage.setTitle("Speedment");
+        Brand.apply(session, scene);
         stage.setMaximized(screenIsSmall);
-        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         stage.setScene(scene);
         stage.show();
-        
-        session.getSpeedment()
-            .getUserInterfaceComponent()
-            .stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
 	}
 }

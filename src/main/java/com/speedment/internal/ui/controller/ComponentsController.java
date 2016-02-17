@@ -22,6 +22,7 @@ import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.Component;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.TypeMapperComponent;
+import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.ui.resource.SpeedmentFont;
@@ -52,6 +53,7 @@ import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -296,6 +298,8 @@ public final class ComponentsController implements Initializable {
         final Parent root = Loader.create(session, "Components", ComponentsController::new, control -> {
             control.dialog = dialog;
         });
+        
+        final UserInterfaceComponent.Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
 
         final Scene scene = new Scene(root);
         session.getSpeedment()
@@ -305,7 +309,7 @@ public final class ComponentsController implements Initializable {
 
         dialog.setTitle("Components");
         dialog.initModality(APPLICATION_MODAL);
-        dialog.getIcons().add(SpeedmentIcon.SPIRE.load());
+        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
         dialog.initOwner(session.getStage());
         dialog.setScene(scene);
         dialog.show();

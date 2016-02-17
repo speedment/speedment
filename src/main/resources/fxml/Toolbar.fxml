@@ -56,7 +56,11 @@
             </padding>
         </Button>
         <Pane prefHeight="200.0" HBox.hgrow="ALWAYS" />
-        <Label fx:id="brand" />
+        <ImageView fx:id="brand" fitHeight="48.0" preserveRatio="true" smooth="true" >
+            <HBox.margin>
+                <Insets right="8.0" />
+            </HBox.margin>
+        </ImageView>
     </children>
     <padding>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

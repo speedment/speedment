@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.ui.util;
 
+import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.resource.SpeedmentIcon;
 import java.io.IOException;
 import java.util.function.Function;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +29,7 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
@@ -59,23 +61,21 @@ public final class Loader {
         }
 	}
     
-    public static <T extends Initializable> Parent createAndShow(UISession session, String filename, Function<UISession, T> constructor) {
+    public static <T extends Initializable> Parent createAndShow(
+        UISession session, String filename, Function<UISession, T> constructor) {
+        
         return createAndShow(session, filename, constructor, e -> {});
     }
     
-    public static <T extends Initializable> Parent createAndShow(UISession session, String filename, Function<UISession, T> constructor, Consumer<T> consumer) {
+    public static <T extends Initializable> Parent createAndShow(
+        UISession session, String filename, Function<UISession, T> constructor, Consumer<T> consumer) {
+        
         final Parent root = Loader.create(session, filename, constructor, consumer);
         final Scene scene = new Scene(root);
         
-        session.getSpeedment()
-            .getUserInterfaceComponent()
-            .stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
-        
         final Stage stage = session.getStage();
         stage.hide();
-        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
-        stage.setTitle("Speedment");
+        Brand.apply(session, scene);
         stage.setScene(scene);
         stage.show();
         

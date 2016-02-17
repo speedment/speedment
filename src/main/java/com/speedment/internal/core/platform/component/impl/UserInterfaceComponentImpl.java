@@ -21,6 +21,7 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.internal.ui.brand.DefaultBrand;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
@@ -39,7 +40,6 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
-import javafx.scene.paint.Color;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -66,7 +66,13 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
         stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
-        brand               = new SpeedmentBrand();
+        
+        brand = new DefaultBrand(
+            "Speedment", 
+            "Open Source", 
+            "/images/logo.png",
+            "/images/speedment_open_source_small.png"
+        );
     }
 
     @Override
@@ -82,29 +88,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     @Override
     public ObservableList<Node> getOutputMessages() {
         return outputMessages;
-    }
-    
-    private final static class SpeedmentBrand implements Brand {
-
-        @Override
-        public String text() {
-            return "Speedment Open Source";
-        }
-
-        @Override
-        public Optional<String> imageFile() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Color background() {
-            return Color.TRANSPARENT;
-        }
-
-        @Override
-        public Color foreground() {
-            return Color.GRAY;
-        }
     }
     
     @Override

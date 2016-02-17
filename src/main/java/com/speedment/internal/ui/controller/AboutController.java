@@ -18,8 +18,7 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.component.Component;
-import com.speedment.internal.ui.resource.SpeedmentFont;
-import com.speedment.internal.ui.resource.SpeedmentIcon;
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.util.Trees;
@@ -35,19 +34,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -57,7 +50,7 @@ public final class AboutController implements Initializable {
     
     private final UISession session;
     
-    private @FXML Label title;
+    private @FXML ImageView titleImage;
     private @FXML Button close;
     private @FXML Label version;
     private @FXML Label external;
@@ -71,8 +64,12 @@ public final class AboutController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        title.setTextFill(Color.web("#45a6fc"));
-        title.setFont(SpeedmentFont.HEADER.get());
+        session.getSpeedment().getUserInterfaceComponent()
+            .getBrand()
+            .logoLarge()
+            .map(Image::new)
+            .ifPresent(titleImage::setImage);
+        
         version.setText(SpeedmentVersion.getImplementationVersion());
 
         external.setText(
@@ -100,9 +97,11 @@ public final class AboutController implements Initializable {
     public static void createAndShow(UISession session) {
         final Stage dialog = new Stage();
         
-        final Parent root  = Loader.create(session, "About", AboutController::new, control -> {
+        final Parent root = Loader.create(session, "About", AboutController::new, control -> {
             control.dialog = dialog;
         });
+        
+        final Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
         
         final Scene scene  = new Scene(root);
         session.getSpeedment()
@@ -110,9 +109,9 @@ public final class AboutController implements Initializable {
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
         
-        dialog.setTitle("About Speedment");
+        dialog.setTitle("About " + brand.title());
         dialog.initModality(APPLICATION_MODAL);
-        dialog.getIcons().add(SpeedmentIcon.SPIRE.load());
+        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
         dialog.initOwner(session.getStage());
         dialog.setScene(scene);
         dialog.show();
