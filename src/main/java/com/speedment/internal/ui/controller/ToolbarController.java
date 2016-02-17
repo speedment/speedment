@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -26,8 +27,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -42,7 +49,7 @@ public final class ToolbarController implements Initializable {
     private @FXML Button buttonOpen;
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
-    private @FXML ImageView logo;
+    private @FXML Label brand;
     
     private ToolbarController(UISession session) {
         this.session = requireNonNull(session);
@@ -60,7 +67,12 @@ public final class ToolbarController implements Initializable {
         buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
-        logo.setOnMousePressed(session.showGithub());
+        final Brand localBrand = session.getSpeedment().getUserInterfaceComponent().getBrand();
+        brand.setText(localBrand.text());
+        localBrand.imageFile().ifPresent(img -> brand.setGraphic(new ImageView(img)));
+        brand.setBackground(new Background(new BackgroundFill(localBrand.background(), CornerRadii.EMPTY, Insets.EMPTY)));
+        brand.setTextFill(localBrand.foreground());
+        
     }
     
     public static Node create(UISession session) {

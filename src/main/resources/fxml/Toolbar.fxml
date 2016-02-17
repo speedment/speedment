@@ -56,17 +56,7 @@
             </padding>
         </Button>
         <Pane prefHeight="200.0" HBox.hgrow="ALWAYS" />
-        <ImageView fx:id="logo" fitHeight="48.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../images/logo.png" />
-            </image>
-            <HBox.margin>
-                <Insets right="16.0" />
-            </HBox.margin>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
-        </ImageView>
+        <Label fx:id="brand" />
     </children>
     <padding>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

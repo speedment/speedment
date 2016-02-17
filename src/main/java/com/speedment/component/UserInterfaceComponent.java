@@ -29,6 +29,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.paint.Color;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -90,6 +91,30 @@ public interface UserInterfaceComponent extends Component {
      * @param filename  the new css stylesheet
      */
     void addStylesheetFile(String filename);
+    
+    /**
+     * A branding container.
+     */
+    interface Brand {
+        String text();
+        Optional<String> imageFile();
+        Color background();
+        Color foreground();
+    }
+    
+    /**
+     * Sets the brand that is shown in the top-left part of the UI.
+     * 
+     * @param brand  the new brand
+     */
+    void setBrand(Brand brand);
+    
+    /**
+     * Returns the brand that is currently used in the top-left part of the UI.
+     * 
+     * @return  the brand
+     */
+    Brand getBrand();
     
     /**
      * Installs a new context menu builder that will be used in the 

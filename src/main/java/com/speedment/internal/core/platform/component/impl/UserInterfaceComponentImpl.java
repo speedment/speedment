@@ -39,7 +39,9 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
+import javafx.scene.paint.Color;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -55,6 +57,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     private final List<String> stylesheets;
+    private Brand brand;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
@@ -63,6 +66,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
         stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
+        brand               = new SpeedmentBrand();
     }
 
     @Override
@@ -79,7 +83,40 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     public ObservableList<Node> getOutputMessages() {
         return outputMessages;
     }
+    
+    private final static class SpeedmentBrand implements Brand {
 
+        @Override
+        public String text() {
+            return "Speedment Open Source";
+        }
+
+        @Override
+        public Optional<String> imageFile() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Color background() {
+            return Color.TRANSPARENT;
+        }
+
+        @Override
+        public Color foreground() {
+            return Color.GRAY;
+        }
+    }
+    
+    @Override
+    public void setBrand(Brand brand) {
+        this.brand = requireNonNull(brand);
+    }
+
+    @Override
+    public Brand getBrand() {
+        return brand;
+    }
+    
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
         contextMenuBuilders.computeIfAbsent(nodeType, k -> new CopyOnWriteArrayList<>()).add(menuBuilder);
