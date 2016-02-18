@@ -42,6 +42,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.internal.core.config.db.ColumnImpl;
 import com.speedment.internal.core.config.db.DbmsImpl;
@@ -114,23 +115,49 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         return GENERATED.set(new TextValue("Speedment"));
     }
 
-    protected abstract String getFileName();
+    /**
+     * Returns the name of the {@link Class}/{@link Interface}/{@link Enum} that
+     * this translator will create. The name is only the short name. It does not
+     * include package information.
+     * <p>
+     * Example:
+     * {@code HareImpl}
+     * 
+     * @return  the short filename of the file to generate
+     */
+    protected abstract String getClassOrInterfaceName();
 
-    protected abstract T make(File file);
+    /**
+     * Creates and configures a {@link Class}/{@link Interface}/{@link Enum} for 
+     * the specified {@code File}. This method uses a builder created using the
+     * {@link #newBuilder(File, String)} method to make sure all the listeners 
+     * are notified when the model is built.
+     * <p>
+     * Observe that this method doesn't add the created model to the file.
+     * 
+     * @param file  the file to make a model for
+     * @return      the model made
+     */
+    protected abstract T makeCodeGenModel(File file);
 
+    /**
+     * This method is executed after the file has been created but before it is
+     * returned to the code generator.
+     * 
+     * @param file  the file to operate on
+     */
     protected void finializeFile(File file) {
         // Do nothing
     }
 
     @Override
     public File get() {
-        final File file = File.of(
-            baseDirectoryName() + "/" + 
+        final File file = File.of(baseDirectoryName() + "/" + 
             (isInGeneratedPackage() ? "generated/" : "") + 
-            getFileName() + ".java"
+            getClassOrInterfaceName() + ".java"
         );
         
-        final T item = make(file);
+        final T item = makeCodeGenModel(file);
         item.set(getJavaDoc());
         file.add(item);
         finializeFile(file);

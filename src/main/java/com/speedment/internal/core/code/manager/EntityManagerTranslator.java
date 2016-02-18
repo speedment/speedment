@@ -35,13 +35,13 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
     }
 
     @Override
-    protected Interface make(File file) {
+    protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, manager.getName()).build()
             .public_().add(manager.getGeneratedType());
     }
     
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return manager.getName();
     }
 

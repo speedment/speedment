@@ -52,7 +52,7 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
     }
 
     @Override
-    protected Class make(File file) {
+    protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         final Method getMetadata = Method.of("getMetadata", STRING)
             .public_()
@@ -98,7 +98,7 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
     }
 
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return className;
     }
 

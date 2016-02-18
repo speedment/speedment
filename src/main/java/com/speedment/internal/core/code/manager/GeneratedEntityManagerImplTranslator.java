@@ -36,17 +36,12 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import com.speedment.internal.codegen.util.Formatting;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -54,6 +49,10 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -71,7 +70,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     }
 
     @Override
-    protected Class make(File file) {
+    protected Class makeCodeGenModel(File file) {
 
         return newBuilder(file, manager.getGeneratedImplName())
             .forEveryColumn((clazz, col) -> {
@@ -222,7 +221,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     }
 
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return manager.getGeneratedImplName();
     }
 

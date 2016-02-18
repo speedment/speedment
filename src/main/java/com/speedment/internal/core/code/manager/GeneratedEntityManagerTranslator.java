@@ -17,7 +17,6 @@
 package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
-import com.speedment.component.ManagerComponent;
 import com.speedment.component.ProjectComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
@@ -32,15 +31,15 @@ import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.SqlManager;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -53,7 +52,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     }
 
     @Override
-    protected Interface make(File file) {
+    protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, manager.getGeneratedName()).build()
             .public_()
             .add(Type.of(SqlManager.class).add(genericOfEntity))
@@ -132,7 +131,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     }
 
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return manager.getGeneratedName();
     }
     

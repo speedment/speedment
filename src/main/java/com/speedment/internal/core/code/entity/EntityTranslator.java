@@ -35,13 +35,13 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
     }
 
     @Override
-    protected Interface make(File file) {
+    protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, entity.getName()).build()
             .public_().add(entity.getGeneratedType());
     }
     
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return entity.getName();
     }
 

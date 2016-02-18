@@ -38,13 +38,13 @@ import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -58,7 +58,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     }
 
     @Override
-    protected Interface make(File file) {
+    protected Interface makeCodeGenModel(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
         final Interface iface = newBuilder(file, entity.getGeneratedName())
@@ -273,7 +273,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     }
 
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return entity.getGeneratedName();
     }
 

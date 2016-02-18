@@ -60,7 +60,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     }
     
     @Override
-    protected Class make(File file) {
+    protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         
         final Map<String, List<Table>> nameMap = traverseOver(project(), Table.class)
@@ -117,7 +117,7 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     }
     
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return className;
     }
 }

@@ -65,7 +65,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     }
     
     @Override
-    protected Class make(File file) {
+    protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
@@ -299,7 +299,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     }
 
     @Override
-    protected String getFileName() {
+    protected String getClassOrInterfaceName() {
         return entity.getGeneratedImplName();
     }
 
