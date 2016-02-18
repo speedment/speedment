@@ -156,7 +156,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                 getDocument().mainInterface().getSimpleName() + 
                 " " + relativeName(getDocument(), Project.class) + 
                 "." + GENERATED_JAVADOC_MESSAGE
-            ).add(AUTHOR.setValue("Speedment"));
+            ).add(AUTHOR.setValue("Your Name")); // TODO: Enter name automatically?
         }
     }
 
@@ -307,7 +307,10 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     );
             }
 
-            i.add(generated());
+            if (isInGeneratedPackage()) {
+                i.add(generated());
+            }
+            
             return i;
         }
     }

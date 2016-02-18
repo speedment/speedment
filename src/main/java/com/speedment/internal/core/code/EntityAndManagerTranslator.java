@@ -97,7 +97,6 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
 
     protected final ClassType 
         entity  = new ClassType("", "Impl"),
-//        builder = new ClassType("Builder", "Impl"),
         manager = new ClassType("Manager", "Impl");
 
     protected final Generic 
