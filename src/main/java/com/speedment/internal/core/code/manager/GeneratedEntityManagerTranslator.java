@@ -57,7 +57,6 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
             .public_()
             .add(Type.of(SqlManager.class).add(genericOfEntity))
             .add(generatePrimaryKeyFor(file))
-            .call(i -> file.add(Import.of(Type.of(Speedment.class))))
             .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
             .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
                 .add("return speedment()" +
