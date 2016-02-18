@@ -466,7 +466,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 // Make sure the driver is loaded. This is a must for some JavaEE servers.
                 Class.forName(driverName);
             } catch (ClassNotFoundException cnfe) {
-                throw new SpeedmentException("The database driver class "+driverName+" is not available. Make sure to include it in your class path (e.g. in the POM file)", cnfe);
+                LOGGER.error("The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
             }
         });
 
