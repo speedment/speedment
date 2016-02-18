@@ -112,7 +112,8 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     protected AnnotationUsage generated() {
-        return GENERATED.set(new TextValue("Speedment"));
+        final String owner = speedment.getUserInterfaceComponent().getBrand().title();
+        return GENERATED.set(new TextValue(owner));
     }
 
     /**
