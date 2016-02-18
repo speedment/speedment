@@ -37,6 +37,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.V
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
@@ -90,13 +91,13 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 );
             })
             .build()
-            .public_()
+            .public_().abstract_()
             .setSupertype(Type.of(AbstractSqlManager.class)
                 .add(Generic.of().add(entity.getType()))
             )
             .call(i -> file.add(Import.of(entity.getImplType())))
             .add(Constructor.of()
-                .public_()
+                .protected_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setSqlEntityMapper(this::defaultReadEntity);"))
@@ -112,8 +113,15 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             add(defaultReadEntity(file))
             .add(Method.of("newInstance", entity.getType())
                 .public_().add(OVERRIDE)
-                .add("return new " + Formatting.shortName(entity.getImplType().getName()) + "(" + SPEEDMENT_VARIABLE_NAME + ");")
+                .add("return new " + entity.getImplName() + "() {", indent(
+                        "@Override",
+                        "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
+                            "return " + SPEEDMENT_VARIABLE_NAME + ";"
+                        ), "}"
+                    ), "};"
+                )
                 .call($ -> file.add(Import.of(entity.getImplType())))
+                .call($ -> file.add(Import.of(Type.of(Speedment.class))))
             )
             .add(generatePrimaryKeyFor(file));
     }

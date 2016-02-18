@@ -29,7 +29,6 @@ import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
 import static com.speedment.internal.codegen.util.Formatting.block;
@@ -61,8 +60,8 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
             .call(i -> file.add(Import.of(Type.of(Speedment.class))))
             .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
             .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                .add("return " + Speedment.class.getSimpleName() +
-                    ".get().get(" + ProjectComponent.class.getSimpleName() +
+                .add("return speedment()" +
+                    ".get(" + ProjectComponent.class.getSimpleName() +
                     ".class).getProject().findTableByName(\"" + 
                     relativeName(table(), Dbms.class) + "\");"
                 )
@@ -73,13 +72,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
             .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
                 .add("return " + entity.getName() + ".class;"))
             .add(generateGet(file))
-            .add(generateSet(file))
-            .call(i -> file.add(Import.of(Type.of(Speedment.class))))
-            .call(i -> file.add(Import.of(Type.of(ManagerComponent.class))))
-            .add(Method.of("get", manager.getType()).static_().add(SUPPRESS_WARNINGS_UNCHECKED)
-                .add("return " + Speedment.class.getSimpleName() +
-                    ".get().get(" + ManagerComponent.class.getSimpleName() +
-                    ".class).manager(" + manager.getName() + ".class);"));
+            .add(generateSet(file));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
@@ -117,7 +110,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     protected Method generateSet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("set", VOID).default_().add(OVERRIDE)
-            .add(Field.of("entity", builder.getType()))
+            .add(Field.of("entity", entity.getType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add(Field.of("value", Type.of(Object.class)))
             .add("switch (column.getName()) " + block(

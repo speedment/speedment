@@ -37,7 +37,8 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
     @Override
     protected Class make(File file) {
         return newBuilder(file, entity.getImplName()).build()
-            .public_().add(entity.getType()).setSupertype(entity.getGeneratedImplType());
+            .public_().abstract_()
+            .add(entity.getType()).setSupertype(entity.getGeneratedImplType());
     }
     
     @Override

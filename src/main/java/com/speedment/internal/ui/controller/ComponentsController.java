@@ -26,7 +26,6 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.ui.resource.SpeedmentFont;
-import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.resource.SilkIcon;

@@ -55,7 +55,7 @@ public class TranslatorManagerTest extends SimpleModel {
         System.out.println("preview");
 
         final Translator<Table, Interface> translator = speedment.getCodeGenerationComponent()
-                .findTranslator(table, StandardTranslatorKey.ENTITY);
+            .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
 
         final String code = translator.toCode();
         System.out.println(code);

@@ -34,7 +34,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultType.O
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.internal.core.code.AbstractBaseEntity;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.BUILDER_METHOD_PREFIX;
+import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import java.util.ArrayList;
@@ -57,7 +57,6 @@ import static java.util.Objects.requireNonNull;
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
     
     private static final String 
-        SPEEDMENT_NAME    = "speedment",
         MANAGER_OF_METHOD = "managerOf_";
 
     public GeneratedEntityImplTranslator(Speedment speedment, Generator gen, Table table) {
@@ -92,7 +91,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             /*** Setters ***/
             .forEveryColumn((clazz, col) -> {
                 clazz
-                    .add(Method.of(BUILDER_METHOD_PREFIX + typeName(col), entity.getImplType())
+                    .add(Method.of(SETTER_METHOD_PREFIX + typeName(col), entity.getType())
                         .public_().final_()
                         .add(OVERRIDE)
                         .add(fieldFor(col))
@@ -157,13 +156,11 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             /*** Class details **/
             .build()
             .public_()
-            .final_()
+            .abstract_()
             .setSupertype(Type.of(AbstractBaseEntity.class).add(Generic.of().add(entity.getType())))
             .add(entity.getType())
-            .add(Constructor.of().add(Field.of(SPEEDMENT_NAME, Type.of(Speedment.class)))
-                .add("super(" + SPEEDMENT_NAME + ");")
-            )
-            .add(copyConstructor(entity.getType(), CopyConstructorMode.BUILDER));
+            .add(Constructor.of().protected_())
+            .add(copyConstructor(entity.getType(), CopyConstructorMode.SETTER));
 
         /*** Create aggregate streaming functions, if any ***/
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
@@ -185,6 +182,8 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 newClass.add(method);
             }
         });
+        
+        file.add(Import.of(Type.of(Speedment.class)));
 
         newClass
             .add(copy())
@@ -201,7 +200,15 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     private Method copy() {
         return Method.of("copy", entity.getType()).public_().add(OVERRIDE)
-            .add("return new " + entity.getImplName() + "(speedment(), this);");
+            .add(
+                "final " + Speedment.class.getSimpleName() + " speedment = speedment();",
+                "return new " + entity.getGeneratedImplName() + "(this) {", indent(
+                    "@Override",
+                    "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(
+                        "return speedment;"
+                    ), "}"
+                ), "};"
+            );
 
     }
 

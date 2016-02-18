@@ -76,7 +76,6 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
     public static final String GETTER_METHOD_PREFIX = "get",
         SETTER_METHOD_PREFIX = "set",
-        BUILDER_METHOD_PREFIX = SETTER_METHOD_PREFIX,
         JAVADOC_MESSAGE = 
         "\n<p>\nThis file is safe to edit. It will not be overwritten by the " +
         "code generator.",
@@ -329,14 +328,12 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     public enum CopyConstructorMode {
-        SETTER, FIELD, BUILDER;
+        SETTER, FIELD;
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {
-        final Constructor constructor = Constructor.of().public_()
-                .add(Field.of("speedment", Type.of(Speedment.class)))
-                .add("super(speedment);")
-                .add(Field.of(variableName(), type).final_());
+        final Constructor constructor = Constructor.of().protected_()
+            .add(Field.of(variableName(), type));
 
         columns().forEachOrdered(c -> {
             switch (mode) {
@@ -344,22 +341,18 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     constructor.add("this." + variableName(c) + " = " + variableName() + "." + GETTER_METHOD_PREFIX + typeName(c) + "();");
                     break;
                 }
-                case SETTER:
-                case BUILDER: {
-                    final String setterPrefix = (mode == SETTER)
-                            ? SETTER_METHOD_PREFIX : BUILDER_METHOD_PREFIX;
-
+                case SETTER: {
                     if (c.isNullable()) {
                         constructor.add(
                                 variableName() + "."
                                 + GETTER_METHOD_PREFIX + typeName(c)
                                 + "().ifPresent(this::"
-                                + setterPrefix + typeName(c)
+                                + SETTER_METHOD_PREFIX + typeName(c)
                                 + ");"
                         );
                     } else {
                         constructor.add(
-                                setterPrefix + typeName(c)
+                                SETTER_METHOD_PREFIX + typeName(c)
                                 + "(" + variableName()
                                 + ".get" + typeName(c)
                                 + "());"
@@ -367,6 +360,9 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     }
                     break;
                 }
+                default: throw new UnsupportedOperationException(
+                    "Unknown mode '" + mode + "'."
+                );
             }
         });
 

@@ -22,6 +22,8 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Class;
 import com.speedment.config.db.Table;
+import com.speedment.internal.codegen.lang.models.Constructor;
+import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.Type;
 
 /**
@@ -38,7 +40,12 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     @Override
     protected Class make(File file) {
         return newBuilder(file, manager.getImplName()).build()
-            .public_().add(manager.getType()).setSupertype(manager.getGeneratedImplType());
+            .public_().final_()
+            .add(manager.getType()).setSupertype(manager.getGeneratedImplType())
+            .add(Constructor.of().public_()
+                .add(Field.of("speedment", Type.of(Speedment.class)))
+                .add("super(speedment);")
+            );
     }
     
     @Override

@@ -119,6 +119,13 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @return the entity class for this Manager
      */
     Class<ENTITY> getEntityClass();
+    
+    /**
+     * Returns the entity class for this Manager.
+     *
+     * @return the entity class for this Manager
+     */
+    Class<? extends Manager<ENTITY>> getManagerClass();
 
     // Json
     /**

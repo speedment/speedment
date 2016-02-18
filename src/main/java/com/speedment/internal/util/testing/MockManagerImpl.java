@@ -132,6 +132,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Class<? extends Manager<ENTITY>> getManagerClass() {
+        return inner.getManagerClass();
+    }
+
+    @Override
     public String toJson(ENTITY entity) {
         return inner.toJson(entity);
     }

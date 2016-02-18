@@ -53,8 +53,8 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             
             this.type              = Type.of(fullyQualifiedTypeName() + typeSuffix);
             this.implType          = Type.of(fullyQualifiedTypeName() + typeSuffix + implSuffix);
-            this.generatedType     = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE) + GENERATED_PREFIX + typeSuffix);
-            this.generatedImplType = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE) + GENERATED_PREFIX + typeSuffix + implSuffix);
+            this.generatedType     = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix);
+            this.generatedImplType = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix + implSuffix);
             this.optionalType      = Type.of(Optional.class).add(Generic.of().add(type));
         }
 
@@ -97,7 +97,7 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
 
     protected final ClassType 
         entity  = new ClassType("", "Impl"),
-        builder = new ClassType("Builder", "Impl"),
+//        builder = new ClassType("Builder", "Impl"),
         manager = new ClassType("Manager", "Impl");
 
     protected final Generic 
