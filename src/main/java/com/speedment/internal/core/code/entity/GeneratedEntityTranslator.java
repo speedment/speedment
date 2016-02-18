@@ -107,7 +107,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             .forEveryColumn((clazz, col) -> {
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
                     EntityTranslatorSupport.getReferenceFieldType(
-                        file, table(), col, entity.getType(), javaLanguageNamer()
+                        file, tableOrThrow(), col, entity.getType(), javaLanguageNamer()
                     );
 
                 final Type entityType        = entity.getType();
@@ -118,7 +118,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String getter, finder;
                 if (col.isNullable()) {
                     getter = "o -> o.get" + typeName(col) + "().orElse(null)";
-                    finder = EntityTranslatorSupport.getForeignKey(table(), col)
+                    finder = EntityTranslatorSupport.getForeignKey(tableOrThrow(), col)
                         .map(fkc -> 
                             ", fk -> fk.find" +
                             javaLanguageNamer().javaTypeName(col.getJavaName()) +
@@ -126,7 +126,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         ).orElse("");
                 } else {
                     getter = shortEntityName + "::get" + typeName(col);
-                    finder = EntityTranslatorSupport.getForeignKey(table(), col)
+                    finder = EntityTranslatorSupport.getForeignKey(tableOrThrow(), col)
                         .map(fkc -> 
                             ", " + shortEntityName + "::find" +
                             javaLanguageNamer().javaTypeName(col.getJavaName())

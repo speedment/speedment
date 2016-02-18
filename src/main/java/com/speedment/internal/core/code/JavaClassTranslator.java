@@ -22,11 +22,13 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.
@@ -261,9 +263,9 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
      * @return the base package name in lowercase.
      */
     default String basePackageName() {
-        final String packName = project().getPackageName().toLowerCase() + ".";
+        final String packName = projectOrThrow().getPackageName().toLowerCase() + ".";
         if (getDocument() instanceof Project) {
-            return packName + javaLanguageNamer().javaPackageName(project().getName());
+            return packName + javaLanguageNamer().javaPackageName(projectOrThrow().getName());
         } else {
             return packName + relativeName(getDocument(), Project.class, javaLanguageNamer()::javaPackageName);
         }
@@ -281,5 +283,15 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
     }
     
     JavaLanguageNamer javaLanguageNamer();
+    
+    default Project projectOrThrow() {
+        return project().orElseThrow(foundNoProjectException());
+    }
+    
+    static Supplier<SpeedmentException> foundNoProjectException() {
+        return () -> new SpeedmentException(
+            "Could not find any project node in document"
+        );
+    }
     
 }

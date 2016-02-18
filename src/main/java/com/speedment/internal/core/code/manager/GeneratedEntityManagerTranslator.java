@@ -62,7 +62,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
                 .add("return speedment()" +
                     ".get(" + ProjectComponent.class.getSimpleName() +
                     ".class).getProject().findTableByName(\"" + 
-                    relativeName(table(), Dbms.class) + "\");"
+                    relativeName(tableOrThrow(), Dbms.class) + "\");"
                 )
             )
 

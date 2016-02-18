@@ -108,7 +108,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
                 .add("return " + SPEEDMENT_VARIABLE_NAME
                     + ".getProjectComponent()"
-                    + ".getProject().findTableByName(\"" + relativeName(table(), Dbms.class) + "\");"))
+                    + ".getProject().findTableByName(\"" + relativeName(tableOrThrow(), Dbms.class) + "\");"))
             .
             add(defaultReadEntity(file))
             .add(Method.of("newInstance", entity.getType())
@@ -167,7 +167,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
             final JavaTypeMapping<?> mapping = mapperComponent
                 .apply(
-                    dbmsTypeOf(speedment, dbms()), 
+                    dbmsTypeOf(speedment, dbmsOrThrow()), 
                     c.findTypeMapper().getDatabaseType()
                 );
             
@@ -178,7 +178,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .append(typeMapperName(c))
                 .append(".toJavaType(");
 
-            final String getterName = "get" + mapping.getResultSetMethodName(dbms());
+            final String getterName = "get" + mapping.getResultSetMethodName(dbmsOrThrow());
 
             final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
                 .map(java.lang.reflect.Method::getName)
@@ -192,12 +192,12 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 sb
                     .append("resultSet.")
                     .append("get")
-                    .append(mapping.getResultSetMethodName(dbms()))
+                    .append(mapping.getResultSetMethodName(dbmsOrThrow()))
                     .append("(").append(position.getAndIncrement()).append(")");
             } else {
                 sb
                     .append("get")
-                    .append(mapping.getResultSetMethodName(dbms()))
+                    .append(mapping.getResultSetMethodName(dbmsOrThrow()))
                     .append("(resultSet, ")
                     .append(position.getAndIncrement()).append(")");
             }

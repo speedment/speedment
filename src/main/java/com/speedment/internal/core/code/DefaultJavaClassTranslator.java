@@ -302,44 +302,46 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
         @Override
         public T build() {
-            final T i = mainModelConstructor.apply(name);
-            act(PROJECTS, i, project());
-            act(Project.DBMSES, i, dbms());
-            act(Dbms.SCHEMAS, i, schema());
-            act(Schema.TABLES, i, table());
+            final T model = mainModelConstructor.apply(name);
+            
+            project().ifPresent(p -> act(PROJECTS, model, p));
+            dbms().ifPresent(d -> act(Project.DBMSES, model, d));
+            schema().ifPresent(s -> act(Dbms.SCHEMAS, model, s));
+            table().ifPresent(t -> act(Schema.TABLES, model, t));
 
             MapStream.of(map)
                 .flatMapValue(List::stream)
                 .forEachOrdered((key, actor) -> 
-                    table().childrenByKey()
+                    table().ifPresent(table -> table.childrenByKey()
                         .filterKey(key::equals)
                         .values()
-                        .map(data -> new BaseDocument(table(), data))
+                        .map(data -> new BaseDocument(table, data))
                         .filter(HasEnabled::test)
-                        .forEachOrdered(c -> actor.accept(i, c))
+                        .forEachOrdered(c -> actor.accept(model, c))
+                    )
                 );
 
             if (Table.class.equals(getDocument().mainInterface())) {
-                schema().tables()
+                schema().ifPresent(schema -> schema.tables()
                     .filter(HasEnabled::test)
                     .flatMap(t -> t.foreignKeys())
                     .filter(fk -> fk.foreignKeyColumns()
                         .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
                         .findFirst()
                         .isPresent()
-                    )
-                    .forEachOrdered(fk
+                    ).forEachOrdered(fk
                         -> foreignKeyReferencesThisTableConsumers.forEach(
-                            c -> c.accept(i, fk)
+                            c -> c.accept(model, fk)
                         )
-                    );
+                    )
+                );
             }
 
             if (isInGeneratedPackage()) {
-                i.add(generated());
+                model.add(generated());
             }
             
-            return i;
+            return model;
         }
     }
     

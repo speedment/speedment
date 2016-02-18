@@ -17,6 +17,8 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
 import com.speedment.internal.codegen.util.Formatting;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
@@ -24,6 +26,7 @@ import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import java.util.function.Function;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -144,5 +147,26 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
     
     public final Generic genericOfEntity() {
         return genericOfEntity;
+    }
+    
+    protected final Table tableOrThrow() {
+        return table().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Table.class.getSimpleName() + " document."
+        ));
+    }
+    
+    protected final Schema schemaOrThrow() {
+        return schema().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Schema.class.getSimpleName() + " document."
+        ));
+    }
+    
+    protected final Dbms dbmsOrThrow() {
+        return dbms().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Dbms.class.getSimpleName() + " document."
+        ));
     }
 }

@@ -35,7 +35,8 @@ import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.core.code.entity.GeneratedEntityImplTranslator;
 import com.speedment.internal.core.code.entity.GeneratedEntityTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
+import com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator;
+import com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerTranslator;
@@ -53,6 +54,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
@@ -113,7 +117,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Table.class, GENERATED_MANAGER, GeneratedEntityManagerTranslator::new);
         put(Table.class, GENERATED_MANAGER_IMPL, GeneratedEntityManagerImplTranslator::new);
         put(Project.class, SPEEDMENT_APPLICATION, SpeedmentApplicationTranslator::new);
-        put(Project.class, SPEEDMENT_APPLICATION_METADATA, SpeedmentApplicationMetadataTranslator::new);
+        put(Project.class, GENERATED_SPEEDMENT_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
+        put(Project.class, GENERATED_SPEEDMENT_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
         
         javaLanguageSupplier = DefaultJavaLanguageNamer::new;
     }

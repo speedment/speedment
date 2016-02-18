@@ -41,14 +41,19 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
+public final class GeneratedSpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
     public static final String METADATA = "Metadata";
 
-    private final String className = typeName(project()) + "Application" + METADATA;
+    private final String className = "Generated" + typeName(projectOrThrow()) + "Application" + METADATA;
 
-    public SpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
+    public GeneratedSpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
         super(speedment, gen, doc, Class::of);
+    }
+
+    @Override
+    protected boolean isInGeneratedPackage() {
+        return true;
     }
 
     @Override
@@ -63,23 +68,19 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
         
         final Initalizer initializer = Initalizer.of().static_();
         
-        //final StringBuilder str = new StringBuilder();
-        Stream.of(DocumentTranscoder.save(project()).split("\\R"))
-        .forEachOrdered(l -> {
-            initializer.add("METADATA.append(\"" + 
-                l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
-                "\\n\");"
-            );
-            //str.append("METADATA.append(\"").append(l.replace("\"", "\\\"")).append("\\n\");\n");
-        });
+        Stream.of(DocumentTranscoder.save(projectOrThrow()).split("\\R"))
+            .forEachOrdered(l -> {
+                initializer.add("METADATA.append(\"" + 
+                    l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
+                    "\\n\");"
+                );
+            });
         
         metadataField.set(new ReferenceValue("new StringBuilder()"));
         getMetadata.add("return METADATA.toString();");
         
-        //final Path path = project().getConfigPath();
-        return Class.of(className)
+        return newBuilder(file, className).build()
             .public_()
-            .add(generated())
             .add(Type.of(ApplicationMetadata.class))
             .add(metadataField)
             .add(initializer)
@@ -88,12 +89,16 @@ public final class SpeedmentApplicationMetadataTranslator extends DefaultJavaCla
 
     @Override
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE).add(AUTHOR.setValue("Speedment"));
+        final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
+            .add(AUTHOR.setValue(owner));
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A {@link " + ApplicationMetadata.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + "."
+        return "A {@link " + ApplicationMetadata.class.getName() + 
+            "} class for the {@link " + Project.class.getName() + 
+            "} named " + projectOrThrow().getName() + "."
             + " This class contains the meta data present at code generation time.";
     }
 
