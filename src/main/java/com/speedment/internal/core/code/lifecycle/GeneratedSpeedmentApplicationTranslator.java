@@ -28,7 +28,6 @@ import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
@@ -37,6 +36,7 @@ import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import com.speedment.stream.MapStream;
 import java.util.List;
@@ -102,7 +102,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
         return newBuilder(file, className)
             .build()
             .public_().abstract_()
-            .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
+            .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(Generic.of().add(applicationType())))
             .add(Constructor.of()
                 .protected_()
                 .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
@@ -127,5 +127,12 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     @Override
     protected String getClassOrInterfaceName() {
         return className;
+    }
+    
+    protected Type applicationType() {
+        return Type.of(
+            basePackageName() + "." + 
+            typeName(projectOrThrow()) + "Application"
+        );
     }
 }
