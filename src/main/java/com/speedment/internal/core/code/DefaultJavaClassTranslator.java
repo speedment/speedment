@@ -170,13 +170,14 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
     protected Javadoc getJavaDoc() {
         if (isInGeneratedPackage()) {
+            final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
             return Javadoc.of(
                 getJavadocRepresentText() + 
                 " representing an entity (for example, a row) in the " + 
                 getDocument().mainInterface().getSimpleName() + 
                 " " + relativeName(getDocument(), Project.class) + 
                 "." + GENERATED_JAVADOC_MESSAGE
-            ).add(AUTHOR.setValue("Speedment"));
+            ).add(AUTHOR.setValue(owner));
         } else {
             return Javadoc.of(
                 getJavadocRepresentText() + 
