@@ -25,15 +25,15 @@ import java.nio.file.Files;
  *
  * @author Emil Forslund
  */
-public final class DefaultSpeedmentApplicationLifecycle extends 
-    SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
-    
+public final class DefaultSpeedmentApplicationLifecycle extends
+        SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
+
     private final ApplicationMetadata metadata; // Can be null.
-    
+
     public DefaultSpeedmentApplicationLifecycle() {
-        this(null);
+        this((File) null);
     }
-    
+
     public DefaultSpeedmentApplicationLifecycle(File configFile) {
         if (configFile != null) {
             final String json;
@@ -42,7 +42,7 @@ public final class DefaultSpeedmentApplicationLifecycle extends
                 json = new String(content);
             } catch (final IOException ex) {
                 throw new SpeedmentException(
-                    "Could not load json-file from path '" + configFile.getAbsolutePath() + "'.", ex
+                        "Could not load json-file from path '" + configFile.getAbsolutePath() + "'.", ex
                 );
             }
 
@@ -50,6 +50,16 @@ public final class DefaultSpeedmentApplicationLifecycle extends
         } else {
             metadata = null;
         }
+    }
+
+    @Override
+    protected void onInit() {
+        super.onInit();
+        loadAndSetProject();
+    }
+
+    public DefaultSpeedmentApplicationLifecycle(String json) {
+        metadata = () -> json;
     }
 
     @Override

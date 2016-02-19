@@ -23,12 +23,15 @@ import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;
+import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Schema;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
@@ -48,6 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -268,9 +272,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * runtime platform by applying the provided component mapper with the
      * internal Speedment instance.
      *
-     * @param <C>              the component type
-     * @param componentMapper  to use when adding/replacing a component
-     * @return                 this instance
+     * @param <C> the component type
+     * @param componentMapper to use when adding/replacing a component
+     * @return this instance
      */
     public <C extends Component> T with(final ComponentConstructor<C> componentMapper) {
         speedment.put(requireNonNull(componentMapper).create(speedment));
@@ -352,7 +356,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected <ENTITY> void applyAndPut(Function<Speedment, Manager<ENTITY>> constructor) {
         put(constructor.apply(speedment));
     }
-    
+
     protected <ENTITY> void put(Manager<ENTITY> manager) {
         speedment.getManagerComponent().put(manager);
     }
@@ -388,7 +392,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         if (!isStarted()) {
             start();
         }
-        
+
+        validateRuntimeConfig();
+
         // If a project has been set for the lifecycle, wrap it in an immutable
         // for performance reasons.
         final Project project = speedment.getProjectComponent().getProject();
@@ -396,7 +402,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Project immutableProject = ImmutableProject.wrap(project);
             speedment.getProjectComponent().setProject(immutableProject);
         }
-        
+
         return speedment;
     }
 
@@ -410,9 +416,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         requireNonNull(managerConsumer);
         final ManagerComponent mc = speedment.getManagerComponent();
         final List<Thread> threads = mc.stream()
-                .map(mgr -> new Thread(() -> 
-                    managerConsumer.accept(mgr), 
-                    mgr.getTable().getName()
+                .map(mgr -> new Thread(()
+                        -> managerConsumer.accept(mgr),
+                        mgr.getTable().getName()
                 ))
                 .collect(toList());
         threads.forEach(Thread::start);
@@ -423,8 +429,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         requireNonNull(componentConsumer);
         final List<Thread> threads = speedment.components()
                 .map(comp -> new Thread( // TODO: Change to ExecutorService
-                    () -> componentConsumer.accept(comp), 
-                    comp.asSoftware().getName()
+                        () -> componentConsumer.accept(comp),
+                        comp.asSoftware().getName()
                 ))
                 .collect(toList());
         threads.forEach(Thread::start);
@@ -442,4 +448,28 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private static <T> List<T> newList() {
         return new ArrayList<>();
     }
+
+    protected void validateRuntimeConfig() {
+        final Project project = speedment.getProjectComponent().getProject();
+        if (project == null) {
+            throw new SpeedmentException("No project defined");
+        }
+
+        project.dbmses().forEach(d -> {
+            final String typeName = d.getTypeName();
+            final Optional<DbmsType> oDbmsType = speedment.getDbmsHandlerComponent().findByName(typeName);
+            if (!oDbmsType.isPresent()) {
+                throw new SpeedmentException("The database type " + typeName + " is not registered with the " + DbmsHandlerComponent.class.getSimpleName());
+            }
+            final String driverName = oDbmsType.get().getDriverName();
+            try {
+                // Make sure the driver is loaded. This is a must for some JavaEE servers.
+                Class.forName(driverName);
+            } catch (ClassNotFoundException cnfe) {
+                LOGGER.error("The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
+            }
+        });
+
+    }
+
 }
