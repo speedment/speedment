@@ -17,20 +17,19 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class PrimaryKeyColumnMutator  extends DocumentMutatorImpl implements DocumentMutator, HasNameMutator, 
-    HasEnabledMutator, HasOrdinalPositionMutator {
+public class PrimaryKeyColumnMutator<DOC extends PrimaryKeyColumn>  extends DocumentMutatorImpl<DOC> implements 
+        HasNameMutator<DOC>,
+        HasOrdinalPositionMutator<DOC> {
 
-    PrimaryKeyColumnMutator(PrimaryKeyColumn primaryKeyColumn) {
+    public PrimaryKeyColumnMutator(DOC primaryKeyColumn) {
         super(primaryKeyColumn);
     }
-
-    
 }

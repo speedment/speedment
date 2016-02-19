@@ -18,16 +18,22 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.*;
+import com.speedment.config.db.Schema;
+import com.speedment.internal.core.config.db.SchemaImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class DbmsMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator {
+public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC> {
     
-    DbmsMutator(Dbms dbms) {
+    public DbmsMutator(DOC dbms) {
         super(dbms);
     }
     
@@ -46,5 +52,8 @@ public final class DbmsMutator extends DocumentMutatorImpl implements DocumentMu
     public void setUsername(String username) {
         put(USERNAME, username);
     }
- 
+    
+    public Schema addNewSchema() {
+        return new SchemaImpl(document(), newDocument(document(), SCHEMAS));
+    }
 }

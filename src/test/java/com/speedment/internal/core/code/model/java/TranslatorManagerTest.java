@@ -20,12 +20,12 @@ import com.speedment.code.StandardTranslatorKey;
 import com.speedment.code.Translator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
-import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
-import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.core.code.TranslatorManager;
-import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.util.JavaLanguageNamer;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -41,7 +41,7 @@ public class TranslatorManagerTest extends SimpleModel {
         final TranslatorManager instance = new TranslatorManager(speedment) {
 
             @Override
-            public void writeToFile(Project project, Meta<File, String> meta) {
+            public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
                 System.out.println("Processing " + meta.getModel().getName());
                 // Do nothing on file...
             }
@@ -54,18 +54,17 @@ public class TranslatorManagerTest extends SimpleModel {
     public void testPreview() {
         System.out.println("preview");
 
-        final Translator<Table, File> translator = speedment.getCodeGenerationComponent()
-                .translators(table, StandardTranslatorKey.ENTITY)
-                .findAny()
-                .get();
+        final Translator<Table, Interface> translator = speedment.getCodeGenerationComponent()
+            .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
 
-        //Todo: translator.toCode();
+        final String code = translator.toCode();
+        System.out.println(code);
         
-        final Generator gen = new JavaGenerator();
-        final EntityTranslator entityTranslator = new EntityTranslator(speedment, gen, table); 
-        final String result = entityTranslator.toCode();
-        System.out.println(result);
-
+        JavaLanguageNamer javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
+        
+        assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaVariableName(column.getName())));
+        assertTrue(code.contains(javaLanguageNamer.javaTypeName(column.getName())));
     }
-
 }

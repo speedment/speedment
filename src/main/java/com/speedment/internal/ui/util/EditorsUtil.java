@@ -48,7 +48,6 @@ public final class EditorsUtil {
             public void setValue(String t) {
                 getEditor().textProperty().setValue(t);
             }
-            
         };
     }
     

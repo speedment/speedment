@@ -1,4 +1,5 @@
-/*
+/**
+ *
  * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
@@ -19,9 +20,8 @@ import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  *
@@ -34,13 +34,7 @@ public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Sch
     }
 
     @Override
-    public BiFunction<Schema, Map<String, Object>, Table> tableConstructor() {
-        return TableImpl::new;
+    public Stream<? extends Table> tables() {
+        return children(TABLES, TableImpl::new);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
 }

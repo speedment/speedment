@@ -19,33 +19,45 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.internal.license.OpenSourceLicense;
+import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.internal.ui.brand.DefaultBrand;
 import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.license.Software;
+import com.speedment.stream.MapStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.util.concurrent.CopyOnWriteArrayList;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
-import static javafx.collections.FXCollections.observableArrayList;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class UserInterfaceComponentImpl extends Apache2AbstractComponent implements UserInterfaceComponent {
+public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
     
-    private final static String DEFAULT_STYLESHEET = "/css/speedment.css";
+    private final static String[] DEFAULT_STYLESHEETS = {"/css/speedment.css"};
     
     private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
-    private final Map<Class<?>, UserInterfaceComponent.ContextMenuBuilder<?>> contextMenuBuilders;
-    private final StringProperty stylesheet;
+    private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
+    private final List<String> stylesheets;
+    private Brand brand;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
@@ -53,7 +65,14 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
         outputMessages      = observableArrayList();
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
-        stylesheet          = new SimpleStringProperty(DEFAULT_STYLESHEET);
+        stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
+        
+        brand = new DefaultBrand(
+            "Speedment", 
+            "Open Source", 
+            "/images/logo.png",
+            "/images/speedment_open_source_small.png"
+        );
     }
 
     @Override
@@ -70,33 +89,74 @@ public final class UserInterfaceComponentImpl extends Apache2AbstractComponent i
     public ObservableList<Node> getOutputMessages() {
         return outputMessages;
     }
+    
+    @Override
+    public void setBrand(Brand brand) {
+        this.brand = requireNonNull(brand);
+    }
 
     @Override
+    public Brand getBrand() {
+        return brand;
+    }
+    
+    @Override
     public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
-        contextMenuBuilders.put(nodeType, menuBuilder);
+        contextMenuBuilders.computeIfAbsent(nodeType, k -> new CopyOnWriteArrayList<>()).add(menuBuilder);
     }
 
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
-        @SuppressWarnings("unchecked")
-        final UserInterfaceComponent.ContextMenuBuilder<DOC> builder = 
-            (UserInterfaceComponent.ContextMenuBuilder<DOC>) 
-            contextMenuBuilders.get(doc.mainInterface());
+        requireNonNulls(treeCell, doc);
         
-        if (builder == null) {
+        @SuppressWarnings("unchecked")
+        final List<UserInterfaceComponent.ContextMenuBuilder<DOC>> builders = 
+            (List<UserInterfaceComponent.ContextMenuBuilder<DOC>>) 
+            MapStream.of(contextMenuBuilders)
+                .filterKey(clazz -> clazz.isAssignableFrom(doc.getClass()))
+                .values()
+                .flatMap(List::stream)
+                .map(builder -> (UserInterfaceComponent.ContextMenuBuilder<DOC>) builder)
+                .collect(toList());
+        
+        final ContextMenu menu = new ContextMenu();
+        for (int i = 0; i < builders.size(); i++) {
+            final List<MenuItem> items = builders.get(i)
+                .build(treeCell, doc)
+                .collect(toList());
+            
+            if (i > 0 && !items.isEmpty()) {
+                menu.getItems().add(new SeparatorMenuItem());
+            }
+            
+            items.forEach(menu.getItems()::add);
+        }
+        
+        if (menu.getItems().isEmpty()) {
             return Optional.empty();
         } else {
-            return builder.build(treeCell, doc);
+            return Optional.ofNullable(menu);
         }
     }
 
     @Override
-    public String getStylesheetFile() {
-        return stylesheet.getValue();
+    public Stream<String> stylesheetFiles() {
+        return stylesheets.stream();
     }
 
     @Override
-    public void setStylesheetFile(String filename) {
-        this.stylesheet.setValue(filename);
+    public void addStylesheetFile(String filename) {
+        this.stylesheets.add(filename);
     }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.of(DEPENDENCIES);
+    }
+    
+    private final static Software[] DEPENDENCIES = {
+        AbstractSoftware.with("Silk",          "1.3",     OpenSourceLicense.CC_BY_2_5),
+        AbstractSoftware.with("ControlsFX",    "8.40.10", OpenSourceLicense.BSD_3_CLAUSE),
+        AbstractSoftware.with("FontawesomeFX", "8.8",     OpenSourceLicense.APACHE_2),
+    };
 }

@@ -17,14 +17,12 @@
 package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.ForeignKeyImpl;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -48,7 +46,7 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
         this.name    = prototype.getName();
         this.enabled = prototype.isEnabled();
         
-        this.foreignKeyColumns = unmodifiableList(ForeignKey.super.foreignKeyColumns().map(ImmutableForeignKeyColumn.class::cast).collect(toList()));
+        this.foreignKeyColumns = unmodifiableList(super.children(FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
     }
 
     @Override
@@ -62,11 +60,6 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
     }
 
     @Override
-    public BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor() {
-        return (parent, map) -> new ImmutableForeignKeyColumn((ImmutableForeignKey) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableForeignKeyColumn> foreignKeyColumns() {
         return foreignKeyColumns.stream();
     }
@@ -75,10 +68,4 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

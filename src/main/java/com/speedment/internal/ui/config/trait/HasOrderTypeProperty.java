@@ -23,9 +23,6 @@ import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.property.EnumPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
-import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
 
 /**
@@ -35,23 +32,12 @@ import org.controlsfx.control.PropertySheet;
 public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     
     default ObjectProperty<OrderType> orderTypeProperty() {
-        final String defaultValue = HasOrderType.super.getOrderType().name();
-        final StringProperty strProperty = stringPropertyOf(HasOrderType.ORDER_TYPE, () -> defaultValue);
-        final ObjectProperty<OrderType> objProperty = new SimpleObjectProperty<>(OrderType.valueOf(defaultValue));
-        
-        strProperty.bindBidirectional(objProperty, new StringConverter<OrderType>() {
-            @Override
-            public String toString(OrderType object) {
-                return object.name();
-            }
+        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class, HasOrderType.super::getOrderType);
+    }
 
-            @Override
-            public OrderType fromString(String string) {
-                return OrderType.valueOf(string);
-            }
-        });
-        
-        return objProperty;
+    @Override
+    default OrderType getOrderType() {
+        return orderTypeProperty().get();
     }
 
     @Override

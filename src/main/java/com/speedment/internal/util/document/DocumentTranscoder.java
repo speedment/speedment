@@ -47,7 +47,7 @@ public final class DocumentTranscoder {
         try {Files.write(location, save(project).getBytes());}
         catch (final IOException ex) {
             throw new SpeedmentException(
-                "Could not save json-file to path '" + location + "'."
+                "Could not save json-file to path '" + location + "'.", ex
             );
         }
     }
@@ -63,7 +63,7 @@ public final class DocumentTranscoder {
             return load(new String(content));
         } catch (final IOException ex) {
             throw new SpeedmentException(
-                "Could not load json-file from path '" + location + "'."
+                "Could not load json-file from path '" + location + "'.", ex
             );
         }
     }

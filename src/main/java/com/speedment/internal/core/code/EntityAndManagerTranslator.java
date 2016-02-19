@@ -17,38 +17,49 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
 import com.speedment.internal.codegen.util.Formatting;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.constants.DefaultType;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.config.db.Table;
-import static java.util.Objects.requireNonNull;
+import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
+import java.util.function.Function;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  *
- * @author pemi
- * @param <T> Type of item to generate
+ * @author     pemi
+ * @param <T>  type of model to translate into
  */
-public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
+public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
+    extends DefaultJavaClassTranslator<Table, T> {
 
-    public class ClassType {
-
-        private ClassType(String typeName, String implTypeName) {
-            requireNonNull(typeName);
-            requireNonNull(implTypeName);
-            this.type = Type.of(fullyQualifiedTypeName() + typeName);
-            this.optionalType = Type.of(Optional.class).add(new GenericImpl().add(type));
-            this.implType = Type.of(fullyQualifiedTypeName("impl") + typeName + implTypeName);
-
-        }
-
+    public final class ClassType {
+        
+        public final static String
+            GENERATED_PACKAGE = "generated",
+            GENERATED_PREFIX  = "Generated";
+        
         private final Type type;
-        private final Type optionalType;
         private final Type implType;
+        private final Type generatedType;
+        private final Type generatedImplType;
+        private final Type optionalType;
+        
+        private ClassType(String typeSuffix, String implSuffix) {
+            requireNonNulls(typeSuffix, implSuffix);
+            
+            this.type              = Type.of(fullyQualifiedTypeName() + typeSuffix);
+            this.implType          = Type.of(fullyQualifiedTypeName() + typeSuffix + implSuffix);
+            this.generatedType     = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix);
+            this.generatedImplType = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix + implSuffix);
+            this.optionalType      = Type.of(Optional.class).add(Generic.of().add(type));
+        }
 
         public Type getType() {
             return type;
@@ -56,6 +67,14 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
 
         public Type getImplType() {
             return implType;
+        }
+        
+        public Type getGeneratedType() {
+            return generatedType;
+        }
+        
+        public Type getGeneratedImplType() {
+            return generatedImplType;
         }
 
         public String getName() {
@@ -65,25 +84,36 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
         public String getImplName() {
             return Formatting.shortName(implType.getName());
         }
+        
+        public String getGeneratedName() {
+            return Formatting.shortName(generatedType.getName());
+        }
+
+        public String getGeneratedImplName() {
+            return Formatting.shortName(generatedImplType.getName());
+        }
 
         public Type getOptionalType() {
             return optionalType;
         }
     }
 
-    public final ClassType ENTITY = new ClassType("", "Impl"),
-            BUILDER = new ClassType("Builder", "Impl"),
-            CONFIG = new ClassType("Config", "Impl"),
-            MANAGER = new ClassType("Manager", "Impl");
-//            FIELD = new ClassType("Field", "Impl");
+    protected final ClassType 
+        entity  = new ClassType("", "Impl"),
+        manager = new ClassType("Manager", "Impl");
 
-    public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
-            GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
-            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType());
-            //GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
+    protected final Generic 
+        genericOfPk      = Generic.of().add(typeOfPK()),
+        genericOfEntity  = Generic.of().add(entity.getType()),
+        genericOfManager = Generic.of().add(manager.getType());
 
-    public EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+    protected EntityAndManagerTranslator(
+            Speedment speedment, 
+            Generator gen, 
+            Table table, 
+            Function<String, T> modelConstructor) {
+        
+        super(speedment, gen, table, modelConstructor);
     }
 
     protected Type typeOfPK() {
@@ -91,19 +121,52 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
 
         if (pks == 0) {
             return DefaultType.list(DefaultType.WILDCARD);
-            //throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
 
-        final Class<?> first = primaryKeyColumns().findFirst().get().findColumn().findTypeMapper().getJavaType();
+        final Class<?> first = primaryKeyColumns()
+            .findFirst().get()
+            .findColumn().get()
+            .findTypeMapper().getJavaType();
 
         if (pks == 1) {
             return Type.of(first);
         } else {
-            if (primaryKeyColumns().allMatch(c -> c.findColumn().findTypeMapper().getJavaType().equals(first))) {
+            if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
+                .findTypeMapper().getJavaType().equals(first))) {
+                
                 return DefaultType.list(Type.of(first));
             } else {
                 return DefaultType.list(DefaultType.WILDCARD);
             }
         }
+    }
+    
+    public final ClassType entity() {
+        return entity;
+    }
+    
+    public final Generic genericOfEntity() {
+        return genericOfEntity;
+    }
+    
+    protected final Table tableOrThrow() {
+        return table().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Table.class.getSimpleName() + " document."
+        ));
+    }
+    
+    protected final Schema schemaOrThrow() {
+        return schema().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Schema.class.getSimpleName() + " document."
+        ));
+    }
+    
+    protected final Dbms dbmsOrThrow() {
+        return dbms().orElseThrow(() -> new SpeedmentException(
+            getClass().getSimpleName() + " must have a " + 
+            Dbms.class.getSimpleName() + " document."
+        ));
     }
 }

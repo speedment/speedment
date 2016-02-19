@@ -20,9 +20,8 @@ import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,13 +34,7 @@ public final class ForeignKeyImpl extends AbstractChildDocument<Table> implement
     }
 
     @Override
-    public BiFunction<ForeignKey, Map<String, Object>, ForeignKeyColumn> foreignKeyColumnConstructor() {
-        return ForeignKeyColumnImpl::new;
+    public Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
+        return children(FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
 }

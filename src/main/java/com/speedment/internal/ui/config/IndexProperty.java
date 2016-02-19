@@ -17,15 +17,15 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.IndexPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -35,11 +35,39 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class IndexProperty extends AbstractChildDocumentProperty<Table> 
+public final class IndexProperty extends AbstractChildDocumentProperty<Table, IndexProperty> 
     implements Index, HasEnabledProperty, HasNameProperty {
 
-    public IndexProperty(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public IndexProperty(Table parent) {
+        super(parent);
+    }
+    
+    public BooleanProperty uniqueProperty() {
+        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
+    }
+
+    @Override
+    public boolean isUnique() {
+        return uniqueProperty().get();
+    }
+
+    @Override
+    public Stream<IndexColumnProperty> indexColumns() {
+        return indexColumnsProperty().stream();
+    }
+    
+    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
+        return observableListOf(INDEX_COLUMNS);
+    }
+    
+    @Override
+    public boolean isExpandedByDefault() {
+        return false;
+    }
+    
+    @Override
+    public IndexPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -57,42 +85,8 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table>
         ).flatMap(s -> s);
     }
     
-    public final BooleanProperty uniqueProperty() {
-        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
-    }
-
     @Override
-    public BiFunction<Index, Map<String, Object>, IndexColumnProperty> indexColumnConstructor() {
-        return IndexColumnProperty::new;
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.INDEXES, key);
     }
-
-    @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case INDEX_COLUMNS : return new IndexColumnProperty(this, data);
-            default            : return super.createDocument(key, data);
-        }
-    }
-    
-    @Override
-    public Stream<IndexColumnProperty> indexColumns() {
-        return indexColumnsProperty().stream();
-    }
-    
-    public ObservableList<IndexColumnProperty> indexColumnsProperty() {
-        return observableListOf(INDEX_COLUMNS, IndexColumnProperty::new);
-    }
-
-    @Override
-    public IndexColumnProperty addNewIndexColumn() {
-        final IndexColumnProperty created = new IndexColumnProperty(this, new ConcurrentHashMap<>());
-        indexColumnsProperty().add(created);
-        return created;
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
 }

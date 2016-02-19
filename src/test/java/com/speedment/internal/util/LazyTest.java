@@ -14,14 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.internal.util;
 
 import com.speedment.exception.SpeedmentException;
+
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -31,18 +27,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+
 import java.util.stream.IntStream;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author pemi
  */
 public class LazyTest {
@@ -68,7 +67,7 @@ public class LazyTest {
 
     @Before
     public void setUp() {
-        instance = new Lazy<>();
+        instance = Lazy.create();
     }
 
     @After
@@ -95,10 +94,8 @@ public class LazyTest {
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         for (int i = 0; i < 10000; i++) {
-            final Lazy<Long> lazy = new Lazy<>();
-            final Callable<Long> callable = () -> {
-                return lazy.getOrCompute(() -> Thread.currentThread().getId());
-            };
+            final Lazy<Long> lazy = Lazy.create();
+            final Callable<Long> callable = () -> lazy.getOrCompute(() -> Thread.currentThread().getId());
             List<Future<Long>> futures
                     = IntStream.rangeClosed(0, threads)
                     .mapToObj($ -> executorService.submit(callable))
@@ -107,7 +104,7 @@ public class LazyTest {
             while (!futures.stream().allMatch(Future::isDone)) {
             }
 
-            Set<Long> ids = futures.stream()
+            final Set<Long> ids = futures.stream()
                     .map(LazyTest::getFutureValue)
                     .collect(toSet());
 

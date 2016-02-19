@@ -17,27 +17,22 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.internal.core.platform.SpeedmentFactory;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.MailPromptController;
 import com.speedment.internal.util.EmailUtil;
 import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.stage.Stage;
+
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 
 /**
  *
@@ -57,8 +52,8 @@ public final class MainApp extends Application {
         requireNonNull(stage);
         
         if (SPEEDMENT == null) {
-            LOGGER.info("Creating new Speedment instance for GUI session.");
-            SPEEDMENT = SpeedmentFactory.newSpeedmentInstance();
+            LOGGER.warn("Creating new Speedment instance for UI session.");
+            SPEEDMENT = new DefaultSpeedmentApplicationLifecycle().build();
         }
         
         final Parameters parameters = getParameters();
@@ -86,8 +81,8 @@ public final class MainApp extends Application {
         launch(args);
     }
     
-    private UISession createSession(Stage stage, String jsonLocation) {
-        final UISession session = new UISession(SPEEDMENT, this, stage, jsonLocation);
+    private UISession createSession(Stage stage, String configLocation) {
+        final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
         SpeedmentFont.loadAll();
         Statistics.onGuiStarted();
         

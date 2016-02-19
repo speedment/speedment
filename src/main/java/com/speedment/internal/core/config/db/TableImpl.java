@@ -23,43 +23,36 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public class TableImpl extends AbstractChildDocument<Schema> implements Table {
+public final class TableImpl extends AbstractChildDocument<Schema> implements Table {
 
     public TableImpl(Schema parent, Map<String, Object> data) {
         super(parent, data);
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, Column> columnConstructor() {
-        return ColumnImpl::new;
+    public Stream<? extends Column> columns() {
+        return children(COLUMNS, ColumnImpl::new);
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, Index> indexConstructor() {
-        return IndexImpl::new;
+    public Stream<? extends Index> indexes() {
+        return children(INDEXES, IndexImpl::new);
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, ForeignKey> foreignKeyConstructor() {
-        return ForeignKeyImpl::new;
+    public Stream<? extends ForeignKey> foreignKeys() {
+        return children(FOREIGN_KEYS, ForeignKeyImpl::new);
     }
 
     @Override
-    public BiFunction<Table, Map<String, Object>, PrimaryKeyColumn> primaryKeyColumnConstructor() {
-        return PrimaryKeyColumnImpl::new;
+    public Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
+        return children(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

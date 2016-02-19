@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <ENTITY> Entity type for this Manager
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
 
     // Entity Inspection
@@ -93,9 +93,6 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      */
     void set(ENTITY entity, Column column, Object value);
 
-    //    Object find(ENTITY entity, Column column);
-    //
-    /**/
     // Data source metadata
     /**
      * Returns the configuration {@link Table} that this Manager is handling.
@@ -111,7 +108,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      *
      * @return a new entity
      */
-    ENTITY newInstance();
+    ENTITY newEmptyEntity();
 
     /**
      * Returns the entity class for this Manager.
@@ -119,6 +116,13 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @return the entity class for this Manager
      */
     Class<ENTITY> getEntityClass();
+    
+    /**
+     * Returns the entity class for this Manager.
+     *
+     * @return the entity class for this Manager
+     */
+    Class<? extends Manager<ENTITY>> getManagerClass();
 
     // Json
     /**
@@ -418,4 +422,11 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
     ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
     ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+
+    /**
+     * Returns the {@link Speedment} instance for this Manager.
+     *
+     * @return the {@link Speedment} instance for this Manager
+     */
+    Speedment speedment();
 }

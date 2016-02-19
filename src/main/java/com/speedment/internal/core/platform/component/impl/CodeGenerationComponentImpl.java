@@ -20,38 +20,104 @@ import com.speedment.Speedment;
 import static com.speedment.code.StandardTranslatorKey.*;
 import com.speedment.code.Translator;
 import com.speedment.code.TranslatorConstructor;
+import com.speedment.code.TranslatorDecorator;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import com.speedment.internal.core.code.JavaClassTranslator;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
+import com.speedment.internal.core.code.entity.GeneratedEntityImplTranslator;
+import com.speedment.internal.core.code.entity.GeneratedEntityTranslator;
+import com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator;
+import com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
+import com.speedment.internal.core.code.manager.EntityManagerTranslator;
+import com.speedment.internal.core.code.manager.GeneratedEntityManagerImplTranslator;
+import com.speedment.internal.core.code.manager.GeneratedEntityManagerTranslator;
+import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.stream.MapStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.license.Software;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
-public final class CodeGenerationComponentImpl extends Apache2AbstractComponent implements CodeGenerationComponent {
+public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
     private Generator generator;
-    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorConstructor<HasMainInterface>>> map;
+    private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
+    private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
+
+    private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
+
+        private final String key;
+        private final List<TranslatorDecorator<DOC, T>> decorators;
+        private TranslatorConstructor<DOC, T> constructor;
+
+        public TranslatorSettings(String key) {
+            this.key = requireNonNull(key);
+            this.decorators = new CopyOnWriteArrayList<>();
+        }
+
+        public String key() {
+            return key;
+        }
+
+        public TranslatorConstructor<DOC, T> getConstructor() {
+            return constructor;
+        }
+
+        public void setConstructor(TranslatorConstructor<DOC, T> constructor) {
+            this.constructor = constructor;
+        }
+
+        public List<TranslatorDecorator<DOC, T>> decorators() {
+            return decorators;
+        }
+
+        public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
+            @SuppressWarnings("unchecked")
+            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) 
+                getConstructor().apply(speedment, generator, document);
+            
+            decorators.stream().forEachOrdered(dec -> dec.apply(translator));
+            return translator;
+        }
+    }
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
+        
         generator = new JavaGenerator();
-        map = new ConcurrentHashMap<>();
+        map       = new ConcurrentHashMap<>();
+        
         put(Table.class, ENTITY, EntityTranslator::new);
         put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
+        put(Table.class, MANAGER, EntityManagerTranslator::new);
         put(Table.class, MANAGER_IMPL, EntityManagerImplTranslator::new);
-        put(Project.class, SPEEDMENT_APPLICATION, SpeedmentApplicationTranslator::new);
-        put(Project.class, SPEEDMENT_APPLICATION_METADATA, SpeedmentApplicationMetadataTranslator::new);
+        put(Table.class, GENERATED_ENTITY, GeneratedEntityTranslator::new);
+        put(Table.class, GENERATED_ENTITY_IMPL, GeneratedEntityImplTranslator::new);
+        put(Table.class, GENERATED_MANAGER, GeneratedEntityManagerTranslator::new);
+        put(Table.class, GENERATED_MANAGER_IMPL, GeneratedEntityManagerImplTranslator::new);
+        put(Project.class, APPLICATION, SpeedmentApplicationTranslator::new);
+        put(Project.class, GENERATED_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
+        put(Project.class, GENERATED_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
+        
+        javaLanguageSupplier = DefaultJavaLanguageNamer::new;
     }
 
     @Override
@@ -64,45 +130,86 @@ public final class CodeGenerationComponentImpl extends Apache2AbstractComponent 
         this.generator = generator;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor) {
-        aquireMap(clazz).put(key, (TranslatorConstructor<HasMainInterface>) constructor);
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
+        aquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
     }
 
     @Override
-    public <T extends HasMainInterface> void remove(Class<T> clazz, String key) {
-        aquireMap(clazz).remove(key);
-    }
-
-    private <T extends HasMainInterface> Map<String, TranslatorConstructor<HasMainInterface>> aquireMap(Class<T> clazz) {
-        return map.computeIfAbsent(clazz, $ -> new ConcurrentHashMap<>());
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
+        aquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
     }
 
     @Override
-    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    void remove(Class<DOC> docType, String key) {
+        aquireTranslatorSettings(docType, null, key).setConstructor(null);
+    }
+
+    private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
+        return (TranslatorSettings<DOC, T>) 
+            map.computeIfAbsent(docType, 
+                s -> new ConcurrentHashMap<>()
+            ).computeIfAbsent(key, TranslatorSettings::new);
+    }
+
+    @Override
+    public <DOC extends HasName & HasMainInterface> 
+    Stream<? extends Translator<DOC, ?>> translators(DOC document) {
         return translators(document, s -> true);
     }
 
     @Override
-    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document, String key) {
-        return translators(document, key::equals);
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
+    Translator<DOC, T> findTranslator(DOC document, Class<T> modelType, String key) {
+        return translators(document, key::equals)
+            .findAny()
+            .map(translator -> (Translator<DOC, T>) translator)
+            .orElseThrow(noTranslatorFound(document, key));
     }
 
-//    @Override
-//    public <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document) {
-//        return MapStream.of(map)
-//                .filterKey(c -> c.isInstance(document))
-//                .values()
-//                .flatMap(m -> m.values().stream())
-//                .map(constructor -> ((TranslatorConstructor<T>) constructor).apply(getSpeedment(), generator, document));
-//    }
-    private <T extends HasMainInterface> Stream<? extends Translator<T, File>>
-            translators(T document, Predicate<String> nameFilter) {
+    @SuppressWarnings("unchecked")
+    private <DOC extends HasName & HasMainInterface> 
+    Stream<? extends Translator<DOC, ?>> translators(DOC document, Predicate<String> nameFilter) {
+
         return MapStream.of(map)
-                .filterKey(c -> c.isInstance(document))
-                .values()
-                .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
-                .map(constructor -> ((TranslatorConstructor<T>) constructor).apply(getSpeedment(), generator, document));
+            .filterKey(c -> c.isInstance(document))
+            .values()
+            .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
+            .map(s -> (TranslatorSettings<DOC, ?>) s)
+            .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
     }
 
+    @Override
+    public JavaLanguageNamer javaLanguageNamer() {
+        return javaLanguageSupplier.get();
+    }
+
+    @Override
+    public void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier) {
+        this.javaLanguageSupplier = supplier;
+    }
+
+    @Override
+    public MapStream<Class<? extends HasMainInterface>, Set<String>> stream() {
+        return MapStream.of(map)
+            .mapValue(Map::keySet);
+    }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+
+    private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
+        return () -> new SpeedmentException(
+            "Found no translator with key '"
+            + key + "' for document '"
+            + doc.mainInterface().getSimpleName() + "'."
+        );
+    }
 }

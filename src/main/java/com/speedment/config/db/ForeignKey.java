@@ -26,9 +26,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -46,16 +43,23 @@ public interface ForeignKey extends
         HasMutator<ForeignKeyMutator> {
 
     final String FOREIGN_KEY_COLUMNS = "foreignKeyColumns";
+    
+    /**
+     * Creates a stream of foreign key columns located in this document.
+     * 
+     * @return  foreign key columns
+     */
+    Stream<? extends ForeignKeyColumn> foreignKeyColumns();
 
-    default Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
-        return children(FOREIGN_KEY_COLUMNS, foreignKeyColumnConstructor());
-    }
-
-    default ForeignKeyColumn addNewForeignKeyColumn() {
-        return foreignKeyColumnConstructor().apply(this, newDocument(this, FOREIGN_KEY_COLUMNS));
-    }
-
-    BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor();
+//    default Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
+//        return children(FOREIGN_KEY_COLUMNS, foreignKeyColumnConstructor());
+//    }
+//
+//    default ForeignKeyColumn addNewForeignKeyColumn() {
+//        return foreignKeyColumnConstructor().apply(this, newDocument(this, FOREIGN_KEY_COLUMNS));
+//    }
+//
+//    BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor();
 
     @Override
     default Class<ForeignKey> mainInterface() {

@@ -32,6 +32,7 @@ import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
@@ -41,8 +42,16 @@ import java.util.stream.Stream;
 public final class DocumentDbUtil {
 
     public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
-        return speedment.getDbmsHandlerComponent().findByName(dbms.getTypeName())
-                .orElseThrow(() -> new SpeedmentException("Unable to find the database type " + dbms.getTypeName()));
+        final String typeName = dbms.getTypeName();
+        return speedment.getDbmsHandlerComponent().findByName(typeName)
+                .orElseThrow(() -> new SpeedmentException(
+                        "Unable to find the database type "
+                        + typeName
+                        + ". The installed types are: "
+                        + speedment.getDbmsHandlerComponent().supportedDbmsTypes()
+                                .map(DbmsType::getName)
+                                .collect(joining(", "))
+                ));
     }
 
     public static Stream<? extends Document> traverseOver(Project project) {
@@ -167,46 +176,13 @@ public final class DocumentDbUtil {
 
     public static Stream<? extends Document> typedChildrenOf(Table table) {
         return StreamComposition.concat(
-                table.columns().map(Document.class::cast),
-                table.primaryKeyColumns().map(Document.class::cast),
-                table.indexes().map(Document.class::cast),
-                table.foreignKeys().map(Document.class::cast)
+            table.columns().map(Document.class::cast),
+            table.primaryKeyColumns().map(Document.class::cast),
+            table.indexes().map(Document.class::cast),
+            table.foreignKeys().map(Document.class::cast)
         );
     }
 
-//    public static Class<? extends Document> mainInterfaceClass(Document document) {
-//        return Stream.of(
-//                Column.class,
-//                Dbms.class,
-//                ForeignKey.class,
-//                ForeignKeyColumn.class,
-//                Index.class,
-//                IndexColumn.class,
-//                PrimaryKeyColumn.class,
-//                Project.class,
-//                Schema.class,
-//                Table.class
-//        )
-//                .filter(c -> c.isAssignableFrom(document.getClass()))
-//                .findAny()
-//                .orElseThrow(() -> new SpeedmentException("Unable to find main interface for " + document));
-//
-//    }
-//    
-//    
-//    public static <T, P, C, B> Stream<T> traverseOver(
-//            P parent,
-//            Class<T> clazz,
-//            Function<P, Stream<B>> streamer,
-//            Class<C> childClass,
-//            Function<B, Stream<T>> recursor
-//    ) {
-//       if (childClass.isAssignableFrom(clazz)) {
-//            return streamer.apply(parent).map(clazz::cast);
-//        } else {
-//           return streamer.apply(parent).flatMap(recursor);
-//        }
-//    }
     /**
      * Utility classes should not be instantiated.
      */

@@ -18,16 +18,22 @@ package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.Index;
 import static com.speedment.config.db.Index.*;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.internal.core.config.db.IndexColumnImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class IndexMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator {
+public class IndexMutator<DOC extends Index> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC> {
 
-    IndexMutator(Index index) {
+    public IndexMutator(DOC index) {
         super(index);
     }
 
@@ -35,4 +41,7 @@ public final class IndexMutator extends DocumentMutatorImpl implements DocumentM
         put(UNIQUE, unique);
     }
 
+    public IndexColumn addNewIndexColumn() {
+        return new IndexColumnImpl(document(), newDocument(document(), INDEX_COLUMNS));
+    }
 }

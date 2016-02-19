@@ -17,13 +17,10 @@
 package com.speedment.internal.ui.property;
 
 import java.util.Arrays;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

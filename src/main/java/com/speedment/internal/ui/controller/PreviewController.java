@@ -16,22 +16,14 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.Speedment;
-import com.speedment.code.Translator;
+import com.speedment.code.StandardTranslatorKey;
+import com.speedment.code.TranslatorKey;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.EventComponent;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.config.Document;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
-import com.speedment.event.PreviewEvent;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Meta;
-import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.entity.EntityImplTranslator;
-import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
+import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DocumentProperty;
@@ -45,13 +37,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
-import static java.util.Objects.requireNonNull;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableStringValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Worker;
 import javafx.scene.control.ChoiceBox;
@@ -59,6 +46,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import javafx.beans.binding.StringBinding;
+import static javafx.application.Platform.runLater;
+import javafx.beans.value.ChangeListener;
+import org.w3c.dom.Element;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -69,224 +63,171 @@ public final class PreviewController implements Initializable {
     private final static double ZOOM_FACTOR = 0.9;
     
     private final UISession session;
+    private final Queue<Runnable> onLoad;
 
     private @FXML TitledPane workspace;
     private @FXML VBox nodes;
     private @FXML TextField filename;
-    private @FXML ChoiceBox<TranslatorConstructor<Document>> target;
+//    private @FXML ChoiceBox<TranslatorKey<DocumentProperty>> target;
     private @FXML WebView web;
     
     private PreviewController(UISession session) {
         this.session = requireNonNull(session);
+        this.onLoad  = new ConcurrentLinkedQueue<>();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        final UserInterfaceComponent ui = session.getSpeedment().getUserInterfaceComponent();
-        final EventComponent events = session.getSpeedment().getEventComponent();
-        web.setZoom(ZOOM_FACTOR);
-
-        // When the user selects a new node, reconfigure the preview component
-        ui.getSelectedTreeItems()
-            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
-                target.setItems(FXCollections.observableArrayList());
-                
-                if (!change.getList().isEmpty()) {
-                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
-                    
-                    if (treeItem != null) {
-                        final DocumentProperty document = treeItem.getValue();
-                        
-                        if (document instanceof Project) {
-                            target.setItems(FXCollections.observableArrayList(
-                                Stream.of(ProjectTarget.values())
-                                    .map(t -> (TranslatorConstructor<? extends Document>) t)
-                                    .map(t -> (TranslatorConstructor<Document>) t)
-                                    .collect(toList())
-                            ));
-                        } else if (document instanceof Table) {
-                            target.setItems(FXCollections.observableArrayList(
-                                Stream.of(TableTarget.values())
-                                    .map(t -> (TranslatorConstructor<? extends Document>) t)
-                                    .map(t -> (TranslatorConstructor<Document>) t)
-                                    .collect(toList())
-                            ));
-                        }
-                        
-                        target.getSelectionModel().select(0);
-                        events.notify(new PreviewEvent(document, nodes));
-                    }
-                }
-            });
-
-        // When the preview component is repainted, bind its content to the 
-        // correct document
-        events.on(PreviewEvent.class, ev -> {
-            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
-        });
-        
-        // React on changes in the dropdown list
-        target.getSelectionModel().selectedItemProperty().addListener((ob, o, selected) -> {
-            if (!ui.getSelectedTreeItems().isEmpty()) {
-                final TreeItem<DocumentProperty> treeItem = ui.getSelectedTreeItems().get(0);
-                if (treeItem != null) {
-                    generatePreview(treeItem.getValue(), selected);
-                }
-            }
-        });
+//        final UserInterfaceComponent ui   = session.getSpeedment().getUserInterfaceComponent();
+//        final EventComponent events       = session.getSpeedment().getEventComponent();
+//        final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
+//        
+//        web.setZoom(ZOOM_FACTOR);
+//
+//        // When the user selects a new node, reconfigure the preview component
+//        ui.getSelectedTreeItems()
+//            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
+//                target.setItems(FXCollections.observableArrayList());
+//                
+//                if (!change.getList().isEmpty()) {
+//                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
+//                    
+//                    if (treeItem != null) {
+//                        final DocumentProperty document = treeItem.getValue();
+//                        
+//                        if (document instanceof Project) {
+//                            target.setItems(FXCollections.observableArrayList(
+//                                StandardTranslatorKey.projectTranslatorKeys()
+//                                    .map(PreviewController::castTranslatorKey)
+//                                    .collect(toList())
+//                            ));
+//                        } else if (document instanceof Table) {
+//                            target.setItems(FXCollections.observableArrayList(
+//                                StandardTranslatorKey.tableTranslatorKeys()
+//                                    .map(PreviewController::castTranslatorKey)
+//                                    .collect(toList())
+//                            ));
+//                        }
+//                        
+//                        target.getSelectionModel().select(0);
+////                        events.notify(new PreviewEvent(document, nodes));
+//                    }
+//                }
+//            });
+//
+//        // When the preview component is repainted, bind its content to the 
+//        // correct document
+////        events.on(PreviewEvent.class, ev -> {
+////            generatePreview(ev.getDocument(), target.getSelectionModel().selectedItemProperty().get());
+////        });
+//        
+//        // React on changes in the dropdown list
+//        target.getSelectionModel().selectedItemProperty().addListener((ob, o, selected) -> {
+//            if (!ui.getSelectedTreeItems().isEmpty()) {
+//                final TreeItem<DocumentProperty> treeItem = ui.getSelectedTreeItems().get(0);
+//                if (treeItem != null) {
+//                    generatePreview(treeItem.getValue(), selected);
+//                }
+//            }
+//        });
+//        
+//        // Create a listener to work off the load queue
+//        final WebEngine engine = web.getEngine();
+//        engine.getLoadWorker().stateProperty().addListener((ov, old, newState) -> {
+//            if (newState == Worker.State.SUCCEEDED) {
+//                Runnable task;
+//                while ((task = onLoad.poll()) != null) {
+//                    task.run();
+//                }
+//            }
+//        });
     }
     
-    private void generatePreview(Document document, TranslatorConstructor<Document> selection) {
-        if (selection != null) {
-
-            final Translator<?, File> translator = selection.create(
-                session.getSpeedment(), 
-                new JavaGenerator(), 
-                document
-            );
-
-            final Meta<File, String> result = translator.generate();
-            filename.setText(result.getModel().getName());
-
-            if (document instanceof TableProperty) {
-                final TableProperty table = (TableProperty) document;
-
-                final ObservableStringValue text = Bindings.createStringBinding(
-                    () -> {
-                        if (table.enabledProperty().get()) {
-                            return translator.toCode();
-                        } else {
-                            return "(No code is generated for disabled nodes.)";
-                        }
-                    },
-                    table.columnsProperty(),
-                    table.indexesProperty(),
-                    table.foreignKeysProperty(),
-                    table.enabledProperty(),
-                    table.aliasProperty(),
-                    table.nameProperty()
-                );
-
-                loadPreview(text);
-            } else if (document instanceof ProjectProperty) {
-                final ProjectProperty project = (ProjectProperty) document;
-
-                final ObservableStringValue text = Bindings.createStringBinding(
-                    () -> {
-                        if (project.enabledProperty().get()) {
-                            return translator.toCode();
-                        } else {
-                            return "(No code is generated for disabled nodes.)";
-                        }
-                    },
-                    project.dbmsesProperty(),
-                    project.enabledProperty(),
-                    project.nameProperty(),
-                    project.configPathProperty(),
-                    project.packageLocationProperty(),
-                    project.packageNameProperty()
-                );
-
-                loadPreview(text);
-            } else {
-                filename.setText("");
-            }
-        }
-    }
+//    private <T extends HasMainInterface> void generatePreview(DocumentProperty document, TranslatorKey<DocumentProperty> selection) {
+//        if (selection != null) {
+//            final CodeGenerationComponent cgc = session.getSpeedment().getCodeGenerationComponent();
+//            
+//            filename.textProperty().bind(Bindings.createStringBinding(() -> {
+//                return cgc.findTranslator(document, selection).get().getName();
+//            }, document));
+//
+//            if (document instanceof TableProperty) {
+//                final TableProperty table = (TableProperty) document;
+//
+//                loadPreview(Bindings.createStringBinding(() -> {
+//                        if (table.enabledProperty().get()) {
+//                            return cgc.findTranslator(document, selection).toCode();
+//                        } else {
+//                            return "(No code is generated for disabled nodes.)";
+//                        }
+//                    },
+//                    table
+//                ));
+//            } else if (document instanceof ProjectProperty) {
+//                final ProjectProperty project = (ProjectProperty) document;
+//
+//                loadPreview(Bindings.createStringBinding(
+//                    () -> {
+//                        if (project.enabledProperty().get()) {
+//                            return cgc.findTranslator(document, selection).toCode();
+//                        } else {
+//                            return "(No code is generated for disabled nodes.)";
+//                        }
+//                    },
+//                    project
+//                ));
+//            } else {
+//                filename.setText("");
+//            }
+//        }
+//    }
+//    
+//    private static <T extends HasMainInterface> TranslatorKey<DocumentProperty> castTranslatorKey(TranslatorKey<T> key) {
+//        @SuppressWarnings("unchecked")
+//        final TranslatorKey<DocumentProperty> casted = (TranslatorKey<DocumentProperty>) key;
+//        return casted;
+//    }
     
     public static Node create(UISession session) {
         return Loader.create(session, "Preview", PreviewController::new);
 	}
     
-    private void loadPreview(ObservableStringValue... preview) {
+    private void loadPreview(StringBinding... preview) {
         final WebEngine engine = web.getEngine();
+        
+        onLoad.add(() -> {
+            for (int i = 0; i < preview.length; i++) {
+                final int j = i;
+                
+                final ChangeListener<String> change = (ob, o, newText) -> {
+                    updateElement(j, newText);
+                };
+                
+                preview[j].addListener(change);
+                updateElement(j, preview[j].get());
+                
+                runLater(() -> onLoad.add(() -> preview[j].removeListener(change)));
+            }
+        });
         
         final StringBuilder html = new StringBuilder(HTML_PREFIX);
         for (int i = 0; i < preview.length; i++) {
             html.append(ELEMENT_PREFIX).append(i).append(ELEMENT_SUFFIX);
         }
+        
         html.append(HTML_SUFFIX);
         engine.loadContent(html.toString());
-
-        final AtomicInteger index = new AtomicInteger(0);
-        while (index.get() < preview.length) {
-            final int i = index.get();
-            
-            preview[i].addListener((ob, o, newText) -> {
-                updateElement(i, newText);
-            });
-
-            final AtomicBoolean first = new AtomicBoolean(true);
-            engine.getLoadWorker().stateProperty().addListener((ov, old, newState) -> {
-                if (first.getAndSet(false) && newState == Worker.State.SUCCEEDED) {
-                    updateElement(i, preview[i].get());
-                }
-            });
-            
-            index.incrementAndGet();
-        }
     }
 
     private void updateElement(int index, String newText) {
         final WebEngine engine = web.getEngine();
-        engine.getDocument().getElementById("code_" + index).setTextContent(newText);
-        engine.executeScript("Prism.highlightAll()");
-    }
-    
-    @FunctionalInterface
-    private interface TranslatorConstructor<DOC extends Document> {
-        Translator create(Speedment speedment, Generator gen, DOC document);
-    }
-    
-    private enum ProjectTarget implements TranslatorConstructor<Project> {
-        
-        APPLICATION          ("Application", SpeedmentApplicationTranslator::new),
-        APPLICATION_METADATA ("Application Metadata", SpeedmentApplicationTranslator::new);
-        
-        private final String label;
-        private final TranslatorConstructor<Project> constructor;
-        
-        private ProjectTarget(String label, TranslatorConstructor<Project> constructor) {
-            this.label       = label;
-            this.constructor = constructor;
-        }
-
-        @Override
-        public Translator create(Speedment speedment, Generator gen, Project document) {
-            return constructor.create(speedment, gen, document);
-        }
-
-        @Override
-        public String toString() {
-            return label;
+        final Element element = engine.getDocument().getElementById("code_" + index);
+        if (element != null) {
+            element.setTextContent(newText);
+            engine.executeScript("Prism.highlightAll()");
         }
     }
-    
-    private enum TableTarget implements TranslatorConstructor<Table> {
-        
-        ENTITY              ("Entity", EntityTranslator::new),
-        ENTITY_IMPL         ("Entity Implementation", EntityImplTranslator::new),
-        ENTITY_MANAGER_IMPL ("Manager Implementation", EntityManagerImplTranslator::new);
-        
-        private final String label;
-        private final TranslatorConstructor<Table> constructor;
-        
-        private TableTarget(String label, TranslatorConstructor<Table> constructor) {
-            this.label       = label;
-            this.constructor = constructor;
-        }
-
-        @Override
-        public Translator create(Speedment speedment, Generator gen, Table document) {
-            return constructor.create(speedment, gen, document);
-        }
-        
-        @Override
-        public String toString() {
-            return label;
-        }
-    } 
 
     private final static String
         ELEMENT_PREFIX = "<pre class=\"line-numbers\"><code id=\"code_",

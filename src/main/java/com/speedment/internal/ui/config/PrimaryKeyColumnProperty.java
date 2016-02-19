@@ -17,13 +17,15 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.PrimaryKeyColumnPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -31,12 +33,17 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table> 
+public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty> 
     implements PrimaryKeyColumn, HasNameProperty, 
     HasOrdinalPositionProperty, HasColumnProperty {
 
-    public PrimaryKeyColumnProperty(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public PrimaryKeyColumnProperty(Table parent) {
+        super(parent);
+    }
+    
+    @Override
+    public PrimaryKeyColumnPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -45,8 +52,7 @@ public final class PrimaryKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS, key);
+    }
 }

@@ -25,6 +25,7 @@ import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.code.TranslatorManager;
+import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
@@ -57,7 +58,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -68,10 +68,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-import org.controlsfx.glyphfont.FontAwesome;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.SplitPane;
+import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 
@@ -89,7 +91,7 @@ public final class UISession {
     }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static double DIALOG_PANE_ICON_SIZE = 48.0;
+    private final static String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
@@ -109,27 +111,28 @@ public final class UISession {
     private final Speedment speedment;
     private final Application application;
     private final Stage stage;
-    private final String defaultJsonLocation;
+    private final String defaultConfigLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
-    private final FontAwesome fontAwesome;
     
     private File currentlyOpenFile = null;
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
-        this(speedment, application, stage, defaultConfigLocation, newEmptyProject());
+        this(speedment, application, stage, defaultConfigLocation, null);
     }
     
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
-        requireNonNull(project);
-        
+
         this.speedment             = requireNonNull(speedment);
         this.application           = requireNonNull(application);
         this.stage                 = requireNonNull(stage);
-        this.defaultJsonLocation   = requireNonNull(defaultConfigLocation);
-        this.project               = new ProjectProperty(project.stream().toConcurrentMap());
+        this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
+        this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
-        this.fontAwesome           = new FontAwesome();
+        
+        if (project != null) {
+            this.project.merge(speedment, project);
+        }
     }
     
     public Speedment getSpeedment() {
@@ -157,8 +160,8 @@ public final class UISession {
         return on(event -> {
             try {
                 final Stage newStage = new Stage();
-                final Speedment newSpeedment = speedment.newInstance();
-                final UISession session = new UISession(newSpeedment, application, newStage, defaultJsonLocation);
+                final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
+                final UISession session = new UISession(newSpeedment, application, newStage, defaultConfigLocation);
 
                 ConnectController.createAndShow(session);
             } catch (Exception e) {
@@ -255,7 +258,7 @@ public final class UISession {
             clearLog();
             
             if (currentlyOpenFile == null) {
-                currentlyOpenFile = new File(defaultJsonLocation);
+                currentlyOpenFile = new File(defaultConfigLocation);
             }
             
             saveConfigFile(currentlyOpenFile);
@@ -295,6 +298,87 @@ public final class UISession {
         });
     }
     
+    public <T extends Event, E extends EventHandler<T>>  E toggleProjectTree() {
+        return toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleWorkspace() {
+        return toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E toggleOutput() {
+        return toggle("output", hiddenOutput, StoredNode.InsertAt.END);
+    }
+    
+    public <T extends Event, E extends EventHandler<T>>  E togglePreview() {
+        return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
+    }
+    
+    private final static class StoredNode {
+        
+        private enum InsertAt {
+            BEGINNING, END
+        }
+        
+        private final Node node;
+        private final SplitPane parent;
+
+        private StoredNode(Node node, SplitPane parent) {
+            this.node             = requireNonNull(node);
+            this.parent           = requireNonNull(parent);
+        }
+    }
+    
+    private final ObjectProperty<StoredNode>
+        hiddenProjectTree = new SimpleObjectProperty<>(),
+        hiddenWorkspace   = new SimpleObjectProperty<>(),
+        hiddenOutput      = new SimpleObjectProperty<>(),
+        hiddenPreview     = new SimpleObjectProperty<>();
+    
+    private <T extends Event, E extends EventHandler<T>>  E toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
+        return on(event -> {
+            final SplitPane parent;
+            final Node node;
+            
+            if (hidden.get() == null) {
+                node = this.stage.getScene().lookup("#" + cssId);
+            
+                if (node != null) {
+                    Node n = node;
+                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
+                    parent = (SplitPane) n;
+                    
+                    if (parent != null) {
+                        parent.getItems().remove(node);
+                        hidden.set(new StoredNode(node, parent));
+                    } else {
+                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
+                    }
+                } else {
+                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
+                }
+            } else {
+                parent = hidden.get().parent;
+                
+                if (parent != null) {
+                    node = hidden.get().node;
+
+                    switch (insertAt) {
+                        case BEGINNING : parent.getItems().add(0, node); break;
+                        case END       : parent.getItems().add(node); break;
+                        default : throw new UnsupportedOperationException(
+                            "Unknown InsertAt enum constant '" + insertAt + "'."
+                        );
+                    }
+
+                    hidden.set(null);
+                } else {
+                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
+                }
+            }
+        });
+    }
+    
     public void showError(String title, String message) {
         showError(title, message, null);
     }
@@ -304,7 +388,11 @@ public final class UISession {
 
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
 
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
@@ -318,7 +406,7 @@ public final class UISession {
         
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         alert.showAndWait();
     }
     
@@ -327,7 +415,10 @@ public final class UISession {
         
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
@@ -336,7 +427,7 @@ public final class UISession {
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(fontAwesome.create(FontAwesome.Glyph.WARNING).size(DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
         
         return alert.showAndWait();
     }
@@ -345,12 +436,15 @@ public final class UISession {
         final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(fontAwesome.create(FontAwesome.Glyph.LOCK).size(DIALOG_PANE_ICON_SIZE));
+        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
         
-        final Scene scene     = pane.getScene();
-        scene.getStylesheets().add(speedment.getUserInterfaceComponent().getStylesheetFile());
+        final Scene scene = pane.getScene();
+        speedment
+            .getUserInterfaceComponent()
+            .stylesheetFiles()
+            .forEachOrdered(scene.getStylesheets()::add);
         
         @SuppressWarnings("unchecked")
         final Stage dialogStage = (Stage) scene.getWindow();
@@ -393,7 +487,7 @@ public final class UISession {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(usernamePassword -> {
-            dbms.usernameProperty().setValue(usernamePassword.getKey());
+            dbms.mutator().setUsername(usernamePassword.getKey());
             speedment.getPasswordComponent().put(dbms, usernamePassword.getValue());
         });
     }
@@ -401,9 +495,14 @@ public final class UISession {
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             dbms.schemasProperty().clear();
+ 
+            final Project newProject = DocumentUtil.deepCopy(project, ProjectImpl::new);
+            final Dbms newDbms = newProject.dbmses().findAny().get();
             
-            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
+            
+            project.merge(speedment, newProject);
             
             return true;
         } catch (final Exception ex) {
@@ -423,13 +522,13 @@ public final class UISession {
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE :
                         final Stage newStage = new Stage();
-                        final Speedment newSpeedment = speedment.newInstance();
+                        final Speedment newSpeedment = speedment.copyWithSameTypeOfComponents();
                         
                         final UISession session = new UISession(
                             newSpeedment, 
                             application, 
                             newStage, 
-                            defaultJsonLocation, 
+                            defaultConfigLocation, 
                             p
                         );
                         
@@ -437,7 +536,7 @@ public final class UISession {
                         break;
 
                     case USE_EXISTING_STAGE :
-                        project.getData().putAll(p.getData());
+                        project.merge(speedment, p);
                         SceneController.createAndShow(this);
                         break;
 
@@ -470,7 +569,7 @@ public final class UISession {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         
         if (currentlyOpenFile == null) {
-            final Path path   = Paths.get(defaultJsonLocation);
+            final Path path   = Paths.get(defaultConfigLocation);
             final Path parent = path.getParent();
             
             try {
@@ -481,9 +580,8 @@ public final class UISession {
                 Do nothing. Creating the parent directory is purely for
                 the convenience of the user.
             */}
-            
             fileChooser.setInitialDirectory(parent.toFile());
-            fileChooser.setInitialFileName(defaultJsonLocation);
+            fileChooser.setInitialFileName(path.getFileName().toString());
         } else {
             fileChooser.setInitialDirectory(currentlyOpenFile.getParentFile());
             fileChooser.setInitialFileName(currentlyOpenFile.getName());
@@ -530,8 +628,16 @@ public final class UISession {
     }
     
     @SuppressWarnings("unchecked")
+    public <T extends Event, E extends EventHandler<T>> E showGitter() {
+        return on(event -> browse(GITTER_URI));
+    }
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        return on(event -> application.getHostServices().showDocument(GITHUB_URI));
+        return on(event -> browse(GITHUB_URI));
+    }
+    
+    public void browse(String url) {
+        application.getHostServices().showDocument(url);
     }
     
     private <T extends Event, E extends EventHandler<T>> E on(Consumer<T> listener) {
@@ -547,10 +653,5 @@ public final class UISession {
     }
     
     private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
-    
-    private static ProjectProperty newEmptyProject() {
-        final Map<String, Object> projectMap = new ConcurrentHashMap<>();
-        projectMap.put("name", "Project");
-        return new ProjectProperty(projectMap);
-    }
+    private final static String GITTER_URI = "https://gitter.im/speedment/speedment/";
 }

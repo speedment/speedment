@@ -19,27 +19,30 @@ package com.speedment.internal.core.code;
 import com.speedment.code.Translator;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.util.JavaLanguage;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import static com.speedment.internal.codegen.util.Formatting.ucfirst;
+import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.JavaLanguage.javaPackageName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.
  * The class contains many helper-functions to make the generation process
  * easier.
  *
- * @author pemi
- * @param <T> The Node type
+ * @author       pemi
+ * @param <DOC>  the document type
+ * @param <T>    the codegen model type
  */
-public interface JavaClassTranslator<T extends HasName & HasMainInterface> extends Translator<T, File> {
+public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> extends Translator<DOC, T> {
 
     /**
-     * Returns the name of the current node formatted as a java variable.
+     * Returns the alias of the current document formatted as a java variable.
      * <p>
      * Example:
      * <ul>
@@ -48,15 +51,15 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>firstname</code>
      * </ul>
      *
-     * @return the node name as a variable
-     * @see #getNode()
+     * @return the document name as a variable
+     * @see #getDocument()
      */
     default String variableName() {
-        return variableName(getNode());
+        return variableName(getAliasDocument());
     }
 
     /**
-     * Returns the name of the specified node formatted as a java variable.
+     * Returns the alias of the specified document formatted as a java variable.
      * <p>
      * Example:
      * <ul>
@@ -65,16 +68,16 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>firstname</code>
      * </ul>
      *
-     * @param node the node to retrieve the name from.
+     * @param doc the document to retrieve the name from.
      * @return the node name as a variable
      */
-    default String variableName(HasName node) {
-        requireNonNull(node);
-        return JavaLanguage.javaVariableName(node.getName());
+    default String variableName(HasAlias doc) {
+        requireNonNull(doc);
+        return javaLanguageNamer().javaVariableName(doc.getJavaName());
     }
 
     /**
-     * Returns the name of the current node formatted as a java type.
+     * Returns the alias of the current document formatted as a java type.
      * <p>
      * Example:
      * <ul>
@@ -83,15 +86,15 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>Firstname</code>
      * </ul>
      *
-     * @return the node name as a type
-     * @see #getNode()
+     * @return the document alias as a type
+     * @see #getDocument()
      */
     default String typeName() {
-        return typeName(getNode());
+        return typeName(getAliasDocument());
     }
 
     /**
-     * Returns the name of the specified node formatted as a java type.
+     * Returns the alias of the specified document formatted as a java type.
      * <p>
      * Example:
      * <ul>
@@ -100,33 +103,32 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>Firstname</code>
      * </ul>
      *
-     * @param node the node to retrieve the name from
-     * @return the node name as a type
+     * @param doc  the document to retrieve the alias from
+     * @return     the document alias as a type
      */
-    default String typeName(HasName node) {
-        return JavaLanguage.javaTypeName(requireNonNull(node).getName());
+    default String typeName(HasAlias doc) {
+        return javaLanguageNamer().javaTypeName(requireNonNull(doc).getJavaName());
     }
-
+    
     /**
-     * Returns the name of the current node as a java type but with the keyword
-     * 'Manager' appended to it.
+     * Returns the name of the specified project formatted as a java type.
      * <p>
      * Example:
      * <ul>
-     * <li><code>EmployeesSchemaManager</code>
-     * <li><code>UserTableManager</code>
-     * <li><code>FirstnameManager</code>
+     * <li><code>EmployeesSchema</code>
+     * <li><code>UserTable</code>
+     * <li><code>Firstname</code>
      * </ul>
      *
-     * @return the node name as a manager type
-     * @see #getNode()
+     * @param project  the document to retrieve the name from
+     * @return         the project name as a type
      */
-    default String managerTypeName() {
-        return managerTypeName(getNode());
+    default String typeName(Project project) {
+        return javaLanguageNamer().javaTypeName(requireNonNull(project).getName());
     }
 
     /**
-     * Returns the name of the specified node as a java type but with the
+     * Returns the alias of the current document as a java type but with the 
      * keyword 'Manager' appended to it.
      * <p>
      * Example:
@@ -136,15 +138,33 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>FirstnameManager</code>
      * </ul>
      *
-     * @param node the node to retrieve the name from
-     * @return the node name as a manager type
+     * @return the document alias as a manager type
+     * @see #getDocument()
      */
-    default String managerTypeName(HasName node) {
-        return typeName(node) + "Manager";
+    default String managerTypeName() {
+        return managerTypeName(getAliasDocument());
     }
 
     /**
-     * Returns the fully qualified type name of the current node.
+     * Returns the alias of the specified document as a java type but with the
+     * keyword 'Manager' appended to it.
+     * <p>
+     * Example:
+     * <ul>
+     * <li><code>EmployeesSchemaManager</code>
+     * <li><code>UserTableManager</code>
+     * <li><code>FirstnameManager</code>
+     * </ul>
+     *
+     * @param doc  the document to retrieve the alias from
+     * @return     the document alias as a manager type
+     */
+    default String managerTypeName(HasAlias doc) {
+        return typeName(doc) + "Manager";
+    }
+
+    /**
+     * Returns the fully qualified type name of the current document.
      * <p>
      * Example:
      * <ul>
@@ -153,12 +173,12 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * <li><code>com.speedment.example.usertable.firstname.Firstname</code>
      * </ul>
      * <p>
-     * Note that this method is only meant to work with nodes at
-     * <code>Table</code> or higher level in the hierarchy. It will return a
-     * result for all nodes located in a valid hierarchy, but the result might
-     * not be as intended.
+     * Note that this method is only meant to work with documents at
+     * {@code Table} or higher level in the hierarchy. It will return a
+     * result for all documents located in a valid hierarchy, but the result 
+     * might not be as intended.
      *
-     * @return the fully qualified type name of the current node
+     * @return the fully qualified type name of the current document
      * @see
      * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning
      * fully qualified type names</a>
@@ -168,7 +188,7 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
     }
 
     /**
-     * Returns the fully qualified type name of the current node. The specified
+     * Returns the fully qualified type name of the current document. The specified
      * sub-path will be added after the base package name and before the type
      * name of the node. The sub-path should not contain either leading nor
      * trailing dots.
@@ -181,24 +201,58 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * </ul>
      * <p>
      * Note that this method is only meant to work with nodes at
-     * <code>Table</code> or higher level in the hierarchy. It will return a
-     * result for all nodes located in a valid hierarchy, but the result might
+     * {@code Table} or higher level in the hierarchy. It will return a
+     * result for all documents located in a valid hierarchy, but the result might
      * not be as intended.
      *
      * @param subPath A sub-path to be added at the end of the 'package'-part of
-     * the qualified type name. This value can be <code>null</code> and in that
+     * the qualified type name. This value can be {@code null} and in that
      * case an ordinary fullyQualifiedTypeName will be returned.
-     * @return the fully qualified type name of the current node
+     * @return the fully qualified type name of the current document
      * @see
      * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning
      * fully qualified type names</a>
      */
     default String fullyQualifiedTypeName(String subPath) {
+        return fullyQualifiedTypeName(subPath, "");
+    }
+    
+    /**
+     * Returns the fully qualified type name of the current document. The specified
+     * sub-path will be added after the base package name and before the type
+     * name of the node. The sub-path should not contain either leading nor
+     * trailing dots.
+     * <p>
+     * Example:
+     * <ul>
+     * <li><code>com.speedment.example.employeesschema.EmployeesSchema</code>
+     * <li><code>com.speedment.example.usertable.UserTable</code>
+     * <li><code>com.speedment.example.usertable.firstname.Firstname</code>
+     * </ul>
+     * <p>
+     * Note that this method is only meant to work with nodes at
+     * {@code Table} or higher level in the hierarchy. It will return a
+     * result for all documents located in a valid hierarchy, but the result might
+     * not be as intended.
+     *
+     * @param subPath A prefix that will be added to the "class"-part of the
+     * type name.
+     * @param subPath A sub-path to be added at the end of the 'package'-part of
+     * the qualified type name. This value can be {@code null} and in that
+     * case an ordinary fullyQualifiedTypeName will be returned.
+     * @return the fully qualified type name of the current document
+     * @see
+     * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning
+     * fully qualified type names</a>
+     */
+    default String fullyQualifiedTypeName(String subPath, String filePrefix) {
+        requireNonNull(filePrefix);
+        
         // subPath is nullable
         if (subPath == null || subPath.isEmpty()) {
-            return basePackageName() + "." + typeName(getNode());
+            return basePackageName() + "." + ucfirst(filePrefix) + typeName(getAliasDocument());
         } else {
-            return basePackageName() + "." + subPath + "." + typeName(getNode());
+            return basePackageName() + "." + subPath + "." + ucfirst(filePrefix) + typeName(getAliasDocument());
         }
     }
 
@@ -209,11 +263,11 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
      * @return the base package name in lowercase.
      */
     default String basePackageName() {
-        final String packName = project().getPackageName().toLowerCase() + ".";
-        if (getNode() instanceof Project) {
-            return packName + javaPackageName(project().getName());
+        final String packName = projectOrThrow().getPackageName().toLowerCase() + ".";
+        if (getDocument() instanceof Project) {
+            return packName + javaLanguageNamer().javaPackageName(projectOrThrow().getName());
         } else {
-            return packName + relativeName(getNode(), Project.class, JavaLanguage::javaPackageName);
+            return packName + relativeName(getDocument(), Project.class, javaLanguageNamer()::javaPackageName);
         }
     }
 
@@ -227,4 +281,17 @@ public interface JavaClassTranslator<T extends HasName & HasMainInterface> exten
     default String baseDirectoryName() {
         return basePackageName().replace(".", "/");
     }
+    
+    JavaLanguageNamer javaLanguageNamer();
+    
+    default Project projectOrThrow() {
+        return project().orElseThrow(foundNoProjectException());
+    }
+    
+    static Supplier<SpeedmentException> foundNoProjectException() {
+        return () -> new SpeedmentException(
+            "Could not find any project node in document"
+        );
+    }
+    
 }

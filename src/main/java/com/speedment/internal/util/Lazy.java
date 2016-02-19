@@ -35,6 +35,9 @@ public final class Lazy<T> {
 
     private volatile T value;
 
+    private Lazy() {
+    }
+    
     public T getOrCompute(Supplier<T> supplier) {
         // With this local variable, we only need to do one volatile read most of the times
         final T result = value;  

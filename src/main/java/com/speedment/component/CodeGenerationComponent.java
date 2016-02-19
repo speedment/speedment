@@ -17,14 +17,20 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.code.StandardTranslatorKey;
 import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.Translator;
+import com.speedment.code.TranslatorDecorator;
 import com.speedment.code.TranslatorKey;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import java.util.stream.Stream;
+import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.stream.MapStream;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * This Component interface is used for Speedmens's code generation.
@@ -34,7 +40,6 @@ import java.util.stream.Stream;
  */
 @Api(version = "2.3")
 public interface CodeGenerationComponent extends Component {
-
 
     @Override
     default Class<CodeGenerationComponent> getComponentClass() {
@@ -60,14 +65,16 @@ public interface CodeGenerationComponent extends Component {
      * an old TranslatorConstructor exists for the same class/key pair, it is
      * replaced.
      *
-     * @param <T> Type of Document
-     * @param clazz Class of the Document
-     * @param tKey translatorKey to use
-     * @param constructor to use when producing Translators of the specified
-     * type
+     * @param <DOC>        type of Document
+     * @param <T>          type of codegen model
+     * @param docType        class of the Document
+     * @param tKey         translatorKey to use
+     * @param constructor  to use when producing Translators of the specified
+     *                     type
      */
-    default <T extends HasMainInterface> void put(Class<T> clazz, TranslatorKey<T> tKey, TranslatorConstructor<T> constructor) {
-        put(clazz, tKey.getKey(), constructor);
+    default <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    put(Class<DOC> docType, TranslatorKey<DOC, T> tKey, TranslatorConstructor<DOC, T> constructor) {
+        put(docType, tKey.getTranslatedType(), tKey.getKey(), constructor);
     }
 
     /**
@@ -75,60 +82,98 @@ public interface CodeGenerationComponent extends Component {
      * an old TranslatorConstructor exists for the same class/key pair, it is
      * replaced.
      *
-     * @param <T> Type of Document
-     * @param clazz CLass of the Document
-     * @param key key to use
-     * @param constructor to use when producing Translators of the specified
-     * type
+     * @param <DOC>        type of Document
+     * @param <T>          type of codegen model
+     * @param docType      class of the Document
+     * @param modelType    class of the codegen model
+     * @param key          key to use
+     * @param constructor  to use when producing Translators of the specified
+     *                     type
      */
-    <T extends HasMainInterface> void put(Class<T> clazz, String key, TranslatorConstructor<T> constructor);
+    <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor);
+
+    /**
+     * Adds a new {@code TranslatorDecorator} for the given class/key pair.
+     *
+     * @param <DOC>      type of Document
+     * @param <T>        type of codegen model
+     * @param docType      class of the Document
+     * @param tKey       translatorKey to use
+     * @param decorator  the new decorator
+     */
+    default <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    add(Class<DOC> docType, TranslatorKey<DOC, T> tKey, TranslatorDecorator<DOC, T> decorator) {
+        add(docType, tKey.getTranslatedType(), tKey.getKey(), decorator);
+    }
+
+    /**
+     * Adds a new {@code TranslatorDecorator} for the given class/key pair.
+     *
+     * @param <DOC>      type of Document
+     * @param <T>        type of codegen model
+     * @param docType    class of the Document
+     * @param modelType  class of the codegen mdoel
+     * @param key        key to use
+     * @param decorator  the new decorator
+     */
+    <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator);
 
     /**
      * Removes the {@code TranslatorConstructor} for the given class/key pair.
      *
-     * @param <T> Type of Document
-     * @param clazz CLass of the Document
-     * @param tKey translatorKey to use
+     * @param <DOC>  type of Document
+     * @param <T>    type of codegen model
+     * @param docType  class of the Document
+     * @param tKey   translatorKey to use
      */
-    default <T extends HasMainInterface> void remove(Class<T> clazz, TranslatorKey<T> tKey) {
-        remove(clazz, tKey.getKey());
+    default <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    remove(Class<DOC> docType, TranslatorKey<DOC, T> tKey) {
+        remove(docType, tKey.getKey());
     }
 
     /**
      * Removes the {@code TranslatorConstructor} for the given class/key pair.
      *
-     * @param <T> Type of Document
-     * @param clazz CLass of the Document
-     * @param key key to use
+     * @param <DOC>    type of Document
+     * @param <T>      type of codegen model
+     * @param docType  class of the Document
+     * @param key      key to use
      */
-    <T extends HasMainInterface> void remove(Class<T> clazz, String key);
+    <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
+    remove(Class<DOC> docType, String key);
 
     /**
      * Returns a Stream of newly created {@code Translator Translators} for the
      * given Document. The translators are all created regardless of its
      * registered key.
      *
-     * @param <T> Document type
-     * @param document
-     * @return a Stream of newly created {@code Translator Translators} for the
-     * given Document
+     * @param <DOC>     Document type
+     * @param document  to use when making translators
+     * @return          a Stream of newly created {@code Translator Translators} 
+     *                  for the given Document
      */
-    <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document);
+    <DOC extends HasName & HasMainInterface> Stream<? extends Translator<DOC, ?>> 
+    translators(DOC document);
 
     /**
      * Returns a Stream of newly created {@code Translator Translators} for the
      * given Document and key. Only Translators that match the provided key are
      * included in the Stream.
      *
-     * @param <T> Document type
-     * @param document
-     * @param hasKey
-     * @return a Stream of newly created {@code Translator Translators} for the
-     * given Document
+     * @param <DOC>     document type
+     * @param <T>       codegen model type
+     * @param document  to use when making translators
+     * @param key       the key
+     * @return          a Stream of newly created {@code Translator Translators} 
+     *                  for the given Document
+     * 
+     * @throws SpeedmentException  if the specified translator did not exist
      */
-    default <T extends HasMainInterface> Stream<? extends Translator<T, File>> 
-        translators(T document, TranslatorKey<T> hasKey) {
-        return translators(document, hasKey.getKey());
+    default <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T>
+    findTranslator(DOC document, TranslatorKey<DOC, T> key) throws SpeedmentException {
+        return CodeGenerationComponent.this.findTranslator(document, key.getTranslatedType(), key.getKey());
     }
 
     /**
@@ -136,12 +181,27 @@ public interface CodeGenerationComponent extends Component {
      * given Document and key. Only Translators that match the provided key are
      * included in the Stream.
      *
-     * @param <T> Document type
-     * @param document
-     * @param key
-     * @return a Stream of newly created {@code Translator Translators} for the
-     * given Document
+     * @param <DOC>      document type
+     * @param <T>        codegen model type
+     * @param document   to use when making translators
+     * @param modelType  type to indicate return type variables
+     * @param key        the key
+     * @return           the newly created {@code Translator Translators} for the 
+     *                   given Document
+     * 
+     * @throws SpeedmentException  if the specified translator did not exist
      */
-    <T extends HasMainInterface> Stream<? extends Translator<T, File>> translators(T document, String key);
+    <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> 
+    findTranslator(DOC document, Class<T> modelType, String key) throws SpeedmentException;
 
+    /**
+     * Returns the current {@link JavaLanguageNamer} used by Speedment.
+     *
+     * @return  the current {@link JavaLanguageNamer}
+     */
+    JavaLanguageNamer javaLanguageNamer();
+
+    void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
+
+    MapStream<Class<? extends HasMainInterface>, Set<String>> stream();
 }

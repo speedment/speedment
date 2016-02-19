@@ -59,7 +59,8 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         this.packageLocation = prototype.getPackageName();
         this.configPath      = prototype.getConfigPath();
         
-        this.dbmses = unmodifiableList(Project.super.dbmses().map(ImmutableDbms.class::cast).collect(toList()));
+        this.dbmses = unmodifiableList(super.children(DBMSES, ImmutableDbms::new).collect(toList()));
+        
         this.tablesByName = MapStream.fromValues(
             DocumentDbUtil.traverseOver(this, ImmutableTable.class),
             table -> DocumentUtil.relativeName(table, Dbms.class)
@@ -92,11 +93,6 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     }
 
     @Override
-    public BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor() {
-        return (parent, map) -> new ImmutableDbms((ImmutableProject) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableDbms> dbmses() {
         return dbmses.stream();
     }
@@ -119,10 +115,4 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     public static ImmutableProject wrap(Project project) {
         return new ImmutableProject(project.getData());
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

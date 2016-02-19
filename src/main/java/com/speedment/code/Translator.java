@@ -16,6 +16,7 @@
  */
 package com.speedment.code;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.Document;
@@ -25,34 +26,52 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javafx.scene.Node;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
+import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import com.speedment.internal.codegen.lang.models.File;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
- * A component that can translate a {@link Node} into something else. This
+ * A component that can translate a {@link Document} into something else. This
  * interface is implemented to generate more files from the same database
  * structure.
  *
- * @author pemi
- * @param <T> the ConfigEntity type to use
- * @param <R> the type to translate into
- * @see Node
+ * @author       pemi
+ * @param <DOC>  the Document type to use
+ * @param <T>    the codegen type to make (Class, Interface or Enum)
+ * @see          Document
+ * @since        2.3
  */
-public interface Translator<T extends Document & HasMainInterface, R> extends Supplier<R> {
+@Api(version = "2.3")
+public interface Translator<DOC extends Document & HasMainInterface, T extends ClassOrInterface<T>> extends Supplier<File> {
 
     /**
-     * The node being translated.
+     * The document being translated.
      *
-     * @return the node
+     * @return  the document
      */
-    T getNode();
+    DOC getDocument();
+    
+    /**
+     * The document being translated wrapped in a {@link HasAlias}.
+     * 
+     * @return  the document
+     */
+    default HasAlias getAliasDocument() {
+        return HasAlias.of(Translator.this.getDocument());
+    }
 
     /**
      * Return this node or any ancestral node that is a {@link Project}. If no
@@ -60,8 +79,8 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the project node
      */
-    default Project project() {
-        return getGenericConfigEntity(Project.class);
+    default Optional<Project> project() {
+        return getDocument(Project.class);
     }
 
     /**
@@ -70,8 +89,8 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the dbms node
      */
-    default Dbms dbms() {
-        return getGenericConfigEntity(Dbms.class);
+    default Optional<Dbms> dbms() {
+        return getDocument(Dbms.class);
     }
 
     /**
@@ -80,8 +99,8 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the schema node
      */
-    default Schema schema() {
-        return getGenericConfigEntity(Schema.class);
+    default Optional<Schema> schema() {
+        return getDocument(Schema.class);
     }
 
     /**
@@ -90,8 +109,8 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the table node
      */
-    default Table table() {
-        return getGenericConfigEntity(Table.class);
+    default Optional<Table> table() {
+        return getDocument(Table.class);
     }
 
     /**
@@ -100,8 +119,8 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the column node
      */
-    default Column column() {
-        return getGenericConfigEntity(Column.class);
+    default Optional<Column> column() {
+        return getDocument(Column.class);
     }
 
     /**
@@ -110,10 +129,13 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled columns
      * @see Column
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Column> columns() {
-        return table().columns().filter(HasEnabled::test);
+        return table()
+            .map(Table::columns)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -122,10 +144,12 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled indexes
      * @see Index
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Index> indexes() {
-        return table().indexes().filter(HasEnabled::test);
+        return table()
+            .map(Table::indexes)
+            .orElse(Stream.empty()).filter(HasEnabled::test);
     }
 
     /**
@@ -134,10 +158,13 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled foreign keys
      * @see ForeignKey
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends ForeignKey> foreignKeys() {
-        return table().foreignKeys().filter(HasEnabled::test);
+        return table()
+            .map(Table::foreignKeys)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -146,10 +173,13 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      *
      * @return the enabled primary key columns
      * @see PrimaryKeyColumn
-     * @see Enableable#isEnabled()
+     * @see HasEnabled#isEnabled()
      */
     default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return table().primaryKeyColumns().filter(HasEnabled::test);
+        return table()
+            .map(Table::primaryKeyColumns)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -161,27 +191,22 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
      * @param clazz the class to match
      * @return the node found
      */
-    default <E extends Document> E getGenericConfigEntity(Class<E> clazz) {
+    default <E extends Document> Optional<E> getDocument(Class<E> clazz) {
         requireNonNull(clazz);
-        if (clazz.isAssignableFrom(getNode().mainInterface())) {
+        if (clazz.isAssignableFrom(Translator.this.getDocument().mainInterface())) {
             @SuppressWarnings("unchecked")
-            final E result = (E) getNode();
-            return result;
+            final E result = (E) Translator.this.getDocument();
+            return Optional.of(result);
         }
 
-        return getNode()
-                //.ancestor(clazz)
-                .ancestors()
-                .filter(clazz::isInstance)
-                .map(clazz::cast)
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException(
-                        getNode() + " is not a " + clazz.getSimpleName()
-                        + " and does not have a parent that is a " + clazz.getSimpleName()
-                ));
+        return Translator.this.getDocument()
+            .ancestors()
+            .filter(clazz::isInstance)
+            .map(clazz::cast)
+            .findAny();
     }
     
-    default Meta<R, String> generate() {
+    default Meta<File, String> generate() {
         return getCodeGenerator().metaOn(get()).findFirst().orElseThrow(() -> new SpeedmentException("Unable to generate Java code"));
     }
     
@@ -189,5 +214,31 @@ public interface Translator<T extends Document & HasMainInterface, R> extends Su
         return generate().getResult();
     }
     
+    boolean isInGeneratedPackage();
+    
     Generator getCodeGenerator();
+    
+    default void onMake(Consumer<Builder<T>> action) {
+        onMake((file, builder) -> action.accept(builder));
+    }
+ 
+    void onMake(BiConsumer<File, Builder<T>> action);
+    
+    Stream<BiConsumer<File, Builder<T>>> listeners();
+    
+    interface Builder<T extends ClassOrInterface<T>> {
+        <P extends Document, DOC extends Document> Builder<T> 
+        forEvery(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
+        
+        Builder<T> forEveryProject(BiConsumer<T, Project> consumer);
+        Builder<T> forEveryDbms(BiConsumer<T, Dbms> consumer);
+        Builder<T> forEverySchema(BiConsumer<T, Schema> consumer);
+        Builder<T> forEveryTable(BiConsumer<T, Table> consumer);
+        Builder<T> forEveryColumn(BiConsumer<T, Column> consumer);
+        Builder<T> forEveryIndex(BiConsumer<T, Index> consumer);
+        Builder<T> forEveryForeignKey(BiConsumer<T, ForeignKey> consumer);
+        Builder<T> forEveryForeignKeyReferencingThis(BiConsumer<T, ForeignKey> consumer);
+        
+        T build();
+    }
 }

@@ -17,18 +17,46 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.*;
+import static com.speedment.config.db.Table.COLUMNS;
+import static com.speedment.config.db.Table.FOREIGN_KEYS;
+import static com.speedment.config.db.Table.INDEXES;
+import static com.speedment.config.db.Table.PRIMARY_KEY_COLUMNS;
+import com.speedment.internal.core.config.db.ColumnImpl;
+import com.speedment.internal.core.config.db.ForeignKeyImpl;
+import com.speedment.internal.core.config.db.IndexImpl;
+import com.speedment.internal.core.config.db.PrimaryKeyColumnImpl;
 import com.speedment.internal.core.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class TableMutator extends DocumentMutatorImpl implements DocumentMutator, HasEnabledMutator, HasNameMutator, HasAliasMutator {
+public class TableMutator<DOC extends Table> extends DocumentMutatorImpl<DOC> implements 
+        HasEnabledMutator<DOC>, 
+        HasNameMutator<DOC>, 
+        HasAliasMutator<DOC> {
 
-    TableMutator(Table table) {
+    public TableMutator(DOC table) {
         super(table);
     }
 
+    public Column addNewColumn() {
+        return new ColumnImpl(document(), newDocument(document(), COLUMNS));
+    }
+    
+    public Index addNewIndex() {
+        return new IndexImpl(document(), newDocument(document(), INDEXES));
+    }
+    
+    public ForeignKey addNewForeignKey() {
+        return new ForeignKeyImpl(document(), newDocument(document(), FOREIGN_KEYS));
+    }
+    
+    public PrimaryKeyColumn addNewPrimaryKeyColumn() {
+        return new PrimaryKeyColumnImpl(document(), newDocument(document(), PRIMARY_KEY_COLUMNS));
+    }
 }

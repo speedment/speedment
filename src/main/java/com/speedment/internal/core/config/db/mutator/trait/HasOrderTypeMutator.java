@@ -22,9 +22,10 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface HasOrderTypeMutator extends DocumentMutator {
+public interface HasOrderTypeMutator<DOC extends HasOrderType> extends DocumentMutator<DOC> {
     
     default void setOrderType(OrderType orderType) {
          put(HasOrderType.ORDER_TYPE, orderType);

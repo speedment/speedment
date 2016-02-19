@@ -17,14 +17,16 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.IndexColumnPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrderTypeProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -32,12 +34,17 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index> 
+public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index, IndexColumnProperty> 
     implements IndexColumn, HasNameProperty, HasOrdinalPositionProperty,
     HasOrderTypeProperty, HasColumnProperty {
     
-    public IndexColumnProperty(Index parent, Map<String, Object> data) {
-        super(parent, data);
+    public IndexColumnProperty(Index parent) {
+        super(parent);
+    }
+    
+    @Override
+    public IndexColumnPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -49,8 +56,7 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
     }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.INDEX_COLUMNS, key);
+    }
 }

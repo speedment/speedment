@@ -35,6 +35,11 @@ public interface HasEnabledProperty extends DocumentProperty, HasEnabled {
     }
     
     @Override
+    default boolean isEnabled() {
+        return enabledProperty().get();
+    }
+    
+    @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new BooleanPropertyItem(

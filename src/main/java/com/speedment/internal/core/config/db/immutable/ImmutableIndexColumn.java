@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.db.Column;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.parameters.OrderType;
@@ -35,7 +34,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     private final transient String name;
     private final transient int ordinalPosition;
     private final transient OrderType orderType;
-    private final transient Lazy<Column> column;
+    private final transient Lazy<Optional<ImmutableColumn>> column;
 
     ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
         super(parent, ic);
@@ -65,8 +64,11 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     }
 
     @Override
-    public Column findColumn() {
-        return column.getOrCompute(IndexColumn.super::findColumn);
+    public Optional<ImmutableColumn> findColumn() {
+        return column.getOrCompute(() ->
+            IndexColumn.super.findColumn()
+                .map(ImmutableColumn.class::cast)
+        );
     }
 
     @Override

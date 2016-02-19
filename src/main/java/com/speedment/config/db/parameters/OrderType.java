@@ -17,6 +17,7 @@
 package com.speedment.config.db.parameters;
 
 import com.speedment.annotation.Api;
+import java.util.function.Supplier;
 
 /**
  *
@@ -24,5 +25,59 @@ import com.speedment.annotation.Api;
  */
 @Api(version = "2.2")
 public enum OrderType {
-    ASC, DESC, NONE;
+    ASC {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
+            return ascAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative) {
+            return ascAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+            ascAternative.run();
+        }
+
+    }, DESC {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
+            return descAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative) {
+            return descAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+            descAternative.run();
+        }
+
+    }, NONE {
+        @Override
+        public <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative) {
+            return ascAternative.get();
+        }
+
+        @Override
+        public <T> T select(T ascAternative, T descAternative) {
+            return ascAternative;
+        }
+
+        @Override
+        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+            ascAternative.run();
+        }
+    };
+
+    public abstract <T> T selectLazily(Supplier<T> ascAternative, Supplier<T> descAternative);
+
+    public abstract <T> T select(T ascAternative, T descAternative);
+
+    public abstract <T> void selectRunnable(Runnable ascAternative, Runnable descAternative);
+
 }

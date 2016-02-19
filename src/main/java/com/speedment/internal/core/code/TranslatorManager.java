@@ -24,11 +24,6 @@ import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.entity.EntityImplTranslator;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
-import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator;
-import com.speedment.internal.core.code.lifecycle.SpeedmentApplicationTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
@@ -74,7 +69,8 @@ public class TranslatorManager implements Consumer<Project> {
         requireNonNull(project);
         Statistics.onGenerate();
 
-        final List<Translator<?, File>> translators = new ArrayList<>();
+        final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
+        final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();
         final Generator gen = new JavaGenerator();
 
         fileCounter.set(0);
@@ -84,24 +80,36 @@ public class TranslatorManager implements Consumer<Project> {
 
         final CodeGenerationComponent cgc = speedment.getCodeGenerationComponent();
         
-        cgc.translators(project).forEachOrdered(translators::add);
-        
-//        translators.add(new SpeedmentApplicationTranslator(speedment, gen, project));
-//        translators.add(new SpeedmentApplicationMetadataTranslator(speedment, gen, project));
+        cgc.translators(project)
+            .forEachOrdered(t -> {
+                if (t.isInGeneratedPackage()) {
+                    writeAlwaysTranslators.add(t);
+                } else {
+                    writeOnceTranslators.add(t);
+                }
+            });
 
         traverseOver(project, Table.class)
-                .filter(HasEnabled::test)
-                .forEach(table -> {
-                    cgc.translators(table).forEachOrdered(translators::add);
-//                    translators.add(new EntityTranslator(speedment, gen, table));
-//                    translators.add(new EntityImplTranslator(speedment, gen, table));
-//                    translators.add(new EntityManagerImplTranslator(speedment, gen, table));
+            .filter(HasEnabled::test)
+            .forEach(table -> {
+                cgc.translators(table).forEachOrdered(t -> {
+                    if (t.isInGeneratedPackage()) {
+                        writeAlwaysTranslators.add(t);
+                    } else {
+                        writeOnceTranslators.add(t);
+                    }
                 });
+            });
 
-        gen.metaOn(translators.stream()
-                .map(Translator::get)
-                .collect(Collectors.toList())
-        ).forEach(meta -> writeToFile(project, meta));
+        gen.metaOn(writeOnceTranslators.stream()
+            .map(Translator::get)
+            .collect(Collectors.toList())
+        ).forEach(meta -> writeToFile(project, meta, false));
+        
+        gen.metaOn(writeAlwaysTranslators.stream()
+            .map(Translator::get)
+            .collect(Collectors.toList())
+        ).forEach(meta -> writeToFile(project, meta, true));
 
         final List<Table> tables = traverseOver(project, Table.class)
                 .filter(HasEnabled::test)
@@ -119,7 +127,7 @@ public class TranslatorManager implements Consumer<Project> {
         return fileCounter.get();
     }
 
-    public void writeToFile(Project project, Meta<File, String> meta) {
+    public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
         requireNonNull(meta);
 
         final String fname = project.getPackageLocation()
@@ -130,10 +138,15 @@ public class TranslatorManager implements Consumer<Project> {
         path.getParent().toFile().mkdirs();
 
         try {
-            Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            fileCounter.incrementAndGet();
-        } catch (IOException ex) {
-            LOGGER.error(ex, "Failed to create file " + fname);
+            if (overwriteExisting || !path.toFile().exists()) {
+                Files.write(path, content.getBytes(StandardCharsets.UTF_8), 
+                    StandardOpenOption.CREATE, 
+                    StandardOpenOption.TRUNCATE_EXISTING
+                );
+                fileCounter.incrementAndGet();
+            }
+        } catch (final IOException ex) {
+            LOGGER.error(ex, "Failed to write file " + fname);
         }
 
         LOGGER.info("done");

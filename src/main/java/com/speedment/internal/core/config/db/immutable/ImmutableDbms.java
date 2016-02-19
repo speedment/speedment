@@ -20,12 +20,12 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.internal.core.config.db.DbmsImpl;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.util.NullUtil.requireKeys;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -46,7 +46,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final transient List<ImmutableSchema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
-        super(parent, dbms);
+        super(parent, requireKeys(dbms, Dbms.TYPE_NAME));
 
         final Dbms prototype = new DbmsImpl(parent, dbms);
         
@@ -58,7 +58,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         this.port      = prototype.getPort();
         this.username  = prototype.getUsername();
         
-        this.schemas   = unmodifiableList(Dbms.super.schemas().map(ImmutableSchema.class::cast).collect(toList()));
+        this.schemas   = unmodifiableList(super.children(SCHEMAS, ImmutableSchema::new).collect(toList()));
     }
 
     @Override
@@ -97,11 +97,6 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     }
 
     @Override
-    public BiFunction<Dbms, Map<String, Object>, ImmutableSchema> schemaConstructor() {
-        return (parent, map) -> new ImmutableSchema((ImmutableDbms) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableSchema> schemas() {
         return schemas.stream();
     }
@@ -114,6 +109,5 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     @Override
     public String toString() {
         return toStringHelper(this);
-    }    
-    
+    }
 }

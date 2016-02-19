@@ -16,17 +16,17 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.util.Loader;
-import com.speedment.internal.ui.UISession;
-import com.speedment.internal.util.Settings;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
+import static java.util.Objects.requireNonNull;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -39,12 +39,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 
-import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
+import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.util.Loader;
+import com.speedment.internal.util.Settings;
+
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -89,9 +92,9 @@ public final class ConnectController implements Initializable {
                 .map(DbmsType::getName)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList))
         );
-
+        
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
-            if (!observable.getValue().isEmpty()) {
+            if (!next.isEmpty()) {
                 final DbmsType item = findDbmsType(next)
                     .orElseThrow(() -> dbmsTypeNotInstalledException(next));
 
@@ -107,10 +110,82 @@ public final class ConnectController implements Initializable {
                     fieldName.textProperty().setValue(DEFAULT_NAME);
                 }
 
+                fieldName.getTooltip().setText(item.getDbmsNameMeaning());
                 fieldPort.textProperty().setValue("" + item.getDefaultPort());
             }
         });
+        
+        final DbmsProperty dbms = session.getProject().mutator().addNewDbms();
+        
+        Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return object.toString();
+            }
 
+            @Override
+            public Number fromString(String string) {
+                if (string == null || "".equals(string.trim())) {
+                    return 0;
+                } else return Integer.parseInt(string);
+            }
+        });
+        
+        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
+        fieldPort.setText(Settings.inst().get("last_known_port", ""));
+        fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
+        fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
+        fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
+        
+        try {
+            fieldType.getSelectionModel().select(
+                Settings.inst().get(
+                    "last_known_dbtype", 
+                    getDbmsTypes()
+                        .map(DbmsType::getName)
+                        .findFirst()
+                        .orElseThrow(() -> new SpeedmentException(
+                            "Could not find any installed JDBC drivers. Make sure to" +
+                            "include at least one JDBC driver as a dependency in the " +
+                            "projects pom.xml-file."
+                        ))
+                )
+            );
+        } catch (final SpeedmentException ex) {
+            session.showError("Couldn't find any installed JDBC drivers", 
+                ex.getMessage(), ex
+            );
+            
+            throw ex;
+        }
+
+        dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
+        dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
+        dbms.nameProperty().bindBidirectional(fieldName.textProperty());
+        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());        
+        
+        buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
+        buttonConnect.setOnAction(ev -> {
+            
+            // Register password in password component
+            session.getSpeedment().getPasswordComponent()
+                .put(fieldName.getText(), fieldPass.getText());
+            
+            session.getProject().nameProperty().setValue(fieldSchema.getText());
+            
+            Settings.inst().set("last_known_schema", fieldSchema.getText());
+            Settings.inst().set("last_known_dbtype", dbms.getTypeName());
+            Settings.inst().set("last_known_host", fieldHost.getText());
+            Settings.inst().set("last_known_user", fieldUser.getText());
+            Settings.inst().set("last_known_name", fieldName.getText());
+            Settings.inst().set("last_known_port", fieldPort.getText());           
+
+            if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
+                Settings.inst().set("hide_open_option", false);
+                SceneController.createAndShow(session);
+            }
+        });
+        
         buttonConnect.disableProperty().bind(createBooleanBinding(
             () -> fieldHost.textProperty().getValue().isEmpty()
             ||    fieldPort.textProperty().getValue().isEmpty()
@@ -126,59 +201,6 @@ public final class ConnectController implements Initializable {
             fieldSchema.textProperty(),
             fieldUser.textProperty()
         ));
-
-        @SuppressWarnings("unchecked")
-        final DbmsProperty dbms = session.getProject().addNewDbms();
-        
-        Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
-            @Override
-            public String toString(Number object) {
-                return object.toString();
-            }
-
-            @Override
-            public Number fromString(String string) {
-                if (string == null || "".equals(string.trim())) {
-                    return 0;
-                } else return Integer.parseInt(string);
-            }
-        });
-
-        dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
-        dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
-        dbms.nameProperty().bindBidirectional(fieldName.textProperty());
-        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
-        dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
-        
-        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
-        fieldPort.setText(Settings.inst().get("last_known_port", ""));
-        fieldType.getSelectionModel().select(Settings.inst().get("last_known_dbtype", ""));
-        fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
-        fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
-        fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
-        
-        buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
-        buttonConnect.setOnAction(ev -> {
-            
-            // Register password in password component
-            session.getSpeedment().getPasswordComponent()
-                .put(fieldName.getText(), fieldPass.getText());
-            
-            
-            session.getProject().nameProperty().setValue(fieldSchema.getText());
-            
-            Settings.inst().set("last_known_schema", fieldSchema.getText());
-            Settings.inst().set("last_known_dbtype", dbms.getTypeName());
-            Settings.inst().set("last_known_host", fieldHost.getText());
-            Settings.inst().set("last_known_user", fieldUser.getText());
-            Settings.inst().set("last_known_name", fieldName.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
-
-            if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
-                Settings.inst().set("hide_open_option", false);
-                SceneController.createAndShow(session);
-            }
-        });
     }
     
     public static void createAndShow(UISession session) {

@@ -49,6 +49,7 @@ import com.speedment.config.db.mapper.time.TimeToIntMapper;
 import com.speedment.config.db.mapper.time.TimeToLongMapper;
 import com.speedment.config.db.mapper.time.TimestampToIntMapper;
 import com.speedment.config.db.mapper.time.TimestampToLongMapper;
+import com.speedment.license.Software;
 
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +62,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.2
  */
-public final class TypeMapperComponentImpl extends Apache2AbstractComponent implements TypeMapperComponent {
+public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
 
     private final Map<String, TypeMapper<?, ?>> mappers;
 
@@ -112,7 +113,7 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
     }
 
     @Override
-    public final void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
+    public void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
         final TypeMapper<?, ?> mapper = typeMapperConstructor.get();
         mappers.put(mapper.getClass().getName(), mapper);
     }
@@ -125,5 +126,10 @@ public final class TypeMapperComponentImpl extends Apache2AbstractComponent impl
     @Override
     public Optional<TypeMapper<?, ?>> get(String absoluteClassName) {
         return Optional.ofNullable(mappers.get(absoluteClassName));
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 }

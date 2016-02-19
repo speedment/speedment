@@ -33,10 +33,10 @@ import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.config.db.mapper.identity.StringIdentityMapper;
-import com.speedment.internal.core.platform.SpeedmentFactory;
 import java.util.stream.Stream;
 import org.junit.Before;
 import static com.speedment.internal.codegen.util.Formatting.indent;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -72,6 +72,10 @@ public abstract class SimpleModel {
         return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
     }
 
+    private String columnDatabaseType(String typeName) {
+        return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+    }
+
     private String array(String name, String... s) {
         return quote(name) + " : [\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n]";
     }
@@ -103,7 +107,8 @@ public abstract class SimpleModel {
                                                                         array(Table.COLUMNS,
                                                                                 object(
                                                                                         name(COLUMN_NAME),
-                                                                                        typeMapper(StringIdentityMapper.class)
+                                                                                        typeMapper(StringIdentityMapper.class),
+                                                                                        columnDatabaseType(String.class.getName())
                                                                                 )
                                                                         ),
                                                                         array(Table.PRIMARY_KEY_COLUMNS,
@@ -122,7 +127,9 @@ public abstract class SimpleModel {
 
         //System.out.println(json);
 
-        project = DocumentTranscoder.load(json);
+        speedment = new DefaultSpeedmentApplicationLifecycle(json).build();
+
+        project = speedment.getProjectComponent().getProject();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
         table = schema.tables().findAny().get();
@@ -130,8 +137,7 @@ public abstract class SimpleModel {
         pkColumn = table.primaryKeyColumns().findAny().get();
         
         System.out.println(project);
-
-        speedment = SpeedmentFactory.newSpeedmentInstance();
+            
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();
 //        schema = dbms.addNewSchema();

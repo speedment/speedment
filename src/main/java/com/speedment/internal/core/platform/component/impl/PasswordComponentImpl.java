@@ -19,15 +19,17 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.component.PasswordComponent;
+import com.speedment.license.Software;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class PasswordComponentImpl extends Apache2AbstractComponent implements PasswordComponent {
+public final class PasswordComponentImpl extends InternalOpenSourceComponent implements PasswordComponent {
     
     private final transient Map<String, String> passwords;
 
@@ -49,5 +51,10 @@ public final class PasswordComponentImpl extends Apache2AbstractComponent implem
     @Override
     public Optional<String> get(String dbmsName) {
         return Optional.ofNullable(passwords.get(dbmsName));
-    }    
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
 }

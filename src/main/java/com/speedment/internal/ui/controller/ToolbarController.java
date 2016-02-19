@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -28,6 +29,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -42,7 +44,7 @@ public final class ToolbarController implements Initializable {
     private @FXML Button buttonOpen;
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
-    private @FXML ImageView logo;
+    private @FXML ImageView brand;
     
     private ToolbarController(UISession session) {
         this.session = requireNonNull(session);
@@ -60,7 +62,10 @@ public final class ToolbarController implements Initializable {
         buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
-        logo.setOnMousePressed(session.showGithub());
+        final Brand uiBrand = session.getSpeedment().getUserInterfaceComponent().getBrand();
+        uiBrand.logoLarge()
+            .map(Image::new)
+            .ifPresent(brand::setImage);
     }
     
     public static Node create(UISession session) {

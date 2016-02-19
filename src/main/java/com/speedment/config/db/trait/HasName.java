@@ -64,9 +64,8 @@ public interface HasName extends Document, HasMainInterface {
         } else if (this instanceof Project) {
             return Project.class.getSimpleName();
         } else {
-
             throw new SpeedmentException(
-                    "A name is required for node of type '" + getClass().getSimpleName() + "'."
+                "A name is required for node of type '" + getClass().getSimpleName() + "'."
             );
         }
     }

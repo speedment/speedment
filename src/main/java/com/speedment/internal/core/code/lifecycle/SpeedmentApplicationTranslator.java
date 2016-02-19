@@ -17,107 +17,53 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.Project;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
-import com.speedment.internal.codegen.lang.models.Constructor;
 import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
-import static com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import com.speedment.stream.MapStream;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toSet;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
-    
-    private final String className = typeName(project()) + "Application";
-    
-    public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
-    }
-    
-    @Override
-    protected Class make(File file) {
-        requireNonNull(file);
-        
-        final Map<String, List<Table>> nameMap = traverseOver(project(), Table.class)
-                .filter(HasEnabled::test)
-                .collect(Collectors.groupingBy(Table::getName));
-        
-        final Set<String> ambigousNames = MapStream.of(nameMap)
-                .filterValue(l -> l.size() > 1)
-                .keys()
-                .collect(toSet());
-        
-        final Method onInit = Method.of("onInit", VOID)
-                .protected_()
-                .add(OVERRIDE)
-                .add("super.onInit();")
-                .add("loadAndSetProject();");
-        
-        final String methodName = "applyAndPut";
-        
-        traverseOver(project(), Table.class)
-                .filter(HasEnabled::test)
-                .forEachOrdered(t -> {
-                    EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
-                    final Type managerType = entityManagerImplTranslator.getImplType();
-                    if (ambigousNames.contains(t.getName())) {
-                        onInit.add(methodName+"("+managerType.getName() + "::new);");
-                    } else {
-                        file.add(Import.of(managerType));
-                        onInit.add(methodName+"(" + entityManagerImplTranslator.managerTypeName() + "Impl::new);");
-                    }
-                    
-                });
 
-        //final Path path = project().getConfigPath();
-        return Class.of(className)
-                .public_()
-                .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
-                .add(Constructor.of()
-                        .public_()
-                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
-                )
-                .add(onInit)
-                .add(generated());
-    }
+    private final String className = typeName(projectOrThrow()) + "Application";
     
+    public SpeedmentApplicationTranslator(
+            Speedment speedment, 
+            Generator generator, 
+            Project project) {
+        
+        super(speedment, generator, project, Class::of);
+    }
+
     @Override
-    protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE).add(AUTHOR.setValue("Speedment"));
+    protected String getClassOrInterfaceName() {
+        return className;
     }
-    
+
+    @Override
+    protected Class makeCodeGenModel(File file) {
+        return newBuilder(file, className).build()
+            .public_().final_()
+            .setSupertype(generatedType());
+    }
+
     @Override
     protected String getJavadocRepresentText() {
-        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + ".";
+        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + 
+            "} class for the {@link " + Project.class.getName() + 
+            "} named " + projectOrThrow().getName() + ".";
     }
     
-    @Override
-    protected String getFileName() {
-        return className;
+    private Type generatedType() {
+        return Type.of(
+            basePackageName() + ".generated.Generated" + 
+            typeName(projectOrThrow()) + "Application"
+        );
     }
 }

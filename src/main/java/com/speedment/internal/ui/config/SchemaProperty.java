@@ -17,16 +17,16 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.SchemaPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -37,29 +37,13 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms> 
+public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty> 
     implements Schema, HasEnabledProperty, HasNameProperty, HasAliasProperty {
 
-    public SchemaProperty(Dbms parent, Map<String, Object> data) {
-        super(parent, data);
+    public SchemaProperty(Dbms parent) {
+        super(parent);
     }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new BooleanPropertyItem(
-                    defaultSchemaProperty(),       
-                    "Is Default Schema",
-                    "If this is the default schema that should be used if none other is specified."
-                )
-            )
-        ).flatMap(s -> s);
-    }
-    
+
     @Override
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
@@ -68,22 +52,14 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     public final BooleanProperty defaultSchemaProperty() {
         return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
     }
+
+    @Override
+    public boolean isDefaultSchema() {
+        return defaultSchemaProperty().get();
+    }
     
     public ObservableList<TableProperty> tablesProperty() {
-        return observableListOf(TABLES, TableProperty::new);
-    }
-
-    @Override
-    public BiFunction<Schema, Map<String, Object>, TableProperty> tableConstructor() {
-        return TableProperty::new;
-    }
-
-    @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case TABLES : return new TableProperty(this, data);
-            default     : return super.createDocument(key, data);
-        }
+        return observableListOf(TABLES);
     }
     
     @Override
@@ -92,16 +68,21 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms>
     }
     
     @Override
-    public TableProperty addNewTable() {
-        final TableProperty created = new TableProperty(this, new ConcurrentHashMap<>());
-        tablesProperty().add(created);
-        return created;
+    public SchemaPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment)
+        ).flatMap(s -> s);
+    }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.SCHEMAS, key);
+    }
 }

@@ -18,14 +18,11 @@ package com.speedment.internal.core.config.db.immutable;
 
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.SchemaImpl;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -52,7 +49,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
         this.alias         = prototype.getAlias();
         this.defaultSchema = prototype.isDefaultSchema();
         
-        this.tables = unmodifiableList(Schema.super.tables().map(ImmutableTable.class::cast).collect(toList()));
+        this.tables = unmodifiableList(super.children(TABLES, ImmutableTable::new).collect(toList()));
     }
 
     @Override
@@ -81,18 +78,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
     }
 
     @Override
-    public BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor() {
-        return (parent, map) -> new ImmutableTable((ImmutableSchema) parent, map);
-    }
-
-    @Override
     public Stream<ImmutableTable> tables() {
         return tables.stream();
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }     
-    
 }

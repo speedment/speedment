@@ -19,7 +19,6 @@ package com.speedment.internal.util.document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.codegen.lang.models.Value;
 import com.speedment.internal.util.Trees;
 import com.speedment.stream.MapStream;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
@@ -33,18 +32,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.NoSuchElementException;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -85,12 +74,12 @@ public final class DocumentUtil {
                 .map(map -> childConstructor.apply(document, map));
     }
 
-    public static Map<String, Object> newDocument(Document document, String key) {
-        final List<Map<String, Object>> children = document.get(key)
+    public static Map<String, Object> newDocument(Document parent, String key) {
+        final List<Map<String, Object>> children = parent.get(key)
                 .map(Document.DOCUMENT_LIST_TYPE::cast)
                 .orElseGet(() -> {
                     final List<Map<String, Object>> list = new CopyOnWriteArrayList<>();
-                    document.put(key, list);
+                    parent.put(key, list);
                     return list;
                 });
 
@@ -170,7 +159,7 @@ public final class DocumentUtil {
             final Function<String, String> nameMapper
     ) {
         requireNonNulls(document, from, nameMapper);
-        final StringJoiner sj = new StringJoiner(".").setEmptyValue("");
+        final StringJoiner sj = new StringJoiner(separator).setEmptyValue("");
         final List<HasName> ancestors = document.ancestors()
                 .filter(HasName.class::isInstance)
                 .map(HasName.class::cast)
@@ -193,20 +182,56 @@ public final class DocumentUtil {
 
     public static Supplier<NoSuchElementException> newNoSuchElementExceptionFor(Document document, String key) {
         return () -> new NoSuchElementException(
-                "An element with the key '"
-                + key
-                + "' could not be found in "
-                + document
-                + " ("
-                + Optional.of(document)
-                .filter(HasName.class::isInstance)
-                .map(HasName.class::cast)
-                .map(HasName::getName)
-                .orElse("")
+                "An attribute with the key '" + key
+                + "' could not be found in " + document
+                + " with name (" + Optional.ofNullable(document)
+                    .flatMap(doc -> doc.getAsString("name"))
+                    .orElse("null")
                 + ")"
         );
     }
+    
+    public static <DOC extends Document> DOC deepCopy(Document document, Function<Map<String, Object>, DOC> constructor) {
+        return constructor.apply(deepCopyMap(document.getData()));
+    }
+    
+    private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {
+        final Map<K, V> copy = new ConcurrentHashMap<>();
+        
+        MapStream.of(original)
+            .mapValue(DocumentUtil::deepCopyObject)
+            .forEachOrdered(copy::put);
+        
+        return copy;
+    }
+    
+    private static <V> List<V> deepCopyList(List<V> original) {
+        final List<V> copy = new CopyOnWriteArrayList<>();
+        
+        original.stream()
+            .map(DocumentUtil::deepCopyObject)
+            .forEachOrdered(copy::add);
+        
+        return copy;
+    }
 
+    private static <V> V deepCopyObject(V original) {
+        if (String.class.isAssignableFrom(original.getClass())
+        ||  Number.class.isAssignableFrom(original.getClass())
+        ||  Boolean.class.isAssignableFrom(original.getClass())
+        ||  Enum.class.isAssignableFrom(original.getClass())) {
+            return original;
+        } else if (List.class.isAssignableFrom(original.getClass())) {
+            return (V) deepCopyList((List<?>) original);
+        } else if (Map.class.isAssignableFrom(original.getClass())) {
+            return (V) deepCopyMap((Map<?, ?>) original);
+        } else {
+            throw new UnsupportedOperationException(
+                "Can't deep copy unknown type '" + original.getClass() + "'."
+            );
+        }
+    }
+    
     private static final Function<Object, Object> VALUE_MAPPER = o -> {
         if (o instanceof List) {
             return "[" + ((List) o).size() + "]";

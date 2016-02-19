@@ -18,6 +18,7 @@ package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.DocumentProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.stream.Stream;
@@ -28,10 +29,15 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasNameProperty extends DocumentProperty, HasName {
+public interface HasNameProperty extends DocumentProperty {
 
     default StringProperty nameProperty() {
-        return stringPropertyOf(HasName.NAME, HasName.super::getName);
+        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
+    }
+
+    @Override
+    default String getName() throws SpeedmentException {
+        return nameProperty().get();
     }
 
     @Override
@@ -39,8 +45,8 @@ public interface HasNameProperty extends DocumentProperty, HasName {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 
-                "Name", 
-                "The name of the persisted entity represented by this node."
+                "Database Name", 
+                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
             )
         );
     }

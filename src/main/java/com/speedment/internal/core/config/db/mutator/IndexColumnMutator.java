@@ -23,13 +23,15 @@ import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMut
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public final class IndexColumnMutator extends DocumentMutatorImpl implements DocumentMutator, HasNameMutator,
-        HasOrdinalPositionMutator, HasOrderTypeMutator {
+public class IndexColumnMutator<DOC extends IndexColumn> extends DocumentMutatorImpl<DOC> implements 
+        HasNameMutator<DOC>,
+        HasOrdinalPositionMutator<DOC>, 
+        HasOrderTypeMutator<DOC> {
 
-    IndexColumnMutator(IndexColumn indexColumn) {
+    public IndexColumnMutator(DOC indexColumn) {
         super(indexColumn);
     }
-
 }

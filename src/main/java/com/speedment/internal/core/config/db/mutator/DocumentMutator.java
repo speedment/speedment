@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.config.db.mutator;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
@@ -29,52 +30,52 @@ import com.speedment.config.db.Table;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface DocumentMutator {
+public interface DocumentMutator<DOC extends Document> {
+    
+    DOC document();
 
     void put(String key, Object value);
 
-    
-    static ColumnMutator of(Column column) {
-        return new ColumnMutator(column);
+    static ColumnMutator<Column> of(Column column) {
+        return new ColumnMutator<>(column);
     }
 
-    static DbmsMutator of(Dbms column) {
-        return new DbmsMutator(column);
+    static DbmsMutator<Dbms> of(Dbms column) {
+        return new DbmsMutator<>(column);
     }
 
-    static ForeignKeyColumnMutator of(ForeignKeyColumn fkcolumn) {
-        return new ForeignKeyColumnMutator(fkcolumn);
+    static ForeignKeyColumnMutator<ForeignKeyColumn> of(ForeignKeyColumn fkcolumn) {
+        return new ForeignKeyColumnMutator<>(fkcolumn);
     }
 
-    static ForeignKeyMutator of(ForeignKey fk) {
-        return new ForeignKeyMutator(fk);
+    static ForeignKeyMutator<ForeignKey> of(ForeignKey fk) {
+        return new ForeignKeyMutator<>(fk);
     }
 
-    static IndexColumnMutator of(IndexColumn indexColumn) {
-        return new IndexColumnMutator(indexColumn);
+    static IndexColumnMutator<IndexColumn> of(IndexColumn indexColumn) {
+        return new IndexColumnMutator<>(indexColumn);
     }
 
-    static IndexMutator of(Index index) {
-        return new IndexMutator(index);
+    static IndexMutator<Index> of(Index index) {
+        return new IndexMutator<>(index);
     }
 
-    static PrimaryKeyColumnMutator of(PrimaryKeyColumn pkColumn) {
-        return new PrimaryKeyColumnMutator(pkColumn);
+    static PrimaryKeyColumnMutator<PrimaryKeyColumn> of(PrimaryKeyColumn pkColumn) {
+        return new PrimaryKeyColumnMutator<>(pkColumn);
     }
 
-    static ProjectMutator of(Project project) {
-        return new ProjectMutator(project);
+    static ProjectMutator<Project> of(Project project) {
+        return new ProjectMutator<>(project);
     }
 
-    static SchemaMutator of(Schema schema) {
-        return new SchemaMutator(schema);
+    static SchemaMutator<Schema> of(Schema schema) {
+        return new SchemaMutator<>(schema);
     }
 
-    static TableMutator of(Table table) {
-        return new TableMutator(table);
+    static TableMutator<Table> of(Table table) {
+        return new TableMutator<>(table);
     }
-
-    
 }

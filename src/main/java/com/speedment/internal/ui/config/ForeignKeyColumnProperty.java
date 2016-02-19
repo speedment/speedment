@@ -17,31 +17,85 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Column;
+import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
+import static com.speedment.component.DocumentPropertyComponent.concat;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
+import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey> 
+public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
     implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
 
-    public ForeignKeyColumnProperty(ForeignKey parent, Map<String, Object> data) {
-        super(parent, data);
+    public ForeignKeyColumnProperty(ForeignKey parent) {
+        super(parent);
+    }
+
+    public final StringProperty foreignTableNameProperty() {
+        return stringPropertyOf(FOREIGN_TABLE_NAME, ForeignKeyColumn.super::getForeignTableName);
+    }
+
+    @Override
+    public String getForeignTableName() {
+        return foreignTableNameProperty().get();
+    }
+
+    public final StringProperty foreignColumnNameProperty() {
+        return stringPropertyOf(FOREIGN_COLUMN_NAME, ForeignKeyColumn.super::getForeignColumnName);
+    }
+
+    @Override
+    public String getForeignColumnName() {
+        return foreignColumnNameProperty().get();
+    }
+
+    public final ObjectBinding<TableProperty> foreignTableProperty() {
+        return createObjectBinding(
+            () -> ForeignKeyColumn.super.findForeignTable()
+                .map(TableProperty.class::cast)
+                .orElse(null), 
+            foreignTableNameProperty()
+        );
+    }
+
+    @Override
+    public Optional<TableProperty> findForeignTable() throws SpeedmentException {
+        return Optional.ofNullable(foreignTableProperty().get());
+    }
+
+    public final ObjectBinding<ColumnProperty> foreignColumnProperty() {
+        return createObjectBinding(
+            () -> ForeignKeyColumn.super.findForeignColumn()
+                .map(ColumnProperty.class::cast)
+                .orElse(null), 
+            foreignTableNameProperty(),
+            foreignColumnNameProperty()
+        );
+    }
+
+    @Override
+    public Optional<ColumnProperty> findForeignColumn() throws SpeedmentException {
+        return Optional.ofNullable(foreignColumnProperty().get());
+    }
+    
+    @Override
+    public ForeignKeyColumnPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -62,26 +116,9 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
             )
         ).flatMap(s -> s);
     }
-
-    public final StringProperty foreignTableNameProperty() {
-        return stringPropertyOf(FOREIGN_TABLE_NAME, () -> null);
-    }
-
-    public final StringProperty foreignColumnNameProperty() {
-        return stringPropertyOf(FOREIGN_COLUMN_NAME, () -> null);
-    }
-
-    public final ObjectBinding<Table> foreignTableProperty() {
-        return createObjectBinding(this::findForeignTable, foreignTableNameProperty());
-    }
-
-    public final ObjectBinding<Column> foreignColumnProperty() {
-        return createObjectBinding(this::findForeignColumn, foreignTableNameProperty(), foreignColumnNameProperty());
-    }
     
     @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
+    }
 }

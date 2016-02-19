@@ -17,22 +17,19 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.config.Document;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author        Emil Forslund
+ * @param <THIS>  this class type
  */
-public abstract class AbstractRootDocumentProperty extends AbstractDocumentProperty {
-    
-    public AbstractRootDocumentProperty(Map<String, Object> data) {
-        super(data);
-    }
+public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>>
+    extends AbstractDocumentProperty<THIS> {
 
     @Override
-    public final Optional<? extends Document> getParent() {
+    public final Optional<? extends DocumentProperty> getParent() {
         return Optional.empty();
     }
 

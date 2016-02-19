@@ -27,12 +27,9 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DbmsMutator;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
-import java.util.Map;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -58,7 +55,7 @@ public interface Dbms extends
         SCHEMAS    = "schemas";
         
     default String getTypeName() {
-        return getAsString(TYPE_NAME).orElseThrow(newNoSuchElementExceptionFor(this, TYPE_NAME));
+        return getAsString(TYPE_NAME).orElse(StandardDbmsType.defaultType().getName());
     }
     
     /**
@@ -92,15 +89,13 @@ public interface Dbms extends
         return getAsString(USERNAME);
     }
     
-    default Stream<? extends Schema> schemas() {
-        return children(SCHEMAS, schemaConstructor());
-    }
+    /**
+     * Creates a stream of schemas located in this document.
+     * 
+     * @return  schemas
+     */
+    Stream<? extends Schema> schemas();
 
-    default Schema addNewSchema() {
-        return schemaConstructor().apply(this, newDocument(this, SCHEMAS));
-    }
-    
-    BiFunction<Dbms, Map<String, Object>, ? extends Schema> schemaConstructor();
    
     @Override
     default Class<Dbms> mainInterface() {
@@ -111,5 +106,4 @@ public interface Dbms extends
     default DbmsMutator mutator() {
         return DocumentMutator.of(this);
     }
-    
 }

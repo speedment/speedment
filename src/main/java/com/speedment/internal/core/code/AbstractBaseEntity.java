@@ -32,19 +32,18 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
 
-    private final transient Speedment speedment;
-
-    public AbstractBaseEntity(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-    }
-
-    protected Speedment getSpeedment_() {
-        return speedment;
-    }
+    /**
+     * Returns the Speedment instance. This method will be implemented by the
+     * instantiating class using an anonymous class and should therefore not be
+     * implemented in named child classes.
+     * 
+     * @return  the {@link Speedment} instance
+     */
+    protected abstract Speedment speedment();
    
     @Override
-    public String toJson(JsonEncoder<ENTITY> jsonFormatter) {
-        return requireNonNull(jsonFormatter).apply((selfAsEntity()));
+    public String toJson(JsonEncoder<ENTITY> encoder) {
+        return requireNonNull(encoder).apply((selfAsEntity()));
     }
 
     @Override
@@ -82,7 +81,7 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
         return manager_().remove(selfAsEntity(), consumer);
     }
 
-    protected abstract Class<ENTITY> getEntityClass_();
+    protected abstract Class<ENTITY> entityClass();
 
     @SuppressWarnings("unchecked")
     private ENTITY selfAsEntity() {
@@ -90,11 +89,11 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     }
 
     protected Manager<ENTITY> manager_() {
-        return managerOf_(getEntityClass_());
+        return managerOf_(entityClass());
     }
 
     protected <T> Manager<T> managerOf_(Class<T> entityClass) {
-        return getSpeedment_().managerOf(requireNonNull(entityClass));
+        return speedment().managerOf(requireNonNull(entityClass));
     }
         
 }

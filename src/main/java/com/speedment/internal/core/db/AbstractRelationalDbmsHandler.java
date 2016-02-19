@@ -56,6 +56,8 @@ import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicBoolean;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -177,8 +179,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         requireNonNull(connection);
         LOGGER.info("Reading metadata from " + dbms.toString());
         
+        final Set<String> discardedSchemas = new HashSet<>();
+
         try {
-            sqlTypeMapping = readTypeMapFromDB(connection);
+            final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
+            sqlTypeMapping = !preSet.isEmpty() ? readTypeMapFromSet(preSet) : readTypeMapFromDB(connection);
+
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
 
@@ -191,12 +197,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     } catch (SQLException sqlException) {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
+                    
+                    boolean schemaWasUsed = false;
                     if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
                         final String name = Optional.ofNullable(schemaName).orElse(catalogName);
                         if (filterCriteria.test(name)) {
-                            final Schema schema = dbms.addNewSchema();
+                            final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(name);
+                            schemaWasUsed = true;
                         }
+                    }
+                    
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(schemaName);
                     }
                 }
             }
@@ -204,11 +217,18 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
+                    
+                    boolean schemaWasUsed = false;
                     if (filterCriteria.test(schemaName)) {
                         if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
-                            final Schema schema = dbms.addNewSchema();
+                            final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(schemaName);
+                            schemaWasUsed = true;
                         }
+                    }
+                    
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(schemaName);
                     }
                 }
             }
@@ -216,14 +236,24 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } catch (SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
+
+        final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);
+        dbms.schemas().forEach(schema -> {
+            tables(connection, schema);
+            atleastOneSchema.set(true);
+        });
         
-        dbms.schemas().forEach(schema -> tables(connection, schema));
+        if (!atleastOneSchema.get()) {
+            throw new SpeedmentException(
+                "Could not find anymatching schema. The following schemas was considered: " + discardedSchemas + "."
+            );
+        }
     }
 
     protected void tables(final Connection connection, Schema schema) {
         requireNonNulls(connection, schema);
         LOGGER.info("Parsing " + schema.toString());
-        
+
         try {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 
@@ -242,7 +272,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
                         }
                     }
-                    final Table table = schema.addNewTable();
+                    final Table table = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
                     table.mutator().setName(tableName);
                 }
@@ -250,7 +280,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } catch (SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
-        
+
         schema.tables().forEach(table -> {
             columns(connection, table);
             indexes(connection, table);
@@ -260,24 +290,39 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     protected void columns(Connection connection, Table table) {
-        requireNonNulls(connection,table);
-        
+        requireNonNulls(connection, table);
+
         final Schema schema = table.getParent().get();
-        
-        final SqlSupplier<ResultSet> supplier = 
-            () -> connection.getMetaData().getColumns(
-                jdbcCatalogLookupName(schema), 
-                jdbcSchemaLookupName(schema), 
-                table.getName(), 
-                null
-            );
+
+        final SqlSupplier<ResultSet> supplier
+                = () -> connection.getMetaData().getColumns(
+                        jdbcCatalogLookupName(schema),
+                        jdbcSchemaLookupName(schema),
+                        table.getName(),
+                        null
+                );
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
-            
+
             column.mutator().setName(rs.getString("COLUMN_NAME"));
             column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
-            final boolean nullable = rs.getInt("NULLABLE") != DatabaseMetaData.columnNoNulls;
+            final boolean nullable;
+            final int nullableValue = rs.getInt("NULLABLE");
+            switch (nullableValue) {
+                case DatabaseMetaData.columnNullable:
+                case DatabaseMetaData.columnNullableUnknown: {
+                    nullable = true;
+                    break;
+                }
+                case DatabaseMetaData.columnNoNulls: {
+                    nullable = false;
+                    break;
+                }
+                default:
+                    throw new SpeedmentException("Unknown nullable type " + nullableValue);
+            }
+
             column.mutator().setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
@@ -304,51 +349,51 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 LOGGER.warn("Unable to determine IS_AUTOINCREMENT for table " + table.getName() + ", column " + column.getName());
             }
         };
-        
-        tableChilds(table::addNewColumn, supplier, mutator);
+
+        tableChilds(table.mutator()::addNewColumn, supplier, mutator);
     }
 
     protected void primaryKeyColumns(Connection connection, Table table) {
         requireNonNulls(connection, table);
-        
+
         final Schema schema = table.getParent().get();
-        
-        final SqlSupplier<ResultSet> supplier = () -> 
-            connection.getMetaData().getPrimaryKeys(
-                jdbcCatalogLookupName(schema), 
-                jdbcSchemaLookupName(schema), 
-                table.getName()
-            );
+
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getPrimaryKeys(
+                        jdbcCatalogLookupName(schema),
+                        jdbcSchemaLookupName(schema),
+                        table.getName()
+                );
 
         final TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
             primaryKeyColumn.mutator().setName(rs.getString("COLUMN_NAME"));
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
-        
-        tableChilds(table::addNewPrimaryKeyColumn, supplier, mutator);
+
+        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator);
     }
 
     protected void indexes(final Connection connection, Table table) {
         requireNonNulls(connection, table);
-        
+
         final Schema schema = table.getParent().get();
-        final SqlSupplier<ResultSet> supplier = () -> 
-            connection.getMetaData().getIndexInfo(
-                jdbcCatalogLookupName(schema), 
-                jdbcSchemaLookupName(schema), 
-                table.getName(), 
-                false, 
-                false
-            );
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getIndexInfo(
+                        jdbcCatalogLookupName(schema),
+                        jdbcSchemaLookupName(schema),
+                        table.getName(),
+                        false,
+                        false
+                );
 
         final TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
-            final String indexName  = rs.getString("INDEX_NAME");
-            final boolean unique    = !rs.getBoolean("NON_UNIQUE");
+            final String indexName = rs.getString("INDEX_NAME");
+            final boolean unique = !rs.getBoolean("NON_UNIQUE");
 
             index.mutator().setName(indexName);
             index.mutator().setUnique(unique);
 
-            final IndexColumn indexColumn = index.addNewIndexColumn();
+            final IndexColumn indexColumn = index.mutator().addNewIndexColumn();
             indexColumn.mutator().setName(rs.getString("COLUMN_NAME"));
             indexColumn.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
             final String ascOrDesc = rs.getString("ASC_OR_DESC");
@@ -361,54 +406,52 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 indexColumn.mutator().setOrderType(OrderType.NONE);
             }
         };
-        
-        tableChilds(table::addNewIndex, supplier, mutator);
+
+        tableChilds(table.mutator()::addNewIndex, supplier, mutator);
     }
 
     protected void foreignKeys(final Connection connection, Table table) {
         requireNonNulls(connection, table);
-        
+
         final Schema schema = table.getParent().get();
 //        final Map<String, ForeignKey> foreignKeys = new HashMap<>(); // Use map instead of Set because ForeignKey equality is difficult...
-        final SqlSupplier<ResultSet> supplier = () -> 
-            connection.getMetaData().getImportedKeys(
-                jdbcCatalogLookupName(schema), 
-                jdbcSchemaLookupName(schema), 
-                table.getName()
-            );
-    
+        final SqlSupplier<ResultSet> supplier = ()
+                -> connection.getMetaData().getImportedKeys(
+                        jdbcCatalogLookupName(schema),
+                        jdbcSchemaLookupName(schema),
+                        table.getName()
+                );
+
         final TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
 
 //            final Map<String, ForeignKey> foo = foreignKeys;
-
             final String foreignKeyName = rs.getString("FK_NAME");
             foreignKey.mutator().setName(foreignKeyName);
-            
+
 //            final boolean exists = foreignKeys.containsKey(foreignKeyName);
 //            final ForeignKey foreignKey = foreignKeys.computeIfAbsent(foreignKeyName, n -> {
 //                final ForeignKey newForeigKey = table.addNewForeignKey();
 //                newForeigKey.mutator().setName(n);
 //                return newForeigKey;
 //            });
-
-            final ForeignKeyColumn foreignKeyColumn = foreignKey.addNewForeignKeyColumn();
+            final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
             final ForeignKeyColumnMutator fkcMutator = foreignKeyColumn.mutator();
             fkcMutator.setName(rs.getString("FKCOLUMN_NAME"));
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
         };
-        
-        tableChilds(table::addNewForeignKey, supplier, mutator);
+
+        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator);
     }
 
     protected <T> void tableChilds(Supplier<T> childSupplier, SqlSupplier<ResultSet> resultSetSupplier, TableChildMutator<T, ResultSet> resultSetMutator) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
-        
+
         try (final ResultSet rsColumn = resultSetSupplier.get()) {
 
             final ResultSetMetaData rsmd = rsColumn.getMetaData();
-            final int numberOfColumns    = rsmd.getColumnCount();
+            final int numberOfColumns = rsmd.getColumnCount();
 
             if (SHOW_METADATA) {
                 for (int x = 1; x <= numberOfColumns; x++) {
@@ -581,10 +624,20 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         };
 
     }
-    
+
     @FunctionalInterface
     protected interface TableChildMutator<T, U> {
+
         void mutate(T t, U u) throws SQLException;
     }
 
+    protected Map<String, Class<?>> readTypeMapFromSet(Set<SqlTypeInfo> typeInfos) {
+        requireNonNull(typeInfos);
+
+        return typeInfos.stream()
+                .collect(toMap(
+                        SqlTypeInfo::getSqlTypeName,
+                        sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
+                );
+    }
 }

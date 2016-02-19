@@ -20,18 +20,20 @@ import com.speedment.Speedment;
 import com.speedment.component.EventComponent;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
+import com.speedment.license.Software;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EventComponentImpl extends Apache2AbstractComponent implements EventComponent {
+public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
     
     private final Map<DefaultEvent, Set<Consumer<Event>>> defaultEventListeners;
     private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
@@ -83,6 +85,11 @@ public final class EventComponentImpl extends Apache2AbstractComponent implement
     @Override
     public void onAny(Consumer<Event> action) {
         anyEventListeners.add(action);
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
     
     private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {

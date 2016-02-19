@@ -21,12 +21,12 @@ import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author Per Minborg
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface HasAliasMutator extends DocumentMutator, HasNameMutator {
+public interface HasAliasMutator<DOC extends HasAlias> extends DocumentMutator<DOC>, HasNameMutator<DOC> {
     
     default void setAlias(String alias) {
         put(HasAlias.ALIAS, alias);
     }
-    
 }

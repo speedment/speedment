@@ -16,19 +16,13 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.db.Column;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.TableImpl;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -56,10 +50,10 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
         this.name    = prototype.getName();
         this.alias   = prototype.getAlias();
         
-        this.columns           = unmodifiableList(Table.super.columns().map(ImmutableColumn.class::cast).collect(toList()));
-        this.indexes           = unmodifiableList(Table.super.indexes().map(ImmutableIndex.class::cast).collect(toList()));
-        this.foreignKeys       = unmodifiableList(Table.super.foreignKeys().map(ImmutableForeignKey.class::cast).collect(toList()));
-        this.primaryKeyColumns = unmodifiableList(Table.super.primaryKeyColumns().map(ImmutablePrimaryKeyColumn.class::cast).collect(toList()));
+        this.columns           = unmodifiableList(super.children(COLUMNS, ImmutableColumn::new).collect(toList()));
+        this.indexes           = unmodifiableList(super.children(INDEXES, ImmutableIndex::new).collect(toList()));
+        this.foreignKeys       = unmodifiableList(super.children(FOREIGN_KEYS, ImmutableForeignKey::new).collect(toList()));
+        this.primaryKeyColumns = unmodifiableList(super.children(PRIMARY_KEY_COLUMNS, ImmutablePrimaryKeyColumn::new).collect(toList()));
     }
 
     @Override
@@ -75,26 +69,6 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     @Override
     public Optional<String> getAlias() {
         return alias;
-    }
-
-    @Override
-    public BiFunction<Table, Map<String, Object>, ? extends Column> columnConstructor() {
-        return (parent, map) -> new ImmutableColumn((ImmutableTable) parent, map);
-    }
-
-    @Override
-    public BiFunction<Table, Map<String, Object>, ? extends Index> indexConstructor() {
-        return (parent, map) -> new ImmutableIndex((ImmutableTable) parent, map);
-    }
-
-    @Override
-    public BiFunction<Table, Map<String, Object>, ? extends ForeignKey> foreignKeyConstructor() {
-        return (parent, map) -> new ImmutableForeignKey((ImmutableTable) parent, map);
-    }
-
-    @Override
-    public BiFunction<Table, Map<String, Object>, ? extends PrimaryKeyColumn> primaryKeyColumnConstructor() {
-        return (parent, map) -> new ImmutablePrimaryKeyColumn((ImmutableTable) parent, map);
     }
 
     @Override
@@ -121,10 +95,4 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     public Optional<Schema> getParent() {
         return super.getParent().map(Schema.class::cast);
     }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    } 
-    
 }

@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.PrimaryKeyFactoryComponent;
+import com.speedment.license.Software;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,18 +26,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.RandomAccess;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractComponent implements PrimaryKeyFactoryComponent {
+public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComponent implements PrimaryKeyFactoryComponent {
 
     public PrimaryKeyFactoryComponentImpl(Speedment speedment) {
         super(speedment);
@@ -83,6 +85,11 @@ public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractCompone
     @Override
     public Class<PrimaryKeyFactoryComponent> getComponentClass() {
         return PrimaryKeyFactoryComponent.class;
+    }
+    
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 
     private List<?> makeHelper(Object... keys) {

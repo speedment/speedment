@@ -27,9 +27,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.SchemaMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newDocument;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -52,23 +49,30 @@ public interface Schema extends
 
     /**
      * Returns {@code true} if this schema is the default one, else
-     * {@code false}.
+     * {@code false}. Default value is {@code true}.
      *
      * @return {@code true} if default, else {@code false}
      */
     default boolean isDefaultSchema() {
-        return getAsBoolean(DEFAULT_SCHEMA).orElse(false);
+        return getAsBoolean(DEFAULT_SCHEMA).orElse(true);
     }
-
-    default Stream<? extends Table> tables() {
-        return children(TABLES, tableConstructor());
-    }
-
-    default Table addNewTable() {
-        return tableConstructor().apply(this, newDocument(this, TABLES));
-    }
-
-    BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor();
+    
+    /**
+     * Creates a stream of tables located in this document.
+     * 
+     * @return  tables
+     */
+    Stream<? extends Table> tables();
+//
+//    default Stream<? extends Table> tables() {
+//        return children(TABLES, tableConstructor());
+//    }
+//
+//    default Table addNewTable() {
+//        return tableConstructor().apply(this, newDocument(this, TABLES));
+//    }
+//
+//    BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor();
 
     @Override
     default Class<Schema> mainInterface() {

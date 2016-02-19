@@ -17,24 +17,26 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
+import com.speedment.component.DocumentPropertyComponent;
+import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
+import com.speedment.internal.core.stream.OptionalUtil;
+import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
@@ -42,12 +44,61 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class DbmsProperty extends AbstractChildDocumentProperty<Project> 
+public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
     implements Dbms, HasEnabledProperty, HasNameProperty {
 
-    public DbmsProperty(Project parent, Map<String, Object> data) {
-        super(parent, data);
-        FXCollections.observableArrayList();
+    public DbmsProperty(Project parent) {
+        super(parent);
+    }
+    
+    public StringProperty typeNameProperty() {
+        return stringPropertyOf(TYPE_NAME,  () -> Dbms.super.getTypeName());
+    }
+
+    @Override
+    public String getTypeName() {
+        return typeNameProperty().get();
+    }
+
+    public StringProperty ipAddressProperty() {
+        return stringPropertyOf(IP_ADDRESS,  () -> Dbms.super.getIpAddress().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getIpAddress() {
+        return Optional.ofNullable(ipAddressProperty().get());
+    }
+
+    public IntegerProperty portProperty() {
+        return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
+    }
+
+    @Override
+    public OptionalInt getPort() {
+        return OptionalUtil.ofNullable(portProperty().get());
+    }
+
+    public StringProperty usernameProperty() {
+        return stringPropertyOf(USERNAME, () -> Dbms.super.getUsername().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getUsername() {
+        return Optional.ofNullable(usernameProperty().get());
+    }
+    
+    public ObservableList<SchemaProperty> schemasProperty() {
+        return observableListOf(SCHEMAS);
+    }
+
+    @Override
+    public Stream<SchemaProperty> schemas() {
+        return schemasProperty().stream();
+    }
+    
+    @Override
+    public DbmsPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
     }
     
     @Override
@@ -78,54 +129,8 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project>
         ).flatMap(s -> s);
     }
     
-    public final StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME, () -> null);
-    }
-
-    public final StringProperty ipAddressProperty() {
-        return stringPropertyOf(IP_ADDRESS, () -> null);
-    }
-
-    public final IntegerProperty portProperty() {
-        return integerPropertyOf(PORT, () -> 0);
-    }
-
-    public final StringProperty usernameProperty() {
-        return stringPropertyOf(USERNAME, () -> null);
-    }
-    
-    public ObservableList<SchemaProperty> schemasProperty() {
-        return observableListOf(SCHEMAS, SchemaProperty::new);
-    }
-
     @Override
-    public BiFunction<Dbms, Map<String, Object>, SchemaProperty> schemaConstructor() {
-        return SchemaProperty::new;
+    protected String[] keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.DBMSES, key);
     }
-    
-    @Override
-    protected final DocumentProperty createDocument(String key, Map<String, Object> data) {
-        switch (key) {
-            case SCHEMAS : return new SchemaProperty(this, data);
-            default      : return super.createDocument(key, data);
-        }
-    }
-    
-    @Override
-    public Stream<SchemaProperty> schemas() {
-        return schemasProperty().stream();
-    }
-    
-    @Override
-    public SchemaProperty addNewSchema() {
-        final SchemaProperty created = new SchemaProperty(this, new ConcurrentHashMap<>());
-        schemasProperty().add(created);
-        return created;
-    }
-    
-    @Override
-    public String toString() {
-        return toStringHelper(this);
-    }
-    
 }

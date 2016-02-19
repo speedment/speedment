@@ -19,6 +19,7 @@ package com.speedment.util;
 import com.speedment.annotation.Api;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collection;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -218,6 +219,41 @@ public class NullUtil {
         if (o7 == null) {
             throwNpeFor(8, 7);
         }
+    }
+    
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K... requiredKeys) {
+        requireNonNulls(map, requiredKeys);
+        
+        for (final K key : requiredKeys) {
+            if (key == null || !map.containsKey(key)) {
+                throw new NullPointerException("Key " + key + " in the map is not defined.");
+            }
+        }
+        
+        return map;
+    }
+    
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKey) {
+        requireNonNull(map);
+        
+        if (requiredKey == null || !map.containsKey(requiredKey)) {
+            throw new NullPointerException("Key " + requiredKey + " in the map is not defined.");
+        }
+        
+        return map;
+    }
+    
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB) {
+        requireKeys(map, requiredKeyA);
+        requireKeys(map, requiredKeyB);
+        return map;
+    }
+    
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB, K requiredKeyC) {
+        requireKeys(map, requiredKeyA);
+        requireKeys(map, requiredKeyB);
+        requireKeys(map, requiredKeyC);
+        return map;
     }
 
     private static void throwNpeFor(int count, int i) {
