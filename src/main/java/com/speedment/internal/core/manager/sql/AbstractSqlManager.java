@@ -64,6 +64,9 @@ import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.LazyString;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

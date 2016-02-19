@@ -53,6 +53,7 @@ public final class DbmsTypeImpl implements DbmsType {
     private final Set<SqlTypeInfo> dataTypes;
     private final SpeedmentPredicateView speedmentPredicateView;
     private final String defaultDbmsName;
+    private final String initialQuery;
 
     private DbmsTypeImpl(
             final String name,
@@ -69,7 +70,8 @@ public final class DbmsTypeImpl implements DbmsType {
             final Function<Dbms, String> connectionUrlGenerator,
             final Set<SqlTypeInfo> dataTypes,
             final SpeedmentPredicateView speedmentPredicateView,
-            final String defaultDbmsName
+            final String defaultDbmsName,
+            final String intitialQuery
     ) {
 
         this.name = requireNonNull(name);
@@ -87,6 +89,7 @@ public final class DbmsTypeImpl implements DbmsType {
         this.dataTypes = unmodifiableSet(new HashSet(requireNonNull(dataTypes))); // Defensive copy
         this.speedmentPredicateView = requireNonNull(speedmentPredicateView);
         this.defaultDbmsName = defaultDbmsName;
+        this.initialQuery = intitialQuery;
     }
 
     public static WithName builder() {
@@ -204,6 +207,11 @@ public final class DbmsTypeImpl implements DbmsType {
         return speedmentPredicateView;
     }
 
+    @Override
+    public String getInitialQuery() {
+        return initialQuery;
+    }
+
     private static class Builder implements
             WithName,
             WithDriverManagerName,
@@ -234,6 +242,7 @@ public final class DbmsTypeImpl implements DbmsType {
         private Set<String> schemaExcludeSet;
         private Set<SqlTypeInfo> dataTypes;
         private String defaultDbmsName;
+        private String initialQuery;
 
         public Builder() {
             resultSetTableSchema = "TABLE_SCHEMA";
@@ -241,6 +250,7 @@ public final class DbmsTypeImpl implements DbmsType {
             schemaExcludeSet = Collections.emptySet();
             dataTypes = Collections.emptySet();
             defaultDbmsName = null;
+            initialQuery = "select 1 from dual";
         }
 
         @Override
@@ -335,6 +345,12 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
+        public Optionals withInitialQuery() {
+            this.initialQuery = requireNonNull(initialQuery);
+            return this;
+        }
+
+        @Override
         public DbmsType build() {
             return new DbmsTypeImpl(
                     name,
@@ -351,7 +367,8 @@ public final class DbmsTypeImpl implements DbmsType {
                     connectionUrlGenerator,
                     dataTypes,
                     speedmentPredicateView,
-                    defaultDbmsName
+                    defaultDbmsName,
+                    initialQuery
             );
 
         }
@@ -534,6 +551,14 @@ public final class DbmsTypeImpl implements DbmsType {
          * @return a builder
          */
         Optionals withDefaultDbmsName(String defaultDbmsName);
+
+        /**
+         * Enters a non-null value for the initial query that speedment is using
+         * to ensure database connectivity on start.
+         *
+         * @return a builder
+         */
+        Optionals withInitialQuery();
 
         /**
          * Creates and returns a new DbmsType instance with the given

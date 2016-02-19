@@ -226,6 +226,8 @@ public interface DbmsType {
     SpeedmentPredicateView getSpeedmentPredicateView();
 
     Set<SqlTypeInfo> getDataTypes();
+    
+    String getInitialQuery();
 
     public static DbmsTypeImpl.WithName builder() {
         return DbmsTypeImpl.builder();

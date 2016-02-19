@@ -38,6 +38,8 @@ import org.junit.Before;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
