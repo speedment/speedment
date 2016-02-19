@@ -51,7 +51,7 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
     public String javaPackageName(final String externalName) {
         requireNonNull(externalName);
         return replaceIfIllegalJavaIdentifierCharacter(
-                replaceIfJavaUsedWord(externalName)
+            replaceIfJavaUsedWord(externalName)
         ).toLowerCase();
     }
 

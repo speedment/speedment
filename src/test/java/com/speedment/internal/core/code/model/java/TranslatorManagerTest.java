@@ -41,7 +41,7 @@ public class TranslatorManagerTest extends SimpleModel {
         final TranslatorManager instance = new TranslatorManager(speedment) {
 
             @Override
-            public void writeToFile(Project project, Meta<File, String> meta) {
+            public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
                 System.out.println("Processing " + meta.getModel().getName());
                 // Do nothing on file...
             }
@@ -55,7 +55,7 @@ public class TranslatorManagerTest extends SimpleModel {
         System.out.println("preview");
 
         final Translator<Table, Interface> translator = speedment.getCodeGenerationComponent()
-                .findTranslator(table, StandardTranslatorKey.ENTITY);
+            .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
 
         final String code = translator.toCode();
         System.out.println(code);

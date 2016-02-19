@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -78,7 +79,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      *
      * @return the project node
      */
-    default Project project() {
+    default Optional<Project> project() {
         return getDocument(Project.class);
     }
 
@@ -88,7 +89,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      *
      * @return the dbms node
      */
-    default Dbms dbms() {
+    default Optional<Dbms> dbms() {
         return getDocument(Dbms.class);
     }
 
@@ -98,7 +99,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      *
      * @return the schema node
      */
-    default Schema schema() {
+    default Optional<Schema> schema() {
         return getDocument(Schema.class);
     }
 
@@ -108,7 +109,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      *
      * @return the table node
      */
-    default Table table() {
+    default Optional<Table> table() {
         return getDocument(Table.class);
     }
 
@@ -118,7 +119,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      *
      * @return the column node
      */
-    default Column column() {
+    default Optional<Column> column() {
         return getDocument(Column.class);
     }
 
@@ -131,7 +132,10 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Column> columns() {
-        return table().columns().filter(HasEnabled::test);
+        return table()
+            .map(Table::columns)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -143,7 +147,9 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @see HasEnabled#isEnabled()
      */
     default Stream<? extends Index> indexes() {
-        return table().indexes().filter(HasEnabled::test);
+        return table()
+            .map(Table::indexes)
+            .orElse(Stream.empty()).filter(HasEnabled::test);
     }
 
     /**
@@ -155,7 +161,10 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @see HasEnabled#isEnabled()
      */
     default Stream<? extends ForeignKey> foreignKeys() {
-        return table().foreignKeys().filter(HasEnabled::test);
+        return table()
+            .map(Table::foreignKeys)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -167,7 +176,10 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @see HasEnabled#isEnabled()
      */
     default Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return table().primaryKeyColumns().filter(HasEnabled::test);
+        return table()
+            .map(Table::primaryKeyColumns)
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -179,24 +191,19 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @param clazz the class to match
      * @return the node found
      */
-    default <E extends Document> E getDocument(Class<E> clazz) {
+    default <E extends Document> Optional<E> getDocument(Class<E> clazz) {
         requireNonNull(clazz);
         if (clazz.isAssignableFrom(Translator.this.getDocument().mainInterface())) {
             @SuppressWarnings("unchecked")
             final E result = (E) Translator.this.getDocument();
-            return result;
+            return Optional.of(result);
         }
 
         return Translator.this.getDocument()
-                //.ancestor(clazz)
-                .ancestors()
-                .filter(clazz::isInstance)
-                .map(clazz::cast)
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException(
-                        Translator.this.getDocument() + " is not a " + clazz.getSimpleName()
-                        + " and does not have a parent that is a " + clazz.getSimpleName()
-                ));
+            .ancestors()
+            .filter(clazz::isInstance)
+            .map(clazz::cast)
+            .findAny();
     }
     
     default Meta<File, String> generate() {
@@ -206,6 +213,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
     default String toCode() {
         return generate().getResult();
     }
+    
+    boolean isInGeneratedPackage();
     
     Generator getCodeGenerator();
     

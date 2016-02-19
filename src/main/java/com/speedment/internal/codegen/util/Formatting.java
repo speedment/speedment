@@ -79,8 +79,8 @@ public final class Formatting {
             return EMPTY;
         } else {
             return String.join(EMPTY,
-                    callback.apply(input.charAt(0)),
-                    input.subSequence(1, input.length())
+                callback.apply(input.charAt(0)),
+                input.subSequence(1, input.length())
             );
         }
     }
@@ -148,6 +148,18 @@ public final class Formatting {
      */
     public static String indent(String text) {
         return tab + text.replaceAll("\\r?\\n", nltab);
+    }
+    
+    /**
+     * Indents one level after each new-line-character as defined by
+     * <code>nl()</code>. f multiple strings are specified, new-line characters
+     * will be added between them.
+     *
+     * @param text The text to indent.
+     * @return The indented text.
+     */
+    public static String indent(String... text) {
+        return tab + String.join(nl(), text).replaceAll("\\r?\\n", nltab);
     }
     
     /**
