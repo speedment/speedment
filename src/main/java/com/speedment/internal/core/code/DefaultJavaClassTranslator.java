@@ -184,7 +184,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                 " representing an entity (for example, a row) in the " + 
                 getDocument().mainInterface().getSimpleName() + 
                 " " + relativeName(getDocument(), Project.class) + 
-                "." + GENERATED_JAVADOC_MESSAGE
+                "." + JAVADOC_MESSAGE
             ).add(AUTHOR.setValue("Your Name")); // TODO: Enter name automatically?
         }
     }
