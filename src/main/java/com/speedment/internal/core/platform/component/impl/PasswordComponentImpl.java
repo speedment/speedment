@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  */
 public final class PasswordComponentImpl extends InternalOpenSourceComponent implements PasswordComponent {
     
-    private final transient Map<String, String> passwords;
+    private final transient Map<String, char[]> passwords;
 
     public PasswordComponentImpl(Speedment speedment) {
         super(speedment);
@@ -44,12 +44,12 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
     }
 
     @Override
-    public void put(String dbmsName, String password) {
+    public void put(String dbmsName, char[] password) {
         passwords.put(dbmsName, password);
     }
 
     @Override
-    public Optional<String> get(String dbmsName) {
+    public Optional<char[]> get(String dbmsName) {
         return Optional.ofNullable(passwords.get(dbmsName));
     }
     

@@ -27,8 +27,8 @@ import java.sql.ResultSet;
  */
 public interface SqlManager<ENTITY> extends Manager<ENTITY> {
 
-    SqlFunction<ResultSet, ENTITY> getSqlEntityMapper();
+    SqlFunction<ResultSet, ENTITY> getEntityMapper();
 
-    void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper);
+    void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
 
 }

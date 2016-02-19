@@ -105,8 +105,8 @@ public final class UISession {
         file.exists() && 
         file.isDirectory();
     
-    private final static Predicate<Optional<String>> NO_PASSWORD_SPECIFIED = pass ->
-        !pass.isPresent() || "".equals(pass.get().trim());
+    private final static Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED = 
+        pass -> !pass.isPresent() || pass.get().length == 0;
 
     private final Speedment speedment;
     private final Application application;
@@ -433,7 +433,7 @@ public final class UISession {
     }
     
     private void showPasswordDialog(DbmsProperty dbms) {
-        final Dialog<Pair<String, String>> dialog = new Dialog<>();
+        final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
         dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
@@ -479,12 +479,12 @@ public final class UISession {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == authButtonType) {
-                return new Pair<>(username.getText(), password.getText());
+                return new Pair<>(username.getText(), password.getText().toCharArray());
             }
             return null;
         });
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+        Optional<Pair<String, char[]>> result = dialog.showAndWait();
 
         result.ifPresent(usernamePassword -> {
             dbms.mutator().setUsername(usernamePassword.getKey());

@@ -27,15 +27,15 @@ import java.util.Optional;
 @Api(version = "2.3")
 public interface PasswordComponent extends Component {
     
-    void put(String dbmsName, String password);
+    void put(String dbmsName, char[] password);
     
-    default void put(Dbms dbms, String password) {
+    default void put(Dbms dbms, char[] password) {
         put(dbms.getName(), password);
     }
     
-    Optional<String> get(String dbmsName);
+    Optional<char[]> get(String dbmsName);
     
-    default Optional<String> get(Dbms dbms) {
+    default Optional<char[]> get(Dbms dbms) {
         return get(dbms.getName());
     }
 }

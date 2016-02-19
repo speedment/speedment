@@ -101,10 +101,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //        dbms.getPassword().ifPresent(p -> connectionProps.put(PASSWORD, p));
         final String url = getUrl();
         final String user = unwrap(dbms.getUsername());
-        final String password = unwrap(speedment.getPasswordComponent().get(dbms));
+        final char[] password = unwrap(speedment.getPasswordComponent().get(dbms));
         try {
             //conn = DriverManager.getConnection(url, user, password);
-            conn = speedment.getConnectionPoolComponent().getConnection(url, user, password);
+            conn = speedment.getConnectionPoolComponent().getConnection(url, user, new String(password));
         } catch (SQLException sqle) {
 //            final Properties pwProtectedProperties = new Properties();
 //            connectionProps.forEach((k, v) -> pwProtectedProperties.put(k, v));

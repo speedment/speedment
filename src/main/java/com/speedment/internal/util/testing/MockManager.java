@@ -34,7 +34,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
     /**
      * Sets the instance factory of this {@code MockManager}. The instance
-     * factory is invoked each time a Managers {@link Manager#newInstance() }
+     * factory is invoked each time a Managers {@link Manager#newEmptyEntity() }
      * method is called.
      *
      * @param factory the new instance factory to use

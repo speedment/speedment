@@ -22,10 +22,13 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import com.speedment.internal.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  * A more specific {@link Translator} that results in a CodeGen {@link File}.
@@ -211,11 +214,45 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
      * fully qualified type names</a>
      */
     default String fullyQualifiedTypeName(String subPath) {
+        return fullyQualifiedTypeName(subPath, "");
+    }
+    
+    /**
+     * Returns the fully qualified type name of the current document. The specified
+     * sub-path will be added after the base package name and before the type
+     * name of the node. The sub-path should not contain either leading nor
+     * trailing dots.
+     * <p>
+     * Example:
+     * <ul>
+     * <li><code>com.speedment.example.employeesschema.EmployeesSchema</code>
+     * <li><code>com.speedment.example.usertable.UserTable</code>
+     * <li><code>com.speedment.example.usertable.firstname.Firstname</code>
+     * </ul>
+     * <p>
+     * Note that this method is only meant to work with nodes at
+     * {@code Table} or higher level in the hierarchy. It will return a
+     * result for all documents located in a valid hierarchy, but the result might
+     * not be as intended.
+     *
+     * @param subPath A prefix that will be added to the "class"-part of the
+     * type name.
+     * @param subPath A sub-path to be added at the end of the 'package'-part of
+     * the qualified type name. This value can be {@code null} and in that
+     * case an ordinary fullyQualifiedTypeName will be returned.
+     * @return the fully qualified type name of the current document
+     * @see
+     * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-6.html#jls-6.5.5.2">Concerning
+     * fully qualified type names</a>
+     */
+    default String fullyQualifiedTypeName(String subPath, String filePrefix) {
+        requireNonNull(filePrefix);
+        
         // subPath is nullable
         if (subPath == null || subPath.isEmpty()) {
-            return basePackageName() + "." + typeName(getAliasDocument());
+            return basePackageName() + "." + ucfirst(filePrefix) + typeName(getAliasDocument());
         } else {
-            return basePackageName() + "." + subPath + "." + typeName(getAliasDocument());
+            return basePackageName() + "." + subPath + "." + ucfirst(filePrefix) + typeName(getAliasDocument());
         }
     }
 
@@ -226,9 +263,9 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
      * @return the base package name in lowercase.
      */
     default String basePackageName() {
-        final String packName = project().getPackageName().toLowerCase() + ".";
+        final String packName = projectOrThrow().getPackageName().toLowerCase() + ".";
         if (getDocument() instanceof Project) {
-            return packName + javaLanguageNamer().javaPackageName(project().getName());
+            return packName + javaLanguageNamer().javaPackageName(projectOrThrow().getName());
         } else {
             return packName + relativeName(getDocument(), Project.class, javaLanguageNamer()::javaPackageName);
         }
@@ -246,5 +283,15 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
     }
     
     JavaLanguageNamer javaLanguageNamer();
+    
+    default Project projectOrThrow() {
+        return project().orElseThrow(foundNoProjectException());
+    }
+    
+    static Supplier<SpeedmentException> foundNoProjectException() {
+        return () -> new SpeedmentException(
+            "Could not find any project node in document"
+        );
+    }
     
 }

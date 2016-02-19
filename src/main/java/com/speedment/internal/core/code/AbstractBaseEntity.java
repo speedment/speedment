@@ -32,19 +32,18 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
 
-    private final transient Speedment speedment;
-
-    public AbstractBaseEntity(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-    }
-
-    protected Speedment speedment() {
-        return speedment;
-    }
+    /**
+     * Returns the Speedment instance. This method will be implemented by the
+     * instantiating class using an anonymous class and should therefore not be
+     * implemented in named child classes.
+     * 
+     * @return  the {@link Speedment} instance
+     */
+    protected abstract Speedment speedment();
    
     @Override
-    public String toJson(JsonEncoder<ENTITY> jsonFormatter) {
-        return requireNonNull(jsonFormatter).apply((selfAsEntity()));
+    public String toJson(JsonEncoder<ENTITY> encoder) {
+        return requireNonNull(encoder).apply((selfAsEntity()));
     }
 
     @Override
