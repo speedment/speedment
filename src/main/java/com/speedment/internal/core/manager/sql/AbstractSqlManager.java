@@ -60,8 +60,8 @@ import java.util.Optional;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.LazyString;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -73,7 +73,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
-    private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
+    private SqlFunction<ResultSet, ENTITY> entityMapper;
     private final LazyString sqlColumnList;
     private final LazyString sqlColumnListQuestionMarks;
 
@@ -85,7 +85,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap()));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), entityMapper.unWrap()));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.apply(asynchronousQueryResult.stream());
         final Stream<ENTITY> result = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
@@ -150,13 +150,13 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     @Override
-    public SqlFunction<ResultSet, ENTITY> getSqlEntityMapper() {
-        return sqlEntityMapper;
+    public SqlFunction<ResultSet, ENTITY> getEntityMapper() {
+        return entityMapper;
     }
 
     @Override
-    public void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper) {
-        this.sqlEntityMapper = requireNonNull(sqlEntityMapper);
+    public void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper) {
+        this.entityMapper = requireNonNull(entityMapper);
     }
 
     @Override

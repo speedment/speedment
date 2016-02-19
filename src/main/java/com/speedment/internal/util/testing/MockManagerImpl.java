@@ -49,7 +49,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-        this.instanceSupplier = inner::newInstance;
+        this.instanceSupplier = inner::newEmptyEntity;
         this.nativeStreamer = inner::nativeStream;
         this.streamer = inner::stream;
         this.persister = inner::persist;
@@ -122,7 +122,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public ENTITY newInstance() {
+    public ENTITY newEmptyEntity() {
         return instanceSupplier.get();
     }
 

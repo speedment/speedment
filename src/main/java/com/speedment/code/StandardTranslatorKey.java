@@ -34,9 +34,9 @@ import java.util.stream.Stream;
 public final class StandardTranslatorKey {
 
     public final static TranslatorKey<Project, Class> 
-        SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("SpeedmentApplication", Class.class),
-        GENERATED_SPEEDMENT_APPLICATION = new TranslatorKeyImpl<>("GeneratedSpeedmentApplication", Class.class),
-        GENERATED_SPEEDMENT_APPLICATION_METADATA = new TranslatorKeyImpl<>("GeneratedSpeedmentApplicationMetadata", Class.class);
+        APPLICATION = new TranslatorKeyImpl<>("Application", Class.class),
+        GENERATED_APPLICATION = new TranslatorKeyImpl<>("GeneratedApplication", Class.class),
+        GENERATED_APPLICATION_METADATA = new TranslatorKeyImpl<>("GeneratedApplicationMetadata", Class.class);
     
     public final static TranslatorKey<Table, Interface> 
         ENTITY = new TranslatorKeyImpl<>("Entity", Interface.class),
@@ -51,7 +51,7 @@ public final class StandardTranslatorKey {
         GENERATED_MANAGER_IMPL = new TranslatorKeyImpl<>("GeneratedManagerImpl", Class.class);
 
     public static Stream<TranslatorKey<Project, Class>> projectTranslatorKeys() {
-        return Stream.of(SPEEDMENT_APPLICATION, GENERATED_SPEEDMENT_APPLICATION, GENERATED_SPEEDMENT_APPLICATION_METADATA);
+        return Stream.of(APPLICATION, GENERATED_APPLICATION, GENERATED_APPLICATION_METADATA);
     }
     
     public static Stream<TranslatorKey<Table, ? extends ClassOrInterface<?>>> tableTranslatorKeys() {

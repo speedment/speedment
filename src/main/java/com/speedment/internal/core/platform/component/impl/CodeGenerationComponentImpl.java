@@ -55,9 +55,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
@@ -116,9 +113,9 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Table.class, GENERATED_ENTITY_IMPL, GeneratedEntityImplTranslator::new);
         put(Table.class, GENERATED_MANAGER, GeneratedEntityManagerTranslator::new);
         put(Table.class, GENERATED_MANAGER_IMPL, GeneratedEntityManagerImplTranslator::new);
-        put(Project.class, SPEEDMENT_APPLICATION, SpeedmentApplicationTranslator::new);
-        put(Project.class, GENERATED_SPEEDMENT_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
-        put(Project.class, GENERATED_SPEEDMENT_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
+        put(Project.class, APPLICATION, SpeedmentApplicationTranslator::new);
+        put(Project.class, GENERATED_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
+        put(Project.class, GENERATED_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
         
         javaLanguageSupplier = DefaultJavaLanguageNamer::new;
     }

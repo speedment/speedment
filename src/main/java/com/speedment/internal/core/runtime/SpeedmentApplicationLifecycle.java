@@ -43,11 +43,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import java.util.Map;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed

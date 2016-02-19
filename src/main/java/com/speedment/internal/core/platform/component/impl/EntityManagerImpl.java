@@ -23,7 +23,6 @@ import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;
 import com.speedment.license.Software;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 

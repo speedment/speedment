@@ -100,7 +100,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .protected_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
-                .add("setSqlEntityMapper(this::defaultReadEntity);"))
+                .add("setEntityMapper(this::newEntityFrom);"))
             .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(genericOfEntity)).public_().add(OVERRIDE)
                 .add("return " + entity.getName() + ".class;"))
             .add(generateGet(file))
@@ -110,8 +110,8 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                     + ".getProjectComponent()"
                     + ".getProject().findTableByName(\"" + relativeName(tableOrThrow(), Dbms.class) + "\");"))
             .
-            add(defaultReadEntity(file))
-            .add(Method.of("newInstance", entity.getType())
+            add(newEntityFrom(file))
+            .add(Method.of("newEmptyEntity", entity.getType())
                 .public_().add(OVERRIDE)
                 .add("return new " + entity.getImplName() + "() {", indent(
                         "@Override",
@@ -149,15 +149,15 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         }
     }
 
-    private Method defaultReadEntity(File file) {
+    private Method newEntityFrom(File file) {
 
         file.add(Import.of(Type.of(SQLException.class)));
         file.add(Import.of(Type.of(SpeedmentException.class)));
 
-        final Method method = Method.of("defaultReadEntity", entity.getType())
+        final Method method = Method.of("newEntityFrom", entity.getType())
             .protected_()
             .add(Field.of("resultSet", Type.of(ResultSet.class)))
-            .add("final " + entity.getName() + " entity = newInstance();");
+            .add("final " + entity.getName() + " entity = newEmptyEntity();");
 
         final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();

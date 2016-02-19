@@ -93,9 +93,6 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      */
     void set(ENTITY entity, Column column, Object value);
 
-    //    Object find(ENTITY entity, Column column);
-    //
-    /**/
     // Data source metadata
     /**
      * Returns the configuration {@link Table} that this Manager is handling.
@@ -111,7 +108,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      *
      * @return a new entity
      */
-    ENTITY newInstance();
+    ENTITY newEmptyEntity();
 
     /**
      * Returns the entity class for this Manager.
