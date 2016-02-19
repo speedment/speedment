@@ -60,7 +60,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     }
     
     @Override
-    protected boolean isInGeneratedPackage() {
+    public boolean isInGeneratedPackage() {
         return true;
     }
     

@@ -304,7 +304,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     }
 
     @Override
-    protected boolean isInGeneratedPackage() {
+    public boolean isInGeneratedPackage() {
         return true;
     }
 }

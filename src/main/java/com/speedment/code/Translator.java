@@ -214,6 +214,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
         return generate().getResult();
     }
     
+    boolean isInGeneratedPackage();
+    
     Generator getCodeGenerator();
     
     default void onMake(Consumer<Builder<T>> action) {

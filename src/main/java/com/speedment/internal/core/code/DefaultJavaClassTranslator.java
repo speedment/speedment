@@ -194,7 +194,8 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         return generator;
     }
 
-    protected boolean isInGeneratedPackage() {
+    @Override
+    public boolean isInGeneratedPackage() {
         return false;
     }
     

@@ -52,7 +52,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
     }
 
     @Override
-    protected boolean isInGeneratedPackage() {
+    public boolean isInGeneratedPackage() {
         return true;
     }
 
