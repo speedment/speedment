@@ -169,7 +169,7 @@ public final class ConnectController implements Initializable {
             
             // Register password in password component
             session.getSpeedment().getPasswordComponent()
-                .put(fieldName.getText(), fieldPass.getText());
+                .put(fieldName.getText(), fieldPass.getText().toCharArray());
             
             session.getProject().nameProperty().setValue(fieldSchema.getText());
             

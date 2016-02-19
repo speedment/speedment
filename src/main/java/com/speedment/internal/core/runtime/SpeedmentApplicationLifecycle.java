@@ -122,11 +122,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * Configures a password for all dbmses in this project. The password will
      * then be applied after the configuration has been read and after the
      * System properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
      *
-     * @param password to use for all dbms:es in this project
-     * @return this instance
+     * @param password  to use for all dbms:es in this project
+     * @return          this instance
      */
-    public T withPassword(final String password) {
+    public T withPassword(final char[] password) {
         // password nullable
         with(Dbms.class, dbms -> speedment.getPasswordComponent().put(dbms, password));
         return self();
@@ -136,12 +138,14 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * Configures a password for the named dbms. The password will then be
      * applied after the configuration has been read and after the System
      * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
      *
-     * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms
-     * @return this instance
+     * @param dbmsName  the name of the dbms
+     * @param password  to use for the named dbms
+     * @return          this instance
      */
-    public T withPassword(final String dbmsName, final String password) {
+    public T withPassword(final String dbmsName, final char[] password) {
         // password nullable
         with(Dbms.class, dbmsName, dbms -> speedment.getPasswordComponent().put(dbms, password));
         return self();
