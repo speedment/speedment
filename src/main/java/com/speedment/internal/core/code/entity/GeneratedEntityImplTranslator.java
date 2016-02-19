@@ -48,6 +48,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.speedment.internal.codegen.util.Formatting.indent;
+import com.speedment.internal.util.JavaLanguageNamer;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -160,8 +161,8 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .abstract_()
             .setSupertype(Type.of(AbstractBaseEntity.class).add(Generic.of().add(entity.getType())))
             .add(entity.getType())
-            .add(Constructor.of().protected_())
-            .add(copyConstructor(entity.getType(), CopyConstructorMode.SETTER));
+            .add(Constructor.of().protected_());
+//            .add(copyConstructor(entity.getType(), CopyConstructorMode.SETTER));
 
         /*** Create aggregate streaming functions, if any ***/
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
@@ -185,9 +186,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         });
         
         file.add(Import.of(Type.of(Speedment.class)));
-
+        
         newClass
-            .add(copy())
+            .add(copy(file))
             .add(toString(file))
             .add(equalsMethod())
             .add(hashCodeMethod())
@@ -199,18 +200,44 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     }
 
-    private Method copy() {
-        return Method.of("copy", entity.getType()).public_().add(OVERRIDE)
+    private Method copy(File file) {
+        file.add(Import.of(entity.getImplType()));
+        
+        final JavaLanguageNamer namer = getSpeedment().getCodeGenerationComponent().javaLanguageNamer();
+        final String entityName = namer.javaVariableName(entity.getName());
+        final Method result = Method.of("copy", entity.getType()).public_().add(OVERRIDE)
             .add(
                 "final " + Speedment.class.getSimpleName() + " speedment = speedment();",
-                "return new " + entity.getGeneratedImplName() + "(this) {", indent(
+                "",
+                "final " + entity.getName() + " " + entityName + " = new " + entity.getImplName() + "() {", indent(
                     "@Override",
                     "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(
                         "return speedment;"
                     ), "}"
-                ), "};"
+                ), "};",
+                ""
             );
-
+        
+        columns().forEachOrdered(c -> {
+            if (c.isNullable()) {
+                result.add(
+                    variableName() + "."
+                    + GETTER_METHOD_PREFIX + typeName(c)
+                    + "().ifPresent(this::"
+                    + SETTER_METHOD_PREFIX + typeName(c)
+                    + ");"
+                );
+            } else {
+                result.add(
+                    SETTER_METHOD_PREFIX + typeName(c)
+                    + "(" + variableName()
+                    + ".get" + typeName(c)
+                    + "());"
+                );
+            }
+        });
+        
+        return result.add("", "return " + entityName + ";");
     }
 
     protected Method toString(File file) {
