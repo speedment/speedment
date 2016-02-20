@@ -56,6 +56,7 @@ public final class MariaDbDbmsType {
             .withConnectionUrlGenerator(CONNECTION_URL_GENERATOR)
             .withSpeedmentPredicateView(VIEW)
             // Optional parameters
+            .withInitialQuery("select version() as " + QUOTE + "MariaDB version" + QUOTE)
             .build();
 
 }

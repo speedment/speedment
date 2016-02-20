@@ -19,7 +19,6 @@ package com.speedment.internal.core.code.manager;
 import com.speedment.Speedment;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
@@ -52,7 +51,6 @@ import java.util.stream.Stream;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -95,22 +93,22 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             .setSupertype(Type.of(AbstractSqlManager.class)
                 .add(Generic.of().add(entity.getType()))
             )
+            .add(manager.getGeneratedType())
             .call(i -> file.add(Import.of(entity.getImplType())))
             .add(Constructor.of()
                 .protected_()
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setEntityMapper(this::newEntityFrom);"))
-            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(genericOfEntity)).public_().add(OVERRIDE)
-                .add("return " + entity.getName() + ".class;"))
-            .add(generateGet(file))
-            .add(generateSet(file))
-            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-                .add("return " + SPEEDMENT_VARIABLE_NAME
-                    + ".getProjectComponent()"
-                    + ".getProject().findTableByName(\"" + relativeName(tableOrThrow(), Dbms.class) + "\");"))
-            .
-            add(newEntityFrom(file))
+//            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(genericOfEntity)).public_().add(OVERRIDE)
+//                .add("return " + entity.getName() + ".class;"))
+//            .add(generateGet(file))
+//            .add(generateSet(file))
+//            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
+//                .add("return " + SPEEDMENT_VARIABLE_NAME
+//                    + ".getProjectComponent()"
+//                    + ".getProject().findTableByName(\"" + relativeName(tableOrThrow(), Dbms.class) + "\");"))
+            .add(newEntityFrom(file))
             .add(Method.of("newEmptyEntity", entity.getType())
                 .public_().add(OVERRIDE)
                 .add("return new " + entity.getImplName() + "() {", indent(
@@ -122,8 +120,8 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 )
                 .call($ -> file.add(Import.of(entity.getImplType())))
                 .call($ -> file.add(Import.of(Type.of(Speedment.class))))
-            )
-            .add(generatePrimaryKeyFor(file));
+            );
+//            .add(generatePrimaryKeyFor(file));
     }
 
     private static enum Primitive {
