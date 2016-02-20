@@ -126,13 +126,9 @@ public abstract class SimpleModel {
                 + "}";
 
         //System.out.println(json);
-        speedment = new DefaultSpeedmentApplicationLifecycle(json) {
-            @Override
-            protected void checkDatabaseConnectivity() {
-                // by pass
-            }
-
-        }.build();
+        speedment = new DefaultSpeedmentApplicationLifecycle(json)
+                .withCheckDatabaseConnectivity(false)
+                .build();
 
         project = speedment.getProjectComponent().getProject();
         dbms = project.dbmses().findAny().get();

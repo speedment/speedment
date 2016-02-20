@@ -25,7 +25,7 @@ import java.nio.file.Files;
  *
  * @author Emil Forslund
  */
-public class DefaultSpeedmentApplicationLifecycle extends
+public final class DefaultSpeedmentApplicationLifecycle extends
         SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
 
     private final ApplicationMetadata metadata; // Can be null.

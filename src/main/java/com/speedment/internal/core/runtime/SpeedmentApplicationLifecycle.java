@@ -75,6 +75,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     private final List<Tuple3<Class<? extends Document>, String, Consumer<? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
+    private boolean checkDatabaseConnectivity;
 
     private ApplicationMetadata speedmentApplicationMetadata;
 
@@ -85,6 +86,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         speedment = new SpeedmentImpl();
         withsNamed = newList();
         withsAll = newList();
+        checkDatabaseConnectivity = true;
     }
 
     /**
@@ -291,6 +293,20 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return self();
     }
 
+    /**
+     * Sets if an initial database check shall be performed upon build(). The
+     * default value is <code>true</code>
+     *
+     * @param <C> the component type
+     * @param checkDatabaseConnectivity if an initial database check shall be
+     * performed
+     * @return this instance
+     */
+    public <C extends Component> T withCheckDatabaseConnectivity(final boolean checkDatabaseConnectivity) {
+        this.checkDatabaseConnectivity = checkDatabaseConnectivity;
+        return self();
+    }
+
     @Override
     protected void onInit() {
         forEachManagerInSeparateThread(Manager::initialize);
@@ -413,7 +429,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             speedment.getProjectComponent().setProject(immutableProject);
         }
 
-        checkDatabaseConnectivity();
+        if (checkDatabaseConnectivity) {
+            checkDatabaseConnectivity();
+        }
 
         return speedment;
     }
