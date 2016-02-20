@@ -35,9 +35,7 @@ import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.config.db.mapper.identity.StringIdentityMapper;
 import java.util.stream.Stream;
 import org.junit.Before;
-import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.stream.Collectors.joining;
 
@@ -66,7 +64,7 @@ public abstract class SimpleModel {
         return quote(HasName.NAME) + " : " + quote(s);
     }
 
-    private String typeMapper(Class<? extends TypeMapper<?,?>> tmc) {
+    private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
         return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
     }
 
@@ -128,8 +126,13 @@ public abstract class SimpleModel {
                 + "}";
 
         //System.out.println(json);
+        speedment = new DefaultSpeedmentApplicationLifecycle(json) {
+            @Override
+            protected void checkDatabaseConnectivity() {
+                // by pass
+            }
 
-        speedment = new DefaultSpeedmentApplicationLifecycle(json).build();
+        }.build();
 
         project = speedment.getProjectComponent().getProject();
         dbms = project.dbmses().findAny().get();
@@ -137,9 +140,9 @@ public abstract class SimpleModel {
         table = schema.tables().findAny().get();
         column = table.columns().findAny().get();
         pkColumn = table.primaryKeyColumns().findAny().get();
-        
+
         System.out.println(project);
-            
+
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();
 //        schema = dbms.addNewSchema();
