@@ -24,26 +24,25 @@ import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 
 import java.util.function.Function;
 
-
 /**
  *
  * @author pemi
  */
-public final class MySqlDbmsType  {
+public final class MySqlDbmsType {
 
     private static final String QUOTE = "`";
 
     private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder()
-        .append("jdbc:mysql://")
-        .append(dbms.getIpAddress().orElse(""));
+                .append("jdbc:mysql://")
+                .append(dbms.getIpAddress().orElse(""));
         dbms.getPort().ifPresent(p -> result.append(":").append(p));
         result.append("/?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
         return result.toString();
     };
 
-    private static final SpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);    
-    
+    private static final SpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
+
     public static final DbmsType INSTANCE = DbmsType.builder()
             // Mandatory parameters
             .withName("MySQL")
@@ -57,6 +56,7 @@ public final class MySqlDbmsType  {
             .withConnectionUrlGenerator(CONNECTION_URL_GENERATOR)
             .withSpeedmentPredicateView(VIEW)
             // Optional parameters
+            .withInitialQuery("select version() as " + QUOTE + "MySQL version" + QUOTE)
             .build();
-    
+
 }

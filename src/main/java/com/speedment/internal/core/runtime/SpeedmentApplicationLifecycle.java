@@ -31,6 +31,8 @@ import com.speedment.config.db.Schema;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.db.DbmsHandler;
+import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
@@ -43,7 +45,11 @@ import com.speedment.internal.util.tuple.Tuple2;
 import com.speedment.internal.util.tuple.Tuple3;
 import com.speedment.internal.util.tuple.Tuples;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -52,7 +58,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
-
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -126,8 +131,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param password  to use for all dbms:es in this project
-     * @return          this instance
+     * @param password to use for all dbms:es in this project
+     * @return this instance
      */
     public T withPassword(final char[] password) {
         // password nullable
@@ -142,9 +147,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param dbmsName  the name of the dbms
-     * @param password  to use for the named dbms
-     * @return          this instance
+     * @param dbmsName the name of the dbms
+     * @param password to use for the named dbms
+     * @return this instance
      */
     public T withPassword(final String dbmsName, final char[] password) {
         // password nullable
@@ -408,6 +413,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             speedment.getProjectComponent().setProject(immutableProject);
         }
 
+        checkDatabaseConnectivity();
+
         return speedment;
     }
 
@@ -474,6 +481,41 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 LOGGER.error("The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
             }
         });
+
+    }
+
+    protected void checkDatabaseConnectivity() {
+        final Project project = speedment.getProjectComponent().getProject();
+        project.dbmses().forEachOrdered(dbms -> {
+            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
+            final DbmsHandler dbmsHandler = speedment.getDbmsHandlerComponent().get(dbms);
+            try {
+                final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
+                if (!oInfo.isPresent()) {
+                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
+                } else {
+                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
+                }
+            } catch (Exception e) {
+                LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
+            }
+        });
+    }
+
+    private class RsMapper implements SqlFunction<ResultSet, Map<String, String>> {
+
+        @Override
+        public Map<String, String> apply(ResultSet rs) throws SQLException {
+            final Map<String, String> map = new LinkedHashMap();
+            final ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            for (int i = 0; i < columns; i++) {
+                final String key = md.getColumnLabel(i + 1);
+                final String value = rs.getObject(i + 1).toString();
+                map.put(key, value);
+            }
+            return map;
+        }
 
     }
 

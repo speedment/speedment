@@ -345,7 +345,7 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
-        public Optionals withInitialQuery() {
+        public Optionals withInitialQuery(String initialQuery) {
             this.initialQuery = requireNonNull(initialQuery);
             return this;
         }
@@ -558,7 +558,7 @@ public final class DbmsTypeImpl implements DbmsType {
          *
          * @return a builder
          */
-        Optionals withInitialQuery();
+        Optionals withInitialQuery(String initialQuery);
 
         /**
          * Creates and returns a new DbmsType instance with the given
