@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -27,7 +25,6 @@ import java.util.stream.Stream;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
-import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -63,6 +60,7 @@ public final class PostgresDbmsType {
             .withConnectionUrlGenerator(CONNECTION_URL_GENERATOR)
             .withSpeedmentPredicateView(VIEW)
             // Optional parameters
+            .withInitialQuery("select version() as " + QUOTE + "PostgreSQL version" + QUOTE)
             .withResultSetTableSchema("TABLE_SCHEM")
             .withDataTypes(dataTypes())
             .build();
