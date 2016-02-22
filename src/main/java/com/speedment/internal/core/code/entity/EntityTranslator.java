@@ -47,6 +47,6 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A interface";
+        return "An interface";
     }
 }
