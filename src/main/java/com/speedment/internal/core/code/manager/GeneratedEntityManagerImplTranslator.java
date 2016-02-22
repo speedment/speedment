@@ -100,14 +100,6 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                 .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
                 .add("setEntityMapper(this::newEntityFrom);"))
-//            .add(Method.of("getEntityClass", Type.of(java.lang.Class.class).add(genericOfEntity)).public_().add(OVERRIDE)
-//                .add("return " + entity.getName() + ".class;"))
-//            .add(generateGet(file))
-//            .add(generateSet(file))
-//            .add(Method.of("getTable", Type.of(Table.class)).public_().add(OVERRIDE)
-//                .add("return " + SPEEDMENT_VARIABLE_NAME
-//                    + ".getProjectComponent()"
-//                    + ".getProject().findTableByName(\"" + relativeName(tableOrThrow(), Dbms.class) + "\");"))
             .add(newEntityFrom(file))
             .add(Method.of("newEmptyEntity", entity.getType())
                 .public_().add(OVERRIDE)
@@ -121,7 +113,6 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .call($ -> file.add(Import.of(entity.getImplType())))
                 .call($ -> file.add(Import.of(Type.of(Speedment.class))))
             );
-//            .add(generatePrimaryKeyFor(file));
     }
 
     private static enum Primitive {
