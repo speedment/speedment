@@ -30,18 +30,19 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class BaseComparablePredicate<ENTITY, V extends Comparable<? super V>> extends SpeedmentPredicateImpl<ENTITY, V> implements
-    SpeedmentPredicate<ENTITY, V>, BinaryOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class BaseComparablePredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V>, ComparableSpeedmentPredicate<ENTITY, D, V> {
 
     private final V operand0;
     private final BiPredicate<V> innerPredicate;
 
     public BaseComparablePredicate(
-        PredicateType predicateType,
-        FieldTrait field,
-        ReferenceFieldTrait<ENTITY, V> referenceField,
-        V operand0,
-        BiPredicate<V> innerPredicate
+            PredicateType predicateType,
+            FieldTrait field,
+            ReferenceFieldTrait<ENTITY, D, V> referenceField,
+            V operand0,
+            BiPredicate<V> innerPredicate
     ) {
         super(predicateType, field, referenceField);
         this.operand0 = operand0;

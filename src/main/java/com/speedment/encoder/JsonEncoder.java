@@ -49,6 +49,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
+     *
      * @param speedment context to use
      */
     public JsonEncoder(Speedment speedment) {
@@ -58,21 +59,21 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
     // Fields
     @Override
-    public <T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T>> JsonEncoder<ENTITY> put(I field) {
+    public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
         final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
-        final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, T>) field).getter(); // Workaround bugg
+        final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
 
     // Foreign key fields.
     @Override
-    public <T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T> & ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY>>
-        JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
+    public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
+            JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
         requireNonNull(field);
         requireNonNull(builder);
         final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
-        final ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, FK_ENTITY>) field; // Workaround bugg
+        final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
 
@@ -133,10 +134,10 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     public String apply(ENTITY entity) {
         requireNonNull(entity);
         return "{"
-            + getters.values().stream()
-            .map(g -> g.apply(entity))
-            .collect(joining(","))
-            + "}";
+                + getters.values().stream()
+                .map(g -> g.apply(entity))
+                .collect(joining(","))
+                + "}";
     }
 
     protected String jsonField(FieldTrait field, JavaLanguageNamer javaLanguageNamer) {
@@ -154,12 +155,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         } else if (in == null) {
             value = "null";
         } else if (in instanceof Byte
-            || in instanceof Short
-            || in instanceof Integer
-            || in instanceof Long
-            || in instanceof Boolean
-            || in instanceof Float
-            || in instanceof Double) {
+                || in instanceof Short
+                || in instanceof Integer
+                || in instanceof Long
+                || in instanceof Boolean
+                || in instanceof Float
+                || in instanceof Double) {
             value = String.valueOf(in);
         } else {
             value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
@@ -198,12 +199,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Table table = manager.getTable();
 
         table.columns()
-            .forEachOrdered(c
-                -> formatter.put(
-                    formatter.javaLanguageNamer.javaVariableName(c.getName()),
-                    entity -> manager.get(entity, c)
-                )
-            );
+                .forEachOrdered(c
+                        -> formatter.put(
+                                formatter.javaLanguageNamer.javaVariableName(c.getName()),
+                                entity -> manager.get(entity, c)
+                        )
+                );
 
         return formatter;
     }
@@ -229,13 +230,13 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final Table table = manager.getTable();
 
         table.columns()
-            .filter(c -> fieldNames.contains(c.getName()))
-            .forEachOrdered(c
-                -> formatter.put(
-                    formatter.javaLanguageNamer.javaVariableName(c.getName()),
-                    entity -> manager.get(entity, c)
-                )
-            );
+                .filter(c -> fieldNames.contains(c.getName()))
+                .forEachOrdered(c
+                        -> formatter.put(
+                                formatter.javaLanguageNamer.javaVariableName(c.getName()),
+                                entity -> manager.get(entity, c)
+                        )
+                );
 
         return formatter;
     }

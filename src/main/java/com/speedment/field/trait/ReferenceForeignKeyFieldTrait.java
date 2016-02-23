@@ -26,7 +26,7 @@ import com.speedment.field.methods.Finder;
  * @param <FK> the foreign entity type
  */
 @Api(version = "2.2")
-public interface ReferenceForeignKeyFieldTrait<ENTITY, FK> {
+public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {
 
     /**
      * Returns a function that can find a foreign entity pointed out by this

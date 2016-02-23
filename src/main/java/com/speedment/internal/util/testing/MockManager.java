@@ -106,7 +106,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param finder the new finder supplier
      * @return this instance
      */
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder);
+    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder);
 
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);

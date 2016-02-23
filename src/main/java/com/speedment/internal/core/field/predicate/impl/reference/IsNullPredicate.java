@@ -29,9 +29,11 @@ import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNullPredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
+public class IsNullPredicate<ENTITY, D, V>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, UnaryOperation {
 
-    public IsNullPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+    public IsNullPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(IS_NULL, field, referenceField);
     }
 

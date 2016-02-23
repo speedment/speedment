@@ -415,7 +415,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @param value to match with the field
      * @return An Optional entity where the given field matches the given value
      */
-    <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value);
+    <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value);
 
     ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 

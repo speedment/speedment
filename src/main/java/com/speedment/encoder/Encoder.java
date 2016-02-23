@@ -51,7 +51,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param field to add to the renderer
      * @return a reference to a resulting Encoder
      */
-    <T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T>> R put(I field);
+    <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> R put(I field);
 
     // Foreign key fields.
     /**
@@ -66,7 +66,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param fkFormatter the foreign key encoder
      * @return a reference to a resulting Encoder
      */
-    <T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T> & ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY>>
+    <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
         R put(I field, Encoder<FK_ENTITY, ?, OUTPUT_TYPE> fkFormatter);
 
     // Label-and-getter pairs

@@ -29,9 +29,11 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class NotEqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class NotEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends BaseComparablePredicate<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public NotEqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V operand0) {
+    public NotEqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField, V operand0) {
         super(NOT_EQUAL, field, referenceField, operand0, (a, b) -> !Objects.equals(a, b));
     }
 

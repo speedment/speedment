@@ -32,15 +32,21 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class BetweenPredicate<ENTITY, V extends Comparable<? super V>>
-    extends SpeedmentPredicateImpl<ENTITY, V>
-    implements SpeedmentPredicate<ENTITY, V>, QuaternaryInclusionOperation<V, V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class BetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, QuaternaryInclusionOperation<V, V>, ComparableSpeedmentPredicate<ENTITY, D, V> {
 
     private final V operand0;
     private final V operand1;
     private final Inclusion operand2;
 
-    public BetweenPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V start, V end, Inclusion inclusion) {
+    public BetweenPredicate(
+            FieldTrait field,
+            ReferenceFieldTrait<ENTITY, D, V> referenceField,
+            V start,
+            V end,
+            Inclusion inclusion
+    ) {
         super(BETWEEN, field, referenceField);
         this.operand0 = start;
         this.operand1 = end;

@@ -45,7 +45,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     private Function<ENTITY, ENTITY> remover;
-    private BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder;
+    private BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
@@ -95,7 +95,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder) {
+    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder) {
         this.finder = finder;
         return this;
     }
@@ -167,7 +167,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+    public <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value) {
         return finder.apply(field, value);
     }
 

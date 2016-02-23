@@ -35,15 +35,15 @@ import static java.util.stream.Collectors.toList;
  */
 public class StreamTerminatorUtil {
 
-    public static <T extends Pipeline, ENTITY> List<SpeedmentPredicate<ENTITY, ?>> topLevelAndPredicates(T initialPipeline) {
-        final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = new ArrayList<>();
+    public static <T extends Pipeline, ENTITY> List<SpeedmentPredicate<ENTITY, ?, ?>> topLevelAndPredicates(T initialPipeline) {
+        final List<SpeedmentPredicate<ENTITY, ?, ?>> andPredicateBuilders = new ArrayList<>();
 
         for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
             @SuppressWarnings("rawtypes")
             final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
             if (oFilterAction.isPresent()) {
                 @SuppressWarnings("unchecked")
-                final List<SpeedmentPredicate<ENTITY, ?>> newAndPredicates = andPredicates(oFilterAction.get());
+                final List<SpeedmentPredicate<ENTITY, ?, ?>> newAndPredicates = andPredicates(oFilterAction.get());
                 andPredicateBuilders.addAll(newAndPredicates);
             } else {
                 break; // We can only do initial consecutive FilterAction(s)
@@ -53,9 +53,9 @@ public class StreamTerminatorUtil {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <ENTITY> List<SpeedmentPredicate<?, ?>> andPredicates(FilterAction<ENTITY> action) {
+    public static <ENTITY> List<SpeedmentPredicate<?, ?, ?>> andPredicates(FilterAction<ENTITY> action) {
         requireNonNull(action);
-        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = new ArrayList<>();
+        final List<SpeedmentPredicate<?, ?, ?>> andPredicateBuilders = new ArrayList<>();
         final Predicate<? super ENTITY> predicate = action.getPredicate();
 
         final Optional<SpeedmentPredicate> oPredicateBuilder = Cast.cast(predicate, SpeedmentPredicate.class);

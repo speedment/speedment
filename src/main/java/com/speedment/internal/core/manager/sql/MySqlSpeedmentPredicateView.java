@@ -31,22 +31,22 @@ public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicat
     }
 
     @Override
-    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 

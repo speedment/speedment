@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNotNullPredicate;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNullPredicate;
@@ -32,16 +33,18 @@ import static java.util.Objects.requireNonNull;
  * @param <V> the field value type
  * @author pemi
  */
-public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<ENTITY, V> {
+public class ReferenceFieldTraitImpl<ENTITY, D, V> implements ReferenceFieldTrait<ENTITY, D, V> {
 
     private final FieldTrait field;
     private final Getter<ENTITY, V> getter;
     private final Setter<ENTITY, V> setter;
+    private final TypeMapper<D, V> typeMapper;
 
-    public ReferenceFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter) {
+    public ReferenceFieldTraitImpl(FieldTrait field, Getter<ENTITY, V> getter, Setter<ENTITY, V> setter, TypeMapper<D, V> typeMapper) {
         this.field = requireNonNull(field);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
+        this.typeMapper = requireNonNull(typeMapper);
     }
 
     @Override
@@ -55,18 +58,23 @@ public class ReferenceFieldTraitImpl<ENTITY, V> implements ReferenceFieldTrait<E
     }
 
     @Override
+    public TypeMapper<D, V> typeMapper() {
+        return typeMapper;
+    }
+
+    @Override
     public FieldSetter<ENTITY, V> setTo(V value) {
         return new FieldSetterImpl<>(field, setter, value);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNull() {
         // Must create a new object each time because users may invoke .negate()
         return new IsNullPredicate<>(field, this);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNotNull() {
         return new IsNotNullPredicate<>(field, this);
     }
 

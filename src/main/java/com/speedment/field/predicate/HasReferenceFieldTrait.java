@@ -26,7 +26,7 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * @param <V> value type
  */
 @Api(version = "2.2")
-public interface HasReferenceFieldTrait<ENTITY, V> {
+public interface HasReferenceFieldTrait<ENTITY, D, V> {
 
-    ReferenceFieldTrait<ENTITY, V> getReferenceField();
+    ReferenceFieldTrait<ENTITY, D, V> getReferenceField();
 }

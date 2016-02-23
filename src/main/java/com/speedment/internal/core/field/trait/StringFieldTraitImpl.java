@@ -31,23 +31,24 @@ import com.speedment.internal.core.field.predicate.impl.string.AlwaysFalseString
 import com.speedment.internal.core.field.predicate.impl.string.AlwaysTrueStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotNullStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredicate;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
  * @author pemi
  */
-public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
+public class StringFieldTraitImpl<ENTITY, D> implements StringFieldTrait<ENTITY, D> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, String> referenceField;
+    private final ReferenceFieldTrait<ENTITY, D, String> referenceField;
 
-    public StringFieldTraitImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
-        this.field = field;
-        this.referenceField = referenceField;
+    public StringFieldTraitImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
+        this.field = requireNonNull(field);
+        this.referenceField = requireNonNull(referenceField);
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> equalIgnoreCase(String value) {
+    public StringSpeedmentPredicate<ENTITY, D> equalIgnoreCase(String value) {
         if (value == null) {
             return newIsNullPredicate();
         }
@@ -55,7 +56,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value) {
+    public StringSpeedmentPredicate<ENTITY, D> notEqualIgnoreCase(String value) {
         if (value == null) {
             return newIsNotNullPredicate();
         }
@@ -63,7 +64,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> startsWith(String value) {
+    public StringSpeedmentPredicate<ENTITY, D> startsWith(String value) {
         if (value == null) {
             return newAlwaysFalsePredicate();
         }
@@ -71,7 +72,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> endsWith(String value) {
+    public StringSpeedmentPredicate<ENTITY, D> endsWith(String value) {
         if (value == null) {
             return newAlwaysFalsePredicate();
         }
@@ -79,7 +80,7 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> contains(String value) {
+    public StringSpeedmentPredicate<ENTITY, D> contains(String value) {
         if (value == null) {
             return newAlwaysFalsePredicate();
         }
@@ -87,28 +88,28 @@ public class StringFieldTraitImpl<ENTITY> implements StringFieldTrait<ENTITY> {
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> isEmpty() {
+    public StringSpeedmentPredicate<ENTITY, D> isEmpty() {
         return new IsEmptyPredicate<>(field, referenceField);
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY> isNotEmpty() {
+    public StringSpeedmentPredicate<ENTITY, D> isNotEmpty() {
         return new IsNotEmptyPredicate<>(field, referenceField);
     }
 
-    private StringSpeedmentPredicate<ENTITY> newAlwaysFalsePredicate() {
+    private StringSpeedmentPredicate<ENTITY, D> newAlwaysFalsePredicate() {
         return new AlwaysFalseStringPredicate<>(field, referenceField);
     }
 
-    private StringSpeedmentPredicate<ENTITY> newAlwaysTruePredicate() {
+    private StringSpeedmentPredicate<ENTITY, D> newAlwaysTruePredicate() {
         return new AlwaysTrueStringPredicate<>(field, referenceField);
     }
 
-    private StringSpeedmentPredicate<ENTITY> newIsNullPredicate() {
+    private StringSpeedmentPredicate<ENTITY, D> newIsNullPredicate() {
         return new IsNullStringPredicate<>(field, referenceField);
     }
 
-    private StringSpeedmentPredicate<ENTITY> newIsNotNullPredicate() {
+    private StringSpeedmentPredicate<ENTITY, D> newIsNotNullPredicate() {
         return new IsNotNullStringPredicate<>(field, referenceField);
     }
 

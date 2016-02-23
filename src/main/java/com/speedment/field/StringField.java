@@ -28,8 +28,8 @@ import com.speedment.field.trait.StringFieldTrait;
  * @param <ENTITY> the entity type
  */
 @Api(version = "2.2")
-public interface StringField<ENTITY> extends
+public interface StringField<ENTITY, D> extends
     FieldTrait,
-    ReferenceFieldTrait<ENTITY, String>,
-    ComparableFieldTrait<ENTITY, String>,
-    StringFieldTrait<ENTITY> {}
+    ReferenceFieldTrait<ENTITY, D, String>,
+    ComparableFieldTrait<ENTITY, D, String>,
+    StringFieldTrait<ENTITY, D> {}

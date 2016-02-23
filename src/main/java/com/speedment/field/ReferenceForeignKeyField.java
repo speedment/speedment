@@ -29,7 +29,7 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
  * @param <FK> the foreign entity type
  */
 @Api(version = "2.2")
-public interface ReferenceForeignKeyField<ENTITY, V, FK> extends
+public interface ReferenceForeignKeyField<ENTITY, D, V, FK> extends
     FieldTrait,
-    ReferenceFieldTrait<ENTITY, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}
+    ReferenceFieldTrait<ENTITY, D, V>,
+    ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {}

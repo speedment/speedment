@@ -49,7 +49,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     }
 
     @Override
-    public SqlPredicateFragment transform(SpeedmentPredicate<?, ?> model) {
+    public SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model) {
         return render(requireNonNull(model));
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
 
     }
 
-    protected SqlPredicateFragment render(SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment render(SpeedmentPredicate<?, ?, ?> model) {
         requireNonNull(model);
         final PredicateType pt = model.getEffectivePredicateType();
         final String cn = getOpeningFieldQuote() + model.getField().getColumnName() + getClosingFieldQuote();
@@ -119,11 +119,11 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
             case LESS_OR_EQUAL:
                 return lessOrEqual(cn, model);
 
-            case BETWEEN:   
+            case BETWEEN:
                 return between(cn, model);
             case NOT_BETWEEN:
                 return notBetween(cn, model);
-            case IN:    
+            case IN:
                 return in(cn, model);
             case NOT_IN:
                 return notIn(cn, model);
@@ -138,7 +138,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
             case NOT_STARTS_WITH:
                 return notStartsWith(cn, model);
 
-            case ENDS_WITH: 
+            case ENDS_WITH:
                 return endsWith(cn, model);
             case NOT_ENDS_WITH:
                 return notEndsWith(cn, model);
@@ -175,39 +175,39 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         return of("(" + cn + " IS NOT NULL)");
     }
 
-    protected SqlPredicateFragment equal(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment equal(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(" + cn + " = ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment notEqual(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(NOT (" + cn + " = ?))").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment greaterThan(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment greaterThan(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment greaterOrEqual(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment greaterOrEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment lessThan(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment lessThan(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment lessOrEqual(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment lessOrEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment between(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment between(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return betweenHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notBetween(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notBetween(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return betweenHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment betweenHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment betweenHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         final Inclusion inclusion = getThirdOperandAsInclusion(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
@@ -226,58 +226,58 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
-    protected SqlPredicateFragment in(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment in(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return inHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notIn(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notIn(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return inHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment inHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
+    protected SqlPredicateFragment inHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
         return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
     }
 
-    protected SqlPredicateFragment equalIgnoreCase(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment equalIgnoreCase(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return equalIgnoreCaseHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notEqualIgnoreCase(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notEqualIgnoreCase(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return equalIgnoreCaseHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment startsWith(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment startsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return startsWithHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notStartsWith(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notStartsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return startsWithHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment endsWith(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment endsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return endsWithHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notEndsWith(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notEndsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return endsWithHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment contains(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment contains(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return containsHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notContains(String cn, SpeedmentPredicate<?,?> model) {
+    protected SqlPredicateFragment notContains(String cn, SpeedmentPredicate<?, ?, ?> model) {
         return containsHelper(cn, model, true);
     }
 
-    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
+    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
+    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
+    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
+    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
     protected SqlPredicateFragment isEmpty(String cn) {
         return of("(" + cn + " = '')");

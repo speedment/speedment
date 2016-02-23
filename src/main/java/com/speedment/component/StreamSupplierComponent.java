@@ -47,8 +47,8 @@ public interface StreamSupplierComponent extends Component {
      */
     <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
 
-    default <ENTITY, V extends Comparable<? super V>>
-            Optional<ENTITY> findAny(Class<ENTITY> entityClass, ComparableField<ENTITY, V> field, V value) {
+    default <ENTITY, D, V extends Comparable<? super V>>
+            Optional<ENTITY> findAny(Class<ENTITY> entityClass, ComparableField<ENTITY, D, V> field, V value) {
         return stream(entityClass, StreamDecorator.IDENTITY)
                 .filter(field.equal(value))
                 .findAny();

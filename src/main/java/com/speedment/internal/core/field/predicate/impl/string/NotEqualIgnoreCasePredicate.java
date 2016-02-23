@@ -27,10 +27,10 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class NotEqualIgnoreCasePredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public class NotEqualIgnoreCasePredicate<ENTITY, D> extends BaseStringPredicate<ENTITY, D>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
-    public NotEqualIgnoreCasePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+    public NotEqualIgnoreCasePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField, String operand0) {
         super(NOT_EQUAL_IGNORE_CASE, field, referenceField, operand0, NOT_EQUALS_IGNORE_CASE_PREDICATE);
     }
 

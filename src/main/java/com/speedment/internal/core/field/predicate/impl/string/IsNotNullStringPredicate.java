@@ -28,10 +28,10 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNotNullStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public class IsNotNullStringPredicate<ENTITY, D> extends BaseStringPredicate<ENTITY, D>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
-    public IsNotNullStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+    public IsNotNullStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
         super(IS_NULL, field, referenceField, null, (o, f) -> f != null);
     }
 

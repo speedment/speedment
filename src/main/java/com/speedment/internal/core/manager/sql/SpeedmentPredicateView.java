@@ -24,7 +24,7 @@ import com.speedment.field.predicate.SpeedmentPredicate;
  */
 public interface SpeedmentPredicateView {
 
-    SqlPredicateFragment transform(SpeedmentPredicate<?, ?> model);
+    SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model);
 
     String getOpeningFieldQuote();
     

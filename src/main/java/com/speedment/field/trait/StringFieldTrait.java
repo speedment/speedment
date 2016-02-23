@@ -25,7 +25,7 @@ import com.speedment.field.predicate.StringSpeedmentPredicate;
  * @param <ENTITY> the entity type
  */
 @Api(version = "2.2")
-public interface StringFieldTrait<ENTITY> {
+public interface StringFieldTrait<ENTITY, D> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -39,7 +39,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> equalIgnoreCase(String value);
+    StringSpeedmentPredicate<ENTITY, D> equalIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -53,7 +53,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value);
+    StringSpeedmentPredicate<ENTITY, D> notEqualIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -66,7 +66,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> startsWith(String value);
+    StringSpeedmentPredicate<ENTITY, D> startsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -79,7 +79,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> endsWith(String value);
+    StringSpeedmentPredicate<ENTITY, D> endsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -92,7 +92,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> contains(String value);
+    StringSpeedmentPredicate<ENTITY, D> contains(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -104,7 +104,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY> isEmpty();
+    StringSpeedmentPredicate<ENTITY, D> isEmpty();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -116,5 +116,5 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY> isNotEmpty();
+    StringSpeedmentPredicate<ENTITY, D> isNotEmpty();
 }

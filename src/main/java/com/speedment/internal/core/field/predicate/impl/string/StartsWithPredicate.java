@@ -27,10 +27,10 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class StartsWithPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public class StartsWithPredicate<ENTITY, D> extends BaseStringPredicate<ENTITY, D>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
-    public StartsWithPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField, String operand0) {
+    public StartsWithPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField, String operand0) {
         super(STARTS_WITH, field, referenceField, operand0, STARTS_WITH_PREDICATE);
     }
 

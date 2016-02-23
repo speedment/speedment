@@ -55,8 +55,8 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     }
 
     @Override
-    public <ENTITY, V> SpeedmentPredicate<ENTITY, V> apply(SpeedmentPredicate<ENTITY, V> predicate) {
-        SpeedmentPredicate<ENTITY, V> s = predicate;
+    public <ENTITY, D, V> SpeedmentPredicate<ENTITY, D, V> apply(SpeedmentPredicate<ENTITY, D, V> predicate) {
+        SpeedmentPredicate<ENTITY, D, V> s = predicate;
 
         for (StreamDecorator sd : decorators) {
             s = sd.apply(s);

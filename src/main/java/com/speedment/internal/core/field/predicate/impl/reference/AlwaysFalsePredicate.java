@@ -29,9 +29,11 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
-public class AlwaysFalsePredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
+public class AlwaysFalsePredicate<ENTITY, D, V>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, UnaryOperation {
 
-    public AlwaysFalsePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*/) {
+    public AlwaysFalsePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(ALWAYS_TRUE, field, referenceField);
     }
 

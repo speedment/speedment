@@ -33,13 +33,17 @@ import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
-public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, V> {
+public abstract class SpeedmentPredicateImpl<ENTITY, D, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, D, V> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
     private final PredicateType predicateType;
 
-    protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*//*, Predicate<V> fieldPredicate*/) {
+    protected SpeedmentPredicateImpl(
+            PredicateType predicateType, 
+            FieldTrait field, 
+            ReferenceFieldTrait<ENTITY, D, V> referenceField
+    ) {
         this.predicateType = predicateType;
         this.field = field;
         this.referenceField = referenceField;
@@ -73,12 +77,12 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
     }
 
     @Override
-    public ReferenceFieldTrait<ENTITY, V> getReferenceField() {
+    public ReferenceFieldTrait<ENTITY, D, V> getReferenceField() {
         return referenceField;
     }
 
     @Override
-    public SpeedmentPredicateImpl<ENTITY, V> negate() {
+    public SpeedmentPredicateImpl<ENTITY, D, V> negate() {
         super.negate();
         return this;
     }

@@ -22,6 +22,7 @@
 package com.speedment.field.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
@@ -31,12 +32,13 @@ import com.speedment.field.predicate.SpeedmentPredicate;
  * Indicates that an extending interface is related to a reference field.
  *
  * @param <ENTITY> the entity type
+ * @param <D> the database value type
  * @param <V> the field value type
  *
  * @author pemi
  */
 @Api(version = "2.2")
-public interface ReferenceFieldTrait<ENTITY, V> {
+public interface ReferenceFieldTrait<ENTITY, D, V> {
 
     /**
      * Returns a reference to the setter for this field.
@@ -51,6 +53,13 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return the getter
      */
     Getter<ENTITY, V> getter();
+
+    /**
+     * Returns the type mapper of this field.
+     *
+     * @return type mapper
+     */
+    TypeMapper<D, V> typeMapper();
 
     /**
      * Gets the value form the Entity field.
@@ -88,7 +97,7 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is {@code null}
      */
-    SpeedmentPredicate<ENTITY, V> isNull();
+    SpeedmentPredicate<ENTITY, D, V> isNull();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -97,6 +106,6 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not</em> {@code null}
      */
-    SpeedmentPredicate<ENTITY, V> isNotNull();
+    SpeedmentPredicate<ENTITY, D, V> isNotNull();
 
 }

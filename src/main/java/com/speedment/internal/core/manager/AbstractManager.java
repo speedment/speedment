@@ -59,7 +59,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+    public <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value) {
         requireNonNull(field);
         return speedment.getStreamSupplierComponent()
                 .findAny(getEntityClass(), field, value);

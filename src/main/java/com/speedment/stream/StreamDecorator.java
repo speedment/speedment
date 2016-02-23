@@ -54,7 +54,7 @@ public interface StreamDecorator {
         return stream;
     }
 
-    default <ENTITY, V> SpeedmentPredicate<ENTITY, V> apply(SpeedmentPredicate<ENTITY, V> predicate) {
+    default <ENTITY, D, V> SpeedmentPredicate<ENTITY, D, V> apply(SpeedmentPredicate<ENTITY, D, V> predicate) {
         return predicate;
     }
 

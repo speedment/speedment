@@ -26,15 +26,15 @@ import java.util.function.Predicate;
  * @param <V> Value type
  */
 @Api(version = "2.2")
-public interface SpeedmentPredicate<ENTITY, V> extends
+public interface SpeedmentPredicate<ENTITY, D, V> extends
     HasGetter<ENTITY, V>,
     HasPredicateType,
     HasEffectivePredicateType,
     HasFieldTrait,
-    HasReferenceFieldTrait<ENTITY, V>,
+    HasReferenceFieldTrait<ENTITY, D, V>,
     HasNegated,
     Predicate<ENTITY> {
 
     @Override
-    SpeedmentPredicate<ENTITY, V> negate();
+    SpeedmentPredicate<ENTITY, D, V> negate();
 }

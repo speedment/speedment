@@ -30,9 +30,9 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
  * @param <FK> the foreign entity type
  */
 @Api(version = "2.2")
-public interface ComparableForeignKeyField<ENTITY, V extends Comparable<? super V>, FK> extends
+public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> extends
     FieldTrait,
-    ReferenceFieldTrait<ENTITY, V>,
-    ComparableFieldTrait<ENTITY, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK>
+    ReferenceFieldTrait<ENTITY, D, V>,
+    ComparableFieldTrait<ENTITY, D, V>,
+    ReferenceForeignKeyFieldTrait<ENTITY, D, FK>
 {}

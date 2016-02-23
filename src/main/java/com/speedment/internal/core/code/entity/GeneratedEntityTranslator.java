@@ -38,6 +38,7 @@ import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
+import com.speedment.internal.util.JavaLanguageNamer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,10 +111,13 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         file, tableOrThrow(), col, entity.getType(), javaLanguageNamer()
                     );
 
+                final String typeMapper      = col.getTypeMapper();
                 final Type entityType        = entity.getType();
                 final String shortEntityName = entity.getName();
+                final Type typeMapperType    = Type.of(typeMapper);
 
                 file.add(Import.of(entityType));
+                file.add(Import.of(typeMapperType));
 
                 final String getter, finder;
                 if (col.isNullable()) {
@@ -146,7 +150,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                                 + getter
                                 + setter
                                 + finder
-                                + ")"
+                                + ", new "
+                                + shortName(typeMapper)
+                                + "())"
                         ))
                         .set(Javadoc.of(
                                 "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "

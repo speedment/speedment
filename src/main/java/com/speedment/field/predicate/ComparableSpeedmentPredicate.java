@@ -22,9 +22,10 @@ import com.speedment.annotation.Api;
  *
  * @author pemi
  * @param <T> type that the Predicate shall operate on
+ * @param <D> database type
  * @param <V> field type
  */
 @Api(version = "2.2")
-public interface ComparableSpeedmentPredicate<T, V extends Comparable<? super V>> extends SpeedmentPredicate<T, V> {
+public interface ComparableSpeedmentPredicate<T, D, V extends Comparable<? super V>> extends SpeedmentPredicate<T, D, V> {
 
 }

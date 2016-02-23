@@ -28,9 +28,11 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class AlwaysTrueComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class AlwaysTrueComparablePredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends BaseComparablePredicate<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public AlwaysTrueComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+    public AlwaysTrueComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(ALWAYS_TRUE, field, referenceField, null, (a, b) -> true);
     }
 }

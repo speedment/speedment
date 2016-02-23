@@ -33,22 +33,22 @@ public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateVi
     // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
     
     @Override
-    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE '%' || ?)", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?> model, boolean negated) {
+    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
 

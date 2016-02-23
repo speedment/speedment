@@ -84,7 +84,7 @@ public final class SelectorImpl implements Selector {
      * @return the constructed {@link Selector}
      * @see BinaryPredicateBuilder
      */
-    public static <ENTITY, V extends Comparable<V>> Selector fromComparablePredicate(ComparableSpeedmentPredicate<ENTITY, V> predicate) {
+    public static <ENTITY, D, V extends Comparable<V>> Selector fromComparablePredicate(ComparableSpeedmentPredicate<ENTITY, D, V> predicate) {
 
         final PredicateType predicateType = predicate.getPredicateType();
         final FieldTrait field = predicate.getField();

@@ -17,6 +17,7 @@
 package com.speedment.internal.core.field.trait;
 
 import com.speedment.field.trait.FieldTrait;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -27,7 +28,7 @@ public class FieldTraitImpl implements FieldTrait {
     private final String columnName;
 
     public FieldTraitImpl(String columnName) {
-        this.columnName = columnName;
+        this.columnName = requireNonNull(columnName);
     }
 
     @Override

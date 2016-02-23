@@ -29,10 +29,10 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNotEmptyPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
-    implements SpeedmentPredicate<ENTITY, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY> {
+public class IsNotEmptyPredicate<ENTITY, D> extends SpeedmentPredicateImpl<ENTITY, D, String>
+        implements SpeedmentPredicate<ENTITY, D, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY, D> {
 
-    public IsNotEmptyPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+    public IsNotEmptyPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
         super(IS_NOT_EMPTY, field, referenceField);
     }
 

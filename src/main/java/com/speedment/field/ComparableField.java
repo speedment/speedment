@@ -30,8 +30,8 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * @param <V> the field value type
  */
 @Api(version = "2.2")
-public interface ComparableField<ENTITY, V extends Comparable<? super V>> extends
+public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends
     FieldTrait,
-    ReferenceFieldTrait<ENTITY, V>,
-    ComparableFieldTrait<ENTITY, V> {
+    ReferenceFieldTrait<ENTITY, D, V>,
+    ComparableFieldTrait<ENTITY, D, V> {
 }

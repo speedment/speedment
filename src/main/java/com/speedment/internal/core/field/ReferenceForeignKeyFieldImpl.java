@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.ReferenceForeignKeyField;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
@@ -29,6 +30,8 @@ import java.util.function.Predicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.util.NullUtil;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,21 +42,23 @@ import static java.util.Objects.requireNonNull;
  * @param <ENTITY> The entity type
  * @param <V> The value type
  */
-public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceForeignKeyField<ENTITY, V, FK> {
+public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements ReferenceForeignKeyField<ENTITY, D, V, FK> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
-    private final ReferenceForeignKeyFieldTrait<ENTITY, FK> referenceForeignKeyField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
+    private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ReferenceForeignKeyFieldImpl(
-        String columnName,
-        Getter<ENTITY, V> getter,
-        Setter<ENTITY, V> setter,
-        Finder<ENTITY, FK> finder
+            String columnName,
+            Getter<ENTITY, V> getter,
+            Setter<ENTITY, V> setter,
+            Finder<ENTITY, FK> finder,
+            TypeMapper<D, V> typeMapper
     ) {
-        field = new FieldTraitImpl(requireNonNull(columnName));
-        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
-        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
+        requireNonNulls(columnName, getter, setter, finder, typeMapper);
+        field = new FieldTraitImpl(columnName);
+        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
+        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
     }
 
     @Override
@@ -72,23 +77,28 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceFor
     }
 
     @Override
+    public Finder<ENTITY, FK> finder() {
+        return referenceForeignKeyField.finder();
+    }
+
+    @Override
+    public TypeMapper<D, V> typeMapper() {
+        return referenceField.typeMapper();
+    }
+
+    @Override
     public FieldSetter<ENTITY, V> setTo(V value) {
         return referenceField.setTo(value);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNotNull() {
         return referenceField.isNotNull();
-    }
-
-    @Override
-    public Finder<ENTITY, FK> finder() {
-        return referenceForeignKeyField.finder();
     }
 
 }

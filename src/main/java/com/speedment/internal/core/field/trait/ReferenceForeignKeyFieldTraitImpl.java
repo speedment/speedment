@@ -18,18 +18,19 @@ package com.speedment.internal.core.field.trait;
 
 import com.speedment.field.methods.Finder;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
  * @param <FK> the foreign entity type
  * @author pemi
  */
-public class ReferenceForeignKeyFieldTraitImpl<ENTITY, FK> implements ReferenceForeignKeyFieldTrait<ENTITY, FK> {
+public class ReferenceForeignKeyFieldTraitImpl<ENTITY, D, FK> implements ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {
 
     private final Finder<ENTITY, FK> finder;
 
     public ReferenceForeignKeyFieldTraitImpl(Finder<ENTITY, FK> finder) {
-        this.finder = finder;
+        this.finder = requireNonNull(finder);
     }
 
     @Override
