@@ -25,9 +25,11 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * A representation of an Entity field that is a reference type (eg Integer and
  * not int) and that is {@link Comparable}.
  *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <V> the field value type
+ * @author          pemi
+ * @author          Emil Forslund
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the field value type
  */
 @Api(version = "2.2")
 public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends

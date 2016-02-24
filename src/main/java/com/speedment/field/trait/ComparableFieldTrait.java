@@ -26,6 +26,7 @@ import java.util.Set;
  *
  * @author pemi, Emil Forslund
  * @param <ENTITY> the entity type
+ * @param <D> the database type
  * @param <V> the field value type
  */
 @Api(version = "2.2")
