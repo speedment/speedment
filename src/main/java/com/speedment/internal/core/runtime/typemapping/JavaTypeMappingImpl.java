@@ -32,7 +32,12 @@ public final class JavaTypeMappingImpl<T> implements JavaTypeMapping<T> {
     private final Function<String, T> stringMapper;
     private final Function<Long, T> longMapper;
 
-    public JavaTypeMappingImpl(Class<T> clazz, String resultSetMethodName, Function<String, T> stringMapper, Function<Long, T> longMapper) {
+    public JavaTypeMappingImpl(
+            Class<T> clazz, 
+            String resultSetMethodName, 
+            Function<String, T> stringMapper, 
+            Function<Long, T> longMapper
+    ) {
         this.clazz = requireNonNull(clazz);
         this.resultSetMethodName = requireNonNull(resultSetMethodName);
         this.stringMapper = requireNonNull(stringMapper);

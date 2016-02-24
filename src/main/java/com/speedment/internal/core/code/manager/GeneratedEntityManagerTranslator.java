@@ -54,37 +54,36 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, manager.getGeneratedName()).build()
-            .public_()
-            .add(Type.of(SqlManager.class).add(genericOfEntity))
-            .add(generatePrimaryKeyFor(file))
-            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                .add("return speedment()" +
-                    ".get(" + ProjectComponent.class.getSimpleName() +
-                    ".class).getProject().findTableByName(\"" + 
-                    relativeName(tableOrThrow(), Dbms.class) + "\");"
+                .public_()
+                .add(Type.of(SqlManager.class).add(genericOfEntity))
+                .add(generatePrimaryKeyFor(file))
+                .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+                .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+                        .add("return speedment()"
+                                + ".get(" + ProjectComponent.class.getSimpleName()
+                                + ".class).getProject().findTableByName(\""
+                                + relativeName(tableOrThrow(), Dbms.class) + "\");"
+                        )
                 )
-            )
-
-            .add(Method.of("getManagerClass", Type.of(Class.class).add(genericOfManager)).default_().add(OVERRIDE)
-                .add("return " + manager.getName() + ".class;"))
-            .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
-                .add("return " + entity.getName() + ".class;"))
-            .add(generateGet(file))
-            .add(generateSet(file));
+                .add(Method.of("getManagerClass", Type.of(Class.class).add(genericOfManager)).default_().add(OVERRIDE)
+                        .add("return " + manager.getName() + ".class;"))
+                .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
+                        .add("return " + entity.getName() + ".class;"))
+                .add(generateGet(file))
+                .add(generateSet(file));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-            .add(Field.of("entity", entity.getType()));
+                .add(Field.of("entity", entity.getType()));
 
         if (primaryKeyColumns().count() == 1) {
             method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
-                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+                    .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
+                    .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
 
@@ -94,34 +93,42 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     protected Method generateGet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("get", OBJECT).default_().add(OVERRIDE)
-            .add(Field.of("entity", entity.getType()))
-            .add(Field.of("column", Type.of(Column.class)))
-            .add("switch (column.getName()) " + block(
-                columns().map(c -> 
-                    "case \"" + c.getName() + 
-                    "\" : return entity." + GETTER_METHOD_PREFIX + typeName(c) + 
-                    "();"
-                ).collect(Collectors.joining(nl())) +
-                nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-            ));
+                .add(Field.of("entity", entity.getType()))
+                .add(Field.of("column", Type.of(Column.class)))
+                .add("switch (column.getName()) " + block(
+                        columns().map(c
+                                -> "case \"" + c.getName()
+                                + "\" : return entity." + getterCode(c)
+                                + ";"
+                        ).collect(Collectors.joining(nl()))
+                        + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+                ));
     }
 
     protected Method generateSet(File file) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         return Method.of("set", VOID).default_().add(OVERRIDE)
-            .add(Field.of("entity", entity.getType()))
-            .add(Field.of("column", Type.of(Column.class)))
-            .add(Field.of("value", Type.of(Object.class)))
-            .add("switch (column.getName()) " + block(
-                columns()
-                .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
-                .map(c -> 
-                    "case \"" + c.getName() + 
-                    "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + 
-                    "((" + c.findTypeMapper().getJavaType().getSimpleName() + 
-                    ") value); break;").collect(Collectors.joining(nl())) +
-                nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-            ));
+                .add(Field.of("entity", entity.getType()))
+                .add(Field.of("column", Type.of(Column.class)))
+                .add(Field.of("value", Type.of(Object.class)))
+                .add("switch (column.getName()) " + block(
+                        columns()
+                        .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
+                        .map(c
+                                -> "case \"" + c.getName()
+                                + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c)
+                                + "((" + c.findTypeMapper().getJavaType().getSimpleName()
+                                + ") value); break;").collect(Collectors.joining(nl()))
+                        + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+                ));
+    }
+
+    private String getterCode(Column c) {
+        if (c.isNullable()) {
+            return GETTER_METHOD_PREFIX + typeName(c) + "().orElse(null)";
+        } else {
+            return GETTER_METHOD_PREFIX + typeName(c) + "()";
+        }
     }
 
     @Override
@@ -133,7 +140,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     protected String getClassOrInterfaceName() {
         return manager.getGeneratedName();
     }
-    
+
     @Override
     public boolean isInGeneratedPackage() {
         return true;
