@@ -82,6 +82,8 @@ public final class ComponentsController implements Initializable {
             );
             setExpanded(true);
             setGraphic(SilkIcon.BOX.view());
+            
+            title.setText(session.getSpeedment().getUserInterfaceComponent().getBrand().title());
         }
     }
 

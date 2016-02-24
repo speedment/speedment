@@ -30,7 +30,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Speedment" textAlignment="CENTER" />
+        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" textAlignment="CENTER" />
         <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Components" />
         <TreeView fx:id="tree" VBox.vgrow="ALWAYS" />
         <HBox alignment="CENTER_RIGHT">
