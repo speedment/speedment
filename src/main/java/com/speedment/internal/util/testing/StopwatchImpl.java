@@ -101,7 +101,7 @@ public final class StopwatchImpl implements Stopwatch {
         final long nanos = elapsedNanos();
         final TimeUnit unit = timeUnitFor(nanos);
         final double value = (double) nanos / NANOSECONDS.convert(1, unit);
-        return String.format("%,.2g %s", value, unitShortText(unit));
+        return String.format("%,.2f %s", value, unitShortText(unit));
     }
 
     private static TimeUnit timeUnitFor(long nanos) {
