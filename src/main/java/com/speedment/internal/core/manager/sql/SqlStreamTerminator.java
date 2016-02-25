@@ -102,10 +102,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .collect(joining(" AND "))
         );
 
-//        @SuppressWarnings("rawtypes")
-//        final List<Object> values = fragments.stream()
-//            .flatMap(SqlPredicateFragment::objects)
-//            .collect(toList());
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
             @SuppressWarnings("unchecked")
