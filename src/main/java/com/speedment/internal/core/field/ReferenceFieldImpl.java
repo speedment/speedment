@@ -17,6 +17,7 @@
 package com.speedment.internal.core.field;
 
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceField;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
@@ -43,19 +44,19 @@ public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, 
     private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
 
     public ReferenceFieldImpl(
-            String columnName,
+            FieldIdentifier identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper
     ) {
-        requireNonNulls(columnName, getter, setter, typeMapper);
-        field = new FieldTraitImpl(columnName);
+        requireNonNulls(identifier, getter, setter, typeMapper);
+        field = new FieldTraitImpl(identifier);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier getIdentifier() {
+        return field.getIdentifier();
     }
 
     @Override

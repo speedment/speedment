@@ -25,16 +25,15 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import java.util.Set;
 import com.speedment.field.ComparableField;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static javafx.scene.input.KeyCode.D;
 
 /**
  * This class represents a Comparable Reference Field. A Reference Field is
@@ -52,21 +51,21 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     private final TypeMapper<D, V> typeMapper;
 
     public ComparableFieldImpl(
-            String columnName,
+            FieldIdentifier identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper
     ) {
-        requireNonNulls(columnName, getter, setter, typeMapper);
-        field = new FieldTraitImpl(columnName);
+        requireNonNulls(identifier, getter, setter, typeMapper);
+        field = new FieldTraitImpl(identifier);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         this.typeMapper = typeMapper;
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier getIdentifier() {
+        return field.getIdentifier();
     }
 
     @Override

@@ -17,13 +17,30 @@
 package com.speedment.field.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.FieldIdentifier;
 
 /**
- *
- * @author pemi
+ * A trait that every field implements.
+ * 
+ * @author Per Minborg
+ * @author Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface FieldTrait {
+    
+    /**
+     * Returns the unique identifier of this field.
+     * 
+     * @return  the identifier
+     */
+    FieldIdentifier getIdentifier();
 
-    String getColumnName();
+    /**
+     * Returns the database name of this field.
+     * 
+     * @return  the database name
+     */
+    default String getColumnName() {
+        return getIdentifier().columnName();
+    }
 }

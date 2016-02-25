@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
 import static java.util.Objects.requireNonNull;
 
@@ -25,20 +26,19 @@ import static java.util.Objects.requireNonNull;
  */
 public class FieldTraitImpl implements FieldTrait {
 
-    private final String columnName;
+    private final FieldIdentifier identifier;
 
-    public FieldTraitImpl(String columnName) {
-        this.columnName = requireNonNull(columnName);
+    public FieldTraitImpl(FieldIdentifier identifier) {
+        this.identifier = requireNonNull(identifier);
     }
 
     @Override
-    public String getColumnName() {
-        return columnName;
+    public FieldIdentifier getIdentifier() {
+        return identifier;
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {columnName: '" + getColumnName() + "'}";
     }
-
 }

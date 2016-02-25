@@ -17,6 +17,7 @@
 package com.speedment.internal.core.field;
 
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
 import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
@@ -36,7 +37,6 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.StringFieldTrait;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Comparable Reference Field. A Reference Field is
@@ -53,21 +53,21 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     private final StringFieldTrait<ENTITY, D> stringField;
 
     public StringFieldImpl(
-            String columnName,
+            FieldIdentifier identifier,
             Getter<ENTITY, String> getter,
             Setter<ENTITY, String> setter,
             TypeMapper<D, String> typeMapper
     ) {
-        requireNonNulls(columnName, getter, setter, typeMapper);
-        field = new FieldTraitImpl(columnName);
+        requireNonNulls(identifier, getter, setter, typeMapper);
+        field = new FieldTraitImpl(identifier);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         stringField = new StringFieldTraitImpl<>(field, referenceField);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier getIdentifier() {
+        return field.getIdentifier();
     }
 
     @Override

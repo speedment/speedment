@@ -18,6 +18,7 @@ package com.speedment.internal.core.field;
 
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.ComparableForeignKeyField;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
@@ -54,22 +55,22 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ComparableForeignKeyFieldImpl(
-            String columnName,
+            FieldIdentifier identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             Finder<ENTITY, FK> finder,
             TypeMapper<D, V> typeMapper
     ) {
-        requireNonNulls(columnName, getter, setter, finder, typeMapper);
-        field = new FieldTraitImpl(columnName);
+        requireNonNulls(identifier, getter, setter, finder, typeMapper);
+        field = new FieldTraitImpl(identifier);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier getIdentifier() {
+        return field.getIdentifier();
     }
 
     @Override

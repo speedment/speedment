@@ -17,6 +17,7 @@
 package com.speedment.internal.core.field;
 
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceForeignKeyField;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
@@ -26,13 +27,10 @@ import com.speedment.field.methods.Finder;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.function.Predicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.util.NullUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -49,21 +47,21 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ReferenceForeignKeyFieldImpl(
-            String columnName,
+            FieldIdentifier identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             Finder<ENTITY, FK> finder,
             TypeMapper<D, V> typeMapper
     ) {
-        requireNonNulls(columnName, getter, setter, finder, typeMapper);
-        field = new FieldTraitImpl(columnName);
+        requireNonNulls(identifier, getter, setter, finder, typeMapper);
+        field = new FieldTraitImpl(identifier);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier getIdentifier() {
+        return field.getIdentifier();
     }
 
     @Override

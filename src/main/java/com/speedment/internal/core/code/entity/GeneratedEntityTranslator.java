@@ -20,7 +20,11 @@ import com.speedment.Entity;
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Table;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.internal.codegen.base.Generator;
+import com.speedment.internal.codegen.lang.models.Constructor;
+import com.speedment.internal.codegen.lang.models.Enum;
+import com.speedment.internal.codegen.lang.models.EnumConstant;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Generic;
@@ -29,11 +33,14 @@ import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
+import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
+import com.speedment.internal.codegen.lang.models.values.TextValue;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
@@ -60,6 +67,17 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     @Override
     protected Interface makeCodeGenModel(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
+        final Enum identifier = Enum.of("Identifier")
+            .add(Field.of("columnName", STRING).private_().final_())
+            .add(Type.of(FieldIdentifier.class))
+            .add(Constructor.of()
+                .add(Field.of("columnName", STRING))
+                .add("this.columnName = columnName;")
+            )
+            .add(Method.of("columnName", STRING).public_()
+                .add(OVERRIDE)
+                .add("return this.columnName;")
+            );
 
         final Interface iface = newBuilder(file, entity.getGeneratedName())
             /*** Getters ***/
@@ -138,14 +156,17 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 }
                 final String setter = ", " + shortEntityName + "::set" + typeName(col);
 
+                final String constant = javaLanguageNamer().javaStaticFieldName(col.getJavaName());
+                identifier.add(EnumConstant.of(constant).add(new TextValue(col.getJavaName())));
+                
                 file.add(Import.of(ref.implType));
                 clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                         .final_()
                         .set(new ReferenceValue(
                                 "new " + shortName(ref.implType.getName())
-                                + "<>(\""
-                                + col.getJavaName()
-                                + "\", "
+                                + "<>(Identifier."
+                                + constant
+                                + ", "
                                 + getter
                                 + setter
                                 + finder
@@ -235,7 +256,10 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             })
             .build()
             .public_()
+            .add(identifier)
             .add(Type.of(Entity.class).add(Generic.of().add(entity.getType())));
+        
+        
 
         /*** Create aggregate streaming functions, if any ***/
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
