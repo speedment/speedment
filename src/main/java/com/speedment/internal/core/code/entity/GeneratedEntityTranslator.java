@@ -140,7 +140,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 file.add(Import.of(ref.implType));
                 clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)
-                        .public_().final_().static_()
+                        .final_()
                         .set(new ReferenceValue(
                                 "new " + shortName(ref.implType.getName())
                                 + "<>(\""
