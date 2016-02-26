@@ -85,7 +85,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     
     public StringBinding defaultPackageNameProperty() {
         return Bindings.createStringBinding(
-            () -> Project.DEFAULT_PACKAGE_LOCATION + getCompanyName(), 
+            () -> Project.DEFAULT_PACKAGE_NAME + getCompanyName(), 
             companyNameProperty()
         );
     }
