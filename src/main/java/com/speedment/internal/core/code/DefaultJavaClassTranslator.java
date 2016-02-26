@@ -169,24 +169,24 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
+        final String owner, message;
+        
         if (isInGeneratedPackage()) {
-            final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
-            return Javadoc.of(
-                getJavadocRepresentText() + 
-                " representing an entity (for example, a row) in the " + 
-                getDocument().mainInterface().getSimpleName() + 
-                " " + relativeName(getDocument(), Project.class) + 
-                "." + GENERATED_JAVADOC_MESSAGE
-            ).add(AUTHOR.setValue(owner));
+            owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+            message = GENERATED_JAVADOC_MESSAGE;
         } else {
-            return Javadoc.of(
-                getJavadocRepresentText() + 
-                " representing an entity (for example, a row) in the " + 
-                getDocument().mainInterface().getSimpleName() + 
-                " " + relativeName(getDocument(), Project.class) + 
-                "." + JAVADOC_MESSAGE
-            ).add(AUTHOR.setValue("Your Name")); // TODO: Enter name automatically?
+            owner = getSpeedment().getProjectComponent().getProject().getCompanyName();
+            message = JAVADOC_MESSAGE;
+            
         }
+        
+        return Javadoc.of(
+            getJavadocRepresentText() + 
+            " representing an entity (for example, a row) in the " + 
+            getDocument().mainInterface().getSimpleName() + 
+            " " + relativeName(getDocument(), Project.class) + 
+            "." + message
+        ).add(AUTHOR.setValue(owner));
     }
 
     @Override

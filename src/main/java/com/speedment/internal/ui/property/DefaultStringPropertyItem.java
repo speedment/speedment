@@ -90,7 +90,8 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
             this.auto         = new CheckBox("Auto");
             this.text         = new TextField();
             
-            final boolean isAutoByDefault = textProperty.isEmpty().get();
+            final boolean isAutoByDefault = textProperty.isEmpty().get()
+                || textProperty.get().equals(defaultValue.get());
             
             this.enteredValue = new SimpleStringProperty(textProperty.get());
             this.auto.selectedProperty().setValue(isAutoByDefault);

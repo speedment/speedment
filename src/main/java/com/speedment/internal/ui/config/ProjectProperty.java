@@ -36,6 +36,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -64,13 +65,29 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             .orElse(DEFAULT_PROJECT_NAME);
     }
     
+    public StringProperty companyNameProperty() {
+        return stringPropertyOf(COMPANY_NAME, Project.super::getCompanyName);
+    }
+    
+    @Override
+    public String getCompanyName() {
+        return getAsString(COMPANY_NAME).orElse(DEFAULT_COMPANY_NAME);
+    }
+    
     public StringProperty packageNameProperty() {
-        return stringPropertyOf(PACKAGE_NAME, Project.super::getPackageName);
+        return stringPropertyOf(PACKAGE_NAME, () -> Project.super.getPackageName().orElse(null));
     }
 
     @Override
-    public String getPackageName() {
-        return packageNameProperty().get();
+    public Optional<String> getPackageName() {
+        return Optional.ofNullable(packageNameProperty().get());
+    }
+    
+    public StringBinding defaultPackageNameProperty() {
+        return Bindings.createStringBinding(
+            () -> Project.DEFAULT_PACKAGE_LOCATION + getCompanyName(), 
+            companyNameProperty()
+        );
     }
 
     public StringProperty packageLocationProperty() {
@@ -121,9 +138,14 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
                 "Project Name", 
                 "The name that should be used for this project."
             ),
+            new StringPropertyItem(
+                companyNameProperty(), 
+                "Company Name", 
+                "The name that should be used for this project."
+            ),
             new DefaultStringPropertyItem(
                 packageNameProperty(),
-                new SimpleStringProperty(DEFAULT_PACKAGE_NAME),
+                defaultPackageNameProperty(),
                 "Package Name",
                 "The name of the package to place all generated files in. This should be a fully qualified java package name."
             ),

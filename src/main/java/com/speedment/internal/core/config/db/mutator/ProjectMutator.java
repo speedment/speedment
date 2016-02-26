@@ -17,6 +17,7 @@
 package com.speedment.internal.core.config.db.mutator;
 
 import com.speedment.config.db.*;
+import static com.speedment.config.db.Project.COMPANY_NAME;
 import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.DBMSES;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
@@ -37,6 +38,10 @@ public class ProjectMutator<DOC extends Project> extends DocumentMutatorImpl<DOC
 
     public ProjectMutator(DOC project) {
         super(project);
+    }
+    
+    public void setCompanyName(String companyName) {
+        put(COMPANY_NAME, companyName);
     }
     
     public void setPackageName(String packageName) {

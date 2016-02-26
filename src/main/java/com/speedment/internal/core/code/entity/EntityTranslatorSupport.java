@@ -78,7 +78,7 @@ public final class EntityTranslatorSupport {
         requireNonNull(javaLanguageNamer);
         final Project project = ancestor(table, Project.class).get();
 
-        return Type.of(project.getPackageName().toLowerCase() + DOT
+        return Type.of(project.findPackageName(javaLanguageNamer) + DOT
                 + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
                 + javaLanguageNamer.javaTypeName(table.getJavaName())
         );

@@ -25,6 +25,7 @@ import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.config.db.mutator.DocumentMutator;
 import com.speedment.internal.core.config.db.mutator.ProjectMutator;
+import com.speedment.internal.util.JavaLanguageNamer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -45,26 +46,40 @@ public interface Project extends
         HasMutator<ProjectMutator> {
 
     final String 
-            PACKAGE_NAME = "packageName",
+            COMPANY_NAME     = "companyName",
+            PACKAGE_NAME     = "packageName",
             PACKAGE_LOCATION = "packageLocation",
-            CONFIG_PATH = "configPath",
-            DBMSES = "dbmses";
+            CONFIG_PATH      = "configPath",
+            DBMSES           = "dbmses";
     
     final String 
-            DEFAULT_PACKAGE_NAME = "com.speedment.example",
+            DEFAULT_COMPANY_NAME     = "company",
+            DEFAULT_PACKAGE_NAME     = "com.",
             DEFAULT_PACKAGE_LOCATION = "src/main/java/",
-            DEFAULT_PROJECT_NAME = Project.class.getSimpleName();
+            DEFAULT_PROJECT_NAME     = Project.class.getSimpleName();
     
-           
+    /**
+     * Returns the name of the company that should be used in generated code.
+     * 
+     * @return  the name of the company generating code
+     */
+    default String getCompanyName() {
+        return getAsString(COMPANY_NAME).orElse(DEFAULT_COMPANY_NAME);
+    }
 
     /**
      * Returns the name of the generated package where this project will be
      * located.
      *
-     * @return the name of the generated package
+     * @return the name of the generated package or {@code empty}
      */
-    default String getPackageName() {
-        return getAsString(PACKAGE_NAME).orElse(DEFAULT_PACKAGE_NAME);
+    default Optional<String> getPackageName() {
+        return getAsString(PACKAGE_NAME);
+    }
+    
+    default String findPackageName(JavaLanguageNamer namer) {
+        return getPackageName()
+            .orElseGet(() -> DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()));
     }
 
     /**
@@ -94,27 +109,6 @@ public interface Project extends
      */
     Stream<? extends Dbms> dbmses();
 
-//    /**
-//     * Return a {@link Stream} of all dbmses that exists in this Project.
-//     *
-//     * @return a {@link Stream} of all dbmses that exists in this Project
-//     */
-//    default Stream<? extends Dbms> dbmses() {
-//        return children(DBMSES, dbmsConstructor());
-//    }
-//
-//    /**
-//     * Creates and adds a new {@link Dbms} as a child to this node in the
-//     * configuration tree.
-//     *
-//     * @return the newly added child
-//     */
-//    default Dbms addNewDbms() {
-//        return dbmsConstructor().apply(this, newDocument(this, DBMSES));
-//    }
-//
-//    BiFunction<Project, Map<String, Object>, ? extends Dbms> dbmsConstructor();
-
     @Override
     default Class<Project> mainInterface() {
         return Project.class;
@@ -142,8 +136,6 @@ public interface Project extends
      * @param fullName the full name of the table
      * @return the table found
      */
-    
-
     default Table findTableByName(String fullName) {
 
         final String[] parts = SPLIT_PATTERN.split(fullName);
@@ -171,5 +163,4 @@ public interface Project extends
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find table: '" + tableName + "'."));
     }
-
 }

@@ -22,14 +22,12 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentUtil;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -41,7 +39,8 @@ public final class ImmutableProject extends ImmutableDocument implements Project
 
     private final transient boolean enabled;
     private final transient String name;
-    private final transient String packageName;
+    private final transient String companyName;
+    private final transient Optional<String> packageName;
     private final transient String packageLocation;
     private final transient Optional<Path> configPath;
     
@@ -55,8 +54,9 @@ public final class ImmutableProject extends ImmutableDocument implements Project
 
         this.enabled         = prototype.isEnabled();
         this.name            = prototype.getName();
+        this.companyName     = prototype.getCompanyName();
         this.packageName     = prototype.getPackageName();
-        this.packageLocation = prototype.getPackageName();
+        this.packageLocation = prototype.getPackageLocation();
         this.configPath      = prototype.getConfigPath();
         
         this.dbmses = unmodifiableList(super.children(DBMSES, ImmutableDbms::new).collect(toList()));
@@ -78,7 +78,12 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     }
 
     @Override
-    public String getPackageName() {
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    @Override
+    public Optional<String> getPackageName() {
         return packageName;
     }
 

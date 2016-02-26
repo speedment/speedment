@@ -263,7 +263,7 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
      * @return the base package name in lowercase.
      */
     default String basePackageName() {
-        final String packName = projectOrThrow().getPackageName().toLowerCase() + ".";
+        final String packName = projectOrThrow().findPackageName(javaLanguageNamer()) + ".";
         if (getDocument() instanceof Project) {
             return packName + javaLanguageNamer().javaPackageName(projectOrThrow().getName());
         } else {
