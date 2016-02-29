@@ -55,6 +55,7 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
@@ -76,6 +77,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private final List<Tuple3<Class<? extends Document>, String, Consumer<? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
     private boolean checkDatabaseConnectivity;
+    private final List<Function<Speedment, Manager<?>>> customManagers;
 
     private ApplicationMetadata speedmentApplicationMetadata;
 
@@ -87,6 +89,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         withsNamed = newList();
         withsAll = newList();
         checkDatabaseConnectivity = true;
+        customManagers = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -307,6 +310,19 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         return self();
     }
 
+    /**
+     * Adds a custom manager constructor, being called before build to replace
+     * an existing manager.
+     *
+     * @param <C> the component type
+     * @param constructor to add
+     * @return this instance
+     */
+    public <C extends Component> T withManager(final Function<Speedment, Manager<?>> constructor) {
+        customManagers.add(constructor);
+        return self();
+    }
+
     @Override
     protected void onInit() {
         forEachManagerInSeparateThread(Manager::initialize);
@@ -376,7 +392,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         });
 
         speedment.getProjectComponent().setProject(project);
+    }
 
+    public void loadCustomManagers() {
+        customManagers.forEach(mc -> {
+            final Manager<?> manager = mc.apply(speedment);
+            speedment.getManagerComponent().put(manager);
+        });
     }
 
     protected <ENTITY> void applyAndPut(Function<Speedment, Manager<ENTITY>> constructor) {

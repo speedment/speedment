@@ -98,6 +98,8 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
                 }
 
             });
+        
+        onInit.add("loadCustomManagers();");
 
         return newBuilder(file, className)
             .build()
