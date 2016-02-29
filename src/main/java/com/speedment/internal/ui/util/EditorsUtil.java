@@ -28,14 +28,24 @@ import javafx.scene.control.PasswordField;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
+import javafx.scene.control.TextArea;
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
- *
+ * Utility methods for creating custom {@link PropertyEditor editors} for a 
+ * ControlsFX {@link PropertySheet}.
+ * 
  * @author Emil Forslund
  */
 public final class EditorsUtil {
     
+    /**
+     * Creates a {@link PropertyEditor} that uses a {@code PasswordField} as
+     * editor componenet.
+     * 
+     * @param item  the property sheet item to represent
+     * @return      the created property editor
+     */
     public static PropertyEditor<String> createPasswordEditor(PropertySheet.Item item) {
         return new AbstractPropertyEditor<String, PasswordField>(item, new PasswordField()) {
             
@@ -51,6 +61,36 @@ public final class EditorsUtil {
         };
     }
     
+    /**
+     * Creates a {@link PropertyEditor} that uses a {@code TextArea} as editor 
+     * componenet.
+     * 
+     * @param item  the property sheet item to represent
+     * @return      the created property editor
+     */
+    public static PropertyEditor<String> createTextAreaEditor(PropertySheet.Item item) {
+        return new AbstractPropertyEditor<String, TextArea>(item, new TextArea()) {
+            
+            @Override
+            protected ObservableValue<String> getObservableValue() {
+                return getEditor().textProperty();
+            }
+
+            @Override
+            public void setValue(String t) {
+                getEditor().textProperty().setValue(t);
+            }
+        };
+    }
+    
+    /**
+     * Creates a {@link PropertyEditor} that uses a {@code ChoiceBox} with a
+     * {@code Function<T, String>} as converter.
+     * componenet.
+     * 
+     * @param item  the property sheet item to represent
+     * @return      the created property editor
+     */
     public static <T> PropertyEditor<T> createChoiceEditorWithConverter(PropertySheet.Item item, List<T> alternatives, Function<T, String> converter) {
         final ObservableList<String> labels = observableArrayList(alternatives.stream().map(converter).collect(toList()));
         final ObservableList<T> observable = observableArrayList(alternatives);
@@ -73,6 +113,9 @@ public final class EditorsUtil {
         };
     }
     
+    /**
+     * This should never be called.
+     */
     private EditorsUtil() {
         instanceNotAllowed(getClass());
     }
