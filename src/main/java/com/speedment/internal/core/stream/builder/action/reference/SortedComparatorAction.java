@@ -18,6 +18,9 @@ package com.speedment.internal.core.stream.builder.action.reference;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SORTED;
+import com.speedment.internal.core.stream.builder.action.trait.HasComparator;
+import java.util.Comparator;
+import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
 /**
@@ -25,10 +28,18 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> the type of the stream elements
  */
-public final class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
+public final class SortedComparatorAction<T> extends Action<Stream<T>, Stream<T>> implements HasComparator<T> {
 
-    public SortedAction() {
-        super(s -> s.sorted(), Stream.class, SORTED);
+    public final Comparator<? super T> comparator;
+
+    public SortedComparatorAction(Comparator<? super T> comparator) {
+        super(s -> s.sorted(requireNonNull(comparator)), Stream.class, SORTED);
+        this.comparator = comparator;
+    }
+
+    @Override
+    public Comparator<? super T> getComparator() {
+        return comparator;
     }
 
 }

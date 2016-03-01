@@ -18,16 +18,25 @@ package com.speedment.internal.core.stream.builder.action.doubles;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.LIMIT;
+import com.speedment.internal.core.stream.builder.action.trait.HasLimit;
 import java.util.stream.DoubleStream;
 
 /**
  *
  * @author pemi
  */
-public final class DoubleLimitAction extends Action<DoubleStream, DoubleStream> {
+public final class DoubleLimitAction extends Action<DoubleStream, DoubleStream> implements HasLimit {
+
+    private final long limit;
 
     public DoubleLimitAction(long maxSize) {
         super(s -> s.limit(maxSize), DoubleStream.class, LIMIT);
+        this.limit = maxSize;
+    }
+
+    @Override
+    public long getLimit() {
+        return limit;
     }
 
 }

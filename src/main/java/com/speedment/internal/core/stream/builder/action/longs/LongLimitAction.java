@@ -18,16 +18,25 @@ package com.speedment.internal.core.stream.builder.action.longs;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.LIMIT;
+import com.speedment.internal.core.stream.builder.action.trait.HasLimit;
 import java.util.stream.LongStream;
 
 /**
  *
  * @author pemi
  */
-public final class LongLimitAction extends Action<LongStream, LongStream> {
+public final class LongLimitAction extends Action<LongStream, LongStream> implements HasLimit {
+
+    private final long limit;
 
     public LongLimitAction(long maxSize) {
         super(s -> s.limit(maxSize), LongStream.class, LIMIT);
+        this.limit = maxSize;
+    }
+
+    @Override
+    public long getLimit() {
+        return limit;
     }
 
 }

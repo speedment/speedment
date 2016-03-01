@@ -18,6 +18,7 @@ package com.speedment.internal.core.stream.builder.action.reference;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.LIMIT;
+import com.speedment.internal.core.stream.builder.action.trait.HasLimit;
 import java.util.stream.Stream;
 
 /**
@@ -25,10 +26,18 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> the type of the stream elements
  */
-public final class LimitAction<T> extends Action<Stream<T>, Stream<T>> {
+public final class LimitAction<T> extends Action<Stream<T>, Stream<T>> implements HasLimit {
+
+    private final long limit;
 
     public LimitAction(long maxSize) {
         super(s -> s.limit(maxSize), Stream.class, LIMIT);
+        this.limit = maxSize;
+    }
+
+    @Override
+    public long getLimit() {
+        return limit;
     }
 
 }

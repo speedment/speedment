@@ -18,6 +18,7 @@ package com.speedment.internal.core.stream.builder.action.reference;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SKIP;
+import com.speedment.internal.core.stream.builder.action.trait.HasSkip;
 import java.util.stream.Stream;
 
 /**
@@ -25,10 +26,18 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> the type of the stream elements
  */
-public final class SkipAction<T> extends Action<Stream<T>, Stream<T>> {
+public final class SkipAction<T> extends Action<Stream<T>, Stream<T>> implements HasSkip {
+
+    private final long skip;
 
     public SkipAction(long n) {
         super(s -> s.skip(n), Stream.class, SKIP);
+        this.skip = n;
+    }
+
+    @Override
+    public long getSkip() {
+        return skip;
     }
 
 }

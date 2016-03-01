@@ -32,6 +32,7 @@ import com.speedment.internal.core.stream.builder.action.reference.MapToLongActi
 import com.speedment.internal.core.stream.builder.action.reference.PeekAction;
 import com.speedment.internal.core.stream.builder.action.reference.SkipAction;
 import com.speedment.internal.core.stream.builder.action.reference.SortedAction;
+import com.speedment.internal.core.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -140,7 +141,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Stream<T> sorted(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return append(new SortedAction<>(comparator));
+        return append(new SortedComparatorAction<>(comparator));
     }
 
     @Override

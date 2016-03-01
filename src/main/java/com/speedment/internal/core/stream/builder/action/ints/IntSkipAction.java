@@ -18,16 +18,25 @@ package com.speedment.internal.core.stream.builder.action.ints;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SKIP;
+import com.speedment.internal.core.stream.builder.action.trait.HasSkip;
 import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
  */
-public final class IntSkipAction extends Action<IntStream, IntStream> {
+public final class IntSkipAction extends Action<IntStream, IntStream> implements HasSkip {
+
+    private final long skip;
 
     public IntSkipAction(long n) {
         super(s -> s.skip(n), IntStream.class, SKIP);
+        this.skip = n;
+    }
+
+    @Override
+    public long getSkip() {
+        return skip;
     }
 
 }

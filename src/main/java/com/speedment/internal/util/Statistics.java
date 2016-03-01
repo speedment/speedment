@@ -115,7 +115,9 @@ public final class Statistics {
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
                     }
-                    LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
+                    
+                    // Do not show...
+                    //LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
                 }
 
             } catch (IOException ex) {

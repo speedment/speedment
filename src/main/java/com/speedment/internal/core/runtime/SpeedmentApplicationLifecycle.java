@@ -337,6 +337,12 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     @Override
     protected void onStart() {
+        validateRuntimeConfig();
+        makeConfigImmutable();
+
+        if (checkDatabaseConnectivity) {
+            checkDatabaseConnectivity();
+        }
         forEachManagerInSeparateThread(Manager::start);
         forEachComponentInSeparateThread(Component::start);
     }
@@ -441,20 +447,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             start();
         }
 
-        validateRuntimeConfig();
-
-        // If a project has been set for the lifecycle, wrap it in an immutable
-        // for performance reasons.
-        final Project project = speedment.getProjectComponent().getProject();
-        if (project != null) {
-            final Project immutableProject = ImmutableProject.wrap(project);
-            speedment.getProjectComponent().setProject(immutableProject);
-        }
-
-        if (checkDatabaseConnectivity) {
-            checkDatabaseConnectivity();
-        }
-
         return speedment;
     }
 
@@ -522,6 +514,16 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             }
         });
 
+    }
+
+    protected void makeConfigImmutable() {
+        // If a project has been set for the lifecycle, wrap it in an immutable
+        // for performance reasons.
+        final Project project = speedment.getProjectComponent().getProject();
+        if (project != null) {
+            final Project immutableProject = ImmutableProject.wrap(project);
+            speedment.getProjectComponent().setProject(immutableProject);
+        }
     }
 
     protected void checkDatabaseConnectivity() {

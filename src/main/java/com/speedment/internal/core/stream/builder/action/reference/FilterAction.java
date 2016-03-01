@@ -18,6 +18,7 @@ package com.speedment.internal.core.stream.builder.action.reference;
 
 import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.FILTER;
+import com.speedment.internal.core.stream.builder.action.trait.HasPredicate;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> the type of the stream elements
  */
-public final class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
+public final class FilterAction<T> extends Action<Stream<T>, Stream<T>> implements HasPredicate<T> {
 
     private final Predicate<? super T> predicate;
 
@@ -36,6 +37,7 @@ public final class FilterAction<T> extends Action<Stream<T>, Stream<T>> {
         this.predicate = predicate;
     }
 
+    @Override
     public Predicate<? super T> getPredicate() {
         return predicate;
     }

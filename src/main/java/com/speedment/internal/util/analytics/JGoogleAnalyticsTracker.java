@@ -78,9 +78,10 @@ public final class JGoogleAnalyticsTracker {
     }
 
     private void logMessage(String message) {
-        if (loggingAdapter != null) {
-            loggingAdapter.logMessage(message);
-        }
+        // Do not show the logging messages
+//        if (loggingAdapter != null) {
+//            loggingAdapter.logMessage(message);
+//        }
     }
 
     private class TrackingThread extends Thread {
