@@ -162,14 +162,29 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return removeHelper(entity, Optional.of(listener));
     }
 
+    /**
+     * Short-cut for retreiving the current {@link Dbms}.
+     * 
+     * @return  the current dbms
+     */
     protected final Dbms getDbms() {
         return ancestor(getTable(), Dbms.class).get();
     }
 
+    /**
+     * Short-cut for retreiving the current {@link DbmsType}.
+     * 
+     * @return  the current dbms type
+     */
     protected final DbmsType getDbmsType() {
         return dbmsTypeOf(speedment, getDbms());
     }
 
+    /**
+     * Short-cut for retreiving the current {@link DbmsHandler}.
+     * 
+     * @return  the current dbms handler
+     */
     protected final DbmsHandler dbmsHandler() {
         return speedment.getDbmsHandlerComponent().get(getDbms());
     }
@@ -335,23 +350,17 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
             final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(sql);
-        requireNonNull(values);
-        requireNonNull(generatedKeyconsumer);
-        requireNonNull(listener);
+        requireNonNulls(entity, sql, values, generatedKeyconsumer, listener);
 
-        final SqlMetaResultImpl<ENTITY> meta;
-
-        if (listener.isPresent()) {
-            meta = new SqlMetaResultImpl<ENTITY>().setQuery(sql).setParameters(values);
-        } else {
-            meta = null;
-        }
+        final SqlMetaResultImpl<ENTITY> meta = listener.isPresent()
+            ? new SqlMetaResultImpl<ENTITY>()
+                .setQuery(sql)
+                .setParameters(values)
+            : null;
+        
         try {
             executeUpdate(entity, sql, values, generatedKeyconsumer);
-        } catch (SQLException sqle) {
-            //LOGGER.error("Unable to persist", sqle);
+        } catch (final SQLException sqle) {
             if (meta != null) {
                 meta.setThrowable(sqle);
             }
@@ -367,8 +376,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             final List<Object> values,
             final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
     ) throws SQLException {
-        //final ENTITY builder = toBuilder(entity);
         dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));
-        //return entity;
     }
 }
