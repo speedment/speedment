@@ -33,20 +33,8 @@ import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.Ref;
 import java.sql.ResultSet;
-import java.sql.RowId;
 import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -185,176 +173,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     protected final DbmsHandler dbmsHandler() {
         return speedment.getDbmsHandlerComponent().get(getDbms());
     }
-
-    // Null safe RS getters, must have the same name as ResultSet getters
-    protected Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getObject(columnName));
-    }
-
-    protected Boolean getBoolean(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBoolean(columnName));
-    }
-
-    protected Byte getByte(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getByte(columnName));
-    }
-
-    protected Short getShort(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getShort(columnName));
-    }
-
-    protected Integer getInt(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getInt(columnName));
-    }
-
-    protected Long getLong(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getLong(columnName));
-    }
-
-    protected Float getFloat(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getFloat(columnName));
-    }
-
-    protected Double getDouble(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDouble(columnName));
-    }
-
-    protected String getString(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getString(columnName));
-    }
-
-    protected Date getDate(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDate(columnName));
-    }
-
-    protected Time getTime(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTime(columnName));
-    }
-
-    protected Timestamp getTimestamp(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTimestamp(columnName));
-    }
-
-    protected BigDecimal getBigDecimal(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(columnName));
-    }
-
-    protected Blob getBlob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBlob(columnName));
-    }
-
-    protected Clob getClob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getClob(columnName));
-    }
-
-    protected Array getArray(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getArray(columnName));
-    }
-
-    protected Ref getRef(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRef(columnName));
-    }
-
-    protected URL getURL(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getURL(columnName));
-    }
-
-    protected RowId getRowId(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRowId(columnName));
-    }
-
-    protected NClob getNClob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getNClob(columnName));
-    }
-
-    protected SQLXML getSQLXML(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
-    }
-
-    // Null safe RS getters (int), must have the same name as ResultSet getters
-    protected Object getObject(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition));
-    }
-
-    protected Boolean getBoolean(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBoolean(ordinalPosition));
-    }
-
-    protected Byte getByte(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getByte(ordinalPosition));
-    }
-
-    protected Short getShort(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getShort(ordinalPosition));
-    }
-
-    protected Integer getInt(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getInt(ordinalPosition));
-    }
-
-    protected Long getLong(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getLong(ordinalPosition));
-    }
-
-    protected Float getFloat(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getFloat(ordinalPosition));
-    }
-
-    protected Double getDouble(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDouble(ordinalPosition));
-    }
-
-    protected String getString(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getString(ordinalPosition));
-    }
-
-    protected Date getDate(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDate(ordinalPosition));
-    }
-
-    protected Time getTime(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTime(ordinalPosition));
-    }
-
-    protected Timestamp getTimestamp(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTimestamp(ordinalPosition));
-    }
-
-    protected BigDecimal getBigDecimal(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(ordinalPosition));
-    }
-
-    protected Blob getBlob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBlob(ordinalPosition));
-    }
-
-    protected Clob getClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getClob(ordinalPosition));
-    }
-
-    protected Array getArray(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getArray(ordinalPosition));
-    }
-
-    protected Ref getRef(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRef(ordinalPosition));
-    }
-
-    protected URL getURL(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getURL(ordinalPosition));
-    }
-
-    protected RowId getRowId(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRowId(ordinalPosition));
-    }
-
-    protected NClob getNClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getNClob(ordinalPosition));
-    }
-
-    protected SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
-    }
     
     /**
      * Short-cut for retreiving the current {@link DatabaseNamingConvention}.
@@ -425,18 +243,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return naming().fullNameOf(getTable());
     }
 
-    private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
-        final T result = mapper.apply(rs);
-        if (rs.wasNull()) {
-            return null;
-        } else {
-            return result;
-        }
-
-    }
-
-    private final Function<ENTITY, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
-    };
+    private final Function<ENTITY, Consumer<List<Long>>> NOTHING = 
+        b -> l -> { /* Nothing to do for updates... */ };
 
     private Object toDatabaseType(Column column, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, column));

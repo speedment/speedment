@@ -27,13 +27,11 @@ import com.speedment.db.crud.Selective;
 import com.speedment.db.crud.Selector;
 import com.speedment.db.crud.Valued;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.joining;
 
@@ -44,45 +42,6 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class SqlWriter {
-
-//    /**
-//     * Prepares an SQL statement for the specified CRUD operation.
-//     *
-//     * @param con        the connection
-//     * @param operation  the CRUD operation
-//     * @return           the prepared statement
-//     */
-//    public static PreparedStatement prepare(Connection con, CrudOperation operation) {
-//        try {
-//            return con.prepareStatement(toSql(operation));
-//        } catch (SQLException ex) {
-//            throw new SpeedmentException("Failed to parse SQL string into a PreparedStatement.", ex);
-//        }
-//    }
-
-//    /**
-//     * Converts the specified CRUD operation to an SQL string. This is a shortcut for the four methods
-//     * <ul>
-//     *     <li>{@link #create(Create)}
-//     *     <li>{@link #read(Read)}
-//     *     <li>{@link #update(Update)}
-//     *     <li>{@link #delete(Delete)}
-//     * </ul>
-//     *
-//     * @param operation  the operation to convert into SQL
-//     * @return           the SQL string
-//     */
-//    public static String toSql(CrudOperation operation) {
-//        switch (operation.getType()) {
-//            case CREATE : return create((Create) operation);
-//            case READ   : return read((Read) operation);
-//            case UPDATE : return update((Update) operation);
-//            case DELETE : return delete((Delete) operation);
-//            default : throw new UnsupportedOperationException(
-//                "Unknown CRUD operation type '" + operation.getType().name() + "'."
-//            );
-//        }
-//    }
 
     /**
      * Creates an SQL query that represents the specified CRUD command.
@@ -112,55 +71,6 @@ public final class SqlWriter {
 
         return str.append(";").toString();
     }
-
-//    /**
-//     * Creates an SQL query that represents the specified CRUD command.
-//     *
-//     * @param read  the command to render
-//     * @return      the SQL query
-//     */
-//    public static String read(Read read) {
-//        return buildOperation(read)
-//            .append(buildSelection(read))
-//            .append(buildLimit(read))
-//            .append(";")
-//            .toString();
-//    }
-
-//    /**
-//     * Creates an SQL query that represents the specified CRUD command.
-//     * <p>
-//     * Values will not be written in plain text but replaced with '?' characters.
-//     * To get a list of values, call the {@link #values(Operation)} method.
-//     *
-//     * @param update  the command to render
-//     * @return        the SQL query
-//     */
-//    public static String update(Update update) {
-//        return buildOperation(update)
-//            .append(
-//                update.getValues().entrySet().stream()
-//                    .map(e -> formatColumnName(e.getKey()) + " = ?")
-//                    .collect(joining(", "))
-//            )
-//            .append(buildSelection(update))
-//            .append(buildLimit(update))
-//            .append(";").toString();
-//    }
-
-//    /**
-//     * Creates an SQL query that represents the specified CRUD command.
-//     *
-//     * @param delete  the command to render
-//     * @return        the SQL query
-//     */
-//    public static String delete(Delete delete) {
-//        return buildOperation(delete)
-//            .append(buildSelection(delete))
-//            .append(buildLimit(delete))
-//            .append(";")
-//            .toString();
-//    }
 
     /**
      * Returns a list of the values specified in the operation with the order preserved.
@@ -217,35 +127,6 @@ public final class SqlWriter {
 
     }
 
-//    /**
-//     * Builds the selection part of the sql query.
-//     *
-//     * @param selective  the operation
-//     * @return           the selection part
-//     */
-//    private static String buildSelection(Selective selective) {
-//        return selective.getSelectors()
-//            .map(sel ->
-//                formatColumnName(sel.getColumnName()) +
-//                formatComparableOperator(sel.getPredicateType())
-//            )
-//            .collect(joining(" AND ", " WHERE ", ""));
-//    }
-
-    /**
-     * Builds the limit part of the sql query.
-     *
-     * @param selective  the operation
-     * @return           the limit part
-     */
-    private static Optional<String> buildLimit(Selective selective) {
-        final long limit = selective.getLimit();
-
-        if (limit > 0 && limit != Long.MAX_VALUE) {
-            return Optional.of(" LIMIT " + limit);
-        } else return Optional.empty();
-    }
-
     /**
      * Returns the name of the specified table formatted as appropriate for use in an SQL query.
      *
@@ -255,88 +136,6 @@ public final class SqlWriter {
     private static String formatTableName(Table table) {
         return table.getName();
     }
-
-    /**
-     * Returns the name of the specified column formatted as appropriate for use in an SQL query.
-     *
-     * @param column  the column
-     * @return        the formatted column name
-     */
-    private static String formatColumnName(String column) {
-        return "`" + column + "`";
-    }
-    
-//    /**
-//     * Returns a string representation of the specified operator and operand 
-//     * formatted as appropriate in SQL.
-//     *
-//     * @param predicateType  the operator
-//     * @return          the formatted text
-//     */
-//    private static String formatUnaryOperator(PredicateType predicateType) {
-//        if (predicateType instanceof StandardUnaryOperator) {
-//            @SuppressWarnings("unchecked")
-//            final StandardUnaryOperator op = (StandardUnaryOperator) predicateType;
-//            
-//            switch (op) {
-//                case IS_NULL     : return " = NULL";
-//                case IS_NOT_NULL : return " <> NULL";
-//            }
-//        }
-//        
-//        throw new UnsupportedOperationException("Unknown unary operator '" + predicateType + "'.");
-//    }
-//    
-//    /**
-//     * Returns a string representation of the specified operator and operand 
-//     * formatted as appropriate in SQL.
-//     *
-//     * @param operator  the operator
-//     * @return          the formatted text
-//     */
-//    private static String formatComparableOperator(ComparableOperator operator) {
-//        if (operator instanceof StandardComparableOperator) {
-//            @SuppressWarnings("unchecked")
-//            final StandardComparableOperator op = (StandardComparableOperator) operator;
-//            
-//            switch (op) {
-//                case EQUAL            : return " = ?";
-//                case NOT_EQUAL        : return " <> ?";
-//                case LESS_THAN        : return " < ?";
-//                case LESS_OR_EQUAL    : return " <= ?";
-//                case GREATER_THAN     : return " > ?";
-//                case GREATER_OR_EQUAL : return " >= ?";
-//                default : throw new UnsupportedOperationException("Unknown comparable operator '" + op.name() + "'.");
-//            }
-//        }
-//        
-//        throw new UnsupportedOperationException("Unknown comparable operator '" + operator + "'.");
-//    }
-//    
-//    /**
-//     * Returns a string representation of the specified operator and operand 
-//     * formatted as appropriate in SQL.
-//     *
-//     * @param operator  the operator
-//     * @return          the formatted text
-//     */
-//    private static String formatStringOperator(StringOperator operator) {
-//        if (operator instanceof StandardStringOperator) {
-//            @SuppressWarnings("unchecked")
-//            final StandardStringOperator op = (StandardStringOperator) operator;
-//            
-//            switch (op) {
-//                case STARTS_WITH            : return " LIKE ?%";
-//                case ENDS_WITH              : return " LIKE %?";
-//                case CONTAINS               : return " LIKE %?%";
-//                case EQUAL_IGNORE_CASE      : return " = ?";
-//                case NOT_EQUAL_IGNORE_CASE  : return " <> ?";
-//                default : throw new UnsupportedOperationException("Unknown string operator '" + op.name() + "'.");
-//            }
-//        }
-//        
-//        throw new UnsupportedOperationException("Unknown string operator '" + operator + "'.");
-//    }
 
     /**
      * Utility classes should not be instantiated.

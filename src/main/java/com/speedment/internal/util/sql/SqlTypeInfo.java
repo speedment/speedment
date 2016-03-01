@@ -59,7 +59,6 @@ public final class SqlTypeInfo {
     }
 
     private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
-//    private static final Map<String, Integer> JAVA_SQL_TYPE_STRING_TO_INT_MAP = new HashMap<>();
 
     static {
         // Get all field in java.sql.Types using reflection
@@ -69,7 +68,6 @@ public final class SqlTypeInfo {
                 final String name = field.getName();
                 final Integer value = (Integer) field.get(null);
                 JAVA_SQL_TYPE_INT_TO_STRING_MAP.put(value, name);
-//                JAVA_SQL_TYPE_STRING_TO_INT_MAP.put(name, value);
             } catch (final IllegalAccessException e) {
                 throw new SpeedmentException(e);
             }
@@ -80,9 +78,6 @@ public final class SqlTypeInfo {
         return Optional.ofNullable(JAVA_SQL_TYPE_INT_TO_STRING_MAP.get(javaSqlTypeInt));
     }
 
-//    public Optional<Integer> typeIntegerFrom() {
-//        return Optional.ofNullable(JAVA_SQL_TYPE_STRING_TO_INT_MAP.get(sqlTypeName));
-//    }
     public String getSqlTypeName() {
         return sqlTypeName;
     }
