@@ -102,6 +102,7 @@
     -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
+    -fx-opacity: 1.0;
 }
 
 .text-field:focused, 
@@ -109,6 +110,17 @@
 .text-area:focused, 
 .text-area:hover {
     -fx-border-color: -fx-speedment-green;
+}
+
+.text-field:disabled,
+.text-area:disabled,
+.text-area:disabled > .content {
+    -fx-text-fill: #000;
+    -fx-opacity: 0.5;
+}
+
+.text-input > .scroll-pane:disabled { /* JavaFX bug workaround */
+    -fx-opacity: 1;
 }
 
 /*** Buttons ***/

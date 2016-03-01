@@ -44,14 +44,14 @@ public final class DocumentDbUtil {
     public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
         final String typeName = dbms.getTypeName();
         return speedment.getDbmsHandlerComponent().findByName(typeName)
-                .orElseThrow(() -> new SpeedmentException(
-                        "Unable to find the database type "
-                        + typeName
-                        + ". The installed types are: "
-                        + speedment.getDbmsHandlerComponent().supportedDbmsTypes()
-                                .map(DbmsType::getName)
-                                .collect(joining(", "))
-                ));
+            .orElseThrow(() -> new SpeedmentException(
+                "Unable to find the database type "
+                + typeName
+                + ". The installed types are: "
+                + speedment.getDbmsHandlerComponent().supportedDbmsTypes()
+                    .map(DbmsType::getName)
+                    .collect(joining(", "))
+            ));
     }
 
     public static Stream<? extends Document> traverseOver(Project project) {

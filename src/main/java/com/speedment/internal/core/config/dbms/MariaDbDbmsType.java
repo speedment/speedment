@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import java.util.function.Function;
-
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
@@ -32,7 +30,7 @@ public final class MariaDbDbmsType {
 
     private static final String QUOTE = "`";
 
-    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
+    private static final ConnectionUrlGenerator CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder()
                 .append("jdbc:mariadb://")
                 .append(dbms.getIpAddress().orElse(""));

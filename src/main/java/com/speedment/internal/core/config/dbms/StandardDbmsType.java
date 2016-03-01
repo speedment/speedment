@@ -27,8 +27,8 @@ import java.util.stream.Stream;
  */
 public final class StandardDbmsType {
 
-    private static final DbmsType MYSQL = MySqlDbmsType.INSTANCE;
-    private static final DbmsType MARIADB = MariaDbDbmsType.INSTANCE;
+    private static final DbmsType MYSQL    = MySqlDbmsType.INSTANCE;
+    private static final DbmsType MARIADB  = MariaDbDbmsType.INSTANCE;
     private static final DbmsType POSTGRES = PostgresDbmsType.INSTANCE;
 
     private final static List<DbmsType> STANDARD_TYPES = Stream.of(

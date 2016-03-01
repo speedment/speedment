@@ -24,16 +24,21 @@ import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -76,6 +81,25 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     @Override
     public OptionalInt getPort() {
         return OptionalUtil.ofNullable(portProperty().get());
+    }
+    
+    public StringProperty connectionUrlProperty() {
+        return stringPropertyOf(CONNECTION_URL,  () -> Dbms.super.getConnectionUrl().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getConnectionUrl() {
+        return Optional.ofNullable(connectionUrlProperty().get());
+    }
+
+    public StringBinding defaultConnectionUrlProperty(Speedment speedment) throws SpeedmentException {
+        return Bindings.createStringBinding(() -> 
+            Dbms.super.defaultConnectionUrl(speedment), 
+            typeNameProperty(),
+            ipAddressProperty(),
+            portProperty(),
+            usernameProperty()
+        );
     }
 
     public StringProperty usernameProperty() {
@@ -124,6 +148,14 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                     new SimpleStringProperty("root"),
                     "Username",                  
                     "The username to use when connecting to the database."
+                ),
+                new DefaultTextAreaPropertyItem(
+                    connectionUrlProperty(),
+                    defaultConnectionUrlProperty(speedment),
+                    "Connection URL",                  
+                    "The connection URL that should be used when establishing " +
+                    "connection with the database. If this is set to Auto, the " +
+                    "DbmsType will generate one."
                 )
             )
         ).flatMap(s -> s);

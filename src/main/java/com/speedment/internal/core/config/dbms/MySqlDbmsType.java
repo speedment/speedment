@@ -16,13 +16,12 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 
-import java.util.function.Function;
 
 /**
  *
@@ -32,7 +31,7 @@ public final class MySqlDbmsType {
 
     private static final String QUOTE = "`";
 
-    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
+    private static final ConnectionUrlGenerator CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder()
                 .append("jdbc:mysql://")
                 .append(dbms.getIpAddress().orElse(""));

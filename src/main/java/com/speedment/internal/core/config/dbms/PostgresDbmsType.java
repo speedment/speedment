@@ -19,11 +19,10 @@ package com.speedment.internal.core.config.dbms;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
@@ -36,7 +35,7 @@ public final class PostgresDbmsType {
 
     private static final String QUOTE = "\"";
 
-    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
+    private static final ConnectionUrlGenerator CONNECTION_URL_GENERATOR = dbms -> {
         final StringBuilder result = new StringBuilder()
                 .append("jdbc:postgresql://")
                 .append(dbms.getIpAddress().orElse(""));

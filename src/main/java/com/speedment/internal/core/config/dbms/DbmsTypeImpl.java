@@ -19,6 +19,7 @@ package com.speedment.internal.core.config.dbms;
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
@@ -49,7 +50,7 @@ public final class DbmsTypeImpl implements DbmsType {
     private final Set<String> schemaExcludeSet;
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
     private final String resultSetTableSchema;
-    private final Function<Dbms, String> connectionUrlGenerator;
+    private final ConnectionUrlGenerator connectionUrlGenerator;
     private final Set<SqlTypeInfo> dataTypes;
     private final SpeedmentPredicateView speedmentPredicateView;
     private final String defaultDbmsName;
@@ -67,7 +68,7 @@ public final class DbmsTypeImpl implements DbmsType {
             final Set<String> schemaExcludeSet,
             final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
             final String resultSetTableSchema,
-            final Function<Dbms, String> connectionUrlGenerator,
+            final ConnectionUrlGenerator connectionUrlGenerator,
             final Set<SqlTypeInfo> dataTypes,
             final SpeedmentPredicateView speedmentPredicateView,
             final String defaultDbmsName,
@@ -193,7 +194,7 @@ public final class DbmsTypeImpl implements DbmsType {
     }
 
     @Override
-    public Function<Dbms, String> getConnectionUrlGenerator() {
+    public ConnectionUrlGenerator getConnectionUrlGenerator() {
         return connectionUrlGenerator;
     }
 
@@ -234,7 +235,7 @@ public final class DbmsTypeImpl implements DbmsType {
         private String fieldEncloserStart;
         private String fieldEncloserEnd;
         private BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
-        private Function<Dbms, String> connectionUrlGenerator;
+        private ConnectionUrlGenerator connectionUrlGenerator;
         private SpeedmentPredicateView speedmentPredicateView;
         // Optionals
         private String resultSetTableSchema;
@@ -302,7 +303,7 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
-        public WithSpeedmentPredicateView withConnectionUrlGenerator(Function<Dbms, String> connectionUrlGenerator) {
+        public WithSpeedmentPredicateView withConnectionUrlGenerator(ConnectionUrlGenerator connectionUrlGenerator) {
             this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
             return this;
         }
@@ -495,7 +496,7 @@ public final class DbmsTypeImpl implements DbmsType {
          * @param generator to be used when constructing connector strings.
          * @return a builder
          */
-        WithSpeedmentPredicateView withConnectionUrlGenerator(Function<Dbms, String> generator);
+        WithSpeedmentPredicateView withConnectionUrlGenerator(ConnectionUrlGenerator generator);
     }
 
     public interface WithSpeedmentPredicateView {
