@@ -51,6 +51,7 @@ import java.util.stream.Stream;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
+import com.speedment.internal.util.sql.ResultSetUtil;
 
 /**
  *
@@ -69,7 +70,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     @Override
     protected Class makeCodeGenModel(File file) {
-
+        file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
         return newBuilder(file, manager.getGeneratedImplName())
                 //            .forEveryColumn((clazz, col) -> {
                 //
@@ -155,10 +156,10 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         columns().forEachOrdered(c -> {
 
             final JavaTypeMapping<?> mapping = mapperComponent
-                .apply(
-                    dbmsTypeOf(speedment, dbmsOrThrow()), 
-                    c.findTypeMapper().getDatabaseType()
-                );
+                    .apply(
+                            dbmsTypeOf(speedment, dbmsOrThrow()),
+                            c.findTypeMapper().getDatabaseType()
+                    );
             final StringBuilder sb = new StringBuilder()
                     .append("entity.set")
                     .append(typeName(c))
