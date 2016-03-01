@@ -37,6 +37,7 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.stream.StreamDecorator;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -96,8 +97,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .map(spv::transform)
                 .collect(toList());
         
-        final String sql = manager.sqlSelect(" where "
-                + fragments.stream()
+        final String sql = manager.sqlSelect(" where " +
+            fragments.stream()
                 .map(SqlPredicateFragment::getSql)
                 .collect(joining(" AND "))
         );
@@ -148,19 +149,24 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     private static final Predicate<Action<?, ?>> CHECK_RETAIN_SIZE = action -> action.is(PRESERVE, SIZE);
 
     /**
-     * Optimizer for count operations!
+     * Optimizer for count operations.
      *
-     * @param pipeline
-     * @param fallbackSupplier
+     * @param pipeline          the pipeline
+     * @param fallbackSupplier  a fallback supplier should every item be size
+     *                          retaining
      * @return the number of rows
      */
     private long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
-        requireNonNull(pipeline);
-        requireNonNull(fallbackSupplier);
+        requireNonNulls(pipeline, fallbackSupplier);
+        
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            final String sql = "select count(*) from " + manager.sqlTableReference();
-            return manager.synchronousStreamOf(sql, Collections.emptyList(), rs -> rs.getLong(1)).findAny().get();
+            return manager.synchronousStreamOf(
+                manager.sqlCount(), 
+                Collections.emptyList(), 
+                rs -> rs.getLong(1)
+            ).findAny().get();
         }
+        
         return fallbackSupplier.getAsLong();
     }
     

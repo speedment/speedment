@@ -121,25 +121,6 @@ public interface Dbms extends
     }
     
     /**
-     * Determines the connection URL to use for this {@code Dbms} by first:
-     * <ol>
-     *      <li>checking if the {@code CONNECTION_URL} property is set;
-     *      <li>otherwise, calculate it using the {@link DbmsType}.
-     * </ol>
-     * If the current {@link DbmsType} can not be found by calling 
-     * {@link DocumentDbUtil#dbmsTypeOf(Speedment, Dbms)}, a 
-     * {@code SpeedmentException} will be thrown.
-     * 
-     * @param speedment            the speedment instance
-     * @return                     the connection URL to use
-     * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
-     */
-    default String findConnectionUrl(Speedment speedment) throws SpeedmentException {
-        return getConnectionUrl()
-            .orElseGet(() -> defaultConnectionUrl(speedment));
-    }
-    
-    /**
      * Returns the database username to use when connecting to the dbms. If no
      * username is specified, {@code empty} is returned.
      *
@@ -156,7 +137,6 @@ public interface Dbms extends
      */
     Stream<? extends Schema> schemas();
 
-   
     @Override
     default Class<Dbms> mainInterface() {
         return Dbms.class;

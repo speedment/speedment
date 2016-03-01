@@ -17,6 +17,7 @@ package com.speedment.internal.core.db;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.Column;
+import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.db.DatabaseNamingConvention;
@@ -31,19 +32,24 @@ import java.util.Set;
  */
 public abstract class AbstractDatabaseNamingConvention 
     implements DatabaseNamingConvention {
+    
+    @Override
+    public String fullNameOf(PrimaryKeyColumn pkc) {
+        return encloseField(pkc.getName());
+    }
 
     @Override
     public String fullNameOf(Column column) {
-        return column.getParent().map(Table::getName)
-            .orElseThrow(() -> noParentException(column))
-            + "." + column.getName();
+        return encloseField(column.getParent().map(Table::getName)
+            .orElseThrow(() -> noParentException(column)))
+            + "." + encloseField(column.getName());
     }
 
     @Override
     public String fullNameOf(Table table) {
-        return table.getParent().map(Schema::getName)
-            .orElseThrow(() -> noParentException(table))
-            + "." + table.getName();
+        return encloseField(table.getParent().map(Schema::getName)
+            .orElseThrow(() -> noParentException(table)))
+            + "." + encloseField(table.getName());
     }
 
     @Override

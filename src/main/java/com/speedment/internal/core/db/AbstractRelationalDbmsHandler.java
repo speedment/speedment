@@ -56,6 +56,7 @@ import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
@@ -90,7 +91,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     // Todo: Use DataSource instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
     public Connection getConnection() {
-        final String url = dbms.findConnectionUrl(speedment);
+        final String url = DocumentDbUtil.findConnectionUrl(speedment, dbms);
         final String user = unwrap(dbms.getUsername());
         final char[] password = unwrap(speedment.getPasswordComponent().get(dbms));
         

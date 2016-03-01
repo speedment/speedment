@@ -182,6 +182,27 @@ public final class DocumentDbUtil {
             table.foreignKeys().map(Document.class::cast)
         );
     }
+    
+    /**
+     * Determines the connection URL to use for the specified {@code Dbms} by 
+     * first:
+     * <ol>
+     *      <li>checking if the {@code CONNECTION_URL} property is set;
+     *      <li>otherwise, calculate it using the {@link DbmsType}.
+     * </ol>
+     * If the {@link DbmsType} can not be found by calling 
+     * {@link DocumentDbUtil#dbmsTypeOf(Speedment, Dbms)}, a 
+     * {@code SpeedmentException} will be thrown.
+     * 
+     * @param speedment            the speedment instance
+     * @param dbms                 the database manager
+     * @return                     the connection URL to use
+     * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
+     */
+    public static String findConnectionUrl(Speedment speedment, Dbms dbms) throws SpeedmentException {
+        return dbms.getConnectionUrl()
+            .orElseGet(() -> dbms.defaultConnectionUrl(speedment));
+    }
 
     /**
      * Utility classes should not be instantiated.

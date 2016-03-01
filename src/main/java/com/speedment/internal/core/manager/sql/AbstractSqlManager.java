@@ -19,8 +19,6 @@ package com.speedment.internal.core.manager.sql;
 import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
-import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.manager.AbstractManager;
@@ -63,7 +61,6 @@ import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -77,7 +74,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private final LazyString sqlColumnList;
     private final LazyString sqlColumnListQuestionMarks;
-    private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
     private SqlFunction<ResultSet, ENTITY> entityMapper;
 
     protected AbstractSqlManager(Speedment speedment) {
@@ -104,36 +100,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
-    public String sqlColumnList() {
-        return sqlColumnList.getOrCompute(columnListSupplier);
-    }
-
-    private final Supplier<String> columnListWithQuestionMarkSupplier = () -> sqlColumnList(c -> "?");
-    
-    public String sqlColumnListWithQuestionMarks() {
-        return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
-    }
-
-    private String sqlColumnList(Function<String, String> postMapper) {
-        requireNonNull(postMapper);
-        return getTable().columns()
-                .map(Column::getName)
-                .map(this::quoteField)
-                .map(postMapper)
-                .collect(Collectors.joining(","));
-    }
-
-    public String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
-        requireNonNull(postMapper);
-        return getTable().primaryKeyColumns()
-                .map(PrimaryKeyColumn::getName)
-                .map(this::quoteField)
-                .map(postMapper)
-                .collect(Collectors.joining(" AND "));
-    }
-
-    public String sqlTableReference() {
-        return relativeName(getTable(), Schema.class, this::quoteField);
+    /**
+     * Returns a SQL statement string that counts the number of rows in the
+     * current table.
+     * 
+     * @return  the count SQL statement
+     */
+    public String sqlCount() {
+        return "select count(*) from " + sqlTableReference();
     }
 
     public String sqlSelect(String suffix) {
@@ -372,8 +346,73 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
     }
     
-    private String quoteField(final String s) {
-        return getDbmsType().getDatabaseNamingConvention().encloseField(s);
+    /**
+     * Short-cut for retreiving the current {@link DatabaseNamingConvention}.
+     * 
+     * @return  the current naming convention
+     */
+    private DatabaseNamingConvention naming() {
+        return getDbmsType().getDatabaseNamingConvention();
+    }
+    
+    /**
+     * Returns a comma separated list of column names, fully formatted in 
+     * accordance to the current {@link DbmsType}.
+     * 
+     * @return  the comma separated column list
+     */
+    private String sqlColumnList() {
+        return sqlColumnList.getOrCompute(() -> sqlColumnList(c -> c));
+    }
+
+    /**
+     * Returns a comma separated list of question marks (?), fully formatted in 
+     * accordance to the current {@link DbmsType} to represent column value
+     * wildcards.
+     * 
+     * @return  the comma separated question mark list
+     */
+    private String sqlColumnListWithQuestionMarks() {
+        return sqlColumnListQuestionMarks.getOrCompute(() -> sqlColumnList(c -> "?"));
+    }
+    
+    /**
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database 
+     * names, formatted in accordance to the current {@link DbmsType}.
+     * 
+     * @return  list of fully quoted primary key column names
+     */
+    private String sqlColumnList(Function<String, String> postMapper) {
+        requireNonNull(postMapper);
+        return getTable().columns()
+                .map(naming()::fullNameOf)
+                .map(postMapper)
+                .collect(Collectors.joining(","));
+    }
+
+    /**
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database 
+     * names, formatted in accordance to the current {@link DbmsType}.
+     * 
+     * @return  list of fully quoted primary key column names
+     */
+    private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
+        requireNonNull(postMapper);
+        return getTable().primaryKeyColumns()
+                .map(naming()::fullNameOf)
+                .map(postMapper)
+                .collect(Collectors.joining(" AND "));
+    }
+
+    /**
+     * Returns the full name of a table formatted in accordance to the current
+     * {@link DbmsType}. The returned value will be within quotes if that is
+     * what the database expects.
+     * 
+     * @return  the full quoted table name
+     */
+    private String sqlTableReference() {
+        return naming().fullNameOf(getTable());
     }
 
     private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {

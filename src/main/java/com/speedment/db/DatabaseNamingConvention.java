@@ -17,6 +17,7 @@ package com.speedment.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Column;
+import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import java.util.Set;
 
@@ -28,6 +29,17 @@ import java.util.Set;
  */
 @Api(version="2.3")
 public interface DatabaseNamingConvention {
+    
+    /**
+     * Returns the full name used in the database for the specified 
+     * {@link PrimaryKeyColumn}. This is typically constructed by combining the 
+     * table and the column name with a separator, but that might be different 
+     * in different implementations.
+     * 
+     * @param pkc  the primary key column to retreive the name of
+     * @return     the full name
+     */
+    String fullNameOf(PrimaryKeyColumn pkc);
     
     /**
      * Returns the full name used in the database for the specified 
