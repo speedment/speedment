@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
 
@@ -25,9 +26,9 @@ import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
  */
 @SuppressWarnings("rawtypes")
 public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
-
-    public MySqlSpeedmentPredicateView(String openingFieldQuote, String closingFieldQuote) {
-        super(openingFieldQuote, closingFieldQuote);
+    
+    public MySqlSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
+        super(namingConvention);
     }
 
     @Override

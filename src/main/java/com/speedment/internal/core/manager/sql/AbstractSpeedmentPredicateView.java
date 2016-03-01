@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.PredicateType;
 import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
@@ -39,61 +40,30 @@ import static java.util.stream.Collectors.joining;
  * @author pemi
  */
 public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
-
-    private final String openingFieldQuote;
-    private final String closingFieldQuote;
-
-    public AbstractSpeedmentPredicateView(String openingFieldQuote, String closingFieldQuote) {
-        this.openingFieldQuote = openingFieldQuote;
-        this.closingFieldQuote = closingFieldQuote;
+    
+    private final DatabaseNamingConvention namingConvention;
+    
+    protected AbstractSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
+        this.namingConvention = requireNonNull(namingConvention);
     }
+    
+    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
     @Override
     public SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model) {
         return render(requireNonNull(model));
     }
 
-    public static SqlPredicateFragment of(String sql) {
-        return SqlPredicateFragment.of(sql);
-    }
-
-    public static SqlPredicateFragment of(String sql, Object object) {
-        return SqlPredicateFragment.of(sql, object);
-    }
-
-    public static SqlPredicateFragment of(String sql, Collection<Object> objects) {
-        return SqlPredicateFragment.of(sql, objects);
-    }
-
-    public static SqlPredicateFragment of(String sql, boolean negated) {
-        if (negated) {
-            return of("(NOT(" + sql + "))");
-        } else {
-            return of(sql);
-        }
-    }
-
-    public static SqlPredicateFragment of(String sql, Object object, boolean negated) {
-        if (negated) {
-            return of("(NOT(" + sql + "))", object);
-        } else {
-            return of(sql, object);
-        }
-    }
-
-    public static SqlPredicateFragment of(String sql, Collection<Object> objects, boolean negated) {
-        if (negated) {
-            return of("(NOT(" + sql + "))", objects);
-        } else {
-            return of(sql, objects);
-        }
-
-    }
-
     protected SqlPredicateFragment render(SpeedmentPredicate<?, ?, ?> model) {
-        requireNonNull(model);
         final PredicateType pt = model.getEffectivePredicateType();
-        final String cn = getOpeningFieldQuote() + model.getField().getColumnName() + getClosingFieldQuote();
+        
+        final String cn = namingConvention.quoteField(model.getField().getColumnName());
         switch (pt) {
             // Constants
             case ALWAYS_TRUE:
@@ -154,7 +124,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
                 return isNotEmpty(cn);
             default:
                 throw new UnsupportedOperationException(
-                        "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getColumnName()
+                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getColumnName()
                 );
         }
     }
@@ -271,14 +241,6 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         return containsHelper(cn, model, true);
     }
 
-    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
-
     protected SqlPredicateFragment isEmpty(String cn) {
         return of("(" + cn + " = '')");
     }
@@ -286,15 +248,41 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     protected SqlPredicateFragment isNotEmpty(String cn) {
         return of("(" + cn + " <> '')");
     }
-
-    @Override
-    public String getOpeningFieldQuote() {
-        return openingFieldQuote;
+    
+    public static SqlPredicateFragment of(String sql) {
+        return SqlPredicateFragment.of(sql);
     }
 
-    @Override
-    public String getClosingFieldQuote() {
-        return closingFieldQuote;
+    public static SqlPredicateFragment of(String sql, Object object) {
+        return SqlPredicateFragment.of(sql, object);
     }
 
+    public static SqlPredicateFragment of(String sql, Collection<Object> objects) {
+        return SqlPredicateFragment.of(sql, objects);
+    }
+
+    public static SqlPredicateFragment of(String sql, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))");
+        } else {
+            return of(sql);
+        }
+    }
+
+    public static SqlPredicateFragment of(String sql, Object object, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))", object);
+        } else {
+            return of(sql, object);
+        }
+    }
+
+    public static SqlPredicateFragment of(String sql, Collection<Object> objects, boolean negated) {
+        if (negated) {
+            return of("(NOT(" + sql + "))", objects);
+        } else {
+            return of(sql, objects);
+        }
+
+    }
 }

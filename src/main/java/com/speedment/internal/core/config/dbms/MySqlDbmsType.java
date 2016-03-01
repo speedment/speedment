@@ -16,46 +16,100 @@
  */
 package com.speedment.internal.core.config.dbms;
 
+import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.ConnectionUrlGenerator;
+import com.speedment.db.DatabaseNamingConvention;
+import com.speedment.internal.core.db.AbstractDatabaseNamingConvention;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
-import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
+import java.util.Collections;
+import java.util.Set;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 public final class MySqlDbmsType {
-
-    private static final String QUOTE = "`";
-
-    private static final ConnectionUrlGenerator CONNECTION_URL_GENERATOR = dbms -> {
-        final StringBuilder result = new StringBuilder()
-                .append("jdbc:mysql://")
-                .append(dbms.getIpAddress().orElse(""));
-        dbms.getPort().ifPresent(p -> result.append(":").append(p));
-        result.append("/?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
-        return result.toString();
-    };
-
-    private static final SpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
+    
+    private final static DatabaseNamingConvention NAMER = new MySqlNamingConvention();
 
     public static final DbmsType INSTANCE = DbmsType.builder()
-            // Mandatory parameters
-            .withName("MySQL")
-            .withDriverManagerName("MySQL-AB JDBC Driver")
-            .withDefaultPort(3306)
-            .withDbmsNameMeaning("Just a name")
-            .withDriverName("com.mysql.jdbc.Driver")
-            .withFieldEncloserStart(QUOTE)
-            .withFieldEncloserEnd(QUOTE)
-            .withDbmsMapper(MySqlDbmsHandler::new)
-            .withConnectionUrlGenerator(CONNECTION_URL_GENERATOR)
-            .withSpeedmentPredicateView(VIEW)
-            // Optional parameters
-            .withInitialQuery("select version() as " + QUOTE + "MySQL version" + QUOTE)
-            .build();
+        // Mandatory parameters
+        .withName("MySQL")
+        .withDriverManagerName("MySQL-AB JDBC Driver")
+        .withDefaultPort(3306)
+        .withDbmsNameMeaning("Just a name")
+        .withDriverName("com.mysql.jdbc.Driver")
+        .withDatabaseNamingConvention(NAMER)
+        .withDbmsMapper(MySqlDbmsHandler::new)
+        .withConnectionUrlGenerator(new MySqlConnectionUrlGenerator())
+        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView(NAMER))
 
+        // Optional parameters
+        .withInitialQuery("select version() as `MySQL version`")
+        .build();
+    
+    private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
+
+        private final static String 
+            ENCLOSER = "`",
+            QUOTE = "'";
+        
+        private final static Set<String> EXCLUDE_SET = Stream.of( 
+            "information_schema"
+        ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+        
+        @Override
+        public Set<String> getSchemaExcludeSet() {
+            return EXCLUDE_SET;
+        }
+        
+        @Override
+        protected String getFieldQuoteStart() {
+            return QUOTE;
+        }
+
+        @Override
+        protected String getFieldQuoteEnd() {
+            return QUOTE;
+        }
+
+        @Override
+        protected String getFieldEncloserStart() {
+            return ENCLOSER;
+        }
+
+        @Override
+        protected String getFieldEncloserEnd() {
+            return ENCLOSER;
+        }
+    }
+    
+    private final static class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
+
+        @Override
+        public String from(Dbms dbms) {
+            final StringBuilder result = new StringBuilder()
+                .append("jdbc:mysql://")
+                .append(dbms.getIpAddress().orElse(""));
+            
+            dbms.getPort().ifPresent(p -> result.append(":").append(p));
+            result.append(
+                "/?useUnicode=true" +
+                "&characterEncoding=UTF-8" +
+                "&useServerPrepStmts=true" +
+                "&useCursorFetch=true" +
+                "&zeroDateTimeBehavior=convertToNull"
+            );
+            
+            return result.toString();
+        }
+    }
 }

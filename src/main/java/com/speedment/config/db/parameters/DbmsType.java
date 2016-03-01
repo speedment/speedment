@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 import com.speedment.db.ConnectionUrlGenerator;
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.config.dbms.DbmsTypeImpl;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
@@ -112,80 +113,13 @@ public interface DbmsType {
      * @return the non-null name for this {@code DbmsType}
      */
     String getDriverName();
-
+    
     /**
-     * Returns the non-null field encloser start string. The field encloser
-     * start string precedes a database entity name like a table or schema name
-     * when quoted. Quoted names are used to avoid that entity names collide
-     * with reserved keywords like "key" or "user". So a table named "user" in
-     * the "key" schema can be quoted to "key"."user". Examples of values are
-     * '`' for MySQL or '"' for Oracle.
-     *
-     * @return the non-null field encloser start string
-     *
-     * @see #getFieldEncloserStart(boolean)
-     * @see #getFieldEncloserEnd()
-     * @see #getFieldEncloserEnd(boolean)
+     * Returns the naming convention used by this database.
+     * 
+     * @return  the naming convention
      */
-    default String getFieldEncloserStart() {
-        return getFieldEncloserStart(false);
-    }
-
-    /**
-     * Returns the non-null field encloser end string. The field encloser end
-     * string follows a database entity name like a table or schema name when
-     * quoted. Quoted names are used to avoid that entity names collide with
-     * reserved keywords like "key" or "user". So a table named "user" in the
-     * "key" schema can be quoted to "key"."user". Examples of values are '`'
-     * for MySQL or '"' for Oracle.
-     *
-     * @return the non-null field encloser end string
-     *
-     * @see #getFieldEncloserStart(boolean)
-     * @see #getFieldEncloserEnd()
-     * @see #getFieldEncloserEnd(boolean)
-     */
-    default String getFieldEncloserEnd() {
-        return getFieldEncloserEnd(false);
-    }
-
-    /**
-     * Returns the non-null field encloser start string. The method parameter
-     * denotes if the field encloser is placed within quotes or not. For example
-     * for Oracle, since the field encloser is the '"' character itself, it
-     * needs to be escaped if within quotes.
-     *
-     * @param isWithinQuotes if the field encloser is within quotes
-     * @return Returns the non-null field encloser start string
-     *
-     * @see #getFieldEncloserStart()
-     */
-    String getFieldEncloserStart(final boolean isWithinQuotes);
-
-    /**
-     * Returns the non-null field encloser end string. The method parameter
-     * denotes if the field encloser is placed within quotes or not. For example
-     * for Oracle, since the field encloser is the '"' character itself, it
-     * needs to be escaped if within quotes.
-     *
-     * @param isWithinQuotes if the field encloser is within quotes
-     * @return Returns the non-null field encloser start string
-     *
-     * @see #getFieldEncloserEnd()
-     */
-    String getFieldEncloserEnd(final boolean isWithinQuotes);
-
-    /**
-     * Returns a non-null Set of Strings that represents schema names that are
-     * to be excluded when examining a Dbms for schemas. The set typically
-     * contains names for system tables and similar things. For example for
-     * MySQL, the schemas "MySQL" and "information_schema" are typically
-     * excluded.
-     *
-     * @return a non-null Set of Strings that represents schema names that are
-     * to be excluded when examining a Dbms for schemas
-     */
-    Set<String> getSchemaExcludeSet();
+    DatabaseNamingConvention getDatabaseNamingConvention();
 
     /**
      * Creates and returns a new {@code DbmsHandler} instance for the given

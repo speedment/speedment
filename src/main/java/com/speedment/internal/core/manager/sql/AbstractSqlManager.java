@@ -31,6 +31,7 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import java.math.BigDecimal;
@@ -57,15 +58,13 @@ import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.Optional;
+import com.speedment.internal.util.LazyString;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import com.speedment.internal.util.LazyString;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -76,52 +75,43 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
-    private SqlFunction<ResultSet, ENTITY> entityMapper;
     private final LazyString sqlColumnList;
     private final LazyString sqlColumnListQuestionMarks;
+    private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
+    private SqlFunction<ResultSet, ENTITY> entityMapper;
 
-    public AbstractSqlManager(Speedment speedment) {
+    protected AbstractSqlManager(Speedment speedment) {
         super(speedment);
-        sqlColumnList = LazyString.create();
-        sqlColumnListQuestionMarks = LazyString.create();
+        this.sqlColumnList              = LazyString.create();
+        this.sqlColumnListQuestionMarks = LazyString.create();
     }
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), entityMapper.unWrap()));
-        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
+        final SqlStreamTerminator<ENTITY> terminator     = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.apply(asynchronousQueryResult.stream());
-        final Stream<ENTITY> result = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
-        result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
+        final Stream<ENTITY> result                      = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
+        
+        // Make sure we are closing the ResultSet, Statement and Connection later
+        result.onClose(asynchronousQueryResult::close); 
+        
         return result;
     }
 
-    public <T> Stream<T> synchronousStreamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
-        //LOGGER.debug(sql + " <- " + values);
-        requireNonNull(sql);
-        requireNonNull(values);
-        requireNonNull(rsMapper);
+    public <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
+        requireNonNulls(sql, values, rsMapper);
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
-    private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
-    
     public String sqlColumnList() {
-//        if (getTable().isImmutable()) {
-            return sqlColumnList.getOrCompute(columnListSupplier);
-//        } else {
-//            return columnListSupplier.get();
-//        }
+        return sqlColumnList.getOrCompute(columnListSupplier);
     }
 
     private final Supplier<String> columnListWithQuestionMarkSupplier = () -> sqlColumnList(c -> "?");
     
     public String sqlColumnListWithQuestionMarks() {
-//        if (getTable().isImmutable()) {
-            return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
-//        } else {
-//            return columnListWithQuestionMarkSupplier.get();
-//        }
+        return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
     }
 
     private String sqlColumnList(Function<String, String> postMapper) {
@@ -206,11 +196,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     protected DbmsType getDbmsType() {
         return dbmsTypeOf(speedment, getDbms());
-    }
-
-    private String quoteField(final String s) {
-        final DbmsType dbmsType = getDbmsType();
-        return getDbmsType().getFieldEncloserStart() + s + dbmsType.getFieldEncloserEnd();
     }
 
     protected DbmsHandler dbmsHandler() {
@@ -385,6 +370,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     protected SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
+    }
+    
+    private String quoteField(final String s) {
+        return getDbmsType().getDatabaseNamingConvention().encloseField(s);
     }
 
     private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {

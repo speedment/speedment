@@ -35,6 +35,7 @@ import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -138,7 +139,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         requireNonNull(connection);
         LOGGER.info("Reading metadata from " + dbms.toString());
 
-        final Set<String> discardedSchemas = new HashSet<>();
+        final Set<String> discardedSchemas    = new HashSet<>();
+        final DatabaseNamingConvention naming = dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention();
 
         try {
             final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
@@ -153,12 +155,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         // This column is not there for Oracle so handle it
                         // gracefully....
                         catalogName = rs.getString("TABLE_CATALOG");
-                    } catch (final SQLException sqlException) {
+                    } catch (final SQLException ex) {
                         LOGGER.info("TABLE_CATALOG not in result set.");
                     }
 
                     boolean schemaWasUsed = false;
-                    if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
+                    if (!naming.getSchemaExcludeSet().contains(schemaName)) {
                         final String name = Optional.ofNullable(schemaName).orElse(catalogName);
                         if (filterCriteria.test(name)) {
                             final Schema schema = dbms.mutator().addNewSchema();
@@ -179,7 +181,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
                     boolean schemaWasUsed = false;
                     if (filterCriteria.test(schemaName)) {
-                        if (!dbmsTypeOf(speedment, dbms).getSchemaExcludeSet().contains(schemaName)) {
+                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
                             final Schema schema = dbms.mutator().addNewSchema();
                             schema.mutator().setName(schemaName);
                             schemaWasUsed = true;
@@ -192,7 +194,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
             }
 
-        } catch (SQLException sqle) {
+        } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
 

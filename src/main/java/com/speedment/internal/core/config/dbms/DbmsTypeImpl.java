@@ -20,7 +20,9 @@ import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.ConnectionUrlGenerator;
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
+import com.speedment.internal.core.db.DefaultDatabaseNamingConvention;
 import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
 import com.speedment.internal.util.sql.SqlTypeInfo;
 import java.util.Collections;
@@ -45,9 +47,7 @@ public final class DbmsTypeImpl implements DbmsType {
     private final String schemaTableDelimiter;
     private final String dbmsNameMeaning;
     private final String driverName;
-    private final String fieldEncloserStart;
-    private final String fieldEncloserEnd;
-    private final Set<String> schemaExcludeSet;
+    private final DatabaseNamingConvention namingConvention;
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
     private final String resultSetTableSchema;
     private final ConnectionUrlGenerator connectionUrlGenerator;
@@ -57,40 +57,35 @@ public final class DbmsTypeImpl implements DbmsType {
     private final String initialQuery;
 
     private DbmsTypeImpl(
-            final String name,
-            final String driverManagerName,
-            final int defaultPort,
-            final String schemaTableDelimiter,
-            final String dbmsNameMeaning,
-            final String driverName,
-            final String fieldEncloserStart,
-            final String fieldEncloserEnd,
-            final Set<String> schemaExcludeSet,
-            final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
-            final String resultSetTableSchema,
-            final ConnectionUrlGenerator connectionUrlGenerator,
-            final Set<SqlTypeInfo> dataTypes,
-            final SpeedmentPredicateView speedmentPredicateView,
-            final String defaultDbmsName,
-            final String intitialQuery
+            String name,
+            String driverManagerName,
+            int defaultPort,
+            String schemaTableDelimiter,
+            String dbmsNameMeaning,
+            String driverName,
+            DatabaseNamingConvention namingConvention,
+            BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
+            String resultSetTableSchema,
+            ConnectionUrlGenerator connectionUrlGenerator,
+            Set<SqlTypeInfo> dataTypes,
+            SpeedmentPredicateView speedmentPredicateView,
+            String defaultDbmsName,
+            String intitialQuery
     ) {
-
-        this.name = requireNonNull(name);
-        this.driverManagerName = requireNonNull(driverManagerName);
-        this.defaultPort = defaultPort;
-        this.schemaTableDelimiter = requireNonNull(schemaTableDelimiter);
-        this.dbmsNameMeaning = requireNonNull(dbmsNameMeaning);
-        this.driverName = requireNonNull(driverName);
-        this.fieldEncloserStart = requireNonNull(fieldEncloserStart);
-        this.fieldEncloserEnd = requireNonNull(fieldEncloserEnd);
-        this.schemaExcludeSet = unmodifiableSet(new HashSet(requireNonNull(schemaExcludeSet))); // Defensive copy
-        this.dbmsMapper = requireNonNull(dbmsMapper);
-        this.resultSetTableSchema = requireNonNull(resultSetTableSchema);
+        this.name                   = requireNonNull(name);
+        this.driverManagerName      = requireNonNull(driverManagerName);
+        this.defaultPort            = defaultPort;
+        this.schemaTableDelimiter   = requireNonNull(schemaTableDelimiter);
+        this.dbmsNameMeaning        = requireNonNull(dbmsNameMeaning);
+        this.driverName             = requireNonNull(driverName);
+        this.namingConvention       = requireNonNull(namingConvention);
+        this.dbmsMapper             = requireNonNull(dbmsMapper);
+        this.resultSetTableSchema   = requireNonNull(resultSetTableSchema);
         this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
-        this.dataTypes = unmodifiableSet(new HashSet(requireNonNull(dataTypes))); // Defensive copy
+        this.dataTypes              = unmodifiableSet(new HashSet(requireNonNull(dataTypes))); // Defensive copy
         this.speedmentPredicateView = requireNonNull(speedmentPredicateView);
-        this.defaultDbmsName = defaultDbmsName;
-        this.initialQuery = intitialQuery;
+        this.defaultDbmsName        = defaultDbmsName;
+        this.initialQuery           = intitialQuery;
     }
 
     public static WithName builder() {
@@ -127,16 +122,6 @@ public final class DbmsTypeImpl implements DbmsType {
     }
 
     @Override
-    public String getFieldEncloserStart() {
-        return fieldEncloserStart;
-    }
-
-    @Override
-    public String getFieldEncloserEnd() {
-        return fieldEncloserEnd;
-    }
-
-    @Override
     public String getDbmsNameMeaning() {
         return dbmsNameMeaning;
     }
@@ -144,21 +129,6 @@ public final class DbmsTypeImpl implements DbmsType {
     @Override
     public Optional<String> getDefaultDbmsName() {
         return Optional.ofNullable(defaultDbmsName);
-    }
-
-    @Override
-    public String getFieldEncloserStart(boolean isWithinQuotes) {
-        return escapeIfQuote(getFieldEncloserStart(), isWithinQuotes);
-    }
-
-    @Override
-    public String getFieldEncloserEnd(boolean isWithinQuotes) {
-        return escapeIfQuote(getFieldEncloserEnd(), isWithinQuotes);
-    }
-
-    @Override
-    public Set<String> getSchemaExcludeSet() {
-        return schemaExcludeSet;
     }
 
     @Override
@@ -170,9 +140,9 @@ public final class DbmsTypeImpl implements DbmsType {
     public boolean isSupported() {
         try {
             Class.forName(
-                    getDriverName(),
-                    false,
-                    DbmsType.class.getClassLoader()
+                getDriverName(),
+                false,
+                DbmsType.class.getClassLoader()
             );
 
             return true;
@@ -181,11 +151,9 @@ public final class DbmsTypeImpl implements DbmsType {
         }
     }
 
-    private String escapeIfQuote(String item, boolean isWithinQuotes) {
-        if (isWithinQuotes && "\"".equals(item)) {
-            return "\\" + item;
-        }
-        return item;
+    @Override
+    public DatabaseNamingConvention getDatabaseNamingConvention() {
+        return namingConvention;
     }
 
     @Override
@@ -219,8 +187,7 @@ public final class DbmsTypeImpl implements DbmsType {
             WithDefaultPort,
             WithDbmsNameMeaning,
             WithDriverName,
-            WithFieldEncloserStart,
-            WithFieldEncloserEnd,
+            WithDatabaseNamingConvention,
             WithDbmsMapper,
             WithConnectionUrlGenerator,
             WithSpeedmentPredicateView,
@@ -232,15 +199,14 @@ public final class DbmsTypeImpl implements DbmsType {
         private int defaultPort;
         private String dbmsNameMeaning;
         private String driverName;
-        private String fieldEncloserStart;
-        private String fieldEncloserEnd;
+        private DatabaseNamingConvention namingConvention;
         private BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
         private ConnectionUrlGenerator connectionUrlGenerator;
         private SpeedmentPredicateView speedmentPredicateView;
+        
         // Optionals
         private String resultSetTableSchema;
         private String schemaTableDelimiter;
-        private Set<String> schemaExcludeSet;
         private Set<SqlTypeInfo> dataTypes;
         private String defaultDbmsName;
         private String initialQuery;
@@ -248,7 +214,7 @@ public final class DbmsTypeImpl implements DbmsType {
         public Builder() {
             resultSetTableSchema = "TABLE_SCHEMA";
             schemaTableDelimiter = ".";
-            schemaExcludeSet = Collections.emptySet();
+            namingConvention = new DefaultDatabaseNamingConvention();
             dataTypes = Collections.emptySet();
             defaultDbmsName = null;
             initialQuery = "select 1 from dual";
@@ -279,20 +245,14 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
-        public WithFieldEncloserStart withDriverName(String driverName) {
+        public WithDatabaseNamingConvention withDriverName(String driverName) {
             this.driverName = requireNonNull(driverName);
             return this;
         }
 
         @Override
-        public WithFieldEncloserEnd withFieldEncloserStart(String fieldEncloserStart) {
-            this.fieldEncloserStart = requireNonNull(fieldEncloserStart);
-            return this;
-        }
-
-        @Override
-        public WithDbmsMapper withFieldEncloserEnd(String fieldEncloserEnd) {
-            this.fieldEncloserEnd = requireNonNull(fieldEncloserEnd);
+        public WithDbmsMapper withDatabaseNamingConvention(DatabaseNamingConvention namingConvention) {
+            this.namingConvention = requireNonNull(namingConvention);
             return this;
         }
 
@@ -328,12 +288,6 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
-        public Optionals withSchemaExcludeSet(Set<String> schemaExcludeSet) {
-            this.schemaExcludeSet = requireNonNull(schemaExcludeSet);
-            return this;
-        }
-
-        @Override
         public Optionals withDataTypes(Set<SqlTypeInfo> dataTypes) {
             this.dataTypes = requireNonNull(dataTypes);
             return this;
@@ -360,9 +314,7 @@ public final class DbmsTypeImpl implements DbmsType {
                     schemaTableDelimiter,
                     dbmsNameMeaning,
                     driverName,
-                    fieldEncloserStart,
-                    fieldEncloserEnd,
-                    schemaExcludeSet,
+                    namingConvention,
                     dbmsMapper,
                     resultSetTableSchema,
                     connectionUrlGenerator,
@@ -431,45 +383,17 @@ public final class DbmsTypeImpl implements DbmsType {
          *
          * @return a builder
          */
-        WithFieldEncloserStart withDriverName(String driverName);
+        WithDatabaseNamingConvention withDriverName(String driverName);
     }
 
-    public interface WithFieldEncloserStart {
+    public interface WithDatabaseNamingConvention {
 
         /**
-         * Enters the non-null field encloser start string. The field encloser
-         * start string precedes a database entity name like a table or schema
-         * name when quoted. Quoted names are used to avoid that entity names
-         * collide with reserved keywords like "key" or "user". So a table named
-         * "user" in the "key" schema can be quoted to "key"."user". Examples of
-         * values are '`' for MySQL or '"' for Oracle.
+         * Enters the non-null naming convention for this database.
          *
          * @return a builder
-         *
-         * @see DbmsType#getFieldEncloserStart(boolean)
-         * @see DbmsType#getFieldEncloserEnd()
-         * @see DbmsType#getFieldEncloserEnd(boolean)
          */
-        WithFieldEncloserEnd withFieldEncloserStart(String start);
-    }
-
-    public interface WithFieldEncloserEnd {
-
-        /**
-         * Enters the non-null field encloser end string. The field encloser end
-         * string follows a database entity name like a table or schema name
-         * when quoted. Quoted names are used to avoid that entity names collide
-         * with reserved keywords like "key" or "user". So a table named "user"
-         * in the "key" schema can be quoted to "key"."user". Examples of values
-         * are '`' for MySQL or '"' for Oracle.
-         *
-         * @return the non-null field encloser end string
-         *
-         * @see DbmsType#getFieldEncloserStart(boolean)
-         * @see DbmsType#getFieldEncloserEnd()
-         * @see DbmsType#getFieldEncloserEnd(boolean)
-         */
-        WithDbmsMapper withFieldEncloserEnd(String end);
+        WithDbmsMapper withDatabaseNamingConvention(DatabaseNamingConvention namingConvention);
     }
 
     public interface WithDbmsMapper {
@@ -524,17 +448,6 @@ public final class DbmsTypeImpl implements DbmsType {
          * @return a builder
          */
         Optionals withSchemaTableDelimiter(String delimiter);
-
-        /**
-         * Enters a non-null Set of Strings that represents schema names that
-         * are to be excluded when examining a Dbms for schemas. The set
-         * typically contains names for system tables and similar things. For
-         * example for MySQL, the schemas "MySQL" and "information_schema" are
-         * typically excluded.
-         *
-         * @return a builder
-         */
-        Optionals withSchemaExcludeSet(Set<String> excludeSet);
 
         /**
          * Enters a non-null Set of database types. This method can be used for

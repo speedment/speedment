@@ -20,14 +20,11 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
+@FunctionalInterface
 public interface SpeedmentPredicateView {
 
     SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model);
-
-    String getOpeningFieldQuote();
-    
-    String getClosingFieldQuote();
     
 }

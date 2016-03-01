@@ -16,19 +16,22 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import static com.speedment.internal.core.manager.sql.AbstractSpeedmentPredicateView.of;
 
 /**
  * Created by fdirlikl on 11/18/2015.
+ * 
+ * @author  Fatih Dirlikli
  */
 public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
 
-    public PostgresSpeedmentPredicateView(String openingFieldQuote, String closingFieldQuote) {
-        super(openingFieldQuote, closingFieldQuote);
+    public PostgresSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
+        super(namingConvention);
     }
-
+    
     // Info from:
     // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
     
@@ -51,5 +54,4 @@ public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateVi
     protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
         return of("(" + cn + " LIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
-
 }
