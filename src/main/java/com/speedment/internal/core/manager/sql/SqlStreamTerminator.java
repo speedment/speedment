@@ -97,11 +97,12 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .map(spv::transform)
                 .collect(toList());
         
-        final String sql = manager.sqlSelect(" where " +
+        final String sql = manager.sqlSelect() + 
+            " where " +
             fragments.stream()
                 .map(SqlPredicateFragment::getSql)
                 .collect(joining(" AND "))
-        );
+        ;
 
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
@@ -160,14 +161,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         requireNonNulls(pipeline, fallbackSupplier);
         
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            return manager.synchronousStreamOf(
-                manager.sqlCount(), 
-                Collections.emptyList(), 
-                rs -> rs.getLong(1)
-            ).findAny().get();
-        }
-        
-        return fallbackSupplier.getAsLong();
+            return manager.count();
+        } else return fallbackSupplier.getAsLong();
     }
     
 }

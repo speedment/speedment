@@ -19,6 +19,7 @@ package com.speedment.internal.core.manager.sql;
 import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
+import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.manager.AbstractManager;
@@ -84,7 +85,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), entityMapper.unWrap()));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(), Collections.emptyList(), entityMapper.unWrap()));
         final SqlStreamTerminator<ENTITY> terminator     = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.apply(asynchronousQueryResult.stream());
         final Stream<ENTITY> result                      = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
@@ -99,21 +100,33 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         requireNonNulls(sql, values, rsMapper);
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
-
+    
     /**
-     * Returns a SQL statement string that counts the number of rows in the
-     * current table.
+     * Counts the number of elements in the current table by quering the
+     * database.
      * 
-     * @return  the count SQL statement
+     * @return  the number of elements in the table
      */
-    public String sqlCount() {
-        return "select count(*) from " + sqlTableReference();
+    public final long count() {
+        return synchronousStreamOf(
+            "select count(*) from " + sqlTableReference(), 
+            Collections.emptyList(), 
+            rs -> rs.getLong(1)
+        ).findAny().get();
     }
 
-    public String sqlSelect(String suffix) {
-        requireNonNull(suffix);
-        final String sql = "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
-        return sql;
+    /**
+     * Returns a {@code SELECT/FROM} SQL statement with the full column list and
+     * the current table specified in accordance to the current {@link DbmsType}.
+     * The specified statement will not have any trailing spaces or semicolons.
+     * <p>
+     * <b>Example:</b>
+     * <code>SELECT `id`, `name` FROM `myschema`.`users`</code>
+     * 
+     * @return  the SQL statement
+     */
+    public final String sqlSelect() {
+        return "select " + sqlColumnList() + " from " + sqlTableReference();
     }
 
     @Override
@@ -133,8 +146,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return persistHelp(entity, Optional.of(listener));
     }
 
@@ -146,8 +158,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return updateHelper(entity, Optional.of(listener));
     }
 
@@ -159,20 +170,19 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return removeHelper(entity, Optional.of(listener));
     }
 
-    protected Dbms getDbms() {
+    protected final Dbms getDbms() {
         return ancestor(getTable(), Dbms.class).get();
     }
 
-    protected DbmsType getDbmsType() {
+    protected final DbmsType getDbmsType() {
         return dbmsTypeOf(speedment, getDbms());
     }
 
-    protected DbmsHandler dbmsHandler() {
+    protected final DbmsHandler dbmsHandler() {
         return speedment.getDbmsHandlerComponent().get(getDbms());
     }
 
@@ -553,15 +563,4 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));
         //return entity;
     }
-
-    private String sqlQuote(Object o) {
-        if (o == null) {
-            return "null";
-        }
-        if (o instanceof Number) {
-            return o.toString();
-        }
-        return "'" + o.toString() + "'";
-    }
-
 }
