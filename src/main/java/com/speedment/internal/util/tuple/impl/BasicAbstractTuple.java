@@ -106,7 +106,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     public <C> Stream<C> streamOf(Class<C> clazz) {
         return Stream.of(values)
             .filter(Objects::nonNull)
-            .filter(e -> clazz.isAssignableFrom(e.getClass()))
+            .filter(clazz::isInstance)
             .map(clazz::cast);
     }
 

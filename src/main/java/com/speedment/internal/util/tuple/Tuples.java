@@ -22,6 +22,9 @@ import com.speedment.internal.util.tuple.impl.Tuple2Impl;
 import com.speedment.internal.util.tuple.impl.Tuple2OfNullablesImpl;
 import com.speedment.internal.util.tuple.impl.Tuple3Impl;
 import com.speedment.internal.util.tuple.impl.Tuple3OfNullablesImpl;
+import com.speedment.internal.util.tuple.impl.Tuple4Impl;
+import com.speedment.internal.util.tuple.impl.Tuple5Impl;
+import com.speedment.internal.util.tuple.impl.Tuple6Impl;
 
 /**
  * Basic convenience factory for Tuples.
@@ -79,6 +82,75 @@ public interface Tuples {
      */
     static <T0, T1, T2> Tuple3<T0, T1, T2> of(T0 e0, T1 e1, T2 e2) {
         return new Tuple3Impl<>(e0, e1, e2);
+    }
+    
+    /**
+     * Creates and returns a Tuple3 with the given parameters.
+     *
+     * @param <T0> type of element 0
+     * @param <T1> type of element 1
+     * @param <T2> type of element 2
+     * @param <T3> type of element 3
+     * @param e0 element 0
+     * @param e1 element 1
+     * @param e2 element 2
+     * @param e3 element 3
+     *
+     * @return a {@link Tuple4} with the given parameters
+     *
+     * @see Tuple4
+     * @see Tuple
+     */
+    static <T0, T1, T2, T3> Tuple4<T0, T1, T2, T3> of(T0 e0, T1 e1, T2 e2, T3 e3) {
+        return new Tuple4Impl<>(e0, e1, e2, e3);
+    }
+    
+    /**
+     * Creates and returns a Tuple3 with the given parameters.
+     *
+     * @param <T0> type of element 0
+     * @param <T1> type of element 1
+     * @param <T2> type of element 2
+     * @param <T3> type of element 3
+     * @param <T4> type of element 3
+     * @param e0 element 0
+     * @param e1 element 1
+     * @param e2 element 2
+     * @param e3 element 3
+     * @param e4 element 4
+     *
+     * @return a {@link Tuple5} with the given parameters
+     *
+     * @see Tuple5
+     * @see Tuple
+     */
+    static <T0, T1, T2, T3, T4> Tuple5<T0, T1, T2, T3, T4> of(T0 e0, T1 e1, T2 e2, T3 e3, T4 e4) {
+        return new Tuple5Impl<>(e0, e1, e2, e3, e4);
+    }
+    
+    /**
+     * Creates and returns a Tuple3 with the given parameters.
+     *
+     * @param <T0> type of element 0
+     * @param <T1> type of element 1
+     * @param <T2> type of element 2
+     * @param <T3> type of element 3
+     * @param <T4> type of element 3
+     * @param <T5> type of element 4
+     * @param e0 element 0
+     * @param e1 element 1
+     * @param e2 element 2
+     * @param e3 element 3
+     * @param e4 element 4
+     * @param e54 element 5
+     *
+     * @return a {@link Tuple6} with the given parameters
+     *
+     * @see Tuple6
+     * @see Tuple
+     */
+    static <T0, T1, T2, T3, T4, T5> Tuple6<T0, T1, T2, T3, T4, T5> of(T0 e0, T1 e1, T2 e2, T3 e3, T4 e4, T5 e5) {
+        return new Tuple6Impl<>(e0, e1, e2, e3, e4, e5);
     }
 
     /**

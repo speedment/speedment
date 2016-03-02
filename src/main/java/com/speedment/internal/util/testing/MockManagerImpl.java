@@ -137,6 +137,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Class<?> getPrimaryKeyClass() {
+        return inner.getPrimaryKeyClass();
+    }
+    
+    @Override
     public String toJson(ENTITY entity) {
         return inner.toJson(entity);
     }
