@@ -57,13 +57,13 @@
     
     <developers>
         <developer>
-            <id>minborg</id>
+            <id>Minborg</id>
             <name>Per Ake Minborg</name>
             <email>minborg@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
-            <id>Pycnic</id>
+            <id>Pyknic</id>
             <name>Emil Forslund</name>
             <email>emil@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
