@@ -93,6 +93,21 @@ public interface Dbms extends
     }
     
     /**
+     * Returns the default port for the current database type.
+     * <p>
+     * Warning, this method does not take a custom port set in the 
+     * {@link #PORT} property into consideration. For the actual
+     * port to use, call {@link #getPort(Speedment)}.
+     * 
+     * @return                     the default port
+     * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
+     */
+    default int defaultPort(Speedment speedment) throws SpeedmentException {
+        return dbmsTypeOf(speedment, this)
+            .getDefaultPort();
+    }
+    
+    /**
      * Returns the explicit connection URL to use for this {@code Dbms} if the
      * user has specified one, or an empty {@code Optional} if one should be
      * generated automatically by the {@link DbmsType}.

@@ -30,14 +30,15 @@ import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultIntegerPropertyItem;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem;
 import com.speedment.internal.ui.property.IntegerPropertyItem;
-import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -77,6 +78,13 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     public IntegerProperty portProperty() {
         return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
     }
+    
+    protected IntegerBinding defaultPortProperty(Speedment speedment) {
+        return Bindings.createIntegerBinding(() -> 
+            Dbms.super.defaultPort(speedment),
+            typeNameProperty()
+        );
+    }
 
     @Override
     public OptionalInt getPort() {
@@ -92,7 +100,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
         return Optional.ofNullable(connectionUrlProperty().get());
     }
 
-    public StringBinding defaultConnectionUrlProperty(Speedment speedment) throws SpeedmentException {
+    protected StringBinding defaultConnectionUrlProperty(Speedment speedment) throws SpeedmentException {
         return Bindings.createStringBinding(() -> 
             Dbms.super.defaultConnectionUrl(speedment), 
             typeNameProperty(),
@@ -135,24 +143,25 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 new DefaultStringPropertyItem(
                     ipAddressProperty(), 
                     new SimpleStringProperty("127.0.0.1"),
-                    "IP Address",                  
+                    "IP Address",
                     "The ip of the database host."
                 ),
-                new IntegerPropertyItem(
-                    portProperty(),       
+                new DefaultIntegerPropertyItem(
+                    portProperty(),
+                    defaultPortProperty(speedment),
                     "Port",                  
                     "The port of the database on the database host."
                 ),
                 new DefaultStringPropertyItem(
                     usernameProperty(),
                     new SimpleStringProperty("root"),
-                    "Username",                  
+                    "Username",
                     "The username to use when connecting to the database."
                 ),
                 new DefaultTextAreaPropertyItem(
                     connectionUrlProperty(),
                     defaultConnectionUrlProperty(speedment),
-                    "Connection URL",                  
+                    "Connection URL",
                     "The connection URL that should be used when establishing " +
                     "connection with the database. If this is set to Auto, the " +
                     "DbmsType will generate one."
