@@ -31,7 +31,6 @@ import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
@@ -52,7 +51,6 @@ import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.util.sql.ResultSetUtil;
-import com.speedment.util.tuple.Tuple;
 import com.speedment.util.tuple.Tuple1;
 import com.speedment.util.tuple.Tuples;
 import static java.util.stream.Collectors.joining;
@@ -119,6 +117,8 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         .call($ -> file.add(Import.of(entity.getImplType())))
                         .call($ -> file.add(Import.of(Type.of(Speedment.class))))
                 )
+                .add(generateGet(file))
+                .add(generateSet(file))
                 .add(generateGetPrimaryKeyClassesField(file))
                 .add(generateGetPrimaryKeyClasses(file));
     }
@@ -230,31 +230,6 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return manager.getImplType();
     }
 
-    private Type pkTupleType() {
-        final long pks = primaryKeyColumns().count();
-        final Package package_ = Tuple1.class.getPackage();
-        final String tupleClassName = package_.getName() + ".Tuple" + pks;
-        final java.lang.Class<?> tupleClass;
-        try {
-            tupleClass = java.lang.Class.forName(tupleClassName);
-        } catch (ClassNotFoundException cnf) {
-            throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
-        }
-        final Type result = Type.of(tupleClass);
-        primaryKeyColumns().forEachOrdered(pk -> {
-            result.add(
-                    Generic.of().add(
-                            Type.of(java.lang.Class.class)
-                            .add(Generic.of().add(
-                                    Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
-                            )
-                    )
-            );
-        });
-        return result;
-
-    }
-
     protected Field generateGetPrimaryKeyClassesField(File file) {
         file.add(Import.of(Type.of(Tuples.class)));
         final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
@@ -287,7 +262,11 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .add(Field.of("entity", entity.getType()))
                 .add(Field.of("column", Type.of(Column.class)))
                 .add("switch (column.getName()) " + block(
-                        columns().map(c -> "case \"" + c.getName() + "\" : return entity." + GETTER_METHOD_PREFIX + typeName(c) + "();").collect(Collectors.joining(nl()))
+                        columns().map(c
+                                -> "case \"" + c.getName()
+                                + "\" : return entity." + getterCode(c)
+                                + ";"
+                        ).collect(Collectors.joining(nl()))
                         + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                 ));
     }
@@ -301,9 +280,21 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .add("switch (column.getName()) " + block(
                         columns()
                         .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
-                        .map(c -> "case \"" + c.getName() + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c) + "((" + c.findTypeMapper().getJavaType().getSimpleName() + ") value); break;").collect(Collectors.joining(nl()))
+                        .map(c
+                                -> "case \"" + c.getName()
+                                + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c)
+                                + "((" + c.findTypeMapper().getJavaType().getSimpleName()
+                                + ") value); break;").collect(Collectors.joining(nl()))
                         + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                 ));
+    }
+
+    private String getterCode(Column c) {
+        if (c.isNullable()) {
+            return GETTER_METHOD_PREFIX + typeName(c) + "().orElse(null)";
+        } else {
+            return GETTER_METHOD_PREFIX + typeName(c) + "()";
+        }
     }
 
     protected Method generatePrimaryKeyFor(File file) {

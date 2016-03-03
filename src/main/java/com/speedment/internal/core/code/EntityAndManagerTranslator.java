@@ -30,35 +30,35 @@ import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 import java.util.function.Function;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import com.speedment.util.tuple.Tuple1;
 
 /**
  *
- * @author     pemi
- * @param <T>  type of model to translate into
+ * @author pemi
+ * @param <T> type of model to translate into
  */
-public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
-    extends DefaultJavaClassTranslator<Table, T> {
+public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
+        extends DefaultJavaClassTranslator<Table, T> {
 
     public final class ClassType {
-        
-        public final static String
-            GENERATED_PACKAGE = "generated",
-            GENERATED_PREFIX  = "Generated";
-        
+
+        public final static String GENERATED_PACKAGE = "generated",
+                GENERATED_PREFIX = "Generated";
+
         private final Type type;
         private final Type implType;
         private final Type generatedType;
         private final Type generatedImplType;
         private final Type optionalType;
-        
+
         private ClassType(String typeSuffix, String implSuffix) {
             requireNonNulls(typeSuffix, implSuffix);
-            
-            this.type              = Type.of(fullyQualifiedTypeName() + typeSuffix);
-            this.implType          = Type.of(fullyQualifiedTypeName() + typeSuffix + implSuffix);
-            this.generatedType     = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix);
+
+            this.type = Type.of(fullyQualifiedTypeName() + typeSuffix);
+            this.implType = Type.of(fullyQualifiedTypeName() + typeSuffix + implSuffix);
+            this.generatedType = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix);
             this.generatedImplType = Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + typeSuffix + implSuffix);
-            this.optionalType      = Type.of(Optional.class).add(Generic.of().add(type));
+            this.optionalType = Type.of(Optional.class).add(Generic.of().add(type));
         }
 
         public Type getType() {
@@ -68,11 +68,11 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         public Type getImplType() {
             return implType;
         }
-        
+
         public Type getGeneratedType() {
             return generatedType;
         }
-        
+
         public Type getGeneratedImplType() {
             return generatedImplType;
         }
@@ -84,7 +84,7 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         public String getImplName() {
             return Formatting.shortName(implType.getName());
         }
-        
+
         public String getGeneratedName() {
             return Formatting.shortName(generatedType.getName());
         }
@@ -98,21 +98,19 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         }
     }
 
-    protected final ClassType 
-        entity  = new ClassType("", "Impl"),
-        manager = new ClassType("Manager", "Impl");
+    protected final ClassType entity = new ClassType("", "Impl"),
+            manager = new ClassType("Manager", "Impl");
 
-    protected final Generic 
-        genericOfPk      = Generic.of().add(typeOfPK()),
-        genericOfEntity  = Generic.of().add(entity.getType()),
-        genericOfManager = Generic.of().add(manager.getType());
+    protected final Generic genericOfPk = Generic.of().add(typeOfPK()),
+            genericOfEntity = Generic.of().add(entity.getType()),
+            genericOfManager = Generic.of().add(manager.getType());
 
     protected EntityAndManagerTranslator(
-            Speedment speedment, 
-            Generator gen, 
-            Table table, 
+            Speedment speedment,
+            Generator gen,
+            Table table,
             Function<String, T> modelConstructor) {
-        
+
         super(speedment, gen, table, modelConstructor);
     }
 
@@ -124,49 +122,72 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         }
 
         final Class<?> first = primaryKeyColumns()
-            .findFirst().get()
-            .findColumn().get()
-            .findTypeMapper().getJavaType();
+                .findFirst().get()
+                .findColumn().get()
+                .findTypeMapper().getJavaType();
 
         if (pks == 1) {
             return Type.of(first);
-        } else {
-            if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
+        } else if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
                 .findTypeMapper().getJavaType().equals(first))) {
-                
-                return DefaultType.list(Type.of(first));
-            } else {
-                return DefaultType.list(DefaultType.WILDCARD);
-            }
+
+            return DefaultType.list(Type.of(first));
+        } else {
+            return DefaultType.list(DefaultType.WILDCARD);
         }
     }
-    
+
+    protected Type pkTupleType() {
+        final long pks = primaryKeyColumns().count();
+        final Package package_ = Tuple1.class.getPackage();
+        final String tupleClassName = package_.getName() + ".Tuple" + pks;
+        final java.lang.Class<?> tupleClass;
+        try {
+            tupleClass = java.lang.Class.forName(tupleClassName);
+        } catch (ClassNotFoundException cnf) {
+            throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
+        }
+        final Type result = Type.of(tupleClass);
+        primaryKeyColumns().forEachOrdered(pk -> {
+            result.add(
+                    Generic.of().add(
+                            Type.of(java.lang.Class.class)
+                            .add(Generic.of().add(
+                                    Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
+                            )
+                    )
+            );
+        });
+        return result;
+
+    }
+
     public final ClassType entity() {
         return entity;
     }
-    
+
     public final Generic genericOfEntity() {
         return genericOfEntity;
     }
-    
+
     protected final Table tableOrThrow() {
         return table().orElseThrow(() -> new SpeedmentException(
-            getClass().getSimpleName() + " must have a " + 
-            Table.class.getSimpleName() + " document."
+                getClass().getSimpleName() + " must have a "
+                + Table.class.getSimpleName() + " document."
         ));
     }
-    
+
     protected final Schema schemaOrThrow() {
         return schema().orElseThrow(() -> new SpeedmentException(
-            getClass().getSimpleName() + " must have a " + 
-            Schema.class.getSimpleName() + " document."
+                getClass().getSimpleName() + " must have a "
+                + Schema.class.getSimpleName() + " document."
         ));
     }
-    
+
     protected final Dbms dbmsOrThrow() {
         return dbms().orElseThrow(() -> new SpeedmentException(
-            getClass().getSimpleName() + " must have a " + 
-            Dbms.class.getSimpleName() + " document."
+                getClass().getSimpleName() + " must have a "
+                + Dbms.class.getSimpleName() + " document."
         ));
     }
 }

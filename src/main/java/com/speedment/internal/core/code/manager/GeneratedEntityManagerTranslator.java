@@ -70,8 +70,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
                         .add("return " + manager.getName() + ".class;"))
                 .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
                         .add("return " + entity.getName() + ".class;"))
-                .add(generateGet(file))
-                .add(generateSet(file));
+                .add(generateGetPrimaryKeyClasses(file));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
@@ -91,45 +90,10 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
         return method;
     }
 
-    protected Method generateGet(File file) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-        return Method.of("get", OBJECT).default_().add(OVERRIDE)
-                .add(Field.of("entity", entity.getType()))
-                .add(Field.of("column", Type.of(Column.class)))
-                .add("switch (column.getName()) " + block(
-                        columns().map(c
-                                -> "case \"" + c.getName()
-                                + "\" : return entity." + getterCode(c)
-                                + ";"
-                        ).collect(Collectors.joining(nl()))
-                        + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-                ));
-    }
 
-    protected Method generateSet(File file) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-        return Method.of("set", VOID).default_().add(OVERRIDE)
-                .add(Field.of("entity", entity.getType()))
-                .add(Field.of("column", Type.of(Column.class)))
-                .add(Field.of("value", Type.of(Object.class)))
-                .add("switch (column.getName()) " + block(
-                        columns()
-                        .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
-                        .map(c
-                                -> "case \"" + c.getName()
-                                + "\" : entity." + SETTER_METHOD_PREFIX + typeName(c)
-                                + "((" + c.findTypeMapper().getJavaType().getSimpleName()
-                                + ") value); break;").collect(Collectors.joining(nl()))
-                        + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-                ));
-    }
 
-    private String getterCode(Column c) {
-        if (c.isNullable()) {
-            return GETTER_METHOD_PREFIX + typeName(c) + "().orElse(null)";
-        } else {
-            return GETTER_METHOD_PREFIX + typeName(c) + "()";
-        }
+    protected Method generateGetPrimaryKeyClasses(File file) {
+        return Method.of("getPrimaryKeyClasses", pkTupleType()).add(OVERRIDE);
     }
 
     @Override
