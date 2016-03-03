@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.Tuple6;
+import com.speedment.util.tuple.Tuple6;
 
 /**
  *

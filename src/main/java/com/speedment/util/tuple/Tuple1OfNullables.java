@@ -14,23 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.tuple;
+package com.speedment.util.tuple;
 
 import java.util.Optional;
 
 /**
+ * {@inheritDoc}
+ *
+ * This {@link Tuple} holds two elements that can be null.
  *
  * @author pemi
  * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
  */
-public interface Tuple3OfNullables<T0, T1, T2> extends TupleOfNullables {
+public interface Tuple1OfNullables<T0> extends TupleOfNullables {
 
     public Optional<T0> get0();
-
-    public Optional<T1> get1();
-
-    public Optional<T2> get2();
 
 }

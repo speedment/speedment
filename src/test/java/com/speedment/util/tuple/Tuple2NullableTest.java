@@ -19,10 +19,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.internal.util.tuple;
+package com.speedment.util.tuple;
 
-import com.speedment.internal.util.tuple.Tuple2OfNullables;
-import com.speedment.internal.util.tuple.Tuples;
+import com.speedment.util.tuple.Tuple2OfNullables;
+import com.speedment.util.tuple.Tuples;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

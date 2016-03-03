@@ -25,6 +25,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
+import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -125,11 +126,11 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
     Class<? extends Manager<ENTITY>> getManagerClass();
 
     /**
-     * Returns the primary key class for this Manager.
+     * Returns a tuple with the primary key classes for this Manager.
      *
-     * @return the primary key class for this Manager
+     * @return a tuple with the primary key classes for this Manager
      */
-    Class<?> getPrimaryKeyClass();
+    Tuple getPrimaryKeyClasses();
 
     // Json
     /**

@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.TupleOfNullables;
+import com.speedment.util.tuple.TupleOfNullables;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -40,12 +40,12 @@ public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<Abstra
         return Optional.ofNullable(values[assertIndexBounds(index)]);
     }
 
-    @Override
-    public Optional<Object> remove(int index) {
-        final Object previousValue = get(index);
-        values[index] = null;
-        return Optional.ofNullable(previousValue);
-    }
+//    @Override
+//    public Optional<Object> remove(int index) {
+//        final Object previousValue = get(index);
+//        values[index] = null;
+//        return Optional.ofNullable(previousValue);
+//    }
 
     @Override
     public Stream<Optional<Object>> stream() {

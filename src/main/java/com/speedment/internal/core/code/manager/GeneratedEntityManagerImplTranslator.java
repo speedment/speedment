@@ -20,7 +20,6 @@ import com.speedment.Speedment;
 import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
-import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
@@ -34,7 +33,6 @@ import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
@@ -113,7 +111,8 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         )
                         .call($ -> file.add(Import.of(entity.getImplType())))
                         .call($ -> file.add(Import.of(Type.of(Speedment.class))))
-                );
+                )
+                .add(generateGetPrimaryKeyClasses(file));
     }
 
     private static enum Primitive {
@@ -221,6 +220,17 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     public Type getImplType() {
         return manager.getImplType();
+    }
+
+    protected Method generateGetPrimaryKeyClasses(File file) {
+        
+        
+        
+        final Method method = Method.of("getPrimaryKeyClasses", Type.of(java.lang.Class.class).add(Generic.of().add(typeOfPK())))
+                .default_()
+                .add(OVERRIDE)
+                .add("return " + typeOfPK().getJavaImpl().get().getSimpleName() + ".class;");
+        return method;
     }
 
     protected Method generateGet(File file) {

@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.Tuple5OfNullables;
-import com.speedment.internal.util.tuple.Tuple6OfNullables;
+import com.speedment.util.tuple.Tuple5OfNullables;
+import com.speedment.util.tuple.Tuple6OfNullables;
 import java.util.Optional;
 
 /**

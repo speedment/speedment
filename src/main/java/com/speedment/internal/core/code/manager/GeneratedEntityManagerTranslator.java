@@ -24,6 +24,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Field;
 import com.speedment.internal.codegen.lang.models.File;
+import com.speedment.internal.codegen.lang.models.Generic;
 import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.codegen.lang.models.Method;

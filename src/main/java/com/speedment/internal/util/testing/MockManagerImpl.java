@@ -24,6 +24,7 @@ import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
 import com.speedment.stream.StreamDecorator;
+import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -137,8 +138,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Class<?> getPrimaryKeyClass() {
-        return inner.getPrimaryKeyClass();
+    public Tuple getPrimaryKeyClasses() {
+        return inner.getPrimaryKeyClasses();
     }
     
     @Override

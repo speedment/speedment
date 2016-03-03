@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.tuple;
+package com.speedment.util.tuple;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -30,14 +30,14 @@ import java.util.stream.Stream;
  */
 public interface TupleOfNullables extends BasicTuple<Optional<Object>> {
 
-    /**
-     * Removes the element at the given index and returns the previous element
-     * at that position.
-     *
-     * @param index of the element
-     * @return the previous element at that position
-     */
-    public Optional<Object> remove(int index);
+//    /**
+//     * Removes the element at the given index and returns the previous element
+//     * at that position.
+//     *
+//     * @param index of the element
+//     * @return the previous element at that position
+//     */
+//    public Optional<Object> remove(int index);
 
     /**
      * Returns a {@link Stream} of all values for this Tuple. If sequential, the

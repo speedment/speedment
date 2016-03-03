@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.BasicTuple;
+import com.speedment.util.tuple.BasicTuple;
 import java.util.Arrays;
 import java.util.Objects;
 import static java.util.stream.Collectors.joining;

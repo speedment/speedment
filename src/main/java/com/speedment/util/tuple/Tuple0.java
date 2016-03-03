@@ -14,25 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.tuple.impl;
-
-import com.speedment.util.tuple.Tuple1;
+package com.speedment.util.tuple;
 
 /**
+ * {@inheritDoc}
+ * 
+ * This {@link Tuple} with no elements.
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
  */
-public final class Tuple1Impl<T0> extends AbstractTuple implements Tuple1<T0> {
-
-    public Tuple1Impl(T0 e0) {
-        super(Tuple1Impl.class, e0);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T0 get0() {
-        return (T0) values[0];
-    }
+public interface Tuple0 extends Tuple {
 
 }

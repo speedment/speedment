@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.tuple;
+package com.speedment.internal.util.tuple.impl;
 
-import java.util.Optional;
+import com.speedment.util.tuple.Tuple0;
 
 /**
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
  */
-public interface Tuple2OfNullables<T0, T1> extends TupleOfNullables {
+public final class Tuple0Impl extends AbstractTuple implements Tuple0 {
 
-    public Optional<T0> get0();
+    public static final Tuple0Impl EMPTY_TUPLE = new Tuple0Impl();
 
-    public Optional<T1> get1();
+    private Tuple0Impl() {
+        super(Tuple0Impl.class);
+    }
 
 }

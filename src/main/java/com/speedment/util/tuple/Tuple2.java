@@ -14,26 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.tuple;
-
-import java.util.stream.Stream;
+package com.speedment.util.tuple;
 
 /**
- * This interface defines a generic Tuple of any order that can hold non-null
- * values. A Tuple is type safe, immutable and thread safe. For null value
- * elements see {@link TupleOfNullables}
+ * {@inheritDoc}
+ *
+ * This {@link Tuple} holds two non-null elements.
  *
  * @author pemi
- * @see TupleOfNullables
+ * @param <T0> Type of 0:th argument
+ * @param <T1> Type of 1:st argument
  */
-public interface Tuple extends BasicTuple<Object> {
+public interface Tuple2<T0, T1> extends Tuple {
 
-    /**
-     * Returns a {@link Stream} of all values for this Tuple. If sequential, the
-     * Stream will start with the 0:th tuple and progress upwards.
-     *
-     * @return a {@link Stream} of all values for this Tuple
-     */
-    Stream<Object> stream();
+    T0 get0();
+
+    T1 get1();
 
 }
