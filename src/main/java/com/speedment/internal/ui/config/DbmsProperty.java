@@ -24,18 +24,20 @@ import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.ChoicePropertyItem;
 import com.speedment.internal.ui.property.DefaultIntegerPropertyItem;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem;
-import com.speedment.internal.ui.property.IntegerPropertyItem;
 import java.util.Optional;
 import java.util.OptionalInt;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
@@ -43,6 +45,7 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import static javafx.collections.FXCollections.observableList;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 
@@ -135,11 +138,26 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        
+        final ObservableList<String> supportedTypes = observableList(
+            speedment.getDbmsHandlerComponent()
+                .supportedDbmsTypes()
+                .map(DbmsType::getName)
+                .collect(toList())
+        );
+        
         return Stream.of(
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
-                // TODO: Add DbmsType
+                new ChoicePropertyItem(
+                    supportedTypes,
+                    typeNameProperty(),
+                    "Dbms Type", 
+                    "Which type of database this is. If the type you are looking " +
+                    "for is missing, make sure it has been loaded properly in " +
+                    "the pom.xml-file."
+                ), 
                 new DefaultStringPropertyItem(
                     ipAddressProperty(), 
                     new SimpleStringProperty("127.0.0.1"),
