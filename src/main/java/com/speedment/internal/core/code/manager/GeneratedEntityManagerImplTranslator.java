@@ -31,8 +31,10 @@ import com.speedment.internal.codegen.lang.models.Import;
 import com.speedment.internal.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.internal.codegen.lang.models.constants.DefaultType;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
+import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
@@ -50,6 +52,10 @@ import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.util.sql.ResultSetUtil;
+import com.speedment.util.tuple.Tuple;
+import com.speedment.util.tuple.Tuple1;
+import com.speedment.util.tuple.Tuples;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -58,6 +64,7 @@ import com.speedment.internal.util.sql.ResultSetUtil;
 public final class GeneratedEntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
+    private static final String PRIMARY_KEY_CLASSES = "PRIMARY_KEY_CLASSES";
 
     private final Speedment speedment;
 
@@ -112,6 +119,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         .call($ -> file.add(Import.of(entity.getImplType())))
                         .call($ -> file.add(Import.of(Type.of(Speedment.class))))
                 )
+                .add(generateGetPrimaryKeyClassesField(file))
                 .add(generateGetPrimaryKeyClasses(file));
     }
 
@@ -222,14 +230,54 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return manager.getImplType();
     }
 
+    private Type pkTupleType() {
+        final long pks = primaryKeyColumns().count();
+        final Package package_ = Tuple1.class.getPackage();
+        final String tupleClassName = package_.getName() + ".Tuple" + pks;
+        final java.lang.Class<?> tupleClass;
+        try {
+            tupleClass = java.lang.Class.forName(tupleClassName);
+        } catch (ClassNotFoundException cnf) {
+            throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
+        }
+        final Type result = Type.of(tupleClass);
+        primaryKeyColumns().forEachOrdered(pk -> {
+            result.add(
+                    Generic.of().add(
+                            Type.of(java.lang.Class.class)
+                            .add(Generic.of().add(
+                                    Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
+                            )
+                    )
+            );
+        });
+        return result;
+
+    }
+
+    protected Field generateGetPrimaryKeyClassesField(File file) {
+        file.add(Import.of(Type.of(Tuples.class)));
+        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
+                .private_()
+                .static_()
+                .final_();
+
+        final String parameters = primaryKeyColumns()
+                .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
+                .map(c -> c.getSimpleName() + ".class")
+                .collect(joining(", "));
+
+        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
+
+        return field;
+    }
+
     protected Method generateGetPrimaryKeyClasses(File file) {
-        
-        
-        
-        final Method method = Method.of("getPrimaryKeyClasses", Type.of(java.lang.Class.class).add(Generic.of().add(typeOfPK())))
-                .default_()
+
+        final Method method = Method.of("getPrimaryKeyClasses", pkTupleType())
+                .public_()
                 .add(OVERRIDE)
-                .add("return " + typeOfPK().getJavaImpl().get().getSimpleName() + ".class;");
+                .add("return " + PRIMARY_KEY_CLASSES + ";");
         return method;
     }
 
