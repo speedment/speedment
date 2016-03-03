@@ -17,7 +17,10 @@
     the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <!-- For OSSRH on SonaType -->
@@ -37,8 +40,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mainClass>com.speedment.gui.MainApp</mainClass>
+        <mainClass>com.speedment.internal.ui.MainApp</mainClass>
     </properties>
+    
     <name>Speedment</name>
     
     <licenses>
@@ -133,7 +137,6 @@
                 <version>3.0.3</version>
             </plugin>
             
-            
             <plugin>
                  <groupId>org.apache.felix</groupId>
                  <artifactId>maven-bundle-plugin</artifactId>
@@ -151,59 +154,7 @@
                      </instructions>
                  </configuration>
              </plugin>
-           
-            
-<!--            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack-dependencies</id>
-                        
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${java.home}/../bin/javafxpackager</executable>
-                            <arguments>
-                                <argument>-createjar</argument>
-                                <argument>-nocss2bin</argument>
-                                <argument>-appclass</argument>
-                                <argument>${mainClass}</argument>
-                                <argument>-srcdir</argument>
-                                <argument>${project.build.directory}/classes</argument>
-                                <argument>-outdir</argument>
-                                <argument>${project.build.directory}</argument>
-                                <argument>-outfile</argument>
-                                <argument>${project.build.finalName}.jar</argument>
-                                <argument>-manifestAttrs</argument>
-                                <argument>
-                                    Implementation-Title=Speedment,
-                                    Implementation-Version=${project.version},
-                                    Implementation-Vendor=Speedment Inc.,
-                                    Implementation-Vendor-Id=${project.groupId},
-                                    Implementation-URL=https://github.com/speedment/speedment,
-                                    Built-By=${user.name},
-                                    Build-Jdk=${java.version},
-                                    Created-By=Apache Maven ${maven.version}
-                                </argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-cli</id>
-                        <goals>
-                            <goal>exec</goal>                            
-                        </goals>
-                        <configuration>
-                            <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>${runfx.args}</commandlineArgs>
-                        </configuration>
-                    </execution>
-                </executions> 
-            </plugin>-->
+             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -231,7 +182,6 @@
                             <showWarnings>true</showWarnings>
                             <showDeprecation>true</showDeprecation>
                         </configuration>
-
                     </plugin>
                     
                     <plugin>
@@ -245,6 +195,7 @@
                             </properties>
                             <excludes>
                                 <exclude>**/README</exclude>
+                                <exclude>**/package-info.java</exclude>
                                 <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
                                 <exclude>README.md</exclude>
                                 <exclude>LICENSE</exclude>

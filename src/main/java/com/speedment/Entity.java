@@ -53,12 +53,12 @@ public interface Entity<ENTITY> {
      * Returns a JSON representation of this Entity using the provided {@link
      * JsonEncoder}.
      *
-     * @param jsonFormatter to use as a formatter
+     * @param encoder to use as a JSON encoder
      * @return Returns a JSON representation of this Entity using the provided
      * {@link JsonEncoder}
      * @see JsonEncoder
      */
-    String toJson(JsonEncoder<ENTITY> jsonFormatter);
+    String toJson(JsonEncoder<ENTITY> encoder);
 
     /**
      * Persists this entity to the underlying database and returns a potentially

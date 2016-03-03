@@ -25,5 +25,11 @@ import com.speedment.annotation.Api;
  */
 @Api(version = "2.2")
 public interface HasSpeedment {
+    
+    /**
+     * Returns the {@link Speedment} handle used in this class.
+     * 
+     * @return  the speedment instance.
+     */
     Speedment getSpeedment();
 }

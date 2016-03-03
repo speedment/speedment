@@ -21,7 +21,9 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 
 /**
- *
+ * A key associated with a specific {@link Translator}. This is used to 
+ * recognise different implementations of the same translator target.
+ * 
  * @author      Per Minborg
  * @param <DOC> Document type
  * @param <T>   CodeGen main model

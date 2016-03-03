@@ -45,8 +45,6 @@ import java.util.stream.Stream;
  * <p>
  * Pluggable instances must implement the {@link Component} interface.
  *
- * <img src="{@docRoot}/doc-files/hare.png" alt="Hare">
- *
  * @author pemi
  */
 @Api(version = "2.2")

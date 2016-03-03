@@ -22,11 +22,16 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+
 /**
- *
+ * Utility methods for binding observable properties that can't easily be
+ * matched otherwise.
+ * 
  * @author Emil Forslund
  */
 public final class ObservableUtil {
+    
     public static void bind(ObjectProperty<Integer> property, IntegerBinding binding) {
         property.bind(new ObservableValue<Integer>() {
             @Override
@@ -54,5 +59,12 @@ public final class ObservableUtil {
                 binding.removeListener(listener);
             }
         });
+    }
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
+    private ObservableUtil() {
+        instanceNotAllowed(getClass());
     }
 }

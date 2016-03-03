@@ -95,6 +95,12 @@ public final class SpeedmentVersion {
         return SPECIFICATION_VERSION;
     }
 
+    /**
+     * Returns a well formatted welcome message that for an example can be 
+     * printed into the console.
+     * 
+     * @return  welcome message
+     */
     public static String getWelcomeMessage() {
         return getImplementationTitle()
             + " (" + getImplementationVersion() + ")"

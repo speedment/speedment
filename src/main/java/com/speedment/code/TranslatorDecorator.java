@@ -23,7 +23,10 @@ import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import com.speedment.internal.core.code.JavaClassTranslator;
 
 /**
- *
+ * This interface describes a functional reference to something that decorates
+ * a {@link Translator} before it used used. This is useful for adding 
+ * additional generation logic to a translator.
+ * 
  * @author       Emil Forslund
  * @param <DOC>  the document type
  * @param <T>    the codegen model type
@@ -32,5 +35,11 @@ import com.speedment.internal.core.code.JavaClassTranslator;
 @Api(version = "2.3")
 @FunctionalInterface
 public interface TranslatorDecorator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
+    
+    /**
+     * Decorates the specified {@link Translator}.
+     * 
+     * @param translator  the translator to decorate
+     */
     void apply(JavaClassTranslator<DOC, T> translator);
 }

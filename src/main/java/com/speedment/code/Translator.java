@@ -44,7 +44,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * A component that can translate a {@link Document} into something else. This
+ * Something that can translate a {@link Document} into something else. This
  * interface is implemented to generate more files from the same database
  * structure.
  *
