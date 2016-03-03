@@ -25,13 +25,14 @@ import java.util.stream.Stream;
  */
 public interface BasicTuple<R> {
 
+
     /**
-     * Returns the order of the Tuple. For example, a Tuple2 has an order of 2
-     * whereas a Tuple3 has an order of 3.
+     * Returns the length of the Tuple. For example, a Tuple2 has a length of 2
+     * whereas a Tuple3 has a length of 3.
      *
-     * @return the order of the Tuple
+     * @return the length of the Tuple
      */
-    int order();
+    int length();
 
     /**
      * Gets the tuple element at the given index. For example, get(0) will
@@ -40,7 +41,7 @@ public interface BasicTuple<R> {
      * @param index of the element to get
      * @return the tuple element at the given index
      * @throws IndexOutOfBoundsException if
-     * {@code index < 0 || index >= order()}
+     * {@code index < 0 || index >= length()}
      */
     R get(int index);
 

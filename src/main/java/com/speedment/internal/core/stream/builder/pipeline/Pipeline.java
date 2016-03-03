@@ -31,8 +31,20 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
 
     Action<?, ?> getLast();
 
+    /**
+     * Removes and returns the first element from this pipeline.
+     *
+     * @return the first element from this pipeline
+     * @throws NoSuchElementException if this pipeline is empty
+     */
     Action<?, ?> removeFirst();
 
+    /**
+     * Removes and returns the last element from this pipeline.
+     *
+     * @return the first element from this pipeline
+     * @throws NoSuchElementException if this pipeline is empty
+     */
     Action<?, ?> removeLast();
 
     void addFirst(Action<?, ?> e);
@@ -75,9 +87,8 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
      * <code>false</code> if the Pipeline is sequential
      */
     void setParallel(boolean flag);
-    
-    
-        /**
+
+    /**
      * Returns whether this pipeline, if a terminal operation were to be
      * executed, would execute in parallel.
      *
@@ -93,6 +104,5 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
      * <code>false</code> if the Pipeline is unordered
      */
     void setOrdered(boolean flag);
-    
 
 }

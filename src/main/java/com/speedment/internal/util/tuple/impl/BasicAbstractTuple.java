@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The BasicAbstractTuple implements parts of a generic Tuple of any order.
@@ -55,14 +58,14 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     protected abstract boolean isNullable();
 
     protected int assertIndexBounds(int index) {
-        if (index < 0 || index >= order()) {
-            throw new IndexOutOfBoundsException("index " + index + " is illegal. There is capacity for " + order() + " items in this class.");
+        if (index < 0 || index >= length()) {
+            throw new IndexOutOfBoundsException("index " + index + " is illegal. There is capacity for " + length() + " items in this class.");
         }
         return index;
     }
 
     @Override
-    public int order() {
+    public int length() {
         return values.length;
     }
 
@@ -85,7 +88,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         // Must be a BasicTuple since baseClass is a BasicTuple
         @SuppressWarnings("unchecked")
         final BasicTuple<?> tuple = (BasicTuple<?>) obj;
-        final int capacity = tuple.order();
+        final int capacity = tuple.length();
         for (int i = 0; i < capacity; i++) {
             if (!Objects.equals(get(i), tuple.get(i))) {
                 return false;
