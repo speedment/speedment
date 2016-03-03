@@ -73,11 +73,11 @@ public final class SceneController implements Initializable {
         final Scene scene           = new Scene(root);
         final Stage stage           = session.getStage();
         final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();
-        final boolean screenIsSmall = screen.getWidth() <= 1600; // TODO Save maximized setting.
+//        final boolean screenIsSmall = screen.getWidth() <= 1600; // TODO Save maximized setting.
         
         stage.hide();
         Brand.apply(session, scene);
-        stage.setMaximized(screenIsSmall);
+//        stage.setMaximized(screenIsSmall);
         stage.setScene(scene);
         stage.show();
 	}

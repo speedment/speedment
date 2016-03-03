@@ -30,11 +30,13 @@ public final class StandardDbmsType {
     private static final DbmsType MYSQL    = MySqlDbmsType.INSTANCE;
     private static final DbmsType MARIADB  = MariaDbDbmsType.INSTANCE;
     private static final DbmsType POSTGRES = PostgresDbmsType.INSTANCE;
+    private static final DbmsType SQLITE = SqliteDbmsType.INSTANCE;
 
     private final static List<DbmsType> STANDARD_TYPES = Stream.of(
         MYSQL,
         MARIADB,
-        POSTGRES
+        POSTGRES,
+        SQLITE
     ).collect(Collectors.toList());
 
     public static Stream<DbmsType> stream() {

@@ -72,11 +72,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private static final String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
-    private transient Map<String, Class<?>> sqlTypeMapping;
+    protected transient Map<String, Class<?>> sqlTypeMapping;
 
     private static final Boolean SHOW_METADATA = false;
 
-    private final Speedment speedment;
+    protected final Speedment speedment;
 
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment      = requireNonNull(speedment);
