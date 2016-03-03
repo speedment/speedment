@@ -21,7 +21,7 @@ import com.speedment.annotation.Api;
 
 /**
  * This functional interface represents a constructor for a class implementing
- * the {@link Componenet} interface.
+ * the {@link Component} interface.
  * 
  * @author     Emil Forslund
  * @param <C>  the component type to build
@@ -32,7 +32,7 @@ import com.speedment.annotation.Api;
 public interface ComponentConstructor<C extends Component> {
     
     /**
-     * Instantiates a new {@link Componenet} with the specified 
+     * Instantiates a new {@link Component} with the specified 
      * {@link Speedment} handle.
      * <p>
      * This method is ment to be implemented using a functional reference to the

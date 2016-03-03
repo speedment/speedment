@@ -14,17 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.field.predicate;
+package com.speedment.field.predicate.trait;
 
 import com.speedment.annotation.Api;
-import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
  *
  * @author pemi
+ * @param <ENTITY> entity type
+ * @param <V> value type
  */
 @Api(version = "2.2")
-public interface HasFieldTrait {
+public interface HasReferenceFieldTrait<ENTITY, D, V> {
 
-    FieldTrait getField();
+    ReferenceFieldTrait<ENTITY, D, V> getReferenceField();
 }

@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.field.predicate;
+package com.speedment.field.predicate.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.predicate.PredicateType;
 
 /**
  *

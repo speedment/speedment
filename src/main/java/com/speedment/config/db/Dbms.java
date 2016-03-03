@@ -97,8 +97,9 @@ public interface Dbms extends
      * <p>
      * Warning, this method does not take a custom port set in the 
      * {@link #PORT} property into consideration. For the actual
-     * port to use, call {@link #getPort(Speedment)}.
+     * port to use, call {@link #getPort()}.
      * 
+     * @param speedment            the {@link Speedment} instance
      * @return                     the default port
      * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
      */
@@ -125,8 +126,10 @@ public interface Dbms extends
      * <p>
      * Warning, this method does not take a custom connection URL set in the 
      * {@link #CONNECTION_URL} property into consideration. For the actual
-     * connection URL to use, call {@link #findConnectionUrl(Speedment)}.
+     * connection URL to use, call 
+     * {@link DocumentDbUtil#findConnectionUrl(Speedment, Dbms)}.
      * 
+     * @param speedment  the {@link Speedment} instance
      * @return  the default connection URL to use if an explicit one is not set
      * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
      */

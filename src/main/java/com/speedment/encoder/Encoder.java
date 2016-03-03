@@ -16,6 +16,7 @@
  */
 package com.speedment.encoder;
 
+import com.speedment.Entity;
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * The EntityFormatter can be used to format an Entity into any kind of strings.
+ * The Encoder can be used to format an {@link Entity} into any kind of strings.
  * Fields can be added, removed and it is also possible to change the way a
  * field is rendered into the resulting String.
  * <p>
@@ -46,6 +47,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * Adds this Field to the output renderer. The field will be rendered using
      * its default class renderer.
      *
+     * @param <D> the database type
      * @param <T> the mapped Java type of the Field
      * @param <I> Field type
      * @param field to add to the renderer
@@ -59,6 +61,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * be rendered such that the foreign key object will be retrieved and then
      * the foreign key object will be rendered using the provided Encoder.
      *
+     * @param <D> the database type
      * @param <T> the mapped Java type of the Field
      * @param <FK_ENTITY> the mapped Java type of the foreign key Field
      * @param <I> Field type

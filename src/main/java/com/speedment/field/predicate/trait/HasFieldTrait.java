@@ -14,37 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugin;
+package com.speedment.field.predicate.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.trait.FieldTrait;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author pemi
  */
-@Api(version = "2.3")
-public interface Plugin {
-    
-    /**
-     * Returns the name of this plugin as declared in the config file.
-     * 
-     * @return  the unique name
-     */
-    String getName();
-    
-    /**
-     * Returns the label of this plugin as shown visible to the user in
-     * the GUI.
-     * 
-     * @return  the label
-     */
-    String getLabel();
-    
-    /**
-     * Returns the path of the icon to use for this node in the GUI.
-     * 
-     * @return  the icon path
-     */
-    String getIconPath();
+@Api(version = "2.2")
+public interface HasFieldTrait {
+
+    FieldTrait getField();
 }

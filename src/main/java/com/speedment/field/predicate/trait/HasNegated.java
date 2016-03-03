@@ -14,19 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.field.predicate;
+package com.speedment.field.predicate.trait;
 
 import com.speedment.annotation.Api;
-import com.speedment.field.methods.Getter;
 
 /**
  *
  * @author pemi
- * @param <ENTITY> entity type
- * @param <V> value type
  */
 @Api(version = "2.2")
-public interface HasGetter<ENTITY, V> {
+public interface HasNegated {
 
-    Getter<ENTITY, V> getter();
+    public boolean isNegated();
 }

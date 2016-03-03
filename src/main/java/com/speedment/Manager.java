@@ -418,6 +418,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * several entities match, then an arbitrary matching entity will be
      * returned.
      *
+     * @param <D> the database type
      * @param <V> value type
      * @param field to use
      * @param value to match with the field

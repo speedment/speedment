@@ -14,22 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment;
+package com.speedment.field.predicate.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.predicate.PredicateType;
 
-/** 
- * Trait for objects that contains a handle to the Speedment instance.
- * 
+/**
+ *
  * @author pemi
  */
 @Api(version = "2.2")
-public interface HasSpeedment {
-    
+public interface HasEffectivePredicateType {
+
     /**
-     * Returns the {@link Speedment} handle used in this class.
-     * 
-     * @return  the speedment instance.
+     * Returns the effective predicate type. The effective predicate type is the
+     * type that results when the isNegated() flag is considered. For example,
+     * EQUAL.negate() has an effective predicate of NOT_EQAUL.
+     *
+     * @return the effective predicate type
      */
-    Speedment getSpeedment();
+    PredicateType getEffectivePredicateType();
+
 }

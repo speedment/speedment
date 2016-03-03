@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.field.predicate;
 
-import com.speedment.field.predicate.HasNegated;
+import com.speedment.field.predicate.trait.HasNegated;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.OrCombinedBasePredicate;
 import static java.util.Objects.requireNonNull;
