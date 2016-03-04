@@ -89,7 +89,7 @@ public interface IntStreamTerminator extends BaseStreamTerminator {
         return optimize(pipeline).getAsIntStream().max();
     }
 
-    default <T> long count(IntPipeline pipeline) {
+    default long count(IntPipeline pipeline) {
         requireNonNull(pipeline);
         return optimize(pipeline).getAsIntStream().count();
     }
