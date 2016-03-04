@@ -17,8 +17,9 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.stream.StreamDecorator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -47,8 +48,8 @@ public interface StreamSupplierComponent extends Component {
      */
     <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
 
-    default <ENTITY, D, V extends Comparable<? super V>>
-            Optional<ENTITY> findAny(Class<ENTITY> entityClass, ComparableField<ENTITY, D, V> field, V value) {
+    default <ENTITY, D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+            Optional<ENTITY> findAny(Class<ENTITY> entityClass, F field, V value) {
         return stream(entityClass, StreamDecorator.IDENTITY)
                 .filter(field.equal(value))
                 .findAny();
