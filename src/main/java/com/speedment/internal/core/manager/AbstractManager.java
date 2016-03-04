@@ -19,7 +19,9 @@ package com.speedment.internal.core.manager;
 import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.encoder.JsonEncoder;
-import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
@@ -59,33 +61,15 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value) {
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    Optional<ENTITY> findAny(F field, V value) {
+        
         requireNonNull(field);
         return speedment.getStreamSupplierComponent()
                 .findAny(getEntityClass(), field, value);
     }
 
-//    @Override
-//    @SuppressWarnings("unchecked")
-//    public Optional<Object> find(ENTITY entity, Column column) {
-//        requireNonNull(entity);
-//        requireNonNull(column);
-//        return getTable()
-//            .streamOf(ForeignKey.class)
-//            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
-//            .map(oFkc -> {
-//                Table fkTable = oFkc.getForeignTable();
-//                Column fkColumn = oFkc.getForeignColumn();
-//
-//                @SuppressWarnings("rawtypes")
-//                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
-//
-//                Object key = get(entity, column);
-//
-//                // This is an O(n) operation. We must use our short curcuit Fields...
-//                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
-//            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
-//    }
     @Override
     public Manager<ENTITY> initialize() {
         state = State.INIITIALIZED;

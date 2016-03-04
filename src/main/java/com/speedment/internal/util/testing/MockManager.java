@@ -18,6 +18,9 @@ package com.speedment.internal.util.testing;
 
 import com.speedment.Manager;
 import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.stream.StreamDecorator;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -106,7 +109,9 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param finder the new finder supplier
      * @return this instance
      */
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder);
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder);
 
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);

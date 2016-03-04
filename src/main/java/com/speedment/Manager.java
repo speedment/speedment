@@ -23,7 +23,9 @@ import com.speedment.config.db.Table;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
@@ -355,6 +357,23 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @see Stream
      */
     Stream<ENTITY> nativeStream(StreamDecorator decorator);
+    
+    /**
+     * Finds and returns an Optional entity where the given field matches the
+     * given value. If no entity matches, an Optional.empty() is returned. If
+     * several entities match, then an arbitrary matching entity will be
+     * returned.
+     *
+     * @param <D> the database type
+     * @param <V> value type
+     * @param <F> the field type
+     * @param field to use
+     * @param value to match with the field
+     * @return An Optional entity where the given field matches the given value
+     */
+    <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    Optional<ENTITY> findAny(F field, V value);
 
     // TBI: Shall we expose this method in the API?
     // Persistence
@@ -419,20 +438,6 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * (e.g. SQLException)
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
-
-    /**
-     * Finds and returns an Optional entity where the given field matches the
-     * given value. If no entity matches, an Optional.empty() is returned. If
-     * several entities match, then an arbitrary matching entity will be
-     * returned.
-     *
-     * @param <D> the database type
-     * @param <V> value type
-     * @param field to use
-     * @param value to match with the field
-     * @return An Optional entity where the given field matches the given value
-     */
-    <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value);
 
     ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 

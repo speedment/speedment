@@ -23,7 +23,9 @@ import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
@@ -47,7 +49,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     private Function<ENTITY, ENTITY> remover;
-    private BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder;
+    private BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
@@ -97,8 +99,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ?, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder) {
-        this.finder = finder;
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder) {
+        this.finder = (BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>>) 
+            (BiFunction<?, ?, ?>) finder;
+        
         return this;
     }
 
@@ -174,7 +180,9 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, D, V> field, V value) {
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    Optional<ENTITY> findAny(F field, V value) {
         return finder.apply(field, value);
     }
 
