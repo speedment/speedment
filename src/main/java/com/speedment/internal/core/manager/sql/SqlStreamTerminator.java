@@ -130,7 +130,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
     
     @Override
-    public <T> long count(IntPipeline pipeline) {
+    public long count(IntPipeline pipeline) {
         requireNonNull(pipeline);
         return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
     }
