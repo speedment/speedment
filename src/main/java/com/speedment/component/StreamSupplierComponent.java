@@ -55,4 +55,15 @@ public interface StreamSupplierComponent extends Component {
                 .findAny();
     }
 
+    /**
+     * Returns if this stream component will return the same stream result over
+     * time (immutable or analytics type of data).
+     *
+     * @return if this stream component will return the same stream result over
+     * time.
+     */
+    default boolean isImmutable() {
+        return false;
+    }
+
 }
