@@ -67,12 +67,25 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     @Override
     protected Interface makeCodeGenModel(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
+
         final Enum identifier = Enum.of("Identifier")
             .add(Field.of("columnName", STRING).private_().final_())
             .add(Type.of(FieldIdentifier.class))
             .add(Constructor.of()
                 .add(Field.of("columnName", STRING))
                 .add("this.columnName = columnName;")
+            )
+            .add(Method.of("dbmsName", STRING).public_()
+                .add(OVERRIDE)
+                .add("return \"" + dbmsOrThrow().getName() + "\";")
+            )
+            .add(Method.of("schemaName", STRING).public_()
+                .add(OVERRIDE)
+                .add("return \"" + schemaOrThrow().getName() + "\";")
+            )
+            .add(Method.of("tableName", STRING).public_()
+                .add(OVERRIDE)
+                .add("return \"" + tableOrThrow().getName() + "\";")
             )
             .add(Method.of("columnName", STRING).public_()
                 .add(OVERRIDE)
@@ -157,7 +170,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String setter = ", " + shortEntityName + "::set" + typeName(col);
 
                 final String constant = javaLanguageNamer().javaStaticFieldName(col.getJavaName());
-                identifier.add(EnumConstant.of(constant).add(new TextValue(col.getJavaName())));
+                identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
                 
                 file.add(Import.of(ref.implType));
                 clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)

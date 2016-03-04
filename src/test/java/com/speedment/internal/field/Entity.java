@@ -43,6 +43,21 @@ public interface Entity {
         public String columnName() {
             return columnName;
         }
+
+        @Override
+        public String dbmsName() {
+            return "my_dbms";
+        }
+
+        @Override
+        public String schemaName() {
+            return "my_schema";
+        }
+
+        @Override
+        public String tableName() {
+            return "my_table";
+        }
     }
 
     public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IntegerIdentityMapper());

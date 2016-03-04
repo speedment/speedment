@@ -23,6 +23,7 @@ import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
@@ -242,4 +243,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return inner.speedment();
     }
 
+    @Override
+    public Stream<FieldTrait> fields() {
+        return inner.fields();
+    }
 }

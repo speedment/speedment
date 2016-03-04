@@ -25,8 +25,28 @@ import com.speedment.annotation.Api;
  * @since  2.3
  */
 @Api(version = "2.3")
-@FunctionalInterface
 public interface FieldIdentifier {
+    
+    /**
+     * Returns the name of the {@link Dbms} that this field is in.
+     * 
+     * @return  the {@link Dbms} name
+     */
+    String dbmsName();
+    
+    /**
+     * Returns the name of the {@link Schema} that this field is in.
+     * 
+     * @return  the {@link Schema} name
+     */
+    String schemaName();
+    
+    /**
+     * Returns the name of the {@link Table} that this field is in.
+     * 
+     * @return  the {@link Table} name
+     */
+    String tableName();
     
     /**
      * The unique java name of the identified column.

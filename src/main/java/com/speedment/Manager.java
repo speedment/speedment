@@ -23,6 +23,7 @@ import com.speedment.config.db.Table;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.ComparableField;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
@@ -93,6 +94,13 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * {@code null}
      */
     void set(ENTITY entity, Column column, Object value);
+    
+    /**
+     * Returns a stream of the fields that every entity in this contains.
+     * 
+     * @return  a stream fo all fields
+     */
+    Stream<FieldTrait> fields();
 
     // Data source metadata
     /**

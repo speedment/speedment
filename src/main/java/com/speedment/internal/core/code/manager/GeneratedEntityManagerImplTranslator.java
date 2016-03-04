@@ -21,6 +21,7 @@ import com.speedment.component.JavaTypeMapperComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.Class;
 import com.speedment.internal.codegen.lang.models.Constructor;
@@ -34,6 +35,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
+import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
@@ -51,7 +53,6 @@ import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.util.sql.ResultSetUtil;
-import com.speedment.util.tuple.Tuple1;
 import com.speedment.util.tuple.Tuples;
 import static java.util.stream.Collectors.joining;
 
@@ -75,23 +76,6 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     protected Class makeCodeGenModel(File file) {
         file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
         return newBuilder(file, manager.getGeneratedImplName())
-                //            .forEveryColumn((clazz, col) -> {
-                //
-                //                final TypeMapper<?, ?> mapper     = col.findTypeMapper();
-                //                final java.lang.Class<?> javaType = mapper.getJavaType();
-                //                final java.lang.Class<?> dbType   = mapper.getDatabaseType();
-                //                
-                //                final Type mapperType = Type.of(TypeMapper.class)
-                //                    .add(Generic.of().add(Type.of(dbType)))
-                //                    .add(Generic.of().add(Type.of(javaType)));
-                //
-                //                file.add(Import.of(Type.of(mapper.getClass())));
-                //
-                //                clazz.add(Field.of(typeMapperName(col), mapperType)
-                //                    .private_().final_()
-                //                    .set(new ReferenceValue("new " + mapper.getClass().getSimpleName() + "()"))
-                //                );
-                //            })
                 .build()
                 .public_().abstract_()
                 .setSupertype(Type.of(AbstractSqlManager.class)
@@ -119,6 +103,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 )
                 .add(generateGet(file))
                 .add(generateSet(file))
+                .add(generateFields(file))
                 .add(generateGetPrimaryKeyClassesField(file))
                 .add(generateGetPrimaryKeyClasses(file));
     }
@@ -287,6 +272,22 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                                 + ") value); break;").collect(Collectors.joining(nl()))
                         + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                 ));
+    }
+    
+    protected Method generateFields(File file) {
+        final Method result = Method.of("fields", Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
+            .public_().add(OVERRIDE)
+            .add("return Stream.of(");
+        
+        result.add(indent(
+            tableOrThrow().columns()
+                .map(Column::getJavaName)
+                .map(javaLanguageNamer()::javaStaticFieldName)
+                .map(field -> typeName() + "." + field)
+                .collect(joining("," + nl()))
+        ));
+        
+        return result.add(");");
     }
 
     private String getterCode(Column c) {
