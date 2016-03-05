@@ -171,26 +171,27 @@ public final class EntityTranslatorSupport {
                 implType = Type.of(StringFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType));
+                
             } else if (Comparable.class.isAssignableFrom(mapping)) {
                 type = Type.of(ComparableField.class)
                         .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(Type.of(mapping)))
-                        .add(Generic.of().add(databaseType));
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ComparableFieldImpl.class)
                         .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(Type.of(mapping)))
-                        .add(Generic.of().add(databaseType));
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
             } else {
                 type = Type.of(ReferenceField.class)
                         .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(Type.of(mapping)))
-                        .add(Generic.of().add(databaseType));
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ReferenceFieldImpl.class)
                         .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(Type.of(mapping)))
-                        .add(Generic.of().add(databaseType));
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
             }
 
             return new ReferenceFieldType(type, implType);
