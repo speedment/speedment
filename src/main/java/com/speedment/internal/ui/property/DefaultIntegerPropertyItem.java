@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;

@@ -27,7 +27,6 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.Arrays;
-import java.util.function.Function;
 
 /**
  * Describes which implementations the {@link Document} interface to use at
