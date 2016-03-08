@@ -35,7 +35,6 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnota
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
-import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
@@ -76,36 +75,41 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     protected Class makeCodeGenModel(File file) {
         file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
         return newBuilder(file, manager.getGeneratedImplName())
+                .forEveryTable((clazz, table) -> {
+                    clazz
+                            .public_()
+                            .abstract_()
+                            .setSupertype(Type.of(AbstractSqlManager.class)
+                                    .add(Generic.of().add(entity.getType()))
+                            )
+                            .add(manager.getGeneratedType())
+                            .add(Constructor.of()
+                                    .protected_()
+                                    .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
+                                    .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
+                                    .add("setEntityMapper(this::newEntityFrom);"))
+                            .add(newEntityFrom(file))
+                            .add(Method.of("newEmptyEntity", entity.getType())
+                                    .public_().add(OVERRIDE)
+                                    .add("return new " + entity.getImplName() + "() {", indent(
+                                            "@Override",
+                                            "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
+                                                    "return " + SPEEDMENT_VARIABLE_NAME + ";"
+                                            ), "}"
+                                    ), "};"
+                                    )
+                                    .call($ -> file.add(Import.of(entity.getImplType())))
+                                    .call($ -> file.add(Import.of(Type.of(Speedment.class))))
+                            )
+                            .add(generateGet(file))
+                            .add(generateSet(file))
+                            .add(generateFields(file))
+                            .add(generateGetPrimaryKeyClassesField(file))
+                            .add(generateGetPrimaryKeyClasses(file));
+
+                })
                 .build()
-                .public_().abstract_()
-                .setSupertype(Type.of(AbstractSqlManager.class)
-                        .add(Generic.of().add(entity.getType()))
-                )
-                .add(manager.getGeneratedType())
-                .call(i -> file.add(Import.of(entity.getImplType())))
-                .add(Constructor.of()
-                        .protected_()
-                        .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
-                        .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
-                        .add("setEntityMapper(this::newEntityFrom);"))
-                .add(newEntityFrom(file))
-                .add(Method.of("newEmptyEntity", entity.getType())
-                        .public_().add(OVERRIDE)
-                        .add("return new " + entity.getImplName() + "() {", indent(
-                                "@Override",
-                                "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                                        "return " + SPEEDMENT_VARIABLE_NAME + ";"
-                                ), "}"
-                        ), "};"
-                        )
-                        .call($ -> file.add(Import.of(entity.getImplType())))
-                        .call($ -> file.add(Import.of(Type.of(Speedment.class))))
-                )
-                .add(generateGet(file))
-                .add(generateSet(file))
-                .add(generateFields(file))
-                .add(generateGetPrimaryKeyClassesField(file))
-                .add(generateGetPrimaryKeyClasses(file));
+                .call(i -> file.add(Import.of(entity.getImplType())));
     }
 
     private static enum Primitive {
@@ -273,20 +277,20 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
                 ));
     }
-    
+
     protected Method generateFields(File file) {
         final Method result = Method.of("fields", Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
-            .public_().add(OVERRIDE)
-            .add("return Stream.of(");
-        
+                .public_().add(OVERRIDE)
+                .add("return Stream.of(");
+
         result.add(indent(
-            tableOrThrow().columns()
+                tableOrThrow().columns()
                 .map(Column::getJavaName)
                 .map(javaLanguageNamer()::javaStaticFieldName)
                 .map(field -> typeName() + "." + field)
                 .collect(joining("," + nl()))
         ));
-        
+
         return result.add(");");
     }
 

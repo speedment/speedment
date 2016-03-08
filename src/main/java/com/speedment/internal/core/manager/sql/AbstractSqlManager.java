@@ -90,12 +90,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
     
     /**
-     * Counts the number of elements in the current table by quering the
+     * Counts the number of elements in the current table by querying the
      * database.
      * 
      * @return  the number of elements in the table
      */
-    public final long count() {
+    public long count() {
         return synchronousStreamOf(
             "select count(*) from " + sqlTableReference(), 
             Collections.emptyList(), 
@@ -113,7 +113,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * 
      * @return  the SQL statement
      */
-    public final String sqlSelect() {
+    public String sqlSelect() {
         return "select " + sqlColumnList() + " from " + sqlTableReference();
     }
 
@@ -163,7 +163,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Short-cut for retreiving the current {@link Dbms}.
+     * Short-cut for retrieving the current {@link Dbms}.
      * 
      * @return  the current dbms
      */
@@ -172,7 +172,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Short-cut for retreiving the current {@link DbmsType}.
+     * Short-cut for retrieving the current {@link DbmsType}.
      * 
      * @return  the current dbms type
      */
@@ -181,7 +181,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Short-cut for retreiving the current {@link DbmsHandler}.
+     * Short-cut for retrieving the current {@link DbmsHandler}.
      * 
      * @return  the current dbms handler
      */
@@ -190,7 +190,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
     
     /**
-     * Short-cut for retreiving the current {@link DatabaseNamingConvention}.
+     * Short-cut for retrieving the current {@link DatabaseNamingConvention}.
      * 
      * @return  the current naming convention
      */
@@ -225,7 +225,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * 
      * @return  list of fully quoted primary key column names
      */
-    private String sqlColumnList(Function<String, String> postMapper) {
+    protected String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return getTable().columns()
                 .map(naming()::fullNameOf)
@@ -254,7 +254,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * 
      * @return  the full quoted table name
      */
-    private String sqlTableReference() {
+    protected String sqlTableReference() {
         return naming().fullNameOf(getTable());
     }
 
