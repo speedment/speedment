@@ -31,7 +31,7 @@ import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.property.ChoicePropertyItem;
+import com.speedment.internal.ui.property.StringChoicePropertyItem;
 import com.speedment.internal.ui.property.DefaultIntegerPropertyItem;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem;
@@ -48,6 +48,7 @@ import javafx.beans.property.StringProperty;
 import static javafx.collections.FXCollections.observableList;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
+import static javafx.collections.FXCollections.observableList;
 
 /**
  *
@@ -146,11 +147,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 .collect(toList())
         );
         
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new ChoicePropertyItem(
+            Stream.of(new StringChoicePropertyItem(
                     supportedTypes,
                     typeNameProperty(),
                     "Dbms Type", 
