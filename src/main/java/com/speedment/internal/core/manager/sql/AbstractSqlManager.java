@@ -194,7 +194,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * 
      * @return  the current naming convention
      */
-    private DatabaseNamingConvention naming() {
+    protected final DatabaseNamingConvention naming() {
         return getDbmsType().getDatabaseNamingConvention();
     }
     
