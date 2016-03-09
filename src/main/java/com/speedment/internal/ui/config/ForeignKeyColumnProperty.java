@@ -33,6 +33,7 @@ import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import java.util.Optional;
 
 /**
@@ -40,7 +41,7 @@ import java.util.Optional;
  * @author Emil Forslund
  */
 public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
-    implements ForeignKeyColumn, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
+    implements ForeignKeyColumn, HasExpandedProperty, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
 
     public ForeignKeyColumnProperty(ForeignKey parent) {
         super(parent);

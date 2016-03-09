@@ -24,6 +24,7 @@ import com.speedment.config.db.IndexColumn;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexColumnPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrderTypeProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
@@ -35,7 +36,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index, IndexColumnProperty> 
-    implements IndexColumn, HasNameProperty, HasOrdinalPositionProperty,
+    implements IndexColumn, HasExpandedProperty, HasNameProperty, HasOrdinalPositionProperty,
     HasOrderTypeProperty, HasColumnProperty {
     
     public IndexColumnProperty(Index parent) {

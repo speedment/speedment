@@ -27,6 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.DefaultStringPropertyItem;
 import com.speedment.internal.ui.property.StringPropertyItem;
@@ -50,7 +51,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
-    implements Project, HasEnabledProperty, HasNameProperty {
+    implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public void merge(Speedment speedment, Project project) {
         DocumentMerger.merge(this, project, (parent, key) -> 

@@ -30,6 +30,7 @@ import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.StringChoicePropertyItem;
 import com.speedment.internal.ui.property.DefaultIntegerPropertyItem;
@@ -55,7 +56,7 @@ import static javafx.collections.FXCollections.observableList;
  * @author Emil Forslund
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
-    implements Dbms, HasEnabledProperty, HasNameProperty {
+    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public DbmsProperty(Project parent) {
         super(parent);

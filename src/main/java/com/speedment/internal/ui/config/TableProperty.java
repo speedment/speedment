@@ -25,6 +25,7 @@ import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.TablePropertyMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
@@ -35,8 +36,14 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class TableProperty extends AbstractChildDocumentProperty<Schema, TableProperty> 
-    implements Table, HasEnabledProperty, HasNameProperty, HasAliasProperty {
+public final class TableProperty 
+    extends AbstractChildDocumentProperty<Schema, TableProperty> 
+    implements 
+        Table, 
+        HasEnabledProperty, 
+        HasExpandedProperty, 
+        HasNameProperty, 
+        HasAliasProperty {
 
     public TableProperty(Schema parent) {
         super(parent);

@@ -72,7 +72,7 @@ import static javafx.collections.FXCollections.observableList;
  * @param <THIS>  the type of the implementing class
  */
 public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> 
-    implements DocumentProperty, HasExpandedProperty, HasNameProperty {
+    implements DocumentProperty/*, HasExpandedProperty, HasNameProperty */{
  
     private final Map<String, Object> config;
     private final transient ObservableMap<String, Property<?>> properties;
@@ -226,11 +226,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     
     @Override
     public final ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
-        return /*unmodifiableObservableMap(*/
+        return
             (ObservableMap<String, ObservableList<DocumentProperty>>) 
             (ObservableMap<String, ?>)
             children
-        /*)*/;
+        ;
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.SchemaPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasAliasProperty;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.stream.Stream;
@@ -38,7 +39,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty> 
-    implements Schema, HasEnabledProperty, HasNameProperty, HasAliasProperty {
+    implements Schema, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 
     public SchemaProperty(Dbms parent) {
         super(parent);

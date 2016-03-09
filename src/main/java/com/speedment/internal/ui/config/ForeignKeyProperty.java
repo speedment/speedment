@@ -24,6 +24,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
@@ -34,7 +35,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table, ForeignKeyProperty> 
-    implements ForeignKey, HasEnabledProperty, HasNameProperty {
+    implements ForeignKey, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public ForeignKeyProperty(Table parent) {
         super(parent);

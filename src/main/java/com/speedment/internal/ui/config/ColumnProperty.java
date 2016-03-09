@@ -43,6 +43,7 @@ import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 
 /**
@@ -52,7 +53,8 @@ import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements 
         Column, 
         HasEnabledProperty, 
-        HasNameProperty, 
+        HasExpandedProperty, 
+        HasNameProperty,
         HasAliasProperty, 
         HasNullableProperty, 
         HasOrdinalPositionProperty {

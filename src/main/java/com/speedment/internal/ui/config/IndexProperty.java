@@ -24,6 +24,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.stream.Stream;
@@ -36,7 +37,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class IndexProperty extends AbstractChildDocumentProperty<Table, IndexProperty> 
-    implements Index, HasEnabledProperty, HasNameProperty {
+    implements Index, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public IndexProperty(Table parent) {
         super(parent);

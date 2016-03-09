@@ -19,6 +19,8 @@ package com.speedment.internal.ui.config;
 import com.speedment.Speedment;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.Document;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
@@ -28,7 +30,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class DefaultDocumentProperty extends 
-    AbstractDocumentProperty<DefaultDocumentProperty> {
+    AbstractDocumentProperty<DefaultDocumentProperty> implements HasExpandedProperty, HasNameProperty {
     
     private final AbstractDocumentProperty parent;
     private final String key;

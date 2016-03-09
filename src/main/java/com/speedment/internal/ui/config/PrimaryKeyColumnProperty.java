@@ -24,6 +24,7 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.PrimaryKeyColumnPropertyMutator;
 import com.speedment.internal.ui.config.trait.HasColumnProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.stream.Stream;
@@ -33,9 +34,14 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class PrimaryKeyColumnProperty extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty> 
-    implements PrimaryKeyColumn, HasNameProperty, 
-    HasOrdinalPositionProperty, HasColumnProperty {
+public final class PrimaryKeyColumnProperty 
+    extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty> 
+    implements 
+        PrimaryKeyColumn, 
+        HasExpandedProperty, 
+        HasNameProperty, 
+        HasOrdinalPositionProperty, 
+        HasColumnProperty {
 
     public PrimaryKeyColumnProperty(Table parent) {
         super(parent);
