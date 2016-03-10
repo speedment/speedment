@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.pipeline;
 
+import com.speedment.stream.Pipeline;
 import java.util.stream.IntStream;
 
 /**

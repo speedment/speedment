@@ -14,19 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator.trait;
+package com.speedment.config.db.mutator.trait;
 
 import com.speedment.config.db.trait.*;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
  *
  * @author       Per Minborg
  * @param <DOC>  document type
  */
-public interface HasAliasMutator<DOC extends HasAlias> extends DocumentMutator<DOC>, HasNameMutator<DOC> {
+public interface HasNameMutator<DOC extends HasName> extends DocumentMutator<DOC> {
     
-    default void setAlias(String alias) {
-        put(HasAlias.ALIAS, alias);
+    default void setName(String name) {
+        put(HasName.NAME, name);
     }
 }

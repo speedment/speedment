@@ -20,7 +20,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.autoclose.AbstractAutoClosingStream;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import com.speedment.util.StreamComposition;
 import java.util.ArrayList;
 import java.util.HashSet;

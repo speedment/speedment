@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.runtime;
 
+import com.speedment.component.Lifecyclable;
 import java.util.Objects;
 
 /**

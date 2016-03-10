@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator;
+package com.speedment.config.db.mutator;
 
 import com.speedment.config.db.Schema;
 import static com.speedment.config.db.Schema.DEFAULT_SCHEMA;
 import static com.speedment.config.db.Schema.TABLES;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.TableImpl;
-import com.speedment.internal.core.config.db.mutator.trait.HasAliasMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
+import com.speedment.config.db.mutator.trait.HasAliasMutator;
+import com.speedment.config.db.mutator.trait.HasEnabledMutator;
+import com.speedment.config.db.mutator.trait.HasNameMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

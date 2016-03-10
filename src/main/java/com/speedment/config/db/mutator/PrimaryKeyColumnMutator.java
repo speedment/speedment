@@ -14,12 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.action;
+package com.speedment.config.db.mutator;
+
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.config.db.mutator.trait.HasOrdinalPositionMutator;
 
 /**
  *
- * @author pemi
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public enum Verb {
-    SET, CLEAR, PRESERVE;
+public class PrimaryKeyColumnMutator<DOC extends PrimaryKeyColumn>  extends DocumentMutatorImpl<DOC> implements 
+        HasNameMutator<DOC>,
+        HasOrdinalPositionMutator<DOC> {
+
+    public PrimaryKeyColumnMutator(DOC primaryKeyColumn) {
+        super(primaryKeyColumn);
+    }
 }

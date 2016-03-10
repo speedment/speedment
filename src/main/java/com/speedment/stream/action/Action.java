@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.action;
+package com.speedment.stream.action;
 
+import com.speedment.stream.action.BasicAction;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.EnumSet;
 import java.util.HashMap;

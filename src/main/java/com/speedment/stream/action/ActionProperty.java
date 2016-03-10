@@ -14,19 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator.trait;
-
-import com.speedment.config.db.trait.*;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+package com.speedment.stream.action;
 
 /**
  *
- * @author       Per Minborg
- * @param <DOC>  document type
+ * @author pemi
  */
-public interface HasNameMutator<DOC extends HasName> extends DocumentMutator<DOC> {
+public interface ActionProperty {
+
     
-    default void setName(String name) {
-        put(HasName.NAME, name);
-    }
 }

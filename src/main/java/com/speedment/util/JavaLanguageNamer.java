@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util;
+package com.speedment.util;
 
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import static com.speedment.internal.util.sql.SqlUtil.unQuote;

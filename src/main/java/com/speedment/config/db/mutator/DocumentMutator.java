@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator;
+package com.speedment.config.db.mutator;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.Column;

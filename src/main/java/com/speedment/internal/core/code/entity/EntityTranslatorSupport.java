@@ -42,7 +42,7 @@ import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringFieldImpl;
 import com.speedment.internal.core.field.ReferenceFieldImpl;
 import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.util.Pluralis;

@@ -14,19 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator.trait;
+package com.speedment.config.db.mutator;
 
-import com.speedment.config.db.trait.*;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.config.db.mutator.trait.HasOrderTypeMutator;
+import com.speedment.config.db.mutator.trait.HasOrdinalPositionMutator;
 
 /**
  *
  * @author       Per Minborg
  * @param <DOC>  document type
  */
-public interface HasEnabledMutator<DOC extends HasEnabled> extends DocumentMutator<DOC> {
-    
-    default void setEnabled(Boolean enabled) {
-        put(HasEnabled.ENABLED, enabled);
+public class IndexColumnMutator<DOC extends IndexColumn> extends DocumentMutatorImpl<DOC> implements 
+        HasNameMutator<DOC>,
+        HasOrdinalPositionMutator<DOC>, 
+        HasOrderTypeMutator<DOC> {
+
+    public IndexColumnMutator(DOC indexColumn) {
+        super(indexColumn);
     }
 }

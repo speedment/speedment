@@ -25,7 +25,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;

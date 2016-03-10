@@ -24,7 +24,7 @@ import com.speedment.internal.codegen.base.Meta;
 import com.speedment.internal.codegen.lang.models.File;
 import com.speedment.internal.codegen.lang.models.Interface;
 import com.speedment.internal.core.code.TranslatorManager;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 

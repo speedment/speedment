@@ -14,15 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator;
+package com.speedment.config.db.mutator;
 
 import com.speedment.config.db.*;
 import static com.speedment.config.db.Column.*;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.internal.core.config.db.mutator.trait.HasAliasMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasEnabledMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.config.db.mutator.trait.HasAliasMutator;
+import com.speedment.config.db.mutator.trait.HasEnabledMutator;
+import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.config.db.mutator.trait.HasOrdinalPositionMutator;
 
 /**
  *

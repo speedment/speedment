@@ -16,13 +16,16 @@
  */
 package com.speedment.internal.core.stream.builder.action;
 
-import static com.speedment.internal.core.stream.builder.action.Property.ORDER;
-import static com.speedment.internal.core.stream.builder.action.Property.SIDE_EFFECT;
-import static com.speedment.internal.core.stream.builder.action.Property.SIZE;
-import static com.speedment.internal.core.stream.builder.action.Property.STREAM_TYPE;
-import static com.speedment.internal.core.stream.builder.action.Property.TYPE;
-import static com.speedment.internal.core.stream.builder.action.Verb.PRESERVE;
-import static com.speedment.internal.core.stream.builder.action.Verb.SET;
+import com.speedment.stream.action.BasicAction;
+import com.speedment.stream.action.Property;
+import com.speedment.stream.action.Statement;
+import static com.speedment.stream.action.Property.ORDER;
+import static com.speedment.stream.action.Property.SIDE_EFFECT;
+import static com.speedment.stream.action.Property.SIZE;
+import static com.speedment.stream.action.Property.STREAM_TYPE;
+import static com.speedment.stream.action.Property.TYPE;
+import static com.speedment.stream.action.Verb.PRESERVE;
+import static com.speedment.stream.action.Verb.SET;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.stream.Stream;
 
@@ -87,7 +90,7 @@ public enum StandardBasicAction implements BasicAction {
         Statement.of(PRESERVE, TYPE),
         Statement.of(PRESERVE, STREAM_TYPE),
         Statement.of(PRESERVE, SIZE),
-        Statement.of(SET, com.speedment.internal.core.stream.builder.action.Property.SORTED)
+        Statement.of(SET, com.speedment.stream.action.Property.SORTED)
     ),
     BOXED(
         Statement.of(PRESERVE, ORDER),

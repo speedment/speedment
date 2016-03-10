@@ -36,7 +36,7 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
-import com.speedment.internal.core.config.db.mutator.ForeignKeyColumnMutator;
+import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.sql.SqlTypeInfo;

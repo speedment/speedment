@@ -16,7 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.pipeline;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.Pipeline;
+import com.speedment.stream.action.Action;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;

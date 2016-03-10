@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.ProjectMutator;
+import com.speedment.config.db.mutator.ProjectMutator;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.mutator.trait.HasEnabledPropertyMutator;

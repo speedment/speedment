@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.SchemaMutator;
+import com.speedment.config.db.mutator.SchemaMutator;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.ui.config.mutator.trait.HasAliasPropertyMutator;

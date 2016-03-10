@@ -17,8 +17,7 @@
 package com.speedment.internal.core.stream;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
+import com.speedment.stream.Pipeline;
 import com.speedment.stream.StreamDecorator;
 import java.util.Arrays;
 import java.util.List;
@@ -44,11 +43,11 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     }
 
     @Override
-    public <ENTITY> ReferenceStreamBuilder<ENTITY> apply(ReferenceStreamBuilder<ENTITY> stream) {
-        ReferenceStreamBuilder<ENTITY> s = stream;
+    public <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
+        S s = stream;
 
         for (StreamDecorator sd : decorators) {
-            s = sd.apply(s);
+            s = sd.applyOnFinal(s);
         }
 
         return s;
@@ -77,11 +76,11 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     }
 
     @Override
-    public <ENTITY> Stream<ENTITY> apply(Stream<ENTITY> stream) {
-        Stream<ENTITY> s = stream;
+    public <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
+        S s = stream;
 
         for (StreamDecorator sd : decorators) {
-            s = sd.apply(s);
+            s = sd.applyOnInitial(s);
         }
         return s;
     }
@@ -89,12 +88,12 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     @Override
     public <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
         H h = hasParallelStrategy;
-        
+
         for (StreamDecorator sd : decorators) {
             h = sd.apply(h);
         }
         return h;
-        
+
     }
 
 }

@@ -17,7 +17,7 @@
 package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
  *

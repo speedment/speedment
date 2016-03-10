@@ -22,7 +22,7 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.db.mutator.DbmsMutator;
+import com.speedment.config.db.mutator.DbmsMutator;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.config.AbstractChildDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;

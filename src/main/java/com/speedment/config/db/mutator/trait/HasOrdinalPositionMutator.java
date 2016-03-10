@@ -14,26 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.action;
+package com.speedment.config.db.mutator.trait;
+
+import com.speedment.config.db.trait.*;
+import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author pemi
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public enum Property implements ActionProperty {
-
-    ORDER,
-    SIZE,
-    TYPE,
-    STREAM_TYPE,
-    DISTINCT,
-    SORTED,
-    /**
-     * Is this a finite stream.
-     */
-    FINITE,
-    /**
-     * Does this action have a side effect (like peek() might).
-     */
-    SIDE_EFFECT;
+public interface HasOrdinalPositionMutator<DOC extends HasOrdinalPosition> extends DocumentMutator<DOC> {
+    
+    default void setOrdinalPosition(Integer ordinalPosition) {
+        put(HasOrdinalPosition.ORDINAL_POSITION, ordinalPosition);
+    }
 }

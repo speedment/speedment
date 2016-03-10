@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.action;
+package com.speedment.stream.action;
 
 import java.util.HashMap;
 import java.util.Map;

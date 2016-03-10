@@ -48,7 +48,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import com.speedment.license.Software;
 import java.util.List;
 import java.util.Set;

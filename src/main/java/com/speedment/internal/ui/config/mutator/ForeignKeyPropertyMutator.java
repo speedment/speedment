@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.ForeignKeyMutator;
+import com.speedment.config.db.mutator.ForeignKeyMutator;
 import com.speedment.internal.ui.config.ForeignKeyColumnProperty;
 import com.speedment.internal.ui.config.ForeignKeyProperty;
 import com.speedment.internal.ui.config.mutator.trait.HasEnabledPropertyMutator;

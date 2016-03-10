@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.IndexMutator;
+import com.speedment.config.db.mutator.IndexMutator;
 import com.speedment.internal.ui.config.IndexColumnProperty;
 import com.speedment.internal.ui.config.IndexProperty;
 import com.speedment.internal.ui.config.mutator.trait.HasEnabledPropertyMutator;

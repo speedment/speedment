@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action.reference;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SORTED;
 import com.speedment.internal.core.stream.builder.action.trait.HasComparator;
 import java.util.Comparator;

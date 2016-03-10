@@ -14,16 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.action;
+package com.speedment.config.db.mutator.trait;
 
-import java.util.stream.Stream;
+import com.speedment.config.db.trait.*;
+import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
  *
- * @author pemi
+ * @author       Per Minborg
+ * @param <DOC>  document type
  */
-public interface BasicAction {
-
-    Stream<Statement> statements();
-
+public interface HasEnabledMutator<DOC extends HasEnabled> extends DocumentMutator<DOC> {
+    
+    default void setEnabled(Boolean enabled) {
+        put(HasEnabled.ENABLED, enabled);
+    }
 }

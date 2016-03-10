@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SKIP;
 import com.speedment.internal.core.stream.builder.action.trait.HasSkip;
 import java.util.stream.LongStream;

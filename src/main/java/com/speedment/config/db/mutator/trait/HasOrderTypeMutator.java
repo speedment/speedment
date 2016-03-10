@@ -14,24 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator;
+package com.speedment.config.db.mutator.trait;
 
-import com.speedment.config.db.IndexColumn;
-import com.speedment.internal.core.config.db.mutator.trait.HasNameMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasOrderTypeMutator;
-import com.speedment.internal.core.config.db.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.config.db.trait.*;
+import com.speedment.config.db.parameters.OrderType;
+import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
  *
  * @author       Per Minborg
  * @param <DOC>  document type
  */
-public class IndexColumnMutator<DOC extends IndexColumn> extends DocumentMutatorImpl<DOC> implements 
-        HasNameMutator<DOC>,
-        HasOrdinalPositionMutator<DOC>, 
-        HasOrderTypeMutator<DOC> {
-
-    public IndexColumnMutator(DOC indexColumn) {
-        super(indexColumn);
+public interface HasOrderTypeMutator<DOC extends HasOrderType> extends DocumentMutator<DOC> {
+    
+    default void setOrderType(OrderType orderType) {
+         put(HasOrderType.ORDER_TYPE, orderType);
     }
 }

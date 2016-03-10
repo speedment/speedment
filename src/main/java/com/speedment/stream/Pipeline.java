@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.stream.builder.pipeline;
+package com.speedment.stream;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;

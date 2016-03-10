@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action.reference;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.FILTER;
 import com.speedment.internal.core.stream.builder.action.trait.HasPredicate;
 import static java.util.Objects.requireNonNull;

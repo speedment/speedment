@@ -18,7 +18,7 @@ package com.speedment.event;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 
 /**
  *

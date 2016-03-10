@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.TableMutator;
+import com.speedment.config.db.mutator.TableMutator;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.ForeignKeyProperty;
 import com.speedment.internal.ui.config.IndexProperty;

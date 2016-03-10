@@ -27,8 +27,8 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasOrdinalPosition;
-import com.speedment.internal.core.config.db.mutator.ColumnMutator;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.ColumnMutator;
+import com.speedment.config.db.mutator.DocumentMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 import com.speedment.config.db.trait.HasNullable;
 

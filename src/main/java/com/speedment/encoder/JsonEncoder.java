@@ -23,7 +23,7 @@ import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

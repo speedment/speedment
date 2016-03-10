@@ -14,19 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator.trait;
+package com.speedment.config.db.mutator;
 
-import com.speedment.config.db.trait.*;
-import com.speedment.internal.core.config.db.mutator.DocumentMutator;
+import com.speedment.config.Document;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author       Per Minborg
- * @param <DOC>  document type
+ * @author Per Minborg
+ * @param <DOC>  the type of the document
  */
-public interface HasOrdinalPositionMutator<DOC extends HasOrdinalPosition> extends DocumentMutator<DOC> {
+abstract class DocumentMutatorImpl<DOC extends Document> implements DocumentMutator<DOC> {
+
+    private final DOC document;
+
+    protected DocumentMutatorImpl(DOC document) {
+        this.document = requireNonNull(document);
+    }
     
-    default void setOrdinalPosition(Integer ordinalPosition) {
-        put(HasOrdinalPosition.ORDINAL_POSITION, ordinalPosition);
+    @Override
+    public final DOC document() {
+        return document;
+    }
+
+    @Override
+    public final void put(String key, Object value) {
+        document.put(key, value);
     }
 }

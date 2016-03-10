@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator.trait;
 
-import com.speedment.internal.core.config.db.mutator.trait.*;
+import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 
 /**

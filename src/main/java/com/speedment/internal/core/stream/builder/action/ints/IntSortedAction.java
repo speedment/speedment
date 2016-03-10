@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action.ints;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SORTED;
 import java.util.stream.IntStream;
 

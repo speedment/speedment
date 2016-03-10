@@ -18,7 +18,6 @@ package com.speedment.component;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
-import com.speedment.internal.core.runtime.Lifecyclable;
 import com.speedment.license.Software;
 
 /**

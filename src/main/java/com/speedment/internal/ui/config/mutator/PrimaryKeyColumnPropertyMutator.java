@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.config.mutator;
 
-import com.speedment.internal.core.config.db.mutator.PrimaryKeyColumnMutator;
+import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 import com.speedment.internal.ui.config.PrimaryKeyColumnProperty;
 import com.speedment.internal.ui.config.mutator.trait.HasNamePropertyMutator;
 import com.speedment.internal.ui.config.mutator.trait.HasOrdinalPositionPropertyMutator;

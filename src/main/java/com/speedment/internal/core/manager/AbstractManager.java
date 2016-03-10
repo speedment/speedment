@@ -22,7 +22,7 @@ import com.speedment.encoder.JsonEncoder;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.component.Lifecyclable;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 import java.util.Optional;

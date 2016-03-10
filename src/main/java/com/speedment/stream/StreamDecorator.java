@@ -19,8 +19,6 @@ package com.speedment.stream;
 import com.speedment.annotation.Api;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.stream.ComposedStreamDecorator;
-import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.internal.util.Cast;
 import java.util.stream.Stream;
 
@@ -50,7 +48,15 @@ public interface StreamDecorator {
         return new ComposedStreamDecorator(this, other);
     }
 
-    default <ENTITY> ReferenceStreamBuilder<ENTITY> apply(ReferenceStreamBuilder<ENTITY> stream) {
+     /**
+     * Method to be used to modify or configure the final stream before it is
+     * returned to the application.
+     *
+     * @param <ENTITY> entity type
+     * @param stream final stream before it is returned to the application
+     * @return the modified or configured final stream
+     */
+    default <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
         return stream;
     }
 
@@ -70,7 +76,7 @@ public interface StreamDecorator {
      * @param stream from the data source
      * @return the modified or configured stream
      */
-    default <ENTITY> Stream<ENTITY> apply(Stream<ENTITY> stream) {
+    default <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
         return stream;
     }
 

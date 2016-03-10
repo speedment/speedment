@@ -18,7 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.component.Lifecyclable;
 import static java.util.Objects.requireNonNull;
 
 /**

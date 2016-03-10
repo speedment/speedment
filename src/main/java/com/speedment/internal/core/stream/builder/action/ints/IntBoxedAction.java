@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.action.ints;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.BOXED;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

@@ -14,31 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db.mutator;
-
-import com.speedment.config.Document;
-import static java.util.Objects.requireNonNull;
+package com.speedment.stream.action;
 
 /**
  *
- * @author Per Minborg
- * @param <DOC>  the type of the document
+ * @author pemi
  */
-public abstract class DocumentMutatorImpl<DOC extends Document> implements DocumentMutator<DOC> {
-
-    private final DOC document;
-
-    protected DocumentMutatorImpl(DOC document) {
-        this.document = requireNonNull(document);
-    }
-    
-    @Override
-    public final DOC document() {
-        return document;
-    }
-
-    @Override
-    public final void put(String key, Object value) {
-        document.put(key, value);
-    }
+public enum Verb {
+    SET, CLEAR, PRESERVE;
 }

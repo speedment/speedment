@@ -21,7 +21,8 @@
  */
 package com.speedment.internal.util;
 
-import static com.speedment.internal.util.JavaLanguageNamer.toHumanReadable;
+import com.speedment.util.JavaLanguageNamer;
+import static com.speedment.util.JavaLanguageNamer.toHumanReadable;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

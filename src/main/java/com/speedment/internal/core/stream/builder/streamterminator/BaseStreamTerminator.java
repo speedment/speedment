@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.stream.builder.streamterminator;
 
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
+import com.speedment.stream.Pipeline;
 import com.speedment.stream.StreamDecorator;
 
 /**

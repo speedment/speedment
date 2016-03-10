@@ -18,9 +18,9 @@ package com.speedment.internal.core.stream.builder.streamterminator;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate;
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.action.Action;
 import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
+import com.speedment.stream.Pipeline;
 import com.speedment.internal.util.Cast;
 import java.util.ArrayList;
 import java.util.List;

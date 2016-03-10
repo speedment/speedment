@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.runtime;
+package com.speedment.component;
 
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -187,7 +187,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
          */
         STOPPED;
 
-        protected void checkNextState(State nextState) {
+        public void checkNextState(State nextState) {
             requireNonNull(nextState);
             if (ordinal() + 1 != nextState.ordinal()) {
                 throw new IllegalStateException("Cannot move from " + this + " to " + nextState);

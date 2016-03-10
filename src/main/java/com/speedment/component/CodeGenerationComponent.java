@@ -27,7 +27,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.models.ClassOrInterface;
 import java.util.stream.Stream;
-import com.speedment.internal.util.JavaLanguageNamer;
+import com.speedment.util.JavaLanguageNamer;
 import com.speedment.stream.MapStream;
 import java.util.Set;
 import java.util.function.Supplier;

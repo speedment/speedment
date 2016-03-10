@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.util;
 
+
+import com.speedment.util.JavaLanguageNamer;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import static com.speedment.internal.util.sql.SqlUtil.unQuote;
 import java.util.function.Function;
