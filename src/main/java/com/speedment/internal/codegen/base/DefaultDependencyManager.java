@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.codegen.base;
 
+import com.speedment.codegen.base.DependencyManager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.HashSet;
 import java.util.Set;

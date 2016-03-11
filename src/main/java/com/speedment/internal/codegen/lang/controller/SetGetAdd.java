@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.lang.models.Class;
-import com.speedment.internal.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Method;
 import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.JavadocTag;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;

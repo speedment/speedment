@@ -16,11 +16,16 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.lang.interfaces.*;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.JavadocTag;
-import com.speedment.internal.codegen.lang.models.Method;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasClasses;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.Method;
 
 import java.util.function.Consumer;
 

@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.lang.models.values;
 
-import com.speedment.internal.codegen.lang.interfaces.HasType;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.implementation.ValueImpl;
 import java.util.Objects;
 import java.util.Optional;

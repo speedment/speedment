@@ -18,9 +18,9 @@ package com.speedment.internal.codegen.java.views.interfaces;
 
 import static com.speedment.internal.codegen.util.Formatting.COMMA_SPACE;
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasThrows;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**

@@ -16,6 +16,12 @@
  */
 package com.speedment.internal.codegen.base;
 
+import com.speedment.codegen.base.TransformFactory;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.base.RenderStack;
+import com.speedment.codegen.base.DependencyManager;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Meta;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +118,7 @@ public class DefaultGenerator implements Generator {
 
         final Optional<Meta<A, B>> meta = transform
             .transform(this, model)
-            .map(s -> new Meta.Impl<A, B>()
+            .map(s -> new MetaImpl<A, B>()
             .setModel(model)
             .setResult(s)
             .setTransform(transform)

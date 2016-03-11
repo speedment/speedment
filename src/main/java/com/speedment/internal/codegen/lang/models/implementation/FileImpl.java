@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.List;

@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.codegen.java.views;
 
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.Initalizer;
-import com.speedment.internal.codegen.base.Transform;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.lang.models.Initalizer;
+import com.speedment.codegen.base.Transform;
 
 import java.util.Optional;
 

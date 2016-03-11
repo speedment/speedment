@@ -17,8 +17,8 @@
 package com.speedment.internal.codegen.java.views;
 
 import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.Class;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.lang.models.Class;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

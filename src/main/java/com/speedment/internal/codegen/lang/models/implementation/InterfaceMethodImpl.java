@@ -16,14 +16,14 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.InterfaceMethod;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.lang.models.Type;
-import com.speedment.internal.codegen.lang.models.modifiers.Modifier;
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Generic;
+import com.speedment.codegen.lang.models.InterfaceMethod;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.modifiers.Modifier;
 import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;

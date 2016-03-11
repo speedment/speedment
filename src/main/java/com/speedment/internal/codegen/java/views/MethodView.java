@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.codegen.java.views;
 
-import com.speedment.internal.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Method;
 import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.codegen.base;
 
+import com.speedment.codegen.base.TransformFactory;
+import com.speedment.codegen.base.Transform;
 import java.util.AbstractMap;
 import java.util.HashSet;
 import java.util.Map;

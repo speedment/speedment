@@ -18,9 +18,9 @@ package com.speedment.internal.codegen.java.views.interfaces;
 
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasComment;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasComment;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 

@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.JavadocTag;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

@@ -20,9 +20,9 @@ import static com.speedment.internal.codegen.util.Formatting.COMMA_SPACE;
 import static com.speedment.internal.codegen.util.Formatting.SE;
 import static com.speedment.internal.codegen.util.Formatting.SPACE;
 import static com.speedment.internal.codegen.util.Formatting.SS;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**

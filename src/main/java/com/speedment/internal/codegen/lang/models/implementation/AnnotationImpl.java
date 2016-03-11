@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.Annotation;
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.modifiers.Modifier;
+import com.speedment.codegen.lang.models.Annotation;
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.modifiers.Modifier;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;

@@ -16,17 +16,18 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.JavaClassTranslator;
 import com.speedment.Speedment;
 import com.speedment.code.Translator;
-import com.speedment.internal.codegen.base.Generator;
+import com.speedment.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.codegen.lang.models.Constructor;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.lang.models.Constructor;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
 import com.speedment.internal.codegen.lang.models.values.TextValue;
@@ -42,7 +43,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.codegen.lang.models.Interface;
+import com.speedment.codegen.lang.models.Interface;
 import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.internal.core.config.db.ColumnImpl;
 import com.speedment.internal.core.config.db.DbmsImpl;

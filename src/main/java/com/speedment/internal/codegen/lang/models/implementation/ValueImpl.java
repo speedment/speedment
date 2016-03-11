@@ -21,7 +21,7 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.Value;
+import com.speedment.codegen.lang.models.Value;
 import java.util.Objects;
 import java.util.Optional;
 

@@ -18,9 +18,9 @@ package com.speedment.internal.codegen.java.views.interfaces;
 
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.internal.codegen.util.Formatting.SPACE;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasType;
 
 /**
  * A trait with the functionality to render models with the trait 

@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.lang.interfaces.HasMethods;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.modifiers.Keyword;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.modifiers.Keyword;
 
 import java.util.function.Consumer;
 

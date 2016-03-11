@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Generic;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.internal.codegen.util.Copier;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;

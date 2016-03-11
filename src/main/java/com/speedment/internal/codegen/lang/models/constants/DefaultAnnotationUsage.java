@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.codegen.lang.models.constants;
 
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.Type;
-import com.speedment.internal.codegen.lang.models.Value;
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Value;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultValue.string;
 import com.speedment.internal.codegen.lang.models.implementation.TypeImpl.TypeConst;
 import java.lang.annotation.Documented;

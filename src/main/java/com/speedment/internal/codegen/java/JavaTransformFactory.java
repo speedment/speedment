@@ -17,24 +17,24 @@
 package com.speedment.internal.codegen.java;
 
 import com.speedment.internal.codegen.base.DefaultTransformFactory;
-import com.speedment.internal.codegen.base.TransformFactory;
+import com.speedment.codegen.base.TransformFactory;
 import com.speedment.internal.codegen.java.views.AnnotationUsageView;
 import com.speedment.internal.codegen.java.views.InterfaceMethodView;
-import com.speedment.internal.codegen.lang.models.Annotation;
-import com.speedment.internal.codegen.lang.models.Class;
-import com.speedment.internal.codegen.lang.models.Enum;
-import com.speedment.internal.codegen.lang.models.EnumConstant;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Interface;
-import com.speedment.internal.codegen.lang.models.InterfaceField;
-import com.speedment.internal.codegen.lang.models.InterfaceMethod;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.JavadocTag;
-import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.lang.models.Type;
-import com.speedment.internal.codegen.lang.models.modifiers.Modifier;
+import com.speedment.codegen.lang.models.Annotation;
+import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.lang.models.Enum;
+import com.speedment.codegen.lang.models.EnumConstant;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Generic;
+import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Interface;
+import com.speedment.codegen.lang.models.InterfaceField;
+import com.speedment.codegen.lang.models.InterfaceMethod;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.modifiers.Modifier;
 import com.speedment.internal.codegen.lang.models.values.ArrayValue;
 import com.speedment.internal.codegen.lang.models.values.BooleanValue;
 import com.speedment.internal.codegen.lang.models.values.EnumValue;
@@ -64,10 +64,10 @@ import com.speedment.internal.codegen.java.views.values.EnumValueView;
 import com.speedment.internal.codegen.java.views.values.NumberValueView;
 import com.speedment.internal.codegen.java.views.values.ReferenceValueView;
 import com.speedment.internal.codegen.java.views.values.TextValueView;
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.Constructor;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Initalizer;
+import com.speedment.codegen.lang.models.AnnotationUsage;
+import com.speedment.codegen.lang.models.Constructor;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Initalizer;
 
 /**
  * Implementation of the {@link TransformFactory} interface that comes with

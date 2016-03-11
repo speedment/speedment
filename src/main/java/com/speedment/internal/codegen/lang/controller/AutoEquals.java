@@ -16,8 +16,16 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.lang.interfaces.*;
-import com.speedment.internal.codegen.lang.models.*;
+import com.speedment.codegen.lang.interfaces.HasName;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.interfaces.HasSupertype;
+import com.speedment.codegen.lang.interfaces.HasImports;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Method;
 
 import java.util.Objects;
 import java.util.Optional;

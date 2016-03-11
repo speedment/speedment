@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.code.entity;
 
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.models.Field;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Generic;
+import com.speedment.codegen.lang.models.Import;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.Method;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;

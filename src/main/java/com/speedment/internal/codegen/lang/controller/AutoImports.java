@@ -16,10 +16,19 @@
  */
 package com.speedment.internal.codegen.lang.controller;
 
-import com.speedment.internal.codegen.base.DependencyManager;
-import com.speedment.internal.codegen.lang.interfaces.*;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Type;
+import com.speedment.codegen.lang.interfaces.HasThrows;
+import com.speedment.codegen.lang.interfaces.HasImplements;
+import com.speedment.codegen.lang.interfaces.HasMethods;
+import com.speedment.codegen.lang.interfaces.HasClasses;
+import com.speedment.codegen.lang.interfaces.HasType;
+import com.speedment.codegen.lang.interfaces.HasSupertype;
+import com.speedment.codegen.lang.interfaces.HasGenerics;
+import com.speedment.codegen.lang.interfaces.HasConstructors;
+import com.speedment.codegen.lang.interfaces.HasFields;
+import com.speedment.codegen.lang.interfaces.HasAnnotationUsage;
+import com.speedment.codegen.base.DependencyManager;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.lang.models.Type;
 import com.speedment.internal.codegen.lang.models.implementation.ImportImpl;
 
 import java.util.HashMap;

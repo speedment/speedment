@@ -19,8 +19,7 @@ package com.speedment.code;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.core.code.JavaClassTranslator;
+import com.speedment.codegen.lang.models.ClassOrInterface;
 
 /**
  * This interface describes a functional reference to something that decorates

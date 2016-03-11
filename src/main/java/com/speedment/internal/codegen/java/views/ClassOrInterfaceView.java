@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.codegen.java.views;
 
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import com.speedment.internal.codegen.java.views.interfaces.*;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.lang.models.ClassOrInterface;
 
 import java.util.Optional;
 import java.util.stream.Stream;

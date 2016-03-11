@@ -17,9 +17,9 @@
 package com.speedment.internal.codegen.java.views.interfaces;
 
 import static com.speedment.internal.codegen.util.Formatting.dnl;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasInitalizers;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasInitalizers;
 import java.util.stream.Collectors;
 
 /**

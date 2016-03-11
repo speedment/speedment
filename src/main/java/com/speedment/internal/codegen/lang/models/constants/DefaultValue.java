@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.lang.models.constants;
 
-import com.speedment.internal.codegen.lang.models.Value;
+import com.speedment.codegen.lang.models.Value;
 import com.speedment.internal.codegen.lang.models.values.NullValue;
 import com.speedment.internal.codegen.lang.models.values.TextValue;
 import static java.util.Objects.requireNonNull;

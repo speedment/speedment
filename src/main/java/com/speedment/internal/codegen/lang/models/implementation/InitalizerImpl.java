@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.Initalizer;
-import com.speedment.internal.codegen.lang.models.modifiers.Modifier;
+import com.speedment.codegen.lang.models.Initalizer;
+import com.speedment.codegen.lang.models.modifiers.Modifier;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;

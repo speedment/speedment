@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.lang.models.implementation;
 
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.JavadocTag;
+import com.speedment.codegen.lang.models.Javadoc;
+import com.speedment.codegen.lang.models.JavadocTag;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.List;

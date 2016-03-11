@@ -20,9 +20,9 @@ import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.internal.codegen.util.Formatting.EQUALS;
 import static com.speedment.internal.codegen.util.Formatting.SPACE;
 import static com.speedment.internal.codegen.util.Formatting.ifelse;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasValue;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasValue;
 
 /**
  * A trait with the functionality to render models with the trait 

@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.codegen.base;
 
+import com.speedment.codegen.base.RenderStack;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;

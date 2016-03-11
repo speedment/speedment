@@ -20,8 +20,8 @@ import com.speedment.internal.codegen.lang.models.values.ArrayValue;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -18,9 +18,9 @@ package com.speedment.internal.codegen.java.views;
 
 import com.speedment.internal.codegen.util.Formatting;
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.Interface;
-import com.speedment.internal.codegen.lang.models.Method;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.lang.models.Interface;
+import com.speedment.codegen.lang.models.Method;
 import com.speedment.internal.codegen.lang.models.implementation.InterfaceMethodImpl;
 
 /**

@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.codegen.java.views.interfaces;
 
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.base.Transform;
-import com.speedment.internal.codegen.lang.interfaces.HasJavadoc;
-import com.speedment.internal.codegen.lang.interfaces.HasJavadocTags;
+import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Transform;
+import com.speedment.codegen.lang.interfaces.HasJavadoc;
+import com.speedment.codegen.lang.interfaces.HasJavadocTags;
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import java.util.stream.Stream;
 
