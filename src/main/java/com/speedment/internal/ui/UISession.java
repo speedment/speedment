@@ -24,7 +24,8 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.code.TranslatorManager;
+import com.speedment.code.TranslatorManager;
+import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
@@ -266,7 +267,7 @@ public final class UISession {
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
-            final TranslatorManager instance = new TranslatorManager(speedment);
+            final TranslatorManager instance = new TranslatorManagerImpl(speedment);
             
             try {
                 instance.accept(project);

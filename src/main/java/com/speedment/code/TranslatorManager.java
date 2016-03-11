@@ -14,20 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.event.trait;
+package com.speedment.code;
 
-import com.speedment.annotation.Api;
-import com.speedment.code.TranslatorManager;
-import com.speedment.event.Event;
-import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.base.Meta;
+import com.speedment.codegen.lang.models.File;
+import com.speedment.config.db.Project;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author pemi
  */
-@Api(version = "2.3")
-public interface GeneratorEvent extends Event {
-    Generator generator();
-    TranslatorManager translatorManager();
+public interface TranslatorManager {
+
+    public void accept(Project project);
+
+    public int getFilesCreated();
+
+    public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting);
+
 }

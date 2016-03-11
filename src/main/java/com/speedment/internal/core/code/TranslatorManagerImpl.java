@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.code;
 
+import com.speedment.code.TranslatorManager;
 import com.speedment.code.Translator;
 import com.speedment.Speedment;
 import com.speedment.component.CodeGenerationComponent;
@@ -43,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
@@ -53,14 +53,14 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public class TranslatorManager implements Consumer<Project> {
+public class TranslatorManagerImpl implements TranslatorManager {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManager.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManagerImpl.class);
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
     private final Speedment speedment;
 
-    public TranslatorManager(Speedment speedment) {
+    public TranslatorManagerImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
     }
 
@@ -79,36 +79,36 @@ public class TranslatorManager implements Consumer<Project> {
         speedment.getEventComponent().notify(new BeforeGenerate(project, gen, this));
 
         final CodeGenerationComponent cgc = speedment.getCodeGenerationComponent();
-        
-        cgc.translators(project)
-            .forEachOrdered(t -> {
-                if (t.isInGeneratedPackage()) {
-                    writeAlwaysTranslators.add(t);
-                } else {
-                    writeOnceTranslators.add(t);
-                }
-            });
 
-        traverseOver(project, Table.class)
-            .filter(HasEnabled::test)
-            .forEach(table -> {
-                cgc.translators(table).forEachOrdered(t -> {
+        cgc.translators(project)
+                .forEachOrdered(t -> {
                     if (t.isInGeneratedPackage()) {
                         writeAlwaysTranslators.add(t);
                     } else {
                         writeOnceTranslators.add(t);
                     }
                 });
-            });
+
+        traverseOver(project, Table.class)
+                .filter(HasEnabled::test)
+                .forEach(table -> {
+                    cgc.translators(table).forEachOrdered(t -> {
+                        if (t.isInGeneratedPackage()) {
+                            writeAlwaysTranslators.add(t);
+                        } else {
+                            writeOnceTranslators.add(t);
+                        }
+                    });
+                });
 
         gen.metaOn(writeOnceTranslators.stream()
-            .map(Translator::get)
-            .collect(Collectors.toList())
+                .map(Translator::get)
+                .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, false));
-        
+
         gen.metaOn(writeAlwaysTranslators.stream()
-            .map(Translator::get)
-            .collect(Collectors.toList())
+                .map(Translator::get)
+                .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, true));
 
         final List<Table> tables = traverseOver(project, Table.class)
@@ -139,9 +139,9 @@ public class TranslatorManager implements Consumer<Project> {
 
         try {
             if (overwriteExisting || !path.toFile().exists()) {
-                Files.write(path, content.getBytes(StandardCharsets.UTF_8), 
-                    StandardOpenOption.CREATE, 
-                    StandardOpenOption.TRUNCATE_EXISTING
+                Files.write(path, content.getBytes(StandardCharsets.UTF_8),
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING
                 );
                 fileCounter.incrementAndGet();
             }
