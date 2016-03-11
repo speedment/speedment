@@ -19,7 +19,7 @@ package com.speedment.internal.core.runtime;
 import com.speedment.SpeedmentVersion;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;

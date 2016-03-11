@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.testing;
 
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.field.ComparableField;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;

@@ -17,7 +17,7 @@
 package com.speedment.encoder;
 
 import com.speedment.config.db.Table;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;

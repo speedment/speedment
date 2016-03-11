@@ -19,7 +19,7 @@ package com.speedment.internal.core.runtime;
 import com.speedment.Speedment;
 import com.speedment.component.Component;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.ComponentConstructor;
 import com.speedment.component.ConnectionPoolComponent;

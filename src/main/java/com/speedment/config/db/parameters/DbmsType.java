@@ -23,8 +23,8 @@ import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.config.dbms.DbmsTypeImpl;
-import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-import com.speedment.internal.util.sql.SqlTypeInfo;
+import com.speedment.manager.SpeedmentPredicateView;
+import com.speedment.util.sql.SqlTypeInfo;
 import static com.speedment.stream.MapStream.comparing;
 import java.util.Comparator;
 

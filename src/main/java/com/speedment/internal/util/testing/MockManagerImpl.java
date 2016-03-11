@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.testing;
 
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;

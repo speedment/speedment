@@ -18,7 +18,7 @@ package com.speedment.component;
 
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.annotation.Api;
 import java.util.stream.Stream;
 

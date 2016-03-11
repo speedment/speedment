@@ -16,11 +16,10 @@
  */
 package com.speedment.internal.util.sql;
 
+import com.speedment.util.sql.SqlTypeInfo;
 import com.speedment.exception.SpeedmentException;
 import java.lang.reflect.Field;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -30,7 +29,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public final class SqlTypeInfo {
+public final class SqlTypeInfoImpl implements SqlTypeInfo {
 
     //http://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html#getTypeInfo()
     private final String sqlTypeName;
@@ -40,22 +39,13 @@ public final class SqlTypeInfo {
     private final short nullable;
     private final boolean unsigned;
 
-    public SqlTypeInfo(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
+    public SqlTypeInfoImpl(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
         this.sqlTypeName = requireNonNull(sqlTypeName);
         this.javaSqlTypeInt = javaSqlTypeInt;
         this.precision = precision;
         this.decimals = decimals;
         this.nullable = nullable;
         this.unsigned = unsigned;
-    }
-
-    public static SqlTypeInfo from(ResultSet rs) throws SQLException {
-        final String sqlTypeName = rs.getString("TYPE_NAME");
-        final int javaSqlTypeInt = rs.getInt("DATA_TYPE");
-        final int precision = rs.getInt("PRECISION");
-        final short nullable = rs.getShort("NULLABLE");
-        final boolean unsigned = rs.getBoolean("UNSIGNED_ATTRIBUTE");
-        return new SqlTypeInfo(sqlTypeName, javaSqlTypeInt, precision, precision, nullable, unsigned);
     }
 
     private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
@@ -74,42 +64,52 @@ public final class SqlTypeInfo {
         }
     }
 
+    @Override
     public Optional<String> javaSqlTypeName() {
         return Optional.ofNullable(JAVA_SQL_TYPE_INT_TO_STRING_MAP.get(javaSqlTypeInt));
     }
 
+    @Override
     public String getSqlTypeName() {
         return sqlTypeName;
     }
 
+    @Override
     public int getJavaSqlTypeInt() {
         return javaSqlTypeInt;
     }
 
+    @Override
     public int getPrecision() {
         return precision;
     }
 
+    @Override
     public int getDecimals() {
         return decimals;
     }
 
+    @Override
     public short getNullable() {
         return nullable;
     }
 
+    @Override
     public boolean isNoNulls() {
         return nullable == DatabaseMetaData.attributeNoNulls;
     }
 
+    @Override
     public boolean isNullable() {
         return nullable == DatabaseMetaData.attributeNullable;
     }
 
+    @Override
     public boolean isNullableUnknown() {
         return nullable == DatabaseMetaData.attributeNullableUnknown;
     }
 
+    @Override
     public boolean isUnsigned() {
         return unsigned;
     }

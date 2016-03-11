@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment;
+package com.speedment.manager;
 
+import com.speedment.Speedment;
 import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Column;

@@ -18,7 +18,7 @@ package com.speedment.internal.core.code;
 
 import com.speedment.exception.SpeedmentException;
 import com.speedment.encoder.JsonEncoder;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.db.MetaResult;
 import java.util.function.Consumer;
 import com.speedment.Entity;

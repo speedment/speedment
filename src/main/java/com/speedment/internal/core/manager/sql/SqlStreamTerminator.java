@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.manager.SqlPredicateFragment;
+import com.speedment.manager.SpeedmentPredicateView;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;

@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.manager;
 
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.field.trait.ComparableFieldTrait;

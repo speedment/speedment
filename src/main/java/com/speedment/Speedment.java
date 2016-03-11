@@ -16,6 +16,7 @@
  */
 package com.speedment;
 
+import com.speedment.manager.Manager;
 import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.component.CodeGenerationComponent;

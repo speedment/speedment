@@ -17,7 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.exception.SpeedmentException;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;

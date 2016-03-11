@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.manager.SqlPredicateFragment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,49 +27,42 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class SqlPredicateFragment {
+public class SqlPredicateFragmentImpl implements SqlPredicateFragment {
 
     private String sql;
     private final List<Object> objects;
 
-    public SqlPredicateFragment() {
+    public SqlPredicateFragmentImpl() {
         this.objects = new ArrayList<>();
         this.sql = "";
     }
 
+    @Override
     public String getSql() {
         return sql;
     }
 
-    public SqlPredicateFragment setSql(String sql) {
+    @Override
+    public SqlPredicateFragmentImpl setSql(String sql) {
         this.sql = requireNonNull(sql);
         return this;
     }
 
-    public SqlPredicateFragment add(Object o) {
+    @Override
+    public SqlPredicateFragmentImpl add(Object o) {
         objects.add(o);
         return this;
     }
 
-    public SqlPredicateFragment addAll(Collection<?> extra) {
+    @Override
+    public SqlPredicateFragmentImpl addAll(Collection<?> extra) {
         objects.addAll(extra);
         return this;
     }
 
+    @Override
     public Stream<Object> objects() {
         return objects.stream();
-    }
-
-    public static SqlPredicateFragment of(String sql) {
-        return new SqlPredicateFragment().setSql(sql);
-    }
-
-    public static SqlPredicateFragment of(String sql, Collection<Object> objects) {
-        return new SqlPredicateFragment().setSql(sql).addAll(objects);
-    }
-
-    public static SqlPredicateFragment of(String sql, Object object) {
-        return new SqlPredicateFragment().setSql(sql).add(object);
     }
 
 }

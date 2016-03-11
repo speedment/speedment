@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.manager.SqlPredicateFragment;
+import com.speedment.manager.SpeedmentPredicateView;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.*;

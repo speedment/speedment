@@ -39,7 +39,7 @@ import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.util.sql.SqlTypeInfo;
+import com.speedment.util.sql.SqlTypeInfo;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

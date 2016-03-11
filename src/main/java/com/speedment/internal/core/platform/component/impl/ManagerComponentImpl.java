@@ -18,7 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.Manager;
+import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.ManagerComponent;
 import com.speedment.license.Software;
