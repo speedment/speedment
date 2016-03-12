@@ -27,19 +27,19 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
-import com.speedment.internal.ui.config.ProjectProperty;
+import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
-import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.config.DbmsProperty; // Exposes internal  
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
 import static com.speedment.internal.ui.util.OutputUtil.success;
-import com.speedment.internal.ui.property.PropertySheetFactory;
+import com.speedment.internal.ui.property.PropertySheetFactory; // Exposes internal 
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;

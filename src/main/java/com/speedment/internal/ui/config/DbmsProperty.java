@@ -46,7 +46,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableList;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import static javafx.collections.FXCollections.observableList;

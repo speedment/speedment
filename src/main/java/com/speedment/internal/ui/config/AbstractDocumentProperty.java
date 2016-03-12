@@ -297,7 +297,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @param key        the key to create the child on
      * @return           the created child
      */
-    protected final AbstractDocumentProperty createChild(Speedment speedment, String key) {
+    protected final DocumentProperty createChild(Speedment speedment, String key) {
 
         return speedment.getDocumentPropertyComponent()
             .getConstructor(keyPathEndingWith(key))

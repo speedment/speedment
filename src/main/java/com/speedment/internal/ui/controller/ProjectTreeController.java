@@ -21,16 +21,16 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.event.ProjectLoaded;
-import com.speedment.internal.ui.config.ProjectProperty;
+import com.speedment.internal.ui.config.ProjectProperty;  // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
-import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.UISession; // Exposes internal
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.config.ForeignKeyProperty;
-import com.speedment.internal.ui.config.IndexProperty;
-import com.speedment.internal.ui.config.SchemaProperty;
-import com.speedment.internal.ui.config.TableProperty;
+import com.speedment.internal.ui.config.ForeignKeyProperty; // Exposes internal
+import com.speedment.internal.ui.config.IndexProperty; // Exposes internal
+import com.speedment.internal.ui.config.SchemaProperty; // Exposes internal
+import com.speedment.internal.ui.config.TableProperty; // Exposes internal
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasIconPath;
