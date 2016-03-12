@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
+import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.config.db.Dbms;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;

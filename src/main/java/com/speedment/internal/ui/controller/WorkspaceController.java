@@ -22,7 +22,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.property.AbstractPropertyItem;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;

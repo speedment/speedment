@@ -17,7 +17,7 @@
 package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
-import com.speedment.component.JavaTypeMapperComponent;
+import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
@@ -39,7 +39,7 @@ import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
-import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
+import com.speedment.component.javatypemapper.JavaTypeMapping;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.sql.ResultSet;
 import java.sql.SQLException;

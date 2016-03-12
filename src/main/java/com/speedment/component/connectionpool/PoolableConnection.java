@@ -14,21 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.config.mutator.trait;
+package com.speedment.component.connectionpool;
 
-import com.speedment.config.db.parameters.OrderType;
-import com.speedment.config.db.mutator.trait.HasOrderTypeMutator;
-import com.speedment.ui.config.trait.HasOrderTypeProperty;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
- * @author       Emil Forslund
- * @param <DOC>  document type
+ * @author pemi
  */
-public interface HasOrderTypePropertyMutator<DOC extends HasOrderTypeProperty> extends HasOrderTypeMutator<DOC> {
+public interface PoolableConnection extends Connection {
+
+    long getId();
     
-    @Override
-    default void setOrderType(OrderType orderType) {
-        document().orderTypeProperty().setValue(orderType);
-    }
+    void rawClose() throws SQLException;
+
+    long getCreated();
+
+    long getExpires();
+
+    String getUser();
+
+    String getPassword();
+
+    String getUri();
+
+    void onClose();
+
+    void setOnClose(Runnable onClose);
+
 }

@@ -26,7 +26,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import java.net.URL;

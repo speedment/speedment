@@ -19,6 +19,8 @@ package com.speedment.config.db.parameters;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
+import com.speedment.config.db.parameters.DbmsTypeBuilder.WithDbmsNameMeaning;
+import com.speedment.config.db.parameters.DbmsTypeBuilder.WithName;
 import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
@@ -143,11 +145,11 @@ public interface DbmsType {
     
     String getInitialQuery();
 
-    public static DbmsTypeImpl.WithName builder() {
+    public static WithName builder() {
         return DbmsTypeImpl.builder();
     }
 
-    public static DbmsTypeImpl.WithDbmsNameMeaning builder(String name, String driverManagerName, int defaultPort) {
+    public static WithDbmsNameMeaning builder(String name, String driverManagerName, int defaultPort) {
         return builder().withName(name).withDriverManagerName(driverManagerName).withDefaultPort(defaultPort);
     }
 }

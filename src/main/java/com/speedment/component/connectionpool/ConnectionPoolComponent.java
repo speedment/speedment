@@ -14,10 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.component;
+package com.speedment.component.connectionpool;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.component.Component;
+import com.speedment.component.connectionpool.PoolableConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
 

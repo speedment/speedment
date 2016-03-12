@@ -17,7 +17,7 @@
 package com.speedment.internal.ui.config.mutator.trait;
 
 import com.speedment.config.db.mutator.trait.HasOrdinalPositionMutator;
-import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
 
 /**
  *

@@ -23,10 +23,10 @@ import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.PrimaryKeyColumnPropertyMutator;
-import com.speedment.internal.ui.config.trait.HasColumnProperty;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import com.speedment.ui.config.trait.HasColumnProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 

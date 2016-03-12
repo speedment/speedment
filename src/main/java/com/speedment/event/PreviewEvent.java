@@ -17,7 +17,7 @@
 package com.speedment.event;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import static java.util.Objects.requireNonNull;
 import javafx.scene.layout.VBox;
 

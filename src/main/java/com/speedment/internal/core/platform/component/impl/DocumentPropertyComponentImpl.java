@@ -28,7 +28,7 @@ import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DefaultDocumentProperty;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.ForeignKeyColumnProperty;
 import com.speedment.internal.ui.config.ForeignKeyProperty;
 import com.speedment.internal.ui.config.IndexColumnProperty;

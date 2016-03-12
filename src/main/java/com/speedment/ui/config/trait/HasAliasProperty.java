@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.config.trait;
+package com.speedment.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.config.db.trait.*;
+import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
@@ -29,24 +29,26 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasNameProperty extends DocumentProperty {
+public interface HasAliasProperty extends DocumentProperty, HasAlias {
 
-    default StringProperty nameProperty() {
-        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
+    StringProperty nameProperty();
+    
+    default StringProperty aliasProperty() {
+        return stringPropertyOf(HasAlias.ALIAS, () -> null);
     }
-
+    
     @Override
-    default String getName() throws SpeedmentException {
-        return nameProperty().get();
+    default Optional<String> getAlias() {
+        return Optional.ofNullable(aliasProperty().get());
     }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            new StringPropertyItem(
-                nameProperty(), 
-                "Database Name", 
-                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
+        return Stream.of(new DefaultStringPropertyItem(
+                aliasProperty(),
+                nameProperty(),
+                "Java Alias", 
+                "The name that will be used for this in generated code."
             )
         );
     }

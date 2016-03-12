@@ -17,7 +17,7 @@
 package com.speedment.internal.ui.config.mutator.trait;
 
 import com.speedment.config.db.mutator.trait.HasNameMutator;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
 
 /**
  *

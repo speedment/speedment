@@ -23,11 +23,11 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexColumnPropertyMutator;
-import com.speedment.internal.ui.config.trait.HasColumnProperty;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.config.trait.HasOrderTypeProperty;
-import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import com.speedment.ui.config.trait.HasColumnProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasOrderTypeProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 

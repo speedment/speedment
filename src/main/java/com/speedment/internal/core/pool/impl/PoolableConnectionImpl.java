@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.pool.impl;
 
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.component.connectionpool.PoolableConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;

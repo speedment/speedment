@@ -20,13 +20,12 @@ import com.speedment.manager.Manager;
 import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.component.CodeGenerationComponent;
-import com.speedment.component.ConnectionPoolComponent;
+import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
 import com.speedment.component.EventComponent;
-import com.speedment.component.JavaTypeMapperComponent;
-import com.speedment.component.LoggerFactoryComponent;
+import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
@@ -65,9 +64,8 @@ public interface Speedment {
      * <li>{@link com.speedment.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
      * <li>{@link com.speedment.component.ProjectComponent ProjectComponent}</li>
      * <li>{@link com.speedment.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
-     * <li>{@link com.speedment.component.LoggerFactoryComponent LoggerFactoryComponent}</li>
-     * <li>{@link com.speedment.component.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
-     * <li>{@link com.speedment.component.ConnectionPoolComponent ConnectionPoolComponent}</li>
+     * <li>{@link com.speedment.component.javatypemapper.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
+     * <li>{@link com.speedment.component.connectionpool.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.component.PasswordComponent PasswordComponent}</li>
@@ -155,9 +153,9 @@ public interface Speedment {
         return get(SqlTypeMapperComponent.class);
     }
 
-    default LoggerFactoryComponent getLoggerFactoryComponent() {
-        return get(LoggerFactoryComponent.class);
-    }
+//    default LoggerFactoryComponent getLoggerFactoryComponent() {
+//        return get(LoggerFactoryComponent.class);
+//    }
 
     default JavaTypeMapperComponent getJavaTypeMapperComponent() {
         return get(JavaTypeMapperComponent.class);

@@ -22,13 +22,12 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.manager.Manager;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.ComponentConstructor;
-import com.speedment.component.ConnectionPoolComponent;
+import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
 import com.speedment.component.EventComponent;
-import com.speedment.component.JavaTypeMapperComponent;
-import com.speedment.component.LoggerFactoryComponent;
+import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
@@ -46,7 +45,6 @@ import com.speedment.internal.core.platform.component.impl.DocumentPropertyCompo
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.EventComponentImpl;
 import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
-import com.speedment.internal.core.platform.component.impl.LoggerFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
@@ -74,7 +72,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private SqlTypeMapperComponent sqlTypeMapperComponent;
     private JavaTypeMapperComponent javaTypeMapperComponent;
     private EntityManager entityManager;
-    private LoggerFactoryComponent loggerFactoryComponent;
+//    private LoggerFactoryComponent loggerFactoryComponent;
     private ConnectionPoolComponent connectionPoolComponent;
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
@@ -92,7 +90,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(SqlTypeMapperComponentImpl::new);
         put(JavaTypeMapperComponentImpl::new);
         put(EntityManagerImpl::new);
-        put(LoggerFactoryComponentImpl::new);
+//        put(LoggerFactoryComponentImpl::new);
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
@@ -142,9 +140,9 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         if (item instanceof EntityManager) {
             entityManager = castOrFail(item, EntityManager.class);
         }
-        if (item instanceof LoggerFactoryComponent) {
-            loggerFactoryComponent = castOrFail(item, LoggerFactoryComponent.class);
-        }
+//        if (item instanceof LoggerFactoryComponent) {
+//            loggerFactoryComponent = castOrFail(item, LoggerFactoryComponent.class);
+//        }
         if (item instanceof ConnectionPoolComponent) {
             connectionPoolComponent = castOrFail(item, ConnectionPoolComponent.class);
         }
@@ -226,10 +224,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         return entityManager;
     }
 
-    @Override
-    public LoggerFactoryComponent getLoggerFactoryComponent() {
-        return loggerFactoryComponent;
-    }
+//    @Override
+//    public LoggerFactoryComponent getLoggerFactoryComponent() {
+//        return loggerFactoryComponent;
+//    }
 
     @Override
     public ConnectionPoolComponent getConnectionPoolComponent() {

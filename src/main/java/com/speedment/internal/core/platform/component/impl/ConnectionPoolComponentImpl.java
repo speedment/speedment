@@ -17,8 +17,8 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.ConnectionPoolComponent;
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.component.connectionpool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;

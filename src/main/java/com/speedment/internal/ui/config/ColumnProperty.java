@@ -24,10 +24,10 @@ import static com.speedment.config.db.Column.DATABASE_TYPE;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.trait.HasAliasProperty;
-import com.speedment.internal.ui.config.trait.HasEnabledProperty;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.config.trait.HasNullableProperty;
+import com.speedment.ui.config.trait.HasAliasProperty;
+import com.speedment.ui.config.trait.HasEnabledProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasNullableProperty;
 import com.speedment.internal.ui.property.BooleanPropertyItem;
 import com.speedment.internal.ui.property.TypeMapperPropertyItem;
 import java.util.Optional;
@@ -43,8 +43,8 @@ import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
-import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
 
 /**
  *

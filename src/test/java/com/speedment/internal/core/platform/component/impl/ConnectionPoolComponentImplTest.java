@@ -22,7 +22,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.component.connectionpool.PoolableConnection;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import java.sql.Array;
 import java.sql.Blob;

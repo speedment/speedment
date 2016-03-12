@@ -14,40 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.config.trait;
+package com.speedment.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.HasNullable;
-import static com.speedment.config.db.trait.HasNullable.NULLABLE;
-import com.speedment.internal.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.BooleanPropertyItem;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.stream.Stream;
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasNullableProperty extends DocumentProperty, HasNullable {
+public interface HasNameProperty extends DocumentProperty {
+
+    default StringProperty nameProperty() {
+        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
+    }
+
+    @Override
+    default String getName() throws SpeedmentException {
+        return nameProperty().get();
+    }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new BooleanPropertyItem(
-                nullableProperty(),
-                "Is Nullable",
-                "If this node can hold 'null'-values or not."
+            new StringPropertyItem(
+                nameProperty(), 
+                "Database Name", 
+                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
             )
         );
-    }
-    
-    default BooleanProperty nullableProperty() {
-        return booleanPropertyOf(NULLABLE, HasNullable.super::isNullable);
-    }
-
-    @Override
-    default boolean isNullable() {
-        return nullableProperty().get();
     }
 }

@@ -33,7 +33,7 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;

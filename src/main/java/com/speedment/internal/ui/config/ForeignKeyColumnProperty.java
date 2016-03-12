@@ -21,9 +21,9 @@ import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.trait.HasColumnProperty;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.config.trait.HasOrdinalPositionProperty;
+import com.speedment.ui.config.trait.HasColumnProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
 import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -33,7 +33,7 @@ import org.controlsfx.control.PropertySheet;
 import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
 import java.util.Optional;
 
 /**

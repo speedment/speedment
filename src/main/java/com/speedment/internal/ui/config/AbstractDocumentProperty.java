@@ -16,12 +16,13 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.Speedment;
 import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
-import com.speedment.internal.ui.config.trait.HasExpandedProperty;
-import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.internal.ui.util.NumericProperty;
 import com.speedment.internal.ui.util.SimpleNumericProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;

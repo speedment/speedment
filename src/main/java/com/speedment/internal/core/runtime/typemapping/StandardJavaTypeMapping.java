@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
+import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.internal.core.runtime.typemapping.JavaTypeMapping.unableToMapLong;
-import static com.speedment.internal.core.runtime.typemapping.JavaTypeMapping.unableToMapString;
+import static com.speedment.component.javatypemapper.JavaTypeMapping.unableToMapLong;
+import static com.speedment.component.javatypemapper.JavaTypeMapping.unableToMapString;
 import com.speedment.internal.util.LongUtil;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.Field;

@@ -17,7 +17,7 @@
 package com.speedment.event;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;

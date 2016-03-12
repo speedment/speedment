@@ -22,7 +22,7 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.internal.license.AbstractSoftware;
 import com.speedment.internal.ui.brand.DefaultBrand;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
 import java.util.List;

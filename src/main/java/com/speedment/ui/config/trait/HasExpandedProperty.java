@@ -14,33 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.pool;
+package com.speedment.ui.config.trait;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.speedment.ui.config.DocumentProperty;
+import javafx.beans.property.BooleanProperty;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
-public interface PoolableConnection extends Connection {
-
-    long getId();
+public interface HasExpandedProperty extends DocumentProperty {
     
-    void rawClose() throws SQLException;
+    final String EXPANDED = "expanded";
 
-    long getCreated();
-
-    long getExpires();
-
-    String getUser();
-
-    String getPassword();
-
-    String getUri();
-
-    void onClose();
-
-    void setOnClose(Runnable onClose);
-
+    default BooleanProperty expandedProperty() {
+        return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);
+    }
+    
+    default boolean isExpanded() {
+        return expandedProperty().get();
+    }
+    
+    default boolean isExpandedByDefault() {
+        return true;
+    }
 }

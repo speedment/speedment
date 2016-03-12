@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.runtime.typemapping;
+package com.speedment.component.javatypemapper;
 
 import com.speedment.config.db.Dbms;
 

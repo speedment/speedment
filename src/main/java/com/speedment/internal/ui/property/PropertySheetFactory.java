@@ -17,7 +17,7 @@
 package com.speedment.internal.ui.property;
 
 import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;

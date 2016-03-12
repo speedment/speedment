@@ -25,7 +25,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.internal.ui.config.AbstractDocumentProperty;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import java.util.Arrays;
 
 /**

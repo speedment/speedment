@@ -14,41 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.config.trait;
+package com.speedment.ui.config.trait;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.parameters.OrderType;
 import com.speedment.config.db.trait.*;
-import com.speedment.internal.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.DefaultStringPropertyItem;
-import java.util.Optional;
+import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.EnumPropertyItem;
 import java.util.stream.Stream;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasAliasProperty extends DocumentProperty, HasAlias {
-
-    StringProperty nameProperty();
+public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     
-    default StringProperty aliasProperty() {
-        return stringPropertyOf(HasAlias.ALIAS, () -> null);
+    default ObjectProperty<OrderType> orderTypeProperty() {
+        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class, HasOrderType.super::getOrderType);
     }
-    
+
     @Override
-    default Optional<String> getAlias() {
-        return Optional.ofNullable(aliasProperty().get());
+    default OrderType getOrderType() {
+        return orderTypeProperty().get();
     }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(new DefaultStringPropertyItem(
-                aliasProperty(),
-                nameProperty(),
-                "Java Alias", 
-                "The name that will be used for this in generated code."
+        return Stream.of(
+            new EnumPropertyItem<>(
+                OrderType.class,
+                orderTypeProperty(),
+                "Order Type",
+                "The order in which elements will be considered."
             )
         );
     }

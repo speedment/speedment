@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.config;
+package com.speedment.ui.config;
 
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.config.trait.HasUiVisibleProperties;
+import com.speedment.ui.config.trait.HasUiVisibleProperties;
 import com.speedment.util.FloatSupplier;
 import java.util.Map;
 import java.util.function.BiFunction;

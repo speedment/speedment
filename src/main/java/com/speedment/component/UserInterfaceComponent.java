@@ -19,7 +19,7 @@ package com.speedment.component;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.UISession;
-import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
 import java.util.Optional;

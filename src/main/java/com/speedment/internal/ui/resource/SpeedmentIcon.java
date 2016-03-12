@@ -30,7 +30,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.ui.config.trait.HasIconPath;
+import com.speedment.ui.config.trait.HasIconPath;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

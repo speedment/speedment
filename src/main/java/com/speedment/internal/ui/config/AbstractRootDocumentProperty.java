@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.config.Document;
 import java.util.Optional;
 import java.util.stream.Stream;

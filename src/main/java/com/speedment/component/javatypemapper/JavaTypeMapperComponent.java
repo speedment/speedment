@@ -14,11 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.component;
+package com.speedment.component.javatypemapper;
 
 import com.speedment.annotation.Api;
+import com.speedment.component.Component;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.internal.core.runtime.typemapping.JavaTypeMapping;
+import com.speedment.component.javatypemapper.JavaTypeMapping;
 
 /**
  * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and
