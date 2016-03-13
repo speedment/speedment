@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.function;
+package com.speedment.util;
 
 import java.util.function.*;
 
