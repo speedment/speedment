@@ -65,7 +65,8 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     protected SqlPredicateFragment render(SpeedmentPredicate<?, ?, ?> model) {
         final PredicateType pt = model.getEffectivePredicateType();
         
-        final String cn = namingConvention.encloseField(model.getField().getColumnName());
+        final String cn = namingConvention.fullNameOf(model.getField().getIdentifier());
+        
         switch (pt) {
             // Constants
             case ALWAYS_TRUE:

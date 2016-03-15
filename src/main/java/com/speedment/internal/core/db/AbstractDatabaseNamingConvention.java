@@ -17,75 +17,89 @@
 package com.speedment.internal.core.db;
 
 import com.speedment.config.Document;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.exception.SpeedmentException;
-import java.util.Set;
 
 /**
- * An abstract base implementation of the {@link DatabaseNamingConvention} 
+ * An abstract base implementation of the {@link DatabaseNamingConvention}
  * interface that works for most relational databases.
- * 
+ *
  * @author Emil Forslund
  */
-public abstract class AbstractDatabaseNamingConvention 
-    implements DatabaseNamingConvention {
-    
+public abstract class AbstractDatabaseNamingConvention
+        implements DatabaseNamingConvention {
+
+    private final static String DEFAULT_DELIMITER = ".";
+    private final static String DEFAULT_QUOTE = "'";
+
     @Override
-    public String fullNameOf(PrimaryKeyColumn pkc) {
-        return encloseField(pkc.getName());
+    public String fullNameOf(String schemaName, String tableName, String columnName) {
+        return fullNameOf(schemaName, tableName) + DEFAULT_DELIMITER
+                + encloseField(columnName);
     }
 
     @Override
-    public String fullNameOf(Column column) {
-        return encloseField(column.getParent().map(Table::getName)
-            .orElseThrow(() -> noParentException(column)))
-            + "." + encloseField(column.getName());
+    public String fullNameOf(String schemaName, String tableName) {
+        return encloseField(schemaName) + DEFAULT_DELIMITER
+                + encloseField(tableName);
     }
 
-    @Override
-    public String fullNameOf(Table table) {
-        return encloseField(table.getParent().map(Schema::getName)
-            .orElseThrow(() -> noParentException(table)))
-            + "." + encloseField(table.getName());
-    }
-
+//    @Override
+//    public String fullNameOf(PrimaryKeyColumn pkc) {
+//        return encloseField(pkc.getName());
+//    }
+//
+//    @Override
+//    public String fullNameOf(Column column) {
+//        return encloseField(column.getParent().map(Table::getName)
+//            .orElseThrow(() -> noParentException(column)))
+//            + "." + encloseField(column.getName());
+//    }
+//
+//    @Override
+//    public String fullNameOf(Table table) {
+//        return encloseField(table.getParent().map(Schema::getName)
+//            .orElseThrow(() -> noParentException(table)))
+//            + "." + encloseField(table.getName());
+//    }
+//
     @Override
     public String quoteField(String field) {
         return getFieldQuoteStart() + field + getFieldQuoteEnd();
     }
-    
+
     @Override
     public String encloseField(String field) {
         return getFieldEncloserStart() + field + getFieldEncloserEnd();
     }
-    
-    @Override
-    public abstract Set<String> getSchemaExcludeSet();
-    
+//    
+//    @Override
+//    public abstract Set<String> getSchemaExcludeSet();
+
     /**
-     * Returns the non-null field quote start string. The field quote
-     * start string precedes a database value used in among other things 
-     * comparisons.
+     * Returns the non-null field quote start string. The field quote start
+     * string precedes a database value used in among other things comparisons.
      *
      * @return the non-null field quote start string
      * @see #getFieldQuoteEnd()
      */
-    protected abstract String getFieldQuoteStart();
-    
+    protected String getFieldQuoteStart() {
+        return DEFAULT_QUOTE;
+    }
+
     /**
-     * Returns the non-null field quote end string. The field quote
-     * end string precedes a database value used in among other things 
-     * comparisons.
+     * Returns the non-null field quote end string. The field quote end string
+     * precedes a database value used in among other things comparisons.
      *
      * @return the non-null field quote end string
      * @see #getFieldQuoteEnd()
      */
-    protected abstract String getFieldQuoteEnd();
-    
+    protected String getFieldQuoteEnd() {
+        return DEFAULT_QUOTE;
+    }
+
+    ;
+
     /**
      * Returns the non-null field encloser start string. The field encloser
      * start string precedes a database entity name like a table or schema name
@@ -101,7 +115,7 @@ public abstract class AbstractDatabaseNamingConvention
      * @see #getFieldEncloserEnd(boolean)
      */
     protected abstract String getFieldEncloserStart();
-    
+
     /**
      * Returns the non-null field encloser start string. The method parameter
      * denotes if the field encloser is placed within quotes or not. For example
@@ -116,7 +130,7 @@ public abstract class AbstractDatabaseNamingConvention
     protected String getFieldEncloserStart(boolean isWithinQuotes) {
         return escapeIfQuote(getFieldEncloserStart(), isWithinQuotes);
     }
-    
+
     /**
      * Returns the non-null field encloser end string. The field encloser end
      * string follows a database entity name like a table or schema name when
@@ -147,17 +161,19 @@ public abstract class AbstractDatabaseNamingConvention
     protected String getFieldEncloserEnd(boolean isWithinQuotes) {
         return escapeIfQuote(getFieldEncloserEnd(), isWithinQuotes);
     }
-    
+
     private String escapeIfQuote(String item, boolean isWithinQuotes) {
         if (isWithinQuotes && "\"".equals(item)) {
             return "\\" + item;
-        } else return item;
+        } else {
+            return item;
+        }
     }
-    
+
     private final static SpeedmentException noParentException(Document doc) {
         return new SpeedmentException(
-            "Can't create full name of '" + doc + 
-            "' since it doesn't have a parent."
+                "Can't create full name of '" + doc
+                + "' since it doesn't have a parent."
         );
     }
 }

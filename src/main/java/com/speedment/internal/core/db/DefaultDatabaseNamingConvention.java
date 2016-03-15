@@ -16,23 +16,35 @@
  */
 package com.speedment.internal.core.db;
 
+import com.speedment.internal.util.function.TriFunction;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  *
- * @author  Emil Forslund
+ * @author Emil Forslund
  */
 public final class DefaultDatabaseNamingConvention extends AbstractDatabaseNamingConvention {
-    
-    private final static String 
-        DEFAULT_ENCLOSER = "`",
-        DEFAULT_QUOTE    = "'";
+
+    private final static String DEFAULT_ENCLOSER = "`",
+            DEFAULT_QUOTE = "'",
+            DEFAULT_DELIMITER = ".";
+
+    @Override
+    public String fullNameOf(String schemaName, String tableName, String columnName) {
+        return fullNameOf(schemaName, tableName) + DEFAULT_DELIMITER
+                + encloseField(columnName);
+    }
+
+    @Override
+    public String fullNameOf(String schemaName, String tableName) {
+        return encloseField(schemaName) + DEFAULT_DELIMITER
+                + encloseField(tableName);
+    }
 
     @Override
     public Set<String> getSchemaExcludeSet() {
-        return Collections.unmodifiableSet(new HashSet<>());
+        return Collections.emptySet();
     }
 
     @Override

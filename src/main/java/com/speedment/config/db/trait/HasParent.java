@@ -18,15 +18,21 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 
 /**
  *
- * @author          Emil Forslund
- * @param <PARENT>  the type of the parent
+ * @author Emil Forslund
+ * @param <PARENT> the type of the parent
  */
 @Api(version = "2.3")
 public interface HasParent<PARENT extends Document> extends Document {
+
     @Override
     Optional<PARENT> getParent();
+
+    default PARENT getParentOrThrow() {
+        return getParent().orElseThrow(() -> new SpeedmentException("Unable to get parent for " + toString()));
+    }
 }
