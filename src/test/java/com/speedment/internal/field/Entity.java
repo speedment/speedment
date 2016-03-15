@@ -60,8 +60,8 @@ public interface Entity {
         }
     }
 
-    public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IntegerIdentityMapper());
-    public final static StringField<Entity, String> NAME = new StringFieldImpl<>(Identifier.NAME, Entity::getName, Entity::setName, new StringIdentityMapper());
+    public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IntegerIdentityMapper(), true);
+    public final static StringField<Entity, String> NAME = new StringFieldImpl<>(Identifier.NAME, Entity::getName, Entity::setName, new StringIdentityMapper(), false);
 
     public Integer getId();
 

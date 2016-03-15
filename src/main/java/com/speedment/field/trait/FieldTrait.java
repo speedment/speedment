@@ -36,11 +36,9 @@ public interface FieldTrait {
     FieldIdentifier getIdentifier();
 
     /**
-     * Returns the database name of this field.
+     * Returns {@code true} if the column that this field represents is UNIQUE.
      * 
-     * @return  the database name
+     * @return  {@code true} if unique
      */
-    default String getColumnName() {
-        return getIdentifier().columnName();
-    }
+    boolean isUnique();
 }

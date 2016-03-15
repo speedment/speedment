@@ -40,7 +40,6 @@ import java.util.Comparator;
 import java.util.Set;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -63,10 +62,11 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
             Getter<ENTITY, String> getter,
             Setter<ENTITY, String> setter,
             Finder<ENTITY, FK> finder,
-            TypeMapper<D, String> typeMapper
+            TypeMapper<D, String> typeMapper,
+            boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, finder, typeMapper);
-        field = new FieldTraitImpl(identifier);
+        field = new FieldTraitImpl(identifier, unique);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         stringField = new StringFieldTraitImpl<>(field, referenceField);
@@ -76,6 +76,11 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     @Override
     public FieldIdentifier getIdentifier() {
         return field.getIdentifier();
+    }
+
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override

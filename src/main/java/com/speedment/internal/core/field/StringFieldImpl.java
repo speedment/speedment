@@ -56,10 +56,11 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
             FieldIdentifier identifier,
             Getter<ENTITY, String> getter,
             Setter<ENTITY, String> setter,
-            TypeMapper<D, String> typeMapper
+            TypeMapper<D, String> typeMapper,
+            boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
-        field = new FieldTraitImpl(identifier);
+        field = new FieldTraitImpl(identifier, unique);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
         stringField = new StringFieldTraitImpl<>(field, referenceField);
@@ -68,6 +69,11 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     @Override
     public FieldIdentifier getIdentifier() {
         return field.getIdentifier();
+    }
+
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override

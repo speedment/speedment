@@ -127,7 +127,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
                 return isNotEmpty(cn);
             default:
                 throw new UnsupportedOperationException(
-                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getColumnName()
+                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getIdentifier().columnName()
                 );
         }
     }

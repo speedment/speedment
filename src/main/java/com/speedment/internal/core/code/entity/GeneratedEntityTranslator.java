@@ -33,6 +33,8 @@ import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.IndexColumn;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
@@ -172,20 +174,32 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String constant = javaLanguageNamer().javaStaticFieldName(col.getJavaName());
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
                 
+                final boolean unique = tableOrThrow().indexes()
+                    .filter(Index::isUnique)
+                    .flatMap(Index::indexColumns)
+                    .map(IndexColumn::findColumn)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .anyMatch(ic -> ic.equals(col));
+                
+                
+                
                 file.add(Import.of(ref.implType));
                 clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                         .final_()
                         .set(new ReferenceValue(
-                                "new " + shortName(ref.implType.getName())
-                                + "<>(Identifier."
-                                + constant
-                                + ", "
-                                + getter
-                                + setter
-                                + finder
-                                + ", new "
-                                + shortName(typeMapper)
-                                + "())"
+                            "new " + shortName(ref.implType.getName())
+                            + "<>(Identifier."
+                            + constant
+                            + ", "
+                            + getter
+                            + setter
+                            + finder
+                            + ", new "
+                            + shortName(typeMapper)
+                            + "(), " 
+                            + unique
+                            + ")"
                         ))
                         .set(Javadoc.of(
                                 "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "

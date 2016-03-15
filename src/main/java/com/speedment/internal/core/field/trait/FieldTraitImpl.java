@@ -27,9 +27,11 @@ import static java.util.Objects.requireNonNull;
 public class FieldTraitImpl implements FieldTrait {
 
     private final FieldIdentifier identifier;
+    private final boolean unique;
 
-    public FieldTraitImpl(FieldIdentifier identifier) {
+    public FieldTraitImpl(FieldIdentifier identifier, boolean unique) {
         this.identifier = requireNonNull(identifier);
+        this.unique = unique;
     }
 
     @Override
@@ -38,7 +40,12 @@ public class FieldTraitImpl implements FieldTrait {
     }
 
     @Override
+    public boolean isUnique() {
+        return unique;
+    }
+
+    @Override
     public String toString() {
-        return getClass().getSimpleName() + " {columnName: '" + getColumnName() + "'}";
+        return getClass().getSimpleName() + " {columnName: '" + getIdentifier().columnName() + "'}";
     }
 }

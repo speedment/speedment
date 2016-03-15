@@ -28,7 +28,6 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -47,16 +46,22 @@ public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, 
             FieldIdentifier identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
-            TypeMapper<D, V> typeMapper
+            TypeMapper<D, V> typeMapper,
+            boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
-        field = new FieldTraitImpl(identifier);
+        field = new FieldTraitImpl(identifier, unique);
         referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
     }
 
     @Override
     public FieldIdentifier getIdentifier() {
         return field.getIdentifier();
+    }
+    
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override

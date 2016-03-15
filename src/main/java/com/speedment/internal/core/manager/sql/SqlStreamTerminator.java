@@ -21,6 +21,7 @@ import com.speedment.manager.SpeedmentPredicateView;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.stream.action.Action;
 import static com.speedment.stream.action.Property.SIZE;
 import static com.speedment.stream.action.Verb.PRESERVE;
@@ -30,7 +31,6 @@ import com.speedment.internal.core.stream.builder.pipeline.LongPipeline;
 import com.speedment.stream.Pipeline;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
@@ -39,52 +39,7 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.stream.StreamDecorator;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -134,11 +89,11 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final List<Column> columns = predicateBuilders
                 .stream()
                 .map(SpeedmentPredicate::getField)
-                .map(FieldTrait::getColumnName)
+                .map(FieldTrait::getIdentifier)
+                .map(FieldIdentifier::columnName)
                 .map(this::findColumn)
                 .collect(toList());
 
-        
         final SpeedmentPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
                 .map(spv::transform)

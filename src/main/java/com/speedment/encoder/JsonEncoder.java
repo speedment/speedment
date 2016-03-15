@@ -20,6 +20,7 @@ import com.speedment.config.db.Table;
 import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
@@ -142,7 +143,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
     protected String jsonField(FieldTrait field, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(field);
-        return javaLanguageNamer.javaVariableName(field.getColumnName());
+        return javaLanguageNamer.javaVariableName(field.getIdentifier().columnName());
     }
 
     protected static String jsonValue(Object in) {
@@ -226,7 +227,11 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         requireNonNulls(fields);
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
 
-        final Set<String> fieldNames = Stream.of(fields).map(FieldTrait::getColumnName).collect(toSet());
+        final Set<String> fieldNames = Stream.of(fields)
+            .map(FieldTrait::getIdentifier)
+            .map(FieldIdentifier::columnName)
+            .collect(toSet());
+        
         final Table table = manager.getTable();
 
         table.columns()

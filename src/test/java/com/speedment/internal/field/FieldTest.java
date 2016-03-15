@@ -29,8 +29,8 @@ public class FieldTest extends BaseFieldTest {
 
     @Test
     public void testField() throws Exception {
-        assertEquals("id", ID.getColumnName());
-        assertEquals("name", NAME.getColumnName());
+        assertEquals("id", ID.getIdentifier().columnName());
+        assertEquals("name", NAME.getIdentifier().columnName());
     }
 
 }
