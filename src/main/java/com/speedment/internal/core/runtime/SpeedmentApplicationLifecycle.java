@@ -324,31 +324,28 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     @Override
-    public T onInitialize() {
+    public void onInitialize() {
         super.onInitialize();
         forEachManagerInSeparateThread(Manager::initialize);
         forEachComponentInSeparateThread(Component::initialize);
-        return self();
     }
     
     @Override
-    public T onLoad() {
+    public void onLoad() {
         super.onLoad();
         forEachManagerInSeparateThread(Manager::load);
         forEachComponentInSeparateThread(Component::load);
-        return self();
     }
 
     @Override
-    public T onResolve() {
+    public void onResolve() {
         super.onResolve();
         forEachManagerInSeparateThread(Manager::resolve);
         forEachComponentInSeparateThread(Component::resolve);
-        return self();
     }
 
     @Override
-    public T onStart() {
+    public void onStart() {
         super.onStart();
         validateRuntimeConfig();
         makeConfigImmutable();
@@ -358,15 +355,20 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         }
         forEachManagerInSeparateThread(Manager::start);
         forEachComponentInSeparateThread(Component::start);
-        return self();
+        
+        Statistics.onNodeStarted();
+
+        LOGGER.info(SpeedmentVersion.getWelcomeMessage());
+        if (!SpeedmentVersion.isProductionMode()) {
+            LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
+        }
     }
 
     @Override
-    public T onStop() {
+    public void onStop() {
         super.onStop();
         forEachManagerInSeparateThread(Manager::stop);
         forEachComponentInSeparateThread(Component::stop);
-        return self();
     }
 
     /**
@@ -445,17 +447,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     protected ApplicationMetadata getSpeedmentApplicationMetadata() {
         return speedmentApplicationMetadata;
-    }
-
-    @Override
-    public T start() {
-        Statistics.onNodeStarted();
-
-        LOGGER.info(SpeedmentVersion.getWelcomeMessage());
-        if (!SpeedmentVersion.isProductionMode()) {
-            LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
-        }
-        return super.start();
     }
 
     public Speedment build() {

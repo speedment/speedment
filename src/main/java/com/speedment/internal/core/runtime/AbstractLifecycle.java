@@ -77,11 +77,9 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * before the {@link #onInit()} method is called.
      *
      * @param preInit Runnable to set
-     * @return this
      */
-    public final T setPreInitialize(Runnable preInit) {
+    public final void setPreInitialize(Runnable preInit) {
         this.preInit = requireNonNull(preInit);
-        return self();
     }
     
     /**
@@ -89,11 +87,9 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * before the {@link #onLoad()} method is called.
      *
      * @param preLoad Runnable to set
-     * @return this
      */
-    public final T setPreLoad(Runnable preLoad) {
+    public final void setPreLoad(Runnable preLoad) {
         this.preLoad = requireNonNull(preLoad);
-        return self();
     }
 
     /**
@@ -101,11 +97,9 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * the {@link #onResolve()} method is called.
      *
      * @param preResolve Runnable to set
-     * @return this
      */
-    public final T setPreResolve(Runnable preResolve) {
+    public final void setPreResolve(Runnable preResolve) {
         this.preResolve = requireNonNull(preResolve);
-        return self();
     }
 
     /**
@@ -113,11 +107,9 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * {@link #onStart()} method is called.
      *
      * @param preStart Runnable to set
-     * @return this
      */
-    public final T setPreStart(Runnable preStart) {
+    public final void setPreStart(Runnable preStart) {
         this.preStart = requireNonNull(preStart);
-        return self();
     }
 
     /**
@@ -125,11 +117,9 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * {@link #onStop()} method is called.
      *
      * @param preStop Runnable to set
-     * @return this
      */
-    public final T setPreStop(Runnable preStop) {
+    public final void setPreStop(Runnable preStop) {
         this.preStop = requireNonNull(preStop);
-        return self();
     }
 
     /**
@@ -137,47 +127,64 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
      * {@link #onStop()} method has been called.
      *
      * @param postStop Runnable to set
-     * @return this
      */
-    public final T setPostStop(Runnable postStop) {
+    public final void setPostStop(Runnable postStop) {
         this.postStop = requireNonNull(postStop);
-        return self();
     }
     
     @Override
-    public T preInitialize() {
+    public void preInitialize() {
         preInit.run();
-        return Lifecyclable.super.preInitialize();
     }
     
     @Override
-    public T preLoad() {
+    public void preLoad() {
         preLoad.run();
-        return Lifecyclable.super.preLoad();
     }
     
     @Override
-    public T preResolve() {
+    public void preResolve() {
         preResolve.run();
-        return Lifecyclable.super.preResolve();
     }
     
     @Override
-    public T preStart() {
+    public void preStart() {
         preStart.run();
-        return Lifecyclable.super.preStart();
     }
     
     @Override
-    public T preStop() {
+    public void preStop() {
         preStop.run();
-        return Lifecyclable.super.preStop();
     }
 
     @Override
-    public T postStop() {
+    public void postStop() {
         postStop.run();
-        return Lifecyclable.super.postStop();
+    }
+    
+    @Override
+    public final T initialize() {
+        return Lifecyclable.super.initialize();
+    }
+    
+    @Override
+    public final T load() {
+        return Lifecyclable.super.load();
+    }
+    
+    @Override
+    public final T resolve() {
+        return Lifecyclable.super.resolve();
+    }
+    
+    @Override
+    public final T start() {
+        return Lifecyclable.super.start();
+    }
+
+    @Override
+    public final T stop() {
+        return Lifecyclable.super.stop();
     }
     
     @Override

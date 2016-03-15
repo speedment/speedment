@@ -53,10 +53,9 @@ public final class DefaultSpeedmentApplicationLifecycle extends
     }
 
     @Override
-    public DefaultSpeedmentApplicationLifecycle onLoad() {
-        final DefaultSpeedmentApplicationLifecycle result = super.onLoad();
+    public void onLoad() {
+        super.onLoad();
         loadAndSetProject();
-        return result;
     }
 
     public DefaultSpeedmentApplicationLifecycle(String json) {

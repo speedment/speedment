@@ -53,24 +53,18 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     /**
      * Overridable method that can add logic before the initialize phase.
      * 
-     * @return  a reference to this
      * @see     #onInitialize()
      * @see     #initialize()
      */
-    default T preInitialize() {
-        return (T) this;
-    }
+    default void preInitialize() {}
     
     /**
      * Overridable method that can add logic to the initialize phase.
      * 
-     * @return  a reference to this
      * @see     #preInitialize()
      * @see     #initialize()
      */
-    default T onInitialize() {
-        return (T) this;
-    }
+    default void onInitialize() {}
     
     /**
      * Initialize this {@code Lifecyclable}. This method will call first the 
@@ -96,24 +90,18 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     /**
      * Overridable method that can add logic before the load phase.
      * 
-     * @return  a reference to this
      * @see     #onLoad()
      * @see     #load()
      */
-    default T preLoad() {
-        return (T) this;
-    }
+    default void preLoad() {}
     
     /**
      * Overridable method that can add logic to the load phase.
      * 
-     * @return  a reference to this
      * @see     #preLoad()
      * @see     #load()
      */
-    default T onLoad() {
-        return (T) this;
-    }
+    default void onLoad() {}
     
     /**
      * Loads this {@code Lifecyclable}. This method will make sure that the 
@@ -143,24 +131,18 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     /**
      * Overridable method that can add logic before the resolve phase.
      * 
-     * @return  a reference to this
      * @see     #onResolve()
      * @see     #resolve()
      */
-    default T preResolve() {
-        return (T) this;
-    }
+    default void preResolve() {}
     
     /**
      * Overridable method that can add logic to the resolve phase.
      * 
-     * @return  a reference to this
      * @see     #preResolve()
      * @see     #resolve()
      */
-    default T onResolve() {
-        return (T) this;
-    }
+    default void onResolve() {}
 
     /**
      * Resolves this {@code Lifecyclable}. This method will make sure that the 
@@ -193,24 +175,18 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     /**
      * Overridable method that can add logic before the start phase.
      * 
-     * @return  a reference to this
      * @see     #onStart()
      * @see     #start()
      */
-    default T preStart() {
-        return (T) this;
-    }
+    default void preStart() {}
     
     /**
      * Overridable method that can add logic to the start phase.
      * 
-     * @return  a reference to this
      * @see     #preStart()
      * @see     #start()
      */
-    default T onStart() {
-        return (T) this;
-    }
+    default void onStart() {}
 
     /**
      * Starts this {@code Lifecyclable}. This method will make sure that the 
@@ -247,38 +223,29 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     /**
      * Overridable method that can add logic before the stopping phase.
      * 
-     * @return  a reference to this
      * @see     #onStop()
      * @see     #postStop()
      * @see     #stop()
      */
-    default T preStop() {
-        return (T) this;
-    }
+    default void preStop() {}
     
     /**
      * Overridable method that can add logic to the stopping phase.
      * 
-     * @return  a reference to this
      * @see     #preStop()
      * @see     #postStop()
      * @see     #stop()
      */
-    default T onStop() {
-        return (T) this;
-    }
+    default void onStop() {}
     
     /**
      * Overridable method that can add logic after the stopping phase.
      * 
-     * @return  a reference to this
      * @see     #preStop()
      * @see     #onStop()
      * @see     #stop()
      */
-    default T postStop() {
-        return (T) this;
-    }
+    default void postStop() {}
 
     /**
      * Stops this {@code Lifecyclable}. This method will call first the 
