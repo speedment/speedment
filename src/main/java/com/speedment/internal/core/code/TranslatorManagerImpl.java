@@ -123,10 +123,12 @@ public class TranslatorManagerImpl implements TranslatorManager {
         speedment.getEventComponent().notify(new AfterGenerate(project, gen, this));
     }
 
+    @Override
     public int getFilesCreated() {
         return fileCounter.get();
     }
 
+    @Override
     public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
         requireNonNull(meta);
 
