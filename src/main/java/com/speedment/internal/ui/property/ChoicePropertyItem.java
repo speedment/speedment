@@ -60,11 +60,18 @@ public final class ChoicePropertyItem<T> extends AbstractPropertyItem<T, Propert
         return createChoiceEditor(this, alternatives, converter);
     }
     
-    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<T, Property<T>> property, ObservableList<T> alternatives, StringConverter<T> converter) {
+    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<T, Property<T>> item, ObservableList<T> alternatives, StringConverter<T> converter) {
         final ComboBox<T> comboBox = new ComboBox<>(alternatives);
         comboBox.setConverter(converter);
         
-        return new AbstractPropertyEditor<T, ComboBox<T>>(property, comboBox) {
+        final T selected = item.getValue();
+        if (selected == null) {
+            comboBox.getSelectionModel().clearSelection();
+        } else {
+            comboBox.getSelectionModel().select(item.getValue());
+        }
+        
+        return new AbstractPropertyEditor<T, ComboBox<T>>(item, comboBox) {
             
             @Override 
             protected ObservableValue<T> getObservableValue() {

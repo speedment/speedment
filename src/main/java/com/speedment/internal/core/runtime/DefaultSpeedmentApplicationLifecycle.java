@@ -53,8 +53,8 @@ public final class DefaultSpeedmentApplicationLifecycle extends
     }
 
     @Override
-    protected void onInit() {
-        super.onInit();
+    protected void onLoad() {
+        super.onLoad();
         loadAndSetProject();
     }
 

@@ -25,6 +25,7 @@ import java.util.Objects;
  * events for each <code>Lifecyclable</code> transition:
  * <ul>
  * <li>{@link #onInit()}</li>
+ * <li>{@link #onLoad()}</li>
  * <li>{@link #onResolve()}</li>
  * <li>{@link #onStart()}</li>
  * <li>{@link #onStop()}</li>
@@ -34,6 +35,7 @@ import java.util.Objects;
  * run-time:
  * <ul>
  * <li>{@link #setPreInitialize(java.lang.Runnable)}</li>
+ * <li>{@link #setPreLoad(java.lang.Runnable)}</li>
  * <li>{@link #setPreResolve(java.lang.Runnable)}</li>
  * <li>{@link #setPreStart(java.lang.Runnable)}</li>
  * <li>{@link #setPreStop(java.lang.Runnable)}</li>
@@ -49,11 +51,11 @@ import java.util.Objects;
 public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implements Lifecyclable<T> {
 
     private State state;
-    private Runnable preInit, preResolve, preStart, preStop, postStop;
+    private Runnable preInit, preLoad, preResolve, preStart, preStop, postStop;
 
     public AbstractLifecycle() {
         state = State.CREATED;
-        preInit = preResolve = preStart = preStop = postStop = NOTHING;
+        preInit = preLoad = preResolve = preStart = preStop = postStop = NOTHING;
     }
 
     /**
@@ -61,6 +63,12 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * over-riding.
      */
     protected abstract void onInit();
+    
+    /**
+     * This method is called by the {@link #load()} method to support easy
+     * over-riding.
+     */
+    protected abstract void onLoad();
 
     /**
      * This method is called by the {@link #resolve()} method to support easy
@@ -98,12 +106,29 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
         state = State.INIITIALIZED;
         return self();
     }
+    
+    @Override
+    public T load() {
+        if (getState() == State.CREATED) {
+            // Automatically call resolve() for conveniency
+            initialize();
+        }
+        getState().checkNextState(State.LOADED);
+        preLoad.run();
+        onLoad();
+        state = State.LOADED;
+        return self();
+    }
 
     @Override
     public T resolve() {
         if (getState() == State.CREATED) {
             // Automatically call resolve() for conveniency
             initialize();
+        }
+        if (getState() == State.INIITIALIZED) {
+            // Automatically call load() for conveniency
+            load();
         }
         getState().checkNextState(State.RESOLVED);
         preResolve.run();
@@ -119,7 +144,11 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
             initialize();
         }
         if (getState() == State.INIITIALIZED) {
-            // Automatically call init() for conveniency
+            // Automatically call load() for conveniency
+            load();
+        }
+        if (getState() == State.LOADED) {
+            // Automatically call resolve() for conveniency
             resolve();
         }
         getState().checkNextState(State.STARTED);

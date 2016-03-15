@@ -328,6 +328,12 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         forEachManagerInSeparateThread(Manager::initialize);
         forEachComponentInSeparateThread(Component::initialize);
     }
+    
+    @Override
+    protected void onLoad() {
+        forEachManagerInSeparateThread(Manager::load);
+        forEachComponentInSeparateThread(Component::load);
+    }
 
     @Override
     protected void onResolve() {

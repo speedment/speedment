@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.ui.util;
 
-import com.speedment.component.UserInterfaceComponent;
 import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
@@ -29,7 +28,6 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.function.Consumer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
 import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**

@@ -36,6 +36,14 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @return this of type T
      */
     T initialize();
+    
+    /**
+     * Loads this <code>Lifecyclable</code>. This method can be used to set
+     * load internal settings.
+     *
+     * @return this of type T
+     */
+    T load();
 
     /**
      * Resolve is called when all the <code>Lifecyclables</code> has been
@@ -80,6 +88,17 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     default boolean isInitialized() {
         return getState().is(State.INIITIALIZED);
     }
+    
+    /**
+     * Returns if this <code>Lifecyclable</code> is loaded.
+     *
+     * @return if this <code>Lifecyclable</code> is loaded
+     * @see #load()
+     * @see State#LOADED
+     */
+    default boolean isLoaded() {
+        return getState().is(State.LOADED);
+    }
 
     /**
      * Returns if this <code>Lifecyclable</code> is resolved.
@@ -122,6 +141,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      *
      * @see #CREATED
      * @see #INIITIALIZED
+     * @see #LOADED
      * @see #RESOLVED
      * @see #STARTED
      * @see #STOPPED
@@ -146,25 +166,40 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
          */
         INIITIALIZED,
         /**
-         * The <code>Lifecyclable</code> has been initialized and resolved.
+         * The <code>Lifecyclable</code> has been initialized and loaded.
          *
          * The following method(s) has been called and has completed on the
          * <code>Lifecyclable</code>:
          * <ul>
          * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
+         * </ul>
+         *
+         */
+        LOADED, 
+        /**
+         * The <code>Lifecyclable</code> has been initialized, loaded and 
+         * resolved.
+         *
+         * The following method(s) has been called and has completed on the
+         * <code>Lifecyclable</code>:
+         * <ul>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
          * <li>{@link #resolve()}</li>
          * </ul>
          *
          */
         RESOLVED,
         /**
-         * The <code>Lifecyclable</code> has been initialized, resolved and
-         * started.
+         * The <code>Lifecyclable</code> has been initialized, loaded, resolved 
+         * and started.
          *
          * The following method(s) has been called and has completed on the
          * <code>Lifecyclable</code>:
          * <ul>
          * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
          * <li>{@link #resolve()}</li>
          * <li>{@link #start()}</li>
          * </ul>
@@ -172,13 +207,14 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
          */
         STARTED,
         /**
-         * The <code>Lifecyclable</code> has been initialized, resolved, started
-         * and stopped.
+         * The <code>Lifecyclable</code> has been initialized, loaded, resolved, 
+         * started and stopped.
          *
          * The following method(s) has been called and has completed on the
          * <code>Lifecyclable</code>:
          * <ul>
          * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
          * <li>{@link #resolve()}</li>
          * <li>{@link #start()}</li>
          * <li>{@link #stop()}</li>

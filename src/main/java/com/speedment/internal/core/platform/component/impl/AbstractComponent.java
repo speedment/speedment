@@ -49,6 +49,12 @@ public abstract class AbstractComponent implements Component {
         state = State.INIITIALIZED;
         return this;
     }
+    
+    @Override
+    public AbstractComponent load() {
+        state = State.LOADED;
+        return this;
+    }
 
     @Override
     public AbstractComponent resolve() {

@@ -22,7 +22,6 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.field.ComparableField;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -205,6 +204,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Manager<ENTITY> initialize() {
         return inner.initialize();
     }
+    
+    @Override
+    public Manager<ENTITY> load() {
+        return inner.load();
+    }
 
     @Override
     public Manager<ENTITY> resolve() {
@@ -229,6 +233,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     @Override
     public boolean isInitialized() {
         return inner.isInitialized();
+    }
+    
+    @Override
+    public boolean isLoaded() {
+        return inner.isLoaded();
     }
 
     @Override

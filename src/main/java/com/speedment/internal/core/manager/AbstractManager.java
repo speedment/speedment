@@ -75,6 +75,12 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         state = State.INIITIALIZED;
         return this;
     }
+    
+    @Override
+    public Manager<ENTITY> load() {
+        state = State.LOADED;
+        return this;
+    }
 
     @Override
     public Manager<ENTITY> resolve() {

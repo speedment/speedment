@@ -77,10 +77,10 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
             .keys()
             .collect(toSet());
         
-        final Method onInit = Method.of("onInit", VOID)
+        final Method onInit = Method.of("onLoad", VOID)
             .protected_()
             .add(OVERRIDE)
-            .add("super.onInit();")
+            .add("super.onLoad();")
             .add("loadAndSetProject();");
         
         final String methodName = "applyAndPut";

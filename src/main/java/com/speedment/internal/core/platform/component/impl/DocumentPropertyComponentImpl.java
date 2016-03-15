@@ -40,7 +40,6 @@ import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.license.Software;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
