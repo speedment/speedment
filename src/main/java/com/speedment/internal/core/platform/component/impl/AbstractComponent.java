@@ -18,17 +18,21 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.component.Lifecyclable;
+import com.speedment.internal.core.runtime.AbstractLifecycle;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-public abstract class AbstractComponent implements Component {
+public abstract class AbstractComponent extends AbstractLifecycle<Component> implements Component {
+    
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractComponent.class);
 
     private final Speedment speedment;
-    private Lifecyclable.State state;
 
     public AbstractComponent(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
@@ -42,40 +46,5 @@ public abstract class AbstractComponent implements Component {
     @Override
     public Speedment getSpeedment() {
         return speedment;
-    }
-    
-    @Override
-    public AbstractComponent initialize() {
-        state = State.INIITIALIZED;
-        return this;
-    }
-    
-    @Override
-    public AbstractComponent load() {
-        state = State.LOADED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent resolve() {
-        state = State.RESOLVED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent start() {
-        state = State.STARTED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent stop() {
-        state = State.STOPPED;
-        return this;
-    }
-
-    @Override
-    public Lifecyclable.State getState() {
-        return state;
     }
 }

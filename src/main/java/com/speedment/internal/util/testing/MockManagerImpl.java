@@ -229,6 +229,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public State getState() {
         return inner.getState();
     }
+    
+    @Override
+    public void setState(State state) {
+        inner.setState(state);
+    }
 
     @Override
     public boolean isInitialized() {

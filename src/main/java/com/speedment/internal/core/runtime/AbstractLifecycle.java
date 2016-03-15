@@ -17,165 +17,60 @@
 package com.speedment.internal.core.runtime;
 
 import com.speedment.component.Lifecyclable;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 /**
- * This class provides an abstract implementation of a
- * <code>Lifecyclable</code>. It also introduces the following overridable
- * events for each <code>Lifecyclable</code> transition:
+ * This class provides an abstract implementation of a {@link Lifecyclable}. It 
+ * also introduces the following overridable events for each 
+ * {@code Lifecyclable} transition:
  * <ul>
- * <li>{@link #onInit()}</li>
- * <li>{@link #onLoad()}</li>
- * <li>{@link #onResolve()}</li>
- * <li>{@link #onStart()}</li>
- * <li>{@link #onStop()}</li>
+ *      <li>{@link #onInit()}</li>
+ *      <li>{@link #onLoad()}</li>
+ *      <li>{@link #onResolve()}</li>
+ *      <li>{@link #onStart()}</li>
+ *      <li>{@link #onStop()}</li>
  * </ul>
- *
+ *<p>
  * It also introduces the following Runnables that can be set dynamically during
  * run-time:
  * <ul>
- * <li>{@link #setPreInitialize(java.lang.Runnable)}</li>
- * <li>{@link #setPreLoad(java.lang.Runnable)}</li>
- * <li>{@link #setPreResolve(java.lang.Runnable)}</li>
- * <li>{@link #setPreStart(java.lang.Runnable)}</li>
- * <li>{@link #setPreStop(java.lang.Runnable)}</li>
- * <li>{@link #setPostStop(java.lang.Runnable)}</li>
+ *      <li>{@link #setPreInitialize(Runnable)}</li>
+ *      <li>{@link #setPreLoad(Runnable)}</li>
+ *      <li>{@link #setPreResolve(Runnable)}</li>
+ *      <li>{@link #setPreStart(Runnable)}</li>
+ *      <li>{@link #setPreStop(Runnable)}</li>
+ *      <li>{@link #setPostStop(Runnable)}</li>
  * </ul>
- * The Runnable will be invoked upon its corresponding life-cycle method
+ * <p>
+ * The Runnable will be invoked upon its corresponding life-cycle method.
  *
- * @author pemi
- * @param <T> the self type
- * @see com.speedment.internal.core.runtime.Lifecyclable
- * @since 2.0
+ * @author     Per Minborg
+ * @author     Emil Forslund
+ * @param <T>  the self type
+ * @see        Lifecyclable
+ * @since      2.0
  */
-public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implements Lifecyclable<T> {
+public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Lifecyclable<T> {
+    
+    private static final Runnable NOTHING = () -> {};
 
     private State state;
     private Runnable preInit, preLoad, preResolve, preStart, preStop, postStop;
-
-    public AbstractLifecycle() {
+    
+    protected AbstractLifecycle() {
         state = State.CREATED;
         preInit = preLoad = preResolve = preStart = preStop = postStop = NOTHING;
     }
 
-    /**
-     * This method is called by the {@link #initialize()} method to support easy
-     * over-riding.
-     */
-    protected abstract void onInit();
-    
-    /**
-     * This method is called by the {@link #load()} method to support easy
-     * over-riding.
-     */
-    protected abstract void onLoad();
-
-    /**
-     * This method is called by the {@link #resolve()} method to support easy
-     * over-riding.
-     */
-    protected abstract void onResolve();
-
-    /**
-     * This method is called by the {@link #start()} method to support easy
-     * over-riding.
-     */
-    protected abstract void onStart();
-
-    /**
-     * This method is called by the {@link #stop()} method to support easy
-     * over-riding.
-     */
-    protected abstract void onStop();
+    @Override
+    public final void setState(State newState) {
+        this.state = requireNonNull(newState);
+    }
 
     @Override
-    public State getState() {
+    public final State getState() {
         return state;
     }
-
-    @SuppressWarnings("unchecked")
-    protected T self() {
-        return (T) this;
-    }
-
-    @Override
-    public T initialize() {
-        getState().checkNextState(State.INIITIALIZED);
-        preInit.run();
-        onInit();
-        state = State.INIITIALIZED;
-        return self();
-    }
-    
-    @Override
-    public T load() {
-        if (getState() == State.CREATED) {
-            // Automatically call resolve() for conveniency
-            initialize();
-        }
-        getState().checkNextState(State.LOADED);
-        preLoad.run();
-        onLoad();
-        state = State.LOADED;
-        return self();
-    }
-
-    @Override
-    public T resolve() {
-        if (getState() == State.CREATED) {
-            // Automatically call resolve() for conveniency
-            initialize();
-        }
-        if (getState() == State.INIITIALIZED) {
-            // Automatically call load() for conveniency
-            load();
-        }
-        getState().checkNextState(State.RESOLVED);
-        preResolve.run();
-        onResolve();
-        state = State.RESOLVED;
-        return self();
-    }
-
-    @Override
-    public T start() {
-        if (getState() == State.CREATED) {
-            // Automatically call init() for conveniency
-            initialize();
-        }
-        if (getState() == State.INIITIALIZED) {
-            // Automatically call load() for conveniency
-            load();
-        }
-        if (getState() == State.LOADED) {
-            // Automatically call resolve() for conveniency
-            resolve();
-        }
-        getState().checkNextState(State.STARTED);
-        preStart.run();
-        onStart();
-        state = State.STARTED;
-        return self();
-    }
-
-    @Override
-    public T stop() {
-        getState().checkNextState(State.STOPPED);
-        preStop.run();
-        onStop();
-        postStop.run();
-        state = State.STOPPED;
-        return self();
-    }
-
-    @Override
-    public String toString() {
-        return getState().toString();
-    }
-
-    // RUNNABLES
-    private static final Runnable NOTHING = () -> {
-    };
 
     /**
      * Sets the non-null pre-initialize {@link Runnable} that is to be run
@@ -184,8 +79,20 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * @param preInit Runnable to set
      * @return this
      */
-    public T setPreInitialize(Runnable preInit) {
-        this.preInit = Objects.requireNonNull(preInit);
+    public final T setPreInitialize(Runnable preInit) {
+        this.preInit = requireNonNull(preInit);
+        return self();
+    }
+    
+    /**
+     * Sets the non-null pre-load {@link Runnable} that is to be run
+     * before the {@link #onLoad()} method is called.
+     *
+     * @param preLoad Runnable to set
+     * @return this
+     */
+    public final T setPreLoad(Runnable preLoad) {
+        this.preLoad = requireNonNull(preLoad);
         return self();
     }
 
@@ -196,8 +103,8 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * @param preResolve Runnable to set
      * @return this
      */
-    public T setPreResolve(Runnable preResolve) {
-        this.preResolve = Objects.requireNonNull(preResolve);
+    public final T setPreResolve(Runnable preResolve) {
+        this.preResolve = requireNonNull(preResolve);
         return self();
     }
 
@@ -208,8 +115,8 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * @param preStart Runnable to set
      * @return this
      */
-    public T setPreStart(Runnable preStart) {
-        this.preStart = Objects.requireNonNull(preStart);
+    public final T setPreStart(Runnable preStart) {
+        this.preStart = requireNonNull(preStart);
         return self();
     }
 
@@ -220,8 +127,8 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * @param preStop Runnable to set
      * @return this
      */
-    public T setPreStop(Runnable preStop) {
-        this.preStop = Objects.requireNonNull(preStop);
+    public final T setPreStop(Runnable preStop) {
+        this.preStop = requireNonNull(preStop);
         return self();
     }
 
@@ -232,9 +139,54 @@ public abstract class AbstractLifecycle<T extends AbstractLifecycle<T>> implemen
      * @param postStop Runnable to set
      * @return this
      */
-    public T setPostStop(Runnable postStop) {
-        this.postStop = Objects.requireNonNull(postStop);
+    public final T setPostStop(Runnable postStop) {
+        this.postStop = requireNonNull(postStop);
         return self();
     }
+    
+    @Override
+    public T preInitialize() {
+        preInit.run();
+        return Lifecyclable.super.preInitialize();
+    }
+    
+    @Override
+    public T preLoad() {
+        preLoad.run();
+        return Lifecyclable.super.preLoad();
+    }
+    
+    @Override
+    public T preResolve() {
+        preResolve.run();
+        return Lifecyclable.super.preResolve();
+    }
+    
+    @Override
+    public T preStart() {
+        preStart.run();
+        return Lifecyclable.super.preStart();
+    }
+    
+    @Override
+    public T preStop() {
+        preStop.run();
+        return Lifecyclable.super.preStop();
+    }
 
+    @Override
+    public T postStop() {
+        postStop.run();
+        return Lifecyclable.super.postStop();
+    }
+    
+    @Override
+    public String toString() {
+        return getState().toString();
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected T self() {
+        return (T) this;
+    }
 }

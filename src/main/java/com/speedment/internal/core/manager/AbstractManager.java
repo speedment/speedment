@@ -22,7 +22,7 @@ import com.speedment.encoder.JsonEncoder;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.component.Lifecyclable;
+import com.speedment.internal.core.runtime.AbstractLifecycle;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 import java.util.Optional;
@@ -30,21 +30,17 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author Emil Forslund
- *
- * @param <ENTITY> Entity type for this Manager
+ * @author          Emil Forslund
+ * @param <ENTITY>  entity type for this Manager
  */
-public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
+public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<ENTITY>> implements Manager<ENTITY> {
 
     protected final Speedment speedment;
 
-    private Lifecyclable.State state;
-
     private final JsonEncoder<ENTITY> sharedJasonFormatter;
 
-    public AbstractManager(Speedment speedment) {
+    protected AbstractManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        state = Lifecyclable.State.CREATED;
         sharedJasonFormatter = JsonEncoder.allOf(this);
     }
 
@@ -71,43 +67,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Manager<ENTITY> initialize() {
-        state = State.INIITIALIZED;
-        return this;
-    }
-    
-    @Override
-    public Manager<ENTITY> load() {
-        state = State.LOADED;
-        return this;
-    }
-
-    @Override
-    public Manager<ENTITY> resolve() {
-        state = State.RESOLVED;
-        return this;
-    }
-
-    @Override
-    public Manager<ENTITY> start() {
-        state = State.STARTED;
-        return this;
-    }
-
-    @Override
-    public Manager<ENTITY> stop() {
-        state = State.STOPPED;
-        return this;
-    }
-
-    @Override
-    public Lifecyclable.State getState() {
-        return state;
-    }
-
-    @Override
     public Speedment speedment() {
         return speedment;
     }
-
 }

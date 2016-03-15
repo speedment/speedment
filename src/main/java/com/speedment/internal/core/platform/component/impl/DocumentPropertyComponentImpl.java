@@ -61,12 +61,8 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
     public DocumentPropertyComponentImpl(Speedment speedment) {
         super(speedment);
         root = new Branch(DEFAULT_CONSTRUCTOR);
-    }
-
-    @Override
-    public AbstractComponent initialize() {
         
-        root.find().set((parent) -> new ProjectProperty());
+        root.find().set(parent -> new ProjectProperty());
         root.find(DBMSES).set(parent -> new DbmsProperty((Project) parent));
         root.find(SCHEMAS).set(parent -> new SchemaProperty((Dbms) parent));
         root.find(TABLES).set(parent -> new TableProperty((Schema) parent));
@@ -76,8 +72,6 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         root.find(INDEX_COLUMNS).set(parent -> new IndexColumnProperty((Index) parent));
         root.find(FOREIGN_KEYS).set(parent -> new ForeignKeyProperty((Table) parent));
         root.find(FOREIGN_KEY_COLUMNS).set(parent -> new ForeignKeyColumnProperty((ForeignKey) parent));
-        
-        return super.initialize();
     }
     
     @Override

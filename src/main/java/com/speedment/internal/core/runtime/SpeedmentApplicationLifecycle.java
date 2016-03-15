@@ -324,25 +324,32 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     @Override
-    protected void onInit() {
+    public T onInitialize() {
+        super.onInitialize();
         forEachManagerInSeparateThread(Manager::initialize);
         forEachComponentInSeparateThread(Component::initialize);
+        return self();
     }
     
     @Override
-    protected void onLoad() {
+    public T onLoad() {
+        super.onLoad();
         forEachManagerInSeparateThread(Manager::load);
         forEachComponentInSeparateThread(Component::load);
+        return self();
     }
 
     @Override
-    protected void onResolve() {
+    public T onResolve() {
+        super.onResolve();
         forEachManagerInSeparateThread(Manager::resolve);
         forEachComponentInSeparateThread(Component::resolve);
+        return self();
     }
 
     @Override
-    protected void onStart() {
+    public T onStart() {
+        super.onStart();
         validateRuntimeConfig();
         makeConfigImmutable();
 
@@ -351,12 +358,15 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         }
         forEachManagerInSeparateThread(Manager::start);
         forEachComponentInSeparateThread(Component::start);
+        return self();
     }
 
     @Override
-    protected void onStop() {
+    public T onStop() {
+        super.onStop();
         forEachManagerInSeparateThread(Manager::stop);
         forEachComponentInSeparateThread(Component::stop);
+        return self();
     }
 
     /**
