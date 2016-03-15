@@ -63,24 +63,28 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private final LazyString sqlColumnList;
     private final LazyString sqlColumnListQuestionMarks;
+    private final LazyString sqlTableReference;
+    private final LazyString sqlSelect;
     private SqlFunction<ResultSet, ENTITY> entityMapper;
 
     protected AbstractSqlManager(Speedment speedment) {
         super(speedment);
-        this.sqlColumnList              = LazyString.create();
+        this.sqlColumnList = LazyString.create();
         this.sqlColumnListQuestionMarks = LazyString.create();
+        this.sqlTableReference = LazyString.create();
+        this.sqlSelect = LazyString.create();
     }
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(), Collections.emptyList(), entityMapper.unWrap()));
-        final SqlStreamTerminator<ENTITY> terminator     = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
+        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.applyOnInitial(asynchronousQueryResult.stream());
-        final Stream<ENTITY> result                      = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
-        
+        final Stream<ENTITY> result = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
+
         // Make sure we are closing the ResultSet, Statement and Connection later
-        result.onClose(asynchronousQueryResult::close); 
-        
+        result.onClose(asynchronousQueryResult::close);
+
         return result;
     }
 
@@ -88,33 +92,34 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         requireNonNulls(sql, values, rsMapper);
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
-    
+
     /**
      * Counts the number of elements in the current table by querying the
      * database.
-     * 
-     * @return  the number of elements in the table
+     *
+     * @return the number of elements in the table
      */
     public long count() {
         return synchronousStreamOf(
-            "select count(*) from " + sqlTableReference(), 
-            Collections.emptyList(), 
-            rs -> rs.getLong(1)
+                "SELECT COUNT(*) FROM " + sqlTableReference(),
+                Collections.emptyList(),
+                rs -> rs.getLong(1)
         ).findAny().get();
     }
 
     /**
      * Returns a {@code SELECT/FROM} SQL statement with the full column list and
-     * the current table specified in accordance to the current {@link DbmsType}.
-     * The specified statement will not have any trailing spaces or semicolons.
+     * the current table specified in accordance to the current
+     * {@link DbmsType}. The specified statement will not have any trailing
+     * spaces or semicolons.
      * <p>
      * <b>Example:</b>
      * <code>SELECT `id`, `name` FROM `myschema`.`users`</code>
-     * 
-     * @return  the SQL statement
+     *
+     * @return the SQL statement
      */
     public String sqlSelect() {
-        return "select " + sqlColumnList() + " from " + sqlTableReference();
+        return sqlSelect.getOrCompute(() -> "SELECT " + sqlColumnList() + " FROM " + sqlTableReference());
     }
 
     @Override
@@ -164,8 +169,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     /**
      * Short-cut for retrieving the current {@link Dbms}.
-     * 
-     * @return  the current dbms
+     *
+     * @return the current dbms
      */
     protected final Dbms getDbms() {
         return ancestor(getTable(), Dbms.class).get();
@@ -173,8 +178,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     /**
      * Short-cut for retrieving the current {@link DbmsType}.
-     * 
-     * @return  the current dbms type
+     *
+     * @return the current dbms type
      */
     protected final DbmsType getDbmsType() {
         return dbmsTypeOf(speedment, getDbms());
@@ -182,48 +187,48 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     /**
      * Short-cut for retrieving the current {@link DbmsHandler}.
-     * 
-     * @return  the current dbms handler
+     *
+     * @return the current dbms handler
      */
     protected final DbmsHandler dbmsHandler() {
         return speedment.getDbmsHandlerComponent().get(getDbms());
     }
-    
+
     /**
      * Short-cut for retrieving the current {@link DatabaseNamingConvention}.
-     * 
-     * @return  the current naming convention
+     *
+     * @return the current naming convention
      */
     protected final DatabaseNamingConvention naming() {
         return getDbmsType().getDatabaseNamingConvention();
     }
-    
+
     /**
-     * Returns a comma separated list of column names, fully formatted in 
+     * Returns a comma separated list of column names, fully formatted in
      * accordance to the current {@link DbmsType}.
-     * 
-     * @return  the comma separated column list
+     *
+     * @return the comma separated column list
      */
     private String sqlColumnList() {
         return sqlColumnList.getOrCompute(() -> sqlColumnList(c -> c));
     }
 
     /**
-     * Returns a comma separated list of question marks (?), fully formatted in 
+     * Returns a comma separated list of question marks (?), fully formatted in
      * accordance to the current {@link DbmsType} to represent column value
      * wildcards.
-     * 
-     * @return  the comma separated question mark list
+     *
+     * @return the comma separated question mark list
      */
     private String sqlColumnListWithQuestionMarks() {
         return sqlColumnListQuestionMarks.getOrCompute(() -> sqlColumnList(c -> "?"));
     }
-    
+
     /**
-     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database 
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
      * names, formatted in accordance to the current {@link DbmsType}.
-     * 
-     * @return  list of fully quoted primary key column names
+     *
+     * @return list of fully quoted primary key column names
      */
     protected String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
@@ -234,10 +239,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database 
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
      * names, formatted in accordance to the current {@link DbmsType}.
-     * 
-     * @return  list of fully quoted primary key column names
+     *
+     * @return list of fully quoted primary key column names
      */
     private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
@@ -251,15 +256,16 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * Returns the full name of a table formatted in accordance to the current
      * {@link DbmsType}. The returned value will be within quotes if that is
      * what the database expects.
-     * 
-     * @return  the full quoted table name
+     *
+     * @return the full quoted table name
      */
     protected String sqlTableReference() {
-        return naming().fullNameOf(getTable());
+        return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private final Function<ENTITY, Consumer<List<Long>>> NOTHING = 
-        b -> l -> { /* Nothing to do for updates... */ };
+    private final Function<ENTITY, Consumer<List<Long>>> NOTHING
+            = b -> l -> {
+                /* Nothing to do for updates... */ };
 
     private Object toDatabaseType(Column column, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, column));
@@ -271,9 +277,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb.append("insert into ").append(sqlTableReference());
+        sb.append("INSERT INTO ").append(sqlTableReference());
         sb.append(" (").append(sqlColumnList()).append(")");
-        sb.append(" values ");
+        sb.append(" VALUES ");
         sb.append("(").append(sqlColumnListWithQuestionMarks()).append(")");
 
         final List<Object> values = table.columns()
@@ -314,9 +320,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
-        sb.append("update ").append(sqlTableReference()).append(" set ");
+        sb.append("UPDATE ").append(sqlTableReference()).append(" SET ");
         sb.append(sqlColumnList(n -> n + " = ?"));
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
         final List<Object> values = table.columns()
@@ -332,8 +338,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
-        sb.append("delete from ").append(sqlTableReference());
-        sb.append(" where ");
+        sb.append("DELETE FROM ").append(sqlTableReference());
+        sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
         final List<Object> values = table.primaryKeyColumns()
                 .map(pk -> toDatabaseType(pk.findColumn().get(), entity))
@@ -353,11 +359,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         requireNonNulls(entity, sql, values, generatedKeyconsumer, listener);
 
         final SqlMetaResultImpl<ENTITY> meta = listener.isPresent()
-            ? new SqlMetaResultImpl<ENTITY>()
+                ? new SqlMetaResultImpl<ENTITY>()
                 .setQuery(sql)
                 .setParameters(values)
-            : null;
-        
+                : null;
+
         try {
             executeUpdate(entity, sql, values, generatedKeyconsumer);
         } catch (final SQLException sqle) {
