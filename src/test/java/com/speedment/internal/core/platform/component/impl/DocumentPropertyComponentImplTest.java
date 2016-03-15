@@ -67,8 +67,14 @@ public class DocumentPropertyComponentImplTest {
             root = DocumentPropertyComponentImpl.class.getDeclaredField("root");
             root.setAccessible(true);
             
-            final Method toString = root.getDeclaringClass().getMethod("toString");
-            System.out.println(toString.invoke(root.get(component)));
+            final Method toString = root.getType().getMethod("toString");
+            final Object rootObj  = root.get(component);
+            
+            if (rootObj == null) {
+                throw new NullPointerException("Root is null.");
+            }
+            
+            System.out.println(toString.invoke(rootObj));
             
         } catch (final NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new SpeedmentException("Could not call toString on component", ex);
