@@ -31,8 +31,8 @@ public interface HasCode<T extends HasCode<T>> {
     
     /**
      * Adds the specified row of code to this model. If the row contains
-     * new-line characters, the line will be breaken apart on those characters
-     * and added using the {@link #add(java.lang.String...)}.
+     * new-line characters, the line will be broken apart on those characters
+     * and added using the {@link #add(java.lang.String...)}-method.
      * 
      * @param row  the row
      * @return     a reference to this
@@ -43,7 +43,9 @@ public interface HasCode<T extends HasCode<T>> {
     }
     
     /**
-     * Adds all the specified rows to this model.
+     * Adds all the specified rows to this model. If any of the specified rows
+     * contains a new-line character it will be broken apart on that character
+     * so that every row is in fact added as a separate string.
      * 
      * @param rows  the rows
      * @return      a reference to this
