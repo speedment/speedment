@@ -16,6 +16,7 @@
  */
 package com.speedment.codegen.lang.interfaces;
 
+import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Collections;
 import java.util.List;
@@ -29,15 +30,16 @@ import java.util.List;
 public interface HasCode<T extends HasCode<T>> {
     
     /**
-     * Adds the specified row of code to this model.
+     * Adds the specified row of code to this model. If the row contains
+     * new-line characters, the line will be breaken apart on those characters
+     * and added using the {@link #add(java.lang.String...)}.
      * 
      * @param row  the row
      * @return     a reference to this
      */
     @SuppressWarnings("unchecked")
     default T add(String row) {
-        getCode().add(row);
-        return (T) this;
+        return add(row.split(nl()));
     }
     
     /**
@@ -49,7 +51,9 @@ public interface HasCode<T extends HasCode<T>> {
     @SuppressWarnings("unchecked")
     default T add(String... rows) {
         requireNonNulls(rows);
-        Collections.addAll(getCode(), rows);
+        for (final String row : rows) {
+            Collections.addAll(getCode(), row.split(nl()));
+        }
         return (T) this;
     }
     
