@@ -42,6 +42,21 @@ import java.util.function.BiFunction;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Something that can translate a {@link Document} into something else. This
@@ -226,18 +241,34 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
     
     Stream<BiConsumer<File, Builder<T>>> listeners();
     
+    enum Phase {PRE_MAKE, MAKE, POST_MAKE};
+    
     interface Builder<T extends ClassOrInterface<T>> {
         <P extends Document, DOC extends Document> Builder<T> 
-        forEvery(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
+        forEvery(Phase phase, String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer);
         
-        Builder<T> forEveryProject(BiConsumer<T, Project> consumer);
-        Builder<T> forEveryDbms(BiConsumer<T, Dbms> consumer);
-        Builder<T> forEverySchema(BiConsumer<T, Schema> consumer);
-        Builder<T> forEveryTable(BiConsumer<T, Table> consumer);
-        Builder<T> forEveryColumn(BiConsumer<T, Column> consumer);
-        Builder<T> forEveryIndex(BiConsumer<T, Index> consumer);
-        Builder<T> forEveryForeignKey(BiConsumer<T, ForeignKey> consumer);
-        Builder<T> forEveryForeignKeyReferencingThis(BiConsumer<T, ForeignKey> consumer);
+        Builder<T> forEveryProject(Phase phase, BiConsumer<T, Project> consumer);
+        Builder<T> forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer);
+        Builder<T> forEverySchema(Phase phase, BiConsumer<T, Schema> consumer);
+        Builder<T> forEveryTable(Phase phase, BiConsumer<T, Table> consumer);
+        Builder<T> forEveryColumn(Phase phase, BiConsumer<T, Column> consumer);
+        Builder<T> forEveryIndex(Phase phase, BiConsumer<T, Index> consumer);
+        Builder<T> forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer);
+        Builder<T> forEveryForeignKeyReferencingThis(Phase phase, BiConsumer<T, ForeignKey> consumer);
+        
+        default <P extends Document, DOC extends Document> Builder<T> 
+        forEvery(String key, BiFunction<P, Map<String, Object>, DOC> constructor, BiConsumer<T, DOC> consumer) {
+            return forEvery(Phase.MAKE, key, constructor, consumer);
+        }
+        
+        default Builder<T> forEveryProject(BiConsumer<T, Project> consumer) {return forEveryProject(Phase.MAKE, consumer);}
+        default Builder<T> forEveryDbms(BiConsumer<T, Dbms> consumer) {return forEveryDbms(Phase.MAKE, consumer);}
+        default Builder<T> forEverySchema(BiConsumer<T, Schema> consumer) {return forEverySchema(Phase.MAKE, consumer);}
+        default Builder<T> forEveryTable(BiConsumer<T, Table> consumer) {return forEveryTable(Phase.MAKE, consumer);}
+        default Builder<T> forEveryColumn(BiConsumer<T, Column> consumer) {return forEveryColumn(Phase.MAKE, consumer);};
+        default Builder<T> forEveryIndex(BiConsumer<T, Index> consumer) {return forEveryIndex(Phase.MAKE, consumer);}
+        default Builder<T> forEveryForeignKey(BiConsumer<T, ForeignKey> consumer) {return forEveryForeignKey(Phase.MAKE, consumer);}
+        default Builder<T> forEveryForeignKeyReferencingThis(BiConsumer<T, ForeignKey> consumer) {return forEveryForeignKeyReferencingThis(Phase.MAKE, consumer);}
         
         T build();
     }

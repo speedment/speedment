@@ -143,8 +143,8 @@ public interface CodeGenerationComponent extends Component {
      */
     <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> void 
     remove(Class<DOC> docType, String key);
-
-    /**
+    
+     /**
      * Returns a Stream of newly created {@code Translator Translators} for the
      * given Document. The translators are all created regardless of its
      * registered key.
