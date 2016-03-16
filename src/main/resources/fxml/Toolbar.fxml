@@ -32,19 +32,6 @@
 
 <HBox alignment="CENTER" prefHeight="38.0" prefWidth="900.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Button fx:id="buttonNew" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" text="New" textAlignment="CENTER">
-            <HBox.margin>
-                <Insets left="4.0" />
-            </HBox.margin>
-            <padding>
-                <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
-            </padding>
-        </Button>
-        <Button fx:id="buttonOpen" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Open" textAlignment="CENTER">
-            <padding>
-                <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
-            </padding>
-        </Button>
         <Button fx:id="buttonReload" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Reload" textAlignment="CENTER">
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />

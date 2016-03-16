@@ -40,8 +40,6 @@ public final class ToolbarController implements Initializable {
     public final static String ICON_SIZE = "2em";
     private final UISession session;
     
-    private @FXML Button buttonNew;
-    private @FXML Button buttonOpen;
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
     private @FXML ImageView brand;
@@ -52,13 +50,9 @@ public final class ToolbarController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        buttonNew.setOnAction(session.newProject());
-        buttonOpen.setOnAction(session.openProject());
         buttonReload.setOnAction(session.reload());
         buttonGenerate.setOnAction(session.generate());
         
-        buttonNew.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLUS_SQUARE, ICON_SIZE));
-        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
         buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
