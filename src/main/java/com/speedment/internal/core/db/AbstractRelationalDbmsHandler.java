@@ -57,7 +57,6 @@ import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import com.speedment.internal.logging.Level;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.nonNull;
@@ -72,16 +71,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
 
-    static {
-        LOGGER.setLevel(Level.DEBUG);
-    }
+//    static {
+//        LOGGER.setLevel(Level.DEBUG);
+//    }
 
     private static final String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
     private transient Map<String, Class<?>> sqlTypeMapping;
 
-    private static final Boolean SHOW_METADATA = true;
+    private static final Boolean SHOW_METADATA = false;
 
     private final Speedment speedment;
 
