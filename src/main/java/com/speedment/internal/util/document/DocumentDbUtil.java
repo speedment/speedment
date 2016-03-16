@@ -32,6 +32,7 @@ import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
@@ -202,6 +203,203 @@ public final class DocumentDbUtil {
     public static String findConnectionUrl(Speedment speedment, Dbms dbms) throws SpeedmentException {
         return dbms.getConnectionUrl()
             .orElseGet(() -> dbms.defaultConnectionUrl(speedment));
+    }
+    
+    /**
+     * Returns {@code true} if the specified {@link Column} represents a column
+     * that can only hold unique values in the database.
+     * 
+     * @param column               the column
+     * @return                     {@code true} if unique, else {@code false}
+     * @throws SpeedmentException  if an index or PK could not be traversed
+     */
+    public static boolean isUnique(Column column) throws SpeedmentException {
+        final Table table = column.getParentOrThrow();
+        
+        return
+            table.indexes()
+                .filter(i -> i.indexColumns().count() == 1)
+                .filter(Index::isUnique)
+                .filter(Index::isEnabled)
+                .flatMap(Index::indexColumns)
+                .map(IndexColumn::findColumn)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .anyMatch(col -> isSame(column, col))
+            || (
+                table.primaryKeyColumns().count() == 1 &&
+                table.primaryKeyColumns()
+                    .map(PrimaryKeyColumn::findColumn)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .anyMatch(col -> isSame(column, col))
+            );
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Column first, Column second) {
+        if (first.getName().equals(second.getName())) {
+            final Table firstParent  = first.getParentOrThrow();
+            final Table secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(IndexColumn first, IndexColumn second) {
+        if (first.getName().equals(second.getName())) {
+            final Index firstParent  = first.getParentOrThrow();
+            final Index secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Index first, Index second) {
+        if (first.getName().equals(second.getName())) {
+            final Table firstParent  = first.getParentOrThrow();
+            final Table secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(PrimaryKeyColumn first, PrimaryKeyColumn second) {
+        if (first.getName().equals(second.getName())) {
+            final Table firstParent  = first.getParentOrThrow();
+            final Table secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(ForeignKeyColumn first, ForeignKeyColumn second) {
+        if (first.getName().equals(second.getName())) {
+            final ForeignKey firstParent  = first.getParentOrThrow();
+            final ForeignKey secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(ForeignKey first, ForeignKey second) {
+        if (first.getName().equals(second.getName())) {
+            final Table firstParent  = first.getParentOrThrow();
+            final Table secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Table first, Table second) {
+        if (first.getName().equals(second.getName())) {
+            final Schema firstParent  = first.getParentOrThrow();
+            final Schema secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Schema first, Schema second) {
+        if (first.getName().equals(second.getName())) {
+            final Dbms firstParent  = first.getParentOrThrow();
+            final Dbms secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Dbms first, Dbms second) {
+        if (first.getName().equals(second.getName())) {
+            final Project firstParent  = first.getParentOrThrow();
+            final Project secondParent = second.getParentOrThrow();
+            return isSame(firstParent, secondParent);
+        } else return false;
+    }
+    
+    /**
+     * Returns {@code true} if the two specified documents represents the same
+     * element in the database. Two documents are considered same if they have
+     * the same name and type and their parents are considered same.
+     * 
+     * @param first   the first document
+     * @param second  the second document
+     * @return        {@code true} if same, else {@code false}
+     */
+    public static boolean isSame(Project first, Project second) {
+        return first.getName().equals(second.getName());
     }
 
     /**

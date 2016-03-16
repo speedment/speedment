@@ -47,6 +47,7 @@ import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,17 +174,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 final String constant = javaLanguageNamer().javaStaticFieldName(col.getJavaName());
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
-                
-                final boolean unique = tableOrThrow().indexes()
-                    .filter(Index::isUnique)
-                    .flatMap(Index::indexColumns)
-                    .map(IndexColumn::findColumn)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .anyMatch(ic -> ic.equals(col));
-                
-                
-                
+
                 file.add(Import.of(ref.implType));
                 clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                         .final_()
@@ -198,7 +189,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                             + ", new "
                             + shortName(typeMapper)
                             + "(), " 
-                            + unique
+                            + DocumentDbUtil.isUnique(col)
                             + ")"
                         ))
                         .set(Javadoc.of(
