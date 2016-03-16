@@ -121,7 +121,7 @@ public final class Statistics {
                 }
 
             } catch (IOException ex) {
-                LOGGER.error(ex);
+                LOGGER.debug(ex);
             }
         });
     }
