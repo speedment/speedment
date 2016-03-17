@@ -54,11 +54,11 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         this.document  = requireNonNull(document);
     }
     
-    protected final JavaLanguageNamer namer() {
+    public JavaLanguageNamer namer() {
         return speedment.getCodeGenerationComponent().javaLanguageNamer();
     }
     
-    protected final DOC document() {
+    protected DOC document() {
         return document;
     }
     
