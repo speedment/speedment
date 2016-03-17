@@ -31,7 +31,7 @@ import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
  */
 public final class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
-    private final String className = typeName(projectOrThrow()) + "Application";
+    private final String className = getSupport().typeName(getSupport().projectOrThrow()) + "Application";
     
     public SpeedmentApplicationTranslator(
             Speedment speedment, 
@@ -57,13 +57,13 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
     protected String getJavadocRepresentText() {
         return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + 
             "} class for the {@link " + Project.class.getName() + 
-            "} named " + projectOrThrow().getName() + ".";
+            "} named " + getSupport().projectOrThrow().getName() + ".";
     }
     
     private Type generatedType() {
         return Type.of(
-            basePackageName() + ".generated.Generated" + 
-            typeName(projectOrThrow()) + "Application"
+            getSupport().basePackageName() + ".generated.Generated" + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );
     }
 }

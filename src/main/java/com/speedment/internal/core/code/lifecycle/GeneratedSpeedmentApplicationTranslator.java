@@ -38,6 +38,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.codegen.lang.models.Generic;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.internal.util.code.TranslatorSupport;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
     
-    private final String className = "Generated" + typeName(projectOrThrow()) + "Application";
+    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application";
     
     public GeneratedSpeedmentApplicationTranslator(Speedment speedment, Generator gen, Project doc) {
         super(speedment, gen, doc, Class::of);
@@ -68,7 +69,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         
-        final Map<String, List<Table>> nameMap = traverseOver(projectOrThrow(), Table.class)
+        final Map<String, List<Table>> nameMap = traverseOver(getSupport().projectOrThrow(), Table.class)
             .filter(HasEnabled::test)
             .collect(Collectors.groupingBy(Table::getName));
         
@@ -85,16 +86,17 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
         
         final String methodName = "applyAndPut";
         
-        traverseOver(projectOrThrow(), Table.class)
+        traverseOver(getSupport().projectOrThrow(), Table.class)
             .filter(HasEnabled::test)
             .forEachOrdered(t -> {
-                EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
-                final Type managerType = entityManagerImplTranslator.getImplType();
+                final TranslatorSupport<Table> support = new TranslatorSupport(getSpeedment(), t);
+                final Type managerType = support.managerImplType();
+                final String managerName = support.managerImplName();
                 if (ambigousNames.contains(t.getName())) {
                     onInit.add(methodName+"("+managerType.getName() + "::new);");
                 } else {
                     file.add(Import.of(managerType));
-                    onInit.add(methodName+"(" + entityManagerImplTranslator.managerTypeName() + "Impl::new);");
+                    onInit.add(methodName+"(" + managerName + "::new);");
                 }
 
             });
@@ -123,7 +125,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     protected String getJavadocRepresentText() {
         return "A generated base {@link " + SpeedmentApplicationLifecycle.class.getName() + 
             "} class for the {@link " + Project.class.getName() + 
-            "} named " + projectOrThrow().getName() + ".";
+            "} named " + getSupport().projectOrThrow().getName() + ".";
     }
     
     @Override
@@ -133,8 +135,8 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     
     protected Type applicationType() {
         return Type.of(
-            basePackageName() + "." + 
-            typeName(projectOrThrow()) + "Application"
+            getSupport().basePackageName() + "." + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );
     }
 }

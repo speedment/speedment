@@ -18,7 +18,6 @@ package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
 import com.speedment.component.ProjectComponent;
-import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Table;
 import com.speedment.codegen.base.Generator;
@@ -30,16 +29,10 @@ import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.SqlManager;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
@@ -54,35 +47,35 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        return newBuilder(file, manager.getGeneratedName()).build()
+        return newBuilder(file, getSupport().generatedManagerName()).build()
                 .public_()
-                .add(Type.of(SqlManager.class).add(genericOfEntity))
+                .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
                 .add(generatePrimaryKeyFor(file))
                 .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
                 .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
                         .add("return speedment()"
                                 + ".get(" + ProjectComponent.class.getSimpleName()
                                 + ".class).getProject().findTableByName(\""
-                                + relativeName(tableOrThrow(), Dbms.class) + "\");"
+                                + relativeName(getSupport().tableOrThrow(), Dbms.class) + "\");"
                         )
                 )
-                .add(Method.of("getManagerClass", Type.of(Class.class).add(genericOfManager)).default_().add(OVERRIDE)
-                        .add("return " + manager.getName() + ".class;"))
-                .add(Method.of("getEntityClass", Type.of(Class.class).add(genericOfEntity)).default_().add(OVERRIDE)
-                        .add("return " + entity.getName() + ".class;"))
+                .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
+                        .add("return " + getSupport().managerName() + ".class;"))
+                .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
+                        .add("return " + getSupport().entityName() + ".class;"))
                 .add(generateGetPrimaryKeyClasses(file));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-                .add(Field.of("entity", entity.getType()));
+                .add(Field.of("entity", getSupport().entityType()));
 
         if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
+            method.add("return entity.get" + getSupport().typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                    .map(pkc -> "entity.get" + typeName(pkc.findColumn().get()) + "()")
+                    .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
                     .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
@@ -103,7 +96,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
 
     @Override
     protected String getClassOrInterfaceName() {
-        return manager.getGeneratedName();
+        return getSupport().generatedManagerName();
     }
 
     @Override

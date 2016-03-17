@@ -45,7 +45,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
 
     public static final String METADATA = "Metadata";
 
-    private final String className = "Generated" + typeName(projectOrThrow()) + "Application" + METADATA;
+    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application" + METADATA;
 
     public GeneratedSpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
         super(speedment, gen, doc, Class::of);
@@ -68,7 +68,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         
         final Initalizer initializer = Initalizer.of().static_();
         
-        Stream.of(DocumentTranscoder.save(projectOrThrow()).split("\\R"))
+        Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R"))
             .forEachOrdered(l -> {
                 initializer.add("METADATA.append(\"" + 
                     l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
@@ -98,7 +98,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
     protected String getJavadocRepresentText() {
         return "A {@link " + ApplicationMetadata.class.getName() + 
             "} class for the {@link " + Project.class.getName() + 
-            "} named " + projectOrThrow().getName() + "."
+            "} named " + getSupport().projectOrThrow().getName() + "."
             + " This class contains the meta data present at code generation time.";
     }
 
@@ -106,5 +106,4 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
     protected String getClassOrInterfaceName() {
         return className;
     }
-
 }

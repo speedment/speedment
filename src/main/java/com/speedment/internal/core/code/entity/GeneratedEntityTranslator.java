@@ -33,20 +33,18 @@ import com.speedment.codegen.lang.models.Interface;
 import com.speedment.codegen.lang.models.Javadoc;
 import com.speedment.codegen.lang.models.Method;
 import com.speedment.codegen.lang.models.Type;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.IndexColumn;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
 import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
 import com.speedment.internal.codegen.lang.models.values.TextValue;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
+import com.speedment.internal.util.code.TranslatorSupport;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,22 +78,22 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             )
             .add(Method.of("dbmsName", STRING).public_()
                 .add(OVERRIDE)
-                .add("return \"" + dbmsOrThrow().getName() + "\";")
+                .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
             )
             .add(Method.of("schemaName", STRING).public_()
                 .add(OVERRIDE)
-                .add("return \"" + schemaOrThrow().getName() + "\";")
+                .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
             )
             .add(Method.of("tableName", STRING).public_()
                 .add(OVERRIDE)
-                .add("return \"" + tableOrThrow().getName() + "\";")
+                .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
             )
             .add(Method.of("columnName", STRING).public_()
                 .add(OVERRIDE)
                 .add("return this.columnName;")
             );
 
-        final Interface iface = newBuilder(file, entity.getGeneratedName())
+        final Interface iface = newBuilder(file, getSupport().generatedEntityName())
             /*** Getters ***/
             .forEveryColumn((clazz, col) -> {
                 final Type retType = col.isNullable()
@@ -106,16 +104,16 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     )
                     : Type.of(col.findTypeMapper().getJavaType());
                 
-                clazz.add(Method.of(GETTER_METHOD_PREFIX + typeName(col), retType)
+                clazz.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
                     .set(Javadoc.of(
-                            "Returns the " + variableName(col) + 
-                            " of this " + entity.getName() + 
-                            ". The " + variableName(col) + 
+                            "Returns the " + getSupport().variableName(col) + 
+                            " of this " + getSupport().entityName() + 
+                            ". The " + getSupport().variableName(col) + 
                             " field corresponds to the database column " +
                             relativeName(col, Dbms.class) + "."
                         ).add(RETURN.setText(
-                            "the " + variableName(col) + 
-                            " of this " + entity.getName()
+                            "the " + getSupport().variableName(col) + 
+                            " of this " + getSupport().entityName()
                         ))
                     )
                 );
@@ -123,30 +121,29 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             
             /*** Setters ***/
             .forEveryColumn((clazz, col) -> {
-                clazz.add(Method.of(SETTER_METHOD_PREFIX + typeName(col), entity.getType())
-                    .add(Field.of(variableName(col), Type.of(col.findTypeMapper().getJavaType())))
+                clazz.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
+                    .add(Field.of(getSupport().variableName(col), Type.of(col.findTypeMapper().getJavaType())))
                     .set(Javadoc.of(
-                        "Sets the " + variableName(col) + 
-                        " of this " + entity.getName() + 
-                        ". The " + variableName(col) + 
+                        "Sets the " + getSupport().variableName(col) + 
+                        " of this " + getSupport().entityName() + 
+                        ". The " + getSupport().variableName(col) + 
                         " field corresponds to the database column " +
                         relativeName(col, Dbms.class) + "."
                     )
-                    .add(PARAM.setValue(variableName(col)).setText("to set of this " + entity.getName()))
-                    .add(RETURN.setText("this " + entity.getName() + " instance")))
+                    .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
+                    .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
             })
             
             /*** Fields ***/
             .forEveryColumn((clazz, col) -> {
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
-                    EntityTranslatorSupport.getReferenceFieldType(
-                        file, tableOrThrow(), col, entity.getType(), javaLanguageNamer()
+                    EntityTranslatorSupport.getReferenceFieldType(file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
 
                 final String typeMapper      = col.getTypeMapper();
-                final Type entityType        = entity.getType();
-                final String shortEntityName = entity.getName();
+                final Type entityType        = getSupport().entityType();
+                final String shortEntityName = getSupport().entityName();
                 final Type typeMapperType    = Type.of(typeMapper);
 
                 file.add(Import.of(entityType));
@@ -154,29 +151,29 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 final String getter, finder;
                 if (col.isNullable()) {
-                    getter = "o -> o.get" + typeName(col) + "().orElse(null)";
-                    finder = EntityTranslatorSupport.getForeignKey(tableOrThrow(), col)
+                    getter = "o -> o.get" + getSupport().typeName(col) + "().orElse(null)";
+                    finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
                         .map(fkc -> 
                             ", fk -> fk.find" +
-                            javaLanguageNamer().javaTypeName(col.getJavaName()) +
+                            getNamer().javaTypeName(col.getJavaName()) +
                             "().orElse(null)"
                         ).orElse("");
                 } else {
-                    getter = shortEntityName + "::get" + typeName(col);
-                    finder = EntityTranslatorSupport.getForeignKey(tableOrThrow(), col)
+                    getter = shortEntityName + "::get" + getSupport().typeName(col);
+                    finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
                         .map(fkc -> 
                             ", " + shortEntityName + "::find" +
-                            javaLanguageNamer().javaTypeName(col.getJavaName())
+                            getNamer().javaTypeName(col.getJavaName())
 
                         ).orElse("");
                 }
-                final String setter = ", " + shortEntityName + "::set" + typeName(col);
+                final String setter = ", " + shortEntityName + "::set" + getSupport().typeName(col);
 
-                final String constant = javaLanguageNamer().javaStaticFieldName(col.getJavaName());
+                final String constant = getNamer().javaStaticFieldName(col.getJavaName());
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
 
                 file.add(Import.of(ref.implType));
-                clazz.add(Field.of(javaLanguageNamer().javaStaticFieldName(col.getJavaName()), ref.type)
+                clazz.add(Field.of(getNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                         .final_()
                         .set(new ReferenceValue(
                             "new " + shortName(ref.implType.getName())
@@ -194,32 +191,32 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         ))
                         .set(Javadoc.of(
                                 "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
-                                + "{@link " + shortEntityName + "#get" + typeName(col) + "()} method."
+                                + "{@link " + shortEntityName + "#get" + getSupport().typeName(col) + "()} method."
                         )));
             })
             
             /*** Add streamers from back pointing FK:s ***/
             .forEveryForeignKeyReferencingThis((i, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                file.add(Import.of(fu.getEmt().entity().getType()));
+                file.add(Import.of(fu.getEmt().getSupport().entityType()));
 
-                Import imp = Import.of(fu.getEmt().entity().getType());
+                Import imp = Import.of(fu.getEmt().getSupport().entityType());
                 file.add(imp);
 
                 fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND
-                    + EntityTranslatorSupport.pluralis(fu.getTable(), javaLanguageNamer())
-                    + "By" + typeName(fu.getColumn());
+                    + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
+                    + "By" + getSupport().typeName(fu.getColumn());
                 
                 /*** Record for later use in the construction of aggregate streamers ***/
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-                final Type returnType = Type.of(Stream.class).add(fu.getEmt().genericOfEntity());
+                final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
                 final Method method = Method.of(methodName, returnType);
 
                 method.set(Javadoc.of(
                         "Creates and returns a {@link Stream} of all "
-                        + "{@link " + typeName(fu.getTable()) + "} Entities that references this Entity by "
-                        + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#get" + typeName(fu.getColumn()) + "()}. "
+                        + "{@link " + getSupport().typeName(fu.getTable()) + "} Entities that references this Entity by "
+                        + "the foreign key field that can be obtained using {@link " + getSupport().typeName(fu.getTable()) + "#get" + getSupport().typeName(fu.getColumn()) + "()}. "
                         + "The order of the Entities are undefined and may change from time to time. "
                         + "<p>\n"
                         + "Using this method, you may \"walk the graph\" and jump "
@@ -229,8 +226,8 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     )
                     .add(RETURN.setText(
                         "a {@link Stream} of all "
-                        + "{@link " + typeName(fu.getTable()) + "} Entities  that references this Entity by "
-                        + "the foreign key field that can be obtained using {@link " + typeName(fu.getTable()) + "#get" + typeName(fu.getColumn()) + "()}")
+                        + "{@link " + getSupport().typeName(fu.getTable()) + "} Entities  that references this Entity by "
+                        + "the foreign key field that can be obtained using {@link " + getSupport().typeName(fu.getTable()) + "#get" + getSupport().typeName(fu.getColumn()) + "()}")
                     )
                 );
 
@@ -246,26 +243,26 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(Type.of(Optional.class)));
-                    returnType = Type.of(Optional.class).add(fu.getForeignEmt().genericOfEntity());
+                    returnType = Type.of(Optional.class).add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
 
                 } else {
-                    returnType = fu.getForeignEmt().entity().getType();
+                    returnType = fu.getForeignEmt().getSupport().entityType();
                 }
 
-                final Method method = Method.of("find" + typeName(fu.getColumn()), returnType);
+                final Method method = Method.of("find" + getSupport().typeName(fu.getColumn()), returnType);
 
                 final String returns = 
                     "the foreign key Entity {@link " + 
-                    typeName(fu.getForeignTable()) + "} referenced " +
+                    getSupport().typeName(fu.getForeignTable()) + "} referenced " +
                     "by the field that can be obtained using {@link " + 
-                    entity.getName() + "#get" + 
-                    typeName(fu.getColumn()) + "()}";
+                    getSupport().entityName() + "#get" + 
+                    getSupport().typeName(fu.getColumn()) + "()}";
 
                 method.set(Javadoc.of(
                         "Finds and returns " + returns + ".\n<p>\n" +
                         "N.B. The current implementation only supports lazy-loading " +
                         "of the referenced Entities. This means that if you " +
-                        "traverse N " + entity.getName() + " entities and call this " +
+                        "traverse N " + getSupport().entityName() + " entities and call this " +
                         "method for each one, there will be N SQL-queries executed."
                     ).add(RETURN.setText(returns)
                 ));
@@ -275,7 +272,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             .build()
             .public_()
             .add(identifier)
-            .add(Type.of(Entity.class).add(Generic.of().add(entity.getType())));
+            .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())));
         
         
 
@@ -284,11 +281,11 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
                 final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                    javaLanguageNamer()), Type.of(Stream.class).add(new GenericImpl(typeName(referencingTable))));
+                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport(getSpeedment(), referencingTable).entityType())));
 
                 method.set(Javadoc.of(
                         "Creates and returns a <em>distinct</em> {@link Stream} of all " +
-                        "{@link " + typeName(referencingTable) + "} Entities that "+
+                        "{@link " + getSupport().typeName(referencingTable) + "} Entities that "+
                         "references this Entity by a foreign key. The order of the "+
                         "Entities are undefined and may change from time to time.\n"+
                         "<p>\n"+
@@ -302,7 +299,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         "N.B. The current implementation supports lazy-loading of the referencing Entities."
                     ).add(RETURN.setText(
                         "a <em>distinct</em> {@link Stream} of all {@link " + 
-                        typeName(referencingTable) + "} " +
+                        getSupport().typeName(referencingTable) + "} " +
                         "Entities that references this Entity by a foreign key"
                     ))
                 );
@@ -321,7 +318,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
     @Override
     protected String getClassOrInterfaceName() {
-        return entity.getGeneratedName();
+        return getSupport().generatedEntityName();
     }
 
     @Override

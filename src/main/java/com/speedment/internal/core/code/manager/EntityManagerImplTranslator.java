@@ -39,10 +39,10 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        return newBuilder(file, manager.getImplName()).build()
+        return newBuilder(file, getSupport().managerImplName()).build()
             .public_().final_()
-            .setSupertype(manager.getGeneratedImplType())
-            .add(manager.getType())
+            .setSupertype(getSupport().managerImplType())
+            .add(getSupport().managerType())
             .add(Constructor.of().public_()
                 .add(Field.of("speedment", Type.of(Speedment.class)))
                 .add("super(speedment);")
@@ -51,7 +51,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     
     @Override
     protected String getClassOrInterfaceName() {
-        return manager.getImplName();
+        return getSupport().managerImplName();
     }
 
     @Override
@@ -60,6 +60,6 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     }
     
     public Type getImplType() {
-        return manager.getImplType();
+        return getSupport().managerImplType();
     }
 }
