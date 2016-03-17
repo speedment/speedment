@@ -44,18 +44,18 @@ import com.speedment.config.db.Dbms;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import com.speedment.internal.util.sql.ResultSetUtil;
 import com.speedment.util.tuple.Tuples;
+import com.speedment.internal.util.code.TranslatorSupport;
+import java.util.function.Supplier;
+import java.util.LinkedList;
+import java.util.List;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import com.speedment.internal.util.code.TranslatorSupport;
-import com.speedment.util.JavaLanguageNamer;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -63,15 +63,21 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class GeneratedEntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
+    
+    public final static String
+        NEW_ENTITY_FROM_METHOD = "newEntityFrom",
+        NEW_EMPTY_ENTITY_METHOD = "newEmptyEntity",
+        GET_PRIMARY_KEY_CLASSES_METHOD = "getPrimaryKeyClasses",
+        FIELDS_METHOD = "fields",
+        GET_METHOD = "get",
+        SET_METHOD = "set";
+        
 
     private static final String SPEEDMENT_VARIABLE_NAME = "speedment";
     private static final String PRIMARY_KEY_CLASSES = "PRIMARY_KEY_CLASSES";
 
-    private final Speedment speedment;
-
     public GeneratedEntityManagerImplTranslator(Speedment speedment, Generator gen, Table table) {
         super(speedment, gen, table, Class::of);
-        this.speedment = speedment;
     }
 
     @Override
@@ -90,23 +96,12 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         .protected_()
                         .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
                         .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
-                        .add("setEntityMapper(this::newEntityFrom);"))
-                    .add(newEntityFrom(file))
-                    .add(Method.of("newEmptyEntity", getSupport().entityType())
-                        .public_().add(OVERRIDE)
-                        .add("return new " + getSupport().entityImplName() + "() {", indent(
-                            "@Override",
-                            "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                                "return " + SPEEDMENT_VARIABLE_NAME + ";"
-                            ), "}"
-                        ), "};"
-                        )
-                        .call($ -> file.add(Import.of(getSupport().entityImplType())))
-                        .call($ -> file.add(Import.of(Type.of(Speedment.class))))
-                    )
-                    .add(generateGet(file))
-                    .add(generateSet(file))
-                    .add(generateFields(file))
+                        .add("setEntityMapper(this::" + NEW_ENTITY_FROM_METHOD + ");"))
+                    .add(generateNewEntityFrom(getSupport(), file, table::columns))
+                    .add(generateNewEmptyEntity(getSupport(), file, table::columns))
+                    .add(generateGet(getSupport(), file, table::columns))
+                    .add(generateSet(getSupport(), file, table::columns))
+                    .add(generateFields(getSupport(), file, table::columns))
                     .add(generateGetPrimaryKeyClassesField(file))
                     .add(generateGetPrimaryKeyClasses(file));
 
@@ -115,98 +110,52 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             .call(i -> file.add(Import.of(getSupport().entityImplType())));
     }
 
-    private static enum Primitive {
-        BYTE("byte"), SHORT("short"), INT("int"), LONG("long"), FLOAT("float"),
-        DOUBLE("double"), BOOLEAN("boolean");
-
-        private final String javaName;
-
-        private Primitive(String javaName) {
-            this.javaName = javaName;
-        }
-
-        public String getJavaName() {
-            return javaName;
-        }
-
-        public static boolean isPrimitive(String typeName) {
-            return nameStream().anyMatch(typeName::equalsIgnoreCase);
-        }
-
-        public static Stream<String> nameStream() {
-            return Stream.of(values()).map(Primitive::getJavaName);
-        }
+    @Override
+    protected String getJavadocRepresentText() {
+        return "The generated base manager implementation";
     }
 
-    private Method newEntityFrom(File file) {
+    @Override
+    protected String getClassOrInterfaceName() {
+        return getSupport().generatedManagerImplName();
+    }
 
-        file.add(Import.of(Type.of(SQLException.class)));
-        file.add(Import.of(Type.of(SpeedmentException.class)));
+    @Override
+    public boolean isInGeneratedPackage() {
+        return true;
+    }
 
-        final Method method = Method.of("newEntityFrom", getSupport().entityType())
-            .protected_()
-            .add(Field.of("resultSet", Type.of(ResultSet.class)))
-            .add("final " + getSupport().entityName() + " entity = newEmptyEntity();");
+    public Type getImplType() {
+        return getSupport().managerImplType();
+    }
 
-        final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
-        final Stream.Builder<String> streamBuilder = Stream.builder();
+    protected Field generateGetPrimaryKeyClassesField(File file) {
+        file.add(Import.of(Type.of(Tuples.class)));
+        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
+            .private_()
+            .static_()
+            .final_();
 
-        final AtomicInteger position = new AtomicInteger(1);
-        columns().forEachOrdered(c -> {
+        final String parameters = primaryKeyColumns()
+            .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
+            .map(c -> c.getSimpleName() + ".class")
+            .collect(joining(", "));
 
-            final JavaTypeMapping<?> mapping = mapperComponent
-                .apply(
-                    dbmsTypeOf(speedment, getSupport().dbmsOrThrow()),
-                    c.findTypeMapper().getDatabaseType()
-                );
-            final StringBuilder sb = new StringBuilder()
-                .append("entity.set")
-                .append(getSupport().typeName(c))
-                .append("(")
-                .append(typeMapperName(getSupport(), c))
-                .append(".toJavaType(");
+        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
 
-            final String getterName = "get" + mapping.getResultSetMethodName(getSupport().dbmsOrThrow());
+        return field;
+    }
 
-            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
-                .map(java.lang.reflect.Method::getName)
-                .anyMatch(getterName::equals);
+    protected Method generateGetPrimaryKeyClasses(File file) {
 
-            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
-                .filter(m -> m.getName().equals(getterName))
-                .anyMatch(m -> m.getReturnType().isPrimitive());
-
-            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
-                sb
-                    .append("resultSet.")
-                    .append("get")
-                    .append(mapping.getResultSetMethodName(getSupport().dbmsOrThrow()))
-                    .append("(").append(position.getAndIncrement()).append(")");
-            } else {
-                sb
-                    .append("get")
-                    .append(mapping.getResultSetMethodName(getSupport().dbmsOrThrow()))
-                    .append("(resultSet, ")
-                    .append(position.getAndIncrement()).append(")");
-            }
-            sb.append("));");
-            streamBuilder.add(sb.toString());
-
-            final JavaLanguageNamer namer = speedment.getCodeGenerationComponent().javaLanguageNamer();
-            streamBuilder.add("entity.set" + namer.javaTypeName(c.getJavaName()) + "(" + readRs(speedment, c, position) + ");");
-        });
-
-        method
-            .add("try " + block(streamBuilder.build()))
-            .add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
-                "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
-            ))
-            .add("return entity;");
-
+        final Method method = Method.of(GET_PRIMARY_KEY_CLASSES_METHOD, pkTupleType())
+            .public_()
+            .add(OVERRIDE)
+            .add("return " + PRIMARY_KEY_CLASSES + ";");
         return method;
     }
-
-    public static String readRs(Speedment speedment, Column c, AtomicInteger position) {
+    
+    public static String readFromResultSet(Speedment speedment, Column c, AtomicInteger position) {
 
         final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment, c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
@@ -250,137 +199,199 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return sb.toString();
     }
 
-    @Override
-    protected String getJavadocRepresentText() {
-        return "The generated base manager implementation";
-    }
-
-    @Override
-    protected String getClassOrInterfaceName() {
-        return getSupport().generatedManagerImplName();
-    }
-
-    @Override
-    public boolean isInGeneratedPackage() {
-        return true;
-    }
-
-    public Type getImplType() {
-        return getSupport().managerImplType();
-    }
-
-    protected Field generateGetPrimaryKeyClassesField(File file) {
-        file.add(Import.of(Type.of(Tuples.class)));
-        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
-            .private_()
-            .static_()
-            .final_();
-
-        final String parameters = primaryKeyColumns()
-            .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
-            .map(c -> c.getSimpleName() + ".class")
-            .collect(joining(", "));
-
-        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
-
-        return field;
-    }
-
-    protected Method generateGetPrimaryKeyClasses(File file) {
-
-        final Method method = Method.of("getPrimaryKeyClasses", pkTupleType())
-            .public_()
-            .add(OVERRIDE)
-            .add("return " + PRIMARY_KEY_CLASSES + ";");
-        return method;
-    }
-
-    protected Method generateGet(File file) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-        return Method.of("get", OBJECT).public_().add(OVERRIDE)
-            .add(Field.of("entity", getSupport().entityType()))
+    public static Method generateGet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(GET_METHOD, OBJECT).public_().add(OVERRIDE)
+            .add(Field.of("entity", support.entityType()))
             .add(Field.of("column", Type.of(Column.class)))
-            .add("switch (column.getName()) " + block(
-                columns().map(c
+            .add(generateGetBody(support, file, columnsSupplier));
+    }
+    
+    public static String[] generateGetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        
+        return new String[] {
+            "switch (column.getName()) " + block(
+                columnsSupplier.get().map(c
                     -> "case \"" + c.getName()
-                    + "\" : return entity." + getterCode(c)
+                    + "\" : return entity." + getterCode(support, c)
                     + ";"
                 ).collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-            ));
+            )
+        };
     }
 
-    protected Method generateSet(File file) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-        return Method.of("set", VOID).public_().add(OVERRIDE)
-            .add(Field.of("entity", getSupport().entityType()))
+    public static Method generateSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(SET_METHOD, VOID).public_().add(OVERRIDE)
+            .add(Field.of("entity", support.entityType()))
             .add(Field.of("column", Type.of(Column.class)))
             .add(Field.of("value", Type.of(Object.class)))
-            .add("switch (column.getName()) " + block(
-                columns()
+            .add(generateSetBody(support, file, columnsSupplier));
+    }
+    
+    public static String[] generateSetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        
+        return new String[] {
+            "switch (column.getName()) " + block(
+            columnsSupplier.get()
                 .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
                 .map(c
                     -> "case \"" + c.getName()
-                    + "\" : entity." + SETTER_METHOD_PREFIX + getSupport().typeName(c)
+                    + "\" : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
                     + "((" + c.findTypeMapper().getJavaType().getSimpleName()
                     + ") value); break;").collect(Collectors.joining(nl()))
                 + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
-            ));
+            )
+        };
     }
 
-    protected Method generateFields(File file) {
-        final Method result = Method.of("fields", Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
+    public static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
             .public_().add(OVERRIDE)
-            .add("return Stream.of(");
-
-        result.add(indent(getSupport().tableOrThrow().columns()
+            .add(generateFieldsBody(support, file, columnsSupplier));
+    }
+    
+    public static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        final List<String> rows = new LinkedList<>();
+        
+        rows.add("return Stream.of(");
+        rows.add(indent(columnsSupplier.get()
             .map(Column::getJavaName)
-            .map(getNamer()::javaStaticFieldName)
-            .map(field -> getSupport().typeName() + "." + field)
+            .map(support.namer()::javaStaticFieldName)
+            .map(field -> support.typeName() + "." + field)
             .collect(joining("," + nl()))
         ));
-
-        return result.add(");");
+        rows.add(");");
+        
+        return rows.toArray(new String[rows.size()]);
     }
-
-    private String getterCode(Column c) {
-        if (c.isNullable()) {
-            return GETTER_METHOD_PREFIX + getSupport().typeName(c) + "().orElse(null)";
-        } else {
-            return GETTER_METHOD_PREFIX + getSupport().typeName(c) + "()";
-        }
+    
+    public static Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
+            .protected_()
+            .add(Type.of(SQLException.class))
+            .add(Type.of(SpeedmentException.class))
+            .add(Field.of("resultSet", Type.of(ResultSet.class)))
+            .add(generateNewEntityFromBody(support, file, columnsSupplier));
     }
+    
+    public static String[] generateNewEntityFromBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
-    protected Method generatePrimaryKeyFor(File file) {
-        final Method method = Method.of("primaryKeyFor", typeOfPK()).public_().add(OVERRIDE)
-            .add(Field.of("entity", getSupport().entityType()));
+        final List<String> rows = new LinkedList<>();
+        rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
 
-        final int count = (int) primaryKeyColumns().count();
-        switch (count) {
-            case 0: {
-                file.add(Import.of(Type.of(Collections.class)));
-                method.add("return Collections.emptyList();");
-                break;
-            }
-            case 1: {
-                method.add("return entity.get" + getSupport().typeName(
-                    primaryKeyColumns().findFirst().get().findColumn().get()
-                ) + "();");
-                break;
-            }
-            default: {
-                file.add(Import.of(Type.of(Arrays.class)));
-                method.add(primaryKeyColumns()
-                    .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
-                    .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+        final JavaTypeMapperComponent mapperComponent = support.speedment().getJavaTypeMapperComponent();
+        final Stream.Builder<String> streamBuilder = Stream.builder();
+
+        final AtomicInteger position = new AtomicInteger(1);
+        columnsSupplier.get().forEachOrdered(c -> {
+
+            final JavaTypeMapping<?> mapping = mapperComponent
+                .apply(
+                    dbmsTypeOf(support.speedment(), support.dbmsOrThrow()),
+                    c.findTypeMapper().getDatabaseType()
                 );
-                break;
+            final StringBuilder sb = new StringBuilder()
+                .append("entity.set")
+                .append(support.typeName(c))
+                .append("(")
+                .append(typeMapperName(support, c))
+                .append(".toJavaType(");
+
+            final String getterName = "get" + mapping.getResultSetMethodName(support.dbmsOrThrow());
+
+            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
+                .map(java.lang.reflect.Method::getName)
+                .anyMatch(getterName::equals);
+
+            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
+                .filter(m -> m.getName().equals(getterName))
+                .anyMatch(m -> m.getReturnType().isPrimitive());
+
+            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
+                sb
+                    .append("resultSet.")
+                    .append("get")
+                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
+                    .append("(").append(position.getAndIncrement()).append(")");
+            } else {
+                sb
+                    .append("get")
+                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
+                    .append("(resultSet, ")
+                    .append(position.getAndIncrement()).append(")");
             }
+            sb.append("));");
+            streamBuilder.add(sb.toString());
+
+            streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(support.speedment(), c, position) + ");");
+        });
+
+        rows.add("try " + block(streamBuilder.build()));
+        rows.add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
+                "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
+            ));
+        rows.add("return entity;");
+
+        return rows.toArray(new String[rows.size()]);
+    }
+    
+    public static Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(NEW_EMPTY_ENTITY_METHOD, support.entityType())
+            .public_().add(OVERRIDE)
+            .add(generateNewEmptyEntityBody(support, file, columnsSupplier));
+                    
+    }
+    
+    public static String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        file.add(Import.of(support.entityImplType()));
+        file.add(Import.of(Type.of(Speedment.class)));
+        
+        final List<String> rows = new LinkedList<>();
+        rows.add("return new " + support.entityImplName() + "() {");
+        rows.add(indent(
+            "@Override",
+            "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
+                "return " + SPEEDMENT_VARIABLE_NAME + ";"
+            ), "}"
+        ));
+        rows.add("};");
+        
+        return rows.toArray(new String[rows.size()]);
+    }
+    
+    private static enum Primitive {
+        BYTE("byte"), SHORT("short"), INT("int"), LONG("long"), FLOAT("float"),
+        DOUBLE("double"), BOOLEAN("boolean");
+
+        private final String javaName;
+
+        private Primitive(String javaName) {
+            this.javaName = javaName;
         }
 
-        return method;
-    }
+        public String getJavaName() {
+            return javaName;
+        }
 
+        public static boolean isPrimitive(String typeName) {
+            return nameStream().anyMatch(typeName::equalsIgnoreCase);
+        }
+
+        public static Stream<String> nameStream() {
+            return Stream.of(values()).map(Primitive::getJavaName);
+        }
+    }
+    
+    private static String getterCode(TranslatorSupport<Table> support, Column c) {
+        if (c.isNullable()) {
+            return GETTER_METHOD_PREFIX + support.typeName(c) + "().orElse(null)";
+        } else {
+            return GETTER_METHOD_PREFIX + support.typeName(c) + "()";
+        }
+    }
+    
     private static String typeMapperName(TranslatorSupport<Table> support, Column col) {
         return support.entityName() + "." + support.namer().javaStaticFieldName(col.getJavaName()) + ".typeMapper()";
     }
