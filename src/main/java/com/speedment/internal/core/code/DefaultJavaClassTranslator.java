@@ -16,9 +16,12 @@
  */
 package com.speedment.internal.core.code;
 
-import com.speedment.code.JavaClassTranslator;
+
 import com.speedment.Speedment;
+import com.speedment.code.JavaClassTranslator;
 import com.speedment.code.Translator;
+import com.speedment.code.Translator.Builder;
+import com.speedment.code.Translator.Phase;
 import com.speedment.codegen.base.Generator;
 import com.speedment.internal.codegen.lang.controller.AutoImports;
 import com.speedment.codegen.lang.models.AnnotationUsage;

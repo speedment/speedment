@@ -57,21 +57,22 @@ import static java.util.Objects.requireNonNull;
  * @author Per-Åke Minborg
  */
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
-    
-    private static final String 
-        MANAGER_OF_METHOD = "managerOf_";
+
+    private static final String MANAGER_OF_METHOD = "managerOf_";
 
     public GeneratedEntityImplTranslator(Speedment speedment, Generator gen, Table table) {
         super(speedment, gen, table, Class::of);
     }
-    
+
     @Override
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
-        
+
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
         final Class newClass = newBuilder(file, getSupport().generatedEntityImplName())
-            /*** Getters ***/
+            /**
+             * * Getters **
+             */
             .forEveryColumn((clazz, col) -> {
                 final Type retType;
                 final String getter;
@@ -90,7 +91,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                         .add("return " + getter + ";"));
 
             })
-            /*** Setters ***/
+            /**
+             * * Setters **
+             */
             .forEveryColumn((clazz, col) -> {
                 clazz
                     .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
@@ -100,8 +103,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
                         .add("return this;"));
             })
-            
-            /*** Add streamers from back pointing foreign keys ***/
+            /**
+             * * Add streamers from back pointing foreign keys **
+             */
             .forEveryForeignKeyReferencingThis((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
@@ -115,8 +119,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     .add("        .stream().filter(" + getSupport().typeName(fu.getTable()) + "." + getNamer().javaStaticFieldName(fu.getColumn().getJavaName()) + ".equal(this." + GETTER_METHOD_PREFIX + getSupport().typeName(fu.getForeignColumn()) + "()));");
                 clazz.add(method);
             })
-            
-            /*** Add getter for ordinary foreign keys ***/
+            /**
+             * * Add getter for ordinary foreign keys **
+             */
             .forEveryForeignKey((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
@@ -124,8 +129,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(OPTIONAL));
-                    returnType = OPTIONAL.add(Generic.of().add(getSupport().entityType()));
-
+                    returnType = OPTIONAL.add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
                 } else {
                     returnType = fu.getForeignEmt().getSupport().entityType();
                 }
@@ -141,20 +145,21 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     file.add(Import.of(Type.of(SpeedmentException.class)));
                     method.add("return " + MANAGER_OF_METHOD + "(" + fu.getForeignEmt().getSupport().typeName() + ".class).findAny("
                         + getSupport().typeName(fu.getForeignTable()) + "." + getNamer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", get" + getSupport().typeName(fu.getColumn()) + "())\n"
-                        + indent(".orElseThrow(() -> new SpeedmentException(\n" + 
-                            indent(
-                                "\"Foreign key constraint error. " + 
-                                getSupport().typeName(fu.getForeignTable()) + 
-                                " is set to \" + get" + 
-                                getSupport().typeName(fu.getColumn()) + "()\n"
+                        + indent(".orElseThrow(() -> new SpeedmentException(\n"
+                            + indent(
+                                "\"Foreign key constraint error. "
+                                + getSupport().typeName(fu.getForeignTable())
+                                + " is set to \" + get"
+                                + getSupport().typeName(fu.getColumn()) + "()\n"
                             ) + "));\n"
                         )
                     );
                 }
                 clazz.add(method);
             })
-            
-            /*** Class details **/
+            /**
+             * * Class details *
+             */
             .build()
             .public_()
             .abstract_()
@@ -163,7 +168,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .add(Constructor.of().protected_());
 //            .add(copyConstructor(entity.getType(), CopyConstructorMode.SETTER));
 
-        /*** Create aggregate streaming functions, if any ***/
+        /**
+         * * Create aggregate streaming functions, if any **
+         */
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
@@ -182,9 +189,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 newClass.add(method);
             }
         });
-        
+
         file.add(Import.of(Type.of(Speedment.class)));
-        
+
         newClass
             .add(copy(file))
             .add(toString(file))
@@ -200,7 +207,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     private Method copy(File file) {
         file.add(Import.of(getSupport().entityImplType()));
-        
+
         final JavaLanguageNamer namer = getSpeedment().getCodeGenerationComponent().javaLanguageNamer();
         final String entityName = namer.javaVariableName(getSupport().entityName());
         final Method result = Method.of("copy", getSupport().entityType()).public_().add(OVERRIDE)
@@ -215,7 +222,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 ), "};",
                 ""
             );
-        
+
         columns().forEachOrdered(c -> {
             if (c.isNullable()) {
                 result.add(
@@ -234,7 +241,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 );
             }
         });
-        
+
         return result.add("", "return " + entityName + ";");
     }
 
@@ -299,15 +306,33 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             str.append("hash = 31 * hash + ");
 
             switch (c.findTypeMapper().getJavaType().getName()) {
-                case "byte":    str.append("Byte");      break;
-                case "short":   str.append("Short");     break;
-                case "int":     str.append("Integer");   break;
-                case "long":    str.append("Long");      break;
-                case "float":   str.append("Float");     break;
-                case "double":  str.append("Double");    break;
-                case "boolean": str.append("Boolean");   break;
-                case "char":    str.append("Character"); break;
-                default:        str.append("Objects");   break;
+                case "byte":
+                    str.append("Byte");
+                    break;
+                case "short":
+                    str.append("Short");
+                    break;
+                case "int":
+                    str.append("Integer");
+                    break;
+                case "long":
+                    str.append("Long");
+                    break;
+                case "float":
+                    str.append("Float");
+                    break;
+                case "double":
+                    str.append("Double");
+                    break;
+                case "boolean":
+                    str.append("Boolean");
+                    break;
+                case "char":
+                    str.append("Character");
+                    break;
+                default:
+                    str.append("Objects");
+                    break;
             }
 
             str.append(".hashCode(get").append(getSupport().typeName(c)).append("());");
