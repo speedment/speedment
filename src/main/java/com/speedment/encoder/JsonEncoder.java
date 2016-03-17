@@ -70,7 +70,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     // Foreign key fields.
     @Override
     public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
-            JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
+        JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
         requireNonNull(field);
         requireNonNull(builder);
         final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
@@ -135,10 +135,10 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     public String apply(ENTITY entity) {
         requireNonNull(entity);
         return "{"
-                + getters.values().stream()
-                .map(g -> g.apply(entity))
-                .collect(joining(","))
-                + "}";
+            + getters.values().stream()
+            .map(g -> g.apply(entity))
+            .collect(joining(","))
+            + "}";
     }
 
     protected String jsonField(FieldTrait field, JavaLanguageNamer javaLanguageNamer) {
@@ -156,12 +156,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         } else if (in == null) {
             value = "null";
         } else if (in instanceof Byte
-                || in instanceof Short
-                || in instanceof Integer
-                || in instanceof Long
-                || in instanceof Boolean
-                || in instanceof Float
-                || in instanceof Double) {
+            || in instanceof Short
+            || in instanceof Integer
+            || in instanceof Long
+            || in instanceof Boolean
+            || in instanceof Float
+            || in instanceof Double) {
             value = String.valueOf(in);
         } else {
             value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
@@ -197,15 +197,14 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         requireNonNull(manager);
 
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
-        final Table table = manager.getTable();
 
-        table.columns()
-                .forEachOrdered(c
-                        -> formatter.put(
-                                formatter.javaLanguageNamer.javaVariableName(c.getName()),
-                                entity -> manager.get(entity, c)
-                        )
-                );
+        manager.fields()
+            .forEachOrdered(f
+                -> formatter.put(
+                    formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
+                    entity -> manager.get(entity, f.getIdentifier())
+                )
+            );
 
         return formatter;
     }
@@ -231,17 +230,15 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             .map(FieldTrait::getIdentifier)
             .map(FieldIdentifier::columnName)
             .collect(toSet());
-        
-        final Table table = manager.getTable();
 
-        table.columns()
-                .filter(c -> fieldNames.contains(c.getName()))
-                .forEachOrdered(c
-                        -> formatter.put(
-                                formatter.javaLanguageNamer.javaVariableName(c.getName()),
-                                entity -> manager.get(entity, c)
-                        )
-                );
+        manager.fields()
+            .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
+            .forEachOrdered(f
+                -> formatter.put(
+                    formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
+                    entity -> manager.get(entity, f.getIdentifier())
+                )
+            );
 
         return formatter;
     }

@@ -281,49 +281,49 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         final List<String> rows = new LinkedList<>();
         rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
 
-        final JavaTypeMapperComponent mapperComponent = support.speedment().getJavaTypeMapperComponent();
+//        final JavaTypeMapperComponent mapperComponent = support.speedment().getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         final AtomicInteger position = new AtomicInteger(1);
         columnsSupplier.get().forEachOrdered(c -> {
-
-            final JavaTypeMapping<?> mapping = mapperComponent
-                .apply(
-                    dbmsTypeOf(support.speedment(), support.dbmsOrThrow()),
-                    c.findTypeMapper().getDatabaseType()
-                );
-            final StringBuilder sb = new StringBuilder()
-                .append("entity.set")
-                .append(support.typeName(c))
-                .append("(")
-                .append(typeMapperName(support, c))
-                .append(".toJavaType(");
-
-            final String getterName = "get" + mapping.getResultSetMethodName(support.dbmsOrThrow());
-
-            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
-                .map(java.lang.reflect.Method::getName)
-                .anyMatch(getterName::equals);
-
-            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
-                .filter(m -> m.getName().equals(getterName))
-                .anyMatch(m -> m.getReturnType().isPrimitive());
-
-            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
-                sb
-                    .append("resultSet.")
-                    .append("get")
-                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
-                    .append("(").append(position.getAndIncrement()).append(")");
-            } else {
-                sb
-                    .append("get")
-                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
-                    .append("(resultSet, ")
-                    .append(position.getAndIncrement()).append(")");
-            }
-            sb.append("));");
-            streamBuilder.add(sb.toString());
+//
+//            final JavaTypeMapping<?> mapping = mapperComponent
+//                .apply(
+//                    dbmsTypeOf(support.speedment(), support.dbmsOrThrow()),
+//                    c.findTypeMapper().getDatabaseType()
+//                );
+//            final StringBuilder sb = new StringBuilder()
+//                .append("entity.set")
+//                .append(support.typeName(c))
+//                .append("(")
+//                .append(typeMapperName(support, c))
+//                .append(".toJavaType(");
+//
+//            final String getterName = "get" + mapping.getResultSetMethodName(support.dbmsOrThrow());
+//
+//            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
+//                .map(java.lang.reflect.Method::getName)
+//                .anyMatch(getterName::equals);
+//
+//            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
+//                .filter(m -> m.getName().equals(getterName))
+//                .anyMatch(m -> m.getReturnType().isPrimitive());
+//
+//            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
+//                sb
+//                    .append("resultSet.")
+//                    .append("get")
+//                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
+//                    .append("(").append(position.getAndIncrement()).append(")");
+//            } else {
+//                sb
+//                    .append("get")
+//                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
+//                    .append("(resultSet, ")
+//                    .append(position.getAndIncrement()).append(")");
+//            }
+//            sb.append("));");
+//            streamBuilder.add(sb.toString());
 
             streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(support.speedment(), c, position) + ");");
         });

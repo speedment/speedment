@@ -17,10 +17,8 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.manager.AbstractManager;
 import com.speedment.db.MetaResult;
@@ -31,6 +29,8 @@ import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import java.sql.ResultSet;
@@ -50,6 +50,7 @@ import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -264,50 +265,49 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     private final Function<ENTITY, Consumer<List<Long>>> NOTHING
-            = b -> l -> {
-                /* Nothing to do for updates... */ };
+        = b -> l -> { /* Nothing to do for updates... */ };
 
-    private Object toDatabaseType(Column column, ENTITY entity) {
-        final Object javaValue = unwrap(get(entity, column));
+    private <F extends FieldTrait & ReferenceFieldTrait> Object toDatabaseType(F field, ENTITY entity) {
+        final Object javaValue = unwrap(get(entity, field.getIdentifier()));
         @SuppressWarnings("unchecked")
-        final Object dbValue = ((TypeMapper<Object, Object>) column.findTypeMapper()).toDatabaseType(javaValue);
+        final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
 
     private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(sqlTableReference());
         sb.append(" (").append(sqlColumnList()).append(")");
         sb.append(" VALUES ");
         sb.append("(").append(sqlColumnListWithQuestionMarks()).append(")");
 
-        final List<Object> values = table.columns()
-                .map(c -> toDatabaseType(c, entity))
-                .collect(Collectors.toList());
+        final List<Object> values = fields()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(Collectors.toList());
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
-                    table.columns()
-                            .filter(Column::isAutoIncrement)
-                            .forEachOrdered(column -> {
-                                // Cast from Long to the column target type
+                    fields()
+                        .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
+                        .filter(ReferenceFieldTrait.class::isInstance)
+                        .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+                        .forEachOrdered(f -> {
+                            
+                            // Cast from Long to the column target type
+                            final Object val = speedment
+                                .getJavaTypeMapperComponent()
+                                .apply(f.typeMapper().getJavaType())
+                                .parse(l.get(cnt.getAndIncrement()));
 
-                                final Object val = speedment
-                                        .getJavaTypeMapperComponent()
-                                        .apply(column.findTypeMapper().getJavaType())
-                                        .parse(
-                                                l.get(cnt.getAndIncrement())
-                                        );
-
-                                //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
-                                @SuppressWarnings("unchecked")
-                                final Object javaValue = ((TypeMapper<Object, Object>) column.findTypeMapper()).toJavaType(val);
-                                set(builder, column, javaValue);
-                            });
+                            @SuppressWarnings("unchecked")
+                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(val);
+                            set(builder, f.getIdentifier(), javaValue);
+                        });
                 }
             };
         };
@@ -317,7 +317,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
 
         final StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ").append(sqlTableReference()).append(" SET ");
@@ -325,25 +324,31 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = table.columns()
-                .map(c -> toDatabaseType(c, entity))
-                .collect(Collectors.toList());
+        final List<Object> values = fields()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(Collectors.toList());
 
-        table.primaryKeyColumns().map(pkc -> pkc.findColumn().get()).forEachOrdered(c -> values.add(get(entity, c)));
-
+        primaryKeyFields()
+            .map(FieldTrait::getIdentifier)
+            .forEachOrdered(f -> values.add(get(entity, f)));
+        
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;
     }
 
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
         final StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ").append(sqlTableReference());
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
-        final List<Object> values = table.primaryKeyColumns()
-                .map(pk -> toDatabaseType(pk.findColumn().get(), entity))
-                .collect(Collectors.toList());
+        
+        final List<Object> values = primaryKeyFields()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(Collectors.toList());
 
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);
         return entity;

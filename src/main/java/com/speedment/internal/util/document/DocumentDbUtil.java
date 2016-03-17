@@ -30,6 +30,7 @@ import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.FieldIdentifier;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.util.StreamComposition;
 import java.util.Optional;
@@ -234,6 +235,58 @@ public final class DocumentDbUtil {
                     .map(Optional::get)
                     .anyMatch(col -> isSame(column, col))
             );
+    }
+    
+    public static Column referencedColumn(Speedment speedment, FieldIdentifier identifier) {
+        return referencedColumn(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
+    }
+    
+    public static Table referencedTable(Speedment speedment, FieldIdentifier identifier) {
+        return referencedTable(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
+    }
+    
+    public static Schema referencedSchema(Speedment speedment, FieldIdentifier identifier) {
+        return referencedSchema(speedment, identifier.dbmsName(), identifier.schemaName());
+    }
+    
+    public static Dbms referencedDbms(Speedment speedment, FieldIdentifier identifier) {
+        return referencedDbms(speedment, identifier.dbmsName());
+    }
+    
+    public static Column referencedColumn(Speedment speedment, String dbmsName, String schemaName, String tableName, String columnName) {
+        return referencedTable(speedment, dbmsName, schemaName, tableName)
+            .columns().filter(column -> columnName.equals(column.getName()))
+            .findAny().orElseThrow(() -> new SpeedmentException(
+                "Could not find referenced " + Column.class.getSimpleName() + 
+                " with name '" + columnName + "'."
+            ));
+    }
+    
+    public static Table referencedTable(Speedment speedment, String dbmsName, String schemaName, String tableName) {
+        return referencedSchema(speedment, dbmsName, schemaName)
+            .tables().filter(table -> tableName.equals(table.getName()))
+            .findAny().orElseThrow(() -> new SpeedmentException(
+                "Could not find referenced " + Table.class.getSimpleName() + 
+                " with name '" + tableName + "'."
+            ));
+    }
+    
+    public static Schema referencedSchema(Speedment speedment, String dbmsName, String schemaName) {
+        return referencedDbms(speedment, dbmsName)
+            .schemas().filter(schema -> schemaName.equals(schema.getName()))
+            .findAny().orElseThrow(() -> new SpeedmentException(
+                "Could not find referenced " + Schema.class.getSimpleName() + 
+                " with name '" + schemaName + "'."
+            ));
+    }
+    
+    public static Dbms referencedDbms(Speedment speedment, String dbmsName) {
+        return speedment.getProjectComponent().getProject()
+            .dbmses().filter(dbms -> dbmsName.equals(dbms.getName()))
+            .findAny().orElseThrow(() -> new SpeedmentException(
+                "Could not find referenced " + Dbms.class.getSimpleName() + 
+                " with name '" + dbmsName + "'."
+            ));
     }
     
     /**

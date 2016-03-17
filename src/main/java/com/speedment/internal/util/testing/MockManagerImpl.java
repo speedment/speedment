@@ -22,6 +22,7 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -114,13 +115,13 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Object get(ENTITY entity, Column column) {
-        return inner.get(entity, column);
+    public Object get(ENTITY entity, FieldIdentifier identifier) {
+        return inner.get(entity, identifier);
     }
 
     @Override
-    public void set(ENTITY entity, Column column, Object value) {
-        inner.set(entity, column, value);
+    public void set(ENTITY entity, FieldIdentifier identifier, Object value) {
+        inner.set(entity, identifier, value);
     }
 
     @Override
@@ -268,5 +269,10 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     @Override
     public Stream<FieldTrait> fields() {
         return inner.fields();
+    }
+    
+    @Override
+    public Stream<FieldTrait> primaryKeyFields() {
+        return inner.primaryKeyFields();
     }
 }

@@ -27,6 +27,7 @@ import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.component.Lifecyclable;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * {@link Column} from the provided entity.
      *
      * @param entity to use
-     * @param column describing the field to get
+     * @param identifier describing the field to get
      * @return the property value (field) that corresponds to the provided
      * {@link Column} from the provided entity
      * @throws IllegalArgumentException if the column does not describe a valid
@@ -80,14 +81,14 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @throws NullPointerException if either the entity or the column is
      * {@code null}
      */
-    Object get(ENTITY entity, Column column);
+    Object get(ENTITY entity, FieldIdentifier identifier);
 
     /**
      * Sets the property value (field) that corresponds to the provided
      * {@link Column} in the provided entity.
      *
      * @param entity to use
-     * @param column describing the field to get
+     * @param identifier describing the field to get
      * @param value to set the property to {@link Column} from the provided
      * entity
      * @throws IllegalArgumentException if the column does not describe a valid
@@ -95,7 +96,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @throws NullPointerException if either the entity or the column is
      * {@code null}
      */
-    void set(ENTITY entity, Column column, Object value);
+    void set(ENTITY entity, FieldIdentifier identifier, Object value);
     
     /**
      * Returns a stream of the fields that every entity in this contains.
@@ -103,6 +104,14 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @return  a stream fo all fields
      */
     Stream<FieldTrait> fields();
+    
+    /**
+     * Returns a stream of the fields that are included in the primary key of
+     * the table represented by this {@code Manager}.
+     * 
+     * @return  the primary key fields
+     */
+    Stream<FieldTrait> primaryKeyFields();
 
     // Data source metadata
     /**
