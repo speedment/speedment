@@ -21,11 +21,12 @@ import com.speedment.annotation.Api;
 /**
  * Identifies a particular field in an entity.
  * 
- * @author Emil Forslund
- * @since  2.3
+ * @author          Emil Forslund
+ * @param <ENTITY>  the entity type
+ * @since           2.3
  */
 @Api(version = "2.3")
-public interface FieldIdentifier {
+public interface FieldIdentifier<ENTITY> {
     
     /**
      * Returns the name of the {@link Dbms} that this field is in.

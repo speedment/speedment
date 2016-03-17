@@ -115,12 +115,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Object get(ENTITY entity, FieldIdentifier identifier) {
+    public Object get(ENTITY entity, FieldIdentifier<ENTITY> identifier) {
         return inner.get(entity, identifier);
     }
 
     @Override
-    public void set(ENTITY entity, FieldIdentifier identifier, Object value) {
+    public void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value) {
         inner.set(entity, identifier, value);
     }
 

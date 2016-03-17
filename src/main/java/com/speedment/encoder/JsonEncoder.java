@@ -16,7 +16,6 @@
  */
 package com.speedment.encoder;
 
-import com.speedment.config.db.Table;
 import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
@@ -199,6 +198,8 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
 
         manager.fields()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(ReferenceFieldTrait.class::cast)
             .forEachOrdered(f
                 -> formatter.put(
                     formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
@@ -232,6 +233,8 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             .collect(toSet());
 
         manager.fields()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(ReferenceFieldTrait.class::cast)
             .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
             .forEachOrdered(f
                 -> formatter.put(
@@ -242,5 +245,4 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
         return formatter;
     }
-
 }

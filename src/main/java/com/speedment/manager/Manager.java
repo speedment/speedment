@@ -41,8 +41,9 @@ import java.util.stream.Stream;
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
  *
- * @author pemi
- * @param <ENTITY> Entity type for this Manager
+ * @author              Per Minborg
+ * @author              Emil Forslund
+ * @param <ENTITY>      Entity type for this Manager
  */
 @Api(version = "2.3")
 public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
@@ -81,7 +82,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @throws NullPointerException if either the entity or the column is
      * {@code null}
      */
-    Object get(ENTITY entity, FieldIdentifier identifier);
+    Object get(ENTITY entity, FieldIdentifier<ENTITY> identifier);
 
     /**
      * Sets the property value (field) that corresponds to the provided
@@ -96,7 +97,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @throws NullPointerException if either the entity or the column is
      * {@code null}
      */
-    void set(ENTITY entity, FieldIdentifier identifier, Object value);
+    void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value);
     
     /**
      * Returns a stream of the fields that every entity in this contains.

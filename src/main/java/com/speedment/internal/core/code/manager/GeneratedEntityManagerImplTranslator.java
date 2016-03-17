@@ -39,6 +39,7 @@ import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.config.db.Dbms;
+import com.speedment.field.FieldIdentifier;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -200,7 +201,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     public static Method generateGet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(GET_METHOD, OBJECT).public_().add(OVERRIDE)
             .add(Field.of("entity", support.entityType()))
-            .add(Field.of("column", Type.of(Column.class)))
+            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
             .add(generateGetBody(support, file, columnsSupplier));
     }
 
@@ -208,13 +209,13 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
 
         return new String[]{
-            "switch (column.getName()) " + block(
+            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
             columnsSupplier.get().map(c
-            -> "case \"" + c.getName()
-            + "\" : return entity." + getterCode(support, c)
+            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
+            + " : return entity." + getterCode(support, c)
             + ";"
             ).collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
             )
         };
     }
@@ -222,7 +223,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     public static Method generateSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(SET_METHOD, VOID).public_().add(OVERRIDE)
             .add(Field.of("entity", support.entityType()))
-            .add(Field.of("column", Type.of(Column.class)))
+            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
             .add(Field.of("value", Type.of(Object.class)))
             .add(generateSetBody(support, file, columnsSupplier));
     }
@@ -231,15 +232,15 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
 
         return new String[]{
-            "switch (column.getName()) " + block(
+            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
             columnsSupplier.get()
             .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
             .map(c
-            -> "case \"" + c.getName()
-            + "\" : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
+            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
+            + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
             + "((" + c.findTypeMapper().getJavaType().getSimpleName()
             + ") value); break;").collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown column '\" + column.getName() + \"'.\");"
+            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
             )
         };
     }
@@ -285,50 +286,10 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         final List<String> rows = new LinkedList<>();
         rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
 
-//        final JavaTypeMapperComponent mapperComponent = support.speedment().getJavaTypeMapperComponent();
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         final AtomicInteger position = new AtomicInteger(1);
         columnsSupplier.get().forEachOrdered(c -> {
-//
-//            final JavaTypeMapping<?> mapping = mapperComponent
-//                .apply(
-//                    dbmsTypeOf(support.speedment(), support.dbmsOrThrow()),
-//                    c.findTypeMapper().getDatabaseType()
-//                );
-//            final StringBuilder sb = new StringBuilder()
-//                .append("entity.set")
-//                .append(support.typeName(c))
-//                .append("(")
-//                .append(typeMapperName(support, c))
-//                .append(".toJavaType(");
-//
-//            final String getterName = "get" + mapping.getResultSetMethodName(support.dbmsOrThrow());
-//
-//            final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
-//                .map(java.lang.reflect.Method::getName)
-//                .anyMatch(getterName::equals);
-//
-//            final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
-//                .filter(m -> m.getName().equals(getterName))
-//                .anyMatch(m -> m.getReturnType().isPrimitive());
-//
-//            if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
-//                sb
-//                    .append("resultSet.")
-//                    .append("get")
-//                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
-//                    .append("(").append(position.getAndIncrement()).append(")");
-//            } else {
-//                sb
-//                    .append("get")
-//                    .append(mapping.getResultSetMethodName(support.dbmsOrThrow()))
-//                    .append("(resultSet, ")
-//                    .append(position.getAndIncrement()).append(")");
-//            }
-//            sb.append("));");
-//            streamBuilder.add(sb.toString());
-
             streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(support.speedment(), c, position) + ");");
         });
 

@@ -33,7 +33,7 @@ public interface FieldTrait {
      * 
      * @return  the identifier
      */
-    FieldIdentifier getIdentifier();
+    FieldIdentifier<?> getIdentifier();
 
     /**
      * Returns {@code true} if the column that this field represents is UNIQUE.

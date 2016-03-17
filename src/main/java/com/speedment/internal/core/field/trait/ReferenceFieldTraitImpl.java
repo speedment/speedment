@@ -17,6 +17,7 @@
 package com.speedment.internal.core.field.trait;
 
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNotNullPredicate;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNullPredicate;
@@ -78,4 +79,13 @@ public class ReferenceFieldTraitImpl<ENTITY, D, V> implements ReferenceFieldTrai
         return new IsNotNullPredicate<>(field, this);
     }
 
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
+    }
+
+    @Override
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return (FieldIdentifier<ENTITY>) field.getIdentifier();
+    }
 }

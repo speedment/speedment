@@ -99,7 +99,7 @@ public interface Speedment {
      * <p>
      * {@code get(ManagerComponent.class).managerOf(entityClass) }
      *
-     * @param <ENTITY> the Entity interface type
+     * @param <ENTITY>  the Entity interface type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class

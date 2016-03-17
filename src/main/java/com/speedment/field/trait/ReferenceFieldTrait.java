@@ -23,6 +23,7 @@ package com.speedment.field.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
@@ -38,7 +39,10 @@ import com.speedment.field.predicate.SpeedmentPredicate;
  * @author pemi
  */
 @Api(version = "2.2")
-public interface ReferenceFieldTrait<ENTITY, D, V> {
+public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
+
+    @Override
+    FieldIdentifier<ENTITY> getIdentifier();
 
     /**
      * Returns a reference to the setter for this field.

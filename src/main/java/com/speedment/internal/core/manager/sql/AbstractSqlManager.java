@@ -326,12 +326,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
         final List<Object> values = fields()
             .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
         primaryKeyFields()
-            .map(FieldTrait::getIdentifier)
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+            .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(f -> values.add(get(entity, f)));
         
         executeUpdate(entity, sb.toString(), values, NOTHING, listener);

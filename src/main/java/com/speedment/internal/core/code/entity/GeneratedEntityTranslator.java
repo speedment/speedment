@@ -61,6 +61,8 @@ import static com.speedment.internal.util.document.DocumentUtil.relativeName;
  */
 public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<Interface> {
 
+    public final static String IDENTIFIER_NAME = "Identifier";
+    
     public GeneratedEntityTranslator(Speedment speedment, Generator gen, Table table) {
         super(speedment, gen, table, Interface::of);
     }
@@ -69,9 +71,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     protected Interface makeCodeGenModel(File file) {
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
 
-        final Enum identifier = Enum.of("Identifier")
+        final Enum identifier = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", STRING).private_().final_())
-            .add(Type.of(FieldIdentifier.class))
+            .add(Type.of(FieldIdentifier.class).add(Generic.of().add(getSupport().entityType())))
             .add(Constructor.of()
                 .add(Field.of("columnName", STRING))
                 .add("this.columnName = columnName;")
@@ -94,8 +96,15 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             );
 
         final Interface iface = newBuilder(file, getSupport().generatedEntityName())
+            /*** General ***/
+            .forEveryTable((intrf, col) -> {
+                intrf.public_()
+                    .add(identifier)
+                    .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())));
+            })
+            
             /*** Getters ***/
-            .forEveryColumn((clazz, col) -> {
+            .forEveryColumn((intrf, col) -> {
                 final Type retType = col.isNullable()
                     ? OPTIONAL.add(
                         Generic.of().add(
@@ -104,7 +113,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     )
                     : Type.of(col.findTypeMapper().getJavaType());
                 
-                clazz.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
+                intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
                     .set(Javadoc.of(
                             "Returns the " + getSupport().variableName(col) + 
                             " of this " + getSupport().entityName() + 
@@ -120,8 +129,8 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             })
             
             /*** Setters ***/
-            .forEveryColumn((clazz, col) -> {
-                clazz.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
+            .forEveryColumn((intrf, col) -> {
+                intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                     .add(Field.of(getSupport().variableName(col), Type.of(col.findTypeMapper().getJavaType())))
                     .set(Javadoc.of(
                         "Sets the " + getSupport().variableName(col) + 
@@ -136,7 +145,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             })
             
             /*** Fields ***/
-            .forEveryColumn((clazz, col) -> {
+            .forEveryColumn((intrf, col) -> {
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
                     EntityTranslatorSupport.getReferenceFieldType(file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
@@ -173,7 +182,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
 
                 file.add(Import.of(ref.implType));
-                clazz.add(Field.of(getNamer().javaStaticFieldName(col.getJavaName()), ref.type)
+                intrf.add(Field.of(getNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                         .final_()
                         .set(new ReferenceValue(
                             "new " + shortName(ref.implType.getName())
@@ -196,7 +205,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             })
             
             /*** Add streamers from back pointing FK:s ***/
-            .forEveryForeignKeyReferencingThis((i, fk) -> {
+            .forEveryForeignKeyReferencingThis((intrf, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 file.add(Import.of(fu.getEmt().getSupport().entityType()));
 
@@ -231,11 +240,11 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     )
                 );
 
-                i.add(method);
+                intrf.add(method);
             })
             
             /*** Add ordinary finders ***/
-            .forEveryForeignKey((clazz, fk) -> {
+            .forEveryForeignKey((intrf, fk) -> {
 
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
                 fu.imports().forEachOrdered(file::add);
@@ -267,15 +276,10 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     ).add(RETURN.setText(returns)
                 ));
 
-                clazz.add(method);
+                intrf.add(method);
             })
-            .build()
-            .public_()
-            .add(identifier)
-            .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())));
+            .build();
         
-        
-
         /*** Create aggregate streaming functions, if any ***/
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
             final List<String> methodNames = fkStreamers.get(referencingTable);
