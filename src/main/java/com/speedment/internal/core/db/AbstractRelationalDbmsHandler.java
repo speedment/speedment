@@ -37,6 +37,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -56,12 +57,8 @@ import java.util.function.*;
 import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -81,6 +78,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private static final String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
+    private final DbmsType dbmsType;
+    
     protected transient Map<String, Class<?>> sqlTypeMapping;
 
     private static final Boolean SHOW_METADATA = false;
@@ -91,6 +90,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
         this.sqlTypeMapping = new ConcurrentHashMap<>();
+        this.dbmsType = dbmsTypeOf(speedment, dbms);
     }
 
     @Override
@@ -150,16 +150,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         LOGGER.info("Reading metadata from " + dbms.toString());
 
         final Set<String> discardedSchemas = new HashSet<>();
-        final DatabaseNamingConvention naming = dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention();
+        final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
 
         try {
-            final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
+            final Set<SqlTypeInfo> preSet = dbmsType.getDataTypes();
             sqlTypeMapping = !preSet.isEmpty() ? readTypeMapFromSet(preSet) : readTypeMapFromDB(connection);
 
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
 
-                    final String schemaName = rs.getString(dbmsTypeOf(speedment, getDbms()).getResultSetTableSchema());
+                    final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
                     String catalogName = "";
                     try {
                         // This column is not there for Oracle so handle it
