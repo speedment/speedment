@@ -83,6 +83,7 @@ import com.speedment.util.ProgressMeasure;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
+import static javafx.application.Platform.runLater;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -523,7 +524,7 @@ public final class UISession {
     }
     
     private void showProgressDialog(String title, ProgressMeasure progress) {
-        final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
+        final Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Progress Tracker");
         dialog.setHeaderText(title);
         dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SPINNER, DIALOG_PANE_ICON_SIZE));
@@ -541,12 +542,19 @@ public final class UISession {
         message.setMaxWidth(Double.MAX_VALUE);
         
         progress.addListener(measure -> {
-            message.setText(measure.getCurrentAction());
-            bar.setProgress(measure.getProgress());
+            final String msg   = measure.getCurrentAction();
+            final double prg   = measure.getProgress();
+            final boolean done = measure.isDone();
             
-            if (measure.isDone()) {
-                dialog.close();
-            }
+            runLater(() -> {
+                message.setText(msg);
+                bar.setProgress(prg);
+
+                if (done) {
+                    dialog.setResult(true);
+                    dialog.close();
+                }
+            });
         });
         
         pane.setContent(box);
@@ -569,15 +577,12 @@ public final class UISession {
             
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             
-            final ProgressMeasure pl = ProgressMeasure.create();
-            final CompletableFuture<Void> future = CompletableFuture.runAsync(
-                () -> showProgressDialog("Loading Database Metadata", pl)
+            final ProgressMeasure progress = ProgressMeasure.create();
+            CompletableFuture.runAsync(
+                () -> dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase)
             );
             
-            dh.readSchemaMetadata(pl, schemaName::equalsIgnoreCase);
-            
-            future.get();
-            
+            showProgressDialog("Loading Database Metadata", progress);
             project.merge(speedment, newProject);
             
             return true;

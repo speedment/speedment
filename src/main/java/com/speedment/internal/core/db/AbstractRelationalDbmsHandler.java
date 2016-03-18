@@ -304,7 +304,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             final String classMappingString = rs.getString("TYPE_NAME");
             final int columnSize = rs.getInt("COLUMN_SIZE");
-            final int decimalDigits = rs.getInt("DECIMAL_DIGIT");
+            final int decimalDigits = rs.getInt("DECIMAL_DIGITS");
             final Class<?> mapping = lookupJdbcClass(classMappingString, columnSize, decimalDigits);
             if (mapping != null) {
 
@@ -474,7 +474,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     LOGGER.debug("Skipped due to RS filtering");
                 }
             }
-        } catch (SQLException sqle) {
+        } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
     }
