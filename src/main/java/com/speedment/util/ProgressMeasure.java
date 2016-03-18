@@ -41,7 +41,7 @@ public interface ProgressMeasure {
      *
      * @return what is going on
      */
-    String getCurrentAction(String action);
+    String getCurrentAction();
 
     /**
      * Adds a listener that will be called each time a value changes.

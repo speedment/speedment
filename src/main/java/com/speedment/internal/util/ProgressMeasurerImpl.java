@@ -39,7 +39,7 @@ public class ProgressMeasurerImpl implements ProgressMeasure {
     }
 
     @Override
-    public String getCurrentAction(String action) {
+    public String getCurrentAction() {
         return currentAction;
     }
 
