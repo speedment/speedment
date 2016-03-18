@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import com.speedment.internal.util.sql.ResultSetUtil;
 import com.speedment.util.tuple.Tuples;
-import com.speedment.internal.util.code.TranslatorSupport;
+import com.speedment.code.TranslatorSupport;
 import java.util.function.Supplier;
 import java.util.LinkedList;
 import java.util.List;

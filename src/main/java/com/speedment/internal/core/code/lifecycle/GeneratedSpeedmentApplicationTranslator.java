@@ -38,7 +38,7 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.codegen.lang.models.Generic;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import com.speedment.internal.util.code.TranslatorSupport;
+import com.speedment.code.TranslatorSupport;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;

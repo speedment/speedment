@@ -53,6 +53,10 @@ public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> impl
         put(USERNAME, username);
     }
     
+    public void setConnectionUrl(String connectionUrl) {
+        put(CONNECTION_URL, connectionUrl);
+    }
+    
     public Schema addNewSchema() {
         return new SchemaImpl(document(), newDocument(document(), SCHEMAS));
     }
