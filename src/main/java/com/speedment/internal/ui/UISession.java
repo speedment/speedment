@@ -25,12 +25,10 @@ import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
-import com.speedment.component.UserInterfaceComponent;
 import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
-import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
@@ -77,12 +75,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
 import com.speedment.internal.util.document.DocumentUtil;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import static java.util.Objects.requireNonNull;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
+import com.speedment.util.ProgressMeasure;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -528,7 +527,10 @@ public final class UISession {
             final Dbms newDbms = newProject.dbmses().findAny().get();
             
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
-            dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
+            
+            ProgressMeasure pl = ProgressMeasure.create();
+            
+            dh.readSchemaMetadata(pl, schemaName::equalsIgnoreCase);
             
             project.merge(speedment, newProject);
             

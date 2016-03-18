@@ -37,6 +37,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -56,10 +57,15 @@ import java.util.function.*;
 import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.nonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import com.speedment.util.ProgressMeasure;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -74,11 +80,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //    static {
 //        LOGGER.setLevel(Level.DEBUG);
 //    }
-
     private static final String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
-    private transient Map<String, Class<?>> sqlTypeMapping;
+    private final DbmsType dbmsType;
+
+    protected transient Map<String, Class<?>> sqlTypeMapping;
 
     private static final Boolean SHOW_METADATA = false;
 
@@ -88,6 +95,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
         this.sqlTypeMapping = new ConcurrentHashMap<>();
+        this.dbmsType = dbmsTypeOf(speedment, dbms);
     }
 
     @Override
@@ -104,12 +112,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final Connection conn;
         try {
             conn = speedment.getConnectionPoolComponent()
-                    .getConnection(url, user, password == null ? null : new String(password));
+                .getConnection(url, user, password == null ? null : new String(password));
         } catch (final SQLException ex) {
             final String msg
-                    = "Unable to get connection for " + dbms
-                    + " using url \"" + url + "\", user = " + user
-                    + ", password = " + PASSWORD_PROTECTED;
+                = "Unable to get connection for " + dbms
+                + " using url \"" + url + "\", user = " + user
+                + ", password = " + PASSWORD_PROTECTED;
 
             LOGGER.error(ex, msg);
             throw new SpeedmentException(msg, ex);
@@ -134,29 +142,31 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void readSchemaMetadata(Predicate<String> filterCriteria) {
+    public void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria) {
         try (final Connection connection = getConnection()) {
-            readSchemaMetadata(connection, filterCriteria);
+            readSchemaMetadata(connection, filterCriteria, progressListener);
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Unable to read from " + dbms.toString());
         }
     }
 
-    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria) {
+    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progressListener) {
         requireNonNull(connection);
-        LOGGER.info("Reading metadata from " + dbms.toString());
+        final String action = "Reading metadata from dbms " + dbms.getName();
+        LOGGER.info(action);
+        progressListener.setCurrentAction(action);
 
         final Set<String> discardedSchemas = new HashSet<>();
-        final DatabaseNamingConvention naming = dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention();
+        final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
 
         try {
-            final Set<SqlTypeInfo> preSet = dbmsTypeOf(speedment, dbms).getDataTypes();
+            final Set<SqlTypeInfo> preSet = dbmsType.getDataTypes();
             sqlTypeMapping = !preSet.isEmpty() ? readTypeMapFromSet(preSet) : readTypeMapFromDB(connection);
 
             try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                 while (rs.next()) {
 
-                    final String schemaName = rs.getString(dbmsTypeOf(speedment, getDbms()).getResultSetTableSchema());
+                    final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
                     String catalogName = "";
                     try {
                         // This column is not there for Oracle so handle it
@@ -207,20 +217,23 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);
         dbms.schemas().forEach(schema -> {
-            tables(connection, schema);
+            tables(connection, schema, progressListener);
             atleastOneSchema.set(true);
         });
 
         if (!atleastOneSchema.get()) {
             throw new SpeedmentException(
-                    "Could not find anymatching schema. The following schemas was considered: " + discardedSchemas + "."
+                "Could not find anymatching schema. The following schemas was considered: " + discardedSchemas + "."
             );
         }
     }
 
-    protected void tables(Connection connection, Schema schema) {
+    protected void tables(Connection connection, Schema schema, ProgressMeasure progressListener) {
         requireNonNulls(connection, schema);
-        LOGGER.info("Parsing " + schema.toString());
+
+        final String action = "Reading metadata from schema " + schema.getName();
+        LOGGER.info(action);
+        progressListener.setCurrentAction(action);
 
         try {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
@@ -250,25 +263,27 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
 
         schema.tables().forEach(table -> {
-            columns(connection, table);
-            indexes(connection, table);
-            foreignKeys(connection, table);
-            primaryKeyColumns(connection, table);
+            columns(connection, table, progressListener);
+            indexes(connection, table, progressListener);
+            foreignKeys(connection, table, progressListener);
+            primaryKeyColumns(connection, table, progressListener);
         });
     }
 
-    protected void columns(Connection connection, Table table) {
+    protected void columns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
+
+        progressListener.setCurrentAction("Reading column metadata from table " + table.getName());
 
         final Schema schema = table.getParent().get();
 
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getColumns(
-                        jdbcCatalogLookupName(schema),
-                        jdbcSchemaLookupName(schema),
-                        table.getName(),
-                        null
-                );
+            -> connection.getMetaData().getColumns(
+                jdbcCatalogLookupName(schema),
+                jdbcSchemaLookupName(schema),
+                table.getName(),
+                null
+            );
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
@@ -294,15 +309,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
-            final Class<?> mapping = sqlTypeMapping.get(classMappingString);
+            final int columnSize = rs.getInt("COLUMN_SIZE");
+            final int decimalDigits = rs.getInt("DECIMAL_DIGIT");
+            final Class<?> mapping = lookupJdbcClass(classMappingString, columnSize, decimalDigits);
             if (mapping != null) {
 
                 final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
-                        .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
-                        .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
-                        .findFirst().orElseThrow(() -> new SpeedmentException(
-                                "Found no identity type mapper for mapping '" + mapping.getName() + "'."
-                        ));
+                    .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
+                    .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
+                    .findFirst().orElseThrow(() -> new SpeedmentException(
+                        "Found no identity type mapper for mapping '" + mapping.getName() + "'."
+                    ));
 
                 column.mutator().setTypeMapper(typeMapper);
                 column.mutator().setDatabaseType(mapping);
@@ -318,41 +335,52 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
         };
 
-        tableChilds(table.mutator()::addNewColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
     }
 
-    protected void primaryKeyColumns(Connection connection, Table table) {
+    /**
+     * Looks up a column TYPE_NAME and returns a mapped Class (e.g. Timestamp or
+     * String)
+     *
+     * @param typeName
+     * @return the mapped Class
+     */
+    protected Class<?> lookupJdbcClass(String typeName, int columnSize, int decimalDigits) {
+        return sqlTypeMapping.get(typeName);
+    }
+
+    protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
 
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getPrimaryKeys(
-                        jdbcCatalogLookupName(schema),
-                        jdbcSchemaLookupName(schema),
-                        table.getName()
-                );
+            -> connection.getMetaData().getPrimaryKeys(
+                jdbcCatalogLookupName(schema),
+                jdbcSchemaLookupName(schema),
+                table.getName()
+            );
 
         final TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
             primaryKeyColumn.mutator().setName(rs.getString("COLUMN_NAME"));
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
 
-        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
     }
 
-    protected void indexes(Connection connection, Table table) {
+    protected void indexes(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getIndexInfo(
-                        jdbcCatalogLookupName(schema),
-                        jdbcSchemaLookupName(schema),
-                        table.getName(),
-                        false,
-                        false
-                );
+            -> connection.getMetaData().getIndexInfo(
+                jdbcCatalogLookupName(schema),
+                jdbcSchemaLookupName(schema),
+                table.getName(),
+                false,
+                false
+            );
 
         final TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
             final String indexName = rs.getString("INDEX_NAME");
@@ -381,19 +409,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             return nonNull(indexName);
         };
 
-        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter);
+        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter, progressListener);
     }
 
-    protected void foreignKeys(Connection connection, Table table) {
+    protected void foreignKeys(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
         final SqlSupplier<ResultSet> supplier = ()
-                -> connection.getMetaData().getImportedKeys(
-                        jdbcCatalogLookupName(schema),
-                        jdbcSchemaLookupName(schema),
-                        table.getName()
-                );
+            -> connection.getMetaData().getImportedKeys(
+                jdbcCatalogLookupName(schema),
+                jdbcSchemaLookupName(schema),
+                table.getName()
+            );
 
         final TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
 
@@ -408,22 +436,24 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
         };
 
-        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator);
+        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
     }
 
     protected <T> void tableChilds(
-            Supplier<T> childSupplier,
-            SqlSupplier<ResultSet> resultSetSupplier,
-            TableChildMutator<T, ResultSet> resultSetMutator
+        Supplier<T> childSupplier,
+        SqlSupplier<ResultSet> resultSetSupplier,
+        TableChildMutator<T, ResultSet> resultSetMutator,
+        ProgressMeasure progressListener
     ) {
-        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true);
+        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
     }
 
     protected <T> void tableChilds(
-            Supplier<T> childSupplier,
-            SqlSupplier<ResultSet> resultSetSupplier,
-            TableChildMutator<T, ResultSet> resultSetMutator,
-            SqlPredicate<ResultSet> filter
+        Supplier<T> childSupplier,
+        SqlSupplier<ResultSet> resultSetSupplier,
+        TableChildMutator<T, ResultSet> resultSetMutator,
+        SqlPredicate<ResultSet> filter,
+        ProgressMeasure progressListener
     ) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 
@@ -468,8 +498,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         requireNonNulls(sql, values, rsMapper);
 
         try (
-                final Connection connection = getConnection();
-                final PreparedStatement ps = connection.prepareStatement(sql)) {
+            final Connection connection = getConnection();
+            final PreparedStatement ps = connection.prepareStatement(sql)) {
             int i = 1;
             for (final Object o : values) {
                 ps.setObject(i++, o);
@@ -490,31 +520,31 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-            String sql, List<?> values, Function<ResultSet, T> rsMapper) {
+        String sql, List<?> values, Function<ResultSet, T> rsMapper) {
 
         return new AsynchronousQueryResultImpl<>(
-                Objects.requireNonNull(sql),
-                Objects.requireNonNull(values),
-                Objects.requireNonNull(rsMapper),
-                () -> getConnection()
+            Objects.requireNonNull(sql),
+            Objects.requireNonNull(values),
+            Objects.requireNonNull(rsMapper),
+            () -> getConnection()
         );
     }
 
     @Override
     public void executeUpdate(
-            String sql, List<?> values, Consumer<List<Long>> generatedKeysConsumer)
-            throws SQLException {
+        String sql, List<?> values, Consumer<List<Long>> generatedKeysConsumer)
+        throws SQLException {
 
         final List<SqlUpdateStatement> sqlStatementList = new ArrayList<>();
         final SqlUpdateStatement sqlUpdateStatement
-                = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
+            = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
 
         sqlStatementList.add(sqlUpdateStatement);
         executeUpdate(sqlStatementList);
     }
 
     private void executeUpdate(List<SqlUpdateStatement> sqlStatementList)
-            throws SQLException {
+        throws SQLException {
 
         requireNonNull(sqlStatementList);
         int retryCount = 5;
@@ -540,7 +570,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             while (generatedKeys.next()) {
                                 final Object genKey = generatedKeys.getObject(1);
                                 if (!"oracle.sql.ROWID".equals(genKey.getClass()
-                                        .getName())) {
+                                    .getName())) {
                                     sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                                 } else {
                                     // Handle ROWID, make result = map<,String>
@@ -619,10 +649,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         requireNonNull(typeInfos);
 
         return typeInfos.stream()
-                .collect(toMap(
-                        SqlTypeInfo::getSqlTypeName,
-                        sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
-                );
+            .collect(toMap(
+                SqlTypeInfo::getSqlTypeName,
+                sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
+            );
     }
 
 }

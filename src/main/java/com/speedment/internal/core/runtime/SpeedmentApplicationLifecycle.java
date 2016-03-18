@@ -283,6 +283,42 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     /**
+     * Configures a connection URL for all dbmses in this project. The new
+     * connection URL will then be applied after the configuration has been read
+     * and after the System properties have been applied. If the connectionUrl
+     * is set to {@code null}, the connection URL will be calculated using the
+     * dbmses' default connection URL generator (e.g. using ipAddress, port,
+     * etc).
+     * <p>
+     *
+     * @param connectionUrl to use for all dbms this project or null
+     * @return this instance
+     */
+    public T withConnectionUrl(final String connectionUrl) {
+        with(Dbms.class, d -> d.mutator().setConnectionUrl(connectionUrl));
+        return self();
+    }
+
+    /**
+     * Configures a connection URL for the named dbms in this project. The new
+     * connection URL will then be applied after the configuration has been read
+     * and after the System properties have been applied. If the connectionUrl
+     * is set to {@code null}, the connection URL will be calculated using the
+     * dbmses' default connection URL generator (e.g. using ipAddress, port,
+     * etc).
+     * <p>
+     *
+     * @param dbmsName the name of the dbms
+     * @param connectionUrl to use for the named dbms or null
+     * @return this instance
+     */
+    public T withConnectionUrl(final String dbmsName, final String connectionUrl) {
+        requireNonNull(dbmsName);
+        with(Dbms.class, dbmsName, s -> s.mutator().setName(connectionUrl));
+        return self();
+    }
+
+    /**
      * Adds a (and replaces any existing) {@link Component} to the Speedment
      * runtime platform by applying the provided component mapper with the
      * internal Speedment instance.
@@ -329,7 +365,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         forEachManagerInSeparateThread(Manager::initialize);
         forEachComponentInSeparateThread(Component::initialize);
     }
-    
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -355,7 +391,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         }
         forEachManagerInSeparateThread(Manager::start);
         forEachComponentInSeparateThread(Component::start);
-        
+
         Statistics.onNodeStarted();
 
         LOGGER.info(SpeedmentVersion.getWelcomeMessage());
@@ -393,10 +429,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
             // System.out.println("Class "+clazz.getSimpleName());
             DocumentDbUtil.traverseOver(project)
-                    // .peek(System.out::println)
-                    .filter(clazz::isInstance)
-                    .map(Document.class::cast)
-                    .forEachOrdered(consumer::accept);
+                // .peek(System.out::println)
+                .filter(clazz::isInstance)
+                .map(Document.class::cast)
+                .forEachOrdered(consumer::accept);
         });
 
         // Apply a named overidden item (if any) for all ConfigEntities of a given class
@@ -408,11 +444,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Consumer<Document> consumer = (Consumer<Document>) t3.get2();
 
             DocumentDbUtil.traverseOver(project)
-                    .filter(clazz::isInstance)
-                    .filter(HasName.class::isInstance)
-                    .map(d -> (Document & HasName) d)
-                    .filter(c -> name.equals(relativeName(c, Project.class)))
-                    .forEachOrdered(consumer::accept);
+                .filter(clazz::isInstance)
+                .filter(HasName.class::isInstance)
+                .map(d -> (Document & HasName) d)
+                .filter(c -> name.equals(relativeName(c, Project.class)))
+                .forEachOrdered(consumer::accept);
         });
 
         speedment.getProjectComponent().setProject(project);
@@ -467,11 +503,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         requireNonNull(managerConsumer);
         final ManagerComponent mc = speedment.getManagerComponent();
         final List<Thread> threads = mc.stream()
-                .map(mgr -> new Thread(()
-                        -> managerConsumer.accept(mgr),
-                        mgr.getTable().getName()
-                ))
-                .collect(toList());
+            .map(mgr -> new Thread(()
+                -> managerConsumer.accept(mgr),
+                mgr.getTable().getName()
+            ))
+            .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);
     }
@@ -479,11 +515,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void forEachComponentInSeparateThread(Consumer<Component> componentConsumer) {
         requireNonNull(componentConsumer);
         final List<Thread> threads = speedment.components()
-                .map(comp -> new Thread( // TODO: Change to ExecutorService
-                        () -> componentConsumer.accept(comp),
-                        comp.asSoftware().getName()
-                ))
-                .collect(toList());
+            .map(comp -> new Thread( // TODO: Change to ExecutorService
+                () -> componentConsumer.accept(comp),
+                comp.asSoftware().getName()
+            ))
+            .collect(toList());
         threads.forEach(Thread::start);
         threads.forEach(SpeedmentApplicationLifecycle::join);
     }

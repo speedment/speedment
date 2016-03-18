@@ -21,7 +21,6 @@ import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.util.code.TranslatorSupport;
 import com.speedment.util.JavaLanguageNamer;
 import java.util.function.Supplier;
 

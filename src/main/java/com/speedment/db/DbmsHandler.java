@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import com.speedment.util.ProgressMeasure;
 
 /**
  * A DbmsHandler provides the interface between Speedment and an underlying
@@ -62,7 +63,6 @@ public interface DbmsHandler {
 //     *          database
 //     */
 //    Stream<Schema> schemasUnpopulated();
-    
     /**
      * Reads the schema metadata with populated {@link Schema Schemas} that are
      * available in this database. The schemas are populated by all their
@@ -73,8 +73,8 @@ public interface DbmsHandler {
      * This method can be used to read a complete inventory of the database
      * structure.
      */
-    default void readSchemaMetadata() {
-        DbmsHandler.this.readSchemaMetadata(SCHEMA_NO_FILTER);
+    default void readSchemaMetadata(ProgressMeasure progressListener) {
+        DbmsHandler.this.readSchemaMetadata(progressListener, SCHEMA_NO_FILTER);
     }
 
     /**
@@ -86,9 +86,9 @@ public interface DbmsHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
-     * @param filterCriteria criteria that schema  names must fulfill
+     * @param filterCriteria criteria that schema names must fulfill
      */
-    void readSchemaMetadata(Predicate<String> filterCriteria);
+    void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria);
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
@@ -104,8 +104,8 @@ public interface DbmsHandler {
      * @return a stream of the mapped objects
      */
     default <T> Stream<T> executeQuery(
-            final String sql,
-            final SqlFunction<ResultSet, T> rsMapper) {
+        final String sql,
+        final SqlFunction<ResultSet, T> rsMapper) {
 
         return executeQuery(sql, Collections.emptyList(), rsMapper);
     }
@@ -126,9 +126,9 @@ public interface DbmsHandler {
      * @return a stream of the mapped objects
      */
     public <T> Stream<T> executeQuery(
-            final String sql,
-            final List<?> values,
-            final SqlFunction<ResultSet, T> rsMapper);
+        final String sql,
+        final List<?> values,
+        final SqlFunction<ResultSet, T> rsMapper);
 
     /**
      * Lazily Executes a SQL query and subsequently maps each row in the
@@ -146,9 +146,9 @@ public interface DbmsHandler {
      * @return a stream of the mapped objects
      */
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-            final String sql,
-            final List<?> values,
-            final Function<ResultSet, T> rsMapper);
+        final String sql,
+        final List<?> values,
+        final Function<ResultSet, T> rsMapper);
 
     /**
      * Executes a SQL update command. Generated key(s) following an insert
@@ -159,8 +159,8 @@ public interface DbmsHandler {
      * @throws SQLException if an error occurs
      */
     default void executeUpdate(
-            final String sql,
-            final Consumer<List<Long>> generatedKeyConsumer
+        final String sql,
+        final Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException {
 
         executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
@@ -177,8 +177,8 @@ public interface DbmsHandler {
      * @throws SQLException if an error occurs
      */
     public void executeUpdate(
-            final String sql,
-            final List<?> values,
-            final Consumer<List<Long>> generatedKeyConsumer
+        final String sql,
+        final List<?> values,
+        final Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 }

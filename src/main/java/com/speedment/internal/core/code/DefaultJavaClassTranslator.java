@@ -55,7 +55,7 @@ import com.speedment.internal.core.config.db.IndexImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.SchemaImpl;
 import com.speedment.internal.core.config.db.TableImpl;
-import com.speedment.internal.util.code.TranslatorSupport;
+import com.speedment.code.TranslatorSupport;
 import com.speedment.util.JavaLanguageNamer;
 import java.util.ArrayList;
 import java.util.HashMap;
