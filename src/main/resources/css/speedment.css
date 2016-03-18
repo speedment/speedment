@@ -332,6 +332,10 @@
     -fx-background-color: -fx-speedment-blue;
 }
 
+.progress .header-panel {
+    -fx-background-color: -fx-speedment-blue;
+}
+
 /*** Output messages ***/
 .label.msg {
     -fx-font-family: 'Monospaced';

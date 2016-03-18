@@ -82,6 +82,9 @@ import javafx.scene.layout.Priority;
 import com.speedment.util.ProgressMeasure;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -469,7 +472,6 @@ public final class UISession {
         pane.getStyleClass().add("authentication");
         
         final Scene scene = pane.getScene();
-        
         Brand.apply(this, scene);
         
         speedment
@@ -519,6 +521,44 @@ public final class UISession {
         });
     }
     
+    private void showProgressDialog(String title, ProgressMeasure progress) {
+        final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
+        dialog.setTitle("Progress Tracker");
+        dialog.setHeaderText(title);
+        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SPINNER, DIALOG_PANE_ICON_SIZE));
+        
+        final DialogPane pane = dialog.getDialogPane();
+        pane.getStyleClass().add("progress");
+        
+        final VBox box        = new VBox();
+        final ProgressBar bar = new ProgressBar();
+        final Label message   = new Label();
+        
+        box.getChildren().addAll(bar, message);
+        box.setMaxWidth(Double.MAX_VALUE);
+        bar.setMaxWidth(Double.MAX_VALUE);
+        message.setMaxWidth(Double.MAX_VALUE);
+        
+        progress.addListener(measure -> {
+            message.setText(measure.getCurrentAction(""));
+            bar.setProgress(measure.getProgress());
+            
+            if (measure.getProgress() >= 1.0) {
+                dialog.close();
+            }
+        });
+        
+        pane.setContent(box);
+        pane.setMaxWidth(Double.MAX_VALUE);
+        
+        final Scene scene = pane.getScene();
+        Brand.apply(this, scene);
+        
+        if (progress.getProgress() < 1.0) {
+            dialog.showAndWait();
+        }
+    }
+    
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             dbms.schemasProperty().clear();
@@ -528,7 +568,8 @@ public final class UISession {
             
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             
-            ProgressMeasure pl = ProgressMeasure.create();
+            final ProgressMeasure pl = ProgressMeasure.create();
+            showProgressDialog("Loading Database Metadata", pl);
             
             dh.readSchemaMetadata(pl, schemaName::equalsIgnoreCase);
             

@@ -27,7 +27,7 @@
 
 <HBox fx:id="container" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="6.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
+        <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="320.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="leftTitle" styleClass="header" text="Open Existing Project" textFill="#3e6293" StackPane.alignment="TOP_CENTER" />
                 <Button fx:id="buttonOpen" defaultButton="true" mnemonicParsing="false" text="Select JSON-file">
@@ -40,7 +40,7 @@
                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
             </padding>
         </StackPane>
-        <VBox alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="280.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
+        <VBox alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="320.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="rightTitle" alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Select Database" textFill="#3f6291" />
                 <ChoiceBox fx:id="fieldType" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
