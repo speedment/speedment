@@ -1,24 +1,26 @@
 package com.speedment.internal.util;
 
 import com.speedment.util.*;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import static java.util.Collections.newSetFromMap;
+import static java.util.Objects.requireNonNull;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
  *
  * @author Per Minborg
  */
-public class ProgressMeasurerImpl implements ProgressMeasure {
+public final class ProgressMeasurerImpl implements ProgressMeasure {
 
-    private final List<Consumer<ProgressMeasure>> listeners;
+    private final Set<Consumer<ProgressMeasure>> listeners;
     private double progress;
     private String currentAction;
 
     public ProgressMeasurerImpl() {
-        progress = -1;
+        listeners     = newSetFromMap(new ConcurrentHashMap<>());
+        progress      = ProgressMeasure.INDETERMINATE;
         currentAction = "";
-        listeners = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -45,6 +47,7 @@ public class ProgressMeasurerImpl implements ProgressMeasure {
 
     @Override
     public ProgressMeasure addListener(Consumer<ProgressMeasure> listener) {
+        requireNonNull(listener);
         listeners.add(listener);
         return this;
     }
@@ -52,5 +55,4 @@ public class ProgressMeasurerImpl implements ProgressMeasure {
     private void callListeners() {
         listeners.forEach(c -> c.accept(this));
     }
-
 }

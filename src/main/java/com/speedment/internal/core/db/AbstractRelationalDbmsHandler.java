@@ -59,10 +59,6 @@ import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.nonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 import com.speedment.util.ProgressMeasure;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
@@ -75,12 +71,8 @@ import static java.util.stream.Collectors.toMap;
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
-
-//    static {
-//        LOGGER.setLevel(Level.DEBUG);
-//    }
-    private static final String PASSWORD_PROTECTED = "********";
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
+    private final static String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
     private final DbmsType dbmsType;
@@ -142,19 +134,21 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria) {
+    public void readSchemaMetadata(ProgressMeasure progress, Predicate<String> filterCriteria) {
         try (final Connection connection = getConnection()) {
-            readSchemaMetadata(connection, filterCriteria, progressListener);
-        } catch (SQLException sqle) {
+            readSchemaMetadata(connection, filterCriteria, progress);
+        } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Unable to read from " + dbms.toString());
+        } finally {
+            progress.setProgress(ProgressMeasure.DONE);
         }
     }
 
-    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progressListener) {
+    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progress) {
         requireNonNull(connection);
         final String action = "Reading metadata from dbms " + dbms.getName();
         LOGGER.info(action);
-        progressListener.setCurrentAction(action);
+        progress.setCurrentAction(action);
 
         final Set<String> discardedSchemas = new HashSet<>();
         final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
@@ -217,7 +211,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);
         dbms.schemas().forEach(schema -> {
-            tables(connection, schema, progressListener);
+            tables(connection, schema, progress);
             atleastOneSchema.set(true);
         });
 

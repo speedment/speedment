@@ -82,6 +82,7 @@ import javafx.scene.layout.Priority;
 import com.speedment.util.ProgressMeasure;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CompletableFuture;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -540,10 +541,10 @@ public final class UISession {
         message.setMaxWidth(Double.MAX_VALUE);
         
         progress.addListener(measure -> {
-            message.setText(measure.getCurrentAction(""));
+            message.setText(measure.getCurrentAction());
             bar.setProgress(measure.getProgress());
             
-            if (measure.getProgress() >= 1.0) {
+            if (measure.isDone()) {
                 dialog.close();
             }
         });
@@ -554,7 +555,7 @@ public final class UISession {
         final Scene scene = pane.getScene();
         Brand.apply(this, scene);
         
-        if (progress.getProgress() < 1.0) {
+        if (!progress.isDone()) {
             dialog.showAndWait();
         }
     }
@@ -569,9 +570,13 @@ public final class UISession {
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             
             final ProgressMeasure pl = ProgressMeasure.create();
-            showProgressDialog("Loading Database Metadata", pl);
+            final CompletableFuture<Void> future = CompletableFuture.runAsync(
+                () -> showProgressDialog("Loading Database Metadata", pl)
+            );
             
             dh.readSchemaMetadata(pl, schemaName::equalsIgnoreCase);
+            
+            future.get();
             
             project.merge(speedment, newProject);
             

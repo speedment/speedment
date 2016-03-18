@@ -8,6 +8,11 @@ import java.util.function.Consumer;
  * @author Per Minborg
  */
 public interface ProgressMeasure {
+    
+    public final static double 
+        INDETERMINATE = -1.0,
+        INITIAL       = 0.0,
+        DONE          = 1.0;
 
     /**
      * Sets the progress ratio. A negative value for progress indicates that the
@@ -28,6 +33,15 @@ public interface ProgressMeasure {
      * @return the progress ratio
      */
     double getProgress();
+    
+    /**
+     * Returns {@code true} if this task is done.
+     * 
+     * @return  {@code true} if done, else {@code false}
+     */
+    default boolean isDone() {
+        return getProgress() >= DONE;
+    }
 
     /**
      * Sets the current action.
@@ -54,5 +68,4 @@ public interface ProgressMeasure {
     static ProgressMeasure create() {
         return new ProgressMeasurerImpl();
     }
-
 }

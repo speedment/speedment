@@ -72,6 +72,7 @@ public interface DbmsHandler {
      * <p>
      * This method can be used to read a complete inventory of the database
      * structure.
+     * @param progressListener
      */
     default void readSchemaMetadata(ProgressMeasure progressListener) {
         DbmsHandler.this.readSchemaMetadata(progressListener, SCHEMA_NO_FILTER);
@@ -86,6 +87,7 @@ public interface DbmsHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
+     * @param progressListener
      * @param filterCriteria criteria that schema names must fulfill
      */
     void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria);
