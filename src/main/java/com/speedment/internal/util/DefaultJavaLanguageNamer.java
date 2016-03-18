@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.util;
 
-
 import com.speedment.util.JavaLanguageNamer;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import static com.speedment.internal.util.sql.SqlUtil.unQuote;
@@ -46,7 +45,7 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
     @Override
     public String javaStaticFieldName(final String externalName) {
         requireNonNull(externalName);
-        return javaName(toUnderscoreSeparated(externalName), Character::toUpperCase).toUpperCase();
+        return toUnderscoreSeparated(javaNameFromExternal(externalName)).toUpperCase();
     }
 
     @Override
@@ -188,6 +187,5 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
         }
         return result.toString();
     }
-
 
 }
