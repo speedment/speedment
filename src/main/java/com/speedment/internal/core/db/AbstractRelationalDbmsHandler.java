@@ -63,6 +63,11 @@ import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
+import com.speedment.util.ProgressMeasure;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -79,7 +84,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private final Dbms dbms;
     private final DbmsType dbmsType;
-    
+
     protected transient Map<String, Class<?>> sqlTypeMapping;
 
     private static final Boolean SHOW_METADATA = false;
@@ -137,17 +142,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void readSchemaMetadata(Predicate<String> filterCriteria) {
+    public void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria) {
         try (final Connection connection = getConnection()) {
-            readSchemaMetadata(connection, filterCriteria);
+            readSchemaMetadata(connection, filterCriteria, progressListener);
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Unable to read from " + dbms.toString());
         }
     }
 
-    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria) {
+    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progressListener) {
         requireNonNull(connection);
-        LOGGER.info("Reading metadata from " + dbms.toString());
+        final String action = "Reading metadata from dbms " + dbms.getName();
+        LOGGER.info(action);
+        progressListener.setCurrentAction(action);
 
         final Set<String> discardedSchemas = new HashSet<>();
         final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
@@ -210,7 +217,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);
         dbms.schemas().forEach(schema -> {
-            tables(connection, schema);
+            tables(connection, schema, progressListener);
             atleastOneSchema.set(true);
         });
 
@@ -221,9 +228,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
     }
 
-    protected void tables(Connection connection, Schema schema) {
+    protected void tables(Connection connection, Schema schema, ProgressMeasure progressListener) {
         requireNonNulls(connection, schema);
-        LOGGER.info("Parsing " + schema.toString());
+
+        final String action = "Reading metadata from schema " + schema.getName();
+        LOGGER.info(action);
+        progressListener.setCurrentAction(action);
 
         try {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
@@ -253,15 +263,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
 
         schema.tables().forEach(table -> {
-            columns(connection, table);
-            indexes(connection, table);
-            foreignKeys(connection, table);
-            primaryKeyColumns(connection, table);
+            columns(connection, table, progressListener);
+            indexes(connection, table, progressListener);
+            foreignKeys(connection, table, progressListener);
+            primaryKeyColumns(connection, table, progressListener);
         });
     }
 
-    protected void columns(Connection connection, Table table) {
+    protected void columns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
+
+        progressListener.setCurrentAction("Reading column metadata from table " + table.getName());
 
         final Schema schema = table.getParent().get();
 
@@ -323,7 +335,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
         };
 
-        tableChilds(table.mutator()::addNewColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
     }
 
     /**
@@ -337,7 +349,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         return sqlTypeMapping.get(typeName);
     }
 
-    protected void primaryKeyColumns(Connection connection, Table table) {
+    protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
@@ -354,10 +366,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
 
-        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator);
+        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
     }
 
-    protected void indexes(Connection connection, Table table) {
+    protected void indexes(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
@@ -397,10 +409,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             return nonNull(indexName);
         };
 
-        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter);
+        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter, progressListener);
     }
 
-    protected void foreignKeys(Connection connection, Table table) {
+    protected void foreignKeys(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParent().get();
@@ -424,22 +436,24 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
         };
 
-        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator);
-    }
-
-    protected <T> void tableChilds(
-        Supplier<T> childSupplier,
-        SqlSupplier<ResultSet> resultSetSupplier,
-        TableChildMutator<T, ResultSet> resultSetMutator
-    ) {
-        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true);
+        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
     }
 
     protected <T> void tableChilds(
         Supplier<T> childSupplier,
         SqlSupplier<ResultSet> resultSetSupplier,
         TableChildMutator<T, ResultSet> resultSetMutator,
-        SqlPredicate<ResultSet> filter
+        ProgressMeasure progressListener
+    ) {
+        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
+    }
+
+    protected <T> void tableChilds(
+        Supplier<T> childSupplier,
+        SqlSupplier<ResultSet> resultSetSupplier,
+        TableChildMutator<T, ResultSet> resultSetMutator,
+        SqlPredicate<ResultSet> filter,
+        ProgressMeasure progressListener
     ) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 

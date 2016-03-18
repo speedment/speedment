@@ -77,6 +77,9 @@ import javafx.scene.control.SplitPane;
 import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import static java.util.Objects.requireNonNull;
+import com.speedment.util.ProgressMeasure;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -501,7 +504,10 @@ public final class UISession {
             final Dbms newDbms = newProject.dbmses().findAny().get();
             
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
-            dh.readSchemaMetadata(schemaName::equalsIgnoreCase);
+            
+            ProgressMeasure pl = ProgressMeasure.create();
+            
+            dh.readSchemaMetadata(pl, schemaName::equalsIgnoreCase);
             
             project.merge(speedment, newProject);
             
