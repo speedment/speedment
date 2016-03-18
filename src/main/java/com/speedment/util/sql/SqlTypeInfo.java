@@ -16,15 +16,9 @@
  */
 package com.speedment.util.sql;
 
-import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.util.sql.SqlTypeInfoImpl;
-import java.lang.reflect.Field;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**

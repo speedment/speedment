@@ -62,6 +62,10 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -77,7 +81,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private static final String PASSWORD_PROTECTED = "********";
 
     private final Dbms dbms;
-    private transient Map<String, Class<?>> sqlTypeMapping;
+    protected transient Map<String, Class<?>> sqlTypeMapping;
 
     private static final Boolean SHOW_METADATA = false;
 
@@ -293,7 +297,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setNullable(nullable);
 
             final String classMappingString = rs.getString("TYPE_NAME");
-            final Class<?> mapping = sqlTypeMapping.get(classMappingString);
+            final int columnSize = rs.getInt("COLUMN_SIZE");
+            final int decimalDigits = rs.getInt("DECIMAL_DIGIT");
+            final Class<?> mapping = lookupJdbcClass(classMappingString, columnSize, decimalDigits);
             if (mapping != null) {
 
                 final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
@@ -318,6 +324,17 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         };
 
         tableChilds(table.mutator()::addNewColumn, supplier, mutator);
+    }
+
+    /**
+     * Looks up a column TYPE_NAME and returns a mapped Class (e.g. Timestamp or
+     * String)
+     *
+     * @param typeName
+     * @return the mapped Class
+     */
+    protected Class<?> lookupJdbcClass(String typeName, int columnSize, int decimalDigits) {
+        return sqlTypeMapping.get(typeName);
     }
 
     protected void primaryKeyColumns(Connection connection, Table table) {
