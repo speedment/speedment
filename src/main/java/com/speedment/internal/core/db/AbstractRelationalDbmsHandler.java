@@ -19,6 +19,7 @@ package com.speedment.internal.core.db;
 import com.speedment.db.SqlFunction;
 import com.speedment.db.SqlSupplier;
 import com.speedment.Speedment;
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
@@ -38,6 +39,9 @@ import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.config.db.trait.HasParent;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -63,6 +67,7 @@ import com.speedment.util.ProgressMeasure;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -140,13 +145,14 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Unable to read from " + dbms.toString());
         } finally {
+            progress.setCurrentAction("Done!");
             progress.setProgress(ProgressMeasure.DONE);
         }
     }
 
     protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progress) {
         requireNonNull(connection);
-        final String action = "Reading metadata from dbms " + dbms.getName();
+        final String action = actionName(dbms);
         LOGGER.info(action);
         progress.setCurrentAction(action);
 
@@ -225,7 +231,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void tables(Connection connection, Schema schema, ProgressMeasure progressListener) {
         requireNonNulls(connection, schema);
 
-        final String action = "Reading metadata from schema " + schema.getName();
+        final String action = actionName(schema);
         LOGGER.info(action);
         progressListener.setCurrentAction(action);
 
@@ -256,18 +262,21 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             throw new SpeedmentException(sqle);
         }
 
+        final AtomicInteger cnt = new AtomicInteger();
+        final double noTables = schema.tables().count();
         schema.tables().forEach(table -> {
             columns(connection, table, progressListener);
             indexes(connection, table, progressListener);
             foreignKeys(connection, table, progressListener);
             primaryKeyColumns(connection, table, progressListener);
+            progressListener.setProgress(cnt.incrementAndGet() / noTables);
         });
     }
 
     protected void columns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
-        progressListener.setCurrentAction("Reading column metadata from table " + table.getName());
+        progressListener.setCurrentAction(actionName(table));
 
         final Schema schema = table.getParent().get();
 
@@ -647,6 +656,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 SqlTypeInfo::getSqlTypeName,
                 sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
             );
+    }
+
+    private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
+        return "Reading metadata from " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
     }
 
 }
