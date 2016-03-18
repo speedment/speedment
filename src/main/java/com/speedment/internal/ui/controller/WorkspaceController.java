@@ -24,6 +24,7 @@ import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.ui.config.DocumentProperty;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -36,6 +37,7 @@ import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import javafx.beans.binding.Bindings;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -64,8 +66,14 @@ public final class WorkspaceController implements Initializable {
                     
                     if (treeItem != null) {
                         final DocumentProperty node = treeItem.getValue();
-                        node.getUiVisibleProperties(session.getSpeedment())
-                            .forEachOrdered(properties::add);
+                        
+                        final List<PropertySheet.Item> items = node.getUiVisibleProperties(session.getSpeedment()).collect(toList());
+                        
+                        for (final PropertySheet.Item item : items) {
+                            properties.add(item);
+                        }
+//                        node.getUiVisibleProperties(session.getSpeedment())
+//                            .forEachOrdered(properties::add);
                     }
                 }
                 

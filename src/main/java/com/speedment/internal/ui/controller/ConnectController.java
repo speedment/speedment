@@ -183,6 +183,7 @@ public final class ConnectController implements Initializable {
 
             if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
+                dbms.typeNameProperty().unbind();
                 SceneController.createAndShow(session);
             }
         });
