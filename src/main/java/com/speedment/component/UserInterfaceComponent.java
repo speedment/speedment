@@ -114,7 +114,15 @@ public interface UserInterfaceComponent extends Component {
             stage.setTitle(brand.title());
             brand.logoSmall()
                 .map(Image::new)
-                .ifPresent(stage.getIcons()::add);
+                .ifPresent(icon -> {
+                    stage.getIcons().add(icon);
+                    
+                    @SuppressWarnings("unchecked")
+                    final Stage dialogStage = (Stage) scene.getWindow();
+                    if (dialogStage != null) {
+                        dialogStage.getIcons().add(icon);
+                    }
+                });
 
             session.getSpeedment()
                 .getUserInterfaceComponent()

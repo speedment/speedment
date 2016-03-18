@@ -25,6 +25,8 @@ import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
+import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
@@ -76,7 +78,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
 import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import static java.util.Objects.requireNonNull;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Priority;
 
 /**
  *
@@ -395,19 +401,42 @@ public final class UISession {
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
 
-        @SuppressWarnings("unchecked")
-        final Stage dialogStage = (Stage) scene.getWindow();
-        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
-
-        if (ex != null) {
-            alert.setTitle(ex.getClass().getSimpleName());
-        } else {
-            alert.setTitle("Error");
-        }
+        Brand.apply(this, scene);
         
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+
+        if (ex == null) {
+            alert.setTitle("Error");
+        } else {
+            alert.setTitle(ex.getClass().getSimpleName());
+            
+            final StringWriter sw = new StringWriter();
+            final PrintWriter pw = new PrintWriter(sw);
+            
+            ex.printStackTrace(pw);
+            
+            final Label label = new Label("The exception stacktrace was:");
+            
+            final String exceptionText = sw.toString();
+            final TextArea textArea = new TextArea(exceptionText);
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setVgrow(textArea, Priority.ALWAYS);
+            GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+            final GridPane expContent = new GridPane();
+            expContent.setMaxWidth(Double.MAX_VALUE);
+            expContent.add(label, 0, 0);
+            expContent.add(textArea, 0, 1);
+
+            alert.getDialogPane().setExpandableContent(expContent);
+        }
+        
         alert.showAndWait();
     }
     
@@ -416,14 +445,13 @@ public final class UISession {
         
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
+        
+        Brand.apply(this, scene);
+        
         speedment
             .getUserInterfaceComponent()
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
-        
-        @SuppressWarnings("unchecked")
-        final Stage dialogStage = (Stage) scene.getWindow();
-        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
 
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
@@ -442,14 +470,13 @@ public final class UISession {
         pane.getStyleClass().add("authentication");
         
         final Scene scene = pane.getScene();
+        
+        Brand.apply(this, scene);
+        
         speedment
             .getUserInterfaceComponent()
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
-        
-        @SuppressWarnings("unchecked")
-        final Stage dialogStage = (Stage) scene.getWindow();
-        dialogStage.getIcons().add(SpeedmentIcon.SPIRE.load());
 
         final ButtonType authButtonType = new ButtonType("OK", ButtonData.OK_DONE);
         pane.getButtonTypes().addAll(ButtonType.CANCEL, authButtonType);
@@ -508,7 +535,7 @@ public final class UISession {
             return true;
         } catch (final Exception ex) {
             showError("Error Connecting to Database", 
-                ex.getMessage(), ex
+                "A problem occured with establishing the database connection.", ex
             );
         }
         
