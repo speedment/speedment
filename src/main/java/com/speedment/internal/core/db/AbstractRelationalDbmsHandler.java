@@ -311,25 +311,29 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             column.mutator().setNullable(nullable);
 
-            final String classMappingString = rs.getString("TYPE_NAME");
+            final String typeName = rs.getString("TYPE_NAME");
             final int columnSize = rs.getInt("COLUMN_SIZE");
             final int decimalDigits = rs.getInt("DECIMAL_DIGITS");
-            final Class<?> mapping = lookupJdbcClass(classMappingString, columnSize, decimalDigits);
-            if (mapping != null) {
+            final Class<?> lookupJdbcClass = lookupJdbcClass(typeName, columnSize, decimalDigits);
 
-                final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
-                    .filter(tm -> Objects.equals(mapping, tm.getDatabaseType()))
-                    .filter(tm -> Objects.equals(mapping, tm.getJavaType()))
-                    .findFirst().orElseThrow(() -> new SpeedmentException(
-                        "Found no identity type mapper for mapping '" + mapping.getName() + "'."
-                    ));
-
-                column.mutator().setTypeMapper(typeMapper);
-                column.mutator().setDatabaseType(mapping);
-
+            final Class<?> selectedJdbcClass;
+            if (lookupJdbcClass != null) {
+                selectedJdbcClass = lookupJdbcClass;
             } else {
-                LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName());
+                // Fall-back to Object
+                selectedJdbcClass = Object.class;
+                LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName() + ". Fall-back to JDBC-type " + selectedJdbcClass.getSimpleName());
             }
+
+            final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
+                .filter(tm -> Objects.equals(selectedJdbcClass, tm.getDatabaseType()))
+                .filter(tm -> Objects.equals(selectedJdbcClass, tm.getJavaType()))
+                .findFirst().orElseThrow(() -> new SpeedmentException(
+                    "Found no identity type mapper for mapping '" + selectedJdbcClass.getName() + "'."
+                ));
+
+            column.mutator().setTypeMapper(typeMapper);
+            column.mutator().setDatabaseType(selectedJdbcClass);
 
             try {
                 column.mutator().setAutoIncrement(rs.getBoolean("IS_AUTOINCREMENT"));
