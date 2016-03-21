@@ -24,29 +24,71 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
+ * Trait for {@link Document} implementations that implement the 
+ * {@link #getAlias()} method. If a {@code Document} implements this trait, it
+ * is also expected to implement the {@link HasName} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
  */
 @Api(version = "2.3")
 public interface HasAlias extends Document, HasName {
     
+    /**
+     * The key of the {@code alias} property.
+     */
     final String ALIAS = "alias";
     
+    /**
+     * Returns the alias of the specified document. The alias is an optional
+     * string value located under the {@link #ALIAS} key.
+     * 
+     * @return  the alias or an empty {@code Optional} if none was specified
+     */
     default Optional<String> getAlias() {
         return getAsString(ALIAS);
     }
     
+    /**
+     * Returns the java name of this {@link Document}. If an alias is specified 
+     * by {@link #getAlias()}, it will be returned, but if no alias exist the 
+     * database name returned by {@link #getName()} will be used.
+     * 
+     * @return  the java name
+     */
     default String getJavaName() {
         return getAlias().orElse(getName());
     }
     
+    /**
+     * Returns a wrapper of the specified document that implements the 
+     * {@link HasAlias} trait. If the specified document already implements the
+     * trait, it is returned unwrapped.
+     * 
+     * @param document  the document to wrap
+     * @return          the wrapper
+     */
     static HasAlias of(Document document) {
         return viewOf(document, HasAlias.class, HasAliasView::new);
     }
 }
 
+/**
+ * A wrapper class that makes sure that a given {@link Document} implements the
+ * {@link HasAlias} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
 class HasAliasView extends AbstractTraitView implements HasAlias {
 
+    /**
+     * Constructs a new alias view of with the specified parent and data.
+     * 
+     * @param parent         the parent of the wrapped document
+     * @param data           the data of the wrapped document
+     * @param mainInterface  the main interface of the wrapped document
+     */
     HasAliasView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
         super(parent, data, mainInterface);
     }

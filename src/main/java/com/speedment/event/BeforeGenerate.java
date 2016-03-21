@@ -20,7 +20,7 @@ import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
 import com.speedment.event.trait.GeneratorEvent;
-import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.Generator;
 import com.speedment.code.TranslatorManager;
 import static java.util.Objects.requireNonNull;
 

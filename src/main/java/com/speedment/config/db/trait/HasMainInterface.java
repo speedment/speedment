@@ -16,20 +16,25 @@
  */
 package com.speedment.config.db.trait;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 
 /**
- *
- * @author Per Minborg
+ * A trait for {@link Document documents} that implement the 
+ * {@link #mainInterface()} method.
+ * 
+ * @author  Per Minborg
+ * @since   2.3
  */
+@Api(version = "2.3")
 public interface HasMainInterface extends Document {
 
-        /**
+    /**
      * Returns the {@code Class} of the interface of this node.
      * <p>
      * This should <b>not</b> be overridden by implementing classes!
      *
-     * @return the main interface class
+     * @return  the main interface class
      */
     Class<? extends Document> mainInterface();
     

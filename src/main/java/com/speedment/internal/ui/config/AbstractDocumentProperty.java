@@ -64,6 +64,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableList;
+import static javafx.collections.FXCollections.observableList;
 
 /**
  *

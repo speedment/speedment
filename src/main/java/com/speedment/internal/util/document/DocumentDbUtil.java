@@ -36,6 +36,7 @@ import com.speedment.util.StreamComposition;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

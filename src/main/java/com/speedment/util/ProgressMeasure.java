@@ -2,6 +2,7 @@ package com.speedment.util;
 
 import com.speedment.internal.util.ProgressMeasurerImpl;
 import java.util.function.Consumer;
+import sun.net.ProgressListener;
 
 /**
  *
@@ -20,7 +21,7 @@ public interface ProgressMeasure {
      * percentage of progress where 0 is 0% and 1 is 100%. Any value greater
      * than 1 is interpreted as 100%.
      *
-     * @param value
+     * @param value  the new progress value
      */
     void setProgress(double value);
 
@@ -30,7 +31,7 @@ public interface ProgressMeasure {
      * percentage of progress where 0 is 0% and 1 is 100%. Any value greater
      * than 1 is interpreted as 100%.
      *
-     * @return the progress ratio
+     * @return  the progress ratio
      */
     double getProgress();
     
@@ -46,22 +47,23 @@ public interface ProgressMeasure {
     /**
      * Sets the current action.
      *
-     * @param action what is going on
+     * @param action  what is going on
      */
     void setCurrentAction(String action);
 
     /**
      * Gets the current action.
      *
-     * @return what is going on
+     * @return  what is going on
      */
     String getCurrentAction();
 
     /**
      * Adds a listener that will be called each time a value changes.
      *
-     * @param listener to add
-     * @return an instance of a ProgressListener that has the provided listener
+     * @param listener  to add
+     * @return          an instance of a {@link ProgressListener} that has the 
+     *                  provided listener
      */
     ProgressMeasure addListener(Consumer<ProgressMeasure> listener);
 

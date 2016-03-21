@@ -16,17 +16,18 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
-import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.config.db.Dbms;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+import com.speedment.component.resultset.ResultSetMapping;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  * @param <T> the Java Class to map
  */
-public final class JavaTypeMappingImpl<T> implements JavaTypeMapping<T> {
+public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
 
     private final Class<T> clazz;
     private final String resultSetMethodName;

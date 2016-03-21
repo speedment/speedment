@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.code.entity;
 
-import com.speedment.codegen.lang.models.Field;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Generic;
-import com.speedment.codegen.lang.models.Import;
-import com.speedment.codegen.lang.models.Javadoc;
-import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Import;
+import com.speedment.codegen.model.Javadoc;
+import com.speedment.codegen.model.Method;
+import com.speedment.codegen.model.Type;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
@@ -49,10 +49,10 @@ import com.speedment.util.Pluralis;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.SEE;
+import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.DOT;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;

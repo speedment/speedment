@@ -26,12 +26,23 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
+ * Trait for {@link Document} implementations that reference another 
+ * {@link Column} document and therefore has a {@link #findColumn()} method. If 
+ * a {@code Document} implements this trait, it is also expected to implement 
+ * the {@link HasName} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
  */
 @Api(version = "2.3")
 public interface HasColumn extends Document, HasName {
 
+    /**
+     * Locates and returns the column referenced by the {@link #getName()} 
+     * method.
+     * 
+     * @return  the referenced column
+     */
     default Optional<? extends Column> findColumn() {
         return ancestors()
             .filter(Table.class::isInstance)
@@ -44,13 +55,35 @@ public interface HasColumn extends Document, HasName {
             );
     }
     
+    /**
+     * Returns a wrapper of the specified document that implements the 
+     * {@link HasColumn} trait. If the specified document already implements the
+     * trait, it is returned unwrapped.
+     * 
+     * @param document  the document to wrap
+     * @return          the wrapper
+     */
     static HasColumn of(Document document) {
         return viewOf(document, HasColumn.class, HasColumnView::new);
     }
 }
 
+/**
+ * A wrapper class that makes sure that a given {@link Document} implements the
+ * {@link HasColumn} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
 class HasColumnView extends AbstractTraitView implements HasColumn {
 
+    /**
+     * Constructs a new alias view of with the specified parent and data.
+     * 
+     * @param parent         the parent of the wrapped document
+     * @param data           the data of the wrapped document
+     * @param mainInterface  the main interface of the wrapped document
+     */
     HasColumnView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
         super(parent, data, mainInterface);
     }

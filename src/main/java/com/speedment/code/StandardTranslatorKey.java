@@ -20,9 +20,9 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.TranslatorKeyImpl;
-import com.speedment.codegen.lang.models.Class;
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Interface;
+import com.speedment.codegen.model.Class;
+import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.codegen.model.Interface;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.stream.Stream;
 

@@ -16,8 +16,8 @@
  */
 package com.speedment.code;
 
-import com.speedment.codegen.base.Meta;
-import com.speedment.codegen.lang.models.File;
+import com.speedment.codegen.Meta;
+import com.speedment.codegen.model.File;
 import com.speedment.config.db.Project;
 
 /**

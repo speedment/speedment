@@ -17,27 +17,25 @@
 package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
-import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.trait.FieldTrait;
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.Class;
-import com.speedment.codegen.lang.models.Constructor;
-import com.speedment.codegen.lang.models.Field;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Generic;
-import com.speedment.codegen.lang.models.Import;
-import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.OBJECT;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.Class;
+import com.speedment.codegen.model.Constructor;
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Import;
+import com.speedment.codegen.model.Method;
+import com.speedment.codegen.model.Type;
+import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.internal.codegen.model.constant.DefaultType.OBJECT;
+import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
+import com.speedment.internal.codegen.model.value.ReferenceValue;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
-import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.config.db.Dbms;
 import com.speedment.field.FieldIdentifier;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
@@ -52,6 +50,36 @@ import com.speedment.code.TranslatorSupport;
 import java.util.function.Supplier;
 import java.util.LinkedList;
 import java.util.List;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import com.speedment.component.resultset.ResultSetMapperComponent;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import com.speedment.component.resultset.ResultSetMapping;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
@@ -158,9 +186,9 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
         final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment, c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
-        final JavaTypeMapperComponent mapperComponent = speedment.getJavaTypeMapperComponent();
+        final ResultSetMapperComponent mapperComponent = speedment.getResultSetMapperComponent();
 
-        final JavaTypeMapping<?> mapping = mapperComponent
+        final ResultSetMapping<?> mapping = mapperComponent
             .apply(
                 dbmsTypeOf(speedment, c.getParentOrThrow().getParentOrThrow().getParentOrThrow()),
                 c.findTypeMapper().getDatabaseType()

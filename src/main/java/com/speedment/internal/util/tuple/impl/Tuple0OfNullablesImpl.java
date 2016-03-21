@@ -21,7 +21,6 @@ import com.speedment.util.tuple.Tuple0OfNullables;
 /**
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
  */
 public final class Tuple0OfNullablesImpl extends AbstractTupleOfNullables implements Tuple0OfNullables {
 
@@ -31,5 +30,4 @@ public final class Tuple0OfNullablesImpl extends AbstractTupleOfNullables implem
     private Tuple0OfNullablesImpl() {
         super(Tuple0OfNullablesImpl.class);
     }
-
 }

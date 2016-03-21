@@ -24,7 +24,7 @@ import static java.util.Objects.requireNonNull;
  * also introduces the following overridable events for each 
  * {@code Lifecyclable} transition:
  * <ul>
- *      <li>{@link #onInit()}</li>
+ *      <li>{@link #onInitialize()}</li>
  *      <li>{@link #onLoad()}</li>
  *      <li>{@link #onResolve()}</li>
  *      <li>{@link #onStart()}</li>
@@ -74,7 +74,7 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
 
     /**
      * Sets the non-null pre-initialize {@link Runnable} that is to be run
-     * before the {@link #onInit()} method is called.
+     * before the {@link #onInitialize()} method is called.
      *
      * @param preInit Runnable to set
      */

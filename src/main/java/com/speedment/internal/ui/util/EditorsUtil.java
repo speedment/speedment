@@ -88,8 +88,11 @@ public final class EditorsUtil {
      * {@code Function<T, String>} as converter.
      * componenet.
      * 
-     * @param item  the property sheet item to represent
-     * @return      the created property editor
+     * @param <T>           the property type
+     * @param item          the property sheet item to represent
+     * @param alternatives  the available alternatives
+     * @param converter     converter to use for the alternative labels
+     * @return              the created property editor
      */
     public static <T> PropertyEditor<T> createChoiceEditorWithConverter(PropertySheet.Item item, List<T> alternatives, Function<T, String> converter) {
         final ObservableList<String> labels = observableArrayList(alternatives.stream().map(converter).collect(toList()));

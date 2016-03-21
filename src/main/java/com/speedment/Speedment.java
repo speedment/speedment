@@ -25,7 +25,6 @@ import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
 import com.speedment.component.EventComponent;
-import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
@@ -36,6 +35,7 @@ import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.exception.SpeedmentException;
 import java.util.stream.Stream;
+import com.speedment.component.resultset.ResultSetMapperComponent;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -64,7 +64,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
      * <li>{@link com.speedment.component.ProjectComponent ProjectComponent}</li>
      * <li>{@link com.speedment.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
-     * <li>{@link com.speedment.component.javatypemapper.JavaTypeMapperComponent JavaTypeMapperComponent}</li>
+     * <li>{@link com.speedment.component.resultset.ResultSetMapperComponent ResultSetMapperComponent}</li>
      * <li>{@link com.speedment.component.connectionpool.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
@@ -153,12 +153,8 @@ public interface Speedment {
         return get(SqlTypeMapperComponent.class);
     }
 
-//    default LoggerFactoryComponent getLoggerFactoryComponent() {
-//        return get(LoggerFactoryComponent.class);
-//    }
-
-    default JavaTypeMapperComponent getJavaTypeMapperComponent() {
-        return get(JavaTypeMapperComponent.class);
+    default ResultSetMapperComponent getResultSetMapperComponent() {
+        return get(ResultSetMapperComponent.class);
     }
 
     default ConnectionPoolComponent getConnectionPoolComponent() {

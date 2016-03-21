@@ -16,11 +16,12 @@
  */
 package com.speedment.code;
 
-import com.speedment.codegen.lang.models.File;
+import com.speedment.annotation.Api;
+import com.speedment.codegen.model.File;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.codegen.lang.models.ClassOrInterface;
+import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.util.JavaLanguageNamer;
 import java.util.function.Supplier;
 
@@ -32,7 +33,9 @@ import java.util.function.Supplier;
  * @author       pemi
  * @param <DOC>  the document type
  * @param <T>    the codegen model type
+ * @since        2.0
  */
+@Api(version = "2.3")
 public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> extends Translator<DOC, T> {
 
     TranslatorSupport<DOC> getSupport();

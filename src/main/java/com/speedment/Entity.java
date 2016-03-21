@@ -26,8 +26,11 @@ import java.util.function.Consumer;
  * This interface contains the common methods that are the same for all
  * entities. Do not assume that an entity must implement this interface.
  *
- * @author pemi, Emil Forslund
- * @param <ENTITY> type
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * @since   2.1
  */
 @Api(version = "2.2")
 public interface Entity<ENTITY> {

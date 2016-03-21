@@ -16,13 +16,16 @@
  */
 package com.speedment.component.connectionpool;
 
+import com.speedment.annotation.Api;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
  *
  * @author pemi
+ * @since  2.2
  */
+@Api(version = "2.3")
 public interface PoolableConnection extends Connection {
 
     long getId();

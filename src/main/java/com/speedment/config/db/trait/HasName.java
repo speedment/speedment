@@ -26,12 +26,19 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
+ * Trait for {@link Document} implementations that implement the 
+ * {@link #getName()} method. If a {@code Document} implements this trait, it
+ * is also expected to implement the {@link HasMainInterface} trait.
+ * 
+ * @author   Emil Forslund
+ * @version  2.3
  */
 @Api(version = "2.3")
 public interface HasName extends Document, HasMainInterface {
 
+    /**
+     * The key of the {@code name} property.
+     */
     final String NAME = "name";
 
     /**
@@ -70,13 +77,35 @@ public interface HasName extends Document, HasMainInterface {
         }
     }
 
+    /**
+     * Returns a wrapper of the specified document that implements the 
+     * {@link HasName} trait. If the specified document already implements the
+     * trait, it is returned unwrapped.
+     * 
+     * @param document  the document to wrap
+     * @return          the wrapper
+     */
     static HasName of(Document document) {
         return viewOf(document, HasName.class, HasNameView::new);
     }
 }
 
+/**
+ * A wrapper class that makes sure that a given {@link Document} implements the
+ * {@link HasName} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
 class HasNameView extends AbstractTraitView implements HasName {
 
+    /**
+     * Constructs a new name view of with the specified parent and data.
+     * 
+     * @param parent         the parent of the wrapped document
+     * @param data           the data of the wrapped document
+     * @param mainInterface  the main interface of the wrapped document
+     */
     HasNameView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
         super(parent, data, mainInterface);
     }

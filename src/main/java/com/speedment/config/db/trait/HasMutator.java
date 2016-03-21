@@ -17,12 +17,17 @@
 package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.Document;
 import com.speedment.config.db.mutator.DocumentMutator;
 
 /**
- *
- * @author Emil Forslund
- * @param <T> Mutator type
+ * Trait for {@link Document} implementations that implement the 
+ * {@link #mutator()} method. Mutable {@code Documents} can be modified using a
+ * specified typed mutator class, specified in the {@code T} type parameter.
+ * 
+ * @param <T>  Mutator type
+ * @author  Emil Forslund
+ * @since   2.3
  */
 @Api(version = "2.3")
 public interface HasMutator<T extends DocumentMutator> {
@@ -33,8 +38,8 @@ public interface HasMutator<T extends DocumentMutator> {
      *
      * @return a DocumentMutator for this Document
      * @throws UnsupportedOperationException if this Document does not support
-     * mutation. For example, an immutable Document might elect to throw an
-     * exception upon a call to this method.
+     * mutation. For example, an immutable {@link Document} might elect to throw 
+     * an exception upon a call to this method.
      */
     T mutator();
 

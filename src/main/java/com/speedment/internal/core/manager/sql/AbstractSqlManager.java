@@ -53,6 +53,27 @@ import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -229,7 +250,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
      * names, formatted in accordance to the current {@link DbmsType}.
      *
-     * @return list of fully quoted primary key column names
+     * @param postMapper  mapper to be applied to each column name
+     * @return            list of fully quoted primary key column names
      */
     protected String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
@@ -300,7 +322,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                             
                             // Cast from Long to the column target type
                             final Object val = speedment
-                                .getJavaTypeMapperComponent()
+                                .getResultSetMapperComponent()
                                 .apply(f.typeMapper().getJavaType())
                                 .parse(l.get(cnt.getAndIncrement()));
 

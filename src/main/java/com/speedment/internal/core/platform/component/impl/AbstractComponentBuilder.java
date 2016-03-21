@@ -22,11 +22,13 @@ import com.speedment.component.ComponentConstructor;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Emil Forslund
- * @param <C>
+ * Abstract builder for a {@link Component} implementation.
+ * 
+ * @author     Emil Forslund
+ * @param <C>  the component type
  */
-public abstract class AbstractComponentBuilder<C extends Component> implements ComponentConstructor<C> {
+public abstract class AbstractComponentBuilder<C extends Component> 
+    implements ComponentConstructor<C> {
     
     private final ComponentConstructor<C> constructor;
     

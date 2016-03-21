@@ -18,21 +18,44 @@ package com.speedment.config.db.trait;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
-import com.speedment.exception.SpeedmentException;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
- * @param <PARENT> the type of the parent
+ * Trait for {@link Document} implementations that is not the root. More 
+ * concretely this means that they implement the {@link #getParent()} method.
+ * 
+ * @param <PARENT>  the type of the parent document
+ * @author   Emil Forslund
+ * @version  2.3
  */
 @Api(version = "2.3")
 public interface HasParent<PARENT extends Document> extends Document {
 
+    /**
+     * Returns the parent of this document. That is the document that is located
+     * exactly one step above this document in the tree. If this is a root node,
+     * an empty {@code Optional} is returned.
+     * 
+     * @return  the parent or {@code empty} if this is the root
+     * @see #getParentOrThrow()
+     */
     @Override
     Optional<PARENT> getParent();
 
-    default PARENT getParentOrThrow() {
-        return getParent().orElseThrow(() -> new SpeedmentException("Unable to get parent for " + toString()));
+    /**
+     * Returns the parent of this document or throws an exception if this was
+     * the root. This method can be used if you know beforehand that this
+     * document is never the root.
+     * 
+     * @return                        the parent document
+     * @throws IllegalStateException  if this was the root
+     * @see #getParent()
+     */
+    default PARENT getParentOrThrow() throws IllegalStateException {
+        return getParent().orElseThrow(
+            () -> new IllegalStateException(
+                "Unable to get parent for " + toString()
+            )
+        );
     }
 }

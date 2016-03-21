@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.codegen.java;
 
-import com.speedment.internal.codegen.base.DefaultDependencyManager;
-import com.speedment.internal.codegen.base.DefaultGenerator;
-import com.speedment.codegen.base.TransformFactory;
+import com.speedment.internal.codegen.DefaultDependencyManager;
+import com.speedment.internal.codegen.DefaultGenerator;
+import com.speedment.codegen.TransformFactory;
 
 import java.util.Set;
 import java.util.regex.Pattern;

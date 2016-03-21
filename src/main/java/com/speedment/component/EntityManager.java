@@ -26,6 +26,8 @@ import com.speedment.annotation.Api;
 import com.speedment.exception.SpeedmentException;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An Entity Manager is be used to handle persistence for any Entity. This

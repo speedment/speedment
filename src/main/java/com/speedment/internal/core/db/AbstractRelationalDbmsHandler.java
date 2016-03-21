@@ -69,6 +69,10 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -346,11 +350,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     /**
-     * Looks up a column TYPE_NAME and returns a mapped Class (e.g. Timestamp or
-     * String)
+     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g. 
+     * {@code Timestamp} or {@code String}).
      *
-     * @param typeName
-     * @return the mapped Class
+     * @param typeName       the TYPE_NAME value
+     * @param columnSize     the COLUMN_SIZE value
+     * @param decimalDigits  the DECIMAL_DIGITS value
+     * @return               the mapped Class
      */
     protected Class<?> lookupJdbcClass(String typeName, int columnSize, int decimalDigits) {
         return sqlTypeMapping.get(typeName);

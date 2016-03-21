@@ -57,6 +57,7 @@ import javafx.collections.ObservableList;
 import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

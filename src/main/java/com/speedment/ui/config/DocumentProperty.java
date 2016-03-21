@@ -22,8 +22,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.ui.config.trait.HasUiVisibleProperties;
 import com.speedment.util.FloatSupplier;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -49,22 +47,23 @@ import javafx.collections.ObservableMap;
  * The following methods exist:
  * <ul>
  *     <li>{@link #stringPropertyOf(String, Supplier)}
- *     <li>{@link #integerPropertyOf(String, Supplier)}
- *     <li>{@link #longPropertyOf(String, Supplier)}
- *     <li>{@link #doublePropertyOf(String, Supplier)}
- *     <li>{@link #floatPropertyOf(String, Supplier)}
+ *     <li>{@link #integerPropertyOf(String, IntSupplier)}
+ *     <li>{@link #longPropertyOf(String, LongSupplier)}
+ *     <li>{@link #doublePropertyOf(String, DoubleSupplier)}
+ *     <li>{@link #floatPropertyOf(String, FloatSupplier)}
  *     <li>{@link #objectPropertyOf(String, Class, Supplier)}
  * </ul>
  * <p>
  * To get an observable view of a specific child type, call 
- * {@link #observableListOf(String, Class, Supplier)}, or if you want all 
+ * {@link #observableListOf(String)}, or if you want all 
  * children as they have been exposed so far, call {@link #childrenProperty()}.
  * <p>
  * As with all JavaFX componenets, the state of this property might not be
  * updated immediatly. It is therefore important to use the appropriate property
  * getter methods to keep notified about changes to this document.
  * 
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3
  */
 public interface DocumentProperty extends Document, 
         HasUiVisibleProperties, 
@@ -170,12 +169,10 @@ public interface DocumentProperty extends Document,
     <T extends DocumentProperty> ObservableList<T> observableListOf(String key);
 
     /**
-     * Returns a list of all children instantiated using 
-     * {@link #createDocument(String, Map) createDocument} in alphabetical order 
-     * based on the key they belong to. The internal order will be the order 
-     * they have in the list.
+     * Returns a list of all children instantiated so far. Note that this might
+     * be somewhat different from the API in the {@link Document} interface.
      * 
-     * @return a stream of the children
+     * @return  a stream of the children
      */
     @Override
     Stream<? extends DocumentProperty> children();
@@ -185,7 +182,7 @@ public interface DocumentProperty extends Document,
      * made visible so far. The {@code ObservableList ObservableLists} contained 
      * in the map will automatically reflect the children belonging to this 
      * document, viewed using the constructor supplied to the 
-     * {@link #observableListOf(String, BiFunction)} method when the child key
+     * {@link #observableListOf(String)} method when the child key
      * was first viewed. If a child key has not been requested before when
      * this method is called, the map might not have all child types. These will 
      * be added as soon as they have been requested, notifying any change 
@@ -194,20 +191,6 @@ public interface DocumentProperty extends Document,
      * @return  all view of all children made visible so far
      */
     ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty();
-    
-    /**
-     * Creates a new child on the specified key with the specified data and 
-     * returns it. This method can be overriden by subclasses to create better
-     * implementations.
-     * <p>
-     * Warning! This method is only intended to be called internally and does
-     * not properly configure created children in the responsive model.
-     * 
-     * @param key   the key to create the child on
-     * @param data  the initial data
-     * @return      the created child
-     */
-//    DocumentProperty createChild(String key, Map<String, Object> data);
     
     /**
      * Mark this component and all components above it as invalidated so that

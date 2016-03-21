@@ -17,7 +17,6 @@
 package com.speedment.internal.util.testing;
 
 import com.speedment.manager.Manager;
-import com.speedment.field.ComparableField;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -31,7 +30,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <ENTITY> type
+ * @param <ENTITY> the entity type
  */
 public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
@@ -48,8 +47,8 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
     /**
      * Sets the native streamer of this {@code MockManager}.
      *
-     * The native streamer is invoked each time a Managers {@link Manager#nativeStream() ()
-     * } method is called.
+     * The native streamer is invoked each time a Managers 
+     * {@link Manager#nativeStream(StreamDecorator)} method is called.
      *
      * @param nativeStreamer the new native streamer supplier
      * @return this instance
@@ -103,18 +102,27 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
     /**
      * Sets the finder of this {@code MockManager}.
      *
-     * The finder is invoked each time a Managers {@link Manager#findAny(com.speedment.field.ComparableField, java.lang.Comparable) ()
-     * } method is called.
+     * The finder is invoked each time a Managers 
+     * {@code Manager#findAny(F, Comparable)} method is called.
      *
-     * @param finder the new finder supplier
-     * @return this instance
+     * @param <D>     the database type
+     * @param <V>     the value type
+     * @param <F>     the field type
+     * @param finder  the new finder supplier
+     * @return        this instance
      */
     public <D, V extends Comparable<? super V>, 
     F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
     MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder);
 
+    /**
+     * Wraps the specified manager in a new {@link MockManager}.
+     * 
+     * @param <ENTITY>  the entity type
+     * @param manager   the manager to wrap
+     * @return          the new {@code MockManager}
+     */
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);
     }
-
 }

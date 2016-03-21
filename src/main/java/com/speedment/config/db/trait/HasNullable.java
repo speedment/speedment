@@ -23,31 +23,58 @@ import static com.speedment.internal.util.document.TraitUtil.viewOf;
 import java.util.Map;
 
 /**
- *
- * @author Emil Forslund
+ * Trait for {@link Document} implementations that implement the 
+ * {@link #isNullable()} method.
+ * 
+ * @author   Emil Forslund
+ * @version  2.3
  */
 @Api(version = "2.3")
 public interface HasNullable extends Document {
     
+    /**
+     * The key of the {@code nullable} property.
+     */
     final String NULLABLE = "nullable";
     
     /**
-     * Returns whether or not this column can hold <code>null</code> values.
+     * Returns whether or not this column can hold {@code null} values.
      *
-     * @return  <code>true</code> if null values are tolerated, else
-     * <code>false</code>
+     * @return  {@code true} if null values are tolerated, else {@code false}
      */
     default boolean isNullable() {
         return getAsBoolean(NULLABLE).orElse(true);
     }
     
+    /**
+     * Returns a wrapper of the specified document that implements the 
+     * {@link HasNullable} trait. If the specified document already implements 
+     * the trait, it is returned unwrapped.
+     * 
+     * @param document  the document to wrap
+     * @return          the wrapper
+     */
     static HasNullable of(Document document) {
         return viewOf(document, HasNullable.class, HasNullableView::new);
     }
 }
 
+/**
+ * A wrapper class that makes sure that a given {@link Document} implements the
+ * {@link HasNullable} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
 class HasNullableView extends AbstractTraitView implements HasNullable {
 
+    /**
+     * Constructs a new nullable view of with the specified parent and data.
+     * 
+     * @param parent         the parent of the wrapped document
+     * @param data           the data of the wrapped document
+     * @param mainInterface  the main interface of the wrapped document
+     */
     HasNullableView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
         super(parent, data, mainInterface);
     }

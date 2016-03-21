@@ -17,11 +17,11 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.Speedment;
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.ClassOrInterface;
-import com.speedment.codegen.lang.models.Generic;
-import com.speedment.codegen.lang.models.Type;
-import com.speedment.internal.codegen.lang.models.constants.DefaultType;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Type;
+import com.speedment.internal.codegen.model.constant.DefaultType;
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
 import java.util.function.Function;

@@ -17,9 +17,9 @@
 package com.speedment.internal.core.code.entity;
 
 import com.speedment.Speedment;
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.Import;
-import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.Import;
+import com.speedment.codegen.model.Type;
 import com.speedment.internal.core.code.manager.EntityManagerTranslator;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;

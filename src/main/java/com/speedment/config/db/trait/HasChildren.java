@@ -16,15 +16,32 @@
  */
 package com.speedment.config.db.trait;
 
+import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import static com.speedment.config.db.trait.HasName.NAME;
 
 /**
- *
- * @author Per Minborg
+ * Trait for {@link Document} implementations that has named children and 
+ * therefore implements the {@code defaultNameFor(Document)} method.
+ * 
+ * @author  Per Minborg
+ * @since   2.3
  */
+@Api(version = "2.3")
 public interface HasChildren extends Document {
 
+    /**
+     * Generates a new default name for the specified child by appending an 
+     * unique number to the {@link HasMainInterface#mainInterface()} of that
+     * document.
+     * <p>
+     * This method will only suggest a new name for the specified child, not set
+     * it.
+     * 
+     * @param <C>            the child type
+     * @param childDocument  the child to name
+     * @return               the suggested name for that child
+     */
     default <C extends Document & HasName & HasMainInterface> String defaultNameFor(C childDocument) {
         int counter = 1;
         String nameCandidate;

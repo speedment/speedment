@@ -18,23 +18,24 @@ package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
 import com.speedment.internal.util.document.DocumentTranscoder;
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.Class;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Javadoc;
-import com.speedment.codegen.lang.models.Method;
-import com.speedment.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
-import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.Class;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Javadoc;
+import com.speedment.codegen.model.Method;
+import com.speedment.codegen.model.Type;
+import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
+import com.speedment.internal.codegen.model.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.config.db.Project;
-import com.speedment.codegen.lang.models.Field;
-import com.speedment.codegen.lang.models.Initalizer;
-import com.speedment.internal.codegen.lang.models.values.ReferenceValue;
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.Initalizer;
+import com.speedment.internal.codegen.model.value.ReferenceValue;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

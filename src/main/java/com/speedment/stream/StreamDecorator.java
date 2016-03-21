@@ -52,9 +52,10 @@ public interface StreamDecorator {
      * Method to be used to modify or configure the final stream before it is
      * returned to the application.
      *
-     * @param <ENTITY> entity type
-     * @param stream final stream before it is returned to the application
-     * @return the modified or configured final stream
+     * @param <ENTITY>  the entity type
+     * @param <S>       the stream type
+     * @param stream    final stream before it is returned to the application
+     * @return          the modified or configured final stream
      */
     default <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
         return stream;
@@ -72,9 +73,10 @@ public interface StreamDecorator {
      * Method to be used to modify or configure the initial stream from the data
      * source.
      *
-     * @param <ENTITY> entity type
-     * @param stream from the data source
-     * @return the modified or configured stream
+     * @param <ENTITY>  the entity type
+     * @param <S>       the stream type
+     * @param stream    from the data source
+     * @return          the modified or configured stream
      */
     default <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
         return stream;
@@ -85,10 +87,10 @@ public interface StreamDecorator {
      * {@link ParallelStrategy} defines how parallel streams are divided amongst
      * the available execution threads.
      *
-     * @param <H> type of strategy receiver
-     * @param hasParallelStrategy to apply the strategy on
-     * @return the object {@link HasParallelStrategy} to use for this
-     * {@link Stream}
+     * @param <H>                  type of strategy receiver
+     * @param hasParallelStrategy  to apply the strategy on
+     * @return                     the object {@link HasParallelStrategy} to use 
+     *                             for this {@link Stream}
      */
     default <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
         return hasParallelStrategy;
@@ -102,6 +104,7 @@ public interface StreamDecorator {
      * @see ParallelStrategy#COMPUTE_INTENSITY_MEDIUM COMPUTE_INTENSITY_MEDIUM
      */
     final static StreamDecorator COMPUTE_INTENSITY_MEDIUM = of(ParallelStrategy.COMPUTE_INTENSITY_MEDIUM);
+    
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH}
@@ -109,8 +112,8 @@ public interface StreamDecorator {
      *
      * @see ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH
      */
-
     final static StreamDecorator COMPUTE_INTENSITY_HIGH = of(ParallelStrategy.COMPUTE_INTENSITY_HIGH);
+    
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME}
@@ -118,7 +121,6 @@ public interface StreamDecorator {
      *
      * @see ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME
      */
-
     final static StreamDecorator COMPUTE_INTENSITY_EXTREAM = of(ParallelStrategy.COMPUTE_INTENSITY_EXTREME);
 
     static StreamDecorator of(final ParallelStrategy parallelStrategy) {
@@ -131,5 +133,4 @@ public interface StreamDecorator {
 
         };
     }
-
 }

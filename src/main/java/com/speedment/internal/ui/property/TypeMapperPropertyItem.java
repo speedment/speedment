@@ -27,6 +27,8 @@ import org.controlsfx.property.editor.PropertyEditor;
 import javafx.beans.property.StringProperty;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

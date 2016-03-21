@@ -28,26 +28,35 @@ import com.speedment.annotation.Api;
  * <p>
  * For an example, take the series {@code [1 2 3 4 5]}. If we select the range 
  * {@code (2, 4)} from this series, we will get the following results:
- * <table>
- *      <tr>
- *          <td>{@link #START_INCLUSIVE_END_INCLUSIVE}</td>
- *          <td>{@code [2, 3, 4]}</td>
- *      </tr>
- *      <tr>
- *          <td>{@link #START_INCLUSIVE_END_EXCLUSIVE}</td>
- *          <td>{@code [2, 3]}</td>
- *      </tr>
- *      <tr>
- *          <td>{@link #START_EXCLUSIVE_END_INCLUSIVE}</td>
- *          <td>{@code [3, 4]}</td>
- *      </tr>
- *      <tr>
- *          <td>{@link #START_EXCLUSIVE_END_EXCLUSIVE}</td>
- *          <td>{@code [3]}</td>
- *      </tr>
+ * <table summary="Example of inclusion and exclusion">
+ *      <thead>
+ *          <tr>
+ *              <th>Enum Constant</th>
+ *              <th>Included Elements</th>
+ *          </tr>
+ *      </thead>
+ *      <tbody>
+ *          <tr>
+ *              <td>{@link #START_INCLUSIVE_END_INCLUSIVE}</td>
+ *              <td>{@code [2, 3, 4]}</td>
+ *          </tr>
+ *          <tr>
+ *              <td>{@link #START_INCLUSIVE_END_EXCLUSIVE}</td>
+ *              <td>{@code [2, 3]}</td>
+ *          </tr>
+ *          <tr>
+ *              <td>{@link #START_EXCLUSIVE_END_INCLUSIVE}</td>
+ *              <td>{@code [3, 4]}</td>
+ *          </tr>
+ *          <tr>
+ *              <td>{@link #START_EXCLUSIVE_END_EXCLUSIVE}</td>
+ *              <td>{@code [3]}</td>
+ *          </tr>
+ *      </tbody>
  * </table>
  * 
  * @author  Per Minborg
+ * @author  Emil Forslund
  * @since   2.2
  */
 @Api(version = "2.2")
@@ -65,10 +74,22 @@ public enum Inclusion {
         this.endInclusive = endInclusive;
     }
 
+    /**
+     * Returns {@code true} if the first element in the range should be 
+     * included, else {@code false}.
+     * 
+     * @return  {@code true} if start is included, else {@code false}
+     */
     public boolean isStartInclusive() {
         return startInclusive;
     }
 
+    /**
+     * Returns {@code true} if the last element in the range should be 
+     * included, else {@code false}.
+     * 
+     * @return  {@code true} if end is included, else {@code false}
+     */
     public boolean isEndInclusive() {
         return endInclusive;
     }

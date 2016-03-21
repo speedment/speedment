@@ -18,10 +18,10 @@ package com.speedment.internal.core.code.model.java.entity;
 
 import com.speedment.config.Document;
 import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.lang.controller.AutoImports;
-import com.speedment.codegen.lang.models.File;
+import com.speedment.internal.codegen.controller.AutoImports;
+import com.speedment.codegen.model.File;
 import com.speedment.internal.core.code.model.java.SimpleModel;
 import com.speedment.config.db.Table;
 import java.util.Optional;

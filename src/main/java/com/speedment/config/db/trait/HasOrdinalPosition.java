@@ -25,16 +25,26 @@ import java.util.Comparator;
 import java.util.Map;
 
 /**
- *
- * @author Emil Forslund
+ * Trait for {@link Document} implementations that implement the 
+ * {@link #getOrdinalPosition()} method.
+ * 
+ * @author   Emil Forslund
+ * @version  2.3
  */
 @Api(version = "2.3")
 public interface HasOrdinalPosition extends Document {
-    
-    final int ORDINAL_FIRST = 1, UNSET = -1;
-    
+
+    /**
+     * The key of the {@code ordinalPosition} property.
+     */
     final String ORDINAL_POSITION = "ordinalPosition";
     
+    /**
+     * The default {@link Comparator} used for documents that implement the 
+     * {@link HasOrdinalPosition} trait. This will simply order the elements
+     * based on the natural ordering of their {@link #getOrdinalPosition()}
+     * result.
+     */
     final Comparator<HasOrdinalPosition> COMPARATOR = 
         comparing(HasOrdinalPosition::getOrdinalPosition);
     
@@ -47,13 +57,36 @@ public interface HasOrdinalPosition extends Document {
         return getAsInt(ORDINAL_POSITION).orElse(0);
     }
     
+    /**
+     * Returns a wrapper of the specified document that implements the 
+     * {@link HasOrdinalPosition} trait. If the specified document already 
+     * implements the trait, it is returned unwrapped.
+     * 
+     * @param document  the document to wrap
+     * @return          the wrapper
+     */
     static HasOrdinalPosition of(Document document) {
         return viewOf(document, HasOrdinalPosition.class, HasOrdinalPositionView::new);
     }
 }
 
+/**
+ * A wrapper class that makes sure that a given {@link Document} implements the
+ * {@link HasOrdinalPosition} trait.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
 class HasOrdinalPositionView extends AbstractTraitView implements HasOrdinalPosition {
 
+    /**
+     * Constructs a new ordinal position view of with the specified parent and 
+     * data.
+     * 
+     * @param parent         the parent of the wrapped document
+     * @param data           the data of the wrapped document
+     * @param mainInterface  the main interface of the wrapped document
+     */
     HasOrdinalPositionView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
         super(parent, data, mainInterface);
     }

@@ -17,6 +17,7 @@
 package com.speedment.stream;
 
 import com.speedment.stream.action.Action;
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
@@ -37,7 +38,7 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
      * @return the first element from this pipeline
      * @throws NoSuchElementException if this pipeline is empty
      */
-    Action<?, ?> removeFirst();
+    Action<?, ?> removeFirst() throws NoSuchElementException;
 
     /**
      * Removes and returns the last element from this pipeline.
@@ -45,7 +46,7 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
      * @return the first element from this pipeline
      * @throws NoSuchElementException if this pipeline is empty
      */
-    Action<?, ?> removeLast();
+    Action<?, ?> removeLast() throws NoSuchElementException;
 
     void addFirst(Action<?, ?> e);
 

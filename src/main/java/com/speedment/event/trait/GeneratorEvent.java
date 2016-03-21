@@ -19,7 +19,7 @@ package com.speedment.event.trait;
 import com.speedment.annotation.Api;
 import com.speedment.code.TranslatorManager;
 import com.speedment.event.Event;
-import com.speedment.codegen.base.Generator;
+import com.speedment.codegen.Generator;
 
 /**
  *

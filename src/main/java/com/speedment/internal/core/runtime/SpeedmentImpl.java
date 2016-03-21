@@ -27,7 +27,6 @@ import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
 import com.speedment.component.EventComponent;
-import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
 import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
@@ -59,6 +58,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import com.speedment.component.resultset.ResultSetMapperComponent;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -70,9 +70,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private PrimaryKeyFactoryComponent primaryKeyFactoryComponent;
     private DbmsHandlerComponent dbmsHandlerComponent;
     private SqlTypeMapperComponent sqlTypeMapperComponent;
-    private JavaTypeMapperComponent javaTypeMapperComponent;
+    private ResultSetMapperComponent resultSetMapperComponent;
     private EntityManager entityManager;
-//    private LoggerFactoryComponent loggerFactoryComponent;
     private ConnectionPoolComponent connectionPoolComponent;
     private StreamSupplierComponent streamSupplierComponent;
     private TypeMapperComponent typeMapperComponent;
@@ -90,7 +89,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(SqlTypeMapperComponentImpl::new);
         put(JavaTypeMapperComponentImpl::new);
         put(EntityManagerImpl::new);
-//        put(LoggerFactoryComponentImpl::new);
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
         put(TypeMapperComponentImpl::new);
@@ -134,15 +132,12 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         if (item instanceof SqlTypeMapperComponent) {
             sqlTypeMapperComponent = castOrFail(item, SqlTypeMapperComponent.class);
         }
-        if (item instanceof JavaTypeMapperComponent) {
-            javaTypeMapperComponent = castOrFail(item, JavaTypeMapperComponent.class);
+        if (item instanceof ResultSetMapperComponent) {
+            resultSetMapperComponent = castOrFail(item, ResultSetMapperComponent.class);
         }
         if (item instanceof EntityManager) {
             entityManager = castOrFail(item, EntityManager.class);
         }
-//        if (item instanceof LoggerFactoryComponent) {
-//            loggerFactoryComponent = castOrFail(item, LoggerFactoryComponent.class);
-//        }
         if (item instanceof ConnectionPoolComponent) {
             connectionPoolComponent = castOrFail(item, ConnectionPoolComponent.class);
         }
@@ -215,19 +210,14 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     }
 
     @Override
-    public JavaTypeMapperComponent getJavaTypeMapperComponent() {
-        return javaTypeMapperComponent;
+    public ResultSetMapperComponent getResultSetMapperComponent() {
+        return resultSetMapperComponent;
     }
 
     @Override
     public EntityManager getEntityManager() {
         return entityManager;
     }
-
-//    @Override
-//    public LoggerFactoryComponent getLoggerFactoryComponent() {
-//        return loggerFactoryComponent;
-//    }
 
     @Override
     public ConnectionPoolComponent getConnectionPoolComponent() {
@@ -273,8 +263,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     public Speedment copyWithSameTypeOfComponents() {
         final SpeedmentApplicationLifecycle<?> lifecycle = new DefaultSpeedmentApplicationLifecycle();
 
-        stream()
-                .map(Entry::getValue)
+        stream().map(Entry::getValue)
                 .map(this::componentConstructor)
                 .forEach(lifecycle::with);
 
@@ -300,7 +289,5 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
                 throw new RuntimeException(ex);
             }
         };
-
     }
-
 }

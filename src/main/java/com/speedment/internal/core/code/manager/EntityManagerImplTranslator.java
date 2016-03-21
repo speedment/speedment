@@ -18,13 +18,13 @@ package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
-import com.speedment.codegen.base.Generator;
-import com.speedment.codegen.lang.models.File;
-import com.speedment.codegen.lang.models.Class;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Class;
 import com.speedment.config.db.Table;
-import com.speedment.codegen.lang.models.Constructor;
-import com.speedment.codegen.lang.models.Field;
-import com.speedment.codegen.lang.models.Type;
+import com.speedment.codegen.model.Constructor;
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.Type;
 
 /**
  *

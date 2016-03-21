@@ -18,8 +18,6 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.component.javatypemapper.JavaTypeMapperComponent;
-import com.speedment.component.javatypemapper.JavaTypeMapping;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuples;
@@ -32,11 +30,19 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import com.speedment.component.resultset.ResultSetMapperComponent;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import com.speedment.component.resultset.ResultSetMapping;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
-public final class JavaTypeMapperComponentImpl extends InternalOpenSourceComponent implements JavaTypeMapperComponent {
+public final class JavaTypeMapperComponentImpl extends InternalOpenSourceComponent implements ResultSetMapperComponent {
 
-    private final Map<Class<?>, JavaTypeMapping<?>> map;
-    private final Map<DbmsType, Map<Class<?>, JavaTypeMapping<?>>> dbmsTypeMap;
+    private final Map<Class<?>, ResultSetMapping<?>> map;
+    private final Map<DbmsType, Map<Class<?>, ResultSetMapping<?>>> dbmsTypeMap;
 
     public JavaTypeMapperComponentImpl(Speedment speedment) {
         super(speedment);
@@ -45,26 +51,26 @@ public final class JavaTypeMapperComponentImpl extends InternalOpenSourceCompone
         StandardJavaTypeMapping.stream().forEach(this::put);
     }
 
-    public JavaTypeMapping<?> put(JavaTypeMapping<?> item) {
+    public ResultSetMapping<?> put(ResultSetMapping<?> item) {
         requireNonNull(item);
         return map.put(item.getJavaClass(), item);
     }
 
-    public JavaTypeMapping<?> put(DbmsType dbmsType, JavaTypeMapping<?> item) {
+    public ResultSetMapping<?> put(DbmsType dbmsType, ResultSetMapping<?> item) {
         requireNonNull(dbmsType);
         requireNonNull(item);
         return dbmsTypeMap.computeIfAbsent(dbmsType, k -> new ConcurrentHashMap<>()).put(item.getJavaClass(), item);
     }
 
     @Override
-    public <T> JavaTypeMapping<T> apply(DbmsType dbmsType, Class<T> javaClass) {
+    public <T> ResultSetMapping<T> apply(DbmsType dbmsType, Class<T> javaClass) {
         requireNonNull(dbmsType);
         requireNonNull(javaClass);
         return getFromMapOrThrow(dbmsTypeMap.getOrDefault(dbmsType, map), javaClass, () -> dbmsType + ", " + javaClass.getName());
     }
 
     @Override
-    public <T> JavaTypeMapping<T> apply(Class<T> javaClass) {
+    public <T> ResultSetMapping<T> apply(Class<T> javaClass) {
         requireNonNull(javaClass);
         return getFromMapOrThrow(map, javaClass, javaClass::getName);
     }
@@ -75,12 +81,12 @@ public final class JavaTypeMapperComponentImpl extends InternalOpenSourceCompone
     }
 
     @SuppressWarnings("unchecked")
-    private <T> JavaTypeMapping<T> getFromMapOrThrow(Map<Class<?>, JavaTypeMapping<?>> map, Class<T> javaClass, Supplier<String> throwMessageSupplier) {
+    private <T> ResultSetMapping<T> getFromMapOrThrow(Map<Class<?>, ResultSetMapping<?>> map, Class<T> javaClass, Supplier<String> throwMessageSupplier) {
                 requireNonNull(map);
                 requireNonNull(javaClass);
                 requireNonNull(throwMessageSupplier);
-        return Optional.ofNullable((JavaTypeMapping<T>) map.get(javaClass))
-            .orElseThrow(() -> new NullPointerException("The " + JavaTypeMapperComponent.class.getSimpleName() + " does not have a mapping for " + throwMessageSupplier.get()));
+        return Optional.ofNullable((ResultSetMapping<T>) map.get(javaClass))
+            .orElseThrow(() -> new NullPointerException("The " + ResultSetMapperComponent.class.getSimpleName() + " does not have a mapping for " + throwMessageSupplier.get()));
     }
 
     private <K, V> Map<K, V> newConcurrentMap() {
@@ -97,16 +103,16 @@ public final class JavaTypeMapperComponentImpl extends InternalOpenSourceCompone
      * @return a {@link Stream} of the current mappings that are registered with
      * this class
      */
-    public Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> stream() {
+    public Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> stream() {
 
-        final Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> s0 = map.values().stream().map(v -> Tuples.of(Optional.empty(), v));
+        final Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> s0 = map.values().stream().map(v -> Tuples.of(Optional.empty(), v));
 
-        final Stream.Builder<Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>>> sb = Stream.builder();
+        final Stream.Builder<Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>>> sb = Stream.builder();
         sb.add(s0);
 
         dbmsTypeMap.entrySet().stream().forEach(e -> {
             final DbmsType dbmsType = e.getKey();
-            Stream<Tuple2<Optional<DbmsType>, JavaTypeMapping<?>>> sn = e.getValue().values().stream().map(v -> Tuples.of(Optional.of(dbmsType), v));
+            Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> sn = e.getValue().values().stream().map(v -> Tuples.of(Optional.of(dbmsType), v));
             sb.add(sn);
         });
 
