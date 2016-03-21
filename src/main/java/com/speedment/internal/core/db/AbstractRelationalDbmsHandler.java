@@ -143,7 +143,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final Connection connection = getConnection()) {
             readSchemaMetadata(connection, filterCriteria, progress);
         } catch (final SQLException sqle) {
-            LOGGER.error(sqle, "Unable to read from " + dbms.toString());
+            LOGGER.error(sqle, "Error closing connection for " + dbms.toString());
         } finally {
             progress.setCurrentAction("Done!");
             progress.setProgress(ProgressMeasure.DONE);
