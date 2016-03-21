@@ -134,6 +134,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
             while (rs.next()) {
                 final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
+                if (typeInfo.getSqlTypeName().contains("BLOB")) {
+                    int foo = 1;
+                }
+                
                 final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
                 result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
@@ -294,7 +298,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
-            column.mutator().setName(rs.getString("COLUMN_NAME"));
+            final String columnName = rs.getString("COLUMN_NAME");
+            if (columnName.startsWith("blob")) {
+                int foo = 1;
+            }
+            
+            column.mutator().setName(columnName);
             column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
             final boolean nullable;

@@ -29,7 +29,6 @@ import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -84,7 +83,7 @@ public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponen
         requireNonNull(typeInfo);
         final Optional<String> key = typeInfo.javaSqlTypeName();
         if (key.isPresent()) {
-            return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), String.class);
+            return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), DEFAULT_MAPPING);
         }
         return DEFAULT_MAPPING;
     }
