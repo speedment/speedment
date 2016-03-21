@@ -18,6 +18,7 @@ package com.speedment.field;
 
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.StringFieldTrait;
 
@@ -38,6 +39,7 @@ import com.speedment.field.trait.StringFieldTrait;
  */
 @Api(version = "2.2")
 public interface StringField<ENTITY, D> extends
+    FieldTrait, 
     ReferenceFieldTrait<ENTITY, D, String>,
     ComparableFieldTrait<ENTITY, D, String>,
     StringFieldTrait<ENTITY, D> {}

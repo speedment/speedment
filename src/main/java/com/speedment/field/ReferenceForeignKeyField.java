@@ -17,6 +17,7 @@
 package com.speedment.field;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 
@@ -38,5 +39,6 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
  */
 @Api(version = "2.2")
 public interface ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> extends
+    FieldTrait, 
     ReferenceFieldTrait<ENTITY, D, V>,
     ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {}

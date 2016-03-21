@@ -34,7 +34,7 @@ import java.util.Set;
  * @author  Emil Forslund
  */
 @Api(version = "2.2")
-public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> extends FieldTrait {
+public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this

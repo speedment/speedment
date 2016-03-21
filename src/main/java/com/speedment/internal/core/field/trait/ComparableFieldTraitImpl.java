@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.field.trait;
 
-import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.Inclusion;
 import com.speedment.internal.core.field.predicate.impl.comparable.BetweenPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.EqualPredicate;

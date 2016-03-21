@@ -31,7 +31,6 @@ import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
