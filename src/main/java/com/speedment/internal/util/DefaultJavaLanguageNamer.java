@@ -81,7 +81,10 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
         requireNonNull(externalName);
         String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
         // CamelCase
-        result = Stream.of(result.replaceAll("([A-Z]+)", "_$1").split("[^A-Za-z0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
+        // http://stackoverflow.com/questions/4050381/regular-expression-for-checking-if-capital-letters-are-found-consecutively-in-a
+        // [A-Z] -> \p{Lu}
+        // [^A-Za-z0-9] -> [^\pL0-90-9]
+        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
         return result;
     }
 

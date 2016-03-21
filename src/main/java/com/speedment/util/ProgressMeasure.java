@@ -2,7 +2,6 @@ package com.speedment.util;
 
 import com.speedment.internal.util.ProgressMeasurerImpl;
 import java.util.function.Consumer;
-import sun.net.ProgressListener;
 
 /**
  *
@@ -62,7 +61,7 @@ public interface ProgressMeasure {
      * Adds a listener that will be called each time a value changes.
      *
      * @param listener  to add
-     * @return          an instance of a {@link ProgressListener} that has the 
+     * @return          an instance of a {@link ProgressMeasure} that has the 
      *                  provided listener
      */
     ProgressMeasure addListener(Consumer<ProgressMeasure> listener);
