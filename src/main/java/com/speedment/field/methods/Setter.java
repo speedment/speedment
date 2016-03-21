@@ -20,9 +20,23 @@ import com.speedment.annotation.Api;
 import java.util.function.BiFunction;
 
 /**
- * @author Emil Forslund
- * @param <ENTITY> the entity
- * @param <V> the type of the value to return
+ * A short-cut functional reference to the {@code setXXX(value)} method for a
+ * particular field in an entity. The referenced method should return a 
+ * reference to itself.
+ * <p>
+ * A {@code Setter<ENTITY, V>} has the following signature:
+ * <code>
+ *      interface ENTITY {
+ *          ENTITY setXXX(V value);
+ *      }
+ * </code>
+ * 
+ * @param <ENTITY>  the entity
+ * @param <V>       the type of the value to return
+ * 
+ * @author  Emil Forslund
+ * @since   2.2
  */
 @Api(version = "2.2")
+@FunctionalInterface
 public interface Setter<ENTITY, V> extends BiFunction<ENTITY, V, ENTITY> {}

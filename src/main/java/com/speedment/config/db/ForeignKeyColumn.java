@@ -31,8 +31,12 @@ import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElement
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents the column referenced by a foreign 
+ * key instance in the database. A {@code ForeignKeyColumn} is located inside a 
+ * {@link ForeignKey}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface ForeignKeyColumn extends 

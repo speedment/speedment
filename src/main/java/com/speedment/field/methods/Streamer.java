@@ -21,11 +21,23 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * @author Emil Forslund
- * @param <ENTITY> the entity
- * @param <FK> the type of the foreign key stream
+ * A short-cut functional reference to the streaming {@code findXXXs()} method 
+ * for a particular field referencing this entity.
+ * <p>
+ * A {@code Streamer<ENTITY, FK_ENTITY>} has the following signature:
+ * <code>
+ *      interface ENTITY {
+ *          Stream&lt;FK_ENTITY&gt; findXXXs();
+ *      }
+ * </code>
+ * 
+ * @param <ENTITY>     the entity
+ * @param <FK_ENTITY>  the type of the foreign entity referencing this
+ * 
+ * @author  Emil Forslund
+ * @since   2.2
  */
 @Api(version = "2.2")
-public interface Referencer<ENTITY, FK> extends Function<ENTITY, Stream<FK>> {
-
-}
+@FunctionalInterface
+public interface Streamer<ENTITY, FK_ENTITY> extends 
+    Function<ENTITY, Stream<FK_ENTITY>> {}

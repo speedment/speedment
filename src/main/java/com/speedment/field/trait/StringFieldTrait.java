@@ -20,9 +20,15 @@ import com.speedment.annotation.Api;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
+ * A representation of an Entity field that is a {@code String} type. String 
+ * fields have additional methods that makes it easier to create string-related 
+ * predicates.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 @Api(version = "2.2")
 public interface StringFieldTrait<ENTITY, D> {

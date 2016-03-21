@@ -19,13 +19,15 @@ package com.speedment.field.predicate;
 import com.speedment.annotation.Api;
 
 /**
- *
- * @author pemi
- * @param <T> type that the Predicate shall operate on
- * @param <D> database type
- * @param <V> field type
+ * A {@link SpeedmentPredicate} where the value implements {@link Comparable}.
+ * 
+ * @param <T>  value type that the Predicate operates on
+ * @param <D>  database type
+ * @param <V>  field type
+ * 
+ * @author  Per Minborg
+ * @since   2.1
  */
 @Api(version = "2.2")
-public interface ComparableSpeedmentPredicate<T, D, V extends Comparable<? super V>> extends SpeedmentPredicate<T, D, V> {
-
-}
+public interface ComparableSpeedmentPredicate<T, D, V extends Comparable<? super V>> 
+    extends SpeedmentPredicate<T, D, V> {}

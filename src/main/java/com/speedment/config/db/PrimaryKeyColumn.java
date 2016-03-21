@@ -28,8 +28,11 @@ import com.speedment.config.db.mutator.DocumentMutator;
 import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents the primary key column instance in 
+ * the database. A {@code PrimaryKeyColumn} is located inside a {@link Table}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface PrimaryKeyColumn extends 

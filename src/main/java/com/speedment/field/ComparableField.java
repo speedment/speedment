@@ -18,22 +18,25 @@ package com.speedment.field;
 
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.ComparableFieldTrait;
-import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
- * A representation of an Entity field that is a reference type (eg Integer and
- * not int) and that is {@link Comparable}.
+ * A field that implements the {@link ReferenceFieldTrait} and 
+ * {@link ComparableFieldTrait}.
  *
- * @author          pemi
- * @author          Emil Forslund
  * @param <ENTITY>  the entity type
  * @param <D>       the database type
  * @param <V>       the field value type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see    ReferenceFieldTrait
+ * @see    ComparableFieldTrait
  */
 @Api(version = "2.2")
 public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends
-    FieldTrait,
     ReferenceFieldTrait<ENTITY, D, V>,
     ComparableFieldTrait<ENTITY, D, V> {
 }

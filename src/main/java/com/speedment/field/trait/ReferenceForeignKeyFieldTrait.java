@@ -20,13 +20,19 @@ import com.speedment.annotation.Api;
 import com.speedment.field.methods.Finder;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <FK> the foreign entity type
+ * A representation of an Entity field that is a reference type (eg 
+ * {@code Integer} and not {@code int}) and that is a foreign key to some other
+ * field.
+ * 
+ * @param <ENTITY>     the entity type
+ * @param <D>          the database type
+ * @param <FK_ENTITY>  the foreign entity type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 @Api(version = "2.2")
-public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {
+public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {
 
     /**
      * Returns a function that can find a foreign entity pointed out by this
@@ -34,16 +40,15 @@ public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {
      *
      * @return the finder
      */
-    Finder<ENTITY, FK> finder();
+    Finder<ENTITY, FK_ENTITY> finder();
 
     /**
      * Finds the foreign entity associated by this field.
      *
-     * @param e entity
-     * @return the foreign entity associated by this field
+     * @param entity  this entity
+     * @return        the foreign entity associated by this field
      */
-    default FK findFrom(ENTITY e) {
-        return finder().apply(e);
+    default FK_ENTITY findFrom(ENTITY entity) {
+        return finder().apply(entity);
     }
-
 }

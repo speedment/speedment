@@ -20,12 +20,19 @@ import com.speedment.annotation.Api;
 import com.speedment.field.predicate.PredicateType;
 
 /**
- *
- * @author pemi
+ * A trait for predicates the implement the {@link #getPredicateType()} method.
+ * 
+ * @see     PredicateType
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasPredicateType {
 
+    /**
+     * Returns the type of this predicate.
+     * 
+     * @return  the {@link PredicateType}
+     */
     PredicateType getPredicateType();
-
 }

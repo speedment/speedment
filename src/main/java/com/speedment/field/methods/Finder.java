@@ -20,11 +20,23 @@ import com.speedment.annotation.Api;
 import java.util.function.Function;
 
 /**
- * @author Emil Forslund
- * @param <ENTITY> the entity
- * @param <FK> the type of the foreign key stream
+ * A short-cut functional reference to the {@code findXXX()} method for a
+ * particular field in an entity.
+ * <p>
+ * A {@code Finder<ENTITY, FK_ENTITY>} has the following signature:
+ * <code>
+ *      interface ENTITY {
+ *          FK_ENTITY findXXX();
+ *      }
+ * </code>
+ * 
+ * @param <ENTITY>     the entity
+ * @param <FK_ENTITY>  the type of the foreign key stream
+ * 
+ * @author  Emil Forslund
+ * @since   2.2
  */
 @Api(version = "2.2")
-public interface Finder<ENTITY, FK> extends Function<ENTITY, FK> {
-
-}
+@FunctionalInterface
+public interface Finder<ENTITY, FK_ENTITY> extends 
+    Function<ENTITY, FK_ENTITY> {}

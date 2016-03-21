@@ -33,8 +33,11 @@ import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElement
 import com.speedment.config.db.trait.HasNullable;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents a column in the database. A
+ * {@code Column} is located inside a {@link Table}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface Column extends
@@ -49,8 +52,8 @@ public interface Column extends
         HasMutator<ColumnMutator> {
 
     final String AUTO_INCREMENT = "autoIncrement",
-            TYPE_MAPPER = "typeMapper",
-            DATABASE_TYPE = "databaseType";
+            TYPE_MAPPER         = "typeMapper",
+            DATABASE_TYPE       = "databaseType";
 
     /**
      * Returns whether or not this column will auto increment when new values

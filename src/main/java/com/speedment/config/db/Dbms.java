@@ -38,8 +38,12 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents a dbms instance in the database. A
+ * {@code Dbms} is located inside a {@link Project} and can have multiple 
+ * {@link Schema Schemas} as children.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface Dbms extends 

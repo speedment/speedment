@@ -22,8 +22,8 @@ import com.speedment.field.FieldIdentifier;
 /**
  * A trait that every field implements.
  * 
- * @author Per Minborg
- * @author Emil Forslund
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 @Api(version = "2.3")
 public interface FieldTrait {

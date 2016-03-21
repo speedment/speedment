@@ -18,21 +18,31 @@ package com.speedment.field;
 
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.ComparableFieldTrait;
-import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.field.trait.StringFieldTrait;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <FK> the foreign entity type
+ * A field that implements the {@link ReferenceFieldTrait}, the 
+ * {@link ComparableFieldTrait}, the {@link StringFieldTrait} and the 
+ * {ReferenceForeignKeyFieldTrait}.
+ * 
+ * @param <ENTITY>     the entity type
+ * @param <D>          the database type
+ * @param <FK_ENTITY>  the foreign entity type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see  ReferenceFieldTrait
+ * @see  ComparableFieldTrait
+ * @see  StringFieldTrait
+ * @see  ReferenceForeignKeyFieldTrait
  */
 @Api(version = "2.2")
-public interface StringForeignKeyField<ENTITY, D, FK> extends
-    FieldTrait,
+public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
     ReferenceFieldTrait<ENTITY, D, String>,
     ComparableFieldTrait<ENTITY, D, String>,
     StringFieldTrait<ENTITY, D>,
-    ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {}
+    ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {}

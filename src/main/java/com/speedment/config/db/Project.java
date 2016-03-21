@@ -33,8 +33,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents a database project. A 
+ * {@code Project} is the root of the document tree and can have multiple 
+ * {@link Dbms Dbmses} as children.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface Project extends

@@ -31,8 +31,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents a table instance in the database. A
+ * {@code Table} is located inside a {@link Schema} and can have multiple 
+ * {@link Column Columns} as children.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface Table extends

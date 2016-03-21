@@ -30,7 +30,10 @@ import com.speedment.config.db.mutator.SchemaMutator;
 import java.util.stream.Stream;
 
 /**
- *
+ * A typed {@link Document} that represents a schema instance in the database. A
+ * {@code Schema} is located inside a {@link Dbms} and can have multiple 
+ * {@link Table Tables} as children.
+ * 
  * @author Emil Forslund
  */
 @Api(version = "2.3")

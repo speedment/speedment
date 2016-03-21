@@ -16,10 +16,27 @@
  */
 package com.speedment.field;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
+import com.speedment.internal.util.document.DocumentDbUtil;
 
 /**
- * Identifies a particular field in an entity.
+ * Identifies a particular field in an entity. The identifier is a immutable
+ * non-complex object that only contains the names of the nodes required to
+ * uniquely identify it in the database.
+ * <p>
+ * To find the actual documents refered to by the identifier, the following
+ * utility methods can be used:
+ * <ul>
+ *      <li>{@link DocumentDbUtil#referencedColumn(Speedment, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedTable(Speedment, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedSchema(Speedment, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedDbms(Speedment, FieldIdentifier)}
+ * </ul>
  * 
  * @author          Emil Forslund
  * @param <ENTITY>  the entity type
@@ -29,30 +46,30 @@ import com.speedment.annotation.Api;
 public interface FieldIdentifier<ENTITY> {
     
     /**
-     * Returns the name of the {@link Dbms} that this field is in.
+     * Returns the database name of the {@link Dbms} that this field is in.
      * 
      * @return  the {@link Dbms} name
      */
     String dbmsName();
     
     /**
-     * Returns the name of the {@link Schema} that this field is in.
+     * Returns the database name of the {@link Schema} that this field is in.
      * 
      * @return  the {@link Schema} name
      */
     String schemaName();
     
     /**
-     * Returns the name of the {@link Table} that this field is in.
+     * Returns the database name of the {@link Table} that this field is in.
      * 
      * @return  the {@link Table} name
      */
     String tableName();
     
     /**
-     * The unique java name of the identified column.
+     * Returns the database name of the {@link Column} that this field is in.
      * 
-     * @return  the column name
+     * @return  the {@link Column} name
      */
     String columnName();
 }

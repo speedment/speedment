@@ -24,8 +24,31 @@ package com.speedment.field;
 import com.speedment.annotation.Api;
 
 /**
- *
- * @author pemi
+ * Determines if a range of resuls should be start and/or end-inclusive.
+ * <p>
+ * For an example, take the series {@code [1 2 3 4 5]}. If we select the range 
+ * {@code (2, 4)} from this series, we will get the following results:
+ * <table>
+ *      <tr>
+ *          <td>{@link #START_INCLUSIVE_END_INCLUSIVE}</td>
+ *          <td>{@code [2, 3, 4]}</td>
+ *      </tr>
+ *      <tr>
+ *          <td>{@link #START_INCLUSIVE_END_EXCLUSIVE}</td>
+ *          <td>{@code [2, 3]}</td>
+ *      </tr>
+ *      <tr>
+ *          <td>{@link #START_EXCLUSIVE_END_INCLUSIVE}</td>
+ *          <td>{@code [3, 4]}</td>
+ *      </tr>
+ *      <tr>
+ *          <td>{@link #START_EXCLUSIVE_END_EXCLUSIVE}</td>
+ *          <td>{@code [3]}</td>
+ *      </tr>
+ * </table>
+ * 
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public enum Inclusion {

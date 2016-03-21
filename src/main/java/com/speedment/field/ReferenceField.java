@@ -17,15 +17,20 @@
 package com.speedment.field;
 
 import com.speedment.annotation.Api;
-import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <V> the field value type
+ * A field that implements the {@link ReferenceFieldTrait}.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the field value type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see  ReferenceFieldTrait
  */
 @Api(version = "2.2")
-public interface ReferenceField<ENTITY, D, V> extends
-    FieldTrait, ReferenceFieldTrait<ENTITY, D, V> {}
+public interface ReferenceField<ENTITY, D, V> extends ReferenceFieldTrait<ENTITY, D, V> {}

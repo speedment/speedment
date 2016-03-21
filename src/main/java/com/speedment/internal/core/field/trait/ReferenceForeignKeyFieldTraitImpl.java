@@ -37,5 +37,4 @@ public class ReferenceForeignKeyFieldTraitImpl<ENTITY, D, FK> implements Referen
     public Finder<ENTITY, FK> finder() {
         return finder;
     }
-
 }

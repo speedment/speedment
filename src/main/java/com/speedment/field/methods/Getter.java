@@ -20,9 +20,22 @@ import com.speedment.annotation.Api;
 import java.util.function.Function;
 
 /**
- * @author Emil Forslund
- * @param <ENTITY> the entity
- * @param <V> the type of the value to return
+ * A short-cut functional reference to the {@code getXXX()} method for a
+ * particular field in an entity.
+ * <p>
+ * A {@code Getter<ENTITY, V>} has the following signature:
+ * <code>
+ *      interface ENTITY {
+ *          V getXXX();
+ *      }
+ * </code>
+ * 
+ * @param <ENTITY>  the entity
+ * @param <V>       the type of the value to return
+ * 
+ * @author  Emil Forslund
+ * @since   2.2
  */
 @Api(version = "2.2")
+@FunctionalInterface
 public interface Getter<ENTITY, V> extends Function<ENTITY, V> {}

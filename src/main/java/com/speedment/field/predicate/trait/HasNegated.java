@@ -19,11 +19,19 @@ package com.speedment.field.predicate.trait;
 import com.speedment.annotation.Api;
 
 /**
- *
- * @author pemi
+ * A trait for predicates the implement the {@link #isNegated()} method.
+ * 
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasNegated {
 
+    /**
+     * Returns {@code true} if this predicate has been negated and should be
+     * read as its opposite meaning, else {@code false}.
+     * 
+     * @return  {@code true} if negated, else {@code false}
+     */
     public boolean isNegated();
 }

@@ -29,8 +29,12 @@ import com.speedment.config.db.mutator.DocumentMutator;
 import com.speedment.config.db.mutator.IndexColumnMutator;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents the column referenced by an index 
+ * key instance in the database. An {@code IndexColumn} is located inside an
+ * {@link Index}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface IndexColumn extends

@@ -20,13 +20,23 @@ import com.speedment.annotation.Api;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
- *
- * @author pemi
- * @param <ENTITY> entity type
- * @param <V> value type
+ * A trait for predicates the implement the {@link #getReferenceField()} method.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the value type
+ * 
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasReferenceFieldTrait<ENTITY, D, V> {
 
+    /**
+     * Returns the field that created this predicate, knowing that it is a 
+     * {@link ReferenceFieldTrait}.
+     * 
+     * @return  the field
+     */
     ReferenceFieldTrait<ENTITY, D, V> getReferenceField();
 }

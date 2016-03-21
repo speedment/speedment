@@ -20,13 +20,23 @@ import com.speedment.annotation.Api;
 import com.speedment.field.methods.Getter;
 
 /**
- *
- * @author pemi
- * @param <ENTITY> entity type
- * @param <V> value type
+ * A trait for predicates the implement the {@link #getter()} method.
+ * 
+ * @param <ENTITY>  entity type
+ * @param <V>       value type
+ * 
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasGetter<ENTITY, V> {
 
+    /**
+     * Returns a functional reference to the {@link Getter} method used in the
+     * field that created this predicate.
+     * 
+     * @return  the getter method
+     */
     Getter<ENTITY, V> getter();
 }

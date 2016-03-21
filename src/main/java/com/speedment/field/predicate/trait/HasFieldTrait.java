@@ -20,11 +20,18 @@ import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 
 /**
- *
- * @author pemi
+ * A trait for predicates the implement the {@link #getField()} method.
+ * 
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasFieldTrait {
 
+    /**
+     * Returns the {@link FieldTrait} that was used to generate this predicate.
+     * 
+     * @return  the field
+     */
     FieldTrait getField();
 }

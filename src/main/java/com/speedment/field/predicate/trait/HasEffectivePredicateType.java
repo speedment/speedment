@@ -20,8 +20,11 @@ import com.speedment.annotation.Api;
 import com.speedment.field.predicate.PredicateType;
 
 /**
- *
- * @author pemi
+ * A trait for predicates the implement the {@link #getEffectivePredicateType()}
+ * method.
+ * 
+ * @author  Per Minborg
+ * @since   2.2
  */
 @Api(version = "2.2")
 public interface HasEffectivePredicateType {
@@ -34,5 +37,4 @@ public interface HasEffectivePredicateType {
      * @return the effective predicate type
      */
     PredicateType getEffectivePredicateType();
-
 }

@@ -29,8 +29,12 @@ import com.speedment.config.db.mutator.IndexMutator;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents an index instance in the database. 
+ * An {@code Index} is located inside a {@link Table} and can have 
+ * multiple {@link IndexColumn IndexColumns} as children.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface Index extends 

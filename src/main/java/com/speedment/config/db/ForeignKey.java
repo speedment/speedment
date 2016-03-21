@@ -29,8 +29,12 @@ import com.speedment.config.db.mutator.ForeignKeyMutator;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
+ * A typed {@link Document} that represents a foreign key instance in the 
+ * database. A {@code ForeignKey} is located inside a {@link Table} and can have 
+ * multiple {@link ForeignKeyColumn ForeignKeyColumns} as children.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.3")
 public interface ForeignKey extends

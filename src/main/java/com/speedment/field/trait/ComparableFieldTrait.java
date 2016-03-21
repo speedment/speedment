@@ -23,14 +23,18 @@ import java.util.Comparator;
 import java.util.Set;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <D> the database type
- * @param <V> the field value type
+ * A representation of an Entity field that is a reference type (eg 
+ * {@code Integer} and not {@code int}) and that implements {@link Comparable}.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the field value type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 @Api(version = "2.2")
-public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
+public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> extends FieldTrait {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this

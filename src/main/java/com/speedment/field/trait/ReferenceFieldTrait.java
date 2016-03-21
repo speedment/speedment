@@ -30,13 +30,15 @@ import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 
 /**
- * Indicates that an extending interface is related to a reference field.
+ * A representation of an Entity field that is a reference type (eg 
+ * {@code Integer} and not {@code int}).
  *
- * @param <ENTITY> the entity type
- * @param <D> the database value type
- * @param <V> the field value type
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database value type
+ * @param <V>       the field value type
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
 @Api(version = "2.2")
 public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
