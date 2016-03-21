@@ -212,12 +212,12 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         final String entityName = namer.javaVariableName(getSupport().entityName());
         final Method result = Method.of("copy", getSupport().entityType()).public_().add(OVERRIDE)
             .add(
-                "final " + Speedment.class.getSimpleName() + " speedment = speedment();",
-                "",
+                //"final " + Speedment.class.getSimpleName() + " speedment = speedment();",
+                // "",
                 "final " + getSupport().entityName() + " " + entityName + " = new " + getSupport().entityImplName() + "() {", indent(
                     "@Override",
                     "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                        "return speedment;"
+                        "return " + getSupport().generatedEntityImplName() + ".this.speedment();"
                     ), "}"
                 ), "};",
                 ""
@@ -226,7 +226,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         columns().forEachOrdered(c -> {
             if (c.isNullable()) {
                 result.add(
-                    getSupport().variableName() + "."
+                    entityName + "."
                     + GETTER_METHOD_PREFIX + getSupport().typeName(c)
                     + "().ifPresent(this::"
                     + SETTER_METHOD_PREFIX + getSupport().typeName(c)
@@ -235,7 +235,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             } else {
                 result.add(
                     SETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + "(" + getSupport().variableName()
+                    + "(" + entityName
                     + ".get" + getSupport().typeName(c)
                     + "());"
                 );
