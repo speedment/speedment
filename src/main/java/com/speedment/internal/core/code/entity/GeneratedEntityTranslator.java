@@ -146,6 +146,11 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             
             /*** Fields ***/
             .forEveryColumn((intrf, col) -> {
+                
+                if (col.getName().startsWith("sales")) {
+                    int foo = 1;
+                }
+                
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
                     EntityTranslatorSupport.getReferenceFieldType(file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );

@@ -54,6 +54,7 @@ import static com.speedment.internal.codegen.lang.models.constants.DefaultJavado
 import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
 import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
 import static com.speedment.internal.codegen.util.Formatting.DOT;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
@@ -79,8 +80,8 @@ public final class EntityTranslatorSupport {
         final Project project = ancestor(table, Project.class).get();
 
         return Type.of(project.findPackageName(javaLanguageNamer) + DOT
-                + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
-                + javaLanguageNamer.javaTypeName(table.getJavaName())
+            + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
+            + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }
 
@@ -95,11 +96,11 @@ public final class EntityTranslatorSupport {
     }
 
     public static ReferenceFieldType getReferenceFieldType(
-            File file,
-            Table table,
-            Column column,
-            Type entityType,
-            JavaLanguageNamer javaLanguageNamer
+        File file,
+        Table table,
+        Column column,
+        Type entityType,
+        JavaLanguageNamer javaLanguageNamer
     ) {
         requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
@@ -107,91 +108,91 @@ public final class EntityTranslatorSupport {
         final Type databaseType = Type.of(column.findTypeMapper().getDatabaseType());
 
         return EntityTranslatorSupport.getForeignKey(table, column)
-                // If this is a foreign key.
-                .map(fkc -> {
-                    final Type type, implType;
-                    final Type fkType = getEntityType(
-                            fkc.findForeignTable().orElseThrow(
-                                    () -> new SpeedmentException(
-                                            "Could not find referenced foreign table '"
-                                            + fkc.getForeignTableName() + "'."
-                                    )),
-                            javaLanguageNamer
-                    );
+            // If this is a foreign key.
+            .map(fkc -> {
+                final Type type, implType;
+                final Type fkType = getEntityType(
+                    fkc.findForeignTable().orElseThrow(
+                        () -> new SpeedmentException(
+                            "Could not find referenced foreign table '"
+                            + fkc.getForeignTableName() + "'."
+                        )),
+                    javaLanguageNamer
+                );
 
-                    file.add(Import.of(fkType));
+                file.add(Import.of(fkType));
 
-                    if (String.class.equals(mapping)) {
-                        type = Type.of(StringForeignKeyField.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(fkType));
+                if (String.class.equals(mapping)) {
+                    type = Type.of(StringForeignKeyField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(fkType));
 
-                        implType = Type.of(StringForeignKeyFieldImpl.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(fkType));
-                    } else if (Comparable.class.isAssignableFrom(mapping)) {
-                        type = Type.of(ComparableForeignKeyField.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(Type.of(mapping)))
-                                .add(Generic.of().add(fkType));
+                    implType = Type.of(StringForeignKeyFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(fkType));
+                } else if (Comparable.class.isAssignableFrom(mapping)) {
+                    type = Type.of(ComparableForeignKeyField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(fkType));
 
-                        implType = Type.of(ComparableForeignKeyFieldImpl.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(Type.of(mapping)))
-                                .add(Generic.of().add(fkType));
-                    } else {
-                        type = Type.of(ReferenceForeignKeyField.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(Type.of(mapping)))
-                                .add(Generic.of().add(fkType));
+                    implType = Type.of(ComparableForeignKeyFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(fkType));
+                } else {
+                    type = Type.of(ReferenceForeignKeyField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(fkType));
 
-                        implType = Type.of(ReferenceForeignKeyFieldImpl.class)
-                                .add(Generic.of().add(entityType))
-                                .add(Generic.of().add(databaseType))
-                                .add(Generic.of().add(Type.of(mapping)))
-                                .add(Generic.of().add(fkType));
-                    }
+                    implType = Type.of(ReferenceForeignKeyFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(fkType));
+                }
 
-                    return new ReferenceFieldType(type, implType);
+                return new ReferenceFieldType(type, implType);
 
-                    // If it is not a foreign key
-                }).orElseGet(() -> {
+                // If it is not a foreign key
+            }).orElseGet(() -> {
             final Type type, implType;
 
             if (String.class.equals(mapping)) {
                 type = Type.of(StringField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType));
 
                 implType = Type.of(StringFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType));
-                
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType));
+
             } else if (Comparable.class.isAssignableFrom(mapping)) {
                 type = Type.of(ComparableField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
+                    .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ComparableFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
+                    .add(Generic.of().add(Type.of(mapping)));
             } else {
                 type = Type.of(ReferenceField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
+                    .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ReferenceFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
+                    .add(Generic.of().add(Type.of(mapping)));
             }
 
             return new ReferenceFieldType(type, implType);
@@ -205,28 +206,28 @@ public final class EntityTranslatorSupport {
 
     public static Method toJson() {
         return Method.of("toJson", STRING)
-                .set(Javadoc.of(
-                        "Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}. "
-                        + "All of the fields in this Entity will appear in the returned JSON String."
-                )
-                        .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}"))
-                );
+            .set(Javadoc.of(
+                "Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}. "
+                + "All of the fields in this Entity will appear in the returned JSON String."
+            )
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}"))
+            );
     }
 
     public static Method toJsonExtended(Type entityType) {
         requireNonNull(entityType);
         final String paramName = "jsonEncoder";
         return Method.of("toJson", STRING)
-                .add(Field.of(paramName, Type.of(JsonEncoder.class)
-                        .add(Generic.of().add(entityType))))
-                .set(Javadoc.of(
-                        "Returns a JSON representation of this Entity using the provided {@link "
-                        + JsonEncoder.class.getSimpleName() + "}."
-                )
-                        .add(PARAM.setValue(paramName).setText("to use as encoder"))
-                        .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link " + JsonEncoder.class.getSimpleName() + "}"))
-                        .add(SEE.setText(JsonEncoder.class.getSimpleName()))
-                );
+            .add(Field.of(paramName, Type.of(JsonEncoder.class)
+                .add(Generic.of().add(entityType))))
+            .set(Javadoc.of(
+                "Returns a JSON representation of this Entity using the provided {@link "
+                + JsonEncoder.class.getSimpleName() + "}."
+            )
+                .add(PARAM.setValue(paramName).setText("to use as encoder"))
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link " + JsonEncoder.class.getSimpleName() + "}"))
+                .add(SEE.setText(JsonEncoder.class.getSimpleName()))
+            );
 
     }
 
@@ -234,10 +235,10 @@ public final class EntityTranslatorSupport {
         requireNonNull(table);
         requireNonNull(column);
         return table.foreignKeys()
-                .filter(HasEnabled::test)
-                .flatMap(ForeignKey::foreignKeyColumns)
-                .filter(fkc -> column.equals(fkc.findColumn().orElse(null)))
-                .findFirst();
+            .filter(HasEnabled::test)
+            .flatMap(ForeignKey::foreignKeyColumns)
+            .filter(fkc -> DocumentDbUtil.isSame(column, fkc.findColumn().orElse(null)))
+            .findFirst();
     }
 
     public static Method dbMethod(String name, Type entityType) {
@@ -250,9 +251,9 @@ public final class EntityTranslatorSupport {
         requireNonNull(name);
         requireNonNull(entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
-                .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
-                        .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
-                ));
+            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
+                .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
+            ));
     }
 
     public static Method persist(Type entityType) {
