@@ -41,7 +41,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().managerImplName()).build()
             .public_().final_()
-            .setSupertype(getSupport().managerImplType())
+            .setSupertype(getSupport().generatedManagerImplType())
             .add(getSupport().managerType())
             .add(Constructor.of().public_()
                 .add(Field.of("speedment", Type.of(Speedment.class)))
