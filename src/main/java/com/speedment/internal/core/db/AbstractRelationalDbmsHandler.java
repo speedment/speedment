@@ -64,11 +64,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.nonNull;
 import com.speedment.util.ProgressMeasure;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -605,8 +601,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
                 conn.commit();
                 conn.close();
-                conn = null;
                 transactionCompleted = true;
+                conn = null;
             } catch (SQLException sqlEx) {
                 LOGGER.error("SqlStatementList: " + sqlStatementList);
                 LOGGER.error("SQL: " + lastSqlStatement);
