@@ -59,22 +59,6 @@ import static java.util.Objects.requireNonNull;
 public interface Translator<DOC extends Document & HasMainInterface, T extends ClassOrInterface<T>> extends Supplier<File> {
 
     /**
-     * The document being translated.
-     *
-     * @return  the document
-     */
-    DOC getDocument();
-    
-    /**
-     * The document being translated wrapped in a {@link HasAlias}.
-     * 
-     * @return  the document
-     */
-    default HasAlias getAliasDocument() {
-        return HasAlias.of(Translator.this.getDocument());
-    }
-
-    /**
      * Return this node or any ancestral node that is a {@link Project}. If no
      * such node exists, an {@code IllegalStateException} is thrown.
      *
@@ -182,10 +166,17 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
             .orElse(Stream.empty())
             .filter(HasEnabled::test);
     }
+    
+    /**
+     * The document being translated.
+     *
+     * @return  the document
+     */
+    DOC getDocument();
 
     /**
      * Returns this node or one of the ancestor nodes if it matches the
-     * specified <code>Class</code>. If no such node exists, an
+     * specified {@code Class}. If no such node exists, an
      * {@code IllegalStateException} is thrown.
      *
      * @param <E> the type of the class to match
@@ -205,6 +196,15 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
             .filter(clazz::isInstance)
             .map(clazz::cast)
             .findAny();
+    }
+    
+    /**
+     * The document being translated wrapped in a {@link HasAlias}.
+     * 
+     * @return  the document
+     */
+    default HasAlias getAliasDocument() {
+        return HasAlias.of(Translator.this.getDocument());
     }
     
     /**
