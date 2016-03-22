@@ -75,10 +75,12 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  *
- * @author  Per Minborg
- * @author  Emil Forslund
+ * @author Per Minborg
+ * @author Emil Forslund
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
+
+    private static final String YES = "YES";
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
     private final static String PASSWORD_PROTECTED = "********";
@@ -99,41 +101,40 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
-            ProgressMeasure progress, 
-            Predicate<String> filterCriteria) {
-        
+        ProgressMeasure progress,
+        Predicate<String> filterCriteria) {
+
         requireNonNulls(filterCriteria, progress);
-        
+
         // Create a deep copy of the project document.
         final Project projectCopy = DocumentUtil.deepCopy(
             this.dbms.getParentOrThrow(), ProjectImpl::new
         );
-        
+
         // Locate the dbms in the copy.
         final Dbms dbmsCopy = projectCopy.dbmses()
             .filter(d -> d.getName().equals(this.dbms.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find Dbms document in copy."
             ));
-        
+
         return readSchemaMetadata(
-                projectCopy, dbmsCopy, filterCriteria, progress
-            ).whenComplete((project, ex) -> {
-                progress.setCurrentAction("Done!");
-                progress.setProgress(ProgressMeasure.DONE);
-            });
+            projectCopy, dbmsCopy, filterCriteria, progress
+        ).whenComplete((project, ex) -> {
+            progress.setCurrentAction("Done!");
+            progress.setProgress(ProgressMeasure.DONE);
+        });
     }
 
     private CompletableFuture<Project> readSchemaMetadata(
-//            Connection connection,
-            Project project,
-            Dbms dbms,
-            Predicate<String> filterCriteria, 
-            ProgressMeasure progress) {
-        
+        //            Connection connection,
+        Project project,
+        Dbms dbms,
+        Predicate<String> filterCriteria,
+        ProgressMeasure progress) {
+
         requireNonNulls(project, dbms, filterCriteria, progress);
-        
-        
+
         final DbmsType dbmsType = dbmsTypeOf(speedment, dbms);
         final String action = actionName(dbms);
 
@@ -145,21 +146,22 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final Set<SqlTypeInfo> preSet = dbmsType.getDataTypes();
 
         // Task that downloads the SQL Type Mappings from the database
-        final CompletableFuture<Map<String, Class<?>>> sqlTypeMappingTask =
-            CompletableFuture.supplyAsync(() -> {
-            final Map<String, Class<?>> sqlTypeMapping;
+        final CompletableFuture<Map<String, Class<?>>> sqlTypeMappingTask
+            = CompletableFuture.supplyAsync(() -> {
+                final Map<String, Class<?>> sqlTypeMapping;
 
-            try {sqlTypeMapping = !preSet.isEmpty() 
-                    ? readTypeMapFromSet(preSet) 
-                    : readTypeMapFromDB(dbms);
-            } catch (final SQLException ex) {
-                throw new SpeedmentException(
-                    "Error loading type map from database.", ex
-                );
-            }
-            
-            return sqlTypeMapping;
-        });
+                try {
+                    sqlTypeMapping = !preSet.isEmpty()
+                        ? readTypeMapFromSet(preSet)
+                        : readTypeMapFromDB(dbms);
+                } catch (final SQLException ex) {
+                    throw new SpeedmentException(
+                        "Error loading type map from database.", ex
+                    );
+                }
+
+                return sqlTypeMapping;
+            });
 
         // Task that downloads the schemas from the database
         final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
@@ -191,7 +193,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             discardedSchemas.add(schemaName);
                         }
                     }
-                } 
+                }
             } catch (final SQLException sqle) {
                 throw new SpeedmentException(
                     "Error reading metadata from result set.", sqle
@@ -226,7 +228,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 );
             }
         });
-        
+
         // Create a new task that will execute once the schemas and the catalogs 
         // have been loaded independently of each other.
         return CompletableFuture.allOf(
@@ -234,11 +236,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             catalogsTask
         ).thenCompose(v -> {
             @SuppressWarnings("rawtypes")
-            final CompletableFuture<Schema>[] tablesTask = 
-                dbms.schemas().map(schema ->
-                    tables(sqlTypeMappingTask, dbms, schema, progress)
+            final CompletableFuture<Schema>[] tablesTask
+                = dbms.schemas().map(schema
+                    -> tables(sqlTypeMappingTask, dbms, schema, progress)
                 ).toArray(CompletableFuture[]::new);
-            
+
             return CompletableFuture.allOf(tablesTask)
                 .handle((v2, ex) -> {
                     if (tablesTask.length == 0) {
@@ -252,7 +254,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                             );
                         }
                     }
-                    
+
                     return project;
                 });
         });
@@ -331,7 +333,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             if (columnName.startsWith("blob")) {
                 int foo = 1;
             }
-            
+
             column.mutator().setName(columnName);
             column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 
@@ -377,24 +379,35 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setTypeMapper(typeMapper);
             column.mutator().setDatabaseType(selectedJdbcClass);
 
-            try {
-                column.mutator().setAutoIncrement(rs.getBoolean("IS_AUTOINCREMENT"));
-            } catch (final SQLException sqle) {
-                LOGGER.warn("Unable to determine IS_AUTOINCREMENT for table " + table.getName() + ", column " + column.getName());
+            final String isAutoIncrementString = getColInfoWithGuard(rs, "IS_AUTOINCREMENT", column);
+            final String isGeneratedColumnString = getColInfoWithGuard(rs, "IS_GENERATEDCOLUMN", column);
+
+            if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
+                column.mutator().setAutoIncrement(true);
             }
+
         };
 
         tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
     }
 
+    private String getColInfoWithGuard(ResultSet rs, String rsColName, Column column) {
+        try {
+            return rs.getString(rsColName);
+        } catch (final SQLException sqle) {
+            LOGGER.warn("Unable to determine " + rsColName + " for table " + column.getParentOrThrow().getName() + ", column " + column.getName());
+        }
+        return "";
+    }
+
     /**
-     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g. 
+     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g.
      * {@code Timestamp} or {@code String}).
      *
-     * @param typeName       the TYPE_NAME value
-     * @param columnSize     the COLUMN_SIZE value
-     * @param decimalDigits  the DECIMAL_DIGITS value
-     * @return               the mapped Class
+     * @param typeName the TYPE_NAME value
+     * @param columnSize the COLUMN_SIZE value
+     * @param decimalDigits the DECIMAL_DIGITS value
+     * @return the mapped Class
      */
     protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, String typeName, int columnSize, int decimalDigits) {
         return sqlTypeMapping.get(typeName);
@@ -677,11 +690,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             sqlStatementList.forEach(SqlUpdateStatement::acceptGeneratedKeys);
         }
     }
-    
+
     protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
         requireNonNull(dbms);
         final Map<String, Class<?>> result;
-        
+
         try (final Connection connection = getConnection(dbms)) {
             result = new ConcurrentHashMap<>();
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
@@ -699,7 +712,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         return result;
     }
-    
+
     // Todo: Use DataSource instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
     private Connection getConnection(Dbms dbms) {
         final String url = DocumentDbUtil.findConnectionUrl(speedment, dbms);
