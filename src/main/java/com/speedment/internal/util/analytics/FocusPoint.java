@@ -18,8 +18,6 @@ package com.speedment.internal.util.analytics;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.internal.util.EmailUtil;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
@@ -30,9 +28,7 @@ public enum FocusPoint {
     APP_STARTED        ("AppStarted"),
     GENERATE           ("Generate");
 
-    private static final String 
-        ENCODING  = "UTF-8",
-        SEPARATOR = "/";
+    private static final String SEPARATOR = "/";
     
     private final String eventName;
     
@@ -51,13 +47,5 @@ public enum FocusPoint {
             eventName,
             EmailUtil.getEmail()
         ).collect(joining(SEPARATOR));
-    }
-
-    private static String encode(String name) {
-        try {
-            return URLEncoder.encode(name, ENCODING);
-        } catch (UnsupportedEncodingException e) {
-            return name;
-        }
     }
 }
