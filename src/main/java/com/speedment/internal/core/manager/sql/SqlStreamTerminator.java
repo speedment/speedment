@@ -43,6 +43,9 @@ import java.util.ArrayList;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
