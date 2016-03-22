@@ -71,7 +71,6 @@ import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -105,32 +104,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         
         requireNonNulls(filterCriteria, progress);
         
-        return CompletableFuture.supplyAsync(() -> getConnection())
-            .thenCompose(conn -> {
-                
-            return readSchemaMetadata(
-                conn, filterCriteria, progress
-            ).whenComplete((project, ex) -> {
-                try {
-                    progress.setCurrentAction("Done!");
-                    progress.setProgress(ProgressMeasure.DONE);
-                    conn.close();
-                } catch (final SQLException sqlex) {
-                    final String err = "Error closing connection for " + conn;
-                    LOGGER.error(sqlex, err);
-                    throw new SpeedmentException(err, sqlex);
-                }
-            });
-        });
-    }
-
-    private CompletableFuture<Project> readSchemaMetadata(
-            Connection connection,
-            Predicate<String> filterCriteria, 
-            ProgressMeasure progress) {
-        
-        requireNonNulls(connection, filterCriteria, progress);
-        
         // Create a deep copy of the project document.
         final Project projectCopy = DocumentUtil.deepCopy(
             this.dbms.getParentOrThrow(), ProjectImpl::new
@@ -143,8 +116,26 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 "Could not find Dbms document in copy."
             ));
         
-        final DbmsType dbmsType = dbmsTypeOf(speedment, dbmsCopy);
-        final String action = actionName(dbmsCopy);
+        return readSchemaMetadata(
+                projectCopy, dbmsCopy, filterCriteria, progress
+            ).whenComplete((project, ex) -> {
+                progress.setCurrentAction("Done!");
+                progress.setProgress(ProgressMeasure.DONE);
+            });
+    }
+
+    private CompletableFuture<Project> readSchemaMetadata(
+//            Connection connection,
+            Project project,
+            Dbms dbms,
+            Predicate<String> filterCriteria, 
+            ProgressMeasure progress) {
+        
+        requireNonNulls(project, dbms, filterCriteria, progress);
+        
+        
+        final DbmsType dbmsType = dbmsTypeOf(speedment, dbms);
+        final String action = actionName(dbms);
 
         LOGGER.info(action);
         progress.setCurrentAction(action);
@@ -160,7 +151,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             try {sqlTypeMapping = !preSet.isEmpty() 
                     ? readTypeMapFromSet(preSet) 
-                    : readTypeMapFromDB(connection);
+                    : readTypeMapFromDB(dbms);
             } catch (final SQLException ex) {
                 throw new SpeedmentException(
                     "Error loading type map from database.", ex
@@ -172,33 +163,35 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         // Task that downloads the schemas from the database
         final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
-            try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
-                while (rs.next()) {
+            try (final Connection connection = getConnection(dbms)) {
+                try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
+                    while (rs.next()) {
 
-                    final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
-                    String catalogName = "";
-                    try {
-                        // This column is not there for Oracle so handle it
-                        // gracefully....
-                        catalogName = rs.getString("TABLE_CATALOG");
-                    } catch (final SQLException ex) {
-                        LOGGER.info("TABLE_CATALOG not in result set.");
-                    }
+                        final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
+                        String catalogName = "";
+                        try {
+                            // This column is not there for Oracle so handle it
+                            // gracefully....
+                            catalogName = rs.getString("TABLE_CATALOG");
+                        } catch (final SQLException ex) {
+                            LOGGER.info("TABLE_CATALOG not in result set.");
+                        }
 
-                    boolean schemaWasUsed = false;
-                    if (!naming.getSchemaExcludeSet().contains(schemaName)) {
-                        final String name = Optional.ofNullable(schemaName).orElse(catalogName);
-                        if (filterCriteria.test(name)) {
-                            final Schema schema = dbmsCopy.mutator().addNewSchema();
-                            schema.mutator().setName(name);
-                            schemaWasUsed = true;
+                        boolean schemaWasUsed = false;
+                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
+                            final String name = Optional.ofNullable(schemaName).orElse(catalogName);
+                            if (filterCriteria.test(name)) {
+                                final Schema schema = dbms.mutator().addNewSchema();
+                                schema.mutator().setName(name);
+                                schemaWasUsed = true;
+                            }
+                        }
+
+                        if (!schemaWasUsed) {
+                            discardedSchemas.add(schemaName);
                         }
                     }
-
-                    if (!schemaWasUsed) {
-                        discardedSchemas.add(schemaName);
-                    }
-                }
+                } 
             } catch (final SQLException sqle) {
                 throw new SpeedmentException(
                     "Error reading metadata from result set.", sqle
@@ -208,21 +201,23 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         // Task that downloads the catalogs from the database
         final CompletableFuture<Void> catalogsTask = CompletableFuture.runAsync(() -> {
-            try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
-                while (catalogResultSet.next()) {
-                    final String schemaName = catalogResultSet.getString(1);
+            try (final Connection connection = getConnection(dbms)) {
+                try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
+                    while (catalogResultSet.next()) {
+                        final String schemaName = catalogResultSet.getString(1);
 
-                    boolean schemaWasUsed = false;
-                    if (filterCriteria.test(schemaName)) {
-                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
-                            final Schema schema = dbmsCopy.mutator().addNewSchema();
-                            schema.mutator().setName(schemaName);
-                            schemaWasUsed = true;
+                        boolean schemaWasUsed = false;
+                        if (filterCriteria.test(schemaName)) {
+                            if (!naming.getSchemaExcludeSet().contains(schemaName)) {
+                                final Schema schema = dbms.mutator().addNewSchema();
+                                schema.mutator().setName(schemaName);
+                                schemaWasUsed = true;
+                            }
                         }
-                    }
 
-                    if (!schemaWasUsed) {
-                        discardedSchemas.add(schemaName);
+                        if (!schemaWasUsed) {
+                            discardedSchemas.add(schemaName);
+                        }
                     }
                 }
             } catch (final SQLException sqle) {
@@ -240,8 +235,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         ).thenCompose(v -> {
             @SuppressWarnings("rawtypes")
             final CompletableFuture<Schema>[] tablesTask = 
-                dbmsCopy.schemas().map(schema ->
-                    tables(connection, sqlTypeMappingTask, schema, progress)
+                dbms.schemas().map(schema ->
+                    tables(sqlTypeMappingTask, dbms, schema, progress)
                 ).toArray(CompletableFuture[]::new);
             
             return CompletableFuture.allOf(tablesTask)
@@ -258,19 +253,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         }
                     }
                     
-                    return projectCopy;
+                    return project;
                 });
         });
     }
 
-    protected CompletableFuture<Schema> tables(Connection connection, CompletableFuture<Map<String, Class<?>>> sqlTypeMapping, Schema schema, ProgressMeasure progressListener) {
-        requireNonNulls(connection, schema);
+    protected CompletableFuture<Schema> tables(CompletableFuture<Map<String, Class<?>>> sqlTypeMapping, Dbms dbms, Schema schema, ProgressMeasure progressListener) {
+        requireNonNulls(sqlTypeMapping, dbms, schema, progressListener);
 
         final String action = actionName(schema);
         LOGGER.info(action);
         progressListener.setCurrentAction(action);
 
-        try {
+        try (final Connection connection = getConnection(dbms)) {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 
                 final ResultSetMetaData rsmd = rsTable.getMetaData();
@@ -302,11 +297,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         return CompletableFuture.allOf(
             schema.tables().map(table -> sqlTypeMapping.thenAccept(mapping -> {
-                columns(connection, mapping, table, progressListener);
-                indexes(connection, table, progressListener);
-                foreignKeys(connection, table, progressListener);
-                primaryKeyColumns(connection, table, progressListener);
-                progressListener.setProgress(cnt.incrementAndGet() / noTables);
+                try (final Connection connection = getConnection(dbms)) {
+                    columns(connection, mapping, table, progressListener);
+                    indexes(connection, table, progressListener);
+                    foreignKeys(connection, table, progressListener);
+                    primaryKeyColumns(connection, table, progressListener);
+                    progressListener.setProgress(cnt.incrementAndGet() / noTables);
+                } catch (final SQLException ex) {
+                    throw new SpeedmentException(ex);
+                }
             })).toArray(CompletableFuture[]::new)
         ).thenApply(v -> schema);
     }
@@ -550,7 +549,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         requireNonNulls(sql, values, rsMapper);
 
         try (
-            final Connection connection = getConnection();
+            final Connection connection = getConnection(dbms);
             final PreparedStatement ps = connection.prepareStatement(sql)) {
             int i = 1;
             for (final Object o : values) {
@@ -578,7 +577,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             Objects.requireNonNull(sql),
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
-            () -> getConnection()
+            () -> getConnection(dbms)
         );
     }
 
@@ -606,7 +605,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             SqlStatement lastSqlStatement = null;
             Connection conn = null;
             try {
-                conn = getConnection();
+                conn = getConnection(dbms);
                 conn.setAutoCommit(false);
                 for (final SqlUpdateStatement sqlStatement : sqlStatementList) {
                     try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
@@ -679,19 +678,22 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
     }
     
-    protected Map<String, Class<?>> readTypeMapFromDB(Connection connection) throws SQLException {
-        requireNonNull(connection);
+    protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
+        requireNonNull(dbms);
+        final Map<String, Class<?>> result;
+        
+        try (final Connection connection = getConnection(dbms)) {
+            result = new ConcurrentHashMap<>();
+            try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
+                while (rs.next()) {
+                    final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
+                    if (typeInfo.getSqlTypeName().contains("BLOB")) {
+                        int foo = 1;
+                    }
 
-        final Map<String, Class<?>> result = new ConcurrentHashMap<>();
-        try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
-            while (rs.next()) {
-                final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
-                if (typeInfo.getSqlTypeName().contains("BLOB")) {
-                    int foo = 1;
+                    final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
+                    result.put(typeInfo.getSqlTypeName(), mappedClass);
                 }
-                
-                final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
-                result.put(typeInfo.getSqlTypeName(), mappedClass);
             }
         }
 
@@ -699,7 +701,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
     
     // Todo: Use DataSource instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
-    private Connection getConnection() {
+    private Connection getConnection(Dbms dbms) {
         final String url = DocumentDbUtil.findConnectionUrl(speedment, dbms);
         final String user = unwrap(dbms.getUsername());
         final char[] password = unwrap(speedment.getPasswordComponent().get(dbms));
