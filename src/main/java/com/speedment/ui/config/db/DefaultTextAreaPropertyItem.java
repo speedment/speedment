@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.property;
+package com.speedment.ui.config.db;
 
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -24,28 +25,40 @@ import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
+import static javafx.scene.layout.HBox.setHgrow;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<String, StringProperty> {
     
     private final StringProperty textProperty;
     private final ObservableStringValue defaultValue;
     
-    public DefaultStringPropertyItem(StringProperty value, ObservableStringValue defaultValue, String name, String description) {
+    public DefaultTextAreaPropertyItem(
+            StringProperty value, 
+            ObservableStringValue defaultValue, 
+            String name, 
+            String description) {
+        
         super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
         this.textProperty = value;
         this.defaultValue = defaultValue;
     }
     
-    public DefaultStringPropertyItem(StringProperty value, ObservableStringValue defaultValue, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public DefaultTextAreaPropertyItem(
+            StringProperty value, 
+            ObservableStringValue defaultValue, 
+            String name, 
+            String description, 
+            Consumer<PropertyEditor<?>> decorator) {
+        
         super(value, name, description, decorator);
         this.textProperty = value;
         this.defaultValue = defaultValue;
@@ -58,13 +71,13 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        return new DefaultStringPropertyEditor(this);
+        return new DefaultTextAreaPropertyEditor(this);
     }
     
-    private final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
+    private final static class DefaultTextAreaPropertyEditor extends AbstractPropertyEditor<String, DefaultTextAreaNode> {
 
-        private DefaultStringPropertyEditor(DefaultStringPropertyItem item) {
-            super(item, new DefaultStringNode(item.textProperty, item.defaultValue));
+        private DefaultTextAreaPropertyEditor(DefaultTextAreaPropertyItem item) {
+            super(item, new DefaultTextAreaNode(item.textProperty, item.defaultValue));
         }
         
         @Override
@@ -78,28 +91,33 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         }
     }
     
-    private final static class DefaultStringNode extends HBox {
+    private final static class DefaultTextAreaNode extends HBox {
         
+        private final ObservableStringValue defaultValue;
         private final StringProperty enteredValue;
         private final CheckBox auto;
-        private final TextField text;
+        private final TextArea text;
         
         private final static double SPACING = 8.0d;
         
-        private DefaultStringNode(StringProperty textProperty, ObservableStringValue defaultValue) {
+        private DefaultTextAreaNode(StringProperty textProperty, ObservableStringValue defaultValue) {
+            this.defaultValue = requireNonNull(defaultValue); // Avoid Garbage Collection
             this.auto         = new CheckBox("Auto");
-            this.text         = new TextField();
+            this.text         = new TextArea();
             
-            final boolean isAutoByDefault = textProperty.isEmpty().get()
-                || textProperty.get().equals(defaultValue.get());
+            final boolean isAutoByDefault = 
+                textProperty.isEmpty().get() ||
+                textProperty.get().equals(defaultValue.get());
             
-            this.enteredValue = new SimpleStringProperty(textProperty.get());
+            this.enteredValue = new SimpleStringProperty();
             this.auto.selectedProperty().setValue(isAutoByDefault);
             
             if (isAutoByDefault) {
+                enteredValue.setValue(defaultValue.get());
                 text.textProperty().bind(defaultValue);
             } else {
-                text.textProperty().setValue(defaultValue.get());
+                enteredValue.setValue(textProperty.get());
+                text.textProperty().setValue(textProperty.get());
             }
             
             this.text.disableProperty().bind(auto.selectedProperty());
@@ -109,11 +127,12 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
                 
                 if (isAuto) {
                     enteredValue.setValue(text.textProperty().getValue());
-                    text.textProperty().bind(defaultValue);
+                    text.textProperty().bind(this.defaultValue);
                 } else {
-                    if (Objects.equals(
-                        defaultValue.get(), 
-                        text.textProperty().get()
+                    if (text.textProperty().isEmpty().get()
+                    ||  Objects.equals(
+                            this.defaultValue.get(), 
+                            this.text.textProperty().get()
                     )) {
                         text.textProperty().setValue(enteredValue.get());
                     }
@@ -124,7 +143,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
             
             setAlignment(Pos.CENTER_LEFT);
             auto.setAlignment(Pos.CENTER_LEFT);
-            text.setAlignment(Pos.CENTER_LEFT);
+            text.setWrapText(true);
 
             setHgrow(text, Priority.ALWAYS);
             setHgrow(auto, Priority.SOMETIMES);
@@ -132,8 +151,16 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         }
         
         private void setValue(String value) {
-            text.textProperty().unbind();
-            text.textProperty().setValue(value);
+            if (auto.isSelected()) {
+                if (value == null || value.isEmpty()) {
+                    enteredValue.setValue(defaultValue.get());
+                } else {
+                    enteredValue.setValue(value);
+                }
+            } else {
+                text.textProperty().unbind();
+                text.textProperty().setValue(value);
+            }
         }
     }
 }

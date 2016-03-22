@@ -20,7 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.db.parameters.OrderType;
 import com.speedment.config.db.trait.*;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.EnumPropertyItem;
+import com.speedment.ui.config.db.EnumPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.PropertySheet;

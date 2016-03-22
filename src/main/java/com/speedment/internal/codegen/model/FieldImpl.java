@@ -34,9 +34,8 @@ import java.util.Set;
 /**
  * This is the default implementation of the {@link Field} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link Field#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
- * method to get an instance. In that way, you can layer change the implementing 
- * class without modifying the using code.
+ * {@link Field#of(String, Type)} method to get an instance. In that way, you 
+ * can layer change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Field
@@ -54,8 +53,7 @@ public final class FieldImpl implements Field {
      * Initializes this field using a name and a type.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link Field#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
-     * method!
+     * the {@link Field#of(String, Type)} method!
      * 
      * @param name  the name
      * @param type  the type

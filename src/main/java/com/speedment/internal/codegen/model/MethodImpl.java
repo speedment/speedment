@@ -36,9 +36,8 @@ import java.util.Set;
 /**
  * This is the default implementation of the {@link Method} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link Method#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
- * method to get an instance. In that way, you can layer change the implementing 
- * class without modifying the using code.
+ * {@link Method#of(String, Type)} method to get an instance. In that way, you 
+ * can layer change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Method
@@ -59,8 +58,7 @@ public final class MethodImpl implements Method {
      * Initializes this method using a name and a type.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link Method#of(java.lang.String, com.speedment.codegen.lang.models.Type)} 
-     * method!
+     * the {@link Method#of(String, Type)} method!
      * 
      * @param name  the name
      * @param type  the type

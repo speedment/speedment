@@ -39,7 +39,7 @@ import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
 import static com.speedment.internal.ui.util.OutputUtil.success;
-import com.speedment.internal.ui.property.PropertySheetFactory; // Exposes internal 
+import com.speedment.ui.config.db.PropertySheetFactory; // Exposes internal 
 import com.speedment.internal.util.Settings;
 import com.speedment.internal.util.testing.Stopwatch;
 import java.io.File;

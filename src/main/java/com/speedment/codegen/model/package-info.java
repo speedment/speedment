@@ -7,7 +7,7 @@
  * The interfaces in this package does not share a common ancestor. The reason
  * for this is that any class should qualify as a model as long as a 
  * corresponding view is installed in the active
- * {@link com.speedment.codegen.base.Generator}.
+ * {@link com.speedment.codegen.Generator}.
  * <p>
  * This package is part of the API. Modifications to classes here should only
  * (if ever) be done in major releases.

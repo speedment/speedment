@@ -1,6 +1,6 @@
 /**
  * Implementations of the 
- * {@link com.speedment.codegen.lang.models.modifiers.Modifier} interface that 
+ * {@link com.speedment.codegen.model.modifier.Modifier} interface that 
  * represent the modifier keywords of the java language is located in this 
  * package.
  * <p>

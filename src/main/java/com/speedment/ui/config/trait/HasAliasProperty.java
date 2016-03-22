@@ -19,7 +19,7 @@ package com.speedment.ui.config.trait;
 import com.speedment.Speedment;
 import com.speedment.config.db.trait.*;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import com.speedment.ui.config.db.DefaultStringPropertyItem;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;

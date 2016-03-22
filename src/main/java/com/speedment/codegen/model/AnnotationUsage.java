@@ -22,7 +22,6 @@ import com.speedment.codegen.model.trait.HasValue;
 import com.speedment.internal.codegen.model.AnnotationUsageImpl;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import com.speedment.codegen.model.trait.HasCopy;
 import static java.util.Objects.requireNonNull;
@@ -41,7 +40,7 @@ public interface AnnotationUsage extends HasCopy<AnnotationUsage>,
     /**
      * Use the specified key-value pair when referencing the annotation. If you
      * only want to show a single value without any key, consider using the
-     * {@link #set(com.speedment.codegen.lang.models.Value) set()} method.
+     * {@link #put(String, Value)} method.
      *
      * @param key the key
      * @param val the value

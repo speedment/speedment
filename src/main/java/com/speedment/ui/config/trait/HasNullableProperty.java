@@ -20,7 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.db.trait.HasNullable;
 import static com.speedment.config.db.trait.HasNullable.NULLABLE;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.BooleanPropertyItem;
+import com.speedment.ui.config.db.BooleanPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import org.controlsfx.control.PropertySheet;

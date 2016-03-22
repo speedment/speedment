@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.property;
+package com.speedment.ui.config.db;
 
 import java.util.function.Consumer;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.BooleanProperty;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
@@ -25,23 +25,23 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty> {
 
-    public StringPropertyItem(StringProperty value, String name, String description) {
+    public BooleanPropertyItem(BooleanProperty value, String name, String description) {
         super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
     }
     
-    public StringPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public BooleanPropertyItem(BooleanProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
         super(value, name, description, decorator);
     }
 
     @Override
-    public Class<String> getType() {
-        return String.class;
+    public Class<Boolean> getType() {
+        return Boolean.class;
     }
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        return Editors.createTextEditor(this);
+        return Editors.createCheckEditor(this);
     }
 }

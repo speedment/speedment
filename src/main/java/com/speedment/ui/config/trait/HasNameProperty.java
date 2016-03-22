@@ -20,7 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.ui.config.db.StringPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;

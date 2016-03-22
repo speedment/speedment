@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * This is the default implementation of the {@link AnnotationUsage} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link AnnotationUsage#of(com.speedment.codegen.lang.models.Type) } method to 
+ * {@link AnnotationUsage#of(Type) } method to 
  * get an instance. In that way, you can layer change the implementing class 
  * without modifying the using code.
  * 
@@ -44,7 +44,7 @@ public final class AnnotationUsageImpl extends AnnotationUsageBase {
      * Initializes this annotation usage using a type.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link AnnotationUsage#of(com.speedment.codegen.lang.models.Type)} 
+     * the {@link AnnotationUsage#of(Type)} 
      * method!
      * 
      * @param type  the type

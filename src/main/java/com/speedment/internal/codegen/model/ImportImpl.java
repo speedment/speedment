@@ -29,9 +29,8 @@ import java.util.Set;
 /**
  * This is the default implementation of the {@link Import} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link Import#of(com.speedment.codegen.lang.models.Type)} method to get an 
- * instance. In that way, you can layer change the implementing class without 
- * modifying the using code.
+ * {@link Import#of(Type)} method to get an instance. In that way, you can layer 
+ * change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Import
@@ -46,7 +45,7 @@ public final class ImportImpl implements Import {
      * Initializes this import using a type.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link Import#of(com.speedment.codegen.lang.models.Type)} method!
+     * the {@link Import#of(Type)} method!
 
      * @param type  the type
      */

@@ -19,7 +19,7 @@ package com.speedment.internal.ui.controller;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.event.TreeSelectionChange;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.ui.property.AbstractPropertyItem;
+import com.speedment.ui.config.db.AbstractPropertyItem;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.ui.config.DocumentProperty;

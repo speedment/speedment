@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.ui.property;
+package com.speedment.ui.config.db;
 
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.ui.config.DocumentProperty;

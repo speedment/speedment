@@ -27,7 +27,7 @@ import com.speedment.ui.config.trait.HasAliasProperty;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.property.BooleanPropertyItem;
+import com.speedment.ui.config.db.BooleanPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;

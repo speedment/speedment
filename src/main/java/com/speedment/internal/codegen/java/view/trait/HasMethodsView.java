@@ -35,7 +35,7 @@ public interface HasMethodsView<M extends HasMethods<M>> extends Transform<M, St
     
     /**
      * Render the methods-part of the model separated with two new-line 
-     * characters. The {@link #wrapMethod(com.speedment.codegen.lang.models.Method)}-method
+     * characters. The {@link #wrapMethod(Method)}-method
      * can be overridden to change the implementation type of the methods before
      * rendering.
      * 

@@ -24,7 +24,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.ui.config.trait.HasColumnProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
-import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.ui.config.db.StringPropertyItem;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
