@@ -80,15 +80,16 @@ import java.io.StringWriter;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import com.speedment.util.ProgressMeasure;
-import static com.speedment.internal.util.TextUtil.alignRight;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import static javafx.application.Platform.runLater;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 
 /**
  *
@@ -525,7 +526,7 @@ public final class UISession {
         });
     }
     
-    private void showProgressDialog(String title, ProgressMeasure progress) {
+    private void showProgressDialog(String title, ProgressMeasure progress, CompletableFuture<Boolean> task) {
         final Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Progress Tracker");
         dialog.setHeaderText(title);
@@ -537,11 +538,17 @@ public final class UISession {
         final VBox box        = new VBox();
         final ProgressBar bar = new ProgressBar();
         final Label message   = new Label();
+        final Button cancel   = new Button("Cancel", new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         
-        box.getChildren().addAll(bar, message);
+        box.getChildren().addAll(bar, message, cancel);
         box.setMaxWidth(Double.MAX_VALUE);
         bar.setMaxWidth(Double.MAX_VALUE);
         message.setMaxWidth(Double.MAX_VALUE);
+        cancel.setMaxWidth(128);
+        VBox.setVgrow(message, Priority.ALWAYS);
+        
+        box.setFillWidth(false);
+        box.setSpacing(8);
         
         progress.addListener(measure -> {
             final String msg   = measure.getCurrentAction();
@@ -557,6 +564,10 @@ public final class UISession {
                     dialog.close();
                 }
             });
+        });
+        
+        cancel.setOnAction(ev -> {
+            task.complete(false);
         });
         
         pane.setContent(box);
@@ -580,14 +591,25 @@ public final class UISession {
             final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
             
             final ProgressMeasure progress = ProgressMeasure.create();
-            CompletableFuture.runAsync(
-                () -> dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase)
+            final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(
+                () -> {
+                    try {
+                        dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase);
+                        return true;
+                    } catch (final SQLException ex) {
+                        showError("Error", "Could not read the specified schema.", ex);
+                        progress.setProgress(ProgressMeasure.DONE);
+                        return false;
+                    }
+                }
             );
             
-            showProgressDialog("Loading Database Metadata", progress);
-            project.merge(speedment, newProject);
+            showProgressDialog("Loading Database Metadata", progress, future);
             
-            return true;
+            if (future.get()) {
+                project.merge(speedment, newProject);
+                return true;
+            } else return false;
         } catch (final Exception ex) {
             showError("Error Connecting to Database", 
                 "A problem occured with establishing the database connection.", ex

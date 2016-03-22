@@ -143,18 +143,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void readSchemaMetadata(ProgressMeasure progress, Predicate<String> filterCriteria) {
+    public void readSchemaMetadata(ProgressMeasure progress, Predicate<String> filterCriteria) throws SQLException {
         try (final Connection connection = getConnection()) {
             readSchemaMetadata(connection, filterCriteria, progress);
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Error closing connection for " + dbms.toString());
+            throw sqle;
         } finally {
             progress.setCurrentAction("Done!");
             progress.setProgress(ProgressMeasure.DONE);
         }
     }
 
-    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progress) {
+    protected void readSchemaMetadata(Connection connection, Predicate<String> filterCriteria, ProgressMeasure progress) throws SQLException {
         requireNonNull(connection);
         final String action = actionName(dbms);
         LOGGER.info(action);
@@ -216,7 +217,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             }
 
         } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
+            throw sqle;
         }
 
         final AtomicBoolean atleastOneSchema = new AtomicBoolean(false);

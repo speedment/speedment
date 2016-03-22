@@ -59,8 +59,10 @@ public interface DbmsHandler {
      * structure.
      * 
      * @param progressListener  the progress listener
+     * @throws java.sql.SQLException  if something went wrong
      */
-    default void readSchemaMetadata(ProgressMeasure progressListener) {
+    default void readSchemaMetadata(ProgressMeasure progressListener) 
+            throws SQLException {
         DbmsHandler.this.readSchemaMetadata(progressListener, SCHEMA_NO_FILTER);
     }
 
@@ -75,8 +77,10 @@ public interface DbmsHandler {
      *
      * @param progressListener  the progress listener
      * @param filterCriteria    criteria that schema names must fulfill
+     * @throws java.sql.SQLException  if something went wrong
      */
-    void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria);
+    void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria)
+            throws SQLException;
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
