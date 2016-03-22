@@ -88,7 +88,7 @@ import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;
-import javafx.geometry.Pos;
+import java.util.concurrent.ExecutionException;
 import javafx.scene.control.Button;
 
 /**
@@ -567,7 +567,7 @@ public final class UISession {
         });
         
         cancel.setOnAction(ev -> {
-            task.complete(false);
+            task.cancel(true);
         });
         
         pane.setContent(box);
@@ -584,35 +584,34 @@ public final class UISession {
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             dbms.schemasProperty().clear();
- 
-            final Project newProject = DocumentUtil.deepCopy(project, ProjectImpl::new);
-            final Dbms newDbms = newProject.dbmses().findAny().get();
-            
-            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(newDbms);
+
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
             
             final ProgressMeasure progress = ProgressMeasure.create();
-            final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(
-                () -> {
-                    try {
-                        dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase);
-                        return true;
-                    } catch (final SQLException ex) {
-                        showError("Error", "Could not read the specified schema.", ex);
+            final CompletableFuture<Boolean> future = 
+                dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase)
+                    .handle((p, ex) -> {
                         progress.setProgress(ProgressMeasure.DONE);
-                        return false;
-                    }
-                }
-            );
-            
+                        
+                        if (ex == null) {
+                            project.merge(speedment, p);
+                            return true;
+                        } else {
+                            runLater(() -> {
+                                showError("Error Connecting to Database", 
+                                    "A problem occured with establishing the database connection.", ex
+                                );
+                            });
+                            return false;
+                        }
+                    });
+
             showProgressDialog("Loading Database Metadata", progress, future);
             
-            if (future.get()) {
-                project.merge(speedment, newProject);
-                return true;
-            } else return false;
-        } catch (final Exception ex) {
-            showError("Error Connecting to Database", 
-                "A problem occured with establishing the database connection.", ex
+            return future.get();
+        } catch (final InterruptedException | ExecutionException ex) {
+            showError("Error Executing Connection Task", 
+                "The execution of certain tasks could not be completed.", ex
             );
         }
         

@@ -19,6 +19,7 @@ package com.speedment.internal.util.document;
 import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasName;
+import com.speedment.config.db.trait.HasParent;
 import com.speedment.internal.util.Trees;
 import com.speedment.stream.MapStream;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
@@ -191,8 +192,15 @@ public final class DocumentUtil {
         );
     }
     
-    public static <DOC extends Document> DOC deepCopy(Document document, Function<Map<String, Object>, DOC> constructor) {
+    public static <DOC extends Document> DOC deepCopy(DOC document, Function<Map<String, Object>, DOC> constructor) {
         return constructor.apply(deepCopyMap(document.getData()));
+    }
+    
+    public static <P extends Document, DOC extends Document & HasParent<P>> DOC deepCopy(DOC document, BiFunction<P, Map<String, Object>, DOC> constructor) {
+        return constructor.apply(
+            document.getParent().orElse(null), 
+            deepCopyMap(document.getData())
+        );
     }
     
     private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {

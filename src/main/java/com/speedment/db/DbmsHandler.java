@@ -18,6 +18,7 @@ package com.speedment.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,23 +29,32 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.speedment.util.ProgressMeasure;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A DbmsHandler provides the interface between Speedment and an underlying
  * {@link Dbms}.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.0
  */
 @Api(version = "2.2")
 public interface DbmsHandler {
 
-    static final Predicate<String> SCHEMA_NO_FILTER = s -> true;
+    /**
+     * A String predicate that always returns true.
+     */
+    final Predicate<String> NO_FILTER = s -> true;
 
     /**
-     * Returns the {@link Dbms} node that is used by this {@code DbmsHandler}.
+     * Returns the {@link Dbms} document that is used by this 
+     * {@code DbmsHandler}.
+     * <p>
+     * This node will be copied before the reading starts to avoid concurrency
+     * issues.
      *
-     * @return the {@link Dbms} node
+     * @return  the {@link Dbms} document to use as a prototype
      */
     Dbms getDbms();
 
@@ -58,12 +68,12 @@ public interface DbmsHandler {
      * This method can be used to read a complete inventory of the database
      * structure.
      * 
-     * @param progressListener  the progress listener
-     * @throws java.sql.SQLException  if something went wrong
+     * @param progressListener        the progress listener
+     * @return                        the handle for this task
      */
-    default void readSchemaMetadata(ProgressMeasure progressListener) 
-            throws SQLException {
-        DbmsHandler.this.readSchemaMetadata(progressListener, SCHEMA_NO_FILTER);
+    default CompletableFuture<Project> readSchemaMetadata(
+        ProgressMeasure progressListener) {
+        return DbmsHandler.this.readSchemaMetadata(progressListener, NO_FILTER);
     }
 
     /**
@@ -75,12 +85,14 @@ public interface DbmsHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
-     * @param progressListener  the progress listener
-     * @param filterCriteria    criteria that schema names must fulfill
-     * @throws java.sql.SQLException  if something went wrong
+     * @param progressListener        the progress listener
+     * @param filterCriteria          criteria that schema names must fulfill
+     * @return                        the handle for this task
      */
-    void readSchemaMetadata(ProgressMeasure progressListener, Predicate<String> filterCriteria)
-            throws SQLException;
+    CompletableFuture<Project> readSchemaMetadata(
+        ProgressMeasure progressListener, 
+        Predicate<String> filterCriteria
+    );
 
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
