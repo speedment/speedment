@@ -17,7 +17,7 @@
 package com.speedment.internal.util.analytics;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.internal.util.Settings;
+import com.speedment.internal.util.EmailUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import static java.util.stream.Collectors.joining;
@@ -49,7 +49,7 @@ public enum FocusPoint {
             SpeedmentVersion.getImplementationTitle(),
             SpeedmentVersion.getImplementationVersion(),
             eventName,
-            Settings.inst().get("user_mail", "no-mail-specified")
+            EmailUtil.getEmail()
         ).collect(joining(SEPARATOR));
     }
 
