@@ -72,6 +72,10 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -379,16 +383,27 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setTypeMapper(typeMapper);
             column.mutator().setDatabaseType(selectedJdbcClass);
 
-            final String isAutoIncrementString = getColInfoWithGuard(rs, "IS_AUTOINCREMENT", column);
-            final String isGeneratedColumnString = getColInfoWithGuard(rs, "IS_GENERATEDCOLUMN", column);
-
-            if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
-                column.mutator().setAutoIncrement(true);
-            }
+            setAutoIncrement(column, rs);
 
         };
 
         tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
+    }
+
+    /**
+     * Sets the autoIncrement property of a Column.
+     *
+     * @param column to use
+     * @param rs that contains column metadata (per
+     * connection.getMetaData().getColumns(...))
+     */
+    protected void setAutoIncrement(Column column, ResultSet rs) {
+        final String isAutoIncrementString = getColInfoWithGuard(rs, "IS_AUTOINCREMENT", column);
+        final String isGeneratedColumnString = getColInfoWithGuard(rs, "IS_GENERATEDCOLUMN", column);
+
+        if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
+            column.mutator().setAutoIncrement(true);
+        }
     }
 
     private String getColInfoWithGuard(ResultSet rs, String rsColName, Column column) {
