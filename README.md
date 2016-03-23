@@ -34,7 +34,7 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy initialization
 A `HareApplication` class is generated from the database.
 ```java
-Speedment speedment = new HareApplication().withPassword("myPwd729").build();
+Speedment speedment = new HareApplication().withPassword(new String("myPwd729").toCharArray()).build();
 Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
 
@@ -90,6 +90,13 @@ Optional<Carrot> carrot = hares.stream()
 hares.stream()
     .map(Hare::toJson)
     .forEach(System.out::println);
+```
+
+###### Or collect the entire stream
+```java
+// List all hares as one JSON object
+String json = hares.stream()
+    .collect(CollectorUtil.toJson());
 ```
 
 Features
