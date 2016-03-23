@@ -609,7 +609,7 @@ public final class UISession {
             showProgressDialog("Loading Database Metadata", progress, future);
             
             return future.get();
-        } catch (final InterruptedException | ExecutionException ex) {
+        } catch (final Exception ex) {
             showError("Error Executing Connection Task", 
                 "The execution of certain tasks could not be completed.", ex
             );

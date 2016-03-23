@@ -74,6 +74,18 @@ import static com.speedment.util.NullUtil.requireNonNulls;
 import java.sql.Types;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -90,10 +102,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private final Speedment speedment;
     private final Dbms dbms;
+    protected final DbmsType dbmsType;
 
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
+        this.dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
     }
 
     @Override
@@ -245,19 +259,19 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             return CompletableFuture.allOf(tablesTask)
                 .handle((v2, ex) -> {
-                    if (tablesTask.length == 0) {
-                        if (ex == null) {
+                    if (ex == null) {
+                        if (tablesTask.length == 0) {
                             throw new SpeedmentException(
                                 "Could not find any matching schema. The following schemas was considered: " + discardedSchemas + "."
                             );
                         } else {
-                            throw new SpeedmentException(
-                                "An exception occured while the tables were loading.", ex
-                            );
+                            return project;
                         }
+                    } else {
+                        throw new SpeedmentException(
+                            "An exception occured while the tables were loading.", ex
+                        );
                     }
-
-                    return project;
                 });
         });
     }
@@ -300,8 +314,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final double noTables = schema.tables().count();
 
         return CompletableFuture.allOf(
-            schema.tables().map(table -> sqlTypeMapping.thenAcceptAsync(mapping -> {
+            schema.tables().map(table -> sqlTypeMapping.thenAccept(mapping -> {
                 try (final Connection connection = getConnection(dbms)) {
+                    progressListener.setCurrentAction(actionName(table));
                     columns(connection, mapping, table, progressListener);
                     indexes(connection, table, progressListener);
                     foreignKeys(connection, table, progressListener);
@@ -317,15 +332,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void columns(Connection connection, Map<String, Class<?>> sqlTypeMapping, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
-        progressListener.setCurrentAction(actionName(table));
-
-        final Schema schema = table.getParent().get();
+        final Schema schema = table.getParentOrThrow();
 
         final SqlSupplier<ResultSet> supplier = ()
             -> connection.getMetaData().getColumns(
                 jdbcCatalogLookupName(schema),
                 jdbcSchemaLookupName(schema),
-                table.getName(),
+                metaDataTableNameForColumns(table),
                 null
             );
 
@@ -342,7 +355,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setOrdinalPosition(md.getOrdinalPosition());
 
             final boolean nullable;
-            final int nullableValue = md.getNullable(); 
+            final int nullableValue = md.getNullable();
             switch (nullableValue) {
                 case DatabaseMetaData.columnNullable:
                 case DatabaseMetaData.columnNullableUnknown: {
@@ -359,9 +372,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             column.mutator().setNullable(nullable);
 
-            final String typeName = md.getTypeName(); 
-            final int columnSize = md.getColumnSize(); 
-            final int decimalDigits = md.getDecimalDigits(); 
+            final String typeName = md.getTypeName();
+            final int columnSize = md.getColumnSize();
+            final int decimalDigits = md.getDecimalDigits();
             final Class<?> lookupJdbcClass = lookupJdbcClass(sqlTypeMapping, typeName, columnSize, decimalDigits);
 
             final Class<?> selectedJdbcClass;
@@ -421,13 +434,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
-        final Schema schema = table.getParent().get();
+        final Schema schema = table.getParentOrThrow();
 
         final SqlSupplier<ResultSet> supplier = ()
-            -> connection.getMetaData().getPrimaryKeys(
-                jdbcCatalogLookupName(schema),
+            -> connection.getMetaData().getPrimaryKeys(jdbcCatalogLookupName(schema),
                 jdbcSchemaLookupName(schema),
-                table.getName()
+                metaDataTableNameForPrimaryKeys(table)
             );
 
         final TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
@@ -441,12 +453,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void indexes(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
-        final Schema schema = table.getParent().get();
+        final Schema schema = table.getParentOrThrow();
         final SqlSupplier<ResultSet> supplier = ()
             -> connection.getMetaData().getIndexInfo(
                 jdbcCatalogLookupName(schema),
                 jdbcSchemaLookupName(schema),
-                table.getName(),
+                metaDataTableNameForIndexes(table), // Todo: break out in protected method
                 false,
                 false
             );
@@ -484,12 +496,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected void foreignKeys(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
-        final Schema schema = table.getParent().get();
+        final Schema schema = table.getParentOrThrow();
         final SqlSupplier<ResultSet> supplier = ()
             -> connection.getMetaData().getImportedKeys(
                 jdbcCatalogLookupName(schema),
                 jdbcSchemaLookupName(schema),
-                table.getName()
+                metaDataTableNameForForeignKeys(table)
             );
 
         final TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
@@ -563,6 +575,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 }
             }
         } catch (final SQLException sqle) {
+            LOGGER.error(sqle, "Unable to read table child.");
             throw new SpeedmentException(sqle);
         }
     }
@@ -574,6 +587,22 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected String jdbcCatalogLookupName(Schema schema) {
         return schema.getName();
     }
+    
+    protected String metaDataTableNameForColumns(Table table) {
+        return table.getName();
+    }
+    
+    protected String metaDataTableNameForIndexes(Table table) {
+        return table.getName();
+    }
+    
+    protected String metaDataTableNameForPrimaryKeys(Table table) {
+        return table.getName();
+    }
+    
+    protected String metaDataTableNameForForeignKeys(Table table) {
+        return table.getName();
+    }    
 
     @Override
     public <T> Stream<T> executeQuery(String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
@@ -773,4 +802,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
         return "Reading metadata from " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
     }
+    
+    protected String encloseField(String fieldName) {
+        return dbmsType.getDatabaseNamingConvention().encloseField(fieldName);
+    }
+    
 }
