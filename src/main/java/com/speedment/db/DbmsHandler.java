@@ -47,16 +47,16 @@ public interface DbmsHandler {
      */
     final Predicate<String> NO_FILTER = s -> true;
 
-    /**
-     * Returns the {@link Dbms} document that is used by this 
-     * {@code DbmsHandler}.
-     * <p>
-     * This node will be copied before the reading starts to avoid concurrency
-     * issues.
-     *
-     * @return  the {@link Dbms} document to use as a prototype
-     */
-    Dbms getDbms();
+//    /**
+//     * Returns the {@link Dbms} document that is used by this 
+//     * {@code DbmsHandler}.
+//     * <p>
+//     * This node will be copied before the reading starts to avoid concurrency
+//     * issues.
+//     *
+//     * @return  the {@link Dbms} document to use as a prototype
+//     */
+//    Dbms getDbms();
 
     /**
      * Reads the schema metadata with populated {@link Schema Schemas} that are

@@ -69,19 +69,7 @@ import com.speedment.util.ProgressMeasure;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.speedment.internal.util.document.DocumentUtil;
 import java.util.concurrent.CompletableFuture;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.sql.Types;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -94,26 +82,20 @@ import static java.util.stream.Collectors.toMap;
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
-    private static final String YES = "YES";
+    protected static final String YES = "YES";
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
     private final static String PASSWORD_PROTECTED = "********";
     public static boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final Speedment speedment;
-    private final Dbms dbms;
-    protected final DbmsType dbmsType;
+    private final Dbms dbms; // No not use for metadata reads.
 
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
-        this.dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
     }
 
-    @Override
-    public Dbms getDbms() {
-        return dbms;
-    }
 
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
@@ -403,34 +385,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
     }
 
-    /**
-     * Sets the autoIncrement property of a Column.
-     *
-     * @param column to use
-     * @param rs that contains column metadata (per
-     * connection.getMetaData().getColumns(...))
-     */
-    protected void setAutoIncrement(Column column, ColumnMetadata md) throws SQLException {
-        final String isAutoIncrementString = md.getIsAutoincrement();
-
-        if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
-            column.mutator().setAutoIncrement(true);
-        }
-    }
-
-    /**
-     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g.
-     * {@code Timestamp} or {@code String}).
-     *
-     * @param typeName the TYPE_NAME value
-     * @param columnSize the COLUMN_SIZE value
-     * @param decimalDigits the DECIMAL_DIGITS value
-     * @return the mapped Class
-     */
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, String typeName, int columnSize, int decimalDigits) {
-        return sqlTypeMapping.get(typeName);
-    }
-
     protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
@@ -580,29 +534,105 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         }
     }
 
+    /**
+     * Sets the autoIncrement property of a Column.
+     *
+     * @param column to use
+     * @param rs that contains column metadata (per
+     * connection.getMetaData().getColumns(...))
+     */
+    protected void setAutoIncrement(Column column, ColumnMetadata md) throws SQLException {
+        final String isAutoIncrementString = md.getIsAutoincrement();
+
+        if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
+            column.mutator().setAutoIncrement(true);
+        }
+    }
+
+    /**
+     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g.
+     * {@code Timestamp} or {@code String}).
+     *
+     * @param typeName the TYPE_NAME value
+     * @param columnSize the COLUMN_SIZE value
+     * @param decimalDigits the DECIMAL_DIGITS value
+     * @return the mapped Class
+     */
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, String typeName, int columnSize, int decimalDigits) {
+        return sqlTypeMapping.get(typeName);
+    }
+
+    /**
+     * Returns the schema lookup name used when calling
+     * connection.getMetaData().getXxxx(y, schemaLookupName, ...) methods.
+     *
+     * @param table to use
+     * @return the schema lookup name used when calling
+     * connection.getMetaData().getXxxx(y, schemaLookupName, ...) methods
+     */
     protected String jdbcSchemaLookupName(Schema schema) {
         return null;
     }
 
+    /**
+     * Returns the catalog lookup name used when calling
+     * connection.getMetaData().getXxxx(catalogLookupName, ...) methods.
+     *
+     * @param table to use
+     * @return the catalog lookup name used when calling
+     * connection.getMetaData().getXxxx(catalogLookupName, ...) methods
+     */
     protected String jdbcCatalogLookupName(Schema schema) {
         return schema.getName();
     }
-    
+
+    /**
+     * Returns the table name used when calling the
+     * connection.getMetaData().getColumns() method.
+     *
+     * @param table to use
+     * @return the table name used when calling
+     * connection.getMetaData().getColumns() method
+     */
     protected String metaDataTableNameForColumns(Table table) {
         return table.getName();
     }
-    
+
+    /**
+     * Returns the table name used when calling the
+     * connection.getMetaData().getIndexes() method.
+     *
+     * @param table to use
+     * @return the table name used when calling
+     * connection.getMetaData().getIndexes() method
+     */
     protected String metaDataTableNameForIndexes(Table table) {
         return table.getName();
     }
-    
+
+    /**
+     * Returns the table name used when calling the
+     * connection.getMetaData().getPrimaryKeys() method.
+     *
+     * @param table to use
+     * @return the table name used when calling the
+     * connection.getMetaData().getPrimaryKeys() method
+     */
     protected String metaDataTableNameForPrimaryKeys(Table table) {
         return table.getName();
     }
-    
+
+    /**
+     * Returns the table name used when calling the
+     * connection.getMetaData().getImportedKeys() method.
+     *
+     * @param table to use
+     * @return the table name used when calling the
+     * connection.getMetaData().getImportedKeys() method
+     */
     protected String metaDataTableNameForForeignKeys(Table table) {
         return table.getName();
-    }    
+    }
 
     @Override
     public <T> Stream<T> executeQuery(String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
@@ -802,9 +832,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
         return "Reading metadata from " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
     }
-    
-    protected String encloseField(String fieldName) {
-        return dbmsType.getDatabaseNamingConvention().encloseField(fieldName);
+
+    protected String encloseField(Dbms dbms, String fieldName) {
+        return dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention().encloseField(fieldName);
     }
-    
+
 }
