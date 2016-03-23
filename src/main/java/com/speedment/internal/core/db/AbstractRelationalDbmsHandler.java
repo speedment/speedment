@@ -45,6 +45,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.core.config.db.ProjectImpl;
+import com.speedment.db.metadata.ColumnMetadata;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.util.sql.SqlTypeInfo;
@@ -66,14 +67,11 @@ import com.speedment.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.nonNull;
 import com.speedment.util.ProgressMeasure;
 import java.util.concurrent.atomic.AtomicInteger;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.util.document.DocumentUtil;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.sql.Types;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -88,7 +86,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
     private final static String PASSWORD_PROTECTED = "********";
-    private static final Boolean SHOW_METADATA = false;
+    public static boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final Speedment speedment;
     private final Dbms dbms;
@@ -333,16 +331,18 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
-            final String columnName = rs.getString("COLUMN_NAME");
-            if (columnName.startsWith("blob")) {
-                int foo = 1;
-            }
+            final ColumnMetadata md = ColumnMetadata.of(rs);
 
+            final String columnName = md.getColumnName();
+
+//            if (columnName.startsWith("blob")) {
+//                int foo = 1;
+//            }
             column.mutator().setName(columnName);
-            column.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+            column.mutator().setOrdinalPosition(md.getOrdinalPosition());
 
             final boolean nullable;
-            final int nullableValue = rs.getInt("NULLABLE");
+            final int nullableValue = md.getNullable(); 
             switch (nullableValue) {
                 case DatabaseMetaData.columnNullable:
                 case DatabaseMetaData.columnNullableUnknown: {
@@ -359,9 +359,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             column.mutator().setNullable(nullable);
 
-            final String typeName = rs.getString("TYPE_NAME");
-            final int columnSize = rs.getInt("COLUMN_SIZE");
-            final int decimalDigits = rs.getInt("DECIMAL_DIGITS");
+            final String typeName = md.getTypeName(); 
+            final int columnSize = md.getColumnSize(); 
+            final int decimalDigits = md.getDecimalDigits(); 
             final Class<?> lookupJdbcClass = lookupJdbcClass(sqlTypeMapping, typeName, columnSize, decimalDigits);
 
             final Class<?> selectedJdbcClass;
@@ -383,7 +383,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setTypeMapper(typeMapper);
             column.mutator().setDatabaseType(selectedJdbcClass);
 
-            setAutoIncrement(column, rs);
+            setAutoIncrement(column, md);
 
         };
 
@@ -397,22 +397,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * @param rs that contains column metadata (per
      * connection.getMetaData().getColumns(...))
      */
-    protected void setAutoIncrement(Column column, ResultSet rs) {
-        final String isAutoIncrementString = getColInfoWithGuard(rs, "IS_AUTOINCREMENT", column);
-        final String isGeneratedColumnString = getColInfoWithGuard(rs, "IS_GENERATEDCOLUMN", column);
+    protected void setAutoIncrement(Column column, ColumnMetadata md) throws SQLException {
+        final String isAutoIncrementString = md.getIsAutoincrement();
 
-        if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
+        if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
             column.mutator().setAutoIncrement(true);
         }
-    }
-
-    private String getColInfoWithGuard(ResultSet rs, String rsColName, Column column) {
-        try {
-            return rs.getString(rsColName);
-        } catch (final SQLException sqle) {
-            LOGGER.warn("Unable to determine " + rsColName + " for table " + column.getParentOrThrow().getName() + ", column " + column.getName());
-        }
-        return "";
     }
 
     /**
@@ -536,27 +526,40 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     ) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 
-        try (final ResultSet rsColumn = resultSetSupplier.get()) {
+        try (final ResultSet rsChild = resultSetSupplier.get()) {
 
-            final ResultSetMetaData rsmd = rsColumn.getMetaData();
+            final ResultSetMetaData rsmd = rsChild.getMetaData();
             final int numberOfColumns = rsmd.getColumnCount();
 
+            final Set<Integer> doNotTouchSet = new HashSet<>();
             if (SHOW_METADATA) {
                 for (int x = 1; x <= numberOfColumns; x++) {
-                    LOGGER.debug(rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + rsmd.getColumnType(x));
+                    final int columnType = rsmd.getColumnType(x);
+                    LOGGER.info(x + ":" + rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + columnType);
+                    if (columnType == Types.LONGVARCHAR || columnType == Types.LONGNVARCHAR) {
+                        doNotTouchSet.add(x);
+                    }
                 }
             }
 
-            while (rsColumn.next()) {
+            while (rsChild.next()) {
                 if (SHOW_METADATA) {
                     for (int x = 1; x <= numberOfColumns; x++) {
-                        LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsColumn.getObject(x) + "'");
+                        final Object val;
+                        // Some type of columns can only be read once
+                        if (doNotTouchSet.contains(x)) {
+                            val = "{unread}";
+                        } else {
+                            val = rsChild.getObject(x);
+                        }
+
+                        LOGGER.info(x + ":" + rsmd.getColumnName(x) + ":'" + val + "'");
                     }
                 }
-                if (filter.test(rsColumn)) {
-                    resultSetMutator.mutate(childSupplier.get(), rsColumn);
+                if (filter.test(rsChild)) {
+                    resultSetMutator.mutate(childSupplier.get(), rsChild);
                 } else {
-                    LOGGER.debug("Skipped due to RS filtering");
+                    LOGGER.info("Skipped due to RS filtering");
                 }
             }
         } catch (final SQLException sqle) {
