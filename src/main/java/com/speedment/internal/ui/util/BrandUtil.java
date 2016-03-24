@@ -15,8 +15,8 @@
  */
 package com.speedment.internal.ui.util;
 
+import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.internal.ui.UISession;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -28,15 +28,12 @@ import javafx.stage.Stage;
  */
 public final class BrandUtil {
     
-    public static void applyBrand(UISession session) {
-        applyBrand(session, session.getStage().getScene());
+    public static void applyBrand(Speedment speedment, Stage stage) {
+        applyBrand(speedment, stage, stage.getScene());
     }
     
-    public static void applyBrand(UISession session, Scene scene) {
-        final Stage stage = session.getStage();
-        
-        final UserInterfaceComponent.Brand brand = session
-            .getSpeedment()
+    public static void applyBrand(Speedment speedment, Stage stage, Scene scene) {
+        final UserInterfaceComponent.Brand brand = speedment
             .getUserInterfaceComponent()
             .getBrand();
 
@@ -45,7 +42,7 @@ public final class BrandUtil {
             .map(Image::new)
             .ifPresent(stage.getIcons()::add);
 
-        session.getSpeedment()
+        speedment
             .getUserInterfaceComponent()
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
