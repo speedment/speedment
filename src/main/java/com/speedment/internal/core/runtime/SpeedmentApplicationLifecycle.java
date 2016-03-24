@@ -163,6 +163,37 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     /**
+     * Configures a password for all dbmses in this project. The password will
+     * then be applied after the configuration has been read and after the
+     * System properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param password to use for all dbms:es in this project
+     * @return this instance
+     */
+    public T withPassword(final String password) {
+        // password nullable
+        return withPassword(stringToCharArray(password));
+    }
+
+    /**
+     * Configures a password for the named dbms. The password will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param dbmsName the name of the dbms
+     * @param password to use for the named dbms
+     * @return this instance
+     */
+    public T withPassword(final String dbmsName, final String password) {
+        // password nullable
+        return withPassword(dbmsName, stringToCharArray(password));
+    }
+
+    /**
      * Configures a username for all dbmses in this project. The username will
      * then be applied after the configuration has been read and after the
      * System properties have been applied.
@@ -602,6 +633,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             return map;
         }
 
+    }
+
+    private char[] stringToCharArray(String s) {
+        return s == null ? null : s.toCharArray();
     }
 
 }

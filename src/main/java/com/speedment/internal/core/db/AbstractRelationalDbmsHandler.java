@@ -72,6 +72,7 @@ import java.util.concurrent.CompletableFuture;
 import java.sql.Types;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -675,13 +676,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     public void executeUpdate(
         String sql, List<?> values, Consumer<List<Long>> generatedKeysConsumer)
         throws SQLException {
-
-        final List<SqlUpdateStatement> sqlStatementList = new ArrayList<>();
-        final SqlUpdateStatement sqlUpdateStatement
-            = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
-
-        sqlStatementList.add(sqlUpdateStatement);
-        executeUpdate(sqlStatementList);
+                
+        final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
+        executeUpdate(singletonList(sqlUpdateStatement));
     }
 
     private void executeUpdate(List<SqlUpdateStatement> sqlStatementList)
@@ -710,8 +707,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
                             while (generatedKeys.next()) {
                                 final Object genKey = generatedKeys.getObject(1);
-                                if (!"oracle.sql.ROWID".equals(genKey.getClass()
-                                    .getName())) {
+                                if (!"oracle.sql.ROWID".equals(genKey.getClass().getName())) {
                                     sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                                 } else {
                                     // Handle ROWID, make result = map<,String>
