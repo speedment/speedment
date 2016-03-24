@@ -80,6 +80,10 @@ public final class Loader {
         return root;
     }
     
+    
+    /**
+     * Utility classes should not be instantiated.
+     */
     private Loader() {
         instanceNotAllowed(getClass());
     }
