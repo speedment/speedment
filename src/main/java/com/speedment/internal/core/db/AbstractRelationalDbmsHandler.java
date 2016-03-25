@@ -46,6 +46,10 @@ import com.speedment.config.db.trait.HasParent;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.db.metadata.ColumnMetadata;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.manager.sql.SqlDeleteStatement;
+import com.speedment.internal.core.manager.sql.SqlInsertStatement;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.util.sql.SqlTypeInfo;
@@ -89,14 +93,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     private final static String PASSWORD_PROTECTED = "********";
     public static boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
-    private final Speedment speedment;
-    private final Dbms dbms; // No not use for metadata reads.
+    protected final Speedment speedment;
+    protected final Dbms dbms; // No not use for metadata reads.
 
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
     }
-
 
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
@@ -673,17 +676,24 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public void executeUpdate(
-        String sql, List<?> values, Consumer<List<Long>> generatedKeysConsumer)
-        throws SQLException {
-                
-        final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values, generatedKeysConsumer);
-        executeUpdate(singletonList(sqlUpdateStatement));
+    public <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
+        execute(singletonList(sqlUpdateStatement));
     }
 
-    private void executeUpdate(List<SqlUpdateStatement> sqlStatementList)
-        throws SQLException {
+    @Override
+    public void executeUpdate(String sql, List<?> values) throws SQLException {
+        final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values);
+        execute(singletonList(sqlUpdateStatement));
+    }
 
+    @Override
+    public void executeDelete(String sql, List<?> values) throws SQLException {
+        final SqlDeleteStatement sqlDeleteStatement = new SqlDeleteStatement(sql, values);
+        execute(singletonList(sqlDeleteStatement));
+    }
+
+    protected void execute(List<? extends SqlStatement> sqlStatementList) throws SQLException {
         requireNonNull(sqlStatementList);
         int retryCount = 5;
         boolean transactionCompleted = false;
@@ -694,29 +704,26 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             try {
                 conn = getConnection(dbms);
                 conn.setAutoCommit(false);
-                for (final SqlUpdateStatement sqlStatement : sqlStatementList) {
-                    try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
+                for (final SqlStatement sqlStatement : sqlStatementList) {
 
-                        int i = 1;
-                        for (Object o : sqlStatement.getValues()) {
-                            ps.setObject(i++, o);
+                    switch (sqlStatement.getType()) {
+                        case INSERT: {
+                            final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
+                            handleSqlStatement(conn, s);
+                            break;
                         }
-
-                        ps.executeUpdate();
-
-                        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                            while (generatedKeys.next()) {
-                                final Object genKey = generatedKeys.getObject(1);
-                                if (!"oracle.sql.ROWID".equals(genKey.getClass().getName())) {
-                                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                                } else {
-                                    // Handle ROWID, make result = map<,String>
-                                    // instead...
-                                }
-                            }
+                        case UPDATE: {
+                            final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
+                            handleSqlStatement(conn, s);
+                            break;
                         }
-
+                        case DELETE: {
+                            final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
+                            handleSqlStatement(conn, s);
+                            break;
+                        }
                     }
+
                 }
                 conn.commit();
                 conn.close();
@@ -760,7 +767,57 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         } while (!transactionCompleted && (retryCount > 0));
 
         if (transactionCompleted) {
-            sqlStatementList.forEach(SqlUpdateStatement::acceptGeneratedKeys);
+            postSuccessfulTransaction(sqlStatementList);
+        }
+    }
+
+    protected void handleSqlStatement(final Connection conn, final SqlInsertStatement sqlStatement) throws SQLException {
+        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
+            int i = 1;
+            for (Object o : sqlStatement.getValues()) {
+                ps.setObject(i++, o);
+            }
+
+            ps.executeUpdate();
+
+            try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                while (generatedKeys.next()) {
+                    final Object genKey = generatedKeys.getObject(1);
+                    if (!"oracle.sql.ROWID".equals(genKey.getClass().getName())) {
+                        sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                    } else {
+                        // Handle ROWID, make result = map<,String>
+                        // instead...
+                    }
+                }
+            }
+        }
+    }
+
+    protected void handleSqlStatement(final Connection conn, final SqlUpdateStatement sqlStatement) throws SQLException {
+        handleSqlStatementHelper(conn, sqlStatement);
+    }
+
+    protected void handleSqlStatement(final Connection conn, final SqlDeleteStatement sqlStatement) throws SQLException {
+        handleSqlStatementHelper(conn, sqlStatement);
+    }
+
+    private void handleSqlStatementHelper(final Connection conn, final SqlStatement sqlStatement) throws SQLException {
+        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
+            int i = 1;
+            for (Object o : sqlStatement.getValues()) {
+                ps.setObject(i++, o);
+            }
+            ps.executeUpdate();
+        }
+    }
+
+    protected void postSuccessfulTransaction(List<? extends SqlStatement> sqlStatementList) {
+        for (final SqlStatement sqlStatement : sqlStatementList) {
+            if (sqlStatement instanceof SqlInsertStatement) {
+                final SqlInsertStatement us = (SqlInsertStatement) sqlStatement;
+                us.acceptGeneratedKeys();
+            }
         }
     }
 
@@ -831,6 +888,26 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected String encloseField(Dbms dbms, String fieldName) {
         return dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention().encloseField(fieldName);
+    }
+
+    @Override
+    public String getDbmsInfoString() throws SQLException {
+        try (final Connection conn = getConnection(dbms)) {
+            final DatabaseMetaData md = conn.getMetaData();
+            return new StringBuilder()
+                .append(md.getDatabaseProductName())
+                .append(", ")
+                .append(md.getDatabaseProductVersion())
+                .append(", ")
+                .append(md.getDriverName())
+                .append(" ")
+                .append(md.getDriverVersion())
+                .append(", JDBC version ")
+                .append(md.getJDBCMajorVersion())
+                .append(".")
+                .append(md.getJDBCMinorVersion())
+                .toString();
+        }
     }
 
 }

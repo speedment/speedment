@@ -603,18 +603,23 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void checkDatabaseConnectivity() {
         final Project project = speedment.getProjectComponent().getProject();
         project.dbmses().forEachOrdered(dbms -> {
-            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
+            //final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
             final DbmsHandler dbmsHandler = speedment.getDbmsHandlerComponent().get(dbms);
             try {
-                final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
-                if (!oInfo.isPresent()) {
-                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
-                } else {
-                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
-                }
+                LOGGER.info(dbmsHandler.getDbmsInfoString());
             } catch (Exception e) {
                 LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
             }
+//            try (Connection conn = dbmsHandler.executeDelete(sql, withsAll)){
+            //final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
+//                if (!oInfo.isPresent()) {
+//                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
+//                } else {
+//                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
+//                }
+//            } catch (Exception e) {
+//                LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
+//            }
         });
     }
 

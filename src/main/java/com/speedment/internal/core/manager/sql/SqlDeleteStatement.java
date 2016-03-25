@@ -16,41 +16,21 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
  * @author pemi
  */
-public abstract class SqlStatement {
+public final class SqlDeleteStatement extends SqlStatement {
 
-    private final String sql;
-    private final List<?> values;
-
-    public enum Type {
-        INSERT, UPDATE, DELETE;
-    }
-
-    public SqlStatement(final String sql, final List<?> values) {
-        this.sql = Objects.requireNonNull(sql);
-        this.values = new ArrayList<>(Objects.requireNonNull(values));
-    }
-
-    public String getSql() {
-        return sql;
-    }
-
-    public List<?> getValues() {
-        return values;
+    public SqlDeleteStatement(final String sql, final List<?> values) {
+        super(sql, values);
     }
 
     @Override
-    public String toString() {
-        return getSql() + ", " + values.toString();
+    public Type getType() {
+        return Type.DELETE;
     }
-
-    public abstract Type getType();
 
 }

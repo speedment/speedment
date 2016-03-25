@@ -30,6 +30,7 @@ import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.DatabaseNamingConvention;
+import com.speedment.db.SqlRunnable;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -51,24 +52,8 @@ import com.speedment.stream.StreamDecorator;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import java.util.ArrayList;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -299,10 +284,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private final Function<ENTITY, Consumer<List<Long>>> NOTHING
-        = b -> l -> {
-            /* Nothing to do for updates... */ };
-
     private <F extends FieldTrait & ReferenceFieldTrait> Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, field.getIdentifier()));
         @SuppressWarnings("unchecked")
@@ -310,7 +291,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return dbValue;
     }
 
-    private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private <F extends FieldTrait & ReferenceFieldTrait> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
         final StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(sqlTableReference());
@@ -333,16 +314,19 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 //            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
 //            .map(f -> toDatabaseType(f, entity))
 //            .collect(toList());
+        final List<F> generatedFields = fields()
+            .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (F) f)
+            .collect(toList());
+
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
-                    fields()
-                        .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
-                        .filter(ReferenceFieldTrait.class::isInstance)
-                        .map(f -> (FieldTrait & ReferenceFieldTrait) f)
-                        .forEachOrdered(f -> {
+                    generatedFields
+                        .forEach(f -> {
 
                             // Cast from Long to the column target type
                             final Object val = speedment
@@ -358,7 +342,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             };
         };
 
-        executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
+        executeInsert(entity, sb.toString(), values, generatedFields, generatedKeyconsumer, listener);
         return entity;
     }
 
@@ -382,7 +366,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(f -> values.add(get(entity, f)));
 
-        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        executeUpdate(sb.toString(), values, listener);
         return entity;
     }
 
@@ -398,7 +382,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
-        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        executeDelete(sb.toString(), values, listener);
         return entity;
     }
 
@@ -454,14 +438,40 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return true;
     }
 
-    private void executeUpdate(
+    private <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(
         final ENTITY entity,
         final String sql,
         final List<Object> values,
+        final List<F> generatedFields,
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        requireNonNulls(entity, sql, values, generatedKeyconsumer, listener);
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeInsert(sql, values, generatedFields, generatedKeyconsumer.apply(entity)));
+    }
+
+    private void executeUpdate(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener
+    ) throws SpeedmentException {
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeUpdate(sql, values));
+    }
+
+    private void executeDelete(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener
+    ) throws SpeedmentException {
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeDelete(sql, values));
+    }
+
+    private void executeHelper(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener,
+        final SqlRunnable action
+    ) throws SpeedmentException {
+        requireNonNulls(sql, values, listener, action);
 
         final SqlMetaResultImpl<ENTITY> meta = listener.isPresent()
             ? new SqlMetaResultImpl<ENTITY>()
@@ -470,7 +480,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             : null;
 
         try {
-            executeUpdate(entity, sql, values, generatedKeyconsumer);
+            action.run();
         } catch (final SQLException sqle) {
             if (meta != null) {
                 meta.setThrowable(sqle);
@@ -481,12 +491,4 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         }
     }
 
-    private void executeUpdate(
-        final ENTITY entity,
-        final String sql,
-        final List<Object> values,
-        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
-    ) throws SQLException {
-        dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));
-    }
 }

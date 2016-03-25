@@ -20,6 +20,8 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -35,9 +37,9 @@ import java.util.concurrent.CompletableFuture;
  * A DbmsHandler provides the interface between Speedment and an underlying
  * {@link Dbms}.
  *
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0
  */
 @Api(version = "2.2")
 public interface DbmsHandler {
@@ -57,7 +59,6 @@ public interface DbmsHandler {
 //     * @return  the {@link Dbms} document to use as a prototype
 //     */
 //    Dbms getDbms();
-
     /**
      * Reads the schema metadata with populated {@link Schema Schemas} that are
      * available in this database. The schemas are populated by all their
@@ -67,9 +68,9 @@ public interface DbmsHandler {
      * <p>
      * This method can be used to read a complete inventory of the database
      * structure.
-     * 
-     * @param progressListener        the progress listener
-     * @return                        the handle for this task
+     *
+     * @param progressListener the progress listener
+     * @return the handle for this task
      */
     default CompletableFuture<Project> readSchemaMetadata(
         ProgressMeasure progressListener) {
@@ -85,12 +86,12 @@ public interface DbmsHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
-     * @param progressListener        the progress listener
-     * @param filterCriteria          criteria that schema names must fulfill
-     * @return                        the handle for this task
+     * @param progressListener the progress listener
+     * @param filterCriteria criteria that schema names must fulfill
+     * @return the handle for this task
      */
     CompletableFuture<Project> readSchemaMetadata(
-        ProgressMeasure progressListener, 
+        ProgressMeasure progressListener,
         Predicate<String> filterCriteria
     );
 
@@ -102,10 +103,10 @@ public interface DbmsHandler {
      * are present or if an SQLException is thrown internally, an {@code empty}
      * stream is returned.
      *
-     * @param <T>       the type of the objects in the stream to return
-     * @param sql       the SQL command to execute
-     * @param rsMapper  the mapper to use when iterating over the ResultSet
-     * @return          a stream of the mapped objects
+     * @param <T> the type of the objects in the stream to return
+     * @param sql the SQL command to execute
+     * @param rsMapper the mapper to use when iterating over the ResultSet
+     * @return a stream of the mapped objects
      */
     default <T> Stream<T> executeQuery(String sql, SqlFunction<ResultSet, T> rsMapper) {
         return executeQuery(sql, Collections.emptyList(), rsMapper);
@@ -118,13 +119,13 @@ public interface DbmsHandler {
      * are present or if an {@link SQLException} is thrown internally, an
      * {@code empty} stream is returned.
      *
-     * @param <T>       the type of the objects in the stream to return
-     * @param sql       the non-null SQL command to execute
-     * @param values    non-null values to use for "?" parameters in the sql
-     *                  command
-     * @param rsMapper  the non-null mapper to use when iterating over the
-     *                  {@link ResultSet}
-     * @return          a stream of the mapped objects
+     * @param <T> the type of the objects in the stream to return
+     * @param sql the non-null SQL command to execute
+     * @param values non-null values to use for "?" parameters in the sql
+     * command
+     * @param rsMapper the non-null mapper to use when iterating over the
+     * {@link ResultSet}
+     * @return a stream of the mapped objects
      */
     public <T> Stream<T> executeQuery(String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper);
 
@@ -135,45 +136,95 @@ public interface DbmsHandler {
      * stream will consume the {@code ResultSet} as the objects are consumed. If
      * no objects are present, an {@code empty} stream is returned.
      *
-     * @param <T>       the type of the objects in the Stream to return
-     * @param sql       the non-null SQL command to execute
-     * @param values    non-null List of objects to use for "?" parameters in 
-     *                  the SQL command
-     * @param rsMapper  the non-null mapper to use when iterating over the
-     *                  {@link ResultSet}
-     * @return          a stream of the mapped objects
+     * @param <T> the type of the objects in the Stream to return
+     * @param sql the non-null SQL command to execute
+     * @param values non-null List of objects to use for "?" parameters in the
+     * SQL command
+     * @param rsMapper the non-null mapper to use when iterating over the
+     * {@link ResultSet}
+     * @return a stream of the mapped objects
      */
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-        String sql, List<?> values, Function<ResultSet, T> rsMapper);
+        String sql,
+        List<?> values,
+        Function<ResultSet, T> rsMapper
+    );
 
+//    /**
+//     * Executes an SQL update command. Generated key(s) following an insert
+//     * command (if any) will be feed to the provided {code Consumer}.
+//     *
+//     * @param sql the non-null SQL command to execute
+//     * @param generatedKeyConsumer the non-null key Consumer
+//     * @throws SQLException if an error occurs
+//     */
+//    default void executeInsert(String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+//        executeInsert(sql, Collections.emptyList(), generatedKeyConsumer);
+//    }
     /**
-     * Executes a SQL update command. Generated key(s) following an insert
-     * command (if any) will be feed to the provided {code Consumer}.
-     *
-     * @param sql                   the non-null SQL command to execute
-     * @param generatedKeyConsumer  the non-null key Consumer
-     * @throws SQLException         if an error occurs
-     */
-    default void executeUpdate(
-        String sql, Consumer<List<Long>> generatedKeyConsumer
-    ) throws SQLException {
-
-        executeUpdate(sql, Collections.emptyList(), generatedKeyConsumer);
-    }
-
-    /**
-     * Executes a SQL update command. Generated key(s) following an insert
+     * Executes an SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
      *
-     * @param sql                   the non-null SQL command to execute
-     * @param values                a non-null list
-     * @param generatedKeyConsumer  non-null List of objects to use for "?"
-     *                              parameters in the SQL command
-     * @throws SQLException         if an error occurs
+     * @param <F> dynamic type
+     * @param sql the non-null SQL command to execute
+     * @param values a non-null list
+     * @param generatedKeyFields list of the generated fields
+     * @param generatedKeyConsumer non-null List of objects to use for "?"
+     * parameters in the SQL command
+     * @throws SQLException if an error occurs
      */
-    public void executeUpdate(
+    public <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(
         final String sql,
         final List<?> values,
+        final List<F> generatedKeyFields,
         final Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
+
+//    /**
+//     * Executes an SQL update command. Generated key(s) following an insert
+//     * command (if any) will be feed to the provided {code Consumer}.
+//     *
+//     * @param sql the non-null SQL command to execute
+//     * @throws SQLException if an error occurs
+//     */
+//    default void executeUpdate(String sql) throws SQLException {
+//        executeUpdate(sql, Collections.emptyList());
+//    }
+    /**
+     * Executes an SQL update command. Generated key(s) following an insert
+     * command (if any) will be feed to the provided Consumer.
+     *
+     * @param sql the non-null SQL command to execute
+     * @param values a non-null list
+     * @throws SQLException if an error occurs
+     */
+    public void executeUpdate(final String sql, final List<?> values) throws SQLException;
+
+//    /**
+//     * Executes an SQL delete command.
+//     *
+//     * @param sql the non-null SQL command to execute
+//     * @throws SQLException if an error occurs
+//     */
+//    default void executeDelete(String sql) throws SQLException {
+//        executeDelete(sql, Collections.emptyList());
+//    }
+    /**
+     * Executes an SQL delete command. Generated key(s) following an insert
+     * command (if any) will be feed to the provided Consumer.
+     *
+     * @param sql the non-null SQL command to execute
+     * @param values a non-null list
+     * @throws SQLException if an error occurs
+     */
+    public void executeDelete(final String sql, final List<?> values) throws SQLException;
+
+    /**
+     * Returns a string with information on the current dbms.
+     *
+     * @return a string with information on the current dbms
+     * @throws SQLException if an error occurs
+     */
+    public String getDbmsInfoString() throws SQLException;
+
 }
