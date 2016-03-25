@@ -26,11 +26,12 @@ import java.util.Optional;
  */
 public final class DefaultBrand implements UserInterfaceComponent.Brand {
         
-    private final String title, subtitle, logoSmall, logoLarge;
+    private final String title, subtitle, version, logoSmall, logoLarge;
 
-    public DefaultBrand(String title, String subtitle, String logoSmall, String logoLarge) {
+    public DefaultBrand(String title, String subtitle, String version, String logoSmall, String logoLarge) {
         this.title     = requireNonNull(title);
         this.subtitle  = requireNonNull(subtitle);
+        this.version   = requireNonNull(version);
         this.logoSmall = logoSmall; // Can be null.
         this.logoLarge = logoLarge; // Can be null.
     }
@@ -43,6 +44,11 @@ public final class DefaultBrand implements UserInterfaceComponent.Brand {
     @Override
     public String subtitle() {
         return subtitle;
+    }
+
+    @Override
+    public String version() {
+        return version;
     }
 
     @Override

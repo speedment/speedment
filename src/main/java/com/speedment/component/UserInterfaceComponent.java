@@ -102,6 +102,7 @@ public interface UserInterfaceComponent extends Component {
         
         String title();
         String subtitle();
+        String version();
         Optional<String> logoSmall();
         Optional<String> logoLarge();
         

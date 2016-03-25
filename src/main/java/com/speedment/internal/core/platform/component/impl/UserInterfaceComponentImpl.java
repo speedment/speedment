@@ -17,6 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.SpeedmentVersion;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.license.OpenSourceLicense;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -40,6 +40,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.controlsfx.control.PropertySheet;
+import static java.util.stream.Collectors.toList;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -68,8 +69,9 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
         
         brand = new DefaultBrand(
-            "Speedment", 
-            "Open Source", 
+            SpeedmentVersion.getImplementationTitle(),
+            "Open Source",
+            SpeedmentVersion.getImplementationVersion(),
             "/images/logo.png",
             "/images/speedment_open_source_small.png"
         );
