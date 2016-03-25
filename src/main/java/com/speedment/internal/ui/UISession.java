@@ -27,7 +27,6 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
 import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
-import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -74,7 +73,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SplitPane;
-import com.speedment.internal.util.document.DocumentUtil;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javafx.scene.control.TextArea;
@@ -86,9 +84,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ExecutionException;
 import javafx.scene.control.Button;
 
 /**
@@ -98,6 +94,7 @@ import javafx.scene.control.Button;
 public final class UISession {
 
     public final static String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
+    public final static String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     public enum ReuseStage {
         USE_EXISTING_STAGE,
@@ -105,7 +102,6 @@ public final class UISession {
     }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-    private final static String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private final static Predicate<File> OPEN_FILE_CONDITIONS = file ->
         file != null &&
