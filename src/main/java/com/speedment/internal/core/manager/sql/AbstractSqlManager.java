@@ -362,7 +362,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
         primaryKeyFields()
             .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+            .map(f -> (ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(f -> values.add(get(entity, f)));
 
