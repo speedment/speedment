@@ -24,7 +24,7 @@ import java.util.Optional;
  *
  * @author Emil Forslund
  */
-public final class DefaultBrand implements UserInterfaceComponent.Brand {
+public class DefaultBrand implements UserInterfaceComponent.Brand {
         
     private final String title, subtitle, version, logoSmall, logoLarge;
 
@@ -37,27 +37,27 @@ public final class DefaultBrand implements UserInterfaceComponent.Brand {
     }
 
     @Override
-    public String title() {
+    public final String title() {
         return title;
     }
 
     @Override
-    public String subtitle() {
+    public final String subtitle() {
         return subtitle;
     }
 
     @Override
-    public String version() {
+    public final String version() {
         return version;
     }
 
     @Override
-    public Optional<String> logoSmall() {
+    public final Optional<String> logoSmall() {
         return Optional.ofNullable(logoSmall);
     }
 
     @Override
-    public Optional<String> logoLarge() {
+    public final Optional<String> logoLarge() {
         return Optional.ofNullable(logoLarge);
     }
 }
