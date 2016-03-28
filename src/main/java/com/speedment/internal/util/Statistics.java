@@ -25,7 +25,7 @@ import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADE
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import com.speedment.internal.util.testing.TestSettings;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,8 +39,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -101,29 +102,32 @@ public final class Statistics {
     private static void sendPostRequest(Collection<Param> params) {
         requireNonNulls(params);
 
-        CompletableFuture.runAsync(() -> {
-            final URL url = createRequestURL(params);
+        if (!TestSettings.isTestMode()) {
 
-            try {
-                final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            CompletableFuture.runAsync(() -> {
+                final URL url = createRequestURL(params);
 
-                final int responseCode = con.getResponseCode();
-                final String responseMessage = con.getResponseMessage();
-                try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                    final StringBuffer response = new StringBuffer();
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
+                try {
+                    final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                    final int responseCode = con.getResponseCode();
+                    final String responseMessage = con.getResponseMessage();
+                    try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                        final StringBuffer response = new StringBuffer();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+
+                        // Do not show...
+                        //LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
                     }
-                    
-                    // Do not show...
-                    //LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
-                }
 
-            } catch (IOException ex) {
-                LOGGER.debug(ex);
-            }
-        });
+                } catch (IOException ex) {
+                    LOGGER.debug(ex);
+                }
+            });
+        }
     }
 
     private static URL createRequestURL(Collection<Param> params) {

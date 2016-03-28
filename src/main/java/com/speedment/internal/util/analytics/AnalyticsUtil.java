@@ -16,7 +16,9 @@
  */
 package com.speedment.internal.util.analytics;
 
+import com.speedment.internal.util.testing.TestSettings;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -29,13 +31,17 @@ public final class AnalyticsUtil {
 
     public static void notify(final FocusPoint focusPoint) {
         requireNonNull(focusPoint);
-        final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
-        tracker.setLoggingAdapter(new LoggingAdapterImpl());
-        tracker.trackAsynchronously(focusPoint);
+        if (!TestSettings.isTestMode()) {
+            final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
+            tracker.setLoggingAdapter(new LoggingAdapterImpl());
+            tracker.trackAsynchronously(focusPoint);
+        }
     }
 
     /**
      * Utility classes should not be instantiated.
      */
-    private AnalyticsUtil() { instanceNotAllowed(getClass()); }
+    private AnalyticsUtil() {
+        instanceNotAllowed(getClass());
+    }
 }
