@@ -17,13 +17,8 @@
 package com.speedment.internal.util.sql;
 
 import com.speedment.util.sql.SqlTypeInfo;
-import com.speedment.exception.SpeedmentException;
-import java.lang.reflect.Field;
 import java.sql.DatabaseMetaData;
-import java.util.HashMap;
-import java.util.Map;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 
 /**
  *
@@ -48,26 +43,21 @@ public final class SqlTypeInfoImpl implements SqlTypeInfo {
         this.unsigned = unsigned;
     }
 
-    private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
-
-    static {
-        // Get all field in java.sql.Types using reflection
-        final Field[] fields = java.sql.Types.class.getFields();
-        for (final Field field : fields) {
-            try {
-                final String name = field.getName();
-                final Integer value = (Integer) field.get(null);
-                JAVA_SQL_TYPE_INT_TO_STRING_MAP.put(value, name);
-            } catch (final IllegalAccessException e) {
-                throw new SpeedmentException(e);
-            }
-        }
-    }
-
-    @Override
-    public Optional<String> javaSqlTypeName() {
-        return Optional.ofNullable(JAVA_SQL_TYPE_INT_TO_STRING_MAP.get(javaSqlTypeInt));
-    }
+//    private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
+//
+//    static {
+//        // Get all field in java.sql.Types using reflection
+//        final Field[] fields = java.sql.Types.class.getFields();
+//        for (final Field field : fields) {
+//            try {
+//                final String name = field.getName();
+//                final Integer value = (Integer) field.get(null);
+//                JAVA_SQL_TYPE_INT_TO_STRING_MAP.put(value, name);
+//            } catch (final IllegalAccessException e) {
+//                throw new SpeedmentException(e);
+//            }
+//        }
+//    }
 
     @Override
     public String getSqlTypeName() {

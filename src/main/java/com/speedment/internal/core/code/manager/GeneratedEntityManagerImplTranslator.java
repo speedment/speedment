@@ -50,36 +50,8 @@ import com.speedment.code.TranslatorSupport;
 import java.util.function.Supplier;
 import java.util.LinkedList;
 import java.util.List;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
 import com.speedment.component.resultset.ResultSetMapperComponent;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
 import com.speedment.component.resultset.ResultSetMapping;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
@@ -194,10 +166,14 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 c.findTypeMapper().getDatabaseType()
             );
 
-        final StringBuilder sb = new StringBuilder()
-            .append(typeMapperName(support, c))
-            .append(".toJavaType(");
+        final boolean isIdentityMapper = c.findTypeMapper().isIdentityMapper();
 
+        final StringBuilder sb = new StringBuilder();
+        if (!isIdentityMapper) {
+            sb
+                .append(typeMapperName(support, c))
+                .append(".toJavaType(");
+        }
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
 
         final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
@@ -221,7 +197,9 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .append("(resultSet, ")
                 .append(position.getAndIncrement()).append(")");
         }
-        sb.append(")");
+        if (!isIdentityMapper) {
+            sb.append(")");
+        }
 
         return sb.toString();
     }
@@ -266,11 +244,21 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             .map(c
             -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
             + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
-            + "((" + c.findTypeMapper().getJavaType().getSimpleName()
-            + ") value); break;").collect(Collectors.joining(nl()))
+            + "("
+            + castToColumnTypeIfNotObject(c)
+            + "value); break;").collect(Collectors.joining(nl()))
             + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
             )
         };
+    }
+
+    private static String castToColumnTypeIfNotObject(Column c) {
+        final java.lang.Class<?> castType = c.findTypeMapper().getJavaType();
+        if (Object.class.equals(castType)) {
+            return "";
+        } else {
+            return "(" + c.findTypeMapper().getJavaType().getSimpleName() + ") ";
+        }
     }
 
     public static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {

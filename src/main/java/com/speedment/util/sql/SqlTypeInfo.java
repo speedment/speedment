@@ -16,9 +16,13 @@
  */
 package com.speedment.util.sql;
 
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.util.sql.SqlTypeInfoImpl;
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -26,6 +30,38 @@ import java.util.Optional;
  * @author pemi
  */
 public interface SqlTypeInfo {
+
+    public class Hidden {
+
+        private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
+
+        static {
+            // Get all field in java.sql.Types using reflection
+            final Field[] fields = java.sql.Types.class.getFields();
+            for (final Field field : fields) {
+                try {
+                    final String name = field.getName();
+                    final Integer value = (Integer) field.get(null);
+                    JAVA_SQL_TYPE_INT_TO_STRING_MAP.put(value, name);
+                } catch (final IllegalAccessException e) {
+                    throw new SpeedmentException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Looks up and returns the given int and returns the name of that int
+     * according to {@link java.sql.Types}. If no value can be found,
+     * Optional.empty() is returned.
+     *
+     * @param javaSqlTypeInt the value in java.sql.Types to lookup
+     * @return the given int and returns the name of that int according to
+     * {@link java.sql.Types}
+     */
+    static Optional<String> lookupJavaSqlType(int javaSqlTypeInt) {
+        return Optional.ofNullable(Hidden.JAVA_SQL_TYPE_INT_TO_STRING_MAP.get(javaSqlTypeInt));
+    }
 
     //http://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html#getTypeInfo()
     static SqlTypeInfo from(ResultSet rs) throws SQLException {
@@ -41,7 +77,9 @@ public interface SqlTypeInfo {
         return new SqlTypeInfoImpl(sqlTypeName, javaSqlTypeInt, precision, decimals, nullable, unsigned);
     }
 
-    Optional<String> javaSqlTypeName();
+    default Optional<String> javaSqlTypeName() {
+        return lookupJavaSqlType(getJavaSqlTypeInt());
+    }
 
     String getSqlTypeName();
 

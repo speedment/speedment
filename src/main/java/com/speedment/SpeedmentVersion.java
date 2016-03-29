@@ -30,11 +30,10 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 @Api(version = "2.2")
 public final class SpeedmentVersion {
 
-    private static final String
-        IMPLEMENTATION_TITLE   = "Speedment",
-        IMPLEMENTATION_VENDOR  = "Speedment Inc.",  // "Speedment, Inc." difficult to enter into POM because of ','
+    private static final String IMPLEMENTATION_TITLE = "Speedment",
+        IMPLEMENTATION_VENDOR = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
         IMPLEMENTATION_VERSION = "2.2.3",
-        SPECIFICATION_VERSION  = "2.2";
+        SPECIFICATION_VERSION = "2.2";
 
     private static final boolean PRODUCTION_MODE = true;
 
@@ -95,19 +94,6 @@ public final class SpeedmentVersion {
         return SPECIFICATION_VERSION;
     }
 
-    /**
-     * Returns a well formatted welcome message that for an example can be 
-     * printed into the console.
-     * 
-     * @return  welcome message
-     */
-    public static String getWelcomeMessage() {
-        return getImplementationTitle()
-            + " (" + getImplementationVersion() + ")"
-            + " by " + getImplementationVendor() + " started."
-            + " API version is " + getSpecificationVersion();
-    }
-    
     /**
      * Utility classes should not be instantiated.
      */

@@ -18,6 +18,9 @@ package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
+import java.sql.Blob;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no
@@ -30,6 +33,23 @@ public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
     public MySqlDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
+    }
+
+    @Override
+    protected void addCustomJavaTypeMap() {
+        addMySqlCustomJavaTypeMap(javaTypeMap);
+    }
+
+    /**
+     * Common to MySQL and MariaDB
+     *
+     * @param map to add to
+     */
+    static void addMySqlCustomJavaTypeMap(Map<String, Class<?>> map) {
+        Stream.of("LONG", "MEDIUM", "TINY").forEach(key -> {
+            map.put(key + "BLOB", Blob.class);
+        });
+        map.put("JSON", String.class);
     }
 
 }

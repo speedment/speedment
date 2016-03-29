@@ -29,7 +29,7 @@ import java.util.function.BiFunction;
  * @since 2.0
  */
 @Api(version = "2.2")
-public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, SqlTypeInfo, Class<?>> {
+public interface SqlTypeMapperComponent extends Component {
 
     @Override
     default Class<SqlTypeMapperComponent> getComponentClass() {
@@ -43,7 +43,6 @@ public interface SqlTypeMapperComponent extends Component, BiFunction<Dbms, SqlT
      * @param typeInfo to apply
      * @return the corresponding Java {@code Class}
      */
-    @Override
     Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo);
 
 }

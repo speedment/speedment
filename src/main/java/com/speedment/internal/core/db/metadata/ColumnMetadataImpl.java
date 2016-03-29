@@ -1,19 +1,19 @@
 package com.speedment.internal.core.db.metadata;
 
 import com.speedment.db.SqlSupplier;
-import com.speedment.db.metadata.ColumnMetadata;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import com.speedment.db.metadata.ColumnMetaData;
 
 /**
  *
  * @author Per Minborg
  */
-public class ColumnMetadataImpl implements ColumnMetadata {
+public class ColumnMetaDataImpl implements ColumnMetaData {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(ColumnMetadataImpl.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(ColumnMetaDataImpl.class);
 
     private final String tableCat;
     private final String tableSchem;
@@ -39,7 +39,7 @@ public class ColumnMetadataImpl implements ColumnMetadata {
     private final String isAutoincrement;
     private final String isGeneratedcolumn;
 
-    public ColumnMetadataImpl(ResultSet rs) {
+    public ColumnMetaDataImpl(ResultSet rs) {
         tableCat = readSilent(rs, () -> rs.getString(1));
         tableSchem = readSilent(rs, () -> rs.getString(2));
         tableName = readSilent(rs, () -> rs.getString(3));
@@ -90,6 +90,12 @@ public class ColumnMetadataImpl implements ColumnMetadata {
         public boolean isNull() {
             return isNull;
         }
+
+        @Override
+        public String toString() {
+            return isNull ? "null" : Integer.toString(value);
+        }
+
     }
 
     @FunctionalInterface

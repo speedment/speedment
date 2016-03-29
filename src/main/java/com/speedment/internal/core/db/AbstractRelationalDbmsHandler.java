@@ -45,7 +45,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.db.SqlPredicate;
 import com.speedment.internal.core.config.db.ProjectImpl;
-import com.speedment.db.metadata.ColumnMetadata;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.manager.sql.SqlDeleteStatement;
@@ -74,9 +73,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.speedment.internal.util.document.DocumentUtil;
 import java.util.concurrent.CompletableFuture;
 import java.sql.Types;
+import static java.util.Collections.singletonList;
+import com.speedment.db.metadata.ColumnMetaData;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Collections.singletonList;
+import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Time;
+import java.sql.Timestamp;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -87,18 +92,23 @@ import static java.util.stream.Collectors.toMap;
  */
 public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
+
+    protected static final Class<?> DEFAULT_MAPPING = Object.class;
     protected static final String YES = "YES";
 
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
     private final static String PASSWORD_PROTECTED = "********";
     public static boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     protected final Speedment speedment;
     protected final Dbms dbms; // No not use for metadata reads.
+    protected final Map<String, Class<?>> javaTypeMap;
 
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
+        javaTypeMap = new HashMap<>();
+        setupJavaTypeMap();
     }
 
     @Override
@@ -330,7 +340,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
-            final ColumnMetadata md = ColumnMetadata.of(rs);
+            final ColumnMetaData md = ColumnMetaData.of(rs);
 
             final String columnName = md.getColumnName();
 
@@ -358,17 +368,14 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             column.mutator().setNullable(nullable);
 
-            final String typeName = md.getTypeName();
-            final int columnSize = md.getColumnSize();
-            final int decimalDigits = md.getDecimalDigits();
-            final Class<?> lookupJdbcClass = lookupJdbcClass(sqlTypeMapping, typeName, columnSize, decimalDigits);
+            final Class<?> lookupJdbcClass = lookupJdbcClass(sqlTypeMapping, md);
 
             final Class<?> selectedJdbcClass;
             if (lookupJdbcClass != null) {
                 selectedJdbcClass = lookupJdbcClass;
             } else {
-                // Fall-back to Object
-                selectedJdbcClass = Object.class;
+                // Fall-back to DEFAULT_MAPPING
+                selectedJdbcClass = DEFAULT_MAPPING;
                 LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName() + ". Fall-back to JDBC-type " + selectedJdbcClass.getSimpleName());
             }
 
@@ -545,7 +552,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * @param rs that contains column metadata (per
      * connection.getMetaData().getColumns(...))
      */
-    protected void setAutoIncrement(Column column, ColumnMetadata md) throws SQLException {
+    protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
         final String isAutoIncrementString = md.getIsAutoincrement();
 
         if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
@@ -562,8 +569,34 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * @param decimalDigits the DECIMAL_DIGITS value
      * @return the mapped Class
      */
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, String typeName, int columnSize, int decimalDigits) {
-        return sqlTypeMapping.get(typeName);
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+        requireNonNull(md);
+
+        if (md.getColumnName().endsWith("_val")) {
+            int foo = 1;
+        }
+
+        // Firstly, try  md.getTypeName()
+        Class<?> result = sqlTypeMapping.get(md.getTypeName());
+        if (result == null) {
+            final int type = md.getDataType(); // Type (int) according to java.sql.Types (e.g. 4) that we got from the ColumnMetaData
+            final Optional<String> oTypeName = SqlTypeInfo.lookupJavaSqlType(type); // Variable name (String) according to java.sql.Types (e.g. INTEGER)       
+            if (oTypeName.isPresent()) {
+                final String typeName = oTypeName.get();
+                // Secondly, try the corresponding name using md.getDataType() and then lookup java.sql.Types name
+                result = sqlTypeMapping.get(typeName);
+                if (result == null) {
+                    final String colName = md.getColumnName();
+                    final String colDef = md.getColumnDef();
+                    final String colTypeName = md.getTypeName();
+                    final int foo = 1;
+                }
+            }
+        }
+
+        return result;
+        //return typeName.map(sqlTypeMapping::get).orElse(null);
+        //return sqlTypeMapping.get(md.getTypeName());
     }
 
     /**
@@ -827,17 +860,63 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         try (final Connection connection = getConnection(dbms)) {
             result = new ConcurrentHashMap<>();
+            final List<SqlTypeInfo> typeInfoList = new ArrayList<>();
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
                 while (rs.next()) {
                     final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
-                    if (typeInfo.getSqlTypeName().contains("BLOB")) {
-                        int foo = 1;
-                    }
+                    typeInfoList.add(typeInfo);
 
-                    final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
-                    result.put(typeInfo.getSqlTypeName(), mappedClass);
+                    System.out.println(typeInfo); /// 999
+
+//                    if (typeInfo.getSqlTypeName().contains("BLOB")) {
+//                        int foo = 1;
+//                    }
+//
+//                    final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
+//                    result.put(typeInfo.getSqlTypeName(), mappedClass);
                 }
             }
+
+            // First, put the java.sql.Types mapping for all types
+            typeInfoList.forEach(ti -> {
+                final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
+
+                javaSqlTypeName.ifPresent(tn -> {
+                    final Class<?> mappedClass = javaTypeMap.get(tn);
+                    if (mappedClass != null) {
+                        result.put(tn, mappedClass);
+                    }
+//else {
+//                        final int type = ti.getJavaSqlTypeInt();
+//                        final Optional<String> sqlTypeName = SqlTypeInfo.lookupJavaSqlType(type);
+//                        sqlTypeName.ifPresent(ltn -> {
+//                            final Class<?> lookupMappedClass = JAVA_TYPE_MAP.get(ltn);
+//                            if (lookupMappedClass != null) {
+//                                result.put(tn, lookupMappedClass);
+//                            }
+//                        });
+//
+//                    }
+                });
+            });
+
+            // Then, put the typeInfo sqlName (That may be more specific) for all types
+            typeInfoList.forEach(ti -> {
+                final String key = ti.getSqlTypeName();
+                final Class<?> mappedClass = javaTypeMap.get(key);
+                if (mappedClass != null) {
+                    result.put(key, mappedClass);
+                } else {
+                    final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
+                    javaSqlTypeName.ifPresent(ltn -> {
+                        final Class<?> lookupMappedClass = javaTypeMap.get(ltn);
+                        if (lookupMappedClass != null) {
+                            result.put(key, lookupMappedClass);
+                        }
+                    });
+                }
+            });
+
         }
 
         return result;
@@ -908,6 +987,59 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 .append(md.getJDBCMinorVersion())
                 .toString();
         }
+    }
+
+    /**
+     * Sets up the java type map for this database type
+     */
+    protected void setupJavaTypeMap() {
+        
+        http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
+        
+        javaTypeMap.put("CHAR", String.class);
+        javaTypeMap.put("VARCHAR", String.class);
+        javaTypeMap.put("LONGVARCHAR", String.class);
+        javaTypeMap.put("LONGVARCHAR", String.class);
+        javaTypeMap.put("NUMERIC", BigDecimal.class);
+        javaTypeMap.put("DECIMAL", BigDecimal.class);
+        javaTypeMap.put("BIT", Integer.class); ///
+        javaTypeMap.put("TINYINT", Byte.class);
+        javaTypeMap.put("SMALLINT", Short.class);
+        javaTypeMap.put("INTEGER", Integer.class);
+        javaTypeMap.put("BIGINT", Long.class);
+        javaTypeMap.put("REAL", Float.class);
+        javaTypeMap.put("FLOAT", Double.class);
+        javaTypeMap.put("DOUBLE", Double.class);
+        //put("BINARY", BYTE_ARRAY_MAPPING);
+        //put("VARBINARY", BYTE_ARRAY_MAPPING);
+        //put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
+        javaTypeMap.put("DATE", java.sql.Date.class);
+        javaTypeMap.put("TIME", Time.class);
+        javaTypeMap.put("TIMESTAMP", Timestamp.class);
+        javaTypeMap.put("CLOB", Clob.class);
+        javaTypeMap.put("BLOB", Blob.class);
+        //put("ARRAY", ARRAY_MAPPING);
+        javaTypeMap.put("BOOLEAN", Boolean.class);
+        javaTypeMap.put("BOOL", Boolean.class); // Added
+
+        //MySQL Specific mappings
+        javaTypeMap.put("YEAR", Integer.class);
+
+        //PostgreSQL specific mappings
+        javaTypeMap.put("UUID", UUID.class);
+        //TODO: Add postgresql specific type mappings
+
+        addCustomJavaTypeMap();
+    }
+
+    /**
+     * Adds custom java type mapping for this dbms type
+     */
+    protected void addCustomJavaTypeMap() {
+    }
+
+    private static String normalize(String string) {
+        return string.toUpperCase();
     }
 
 }

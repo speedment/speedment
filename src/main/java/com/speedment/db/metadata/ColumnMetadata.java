@@ -1,13 +1,13 @@
 package com.speedment.db.metadata;
 
-import com.speedment.internal.core.db.metadata.ColumnMetadataImpl;
+import com.speedment.internal.core.db.metadata.ColumnMetaDataImpl;
 import java.sql.ResultSet;
 
 /**
  *
  * @author Per Minborg
  */
-public interface ColumnMetadata {
+public interface ColumnMetaData {
 
     /**
      * Returns the table catalog (may be null).
@@ -289,8 +289,8 @@ public interface ColumnMetadata {
      * @param rs with column metadata
      * @return a new ColumnMetadata from the given {@link ResultSet}
      */
-    static ColumnMetadata of(ResultSet rs) {
-        return new ColumnMetadataImpl(rs);
+    static ColumnMetaData of(ResultSet rs) {
+        return new ColumnMetaDataImpl(rs);
     }
 
 

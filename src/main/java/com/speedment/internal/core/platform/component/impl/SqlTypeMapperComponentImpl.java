@@ -37,7 +37,7 @@ import static java.util.Objects.requireNonNull;
 public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponent implements SqlTypeMapperComponent {
 
     private static final Map<String, Class<?>> JAVA_TYPE_MAP = new HashMap<>();
-    private static final Class<?> DEFAULT_MAPPING = String.class;
+    private static final Class<?> DEFAULT_MAPPING = Object.class;
 
     static {
         put("CHAR", String.class);
@@ -72,7 +72,7 @@ public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponen
         put("UUID", UUID.class);
         //TODO: Add postgresql specific type mappings
     }
-    
+
     public SqlTypeMapperComponentImpl(Speedment speedment) {
         super(speedment);
     }
@@ -81,18 +81,27 @@ public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponen
     public Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo) {
         requireNonNull(dbms);
         requireNonNull(typeInfo);
+
+        // Firsty, check the sqlTypeName
+        final String sqlTypeName = typeInfo.getSqlTypeName();
+        final Class<?> clazz = JAVA_TYPE_MAP.get(sqlTypeName);
+        if (clazz != null) {
+            return clazz;
+        }
+
+        // Secondly, check the java.sql.Types name
         final Optional<String> key = typeInfo.javaSqlTypeName();
         if (key.isPresent()) {
             return JAVA_TYPE_MAP.getOrDefault(normalize(key.get()), DEFAULT_MAPPING);
         }
         return DEFAULT_MAPPING;
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-    
+
     private static void put(String key, Class<?> clazz) {
         JAVA_TYPE_MAP.put(normalize(key), clazz);
     }

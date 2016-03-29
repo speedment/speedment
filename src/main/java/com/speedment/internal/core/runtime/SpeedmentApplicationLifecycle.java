@@ -21,6 +21,8 @@ import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.manager.Manager;
 import com.speedment.Speedment;
+import static com.speedment.SpeedmentVersion.getImplementationVendor;
+import static com.speedment.SpeedmentVersion.getSpecificationVersion;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;
 import com.speedment.component.DbmsHandlerComponent;
@@ -425,7 +427,14 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
         Statistics.onNodeStarted();
 
-        LOGGER.info(SpeedmentVersion.getWelcomeMessage());
+        final String title = speedment.getUserInterfaceComponent().getBrand().title();
+        final String subTitle = speedment.getUserInterfaceComponent().getBrand().subtitle();
+        final String version = speedment.getUserInterfaceComponent().getBrand().version();
+
+        final String msg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
+            + " API version is " + getSpecificationVersion();
+
+        LOGGER.info(msg);
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
         }
