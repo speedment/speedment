@@ -353,9 +353,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             final String columnName = md.getColumnName();
 
-//            if (columnName.startsWith("blob")) {
-//                int foo = 1;
-//            }
             column.mutator().setName(columnName);
             column.mutator().setOrdinalPosition(md.getOrdinalPosition());
 
@@ -517,14 +514,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             final ResultSetMetaData rsmd = rsChild.getMetaData();
             final int numberOfColumns = rsmd.getColumnCount();
 
-            final Set<Integer> doNotTouchSet = new HashSet<>();
             if (SHOW_METADATA) {
                 for (int x = 1; x <= numberOfColumns; x++) {
                     final int columnType = rsmd.getColumnType(x);
                     LOGGER.info(x + ":" + rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + columnType);
-                    if (columnType == Types.LONGVARCHAR || columnType == Types.LONGNVARCHAR) {
-                        doNotTouchSet.add(x);
-                    }
                 }
             }
 
@@ -532,20 +525,14 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 if (SHOW_METADATA) {
                     for (int x = 1; x <= numberOfColumns; x++) {
                         final Object val;
-                        // Some type of columns can only be read once
-                        if (doNotTouchSet.contains(x)) {
-                            val = "{unread}";
-                        } else {
-                            val = rsChild.getObject(x);
-                        }
-
+                        val = rsChild.getObject(x);
                         LOGGER.info(x + ":" + rsmd.getColumnName(x) + ":'" + val + "'");
                     }
                 }
                 if (filter.test(rsChild)) {
                     resultSetMutator.mutate(childSupplier.get(), rsChild);
                 } else {
-                    LOGGER.info("Skipped due to RS filtering");
+                    LOGGER.info("Skipped due to RS filtering. This is normal for some DBMS types.");
                 }
             }
         } catch (final SQLException sqle) {
