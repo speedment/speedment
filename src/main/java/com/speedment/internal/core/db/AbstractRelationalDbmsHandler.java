@@ -60,7 +60,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 
 import java.util.stream.Stream;
@@ -71,7 +70,6 @@ import com.speedment.util.ProgressMeasure;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.speedment.internal.util.document.DocumentUtil;
 import java.util.concurrent.CompletableFuture;
-import java.sql.Types;
 import static java.util.Collections.singletonList;
 import com.speedment.db.metadata.ColumnMetaData;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
@@ -82,16 +80,10 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Map.Entry;
 import com.speedment.db.metadata.TypeInfoMetaData;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import com.speedment.internal.util.CaseInsensitiveMaps;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 import static com.speedment.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 
 /**
  *

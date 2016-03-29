@@ -31,7 +31,6 @@ import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
-import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
@@ -49,7 +48,6 @@ import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierC
 import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PrimaryKeyFactoryComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
-import com.speedment.internal.core.platform.component.impl.SqlTypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
 import static com.speedment.internal.util.Cast.castOrFail;
@@ -69,7 +67,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private ProjectComponent projectComponent;
     private PrimaryKeyFactoryComponent primaryKeyFactoryComponent;
     private DbmsHandlerComponent dbmsHandlerComponent;
-    private SqlTypeMapperComponent sqlTypeMapperComponent;
     private ResultSetMapperComponent resultSetMapperComponent;
     private EntityManager entityManager;
     private ConnectionPoolComponent connectionPoolComponent;
@@ -86,7 +83,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(ProjectComponentImpl::new);
         put(PrimaryKeyFactoryComponentImpl::new);
         put(DbmsHandlerComponentImpl::new);
-        put(SqlTypeMapperComponentImpl::new);
         put(JavaTypeMapperComponentImpl::new);
         put(EntityManagerImpl::new);
         put(ConnectionPoolComponentImpl::new);
@@ -128,9 +124,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof DbmsHandlerComponent) {
             dbmsHandlerComponent = castOrFail(item, DbmsHandlerComponent.class);
-        }
-        if (item instanceof SqlTypeMapperComponent) {
-            sqlTypeMapperComponent = castOrFail(item, SqlTypeMapperComponent.class);
         }
         if (item instanceof ResultSetMapperComponent) {
             resultSetMapperComponent = castOrFail(item, ResultSetMapperComponent.class);
@@ -202,11 +195,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public DbmsHandlerComponent getDbmsHandlerComponent() {
         return dbmsHandlerComponent;
-    }
-
-    @Override
-    public SqlTypeMapperComponent getSqlTypeMapperComponent() {
-        return sqlTypeMapperComponent;
     }
 
     @Override

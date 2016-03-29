@@ -29,7 +29,6 @@ import com.speedment.component.ManagerComponent;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.component.ProjectComponent;
-import com.speedment.component.SqlTypeMapperComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
@@ -63,7 +62,6 @@ public interface Speedment {
      * <li>{@link com.speedment.component.ManagerComponent ManagerComponent}</li>
      * <li>{@link com.speedment.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
      * <li>{@link com.speedment.component.ProjectComponent ProjectComponent}</li>
-     * <li>{@link com.speedment.component.SqlTypeMapperComponent SqlTypeMapperComponent}</li>
      * <li>{@link com.speedment.component.resultset.ResultSetMapperComponent ResultSetMapperComponent}</li>
      * <li>{@link com.speedment.component.connectionpool.ConnectionPoolComponent ConnectionPoolComponent}</li>
      * <li>{@link com.speedment.component.StreamSupplierComponent StreamSupplierComponent}</li>
@@ -147,10 +145,6 @@ public interface Speedment {
 
     default ProjectComponent getProjectComponent() {
         return get(ProjectComponent.class);
-    }
-
-    default SqlTypeMapperComponent getSqlTypeMapperComponent() {
-        return get(SqlTypeMapperComponent.class);
     }
 
     default ResultSetMapperComponent getResultSetMapperComponent() {
