@@ -51,7 +51,6 @@ import com.speedment.internal.core.manager.sql.SqlDeleteStatement;
 import com.speedment.internal.core.manager.sql.SqlInsertStatement;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.util.sql.SqlTypeInfo;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -84,6 +83,19 @@ import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Map.Entry;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import com.speedment.db.metadata.TypeInfoMetaData;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -158,7 +170,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final Set<String> discardedSchemas = new HashSet<>();
         final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
-        final Set<SqlTypeInfo> preSet = dbmsType.getDataTypes();
+        final Set<TypeInfoMetaData> preSet = dbmsType.getDataTypes();
 
         // Task that downloads the SQL Type Mappings from the database
         final CompletableFuture<Map<String, Class<?>>> sqlTypeMappingTask
@@ -579,7 +591,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         Class<?> result = sqlTypeMapping.get(md.getTypeName());
         if (result == null) {
             final int type = md.getDataType(); // Type (int) according to java.sql.Types (e.g. 4) that we got from the ColumnMetaData
-            final Optional<String> oTypeName = SqlTypeInfo.lookupJavaSqlType(type); // Variable name (String) according to java.sql.Types (e.g. INTEGER)       
+            final Optional<String> oTypeName = TypeInfoMetaData.lookupJavaSqlType(type); // Variable name (String) according to java.sql.Types (e.g. INTEGER)       
             if (oTypeName.isPresent()) {
                 final String typeName = oTypeName.get();
                 // Secondly, try the corresponding name using md.getDataType() and then lookup java.sql.Types name
@@ -850,10 +862,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         try (final Connection connection = getConnection(dbms)) {
             result = new ConcurrentHashMap<>();
-            final List<SqlTypeInfo> typeInfoList = new ArrayList<>();
+            final List<TypeInfoMetaData> typeInfoList = new ArrayList<>();
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
                 while (rs.next()) {
-                    final SqlTypeInfo typeInfo = SqlTypeInfo.from(rs);
+                    final TypeInfoMetaData typeInfo = TypeInfoMetaData.of(rs);
                     typeInfoList.add(typeInfo);
 
                     System.out.println(typeInfo); /// 999
@@ -941,12 +953,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         void mutate(T t, U u) throws SQLException;
     }
 
-    protected Map<String, Class<?>> readTypeMapFromSet(Set<SqlTypeInfo> typeInfos) {
+    protected Map<String, Class<?>> readTypeMapFromSet(Set<TypeInfoMetaData> typeInfos) {
         requireNonNull(typeInfos);
 
         return typeInfos.stream()
-            .collect(toMap(
-                SqlTypeInfo::getSqlTypeName,
+            .collect(toMap(TypeInfoMetaData::getSqlTypeName,
                 sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
             );
     }

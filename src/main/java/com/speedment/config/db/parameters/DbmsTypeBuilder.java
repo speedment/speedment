@@ -11,9 +11,9 @@ import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
 import com.speedment.manager.SpeedmentPredicateView;
-import com.speedment.util.sql.SqlTypeInfo;
 import java.util.Set;
 import java.util.function.BiFunction;
+import com.speedment.db.metadata.TypeInfoMetaData;
 
 /**
  *
@@ -170,7 +170,7 @@ public interface DbmsTypeBuilder {
          * @param dataTypes Set of database types
          * @return a builder
          */
-        Optionals withDataTypes(Set<SqlTypeInfo> dataTypes);
+        Optionals withDataTypes(Set<TypeInfoMetaData> dataTypes);
 
         /**
          * Enters a default name for this {@code DbmsType}. For example ‘orcl'

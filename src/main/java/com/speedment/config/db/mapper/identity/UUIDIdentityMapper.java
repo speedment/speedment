@@ -16,13 +16,15 @@
  */
 package com.speedment.config.db.mapper.identity;
 
+import java.util.UUID;
+
 /**
  *
  * @author Emil Forslund
  */
-public final class UUIDIdentityMapper extends AbstractIdentityMapper<Integer> {
+public final class UUIDIdentityMapper extends AbstractIdentityMapper<UUID> {
 
     public UUIDIdentityMapper() {
-        super(Integer.class);
+        super(UUID.class);
     }
 }

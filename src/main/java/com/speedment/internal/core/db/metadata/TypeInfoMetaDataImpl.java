@@ -14,17 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.util.sql;
+package com.speedment.internal.core.db.metadata;
 
-import com.speedment.util.sql.SqlTypeInfo;
 import java.sql.DatabaseMetaData;
+import static java.util.Objects.requireNonNull;
+import com.speedment.db.metadata.TypeInfoMetaData;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class SqlTypeInfoImpl implements SqlTypeInfo {
+public final class TypeInfoMetaDataImpl implements TypeInfoMetaData {
 
     //http://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html#getTypeInfo()
     private final String sqlTypeName;
@@ -34,7 +37,7 @@ public final class SqlTypeInfoImpl implements SqlTypeInfo {
     private final short nullable;
     private final boolean unsigned;
 
-    public SqlTypeInfoImpl(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
+    public TypeInfoMetaDataImpl(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
         this.sqlTypeName = requireNonNull(sqlTypeName);
         this.javaSqlTypeInt = javaSqlTypeInt;
         this.precision = precision;

@@ -28,10 +28,10 @@ import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.internal.core.db.AbstractDatabaseNamingConvention;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
-import com.speedment.util.sql.SqlTypeInfo;
-import static com.speedment.util.sql.SqlTypeInfo.of;
+import static com.speedment.db.metadata.TypeInfoMetaData.of;
 import java.util.Collections;
 import static java.util.stream.Collectors.collectingAndThen;
+import com.speedment.db.metadata.TypeInfoMetaData;
 
 /**
  * Created by fdirlikl on 11/13/2015.
@@ -109,7 +109,7 @@ public final class PostgresDbmsType {
         }
     }
 
-    private static final Set<SqlTypeInfo> dataTypes() {
+    private static final Set<TypeInfoMetaData> dataTypes() {
 
         return Stream.of(
             of("bool", -7, 0, 0, (short) 1, true),

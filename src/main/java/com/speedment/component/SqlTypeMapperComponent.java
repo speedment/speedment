@@ -18,8 +18,8 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
-import com.speedment.util.sql.SqlTypeInfo;
 import java.util.function.BiFunction;
+import com.speedment.db.metadata.TypeInfoMetaData;
 
 /**
  * The SqlTypeMapperComponent Component interface allows a mapping from a SQL
@@ -43,6 +43,6 @@ public interface SqlTypeMapperComponent extends Component {
      * @param typeInfo to apply
      * @return the corresponding Java {@code Class}
      */
-    Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo);
+    Class<?> apply(Dbms dbms, TypeInfoMetaData typeInfo);
 
 }

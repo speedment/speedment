@@ -35,7 +35,6 @@ import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.db.DefaultDatabaseNamingConvention;
 import com.speedment.manager.SpeedmentPredicateView;
-import com.speedment.util.sql.SqlTypeInfo;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableSet;
 import java.util.HashSet;
@@ -43,6 +42,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
+import com.speedment.db.metadata.TypeInfoMetaData;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -61,7 +62,7 @@ public final class DbmsTypeImpl implements DbmsType {
     private final BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper;
     private final String resultSetTableSchema;
     private final ConnectionUrlGenerator connectionUrlGenerator;
-    private final Set<SqlTypeInfo> dataTypes;
+    private final Set<TypeInfoMetaData> dataTypes;
     private final SpeedmentPredicateView speedmentPredicateView;
     private final String defaultDbmsName;
     private final String initialQuery;
@@ -77,7 +78,7 @@ public final class DbmsTypeImpl implements DbmsType {
             BiFunction<Speedment, Dbms, DbmsHandler> dbmsMapper,
             String resultSetTableSchema,
             ConnectionUrlGenerator connectionUrlGenerator,
-            Set<SqlTypeInfo> dataTypes,
+            Set<TypeInfoMetaData> dataTypes,
             SpeedmentPredicateView speedmentPredicateView,
             String defaultDbmsName,
             String intitialQuery
@@ -177,7 +178,7 @@ public final class DbmsTypeImpl implements DbmsType {
     }
 
     @Override
-    public Set<SqlTypeInfo> getDataTypes() {
+    public Set<TypeInfoMetaData> getDataTypes() {
         return dataTypes;
     }
 
@@ -207,7 +208,7 @@ public final class DbmsTypeImpl implements DbmsType {
         // Optionals
         private String resultSetTableSchema;
         private String schemaTableDelimiter;
-        private Set<SqlTypeInfo> dataTypes;
+        private Set<TypeInfoMetaData> dataTypes;
         private String defaultDbmsName;
         private String initialQuery;
 
@@ -288,7 +289,7 @@ public final class DbmsTypeImpl implements DbmsType {
         }
 
         @Override
-        public Optionals withDataTypes(Set<SqlTypeInfo> dataTypes) {
+        public Optionals withDataTypes(Set<TypeInfoMetaData> dataTypes) {
             this.dataTypes = requireNonNull(dataTypes);
             return this;
         }

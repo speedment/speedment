@@ -19,7 +19,6 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
 import com.speedment.component.SqlTypeMapperComponent;
-import com.speedment.util.sql.SqlTypeInfo;
 import com.speedment.license.Software;
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -32,6 +31,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import com.speedment.db.metadata.TypeInfoMetaData;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponent implements SqlTypeMapperComponent {
@@ -78,7 +81,7 @@ public final class SqlTypeMapperComponentImpl extends InternalOpenSourceComponen
     }
 
     @Override
-    public Class<?> apply(Dbms dbms, SqlTypeInfo typeInfo) {
+    public Class<?> apply(Dbms dbms, TypeInfoMetaData typeInfo) {
         requireNonNull(dbms);
         requireNonNull(typeInfo);
 

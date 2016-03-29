@@ -26,12 +26,12 @@ import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
 import com.speedment.internal.core.config.dbms.DbmsTypeImpl;
 import com.speedment.manager.SpeedmentPredicateView;
-import com.speedment.util.sql.SqlTypeInfo;
 import static com.speedment.stream.MapStream.comparing;
 import java.util.Comparator;
 
 import java.util.Optional;
 import java.util.Set;
+import com.speedment.db.metadata.TypeInfoMetaData;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -141,7 +141,7 @@ public interface DbmsType {
 
     SpeedmentPredicateView getSpeedmentPredicateView();
 
-    Set<SqlTypeInfo> getDataTypes();
+    Set<TypeInfoMetaData> getDataTypes();
     
     String getInitialQuery();
 

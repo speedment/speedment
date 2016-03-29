@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.util.sql;
+package com.speedment.db.metadata;
 
 import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.util.sql.SqlTypeInfoImpl;
+import com.speedment.internal.core.db.metadata.TypeInfoMetaDataImpl;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ import java.util.Optional;
  *
  * @author pemi
  */
-public interface SqlTypeInfo {
+public interface TypeInfoMetaData {
 
     public class Hidden {
 
@@ -64,7 +64,7 @@ public interface SqlTypeInfo {
     }
 
     //http://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html#getTypeInfo()
-    static SqlTypeInfo from(ResultSet rs) throws SQLException {
+    static TypeInfoMetaData of(ResultSet rs) throws SQLException {
         final String sqlTypeName = rs.getString("TYPE_NAME");
         final int javaSqlTypeInt = rs.getInt("DATA_TYPE");
         final int precision = rs.getInt("PRECISION");
@@ -73,8 +73,8 @@ public interface SqlTypeInfo {
         return of(sqlTypeName, javaSqlTypeInt, precision, precision, nullable, unsigned);
     }
 
-    static SqlTypeInfo of(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
-        return new SqlTypeInfoImpl(sqlTypeName, javaSqlTypeInt, precision, decimals, nullable, unsigned);
+    static TypeInfoMetaData of(String sqlTypeName, int javaSqlTypeInt, int precision, int decimals, short nullable, boolean unsigned) {
+        return new TypeInfoMetaDataImpl(sqlTypeName, javaSqlTypeInt, precision, decimals, nullable, unsigned);
     }
 
     default Optional<String> javaSqlTypeName() {
