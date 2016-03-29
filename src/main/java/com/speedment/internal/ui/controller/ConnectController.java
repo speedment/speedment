@@ -44,10 +44,13 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.util.Settings;
+import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  *
@@ -89,14 +92,16 @@ public final class ConnectController implements Initializable {
         
         fieldType.setItems(
             getDbmsTypes()
-                .map(DbmsType::getName)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList))
+                .collect(toCollection(FXCollections::observableArrayList))
         );
         
-        fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, next) -> {
-            if (!next.isEmpty()) {
-                final DbmsType item = findDbmsType(next)
-                    .orElseThrow(() -> dbmsTypeNotInstalledException(next));
+        final DbmsProperty dbms = session.getProject().mutator().addNewDbms();
+        
+        fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, typeName) -> {
+            dbms.typeNameProperty().setValue(typeName);
+            
+            if (!typeName.isEmpty()) {
+                final DbmsType item = dbmsTypeOf(session.getSpeedment(), dbms);
 
                 if (fieldHost.textProperty().getValue().isEmpty()) {
                     fieldHost.textProperty().setValue(DEFAULT_HOST);
@@ -115,8 +120,6 @@ public final class ConnectController implements Initializable {
             }
         });
         
-        final DbmsProperty dbms = session.getProject().mutator().addNewDbms();
-        
         Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
@@ -131,26 +134,31 @@ public final class ConnectController implements Initializable {
             }
         });
         
-        fieldSchema.setText(Settings.inst().get("last_known_schema", ""));
-        fieldPort.setText(Settings.inst().get("last_known_port", ""));
+        fieldSchema.setText(Settings.inst().get("last_known_schema"));
+        fieldPort.setText(Settings.inst().get("last_known_port"));
         fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
         fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
         fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
         
         try {
-            fieldType.getSelectionModel().select(
-                Settings.inst().get(
-                    "last_known_dbtype", 
-                    getDbmsTypes()
-                        .map(DbmsType::getName)
-                        .findFirst()
-                        .orElseThrow(() -> new SpeedmentException(
-                            "Could not find any installed JDBC drivers. Make sure to" +
-                            "include at least one JDBC driver as a dependency in the " +
-                            "projects pom.xml-file."
-                        ))
-                )
+            // Find the prefered dbms-type
+            final String prefered = Settings.inst().get(
+                "last_known_dbtype",
+                getDbmsTypes()
+                    .findFirst()
+                    .orElseThrow(() -> new SpeedmentException(
+                        "Could not find any installed JDBC drivers. Make sure to" +
+                        "include at least one JDBC driver as a dependency in the " +
+                        "projects pom.xml-file."
+                    ))
             );
+            
+            // If the prefered dbms-type isn't loaded, select the first one.
+            if (getDbmsTypes().anyMatch(prefered::equals)) {
+                fieldType.getSelectionModel().select(prefered);
+            } else {
+                fieldType.getSelectionModel().select(getDbmsTypes().findFirst().get());
+            }
         } catch (final SpeedmentException ex) {
             session.showError("Couldn't find any installed JDBC drivers", 
                 ex.getMessage(), ex
@@ -158,10 +166,6 @@ public final class ConnectController implements Initializable {
             
             throw ex;
         }
-        
-        fieldType.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-            dbms.typeNameProperty().setValue(n);
-        });
         
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
@@ -210,24 +214,10 @@ public final class ConnectController implements Initializable {
         Loader.createAndShow(session, "Connect", ConnectController::new);
 	}
     
-    private Stream<DbmsType> getDbmsTypes() {
+    private Stream<String> getDbmsTypes() {
         return session.getSpeedment()
             .getDbmsHandlerComponent()
-            .supportedDbmsTypes();
-    }
-
-    private Optional<DbmsType> findDbmsType(String dbmsTypeName) {
-        requireNonNull(dbmsTypeName);
-        return session.getSpeedment()
-            .getDbmsHandlerComponent()
-            .findByName(dbmsTypeName);
-    }
-
-    private static SpeedmentException dbmsTypeNotInstalledException(String dbmsTypeName) {
-        requireNonNull(dbmsTypeName);
-        return new SpeedmentException(
-            "Required " + DbmsType.class.getSimpleName() + 
-            " '" + dbmsTypeName + "' is not installed correctly."
-        );
+            .supportedDbmsTypes()
+            .map(DbmsType::getName);
     }
 }
