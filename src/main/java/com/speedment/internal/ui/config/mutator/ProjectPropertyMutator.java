@@ -49,6 +49,11 @@ public final class ProjectPropertyMutator extends ProjectMutator<ProjectProperty
     public void setConfigPath(String configPath) {
         document().configPathProperty().setValue(Paths.get(configPath));
     }
+
+    @Override
+    public void setCompanyName(String companyName) {
+        document().companyNameProperty().setValue(companyName);
+    }
     
     @Override
     public DbmsProperty addNewDbms() {

@@ -18,7 +18,6 @@ package com.speedment.internal.ui.controller;
 
 import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
-import static java.util.Objects.requireNonNull;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 
 import java.net.URL;
@@ -48,8 +47,6 @@ import com.speedment.internal.util.Settings;
 
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -161,8 +158,11 @@ public final class ConnectController implements Initializable {
             
             throw ex;
         }
-
-        dbms.typeNameProperty().bind(fieldType.getSelectionModel().selectedItemProperty());
+        
+        fieldType.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+            dbms.typeNameProperty().setValue(n);
+        });
+        
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
         dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());        
@@ -185,7 +185,6 @@ public final class ConnectController implements Initializable {
 
             if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
-                dbms.typeNameProperty().unbind();
                 SceneController.createAndShow(session);
             }
         });

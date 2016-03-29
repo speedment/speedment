@@ -36,7 +36,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 import javafx.beans.binding.Bindings;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
 
@@ -73,8 +72,6 @@ public final class WorkspaceController implements Initializable {
                         for (final PropertySheet.Item item : items) {
                             properties.add(item);
                         }
-//                        node.getUiVisibleProperties(session.getSpeedment())
-//                            .forEachOrdered(properties::add);
                     }
                 }
                 

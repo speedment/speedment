@@ -49,7 +49,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *
