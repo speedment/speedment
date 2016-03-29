@@ -27,7 +27,6 @@ import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

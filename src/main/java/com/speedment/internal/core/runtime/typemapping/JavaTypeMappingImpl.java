@@ -17,7 +17,6 @@
 package com.speedment.internal.core.runtime.typemapping;
 
 import com.speedment.config.db.Dbms;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import com.speedment.component.resultset.ResultSetMapping;
 import static java.util.Objects.requireNonNull;
@@ -35,10 +34,10 @@ public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
     private final Function<Long, T> longMapper;
 
     public JavaTypeMappingImpl(
-            Class<T> clazz, 
-            String resultSetMethodName, 
-            Function<String, T> stringMapper, 
-            Function<Long, T> longMapper
+        Class<T> clazz,
+        String resultSetMethodName,
+        Function<String, T> stringMapper,
+        Function<Long, T> longMapper
     ) {
         this.clazz = requireNonNull(clazz);
         this.resultSetMethodName = requireNonNull(resultSetMethodName);

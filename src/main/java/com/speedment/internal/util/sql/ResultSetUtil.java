@@ -32,14 +32,15 @@ import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
- * Utility methods for retreiving nullable values from {@code ResultSet}.
- * 
+ * Utility methods for retrieving nullable and special values from {@code ResultSet}.
+ *
  * @author Emil Forslund
  */
 public final class ResultSetUtil {
-    
+
     // Null safe RS getters, must have the same name as ResultSet getters
     public static Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getObject(columnName));
@@ -123,6 +124,10 @@ public final class ResultSetUtil {
 
     public static SQLXML getSQLXML(final ResultSet resultSet, final String columnName) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
+    }
+
+    public static UUID getUUID(final ResultSet resultSet, final String columnName) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getObject(columnName, UUID.class));
     }
 
     // Null safe RS getters (int), must have the same name as ResultSet getters
@@ -209,14 +214,20 @@ public final class ResultSetUtil {
     public static SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
     }
-    
+
+    public static UUID getUUID(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition, UUID.class));
+    }
+
     private static <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);
         return rs.wasNull() ? null : result;
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */
-    private ResultSetUtil() { instanceNotAllowed(getClass()); }
+    private ResultSetUtil() {
+        instanceNotAllowed(getClass());
+    }
 }

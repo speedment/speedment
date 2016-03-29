@@ -41,9 +41,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import com.speedment.component.resultset.ResultSetMapping;
 import static java.util.Objects.requireNonNull;
+import java.util.UUID;
 
 public final class StandardJavaTypeMapping {
 
@@ -117,6 +117,10 @@ public final class StandardJavaTypeMapping {
         SQLXML.class, "SQLXML", s -> unableToMapString(SQLXML.class), l -> unableToMapLong(SQLXML.class)
     );
 
+    public static final ResultSetMapping<UUID> UUID = new JavaTypeMappingImpl<>(
+        UUID.class, "UUID", java.util.UUID::fromString, l -> unableToMapLong(UUID.class)
+    );
+
     /**
      * Iterate over all JavaTypeMapping fields that are defined in this Class
      * and collect them in an array. If we add new static fields in the future,
@@ -130,7 +134,7 @@ public final class StandardJavaTypeMapping {
         .filter(f -> ResultSetMapping.class.isAssignableFrom(f.getClass()))
         .map(ResultSetMapping.class::cast)
         .collect(toList()).toArray(new ResultSetMapping<?>[0]);
-    
+
     /**
      * Returns a {@link Stream} of all JavaTypeMapping that is defined in this
      * class.
@@ -161,5 +165,7 @@ public final class StandardJavaTypeMapping {
     /**
      * Utility classes should not be instantiated.
      */
-    private StandardJavaTypeMapping() { instanceNotAllowed(getClass()); }
+    private StandardJavaTypeMapping() {
+        instanceNotAllowed(getClass());
+    }
 }

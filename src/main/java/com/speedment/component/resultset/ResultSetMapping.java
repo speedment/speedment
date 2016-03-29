@@ -20,10 +20,10 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 
 /**
- * 
+ *
  * @author pemi
  * @param <T> Java type for this mapping
- * @since  2.0
+ * @since 2.0
  */
 @Api(version = "2.3")
 public interface ResultSetMapping<T> {
@@ -52,13 +52,13 @@ public interface ResultSetMapping<T> {
 
     /**
      * Parses the given input {@code String} and returns an object of type T
-     * that corresponds to the given {@code String}. This function is needed to 
-     * be able to reconstruct Entity fields from JSON strings or change data 
+     * that corresponds to the given {@code String}. This function is needed to
+     * be able to reconstruct Entity fields from JSON strings or change data
      * logs for example.
      *
-     * @param input  the input {@code String}
-     * @return       an {@code Object} of type T that corresponds to the given
-     *               {@code String}
+     * @param input the input {@code String}
+     * @return an {@code Object} of type T that corresponds to the given
+     * {@code String}
      */
     T parse(String input);
 
@@ -69,9 +69,9 @@ public interface ResultSetMapping<T> {
      * Typically, this method is only implemented for classes implementing the
      * {@link Number} interface.
      *
-     * @param input  the input {@code long}
-     * @return       an {@code Object} of type T that corresponds to the given
-     *               {@code String}
+     * @param input the input {@code long}
+     * @return an {@code Object} of type T that corresponds to the given
+     * {@code String}
      */
     T parse(long input);
 
@@ -86,4 +86,16 @@ public interface ResultSetMapping<T> {
     static <T> T unableToMap(Class<?> from, Class<T> to) {
         throw new IllegalArgumentException("Unable to parse a " + from.toString() + " and make it " + to.toString());
     }
+
+    /**
+     * Returns if this type must use a support method to read from the ResulSet
+     * rather than just calling a ResultSet method directly (e.g. there is no
+     * rs.getUuid() method)
+     *
+     * @return
+     */
+    default boolean isMustUseSupportMethod() {
+        return false;
+    }
+
 }

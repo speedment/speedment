@@ -18,7 +18,9 @@ package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
+import com.speedment.db.metadata.ColumnMetaData;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -31,13 +33,32 @@ import java.util.stream.Stream;
  */
 public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
 
+    private static final String YEAR = "YEAR";
+    private static final Class<?> YEAR_MAPPING = Integer.class;
+
     public MySqlDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
 
     @Override
+    protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
+        final Map<String, Class<?>> result = super.readTypeMapFromDB(dbms);
+        result.put(YEAR, YEAR_MAPPING);
+        return result;
+    }
+
+    @Override
     protected void addCustomJavaTypeMap() {
         addMySqlCustomJavaTypeMap(javaTypeMap);
+    }
+
+    @Override
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+        if ("BIT".equals(md.getTypeName()) && md.getColumnSize() == 1) {
+            // Map a BIT(1) to boolean
+            return Boolean.class;
+        }
+        return super.lookupJdbcClass(sqlTypeMapping, md);
     }
 
     /**
@@ -46,6 +67,7 @@ public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
      * @param map to add to
      */
     static void addMySqlCustomJavaTypeMap(Map<String, Class<?>> map) {
+        map.put(YEAR, YEAR_MAPPING);
         Stream.of("LONG", "MEDIUM", "TINY").forEach(key -> {
             map.put(key + "BLOB", Blob.class);
         });

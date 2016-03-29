@@ -75,6 +75,7 @@ import java.util.concurrent.CompletableFuture;
 import java.sql.Types;
 import static java.util.Collections.singletonList;
 import com.speedment.db.metadata.ColumnMetaData;
+import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.math.BigDecimal;
@@ -82,6 +83,7 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
@@ -109,6 +111,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         this.dbms = requireNonNull(dbms);
         javaTypeMap = new HashMap<>();
         setupJavaTypeMap();
+        assertJavaTypesKnown();
     }
 
     @Override
@@ -571,11 +574,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      */
     protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
         requireNonNull(md);
-
-        if (md.getColumnName().endsWith("_val")) {
-            int foo = 1;
-        }
-
+        
         // Firstly, try  md.getTypeName()
         Class<?> result = sqlTypeMapping.get(md.getTypeName());
         if (result == null) {
@@ -585,18 +584,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 final String typeName = oTypeName.get();
                 // Secondly, try the corresponding name using md.getDataType() and then lookup java.sql.Types name
                 result = sqlTypeMapping.get(typeName);
-                if (result == null) {
-                    final String colName = md.getColumnName();
-                    final String colDef = md.getColumnDef();
-                    final String colTypeName = md.getTypeName();
-                    final int foo = 1;
-                }
             }
         }
-
         return result;
-        //return typeName.map(sqlTypeMapping::get).orElse(null);
-        //return sqlTypeMapping.get(md.getTypeName());
     }
 
     /**
@@ -993,9 +983,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Sets up the java type map for this database type
      */
     protected void setupJavaTypeMap() {
-        
+
         http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
-        
+
         javaTypeMap.put("CHAR", String.class);
         javaTypeMap.put("VARCHAR", String.class);
         javaTypeMap.put("LONGVARCHAR", String.class);
@@ -1036,6 +1026,20 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Adds custom java type mapping for this dbms type
      */
     protected void addCustomJavaTypeMap() {
+    }
+
+    protected void assertJavaTypesKnown() {
+        final Map<String, Class<?>> unmapped = new LinkedHashMap<>();
+        for (final Entry<String, Class<?>> entry : javaTypeMap.entrySet()) {
+            final String key = entry.getKey();
+            final Class<?> clazz = entry.getValue();
+            if (!StandardJavaTypeMapping.stream().anyMatch(jtm -> jtm.getJavaClass().equals(clazz))) {
+                unmapped.put(key, clazz);
+            }
+        }
+        if (!unmapped.isEmpty()) {
+            throw new SpeedmentException("There are mappings that have no " + StandardJavaTypeMapping.class.getSimpleName() + " " + unmapped);
+        }
     }
 
     private static String normalize(String string) {
