@@ -40,6 +40,7 @@ import com.speedment.config.db.mapper.identity.StringIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
 import com.speedment.config.db.mapper.identity.URLIdentityMapper;
+import com.speedment.config.db.mapper.identity.UUIDIdentityMapper;
 import com.speedment.config.db.mapper.string.StringToLocaleMapper;
 import com.speedment.config.db.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.config.db.mapper.string.YesNoStringToBooleanMapper;
@@ -68,13 +69,13 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
 
     /**
      * Constructs the component.
-     * 
-     * @param speedment  the speedment instance
+     *
+     * @param speedment the speedment instance
      */
     public TypeMapperComponentImpl(Speedment speedment) {
         super(speedment);
         this.mappers = new ConcurrentHashMap<>();
-        
+
         // Identity mappers
         install(ArrayIdentityMapper::new);
         install(BigDecimalIdentityMapper::new);
@@ -97,7 +98,7 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(TimeIdentityMapper::new);
         install(TimestampIdentityMapper::new);
         install(URLIdentityMapper::new);
-        
+
         // Special time mappers
         install(DateToLongMapper::new);
         install(TimestampToLongMapper::new);
@@ -105,11 +106,14 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(DateToIntMapper::new);
         install(TimestampToIntMapper::new);
         install(TimeToIntMapper::new);
-        
+
         // Special string mappers
         install(StringToLocaleMapper::new);
         install(TrueFalseStringToBooleanMapper::new);
         install(YesNoStringToBooleanMapper::new);
+
+        // Other mappers
+        install(UUIDIdentityMapper::new);
     }
 
     @Override
@@ -127,7 +131,7 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public Optional<TypeMapper<?, ?>> get(String absoluteClassName) {
         return Optional.ofNullable(mappers.get(absoluteClassName));
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
