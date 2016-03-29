@@ -33,14 +33,22 @@ public final class BrandUtil {
     }
     
     public static void applyBrand(Speedment speedment, Stage stage, Scene scene) {
+        applyBrandToStage(speedment, stage);
+        applyBrandToScene(speedment, scene);
+    }
+    
+    public static void applyBrandToStage(Speedment speedment, Stage stage) {
         final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
         final UserInterfaceComponent.Brand brand = ui.getBrand();
-
+        
         stage.setTitle(brand.title());
         brand.logoSmall()
             .map(Image::new)
             .ifPresent(stage.getIcons()::add);
-
+    }
+    
+    public static void applyBrandToScene(Speedment speedment, Scene scene) {
+        final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
         ui.stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
     }
