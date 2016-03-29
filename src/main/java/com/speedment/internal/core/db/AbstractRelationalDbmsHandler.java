@@ -75,25 +75,19 @@ import java.sql.Types;
 import static java.util.Collections.singletonList;
 import com.speedment.db.metadata.ColumnMetaData;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Map.Entry;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
 import com.speedment.db.metadata.TypeInfoMetaData;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.internal.util.CaseInsensitiveMaps;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
+import static com.speedment.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -121,7 +115,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
         this.speedment = requireNonNull(speedment);
         this.dbms = requireNonNull(dbms);
-        javaTypeMap = new HashMap<>();
+        javaTypeMap = newCaseInsensitiveMap();
         setupJavaTypeMap();
         assertJavaTypesKnown();
     }
@@ -586,7 +580,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      */
     protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
         requireNonNull(md);
-        
+
         // Firstly, try  md.getTypeName()
         Class<?> result = sqlTypeMapping.get(md.getTypeName());
         if (result == null) {
@@ -858,36 +852,38 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
         requireNonNull(dbms);
-        final Map<String, Class<?>> result;
 
+        final List<TypeInfoMetaData> typeInfoMetaDataList = new ArrayList<>();
         try (final Connection connection = getConnection(dbms)) {
-            result = new ConcurrentHashMap<>();
-            final List<TypeInfoMetaData> typeInfoList = new ArrayList<>();
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
                 while (rs.next()) {
                     final TypeInfoMetaData typeInfo = TypeInfoMetaData.of(rs);
-                    typeInfoList.add(typeInfo);
-
-                    System.out.println(typeInfo); /// 999
-
-//                    if (typeInfo.getSqlTypeName().contains("BLOB")) {
-//                        int foo = 1;
-//                    }
-//
-//                    final Class<?> mappedClass = speedment.getSqlTypeMapperComponent().apply(dbms, typeInfo);
-//                    result.put(typeInfo.getSqlTypeName(), mappedClass);
+                    typeInfoMetaDataList.add(typeInfo);
                 }
             }
+            return typeMapFromTypeInfo(typeInfoMetaDataList);
+        }
+    }
 
-            // First, put the java.sql.Types mapping for all types
-            typeInfoList.forEach(ti -> {
-                final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
+    protected Map<String, Class<?>> readTypeMapFromSet(Set<TypeInfoMetaData> typeInfos) {
+        requireNonNull(typeInfos);
 
-                javaSqlTypeName.ifPresent(tn -> {
-                    final Class<?> mappedClass = javaTypeMap.get(tn);
-                    if (mappedClass != null) {
-                        result.put(tn, mappedClass);
-                    }
+        return typeMapFromTypeInfo(new ArrayList<>(typeInfos));
+    }
+
+    protected Map<String, Class<?>> typeMapFromTypeInfo(List<TypeInfoMetaData> typeInfoMetaDataList) {
+        requireNonNull(typeInfoMetaDataList);
+
+        final Map<String, Class<?>> result = newCaseInsensitiveMap();
+        // First, put the java.sql.Types mapping for all types
+        typeInfoMetaDataList.forEach(ti -> {
+            final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
+
+            javaSqlTypeName.ifPresent(tn -> {
+                final Class<?> mappedClass = javaTypeMap.get(tn);
+                if (mappedClass != null) {
+                    result.put(tn, mappedClass);
+                }
 //else {
 //                        final int type = ti.getJavaSqlTypeInt();
 //                        final Optional<String> sqlTypeName = SqlTypeInfo.lookupJavaSqlType(type);
@@ -899,28 +895,25 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 //                        });
 //
 //                    }
+            });
+        });
+
+        // Then, put the typeInfo sqlName (That may be more specific) for all types
+        typeInfoMetaDataList.forEach(ti -> {
+            final String key = ti.getSqlTypeName();
+            final Class<?> mappedClass = javaTypeMap.get(key);
+            if (mappedClass != null) {
+                result.put(key, mappedClass);
+            } else {
+                final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
+                javaSqlTypeName.ifPresent(ltn -> {
+                    final Class<?> lookupMappedClass = javaTypeMap.get(ltn);
+                    if (lookupMappedClass != null) {
+                        result.put(key, lookupMappedClass);
+                    }
                 });
-            });
-
-            // Then, put the typeInfo sqlName (That may be more specific) for all types
-            typeInfoList.forEach(ti -> {
-                final String key = ti.getSqlTypeName();
-                final Class<?> mappedClass = javaTypeMap.get(key);
-                if (mappedClass != null) {
-                    result.put(key, mappedClass);
-                } else {
-                    final Optional<String> javaSqlTypeName = ti.javaSqlTypeName();
-                    javaSqlTypeName.ifPresent(ltn -> {
-                        final Class<?> lookupMappedClass = javaTypeMap.get(ltn);
-                        if (lookupMappedClass != null) {
-                            result.put(key, lookupMappedClass);
-                        }
-                    });
-                }
-            });
-
-        }
-
+            }
+        });
         return result;
     }
 
@@ -951,15 +944,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected interface TableChildMutator<T, U> {
 
         void mutate(T t, U u) throws SQLException;
-    }
-
-    protected Map<String, Class<?>> readTypeMapFromSet(Set<TypeInfoMetaData> typeInfos) {
-        requireNonNull(typeInfos);
-
-        return typeInfos.stream()
-            .collect(toMap(TypeInfoMetaData::getSqlTypeName,
-                sti -> speedment.getSqlTypeMapperComponent().apply(dbms, sti))
-            );
     }
 
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {

@@ -17,15 +17,26 @@
 package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
+import com.speedment.db.metadata.ColumnMetaData;
+import java.sql.SQLException;
 
 /**
  * Created by fdirlikl on 11/15/2015.
  */
 public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
-    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEM";
 
     public PostgresDbmsHandler(Speedment speedment, final Dbms dbms) {
         super(speedment, dbms);
     }
+
+    @Override
+    protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
+        final String defaultValue = md.getColumnDef();
+        if (defaultValue != null && defaultValue.startsWith("nextval(")) {
+            column.mutator().setAutoIncrement(true);
+        }
+    }
+
 }
