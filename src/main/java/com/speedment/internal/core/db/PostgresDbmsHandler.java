@@ -21,6 +21,8 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.db.metadata.ColumnMetaData;
 import java.sql.SQLException;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by fdirlikl on 11/15/2015.
@@ -32,11 +34,41 @@ public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
     }
 
     @Override
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+        requireNonNull(sqlTypeMapping);
+        requireNonNull(md);
+        final String typeName = md.getTypeName().toUpperCase();
+        final int columnSize = md.getColumnSize();
+        final int decimalDigits = md.getDecimalDigits();
+        final int dataType = md.getDataType();
+
+        switch (typeName) {
+            case "BIT": {
+                if (columnSize == 1) {
+                    return Boolean.class;
+                }
+                break;
+            }
+        }
+
+        return super.lookupJdbcClass(sqlTypeMapping, md);
+    }
+
+    @Override
     protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
         final String defaultValue = md.getColumnDef();
         if (defaultValue != null && defaultValue.startsWith("nextval(")) {
             column.mutator().setAutoIncrement(true);
         }
     }
+
+//    @Override
+//    protected void addCustomJavaTypeMap() {
+//        final Optional<Class<?>> pgLineClass = PostgresDbmsType.pgLineClass();
+//        pgLineClass.ifPresent(c -> {
+//            javaTypeMap.put("line", c);
+//        });
+//    }
+    
 
 }

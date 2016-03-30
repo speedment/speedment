@@ -35,7 +35,8 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
- * Utility methods for retrieving nullable and special values from {@code ResultSet}.
+ * Utility methods for retrieving nullable and special values from
+ * {@code ResultSet}.
  *
  * @author Emil Forslund
  */
@@ -216,8 +217,13 @@ public final class ResultSetUtil {
     }
 
     public static UUID getUUID(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition, UUID.class));
+        return getNullableFrom(resultSet, rs -> (UUID) rs.getObject(ordinalPosition));
     }
+    
+//    public static Object getPGLine(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+//        return getNullableFrom(resultSet, rs -> (Object) rs.getObject(ordinalPosition));
+//    }
+    
 
     private static <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);

@@ -32,11 +32,13 @@ import static com.speedment.db.metadata.TypeInfoMetaData.of;
 import java.util.Collections;
 import static java.util.stream.Collectors.collectingAndThen;
 import com.speedment.db.metadata.TypeInfoMetaData;
+import java.util.Optional;
 
 /**
  * Created by fdirlikl on 11/13/2015.
  *
  * @author Fatih Dirlikli
+ * @author Per Minborg
  */
 public final class PostgresDbmsType {
 
@@ -106,6 +108,18 @@ public final class PostgresDbmsType {
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
             result.append("/").append(dbms.getName());
             return result.toString();
+        }
+    }
+
+    public static Optional<Class<? extends Object>> pgLineClass() {
+        return findClass("org.postgresql.geometric.PGline");
+    }
+
+    private static Optional<Class<? extends Object>> findClass(String name) {
+        try {
+            return Optional.of(Class.forName(name));
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
         }
     }
 

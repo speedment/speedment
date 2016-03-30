@@ -42,6 +42,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import com.speedment.component.resultset.ResultSetMapping;
+import com.speedment.internal.core.config.dbms.PostgresDbmsType;
 import static java.util.Objects.requireNonNull;
 import java.util.UUID;
 
@@ -120,6 +121,14 @@ public final class StandardJavaTypeMapping {
     public static final ResultSetMapping<UUID> UUID = new JavaTypeMappingImpl<>(
         UUID.class, "UUID", java.util.UUID::fromString, l -> unableToMapLong(UUID.class)
     );
+ 
+//    public static final ResultSetMapping<?> PG_LINE = PostgresDbmsType.pgLineClass()
+//        .map(c -> StandardJavaTypeMapping.resultSetMapping(c, "PGLine"))
+//        .orElse(null);
+
+    private static <T> ResultSetMapping<T> resultSetMapping(Class<T> c, String methodName) {
+        return new JavaTypeMappingImpl<>(c, methodName, s -> unableToMapString(c), l -> unableToMapLong(c));
+    }
 
     /**
      * Iterate over all JavaTypeMapping fields that are defined in this Class

@@ -17,10 +17,7 @@
 package com.speedment.internal.core.db.metadata;
 
 import java.sql.DatabaseMetaData;
-import static java.util.Objects.requireNonNull;
 import com.speedment.db.metadata.TypeInfoMetaData;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
