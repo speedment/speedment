@@ -65,7 +65,7 @@ import java.util.stream.Stream;
  * @param <K> the key type
  * @param <V> the value type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
 
     private Stream<Map.Entry<K, V>> inner;

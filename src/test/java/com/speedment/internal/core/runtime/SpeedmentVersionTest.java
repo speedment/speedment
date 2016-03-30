@@ -33,8 +33,8 @@ import static org.junit.Assert.*;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.2.3";
-    private static final String EXPECTED_SPECIFICATION_VERSION = "2.2";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.3.0";
+    private static final String EXPECTED_SPECIFICATION_VERSION = "2.3";
 
     public SpeedmentVersionTest() {
     }
@@ -77,8 +77,8 @@ public class SpeedmentVersionTest {
     public void testGetImplementationTitle() {
         System.out.println("getImplementationTitle");
         //String expResult = getPackage().getImplementationTitle();
-        String expResult = "Speedment";
-        String result = SpeedmentVersion.getImplementationTitle();
+        final String expResult = "Speedment";
+        final String result = SpeedmentVersion.getImplementationTitle();
         assertEquals(expResult, result);
     }
 
@@ -86,8 +86,8 @@ public class SpeedmentVersionTest {
     public void testGetImplementationVendor() {
         System.out.println("getImplementationVendor");
         //String expResult = getPackage().getImplementationVendor();
-        String expResult = "Speedment Inc.";
-        String result = SpeedmentVersion.getImplementationVendor();
+        final String expResult = "Speedment Inc.";
+        final String result = SpeedmentVersion.getImplementationVendor();
         assertEquals(expResult, result);
     }
 
@@ -98,15 +98,15 @@ public class SpeedmentVersionTest {
 //        String expResult2 = getFromManifest("ImplementationVersion");
 
         // Todo: Implement a real test. Like extract version from POM or MANIFEST.MF
-        String result = SpeedmentVersion.getImplementationVersion();
+        final String result = SpeedmentVersion.getImplementationVersion();
         assertEquals(EXPECTED_IMPLEMENTATION_VERSION, result);
     }
     
     @Test
     public void testGetSpecificationVersion() {
         System.out.println("getSpecificationVersion");
-        String expResult = EXPECTED_SPECIFICATION_VERSION;
-        String result = SpeedmentVersion.getSpecificationVersion();
+        final String expResult = EXPECTED_SPECIFICATION_VERSION;
+        final String result = SpeedmentVersion.getSpecificationVersion();
         assertEquals(expResult, result);
     }
     

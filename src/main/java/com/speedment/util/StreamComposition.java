@@ -35,7 +35,7 @@ import static com.speedment.util.NullUtil.requireNonNulls;
  *
  * @author pemi
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public class StreamComposition {
 
     /**

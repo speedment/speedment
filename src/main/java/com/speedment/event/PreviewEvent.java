@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
  *
  * @author Emil Forslund
  */
-@Api(version = "2.4")
+@Api(version = "2.3")
 public final class PreviewEvent implements Event {
     
     private final DocumentProperty document;

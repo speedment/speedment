@@ -42,7 +42,7 @@ import com.speedment.db.metadata.TypeInfoMetaData;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface DbmsType {
 
     final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);

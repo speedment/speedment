@@ -31,7 +31,7 @@ import com.speedment.field.methods.Finder;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {
 
     /**

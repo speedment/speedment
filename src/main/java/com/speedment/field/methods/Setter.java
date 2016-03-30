@@ -37,6 +37,6 @@ import java.util.function.BiFunction;
  * @author  Emil Forslund
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 @FunctionalInterface
 public interface Setter<ENTITY, V> extends BiFunction<ENTITY, V, ENTITY> {}

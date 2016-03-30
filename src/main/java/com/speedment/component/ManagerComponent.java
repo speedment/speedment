@@ -20,7 +20,6 @@ import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.manager.Manager;
 import com.speedment.annotation.Api;
-import com.speedment.field.FieldIdentifier;
 import java.util.stream.Stream;
 
 /**
@@ -31,7 +30,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ManagerComponent extends Component {
 
     @Override

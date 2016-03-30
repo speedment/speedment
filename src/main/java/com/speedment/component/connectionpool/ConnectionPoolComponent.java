@@ -28,7 +28,7 @@ import java.sql.SQLException;
  * @author pemi
  * @since 2.1
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ConnectionPoolComponent extends Component {
 
     @Override

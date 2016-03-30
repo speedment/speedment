@@ -24,7 +24,7 @@ import com.speedment.annotation.Api;
  *
  * @author Per Minborg
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public enum PredicateType {
 
     // Constants

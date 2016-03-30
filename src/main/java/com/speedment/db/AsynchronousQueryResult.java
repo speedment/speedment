@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @param <T> The type that the ResultSet shall be mapped to
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface AsynchronousQueryResult<T> extends HasParallelStrategy, AutoCloseable {
 
     Stream<T> stream();

@@ -33,7 +33,7 @@ import com.speedment.annotation.Api;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public final class SpeedmentException extends RuntimeException {
 
     static final long serialVersionUID = -623523923713561356L;

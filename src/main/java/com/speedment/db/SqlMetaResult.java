@@ -26,7 +26,7 @@ import java.util.Optional;
  * @param <ENTITY> the entity type
  * @param <R> return type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface SqlMetaResult<ENTITY, R extends SqlMetaResult<ENTITY, R>> extends MetaResult<ENTITY> {
 
     String getQuery();

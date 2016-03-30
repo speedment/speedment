@@ -46,7 +46,7 @@ import com.speedment.component.resultset.ResultSetMapperComponent;
  *
  * @author pemi
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Speedment {
 
     /**

@@ -57,7 +57,7 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @since 2.1
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public final class CollectorUtil {
 
     private final static Logger LOGGER = LoggerManager.getLogger(CollectorUtil.class);

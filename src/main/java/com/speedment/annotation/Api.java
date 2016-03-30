@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  *
  * @author pemi
  */
-@Api(version = "2.2", snapshot = false)
+@Api(version = "2.3", snapshot = false)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.CONSTRUCTOR})
 public @interface Api {

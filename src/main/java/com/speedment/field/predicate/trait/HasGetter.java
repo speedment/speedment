@@ -29,7 +29,7 @@ import com.speedment.field.methods.Getter;
  * @author  Per Minborg
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface HasGetter<ENTITY, V> {
 
     /**

@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <T> Input type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 @FunctionalInterface
 public interface SqlPredicate<T> {
 

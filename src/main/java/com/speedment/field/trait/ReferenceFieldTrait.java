@@ -40,7 +40,7 @@ import com.speedment.field.predicate.SpeedmentPredicate;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
 
     @Override

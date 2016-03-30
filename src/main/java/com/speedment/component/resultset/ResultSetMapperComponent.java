@@ -28,7 +28,7 @@ import com.speedment.config.db.parameters.DbmsType;
  * @author  Per Minborg
  * @since   2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ResultSetMapperComponent extends Component {
 
     @Override

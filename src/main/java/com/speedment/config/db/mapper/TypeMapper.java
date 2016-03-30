@@ -32,7 +32,7 @@ import static java.util.Comparator.comparing;
  * @author  Emil Forslund
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     
     /**

@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * @author pemi
  * @param <T> Supplied type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 @FunctionalInterface
 public interface SqlSupplier<T> {
 

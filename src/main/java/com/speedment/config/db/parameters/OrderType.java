@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  *
  * @author pemi
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public enum OrderType {
     ASC {
         @Override

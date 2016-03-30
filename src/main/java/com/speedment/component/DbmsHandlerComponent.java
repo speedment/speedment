@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface DbmsHandlerComponent extends Component {
 
     /**

@@ -35,7 +35,7 @@ import java.util.function.UnaryOperator;
  * @author  Per Minborg
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface FieldSetter<ENTITY, V> extends UnaryOperator<ENTITY> {
 
     /**

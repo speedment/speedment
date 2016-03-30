@@ -29,7 +29,7 @@ import com.speedment.field.trait.ReferenceFieldTrait;
  * @author  Per Minborg
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface HasReferenceFieldTrait<ENTITY, D, V> {
 
     /**

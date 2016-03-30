@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface StreamDecorator {
 
     final static StreamDecorator IDENTITY = new StreamDecorator() {

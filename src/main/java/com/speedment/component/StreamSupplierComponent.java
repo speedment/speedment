@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @since 2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface StreamSupplierComponent extends Component {
 
     @Override

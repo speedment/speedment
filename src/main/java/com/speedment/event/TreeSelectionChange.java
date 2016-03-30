@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-@Api(version="2.4")
+@Api(version="2.3")
 public final class TreeSelectionChange implements Event {
 
     private final ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent;

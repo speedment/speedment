@@ -33,7 +33,7 @@ import java.util.Set;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
 
     /**

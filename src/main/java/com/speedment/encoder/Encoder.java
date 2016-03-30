@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * @param <R> Type of formatter
  * @param <OUTPUT_TYPE> Target encoder output type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTPUT_TYPE> {
 
     OUTPUT_TYPE apply(ENTITY entity);

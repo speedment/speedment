@@ -59,7 +59,7 @@ import com.speedment.annotation.Api;
  * @author  Emil Forslund
  * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public enum Inclusion {
 
     START_INCLUSIVE_END_INCLUSIVE(true, true),
