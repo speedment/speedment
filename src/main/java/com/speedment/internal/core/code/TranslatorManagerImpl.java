@@ -89,7 +89,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
                     writeOnceTranslators.add(t);
                 }
             });
-        
+
         traverseOver(project, Table.class)
             .filter(HasEnabled::test)
             .forEach(table -> {
@@ -101,7 +101,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
                     }
                 });
             });
-        
+
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
@@ -115,7 +115,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
         final List<Table> tables = traverseOver(project, Table.class)
             .filter(HasEnabled::test)
             .collect(toList());
-        
+
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
             fileCounter.incrementAndGet();
@@ -174,7 +174,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
             final String fname
                 = project.getPackageLocation()
                 + "/" + meta.getResult().getName();
-            
+
             final Path path = Paths.get(fname);
             try {
                 final boolean created = Optional.ofNullable(path.getParent()).map(p -> p.toFile().mkdirs()).orElse(false);
@@ -198,5 +198,4 @@ public class TranslatorManagerImpl implements TranslatorManager {
             throw new IllegalArgumentException("Input file could not be generated.");
         }
     }
-    
 }

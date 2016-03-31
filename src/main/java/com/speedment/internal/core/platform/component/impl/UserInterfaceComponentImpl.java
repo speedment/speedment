@@ -20,8 +20,10 @@ import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.brand.DefaultBrand;
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.license.Software;
@@ -59,6 +61,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     private final List<String> stylesheets;
     private Brand brand;
+    private UISession session;
     
     public UserInterfaceComponentImpl(Speedment speedment) {
         super(speedment);
@@ -72,6 +75,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
             SpeedmentVersion.getImplementationTitle(),
             "Open Source",
             SpeedmentVersion.getImplementationVersion(),
+            "www.speedment.org",
             "/images/logo.png",
             "/images/speedment_open_source_small.png"
         );
@@ -100,6 +104,20 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     @Override
     public Brand getBrand() {
         return brand;
+    }
+
+    @Override
+    public void setUISession(UISession session) {
+        this.session = requireNonNull(session);
+    }
+
+    @Override
+    public UISession getUISession() throws SpeedmentException {
+        if (session == null) {
+            throw new SpeedmentException(
+                "The UI isn't running so no session was found."
+            );
+        } else return session;
     }
     
     @Override

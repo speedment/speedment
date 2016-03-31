@@ -17,6 +17,7 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
+import com.speedment.event.UiStarting;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
@@ -84,7 +85,7 @@ public final class MainApp extends Application {
     private UISession createSession(Stage stage, String configLocation) {
         final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
         Statistics.onGuiStarted();
-        
+        SPEEDMENT.getEventComponent().notify(new UiStarting());
         return session;
     }
 }

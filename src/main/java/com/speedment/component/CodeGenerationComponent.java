@@ -21,6 +21,7 @@ import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.Translator;
 import com.speedment.code.TranslatorDecorator;
 import com.speedment.code.TranslatorKey;
+import com.speedment.code.TranslatorManager;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
@@ -35,8 +36,9 @@ import java.util.function.Supplier;
 /**
  * This Component interface is used for Speedmens's code generation.
  *
- * @author Per Minborg
- * @since 2.3
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.3
  */
 @Api(version = "2.3")
 public interface CodeGenerationComponent extends Component {
@@ -59,6 +61,20 @@ public interface CodeGenerationComponent extends Component {
      * @param generator to set
      */
     void setGenerator(Generator generator);
+    
+    /**
+     * Returns the current {@link TranslatorManager}.
+     *
+     * @return the current {@link TranslatorManager}
+     */
+    TranslatorManager getTranslatorManager();
+
+    /**
+     * Sets the current {@link TranslatorManager}.
+     *
+     * @param manager  to set
+     */
+    void setTranslatorManager(TranslatorManager manager);
 
     /**
      * Puts a new {@code TranslatorConstructor} for the given class/key pair. If

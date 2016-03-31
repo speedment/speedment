@@ -194,12 +194,12 @@ public final class ConnectController implements Initializable {
         });
         
         buttonConnect.disableProperty().bind(createBooleanBinding(
-            () -> fieldHost.textProperty().getValue().isEmpty()
-            ||    fieldPort.textProperty().getValue().isEmpty()
+            () -> fieldHost.textProperty().isEmpty().get()
+            ||    fieldPort.textProperty().isEmpty().get()
             ||    fieldType.getSelectionModel().isEmpty()
-            ||    fieldName.textProperty().getValue().isEmpty()
-            ||    fieldSchema.textProperty().getValue().isEmpty()
-            ||    fieldUser.textProperty().getValue().isEmpty(), 
+            ||    fieldName.textProperty().isEmpty().get()
+            ||    fieldSchema.textProperty().isEmpty().get()
+            ||    fieldUser.textProperty().isEmpty().get(), 
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
