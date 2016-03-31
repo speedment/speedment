@@ -26,6 +26,7 @@ import static com.speedment.SpeedmentVersion.getSpecificationVersion;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;
 import com.speedment.component.DbmsHandlerComponent;
+import com.speedment.component.Lifecyclable;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
 import com.speedment.internal.util.document.DocumentTranscoder;
@@ -59,6 +60,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.FunctionCastUtil.asPredicate;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -72,7 +78,7 @@ import static java.util.Objects.requireNonNull;
  * @since 2.0
  *
  */
-public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> {
+public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> implements Lifecyclable<T> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(SpeedmentApplicationLifecycle.class);
 
@@ -397,25 +403,34 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         super.onInitialize();
         forEachManagerInSeparateThread(Manager::initialize);
         forEachComponentInSeparateThread(Component::initialize);
+        // In case a component added another component
+        bringRemainingUpTo(State.INIITIALIZED);
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
+        bringRemainingUpTo(State.INIITIALIZED); // We need to double check since an inheriting class may have added things
         forEachManagerInSeparateThread(Manager::load);
         forEachComponentInSeparateThread(Component::load);
+        // In case a component added another component
+        bringRemainingUpTo(State.LOADED);
     }
 
     @Override
     public void onResolve() {
         super.onResolve();
+        bringRemainingUpTo(State.LOADED); // We need to double check since an inheriting class may have added things
         forEachManagerInSeparateThread(Manager::resolve);
         forEachComponentInSeparateThread(Component::resolve);
+        // In case a component added another component
+        bringRemainingUpTo(State.RESOLVED);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        bringRemainingUpTo(State.RESOLVED); // We need to double check since an inheriting class may have added things
         validateRuntimeConfig();
         makeConfigImmutable();
 
@@ -424,7 +439,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         }
         forEachManagerInSeparateThread(Manager::start);
         forEachComponentInSeparateThread(Component::start);
-
+        // In case a component added another component
+        bringRemainingUpTo(State.STARTED);
         Statistics.onNodeStarted();
 
         final String title = speedment.getUserInterfaceComponent().getBrand().title();
@@ -651,6 +667,46 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     private char[] stringToCharArray(String s) {
         return s == null ? null : s.toCharArray();
+    }
+
+    private void bringRemainingUpTo(State state) {
+        final ManagerComponent mc = speedment.getManagerComponent();
+        List<Component> components;
+        List<Manager<?>> managers;
+        do {
+            components = notUpTo(state, speedment.components());
+            components.forEach(c -> bringUpTo(state, c));
+            managers = notUpTo(state, mc.stream());
+            managers.forEach(m -> bringUpTo(state, m));
+        } while (!managers.isEmpty() || components.isEmpty());
+
+    }
+
+    private <T extends Lifecyclable<?>> List<T> notUpTo(State state, Stream<T> stream) {
+        return stream
+            .filter(m -> !m.getState().onOrAfter(state))
+            .collect(toList());
+    }
+
+    private void bringUpTo(State state, Lifecyclable<?> lifecyclable) {
+        switch (state) {
+            case INIITIALIZED: {
+                lifecyclable.initialize();
+                break;
+            }
+            case LOADED: {
+                lifecyclable.load();
+                break;
+            }
+            case RESOLVED: {
+                lifecyclable.resolve();
+                break;
+            }
+            case STARTED: {
+                lifecyclable.start();
+                break;
+            }
+        }
     }
 
 }
