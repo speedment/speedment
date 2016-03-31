@@ -678,7 +678,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             components.forEach(c -> bringUpTo(state, c));
             managers = notUpTo(state, mc.stream());
             managers.forEach(m -> bringUpTo(state, m));
-        } while (!managers.isEmpty() || components.isEmpty());
+        } while (!(managers.isEmpty() && components.isEmpty()));
 
     }
 

@@ -27,9 +27,6 @@ import com.speedment.config.db.Table;
 import java.util.Optional;
 import org.junit.Test;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *
