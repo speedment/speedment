@@ -71,7 +71,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.speedment.internal.util.document.DocumentUtil;
 import java.util.concurrent.CompletableFuture;
 import static java.util.Collections.singletonList;
-import com.speedment.db.metadata.ColumnMetaData;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -81,6 +80,10 @@ import java.sql.Timestamp;
 import java.util.Map.Entry;
 import com.speedment.db.metadata.TypeInfoMetaData;
 import static com.speedment.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import com.speedment.db.metadata.ColumnMetaData2;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -342,7 +345,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
-            final ColumnMetaData md = ColumnMetaData.of(rs);
+            final ColumnMetaData2 md = ColumnMetaData2.of(rs);
 
             final String columnName = md.getColumnName();
 
@@ -542,7 +545,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * @param rs that contains column metadata (per
      * connection.getMetaData().getColumns(...))
      */
-    protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
+    protected void setAutoIncrement(Column column, ColumnMetaData2 md) throws SQLException {
         final String isAutoIncrementString = md.getIsAutoincrement();
 
         if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
@@ -559,7 +562,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * @param decimalDigits the DECIMAL_DIGITS value
      * @return the mapped Class
      */
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData2 md) {
         requireNonNull(md);
 
         // Firstly, try  md.getTypeName()

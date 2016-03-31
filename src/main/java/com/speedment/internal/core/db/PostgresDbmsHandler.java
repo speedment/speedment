@@ -19,9 +19,10 @@ package com.speedment.internal.core.db;
 import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
-import com.speedment.db.metadata.ColumnMetaData;
 import java.sql.SQLException;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import com.speedment.db.metadata.ColumnMetaData2;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,7 +35,7 @@ public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
     }
 
     @Override
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData2 md) {
         requireNonNull(sqlTypeMapping);
         requireNonNull(md);
         final String typeName = md.getTypeName().toUpperCase();
@@ -53,7 +54,7 @@ public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
     }
 
     @Override
-    protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
+    protected void setAutoIncrement(Column column, ColumnMetaData2 md) throws SQLException {
         final String defaultValue = md.getColumnDef();
         if (defaultValue != null && defaultValue.startsWith("nextval(")) {
             column.mutator().setAutoIncrement(true);
