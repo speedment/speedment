@@ -98,7 +98,14 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public <R extends Component> R get(Class<R> iface) {
         requireNonNull(iface);
-        return super.get(iface);
+        try {
+            return requireNonNull(super.get(iface));
+        } catch (final NullPointerException ex) {
+            throw new SpeedmentException(
+                "The specified component '" + iface.getSimpleName() + "' has " +
+                "not been installed in the Speedment platform.", ex
+            );
+        }
     }
 
     public Component put(Function<Speedment, Component> mapper) {

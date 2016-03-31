@@ -31,6 +31,8 @@ import com.speedment.codegen.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.code.JavaClassTranslator;
+import com.speedment.code.TranslatorManager;
+import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.internal.core.code.entity.GeneratedEntityImplTranslator;
@@ -59,51 +61,16 @@ import static java.util.Objects.requireNonNull;
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
     private Generator generator;
+    private TranslatorManager translatorManager;
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
     private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
-
-    private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
-
-        private final String key;
-        private final List<TranslatorDecorator<DOC, T>> decorators;
-        private TranslatorConstructor<DOC, T> constructor;
-
-        public TranslatorSettings(String key) {
-            this.key = requireNonNull(key);
-            this.decorators = new CopyOnWriteArrayList<>();
-        }
-
-        public String key() {
-            return key;
-        }
-
-        public TranslatorConstructor<DOC, T> getConstructor() {
-            return constructor;
-        }
-
-        public void setConstructor(TranslatorConstructor<DOC, T> constructor) {
-            this.constructor = constructor;
-        }
-
-        public List<TranslatorDecorator<DOC, T>> decorators() {
-            return decorators;
-        }
-
-        public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
-            @SuppressWarnings("unchecked")
-            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) 
-                getConstructor().apply(speedment, generator, document);
-            
-            decorators.stream().forEachOrdered(dec -> dec.apply(translator));
-            return translator;
-        }
-    }
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
         
-        generator = new JavaGenerator();
-        map       = new ConcurrentHashMap<>();
+        generator         = new JavaGenerator();
+        translatorManager = new TranslatorManagerImpl(speedment);
+        map               = new ConcurrentHashMap<>();
         
         put(Table.class, ENTITY, EntityTranslator::new);
         put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
@@ -127,7 +94,17 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     @Override
     public void setGenerator(Generator generator) {
-        this.generator = generator;
+        this.generator = requireNonNull(generator);
+    }
+    
+    @Override
+    public TranslatorManager getTranslatorManager() {
+        return translatorManager;
+    }
+
+    @Override
+    public void setTranslatorManager(TranslatorManager manager) {
+        this.translatorManager = requireNonNull(manager);
     }
 
     @SuppressWarnings("unchecked")
@@ -211,5 +188,42 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             + key + "' for document '"
             + doc.mainInterface().getSimpleName() + "'."
         );
+    }
+    
+    private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
+
+        private final String key;
+        private final List<TranslatorDecorator<DOC, T>> decorators;
+        private TranslatorConstructor<DOC, T> constructor;
+
+        public TranslatorSettings(String key) {
+            this.key = requireNonNull(key);
+            this.decorators = new CopyOnWriteArrayList<>();
+        }
+
+        public String key() {
+            return key;
+        }
+
+        public TranslatorConstructor<DOC, T> getConstructor() {
+            return constructor;
+        }
+
+        public void setConstructor(TranslatorConstructor<DOC, T> constructor) {
+            this.constructor = constructor;
+        }
+
+        public List<TranslatorDecorator<DOC, T>> decorators() {
+            return decorators;
+        }
+
+        public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
+            @SuppressWarnings("unchecked")
+            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) 
+                getConstructor().apply(speedment, generator, document);
+            
+            decorators.stream().forEachOrdered(dec -> dec.apply(translator));
+            return translator;
+        }
     }
 }

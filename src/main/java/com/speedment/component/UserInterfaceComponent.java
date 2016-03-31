@@ -18,6 +18,7 @@ package com.speedment.component;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.UISession;
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
@@ -47,6 +48,25 @@ public interface UserInterfaceComponent extends Component {
     default Class<UserInterfaceComponent> getComponentClass() {
         return UserInterfaceComponent.class;
     }
+    
+    /**
+     * Sets the {@code UISession} to use. This should only be called by 
+     * UISession itself to update the session in use once the platform has 
+     * loaded.
+     * 
+     * @param session  the new UISession
+     */
+    void setUISession(UISession session);
+    
+    /**
+     * Returns the UISession used. This method might throw an exception if the
+     * UISession has not yet updated the component with a reference to itself
+     * or if the UI isn't running.
+     * 
+     * @return                      the current session
+     * @throws  SpeedmentException  if the UI isn't running
+     */
+    UISession getUISession() throws SpeedmentException;
 
     /**
      * Returns a observable and modifiable view of all the currently visible properties
@@ -103,6 +123,7 @@ public interface UserInterfaceComponent extends Component {
         String title();
         String subtitle();
         String version();
+        String website();
         Optional<String> logoSmall();
         Optional<String> logoLarge();
         

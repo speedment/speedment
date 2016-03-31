@@ -48,8 +48,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -83,39 +81,39 @@ public class TranslatorManagerImpl implements TranslatorManager {
         final CodeGenerationComponent cgc = speedment.getCodeGenerationComponent();
 
         cgc.translators(project)
-                .forEachOrdered(t -> {
+            .forEachOrdered(t -> {
+                if (t.isInGeneratedPackage()) {
+                    writeAlwaysTranslators.add(t);
+                } else {
+                    writeOnceTranslators.add(t);
+                }
+            });
+
+        traverseOver(project, Table.class)
+            .filter(HasEnabled::test)
+            .forEach(table -> {
+                cgc.translators(table).forEachOrdered(t -> {
                     if (t.isInGeneratedPackage()) {
                         writeAlwaysTranslators.add(t);
                     } else {
                         writeOnceTranslators.add(t);
                     }
                 });
-
-        traverseOver(project, Table.class)
-                .filter(HasEnabled::test)
-                .forEach(table -> {
-                    cgc.translators(table).forEachOrdered(t -> {
-                        if (t.isInGeneratedPackage()) {
-                            writeAlwaysTranslators.add(t);
-                        } else {
-                            writeOnceTranslators.add(t);
-                        }
-                    });
-                });
+            });
 
         gen.metaOn(writeOnceTranslators.stream()
-                .map(Translator::get)
-                .collect(Collectors.toList())
+            .map(Translator::get)
+            .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, false));
 
         gen.metaOn(writeAlwaysTranslators.stream()
-                .map(Translator::get)
-                .collect(Collectors.toList())
+            .map(Translator::get)
+            .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, true));
 
         final List<Table> tables = traverseOver(project, Table.class)
-                .filter(HasEnabled::test)
-                .collect(toList());
+            .filter(HasEnabled::test)
+            .collect(toList());
 
         gen.metaOn(tables, File.class).forEach(meta -> {
             writeToFile(project, gen, meta);
@@ -135,8 +133,8 @@ public class TranslatorManagerImpl implements TranslatorManager {
         requireNonNull(meta);
 
         final String fname = project.getPackageLocation()
-                + "/"
-                + meta.getModel().getName();
+            + "/"
+            + meta.getModel().getName();
         final String content = meta.getResult();
         final Path path = Paths.get(fname);
         path.getParent().toFile().mkdirs();
@@ -144,8 +142,8 @@ public class TranslatorManagerImpl implements TranslatorManager {
         try {
             if (overwriteExisting || !path.toFile().exists()) {
                 Files.write(path, content.getBytes(StandardCharsets.UTF_8),
-                        StandardOpenOption.CREATE,
-                        StandardOpenOption.TRUNCATE_EXISTING
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING
                 );
                 fileCounter.incrementAndGet();
             }
@@ -169,15 +167,15 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
         if (content.isPresent()) {
             final String fname
-                    = project.getPackageLocation()
-                    + "/" + meta.getResult().getName();
+                = project.getPackageLocation()
+                + "/" + meta.getResult().getName();
 
             final Path path = Paths.get(fname);
             path.getParent().toFile().mkdirs();
 
             try {
                 Files.write(path,
-                        content.get().getBytes(StandardCharsets.UTF_8)
+                    content.get().getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException ex) {
                 LOGGER.error(ex, "Failed to create file " + fname);
@@ -192,5 +190,4 @@ public class TranslatorManagerImpl implements TranslatorManager {
             throw new IllegalArgumentException("Input file could not be generated.");
         }
     }
-
 }

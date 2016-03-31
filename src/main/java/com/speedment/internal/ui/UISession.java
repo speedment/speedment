@@ -26,7 +26,6 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
 import com.speedment.component.UserInterfaceComponent.Brand;
-import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -85,6 +84,7 @@ import javafx.scene.layout.VBox;
 import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ExecutionException;
 import javafx.scene.control.Button;
 
 /**
@@ -139,6 +139,8 @@ public final class UISession {
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
+        
+        speedment.getUserInterfaceComponent().setUISession(this);
         
         if (project != null) {
             this.project.merge(speedment, project);
@@ -276,7 +278,7 @@ public final class UISession {
             final Stopwatch stopwatch = Stopwatch.createStarted();
             log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
-            final TranslatorManager instance = new TranslatorManagerImpl(speedment);
+            final TranslatorManager instance = speedment.getCodeGenerationComponent().getTranslatorManager();
             
             try {
                 instance.accept(project);
@@ -605,7 +607,7 @@ public final class UISession {
             showProgressDialog("Loading Database Metadata", progress, future);
             
             return future.get();
-        } catch (final Exception ex) {
+        } catch (final InterruptedException | ExecutionException ex) {
             showError("Error Executing Connection Task", 
                 "The execution of certain tasks could not be completed.", ex
             );

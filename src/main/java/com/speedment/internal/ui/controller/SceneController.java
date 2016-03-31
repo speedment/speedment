@@ -28,12 +28,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import javafx.scene.image.Image;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -44,7 +41,6 @@ public final class SceneController implements Initializable {
     
     private final UISession session;
     
-    private @FXML StackPane stack;
     private @FXML VBox top;
     private @FXML SplitPane horizontal;
     private @FXML SplitPane vertical;
@@ -59,7 +55,6 @@ public final class SceneController implements Initializable {
             top.getChildren().add(MenubarController.create(session));
             top.getChildren().add(ToolbarController.create(session));
             horizontal.getItems().add(0, ProjectTreeController.create(session));
-//            horizontal.getItems().add(2, PreviewController.create(session));
             vertical.getItems().add(WorkspaceController.create(session));
             vertical.getItems().add(OutputController.create(session));
             
