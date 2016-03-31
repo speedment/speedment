@@ -26,57 +26,59 @@ import static java.util.Objects.requireNonNull;
  * different life-cycle stated are defined in the {@link State} enum and the
  * corresponding methods are defined hereunder.
  *
- * @author     Per Minborg
- * @author     Emil Forslund
- * @param <T>  the implementing type
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @param <T> the implementing type
  */
 public interface Lifecyclable<T extends Lifecyclable<T>> {
-    
+
     final Logger LIFECYCLABLE_LOGGER = LoggerManager.getLogger(Lifecyclable.class);
-    
+
     /**
-     * Sets the {@link State} of this {@code Lifecyclable} directly. This should 
+     * Sets the {@link State} of this {@code Lifecyclable} directly. This should
      * only be called internally.
-     * 
-     * @param newState  the new state
+     *
+     * @param newState the new state
      */
     void setState(State newState);
 
     /**
      * Returns the current {@link State} of this {@code Lifecyclable}.
      *
-     * @return  the current state
-     * @see     State
+     * @return the current state
+     * @see State
      */
     State getState();
 
     /**
      * Overridable method that can add logic before the initialize phase.
-     * 
-     * @see     #onInitialize()
-     * @see     #initialize()
+     *
+     * @see #onInitialize()
+     * @see #initialize()
      */
-    default void preInitialize() {}
-    
+    default void preInitialize() {
+    }
+
     /**
      * Overridable method that can add logic to the initialize phase.
-     * 
-     * @see     #preInitialize()
-     * @see     #initialize()
+     *
+     * @see #preInitialize()
+     * @see #initialize()
      */
-    default void onInitialize() {}
-    
+    default void onInitialize() {
+    }
+
     /**
-     * Initialize this {@code Lifecyclable}. This method will call first the 
+     * Initialize this {@code Lifecyclable}. This method will call first the
      * {@link #preInitialize()} and then the {@link #onInitialize()} method.
      * <p>
      * This method should not be overriden by individual implementations of this
-     * interface. Instead, to add logic to the initialization phase, override 
+     * interface. Instead, to add logic to the initialization phase, override
      * the {@link #onInitialize()} method.
      *
-     * @return  this of type T
-     * @see     #preInitialize()
-     * @see     #onInitialize()
+     * @return this of type T
+     * @see #preInitialize()
+     * @see #onInitialize()
      */
     default T initialize() {
         LIFECYCLABLE_LOGGER.debug("Initializing " + getClass().getSimpleName());
@@ -84,37 +86,41 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         preInitialize();
         onInitialize();
         setState(State.INIITIALIZED);
-        return (T) this;
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
-    
+
     /**
      * Overridable method that can add logic before the load phase.
-     * 
-     * @see     #onLoad()
-     * @see     #load()
+     *
+     * @see #onLoad()
+     * @see #load()
      */
-    default void preLoad() {}
-    
+    default void preLoad() {
+    }
+
     /**
      * Overridable method that can add logic to the load phase.
-     * 
-     * @see     #preLoad()
-     * @see     #load()
+     *
+     * @see #preLoad()
+     * @see #load()
      */
-    default void onLoad() {}
-    
+    default void onLoad() {
+    }
+
     /**
-     * Loads this {@code Lifecyclable}. This method will make sure that the 
-     * {@code Lifecyclable} has been initialized before calling first the 
+     * Loads this {@code Lifecyclable}. This method will make sure that the
+     * {@code Lifecyclable} has been initialized before calling first the
      * {@link #preLoad()} and then the {@link #onLoad()} method.
      * <p>
      * This method should not be overriden by individual implementations of this
-     * interface. Instead, to add logic to the loading phase, override the 
+     * interface. Instead, to add logic to the loading phase, override the
      * {@link #onLoad()} method.
      *
-     * @return  this of type T
-     * @see     #preLoad()
-     * @see     #onLoad()
+     * @return this of type T
+     * @see #preLoad()
+     * @see #onLoad()
      */
     default T load() {
         if (getState() == State.CREATED) {
@@ -125,37 +131,41 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         preLoad();
         onLoad();
         setState(State.LOADED);
-        return (T) this;
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
-    
-    /**
-     * Overridable method that can add logic before the resolve phase.
-     * 
-     * @see     #onResolve()
-     * @see     #resolve()
-     */
-    default void preResolve() {}
-    
-    /**
-     * Overridable method that can add logic to the resolve phase.
-     * 
-     * @see     #preResolve()
-     * @see     #resolve()
-     */
-    default void onResolve() {}
 
     /**
-     * Resolves this {@code Lifecyclable}. This method will make sure that the 
-     * {@code Lifecyclable} has been initialized and loaded before calling first 
+     * Overridable method that can add logic before the resolve phase.
+     *
+     * @see #onResolve()
+     * @see #resolve()
+     */
+    default void preResolve() {
+    }
+
+    /**
+     * Overridable method that can add logic to the resolve phase.
+     *
+     * @see #preResolve()
+     * @see #resolve()
+     */
+    default void onResolve() {
+    }
+
+    /**
+     * Resolves this {@code Lifecyclable}. This method will make sure that the
+     * {@code Lifecyclable} has been initialized and loaded before calling first
      * the {@link #preResolve()} and then the {@link #onResolve()} method.
      * <p>
      * This method should not be overriden by individual implementations of this
-     * interface. Instead, to add logic to the resolve phase, override the 
+     * interface. Instead, to add logic to the resolve phase, override the
      * {@link #onResolve()} method.
      *
-     * @return  this of type T
-     * @see     #preResolve()
-     * @see     #onResolve()
+     * @return this of type T
+     * @see #preResolve()
+     * @see #onResolve()
      */
     default T resolve() {
         if (getState() == State.CREATED) {
@@ -169,38 +179,42 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         preResolve();
         onResolve();
         setState(State.RESOLVED);
-        return (T) this;
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
-    
-    /**
-     * Overridable method that can add logic before the start phase.
-     * 
-     * @see     #onStart()
-     * @see     #start()
-     */
-    default void preStart() {}
-    
-    /**
-     * Overridable method that can add logic to the start phase.
-     * 
-     * @see     #preStart()
-     * @see     #start()
-     */
-    default void onStart() {}
 
     /**
-     * Starts this {@code Lifecyclable}. This method will make sure that the 
-     * {@code Lifecyclable} has been initialized, loaded and resolved before 
-     * calling first the {@link #preStart()} and then the {@link #onStart()} 
+     * Overridable method that can add logic before the start phase.
+     *
+     * @see #onStart()
+     * @see #start()
+     */
+    default void preStart() {
+    }
+
+    /**
+     * Overridable method that can add logic to the start phase.
+     *
+     * @see #preStart()
+     * @see #start()
+     */
+    default void onStart() {
+    }
+
+    /**
+     * Starts this {@code Lifecyclable}. This method will make sure that the
+     * {@code Lifecyclable} has been initialized, loaded and resolved before
+     * calling first the {@link #preStart()} and then the {@link #onStart()}
      * method.
      * <p>
      * This method should not be overriden by individual implementations of this
-     * interface. Instead, to add logic to the start phase, override the 
+     * interface. Instead, to add logic to the start phase, override the
      * {@link #onStart()} method.
      *
-     * @return  this of type T
-     * @see     #preStart()
-     * @see     #onStart()
+     * @return this of type T
+     * @see #preStart()
+     * @see #onStart()
      */
     default T start() {
         if (getState() == State.CREATED) {
@@ -217,49 +231,54 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         preStart();
         onStart();
         setState(State.STARTED);
-        return (T) this;
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
-    
-    /**
-     * Overridable method that can add logic before the stopping phase.
-     * 
-     * @see     #onStop()
-     * @see     #postStop()
-     * @see     #stop()
-     */
-    default void preStop() {}
-    
-    /**
-     * Overridable method that can add logic to the stopping phase.
-     * 
-     * @see     #preStop()
-     * @see     #postStop()
-     * @see     #stop()
-     */
-    default void onStop() {}
-    
-    /**
-     * Overridable method that can add logic after the stopping phase.
-     * 
-     * @see     #preStop()
-     * @see     #onStop()
-     * @see     #stop()
-     */
-    default void postStop() {}
 
     /**
-     * Stops this {@code Lifecyclable}. This method will call first the 
-     * {@link #preStop()}, the {@link #onStop()} and then the 
+     * Overridable method that can add logic before the stopping phase.
+     *
+     * @see #onStop()
+     * @see #postStop()
+     * @see #stop()
+     */
+    default void preStop() {
+    }
+
+    /**
+     * Overridable method that can add logic to the stopping phase.
+     *
+     * @see #preStop()
+     * @see #postStop()
+     * @see #stop()
+     */
+    default void onStop() {
+    }
+
+    /**
+     * Overridable method that can add logic after the stopping phase.
+     *
+     * @see #preStop()
+     * @see #onStop()
+     * @see #stop()
+     */
+    default void postStop() {
+    }
+
+    /**
+     * Stops this {@code Lifecyclable}. This method will call first the
+     * {@link #preStop()}, the {@link #onStop()} and then the
      * {@link #postStop()} method.
      * <p>
      * This method should not be overriden by individual implementations of this
-     * interface. Instead, to add logic to the stopping phase, override the 
+     * interface. Instead, to add logic to the stopping phase, override the
      * {@link #onStop()} method.
      *
-     * @return  this of type T
-     * @see     #preStop()
-     * @see     #onStop()
-     * @see     #postStop()
+     * @return this of type T
+     * @see #preStop()
+     * @see #onStop()
+     * @see #postStop()
      */
     default T stop() {
         LIFECYCLABLE_LOGGER.debug("Stopping " + getClass().getSimpleName());
@@ -268,79 +287,81 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         onStop();
         postStop();
         setState(State.STOPPED);
-        return (T) this;
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
 
     /**
-     * Returns {@code true} if this {@code Lifecyclable} is in the 
+     * Returns {@code true} if this {@code Lifecyclable} is in the
      * {@link State#INIITIALIZED} or a later {@link State}. If that state has
      * not yet been reached, {@code false} is returned.
      *
-     * @return  {@code true} if this is initialized
-     * @see     #initialize()
-     * @see     State#INIITIALIZED
+     * @return {@code true} if this is initialized
+     * @see #initialize()
+     * @see State#INIITIALIZED
      */
     default boolean isInitialized() {
-        return getState().is(State.INIITIALIZED);
+        return getState().onOrAfter(State.INIITIALIZED);
     }
-    
+
     /**
-     * Returns {@code true} if this {@code Lifecyclable} is in the 
-     * {@link State#LOADED} or a later {@link State}. If that state has
-     * not yet been reached, {@code false} is returned.
+     * Returns {@code true} if this {@code Lifecyclable} is in the
+     * {@link State#LOADED} or a later {@link State}. If that state has not yet
+     * been reached, {@code false} is returned.
      *
-     * @return  {@code true} if this is loaded
-     * @see     #load()
-     * @see     State#LOADED
+     * @return {@code true} if this is loaded
+     * @see #load()
+     * @see State#LOADED
      */
     default boolean isLoaded() {
-        return getState().is(State.LOADED);
+        return getState().onOrAfter(State.LOADED);
     }
 
     /**
-     * Returns {@code true} if this {@code Lifecyclable} is in the 
-     * {@link State#RESOLVED} or a later {@link State}. If that state has
-     * not yet been reached, {@code false} is returned.
+     * Returns {@code true} if this {@code Lifecyclable} is in the
+     * {@link State#RESOLVED} or a later {@link State}. If that state has not
+     * yet been reached, {@code false} is returned.
      *
-     * @return  {@code true} if this is resolved
-     * @see     #resolve()
-     * @see     State#RESOLVED
+     * @return {@code true} if this is resolved
+     * @see #resolve()
+     * @see State#RESOLVED
      */
     default boolean isResolved() {
-        return getState().is(State.RESOLVED);
+        return getState().onOrAfter(State.RESOLVED);
     }
 
     /**
-     * Returns {@code true} if this {@code Lifecyclable} is in the 
-     * {@link State#STARTED} or a later {@link State}. If that state has
-     * not yet been reached, {@code false} is returned.
+     * Returns {@code true} if this {@code Lifecyclable} is in the
+     * {@link State#STARTED} or a later {@link State}. If that state has not yet
+     * been reached, {@code false} is returned.
      *
-     * @return  {@code true} if this is started
-     * @see     #start()
-     * @see     State#STARTED
+     * @return {@code true} if this is started
+     * @see #start()
+     * @see State#STARTED
      */
     default boolean isStarted() {
-        return getState().is(State.STARTED);
+        return getState().onOrAfter(State.STARTED);
     }
 
     /**
-     * Returns {@code true} if this {@code Lifecyclable} is in the 
-     * {@link State#STOPPED} {@link State}. If that state has not yet been 
+     * Returns {@code true} if this {@code Lifecyclable} is in the
+     * {@link State#STOPPED} {@link State}. If that state has not yet been
      * reached, {@code false} is returned.
      *
-     * @return  {@code true} if this is stopped
-     * @see     #stop()
-     * @see     State#STOPPED
+     * @return {@code true} if this is stopped
+     * @see #stop()
+     * @see State#STOPPED
      */
     default boolean isStopped() {
-        return getState().is(State.STOPPED);
+        return getState().onOrAfter(State.STOPPED);
     }
 
     /**
-     * The state of the {@code Lifecyclable} is defined by the enum
-     * constants. Transition from one state to another must only be made
-     * sequentially in strict ordinal order using the {@link #nextState()}
-     * method or an equivalent.
+     * The state of the {@code Lifecyclable} is defined by the enum constants.
+     * Transition from one state to another must only be made sequentially in
+     * strict ordinal order using the {@link #nextState()} method or an
+     * equivalent.
      *
      * @see #CREATED
      * @see #INIITIALIZED
@@ -352,88 +373,83 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
     public enum State {
 
         /**
-         * The {@code Lifecyclable} has been created but no
-         * {@code Lifecyclable} methods has been called on it yet.
+         * The {@code Lifecyclable} has been created but no {@code Lifecyclable}
+         * methods has been called on it yet.
          */
         CREATED,
-        
         /**
          * The {@code Lifecyclable} has been initialized.
          * <p>
          * The following method(s) has been called and has completed on the
          * {@code Lifecyclable}:
          * <ul>
-         *      <li>{@link #initialize()}</li>
+         * <li>{@link #initialize()}</li>
          * </ul>
          *
          */
         INIITIALIZED,
-        
         /**
          * The {@code Lifecyclable} has been initialized and loaded.
          * <p>
          * The following method(s) has been called and has completed on the
          * {@code Lifecyclable}:
          * <ul>
-         *      <li>{@link #initialize()}</li>
-         *      <li>{@link #load()}</li>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
          * </ul>
          *
          */
-        LOADED, 
-        
+        LOADED,
         /**
          * The {@code Lifecyclable} has been initialized, loaded and resolved.
          * <p>
          * The following method(s) has been called and has completed on the
          * {@code Lifecyclable}:
          * <ul>
-         *      <li>{@link #initialize()}</li>
-         *      <li>{@link #load()}</li>
-         *      <li>{@link #resolve()}</li>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
+         * <li>{@link #resolve()}</li>
          * </ul>
          *
          */
         RESOLVED,
-        
         /**
-         * The {@code Lifecyclable} has been initialized, loaded, resolved and 
+         * The {@code Lifecyclable} has been initialized, loaded, resolved and
          * started.
          * <p>
          * The following method(s) has been called and has completed on the
          * {@code Lifecyclable}:
          * <ul>
-         *      <li>{@link #initialize()}</li>
-         *      <li>{@link #load()}</li>
-         *      <li>{@link #resolve()}</li>
-         *      <li>{@link #start()}</li>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
+         * <li>{@link #resolve()}</li>
+         * <li>{@link #start()}</li>
          * </ul>
          *
          */
         STARTED,
-        
         /**
-         * The {@code Lifecyclable} has been initialized, loaded, resolved, 
+         * The {@code Lifecyclable} has been initialized, loaded, resolved,
          * started and stopped.
          * <p>
          * The following method(s) has been called and has completed on the
          * {@code Lifecyclable}:
          * <ul>
-         *      <li>{@link #initialize()}</li>
-         *      <li>{@link #load()}</li>
-         *      <li>{@link #resolve()}</li>
-         *      <li>{@link #start()}</li>
-         *      <li>{@link #stop()}</li>
+         * <li>{@link #initialize()}</li>
+         * <li>{@link #load()}</li>
+         * <li>{@link #resolve()}</li>
+         * <li>{@link #start()}</li>
+         * <li>{@link #stop()}</li>
          * </ul>
          *
          */
         STOPPED;
 
         /**
-         * Asserts that the specified state is the correct next one. If it is 
+         * Asserts that the specified state is the correct next one. If it is
          * not, an {@code IllegalStateException} is thrown.
-         * 
-         * @param nextState  the proposed next state
+         *
+         * @param nextState the proposed next state
          */
         public void checkNextState(State nextState) {
             requireNonNull(nextState);
@@ -443,10 +459,10 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
         }
 
         /**
-         * Returns the next {@code State} after this, if any. If there is no 
+         * Returns the next {@code State} after this, if any. If there is no
          * following {@code State}, an empty optional is returned.
          *
-         * @return  the next {@code State} or empty if there is none
+         * @return the next {@code State} or empty if there is none
          */
         public Optional<State> nextState() {
             final State[] states = State.values();
@@ -458,15 +474,16 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
 
         /**
          * Returns if this State is on or after the provided state. Thus, it
-         * returns if this State is the same or has already passed the provided 
+         * returns if this State is the same or has already passed the provided
          * state.
          *
-         * @param compareToState  the {@code State} to compare this with
-         * @return                if same or earlier
+         * @param compareToState the {@code State} to compare this with
+         * @return if same or earlier
          */
-        public boolean is(State compareToState) {
+        public boolean onOrAfter(State compareToState) {
             requireNonNull(compareToState);
             return ordinal() >= compareToState.ordinal();
         }
     }
+
 }
