@@ -139,23 +139,30 @@ public final class InterfaceFieldImpl implements InterfaceField {
 		return new InterfaceFieldImpl(f.copy());
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        return f.hashCode();
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.f);
+        return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> InterfaceFieldImpl.class.isAssignableFrom(o.getClass()))
-            .filter(o -> Objects.equals(((InterfaceFieldImpl) o).f, f))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InterfaceFieldImpl other = (InterfaceFieldImpl) obj;
+        if (!Objects.equals(this.f, other.f)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

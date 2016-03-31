@@ -18,13 +18,25 @@ package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
 import com.speedment.codegen.model.trait.HasCode;
-import com.speedment.internal.codegen.model.InitalizerImpl;
+import com.speedment.internal.codegen.model.InitializerImpl;
 import com.speedment.codegen.model.modifier.InitalizerModifier;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import com.speedment.codegen.model.trait.HasCall;
 import static java.util.Objects.requireNonNull;
 import com.speedment.codegen.model.trait.HasCopy;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
@@ -35,14 +47,13 @@ import static java.util.Objects.requireNonNull;
  * @since  2.1
  */
 @Api(version = "2.3")
-public interface Initalizer extends HasCopy<Initalizer>, HasCall<Initalizer>, 
-HasCode<Initalizer>, InitalizerModifier<Initalizer> {
+public interface Initializer extends HasCopy<Initializer>, HasCall<Initializer>, HasCode<Initializer>, InitalizerModifier<Initializer> {
     
     /**
      * Factory holder.
      */
     enum Factory { INST;
-        private Supplier<Initalizer> supplier = InitalizerImpl::new;
+        private Supplier<Initializer> supplier = InitializerImpl::new;
     }
 
     /**
@@ -52,7 +63,7 @@ HasCode<Initalizer>, InitalizerModifier<Initalizer> {
 
      * @return      the new instance
      */
-    static Initalizer of() {
+    static Initializer of() {
         return Factory.INST.supplier.get();
     }
         
@@ -62,7 +73,7 @@ HasCode<Initalizer>, InitalizerModifier<Initalizer> {
      * 
      * @param supplier  the new constructor 
      */
-    static void setSupplier(Supplier<Initalizer> supplier) {
+    static void setSupplier(Supplier<Initializer> supplier) {
         Factory.INST.supplier = requireNonNull(supplier);
     }
 }

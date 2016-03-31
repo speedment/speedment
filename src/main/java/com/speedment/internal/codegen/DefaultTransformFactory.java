@@ -26,29 +26,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The default implementation of the {@link TransformFactory} interface.
- * 
+ *
  * @author Emil Forslund
  */
 public class DefaultTransformFactory implements TransformFactory {
 
     private final Map<Class<?>, Set<Map.Entry<Class<?>, Class<? extends Transform<?, ?>>>>> transforms;
-	private final String name;
-    
+    private final String name;
+
     /**
      * Instantiates the factory.
-     * 
-     * @param name  the unique name to use
+     *
+     * @param name the unique name to use
      */
-	public DefaultTransformFactory(String name) {
-        this.name       = requireNonNull(name);
+    public DefaultTransformFactory(String name) {
+        this.name = requireNonNull(name);
         this.transforms = new ConcurrentHashMap<>();
-	}
-    
+    }
+
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public String getName() {
@@ -56,34 +57,35 @@ public class DefaultTransformFactory implements TransformFactory {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
-	@Override
-	public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Class<T> transform) {
+    @Override
+    public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Class<T> transform) {
         requireNonNull(from);
         requireNonNull(to);
         requireNonNull(transform);
-        
+
         transforms.computeIfAbsent(from, f -> new HashSet<>())
             .add(new AbstractMap.SimpleEntry<>(to, transform));
-        
+
         return this;
-	}
+    }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
-	@Override
+    @Override
     @SuppressWarnings("unchecked")
-	public <A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> model) {
+    public <A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> model) {
         requireNonNull(model);
-        
-		return new HashSet<>(transforms.entrySet()).stream()
-			.filter(e -> e.getKey().isAssignableFrom(model))
+
+        return transforms.entrySet().stream()
+            .filter(e -> e.getKey().isAssignableFrom(model))
             .flatMap(e -> e.getValue().stream())
             .map(e -> toEntry(e.getKey(), (T) TransformFactory.create(e.getValue())))
-            .collect(Collectors.toSet());
-	}
+            .collect(toSet());
+
+    }
 
     private static <A, T extends Transform<A, ?>> Map.Entry<Class<?>, T> toEntry(Class<?> key, T value) {
         return new AbstractMap.SimpleEntry<>(key, value);

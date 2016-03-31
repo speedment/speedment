@@ -278,34 +278,46 @@ abstract class TypeBase implements Type {
         return new TypeImpl(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object obj) {
-		return Optional.ofNullable(obj)
-            .filter(o -> Type.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Type) o)
-            .filter(o -> Objects.equals(getName(), o.getName()))
-            .filter(o -> Objects.equals(getArrayDimension(), o.getArrayDimension()))
-            .filter(o -> Objects.equals(getAnnotations(), o.getAnnotations()))
-            .filter(o -> Objects.equals(getGenerics(), o.getGenerics()))
-            .filter(o -> Objects.equals(getJavaImpl(), o.getJavaImpl()))
-            .isPresent();
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + this.arrayDimension;
+        hash = 29 * hash + Objects.hashCode(this.annotations);
+        hash = 29 * hash + Objects.hashCode(this.generics);
+        hash = 29 * hash + Objects.hashCode(this.javaImpl);
+        return hash;
+    }
 
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 61 * hash + Objects.hashCode(this.name);
-		hash = 61 * hash + this.arrayDimension;
-		hash = 61 * hash + Objects.hashCode(this.annotations);
-		hash = 61 * hash + Objects.hashCode(this.generics);
-		hash = 61 * hash + Objects.hashCode(this.javaImpl);
-		return hash;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TypeBase other = (TypeBase) obj;
+        if (this.arrayDimension != other.arrayDimension) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.generics, other.generics)) {
+            return false;
+        }
+        if (!Objects.equals(this.javaImpl, other.javaImpl)) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

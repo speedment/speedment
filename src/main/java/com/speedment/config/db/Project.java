@@ -47,7 +47,7 @@ public interface Project extends
         HasName,
         HasChildren,
         HasMainInterface,
-        HasMutator<ProjectMutator> {
+        HasMutator<ProjectMutator<? extends Project>> {
 
     final String 
             COMPANY_NAME     = "companyName",
@@ -119,7 +119,7 @@ public interface Project extends
     }
 
     @Override
-    default ProjectMutator mutator() {
+    default ProjectMutator<? extends Project> mutator() {
         return DocumentMutator.of(this);
     }
 

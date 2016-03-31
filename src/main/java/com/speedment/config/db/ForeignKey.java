@@ -44,7 +44,7 @@ public interface ForeignKey extends
         HasName,
         HasChildren,
         HasMainInterface,
-        HasMutator<ForeignKeyMutator> {
+        HasMutator<ForeignKeyMutator<? extends ForeignKey>> {
 
     final String FOREIGN_KEY_COLUMNS = "foreignKeyColumns";
     
@@ -71,7 +71,7 @@ public interface ForeignKey extends
     }
 
     @Override
-    default ForeignKeyMutator mutator() {
+    default ForeignKeyMutator<? extends ForeignKey> mutator() {
         return DocumentMutator.of(this);
     }
 }

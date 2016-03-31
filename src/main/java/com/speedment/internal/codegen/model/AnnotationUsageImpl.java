@@ -31,85 +31,83 @@ import java.util.Optional;
 /**
  * This is the default implementation of the {@link AnnotationUsage} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link AnnotationUsage#of(Type) } method to 
- * get an instance. In that way, you can layer change the implementing class 
- * without modifying the using code.
- * 
+ * {@link AnnotationUsage#of(Type) } method to get an instance. In that way, you
+ * can layer change the implementing class without modifying the using code.
+ *
  * @author Emil Forslund
- * @see    AnnotationUsage
+ * @see AnnotationUsage
  */
 public final class AnnotationUsageImpl extends AnnotationUsageBase {
 
     /**
      * Initializes this annotation usage using a type.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link AnnotationUsage#of(Type)} 
-     * method!
-     * 
-     * @param type  the type
+     * <b>Warning!</b> This class should not be instantiated directly but using
+     * the {@link AnnotationUsage#of(Type)} method!
+     *
+     * @param type the type
      */
-	public AnnotationUsageImpl(Type type) {
+    public AnnotationUsageImpl(Type type) {
         super(requireNonNull(type));
-	}
+    }
 
     /**
      * Copy constructor.
-     * 
-     * @param prototype  the prototype
+     *
+     * @param prototype the prototype
      */
-	protected AnnotationUsageImpl(AnnotationUsage prototype) {
-		super(requireNonNull(prototype));
-	}
-	
-	public final static class AnnotationUsageConst extends AnnotationUsageBase {
-        
-		public AnnotationUsageConst(Type type) { 
-			super(type); 
-		}
+    protected AnnotationUsageImpl(AnnotationUsage prototype) {
+        super(requireNonNull(prototype));
+    }
+
+    public final static class AnnotationUsageConst extends AnnotationUsageBase {
+
+        public AnnotationUsageConst(Type type) {
+            super(type);
+        }
 
         /**
-        * {@inheritDoc}
-        */
-		@Override
-		public AnnotationUsage set(Value<?> val) {
-			return copy().set(val);
-		}
-		
-        /**
-        * {@inheritDoc}
-        */
-		@Override
-		public AnnotationUsage put(String key, Value<?> val) {
-			return copy().put(key, val);
-		}
+         * {@inheritDoc}
+         */
+        @Override
+        public AnnotationUsage set(Value<?> val) {
+            return copy().set(val);
+        }
 
         /**
-        * {@inheritDoc}
-        */
-		@Override
-		public AnnotationUsage set(Type type) {
-			return copy().set(type);
-		}
-	}
+         * {@inheritDoc}
+         */
+        @Override
+        public AnnotationUsage put(String key, Value<?> val) {
+            return copy().put(key, val);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public AnnotationUsage set(Type type) {
+            return copy().set(type);
+        }
+    }
 }
 
 abstract class AnnotationUsageBase implements AnnotationUsage {
-	
+
     private Type type;
     private Value<?> value;
     private final List<Entry<String, Value<?>>> values;
 
     AnnotationUsageBase(Type type) {
-        this.type	= type;
-        this.value	= null;
+        this.type = type;
+        this.value = null;
         this.values = new ArrayList<>();
     }
 
     AnnotationUsageBase(AnnotationUsage prototype) {
-        type   = prototype.getType();
-        value  = prototype.getValue().map(Copier::copy).orElse(null);
-        values = Copier.copy(prototype.getValues(), 
+        type = prototype.getType();
+        value = prototype.getValue().map(Copier::copy).orElse(null);
+        values = Copier.copy(prototype.getValues(),
             e -> new AbstractMap.SimpleEntry<>(
                 e.getKey(), e.getValue().copy()
             )
@@ -175,30 +173,37 @@ abstract class AnnotationUsageBase implements AnnotationUsage {
         return new AnnotationUsageImpl(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.type);
-        hash = 79 * hash + Objects.hashCode(this.value);
-        hash = 79 * hash + Objects.hashCode(this.values);
+        hash = 67 * hash + Objects.hashCode(this.type);
+        hash = 67 * hash + Objects.hashCode(this.value);
+        hash = 67 * hash + Objects.hashCode(this.values);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> AnnotationUsage.class.isAssignableFrom(obj.getClass()))
-            .map(o -> (AnnotationUsage) o)
-            .filter(o -> Objects.equals(getType(), o.getType()))
-            .filter(o -> Objects.equals(getValue(), o.getValue()))
-            .filter(o -> Objects.equals(getValues(), o.getValues()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AnnotationUsageBase other = (AnnotationUsageBase) obj;
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        if (!Objects.equals(this.values, other.values)) {
+            return false;
+        }
+        return true;
     }
+
 }

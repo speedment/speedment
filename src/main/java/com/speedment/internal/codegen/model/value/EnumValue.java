@@ -20,7 +20,6 @@ import com.speedment.codegen.model.trait.HasType;
 import com.speedment.codegen.model.Type;
 import com.speedment.internal.codegen.model.ValueImpl;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  *
@@ -56,20 +55,30 @@ public final class EnumValue extends ValueImpl<String>
 		return new EnumValue(this);
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 3;
-		hash = 59 * hash + Objects.hashCode(this.type);
-		return hash;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.type);
+        return hash;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> getClass().equals(o.getClass()))
-            .map(o -> (EnumValue) o)
-            .filter(o -> Objects.equals(type, o.type))
-            .filter(o -> super.equals(o))
-            .isPresent();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnumValue other = (EnumValue) obj;
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

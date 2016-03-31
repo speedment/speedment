@@ -24,29 +24,25 @@ import javafx.scene.text.Font;
  * @author Emil Forslund
  */
 public enum SpeedmentFont {
-    
+
     HEADER("AdventPro-Bold.ttf"),
     LABEL("SourceSansPro-Bold.ttf"),
     BODY("SourceSansPro-Regular.ttf");
 
     private final static String PATH = "/fonts/";
     private final static int DEFAULT_SIZE = 32;
-    
+
     private final Font font;
-    
+
     SpeedmentFont(String fontname) {
-        this.font = requireNonNull(Font.loadFont(
-            SpeedmentFont.class.getResource(PATH + fontname).toExternalForm(), 
-            DEFAULT_SIZE
-        ));
+        this.font = requireNonNull(
+            Font.loadFont(
+                SpeedmentFont.class.getResource(PATH + fontname).toExternalForm(),
+                DEFAULT_SIZE
+            )
+        );
     }
-    
-    public static void loadAll() {
-        for (final SpeedmentFont font : SpeedmentFont.values()) {
-            font.get();
-        }
-    }
-    
+
     public Font get() {
         return font;
     }

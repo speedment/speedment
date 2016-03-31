@@ -28,132 +28,141 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
- * This is the default implementation of the {@link File} interface.
- * This class should not be instantiated directly. Instead you should call the
- * {@link File#of(java.lang.String)} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
- * 
+ * This is the default implementation of the {@link File} interface. This class
+ * should not be instantiated directly. Instead you should call the
+ * {@link File#of(java.lang.String)} method to get an instance. In that way, you
+ * can layer change the implementing class without modifying the using code.
+ *
  * @author Emil Forslund
- * @see    File
+ * @see File
  */
 public final class FileImpl implements File {
-	
-	private String name;
-	private Javadoc doc;
-	private final List<Import> imports;
-	private final List<ClassOrInterface<?>> classes;
-	
+
+    private String name;
+    private Javadoc doc;
+    private final List<Import> imports;
+    private final List<ClassOrInterface<?>> classes;
+
     /**
      * Initializes this file using a name.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * <b>Warning!</b> This class should not be instantiated directly but using
      * the {@link File#of(java.lang.String)} method!
-     * 
-     * @param name  the filename
+     *
+     * @param name the filename
      */
-	public FileImpl(String name) {
-		this.name	 = requireNonNull(name);
-		this.doc	 = null;
-		this.imports = new ArrayList<>();
-		this.classes = new ArrayList<>();
-	}
-	
+    public FileImpl(String name) {
+        this.name = requireNonNull(name);
+        this.doc = null;
+        this.imports = new ArrayList<>();
+        this.classes = new ArrayList<>();
+    }
+
     /**
      * Copy constructor.
-     * 
-     * @param prototype  the prototype
+     *
+     * @param prototype the prototype
      */
-	protected FileImpl(File prototype) {
-		this.name	 = requireNonNull(prototype).getName();
-		this.doc	 = prototype.getJavadoc().map(Copier::copy).orElse(null);
-		this.imports = Copier.copy(prototype.getImports());
-		this.classes = Copier.copy(prototype.getClasses(), c -> c.copy());
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public File setName(String name) {
-		this.name = requireNonNull(name);
-		return this;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public File set(Javadoc doc) {
-		this.doc = doc;
-		return this;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public Optional<Javadoc> getJavadoc() {
-		return Optional.ofNullable(doc);
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public List<Import> getImports() {
-		return imports;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public List<ClassOrInterface<?>> getClasses() {
-		return classes;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public FileImpl copy() {
-		return new FileImpl(this);
-	}
+    protected FileImpl(File prototype) {
+        this.name = requireNonNull(prototype).getName();
+        this.doc = prototype.getJavadoc().map(Copier::copy).orElse(null);
+        this.imports = Copier.copy(prototype.getImports());
+        this.classes = Copier.copy(prototype.getClasses(), c -> c.copy());
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public File setName(String name) {
+        this.name = requireNonNull(name);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File set(Javadoc doc) {
+        this.doc = doc;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Javadoc> getJavadoc() {
+        return Optional.ofNullable(doc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Import> getImports() {
+        return imports;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ClassOrInterface<?>> getClasses() {
+        return classes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileImpl copy() {
+        return new FileImpl(this);
+    }
+
+    @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.doc);
-        hash = 97 * hash + Objects.hashCode(this.imports);
-        hash = 97 * hash + Objects.hashCode(this.classes);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + Objects.hashCode(this.doc);
+        hash = 37 * hash + Objects.hashCode(this.imports);
+        hash = 37 * hash + Objects.hashCode(this.classes);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> File.class.isAssignableFrom(o.getClass()))
-            .map(o -> (File) o)
-            .filter(o -> Objects.equals(getName(), o.getName()))
-            .filter(o -> Objects.equals(getJavadoc(), o.getJavadoc()))
-            .filter(o -> Objects.equals(getImports(), o.getImports()))
-            .filter(o -> Objects.equals(getClasses(), o.getClasses()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FileImpl other = (FileImpl) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.doc, other.doc)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
+            return false;
+        }
+        if (!Objects.equals(this.classes, other.classes)) {
+            return false;
+        }
+        return true;
     }
+
 }

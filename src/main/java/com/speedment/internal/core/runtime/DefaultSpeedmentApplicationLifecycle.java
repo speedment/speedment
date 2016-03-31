@@ -19,6 +19,7 @@ package com.speedment.internal.core.runtime;
 import com.speedment.exception.SpeedmentException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
@@ -26,7 +27,7 @@ import java.nio.file.Files;
  * @author Emil Forslund
  */
 public final class DefaultSpeedmentApplicationLifecycle extends
-        SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
+    SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
 
     private final ApplicationMetadata metadata; // Can be null.
 
@@ -34,15 +35,21 @@ public final class DefaultSpeedmentApplicationLifecycle extends
         this((File) null);
     }
 
+    /**
+     * Constructs a new DefaultSpeedmentApplicationLifecycle from the UTF-8
+     * encoded configuration file.
+     *
+     * @param configFile UTF-8 encoded configuration file
+     */
     public DefaultSpeedmentApplicationLifecycle(File configFile) {
         if (configFile != null) {
             final String json;
             try {
                 final byte[] content = Files.readAllBytes(configFile.toPath());
-                json = new String(content);
+                json = new String(content, StandardCharsets.UTF_8);
             } catch (final IOException ex) {
                 throw new SpeedmentException(
-                        "Could not load json-file from path '" + configFile.getAbsolutePath() + "'.", ex
+                    "Could not load json-file from path '" + configFile.getAbsolutePath() + "'.", ex
                 );
             }
 

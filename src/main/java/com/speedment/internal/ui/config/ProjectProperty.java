@@ -22,10 +22,12 @@ import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.DEFAULT_PROJECT_NAME;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
+import com.speedment.config.db.mutator.ProjectMutator;
 import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
@@ -34,6 +36,7 @@ import com.speedment.ui.config.db.StringPropertyItem;
 import com.speedment.internal.util.document.DocumentMerger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -54,27 +57,27 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public void merge(Speedment speedment, Project project) {
-        DocumentMerger.merge(this, project, (parent, key) -> 
-            ((AbstractDocumentProperty<?>) parent).createChild(speedment, key)
+        DocumentMerger.merge(this, project, (parent, key)
+            -> ((AbstractDocumentProperty<?>) parent).createChild(speedment, key)
         );
     }
-    
+
     @Override
     public String getName() throws SpeedmentException {
         // Must implement getName because Project does not have any parent.
         return getAsString(NAME)
             .orElse(DEFAULT_PROJECT_NAME);
     }
-    
+
     public StringProperty companyNameProperty() {
         return stringPropertyOf(COMPANY_NAME, Project.super::getCompanyName);
     }
-    
+
     @Override
     public String getCompanyName() {
         return getAsString(COMPANY_NAME).orElse(DEFAULT_COMPANY_NAME);
     }
-    
+
     public StringProperty packageNameProperty() {
         return stringPropertyOf(PACKAGE_NAME, () -> Project.super.getPackageName().orElse(null));
     }
@@ -83,10 +86,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     public Optional<String> getPackageName() {
         return Optional.ofNullable(packageNameProperty().get());
     }
-    
+
     public StringBinding defaultPackageNameProperty() {
         return Bindings.createStringBinding(
-            () -> Project.DEFAULT_PACKAGE_NAME + getCompanyName(), 
+            () -> Project.DEFAULT_PACKAGE_NAME + getCompanyName(),
             companyNameProperty()
         );
     }
@@ -102,13 +105,13 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
 
     public ObjectProperty<Path> configPathProperty() {
         final ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
-        
+
         Bindings.bindBidirectional(
-            stringPropertyOf(CONFIG_PATH, () -> null), 
-            pathProperty, 
+            stringPropertyOf(CONFIG_PATH, () -> null),
+            pathProperty,
             PATH_CONVERTER
         );
-        
+
         return pathProperty;
     }
 
@@ -116,7 +119,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     public Optional<Path> getConfigPath() {
         return Optional.ofNullable(configPathProperty().get());
     }
-    
+
     public ObservableList<DbmsProperty> dbmsesProperty() {
         return observableListOf(DBMSES);
     }
@@ -125,23 +128,23 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     public Stream<DbmsProperty> dbmses() {
         return dbmsesProperty().stream();
     }
-    
+
     @Override
     public ProjectPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new StringPropertyItem(
-                nameProperty(), 
-                "Project Name", 
+                nameProperty(),
+                "Project Name",
                 "The name that should be used for this project."
             ),
             new StringPropertyItem(
-                companyNameProperty(), 
-                "Company Name", 
+                companyNameProperty(),
+                "Company Name",
                 "The name that should be used for this project."
             ),
             new DefaultStringPropertyItem(
@@ -158,23 +161,29 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             )
         );
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
-        return new String[] {key};
+    protected List<String> keyPathEndingWith(String key) {
+        return of(key);
     }
-    
+
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
         @Override
         public String toString(Path p) {
-            if (p == null) return null;
-            else return p.toString();
+            if (p == null) {
+                return null;
+            } else {
+                return p.toString();
+            }
         }
 
         @Override
         public Path fromString(String string) {
-            if (string == null) return null;
-            else return Paths.get(string);
+            if (string == null) {
+                return null;
+            } else {
+                return Paths.get(string);
+            }
         }
     };
 }

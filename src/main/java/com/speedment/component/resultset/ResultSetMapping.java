@@ -89,10 +89,11 @@ public interface ResultSetMapping<T> {
 
     /**
      * Returns if this type must use a support method to read from the ResulSet
-     * rather than just calling a ResultSet method directly (e.g. there is no
-     * rs.getUuid() method)
+     * rather than just calling a ResultSet method directly (for example, there is no
+     * {@code rs.getUuid()} method).
      *
-     * @return
+     * @return if this type must use a support method to read from the ResulSet
+     * rather than just calling a ResultSet method directly
      */
     default boolean isMustUseSupportMethod() {
         return false;

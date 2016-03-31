@@ -17,7 +17,6 @@
 package com.speedment.internal.codegen.java.view;
 
 import com.speedment.codegen.Generator;
-import com.speedment.codegen.model.Initalizer;
 import com.speedment.codegen.Transform;
 
 import java.util.Optional;
@@ -25,19 +24,22 @@ import java.util.Optional;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.codegen.model.Initializer;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**
- * Transforms from an {@link Initalizer} to java code.
+ * Transforms from an {@link Initializer} to java code.
  * 
  * @author Emil Forslund
  */
-public final class InitalizerView implements Transform<Initalizer, String> {
+public final class InitalizerView implements Transform<Initializer, String> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<String> transform(Generator gen, Initalizer model) {
+    public Optional<String> transform(Generator gen, Initializer model) {
         requireNonNull(gen);
         requireNonNull(model);
         

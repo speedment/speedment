@@ -16,32 +16,14 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.code.StandardTranslatorKey;
-import com.speedment.code.TranslatorKey;
-import com.speedment.component.CodeGenerationComponent;
-import com.speedment.component.EventComponent;
-import com.speedment.component.UserInterfaceComponent;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.config.ProjectProperty;
-import com.speedment.internal.ui.config.TableProperty;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
-import javafx.scene.control.TreeItem;
-import static java.util.stream.Collectors.toList;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.concurrent.Worker;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;

@@ -54,7 +54,7 @@ public interface Dbms extends
         HasChildren,
         HasAlias,
         HasMainInterface,
-        HasMutator<DbmsMutator> {
+        HasMutator<DbmsMutator<? extends Dbms>> {
     
     final String
         TYPE_NAME      = "typeName",
@@ -165,7 +165,7 @@ public interface Dbms extends
     }  
     
     @Override
-    default DbmsMutator mutator() {
+    default DbmsMutator<? extends Dbms> mutator() {
         return DocumentMutator.of(this);
     }
 }

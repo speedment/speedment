@@ -84,6 +84,13 @@ public final class JGoogleAnalyticsTracker {
 //        }
     }
 
+    /**
+     * @return the loggingAdapter
+     */
+    public LoggingAdapter getLoggingAdapter() {
+        return loggingAdapter;
+    }
+
     private class TrackingThread extends Thread {
 
         private final FocusPoint focusPoint;

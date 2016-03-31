@@ -97,29 +97,34 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
 		return new ClassImpl(this);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.superType);
-        hash = 97 * hash + Objects.hashCode(this.constructors);
+        hash = 11 * hash + Objects.hashCode(this.superType);
+        hash = 11 * hash + Objects.hashCode(this.constructors);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> super.equals(obj))
-            .filter(o -> Class.class.isAssignableFrom(obj.getClass()))
-            .map(o -> (Class) o)
-            .filter(o -> Objects.equals(getSupertype(), o.getSupertype()))
-            .filter(o -> Objects.equals(getConstructors(), o.getConstructors()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClassImpl other = (ClassImpl) obj;
+        if (!Objects.equals(this.superType, other.superType)) {
+            return false;
+        }
+        if (!Objects.equals(this.constructors, other.constructors)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

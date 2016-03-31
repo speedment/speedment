@@ -18,17 +18,18 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.IP_ADDRESS;
 import static com.speedment.config.db.Dbms.PORT;
 import static com.speedment.config.db.Dbms.USERNAME;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.mutator.DbmsMutator;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.concat;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
@@ -36,6 +37,7 @@ import com.speedment.ui.config.db.StringChoicePropertyItem;
 import com.speedment.ui.config.db.DefaultIntegerPropertyItem;
 import com.speedment.ui.config.db.DefaultStringPropertyItem;
 import com.speedment.ui.config.db.DefaultTextAreaPropertyItem;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import static java.util.stream.Collectors.toList;
@@ -188,7 +190,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
     
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.DBMSES, key);
     }
 }

@@ -45,7 +45,7 @@ public interface Schema extends
         HasChildren,
         HasAlias,
         HasMainInterface,
-        HasMutator<SchemaMutator> {
+        HasMutator<SchemaMutator<? extends Schema>> {
 
     final String DEFAULT_SCHEMA = "defaultSchema",
             TABLES = "tables";
@@ -83,7 +83,7 @@ public interface Schema extends
     }
 
     @Override
-    default SchemaMutator mutator() {
+    default SchemaMutator<? extends Schema> mutator() {
         return DocumentMutator.of(this);
     }
 

@@ -45,7 +45,7 @@ public interface IndexColumn extends
         HasOrderType,
         HasColumn,
         HasMainInterface,
-        HasMutator<IndexColumnMutator> {
+        HasMutator<IndexColumnMutator<? extends IndexColumn>> {
 
     @Override
     default Class<IndexColumn> mainInterface() {
@@ -53,7 +53,7 @@ public interface IndexColumn extends
     }
 
     @Override
-    default IndexColumnMutator mutator() {
+    default IndexColumnMutator<? extends IndexColumn> mutator() {
         return DocumentMutator.of(this);
     }
 

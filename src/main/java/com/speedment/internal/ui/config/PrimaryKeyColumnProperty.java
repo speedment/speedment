@@ -18,15 +18,17 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.PrimaryKeyColumnPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasColumnProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
+import java.util.List;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -34,31 +36,31 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class PrimaryKeyColumnProperty 
-    extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty> 
-    implements 
-        PrimaryKeyColumn, 
-        HasExpandedProperty, 
-        HasNameProperty, 
-        HasOrdinalPositionProperty, 
-        HasColumnProperty {
+public final class PrimaryKeyColumnProperty
+    extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty>
+    implements
+    PrimaryKeyColumn,
+    HasExpandedProperty,
+    HasNameProperty,
+    HasOrdinalPositionProperty,
+    HasColumnProperty {
 
     public PrimaryKeyColumnProperty(Table parent) {
         super(parent);
     }
-    
+
     @Override
     public PrimaryKeyColumnPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return HasColumnProperty.super.getUiVisibleProperties(speedment);
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS, key);
     }
 }

@@ -18,14 +18,16 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.mutator.ForeignKeyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
+import java.util.List;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
@@ -69,7 +71,7 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     }
     
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
     }
 }

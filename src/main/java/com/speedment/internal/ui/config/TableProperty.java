@@ -18,15 +18,17 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.mutator.TableMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.TablePropertyMutator;
 import com.speedment.ui.config.trait.HasAliasProperty;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
+import static com.speedment.internal.util.ImmutableListUtil.*;
+import java.util.List;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -36,40 +38,40 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class TableProperty 
-    extends AbstractChildDocumentProperty<Schema, TableProperty> 
-    implements 
-        Table, 
-        HasEnabledProperty, 
-        HasExpandedProperty, 
-        HasNameProperty, 
-        HasAliasProperty {
+public final class TableProperty
+    extends AbstractChildDocumentProperty<Schema, TableProperty>
+    implements
+    Table,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasNameProperty,
+    HasAliasProperty {
 
     public TableProperty(Schema parent) {
         super(parent);
     }
-    
+
     public ObservableList<ColumnProperty> columnsProperty() {
         return observableListOf(COLUMNS);
     }
-    
+
     public ObservableList<IndexProperty> indexesProperty() {
         return observableListOf(INDEXES);
     }
-    
+
     public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
         return observableListOf(FOREIGN_KEYS);
     }
-    
+
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
         return observableListOf(PRIMARY_KEY_COLUMNS);
     }
-    
+
     @Override
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
     }
-    
+
     @Override
     public Stream<? extends ColumnProperty> columns() {
         return columnsProperty().stream();
@@ -89,12 +91,12 @@ public final class TableProperty
     public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
         return primaryKeyColumnsProperty().stream();
     }
-    
+
     @Override
     public TablePropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
@@ -103,9 +105,9 @@ public final class TableProperty
             HasAliasProperty.super.getUiVisibleProperties(speedment)
         ).flatMap(s -> s);
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.TABLES, key);
     }
 }

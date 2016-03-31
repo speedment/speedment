@@ -153,24 +153,31 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
 	public InterfaceMethodImpl copy() {
 		return new InterfaceMethodImpl(m.copy());
 	}
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
-        return m.hashCode();
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.m);
+        return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> InterfaceMethodImpl.class.isAssignableFrom(o.getClass()))
-            .filter(o -> Objects.equals(((InterfaceMethodImpl) o).m, m))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InterfaceMethodImpl other = (InterfaceMethodImpl) obj;
+        if (!Objects.equals(this.m, other.m)) {
+            return false;
+        }
+        return true;
     }
+    
+
 }

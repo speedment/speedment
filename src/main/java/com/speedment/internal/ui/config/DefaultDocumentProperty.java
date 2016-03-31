@@ -17,10 +17,11 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.Document;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
@@ -41,12 +42,12 @@ public final class DefaultDocumentProperty extends
     }
     
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         if (parent == null) {
             if (key == null) {
-                return new String[0];
+                return of();
             } else {
-                return new String[] {key};
+                return of(key);
             }
         } else {
             return concat(parent.keyPathEndingWith(this.key), key);

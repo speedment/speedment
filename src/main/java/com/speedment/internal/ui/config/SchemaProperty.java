@@ -18,16 +18,18 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
+
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Schema;
+import com.speedment.config.db.mutator.SchemaMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.SchemaPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasAliasProperty;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
-import com.speedment.ui.config.db.BooleanPropertyItem;
+import java.util.List;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -38,7 +40,7 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty> 
+public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty>
     implements Schema, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 
     public SchemaProperty(Dbms parent) {
@@ -49,7 +51,7 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
     }
-    
+
     public final BooleanProperty defaultSchemaProperty() {
         return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
     }
@@ -58,21 +60,21 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     public boolean isDefaultSchema() {
         return defaultSchemaProperty().get();
     }
-    
+
     public ObservableList<TableProperty> tablesProperty() {
         return observableListOf(TABLES);
     }
-    
+
     @Override
     public Stream<TableProperty> tables() {
         return tablesProperty().stream();
     }
-    
+
     @Override
     public SchemaPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
@@ -81,9 +83,9 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
             HasAliasProperty.super.getUiVisibleProperties(speedment)
         ).flatMap(s -> s);
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.SCHEMAS, key);
     }
 }

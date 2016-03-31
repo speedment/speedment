@@ -18,16 +18,18 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
+import com.speedment.config.db.mutator.IndexColumnMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexColumnPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasColumnProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.trait.HasOrderTypeProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
+import java.util.List;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
 
@@ -35,19 +37,19 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index, IndexColumnProperty> 
+public final class IndexColumnProperty extends AbstractChildDocumentProperty<Index, IndexColumnProperty>
     implements IndexColumn, HasExpandedProperty, HasNameProperty, HasOrdinalPositionProperty,
     HasOrderTypeProperty, HasColumnProperty {
-    
+
     public IndexColumnProperty(Index parent) {
         super(parent);
     }
-    
+
     @Override
     public IndexColumnPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.concat(
@@ -55,9 +57,9 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
             HasOrderTypeProperty.super.getUiVisibleProperties(speedment)
         );
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.INDEX_COLUMNS, key);
     }
 }

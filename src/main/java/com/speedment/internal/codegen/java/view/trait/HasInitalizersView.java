@@ -21,6 +21,7 @@ import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.trait.HasInitalizers;
 import java.util.stream.Collectors;
+import static com.speedment.internal.codegen.util.Formatting.dnl;
 
 /**
  * A trait with the functionality to render models with the trait 

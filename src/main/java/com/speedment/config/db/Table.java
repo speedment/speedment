@@ -47,7 +47,7 @@ public interface Table extends
         HasChildren,
         HasAlias,
         HasMainInterface,
-        HasMutator<TableMutator> {
+        HasMutator<TableMutator<? extends Table>> {
 
     final String COLUMNS = "columns",
             INDEXES = "indexes",
@@ -144,7 +144,7 @@ public interface Table extends
     }
 
     @Override
-    default TableMutator mutator() {
+    default TableMutator<? extends Table> mutator() {
         return DocumentMutator.of(this);
     }
 }

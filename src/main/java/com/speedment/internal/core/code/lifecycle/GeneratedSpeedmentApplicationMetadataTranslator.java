@@ -31,10 +31,12 @@ import com.speedment.internal.codegen.model.JavadocImpl;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.codegen.model.Field;
-import com.speedment.codegen.model.Initalizer;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import com.speedment.codegen.model.Initializer;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
@@ -67,7 +69,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         final Field metadataField = Field.of("METADATA", Type.of(StringBuilder.class))
             .private_().final_().static_();
         
-        final Initalizer initializer = Initalizer.of().static_();
+        final Initializer initializer = Initializer.of().static_();
         
         Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R"))
             .forEachOrdered(l -> {

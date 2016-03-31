@@ -17,25 +17,31 @@
 package com.speedment.internal.util;
 
 import com.speedment.exception.SpeedmentException;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class CopyFileUtil {
-    
+
     public static void generate(String srcFolder, String destFolder, String className) {
         final String destFilename = destFolder + className;
-        
+
         final Path writePath = Paths.get(destFilename);
         try {
-            writePath.getParent().toFile().mkdirs();
-            Files.copy(CopyFileUtil.class.getResourceAsStream(className), 
+            try {
+                final boolean created = Optional.ofNullable(writePath.getParent()).map(p -> p.toFile().mkdirs()).orElse(false);
+            } catch (SecurityException se) {
+                throw new SpeedmentException("Unable to create directory " + writePath.toString(), se);
+            }
+            Files.copy(CopyFileUtil.class.getResourceAsStream(className),
                 writePath,
                 StandardCopyOption.REPLACE_EXISTING
             );
@@ -45,6 +51,8 @@ public final class CopyFileUtil {
             );
         }
     }
-    
-    private CopyFileUtil() {}
+
+    private CopyFileUtil() {
+        instanceNotAllowed(CopyFileUtil.class);
+    }
 }

@@ -706,6 +706,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 lifecyclable.start();
                 break;
             }
+            default: {
+                // Do nothing
+            }
         }
     }
 

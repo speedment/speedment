@@ -107,28 +107,34 @@ public final class JavadocImpl implements Javadoc {
         return new JavadocImpl(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.text);
-        hash = 47 * hash + Objects.hashCode(this.tags);
+        hash = 29 * hash + Objects.hashCode(this.text);
+        hash = 29 * hash + Objects.hashCode(this.tags);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Javadoc.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Javadoc) o)
-            .filter(o -> Objects.equals(getText(), o.getText()))
-            .filter(o -> Objects.equals(getTags(), o.getTags()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final JavadocImpl other = (JavadocImpl) obj;
+        if (!Objects.equals(this.text, other.text)) {
+            return false;
+        }
+        if (!Objects.equals(this.tags, other.tags)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

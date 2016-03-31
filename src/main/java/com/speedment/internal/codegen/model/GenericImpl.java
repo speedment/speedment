@@ -164,30 +164,38 @@ public final class GenericImpl implements Generic {
 		return new GenericImpl(this);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.lowerBound);
-        hash = 23 * hash + Objects.hashCode(this.upperBounds);
-        hash = 23 * hash + Objects.hashCode(this.type);
+        hash = 89 * hash + Objects.hashCode(this.lowerBound);
+        hash = 89 * hash + Objects.hashCode(this.upperBounds);
+        hash = 89 * hash + Objects.hashCode(this.type);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Generic.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Generic) o)
-            .filter(o -> Objects.equals(getLowerBound(), o.getLowerBound()))
-            .filter(o -> Objects.equals(getUpperBounds(), o.getUpperBounds()))
-            .filter(o -> Objects.equals(getBoundType(), o.getBoundType()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GenericImpl other = (GenericImpl) obj;
+        if (!Objects.equals(this.lowerBound, other.lowerBound)) {
+            return false;
+        }
+        if (!Objects.equals(this.upperBounds, other.upperBounds)) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        return true;
     }
+
+
 }

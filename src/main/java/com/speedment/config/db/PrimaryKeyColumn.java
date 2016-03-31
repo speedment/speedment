@@ -28,21 +28,21 @@ import com.speedment.config.db.mutator.DocumentMutator;
 import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 
 /**
- * A typed {@link Document} that represents the primary key column instance in 
+ * A typed {@link Document} that represents the primary key column instance in
  * the database. A {@code PrimaryKeyColumn} is located inside a {@link Table}.
- * 
- * @author  Emil Forslund
- * @since   2.0
+ *
+ * @author Emil Forslund
+ * @since 2.0
  */
 @Api(version = "2.3")
-public interface PrimaryKeyColumn extends 
-        Document,
-        HasParent<Table>,
-        HasName,
-        HasOrdinalPosition,
-        HasColumn,
-        HasMainInterface,
-        HasMutator<PrimaryKeyColumnMutator> {
+public interface PrimaryKeyColumn extends
+    Document,
+    HasParent<Table>,
+    HasName,
+    HasOrdinalPosition,
+    HasColumn,
+    HasMainInterface,
+    HasMutator<PrimaryKeyColumnMutator<? extends PrimaryKeyColumn>> {
 
     @Override
     default Class<PrimaryKeyColumn> mainInterface() {
@@ -50,7 +50,7 @@ public interface PrimaryKeyColumn extends
     }
 
     @Override
-    default PrimaryKeyColumnMutator mutator() {
+    default PrimaryKeyColumnMutator<? extends PrimaryKeyColumn> mutator() {
         return DocumentMutator.of(this);
     }
 

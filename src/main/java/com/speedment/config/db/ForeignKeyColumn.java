@@ -31,25 +31,24 @@ import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElement
 import java.util.Optional;
 
 /**
- * A typed {@link Document} that represents the column referenced by a foreign 
- * key instance in the database. A {@code ForeignKeyColumn} is located inside a 
+ * A typed {@link Document} that represents the column referenced by a foreign
+ * key instance in the database. A {@code ForeignKeyColumn} is located inside a
  * {@link ForeignKey}.
- * 
- * @author  Emil Forslund
- * @since   2.0
+ *
+ * @author Emil Forslund
+ * @since 2.0
  */
 @Api(version = "2.3")
-public interface ForeignKeyColumn extends 
-        Document,
-        HasParent<ForeignKey>,
-        HasName,
-        HasOrdinalPosition,
-        HasColumn,
-        HasMainInterface,
-        HasMutator<ForeignKeyColumnMutator> {
+public interface ForeignKeyColumn extends
+    Document,
+    HasParent<ForeignKey>,
+    HasName,
+    HasOrdinalPosition,
+    HasColumn,
+    HasMainInterface,
+    HasMutator<ForeignKeyColumnMutator<? extends ForeignKeyColumn>> {
 
-    final String 
-        FOREIGN_TABLE_NAME = "foreignTableName",
+    final String FOREIGN_TABLE_NAME = "foreignTableName",
         FOREIGN_COLUMN_NAME = "foreignColumnName";
 
     /**
@@ -114,7 +113,7 @@ public interface ForeignKeyColumn extends
     }
 
     @Override
-    default ForeignKeyColumnMutator mutator() {
+    default ForeignKeyColumnMutator<? extends ForeignKeyColumn> mutator() {
         return DocumentMutator.of(this);
     }
 }

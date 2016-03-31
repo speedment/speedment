@@ -33,101 +33,101 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * This is the default implementation of the {@link Constructor} interface.
- * This class should not be instantiated directly. Instead you should call the
- * {@link Constructor#of()} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
- * 
+ * This is the default implementation of the {@link Constructor} interface. This
+ * class should not be instantiated directly. Instead you should call the
+ * {@link Constructor#of()} method to get an instance. In that way, you can
+ * layer change the implementing class without modifying the using code.
+ *
  * @author Emil Forslund
- * @see    Constructor
+ * @see Constructor
  */
 public final class ConstructorImpl implements Constructor {
-	
-	private Javadoc javadoc;
-	private final List<AnnotationUsage> annotations;
-	private final List<Field> params;
-	private final List<String> code;
-	private final Set<Modifier> modifiers;
+
+    private Javadoc javadoc;
+    private final List<AnnotationUsage> annotations;
+    private final List<Field> params;
+    private final List<String> code;
+    private final Set<Modifier> modifiers;
     private final Set<Type> exceptions;
-	
+
     /**
      * Initializes this constructor.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * <b>Warning!</b> This class should not be instantiated directly but using
      * the {@link Constructor#of()} method!
      */
-	public ConstructorImpl() {
-		javadoc		= null;
-		annotations = new ArrayList<>();
-		params		= new ArrayList<>();
-		code		= new ArrayList<>();
-		modifiers	= new HashSet<>();
-        exceptions  = new HashSet<>();
-	}
-	
-    /**
-     * Copy constructor.
-     * 
-     * @param prototype  the prototype
-     */
-	protected ConstructorImpl(final Constructor prototype) {
-		javadoc		= requireNonNull(prototype).getJavadoc().map(Copier::copy).orElse(null);
-		annotations	= Copier.copy(prototype.getAnnotations());
-		params		= Copier.copy(prototype.getFields());
-		code		= Copier.copy(prototype.getCode(), c -> c);
-		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-        exceptions  = Copier.copy(prototype.getExceptions());
-	}
+    public ConstructorImpl() {
+        javadoc = null;
+        annotations = new ArrayList<>();
+        params = new ArrayList<>();
+        code = new ArrayList<>();
+        modifiers = new HashSet<>();
+        exceptions = new HashSet<>();
+    }
 
     /**
-     * {@inheritDoc}
+     * Copy constructor.
+     *
+     * @param prototype the prototype
      */
-	@Override
-	public List<Field> getFields() {
-		return params;
-	}
+    protected ConstructorImpl(final Constructor prototype) {
+        javadoc = requireNonNull(prototype).getJavadoc().map(Copier::copy).orElse(null);
+        annotations = Copier.copy(prototype.getAnnotations());
+        params = Copier.copy(prototype.getFields());
+        code = Copier.copy(prototype.getCode(), c -> c);
+        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        exceptions = Copier.copy(prototype.getExceptions());
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-	public List<String> getCode() {
-		return code;
-	}
+    public List<Field> getFields() {
+        return params;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Set<Modifier> getModifiers() {
-		return modifiers;
-	}
+    @Override
+    public List<String> getCode() {
+        return code;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Constructor set(Javadoc doc) {
-		javadoc = doc;
-		return this;
-	}
+    @Override
+    public Set<Modifier> getModifiers() {
+        return modifiers;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Optional<Javadoc> getJavadoc() {
-		return Optional.ofNullable(javadoc);
-	}
+    @Override
+    public Constructor set(Javadoc doc) {
+        javadoc = doc;
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public List<AnnotationUsage> getAnnotations() {
-		return annotations;
-	}
-    
+    @Override
+    public Optional<Javadoc> getJavadoc() {
+        return Optional.ofNullable(javadoc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<AnnotationUsage> getAnnotations() {
+        return annotations;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -135,44 +135,58 @@ public final class ConstructorImpl implements Constructor {
     public Set<Type> getExceptions() {
         return exceptions;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-	public ConstructorImpl copy() {
-		return new ConstructorImpl(this);
-	}
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public ConstructorImpl copy() {
+        return new ConstructorImpl(this);
+    }
+
+    @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.javadoc);
-        hash = 59 * hash + Objects.hashCode(this.annotations);
-        hash = 59 * hash + Objects.hashCode(this.params);
-        hash = 59 * hash + Objects.hashCode(this.code);
-        hash = 59 * hash + Objects.hashCode(this.modifiers);
+        int hash = 5;
+        hash = 43 * hash + Objects.hashCode(this.javadoc);
+        hash = 43 * hash + Objects.hashCode(this.annotations);
+        hash = 43 * hash + Objects.hashCode(this.params);
+        hash = 43 * hash + Objects.hashCode(this.code);
+        hash = 43 * hash + Objects.hashCode(this.modifiers);
+        hash = 43 * hash + Objects.hashCode(this.exceptions);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Constructor.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Constructor) o)
-            .filter(o -> Objects.equals(getJavadoc(), o.getJavadoc()))
-            .filter(o -> Objects.equals(getAnnotations(), o.getAnnotations()))
-            .filter(o -> Objects.equals(getFields(), o.getFields()))
-            .filter(o -> Objects.equals(getCode(), o.getCode()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .filter(o -> Objects.equals(getExceptions(), o.getExceptions()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ConstructorImpl other = (ConstructorImpl) obj;
+        if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.params, other.params)) {
+            return false;
+        }
+        if (!Objects.equals(this.code, other.code)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        if (!Objects.equals(this.exceptions, other.exceptions)) {
+            return false;
+        }
+        return true;
     }
+
 }

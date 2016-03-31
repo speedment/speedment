@@ -16,38 +16,38 @@
  */
 package com.speedment.internal.codegen.model;
 
-import com.speedment.codegen.model.Initalizer;
 import com.speedment.codegen.model.modifier.Modifier;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+import com.speedment.codegen.model.Initializer;
+import static java.util.Objects.requireNonNull;
 
 /**
- * This is the default implementation of the {@link Initalizer} interface.
+ * This is the default implementation of the {@link Initializer} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link Initalizer#of()} method to get an instance. In that way, 
+ * {@link Initializer#of()} method to get an instance. In that way, 
  * you can layer change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
- * @see    Initalizer
+ * @see    Initializer
  */
-public final class InitalizerImpl implements Initalizer {
+public final class InitializerImpl implements Initializer {
 
     private final List<String> code;
     private final Set<Modifier> modifiers;
     
     /**
-     * Initializes this initalizer.
+     * Initializes this initializer.
      * <p>
      * <b>Warning!</b> This class should not be instantiated directly but using 
-     * the {@link Initalizer#of()} method!
+     * the {@link Initializer#of()} method!
      */
-    public InitalizerImpl() {
+    public InitializerImpl() {
         code      = new ArrayList<>();
         modifiers = EnumSet.noneOf(Modifier.class);
     }
@@ -57,7 +57,7 @@ public final class InitalizerImpl implements Initalizer {
      * 
      * @param prototype  the prototype
      */
-    protected InitalizerImpl(Initalizer prototype) {
+    protected InitializerImpl(Initializer prototype) {
         requireNonNull(prototype);
         code      = Copier.copy(prototype.getCode(), c -> c);
         modifiers = Copier.copy(prototype.getModifiers(), c -> c);
@@ -83,32 +83,38 @@ public final class InitalizerImpl implements Initalizer {
      * {@inheritDoc}
      */
     @Override
-    public InitalizerImpl copy() {
-        return new InitalizerImpl(this);
+    public InitializerImpl copy() {
+        return new InitializerImpl(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.code);
-        hash = 37 * hash + Objects.hashCode(this.modifiers);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.code);
+        hash = 67 * hash + Objects.hashCode(this.modifiers);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Initalizer.class.isAssignableFrom(obj.getClass()))
-            .map(o -> (Initalizer) o)
-            .filter(o -> Objects.equals(getCode(), o.getCode()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InitializerImpl other = (InitializerImpl) obj;
+        if (!Objects.equals(this.code, other.code)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

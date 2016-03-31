@@ -18,6 +18,7 @@ package com.speedment.util;
 
 import com.speedment.annotation.Api;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -44,7 +45,7 @@ public class NullUtil {
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException("Item " + i + " in the array " + array + " is null");
+                throw new NullPointerException("Item " + i + " in the array " + Arrays.toString(array) + " is null");
             }
         }
         return array;
@@ -89,7 +90,7 @@ public class NullUtil {
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException(msg + ", item " + i + " in the array " + array + " is null");
+                throw new NullPointerException(msg + ", item " + i + " in the array " + Arrays.toString(array) + " is null");
             }
         }
         return array;
@@ -220,35 +221,37 @@ public class NullUtil {
             throwNpeFor(8, 7);
         }
     }
-    
+
+    @SafeVarargs // Ierating over an array is safe
+    @SuppressWarnings("varargs")
     public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K... requiredKeys) {
         requireNonNulls(map, requiredKeys);
-        
+
         for (final K key : requiredKeys) {
             if (key == null || !map.containsKey(key)) {
                 throw new NullPointerException("Key " + key + " in the map is not defined.");
             }
         }
-        
+
         return map;
     }
-    
+
     public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKey) {
         requireNonNull(map);
-        
+
         if (requiredKey == null || !map.containsKey(requiredKey)) {
             throw new NullPointerException("Key " + requiredKey + " in the map is not defined.");
         }
-        
+
         return map;
     }
-    
+
     public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB) {
         requireKeys(map, requiredKeyA);
         requireKeys(map, requiredKeyB);
         return map;
     }
-    
+
     public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB, K requiredKeyC) {
         requireKeys(map, requiredKeyA);
         requireKeys(map, requiredKeyB);

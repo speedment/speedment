@@ -27,69 +27,69 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * This is the default implementation of the {@link Import} interface.
- * This class should not be instantiated directly. Instead you should call the
- * {@link Import#of(Type)} method to get an instance. In that way, you can layer 
+ * This is the default implementation of the {@link Import} interface. This
+ * class should not be instantiated directly. Instead you should call the
+ * {@link Import#of(Type)} method to get an instance. In that way, you can layer
  * change the implementing class without modifying the using code.
- * 
+ *
  * @author Emil Forslund
- * @see    Import
+ * @see Import
  */
 public final class ImportImpl implements Import {
-	
-	private Type type;
+
+    private Type type;
     private String staticMember;
-	private final Set<Modifier> modifiers;
+    private final Set<Modifier> modifiers;
 
     /**
      * Initializes this import using a type.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * <b>Warning!</b> This class should not be instantiated directly but using
      * the {@link Import#of(Type)} method!
-
-     * @param type  the type
+     *
+     * @param type the type
      */
-	public ImportImpl(Type type) {
-		this.type = requireNonNull(type);
+    public ImportImpl(Type type) {
+        this.type = requireNonNull(type);
         this.staticMember = null;
-		this.modifiers = EnumSet.noneOf(Modifier.class);
-	}
-	
+        this.modifiers = EnumSet.noneOf(Modifier.class);
+    }
+
     /**
      * Copy constructor.
-     * 
-     * @param prototype  the prototype
+     *
+     * @param prototype the prototype
      */
-	protected ImportImpl(Import prototype) {
-		type = Copier.copy(requireNonNull(prototype).getType());
-		modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-	}
+    protected ImportImpl(Import prototype) {
+        type = Copier.copy(requireNonNull(prototype).getType());
+        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Import set(Type type) {
-		this.type = requireNonNull(type);
-		return this;
-	}
+    @Override
+    public Import set(Type type) {
+        this.type = requireNonNull(type);
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Type getType() {
-		return type;
-	}
+    @Override
+    public Type getType() {
+        return type;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Set<Modifier> getModifiers() {
-		return this.modifiers;
-	}
-    
+    @Override
+    public Set<Modifier> getModifiers() {
+        return this.modifiers;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -110,33 +110,42 @@ public final class ImportImpl implements Import {
     /**
      * {@inheritDoc}
      */
-	@Override
-	public ImportImpl copy() {
-		return new ImportImpl(this);
-	}
+    @Override
+    public ImportImpl copy() {
+        return new ImportImpl(this);
+    }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.type);
-        hash = 97 * hash + Objects.hashCode(this.modifiers);
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.type);
+        hash = 29 * hash + Objects.hashCode(this.staticMember);
+        hash = 29 * hash + Objects.hashCode(this.modifiers);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Import.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Import) o)
-            .filter(o -> Objects.equals(getType(), o.getType()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ImportImpl other = (ImportImpl) obj;
+        if (!Objects.equals(this.staticMember, other.staticMember)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        return true;
     }
+
 }

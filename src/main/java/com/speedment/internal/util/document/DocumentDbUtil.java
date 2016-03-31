@@ -238,19 +238,19 @@ public final class DocumentDbUtil {
             );
     }
     
-    public static Column referencedColumn(Speedment speedment, FieldIdentifier identifier) {
+    public static Column referencedColumn(Speedment speedment, FieldIdentifier<?> identifier) {
         return referencedColumn(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
     }
     
-    public static Table referencedTable(Speedment speedment, FieldIdentifier identifier) {
+    public static Table referencedTable(Speedment speedment, FieldIdentifier<?> identifier) {
         return referencedTable(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
     }
     
-    public static Schema referencedSchema(Speedment speedment, FieldIdentifier identifier) {
+    public static Schema referencedSchema(Speedment speedment, FieldIdentifier<?> identifier) {
         return referencedSchema(speedment, identifier.dbmsName(), identifier.schemaName());
     }
     
-    public static Dbms referencedDbms(Speedment speedment, FieldIdentifier identifier) {
+    public static Dbms referencedDbms(Speedment speedment, FieldIdentifier<?> identifier) {
         return referencedDbms(speedment, identifier.dbmsName());
     }
     

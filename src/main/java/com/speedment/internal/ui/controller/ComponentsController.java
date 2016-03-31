@@ -51,7 +51,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import static java.util.Objects.requireNonNull;
 import javafx.scene.image.Image;
 import static java.util.Objects.requireNonNull;
 
@@ -88,7 +87,7 @@ public final class ComponentsController implements Initializable {
         }
     }
 
-    private class ComponentItem extends TreeItem<String> {
+    private static class ComponentItem extends TreeItem<String> {
 
         public ComponentItem(Component comp) {
             super(comp.asSoftware().getName() + " (" +
@@ -100,7 +99,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class TranslatorsItem extends TreeItem<String> {
+    private static class TranslatorsItem extends TreeItem<String> {
 
         public TranslatorsItem() {
             super("Code Generators");
@@ -109,7 +108,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class TranslatorItem extends TreeItem<String> {
+    private static class TranslatorItem extends TreeItem<String> {
 
         public TranslatorItem(String translatorKey) {
             super(translatorKey);
@@ -118,7 +117,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class DbmsTypesItem extends TreeItem<String> {
+    private static class DbmsTypesItem extends TreeItem<String> {
 
         public DbmsTypesItem() {
             super("Supported Databases");
@@ -127,7 +126,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class DbmsTypeItem extends TreeItem<String> {
+    private static class DbmsTypeItem extends TreeItem<String> {
 
         public DbmsTypeItem(DbmsType dbmsType) {
             super(dbmsType.getName());
@@ -136,7 +135,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class TypeMappersItem extends TreeItem<String> {
+    private static class TypeMappersItem extends TreeItem<String> {
 
         public TypeMappersItem() {
             super("Installed Type Mappings");
@@ -145,7 +144,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class TypeMapperItem extends TreeItem<String> {
+    private static class TypeMapperItem extends TreeItem<String> {
 
         public TypeMapperItem(TypeMapper<?, ?> typeMapper) {
             super(typeMapper.getLabel());
@@ -154,7 +153,7 @@ public final class ComponentsController implements Initializable {
         }
     };
     
-    private class LicenseItem extends TreeItem<String> {
+    private static class LicenseItem extends TreeItem<String> {
         
         private final License license;
         
@@ -170,7 +169,7 @@ public final class ComponentsController implements Initializable {
         }
     }
     
-    private class DependenciesItem extends TreeItem<String> {
+    private static class DependenciesItem extends TreeItem<String> {
         
         public DependenciesItem() {
             super("External Dependencies");
@@ -179,7 +178,7 @@ public final class ComponentsController implements Initializable {
         }
     }
     
-    private class SoftwareItem extends TreeItem<String> {
+    private static class SoftwareItem extends TreeItem<String> {
         
         public SoftwareItem(Software software) {
             super(software.getName() + " (" + software.getVersion() + ")");

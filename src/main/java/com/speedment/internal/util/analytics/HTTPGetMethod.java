@@ -25,30 +25,16 @@ public final class HTTPGetMethod {
     private static final String GET_METHOD_NAME = "GET";
 
     //private static final String SUCCESS_MESSAGE = "JGoogleAnalytics: Tracking Successful!";
-
     private LoggingAdapter loggingAdapter = null;
 
     public void setLoggingAdapter(LoggingAdapter loggingAdapter) {
         this.loggingAdapter = loggingAdapter;
     }
 
-    private static String uaName = null; // User Agent name
-
-    private static String osString = "Unknown";
+    private final static String UA_NAME = "Java/" + System.getProperty("java.version"); // java version info appended; // User Agent name
+    private final static String OS_STRING = System.getProperty("os.name") + " " + System.getProperty("os.version");
 
     HTTPGetMethod() {
-        // Initialise the static parameters if we need to.
-        if (uaName == null) {
-            uaName = "Java/" + System.getProperty("java.version"); // java version info appended
-            // os string is architecture+osname+version concatenated with _
-            osString = System.getProperty("os.arch");
-            if (osString == null || osString.length() < 1) {
-                osString = "";
-            } else {
-                osString += "; ";
-                osString += System.getProperty("os.name") + " " + System.getProperty("os.version");
-            }
-        }
     }
 
     public void request(String urlString) {
@@ -57,7 +43,7 @@ public final class HTTPGetMethod {
             final HttpURLConnection urlConnection = openURLConnection(url);
             urlConnection.setInstanceFollowRedirects(true);
             urlConnection.setRequestMethod(GET_METHOD_NAME);
-            urlConnection.setRequestProperty("User-agent", uaName + " (" + osString + ")");
+            urlConnection.setRequestProperty("User-agent", UA_NAME + " (" + OS_STRING + ")");
 
             urlConnection.connect();
             final int responseCode = getResponseCode(urlConnection);

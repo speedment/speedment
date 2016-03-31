@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util;
 
+import com.speedment.exception.SpeedmentException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -50,8 +51,8 @@ public final class Settings {
 
 		try (final InputStream is = new FileInputStream(SETTINGS_FILE)) {
 			props.load(is);
-		} catch (Exception e) {
-			throw new RuntimeException(
+		} catch (IOException e) {
+			throw new SpeedmentException(
 				"Could not find file '" + filename() + "'."
 			);
 		}

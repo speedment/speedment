@@ -88,29 +88,34 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
 		return new EnumImpl(this);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.constants);
-        hash = 97 * hash + Objects.hashCode(this.constructors);
+        int hash = 5;
+        hash = 13 * hash + Objects.hashCode(this.constants);
+        hash = 13 * hash + Objects.hashCode(this.constructors);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> super.equals(o))
-            .filter(o -> Enum.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Enum) o)
-            .filter(o -> Objects.equals(getConstants(), o.getConstants()))
-            .filter(o -> Objects.equals(getConstructors(), o.getConstructors()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnumImpl other = (EnumImpl) obj;
+        if (!Objects.equals(this.constants, other.constants)) {
+            return false;
+        }
+        if (!Objects.equals(this.constructors, other.constructors)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

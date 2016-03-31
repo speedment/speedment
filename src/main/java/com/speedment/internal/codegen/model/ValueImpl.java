@@ -67,24 +67,30 @@ public abstract class ValueImpl<V> implements Value<V> {
 	@Override
 	public abstract ValueImpl<V> copy();
 
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public int hashCode() {
-		return value.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(other -> getClass().isAssignableFrom(other.getClass()))
-            .map(other -> (ValueImpl<V>) other)
-            .filter(other -> Objects.equals(value, other.value))
-            .isPresent();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ValueImpl<?> other = (ValueImpl<?>) obj;
+        if (!Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

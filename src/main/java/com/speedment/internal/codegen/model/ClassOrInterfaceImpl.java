@@ -20,7 +20,6 @@ import com.speedment.codegen.model.AnnotationUsage;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.Generic;
-import com.speedment.codegen.model.Initalizer;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
@@ -33,6 +32,8 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+import com.speedment.codegen.model.Initializer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This is the abstract base implementation used by the classes {@link ClassImpl},
@@ -51,7 +52,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 	private final List<Type> interfaces;
 	private final List<Field> fields;
 	private final List<Method> methods;
-    private final List<Initalizer> initalizers;
+    private final List<Initializer> initalizers;
 	private final List<ClassOrInterface<?>> classes;
 	private final Set<Modifier> modifiers;
     
@@ -187,48 +188,70 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
      * {@inheritDoc}
      */
     @Override
-    public List<Initalizer> getInitalizers() {
+    public List<Initializer> getInitalizers() {
         return initalizers;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.name);
-        hash = 53 * hash + Objects.hashCode(this.javadoc);
-        hash = 53 * hash + Objects.hashCode(this.annotations);
-        hash = 53 * hash + Objects.hashCode(this.generics);
-        hash = 53 * hash + Objects.hashCode(this.interfaces);
-        hash = 53 * hash + Objects.hashCode(this.fields);
-        hash = 53 * hash + Objects.hashCode(this.methods);
-        hash = 53 * hash + Objects.hashCode(this.initalizers);
-        hash = 53 * hash + Objects.hashCode(this.classes);
-        hash = 53 * hash + Objects.hashCode(this.modifiers);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + Objects.hashCode(this.javadoc);
+        hash = 37 * hash + Objects.hashCode(this.annotations);
+        hash = 37 * hash + Objects.hashCode(this.generics);
+        hash = 37 * hash + Objects.hashCode(this.interfaces);
+        hash = 37 * hash + Objects.hashCode(this.fields);
+        hash = 37 * hash + Objects.hashCode(this.methods);
+        hash = 37 * hash + Objects.hashCode(this.initalizers);
+        hash = 37 * hash + Objects.hashCode(this.classes);
+        hash = 37 * hash + Objects.hashCode(this.modifiers);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> ClassOrInterface.class.isAssignableFrom(o.getClass()))
-            .map(o -> (ClassOrInterface) o)
-            .filter(o -> Objects.equals(getName(), o.getName()))
-            .filter(o -> Objects.equals(getJavadoc(), o.getJavadoc()))
-            .filter(o -> Objects.equals(getAnnotations(), o.getAnnotations()))
-            .filter(o -> Objects.equals(getGenerics(), o.getGenerics()))
-            .filter(o -> Objects.equals(getInterfaces(), o.getInterfaces()))
-            .filter(o -> Objects.equals(getFields(), o.getFields()))
-            .filter(o -> Objects.equals(getMethods(), o.getMethods()))
-            .filter(o -> Objects.equals(getInitalizers(), o.getInitalizers()))
-            .filter(o -> Objects.equals(getClasses(), o.getClasses()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClassOrInterfaceImpl<?> other = (ClassOrInterfaceImpl<?>) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.generics, other.generics)) {
+            return false;
+        }
+        if (!Objects.equals(this.interfaces, other.interfaces)) {
+            return false;
+        }
+        if (!Objects.equals(this.fields, other.fields)) {
+            return false;
+        }
+        if (!Objects.equals(this.methods, other.methods)) {
+            return false;
+        }
+        if (!Objects.equals(this.initalizers, other.initalizers)) {
+            return false;
+        }
+        if (!Objects.equals(this.classes, other.classes)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        return true;
     }
+
+  
 }

@@ -34,155 +34,155 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * This is the default implementation of the {@link Method} interface.
- * This class should not be instantiated directly. Instead you should call the
- * {@link Method#of(String, Type)} method to get an instance. In that way, you 
+ * This is the default implementation of the {@link Method} interface. This
+ * class should not be instantiated directly. Instead you should call the
+ * {@link Method#of(String, Type)} method to get an instance. In that way, you
  * can layer change the implementing class without modifying the using code.
- * 
+ *
  * @author Emil Forslund
- * @see    Method
+ * @see Method
  */
 public final class MethodImpl implements Method {
-	
-	private String name;
-	private Type type;
-	private Javadoc javadoc;
-	private final List<AnnotationUsage> annotations;
-	private final List<Generic> generics;
-	private final List<Field> params;
-	private final List<String> code;
-	private final Set<Modifier> modifiers;
+
+    private String name;
+    private Type type;
+    private Javadoc javadoc;
+    private final List<AnnotationUsage> annotations;
+    private final List<Generic> generics;
+    private final List<Field> params;
+    private final List<String> code;
+    private final Set<Modifier> modifiers;
     private final Set<Type> exceptions;
-	
+
     /**
      * Initializes this method using a name and a type.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using 
+     * <b>Warning!</b> This class should not be instantiated directly but using
      * the {@link Method#of(String, Type)} method!
-     * 
-     * @param name  the name
-     * @param type  the type
+     *
+     * @param name the name
+     * @param type the type
      */
-	public MethodImpl(String name, Type type) {
-		this.name			= requireNonNull(name);
-		this.type			= requireNonNull(type);
-		this.javadoc		= null;
-		this.annotations	= new ArrayList<>();
-		this.generics		= new ArrayList<>();
-		this.params			= new ArrayList<>();
-		this.code			= new ArrayList<>();
-		this.modifiers		= EnumSet.noneOf(Modifier.class);
-        this.exceptions     = new HashSet<>();
-	}
-	
+    public MethodImpl(String name, Type type) {
+        this.name = requireNonNull(name);
+        this.type = requireNonNull(type);
+        this.javadoc = null;
+        this.annotations = new ArrayList<>();
+        this.generics = new ArrayList<>();
+        this.params = new ArrayList<>();
+        this.code = new ArrayList<>();
+        this.modifiers = EnumSet.noneOf(Modifier.class);
+        this.exceptions = new HashSet<>();
+    }
+
     /**
      * Copy constructor.
-     * 
-     * @param prototype  the prototype
+     *
+     * @param prototype the prototype
      */
-	protected MethodImpl(final Method prototype) {
-		name		= requireNonNull(prototype).getName();
-		type		= Copier.copy(prototype.getType());
-		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
-		annotations	= Copier.copy(prototype.getAnnotations());
-		generics	= Copier.copy(prototype.getGenerics());
-		params		= Copier.copy(prototype.getFields());
-		code		= Copier.copy(prototype.getCode(), s -> s);
-		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-        exceptions  = Copier.copy(prototype.getExceptions());
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public Method setName(String name) {
-		this.name = requireNonNull(name);
-		return this;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public Type getType() {
-		return type;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public Method set(Type type) {
-		this.type = requireNonNull(type);
-		return this;
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public List<Field> getFields() {
-		return params;
-	}
+    protected MethodImpl(final Method prototype) {
+        name = requireNonNull(prototype).getName();
+        type = Copier.copy(prototype.getType());
+        javadoc = prototype.getJavadoc().map(Copier::copy).orElse(null);
+        annotations = Copier.copy(prototype.getAnnotations());
+        generics = Copier.copy(prototype.getGenerics());
+        params = Copier.copy(prototype.getFields());
+        code = Copier.copy(prototype.getCode(), s -> s);
+        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        exceptions = Copier.copy(prototype.getExceptions());
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-	public List<String> getCode() {
-		return code;
-	}
+    public String getName() {
+        return name;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Set<Modifier> getModifiers() {
-		return modifiers;
-	}
+    @Override
+    public Method setName(String name) {
+        this.name = requireNonNull(name);
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Method set(Javadoc doc) {
-		javadoc = doc;
-		return this;
-	}
+    @Override
+    public Type getType() {
+        return type;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public Optional<Javadoc> getJavadoc() {
-		return Optional.ofNullable(javadoc);
-	}
+    @Override
+    public Method set(Type type) {
+        this.type = requireNonNull(type);
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public List<AnnotationUsage> getAnnotations() {
-		return annotations;
-	}
+    @Override
+    public List<Field> getFields() {
+        return params;
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	public List<Generic> getGenerics() {
-		return generics;
-	}
-    
+    @Override
+    public List<String> getCode() {
+        return code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Modifier> getModifiers() {
+        return modifiers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Method set(Javadoc doc) {
+        javadoc = doc;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Javadoc> getJavadoc() {
+        return Optional.ofNullable(javadoc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<AnnotationUsage> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Generic> getGenerics() {
+        return generics;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -190,51 +190,70 @@ public final class MethodImpl implements Method {
     public Set<Type> getExceptions() {
         return exceptions;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-	public MethodImpl copy() {
-		return new MethodImpl(this);
-	}
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public MethodImpl copy() {
+        return new MethodImpl(this);
+    }
+
+    @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 19 * hash + Objects.hashCode(this.name);
-        hash = 19 * hash + Objects.hashCode(this.type);
-        hash = 19 * hash + Objects.hashCode(this.javadoc);
-        hash = 19 * hash + Objects.hashCode(this.annotations);
-        hash = 19 * hash + Objects.hashCode(this.generics);
-        hash = 19 * hash + Objects.hashCode(this.params);
-        hash = 19 * hash + Objects.hashCode(this.code);
-        hash = 19 * hash + Objects.hashCode(this.modifiers);
-        hash = 19 * hash + Objects.hashCode(this.exceptions);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.name);
+        hash = 71 * hash + Objects.hashCode(this.type);
+        hash = 71 * hash + Objects.hashCode(this.javadoc);
+        hash = 71 * hash + Objects.hashCode(this.annotations);
+        hash = 71 * hash + Objects.hashCode(this.generics);
+        hash = 71 * hash + Objects.hashCode(this.params);
+        hash = 71 * hash + Objects.hashCode(this.code);
+        hash = 71 * hash + Objects.hashCode(this.modifiers);
+        hash = 71 * hash + Objects.hashCode(this.exceptions);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Method.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Method) o)
-            .filter(o -> Objects.equals(getName(), o.getName()))
-            .filter(o -> Objects.equals(getType(), o.getType()))
-            .filter(o -> Objects.equals(getJavadoc(), o.getJavadoc()))
-            .filter(o -> Objects.equals(getAnnotations(), o.getAnnotations()))
-            .filter(o -> Objects.equals(getGenerics(), o.getGenerics()))
-            .filter(o -> Objects.equals(getFields(), o.getFields()))
-            .filter(o -> Objects.equals(getCode(), o.getCode()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .filter(o -> Objects.equals(getExceptions(), o.getExceptions()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MethodImpl other = (MethodImpl) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.generics, other.generics)) {
+            return false;
+        }
+        if (!Objects.equals(this.params, other.params)) {
+            return false;
+        }
+        if (!Objects.equals(this.code, other.code)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        if (!Objects.equals(this.exceptions, other.exceptions)) {
+            return false;
+        }
+        return true;
     }
+
 }

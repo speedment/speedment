@@ -39,9 +39,7 @@ public class PostgresDbmsHandler extends AbstractRelationalDbmsHandler {
         requireNonNull(md);
         final String typeName = md.getTypeName().toUpperCase();
         final int columnSize = md.getColumnSize();
-        final int decimalDigits = md.getDecimalDigits();
-        final int dataType = md.getDataType();
-
+      
         switch (typeName) {
             case "BIT": {
                 if (columnSize == 1) {

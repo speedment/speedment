@@ -44,7 +44,7 @@ public interface Index extends
         HasName,
         HasChildren,
         HasMainInterface,
-        HasMutator<IndexMutator> {
+        HasMutator<IndexMutator<? extends Index>> {
 
     final String UNIQUE = "unique",
         INDEX_COLUMNS = "indexColumns";
@@ -83,7 +83,7 @@ public interface Index extends
     }
 
     @Override
-    default IndexMutator mutator() {
+    default IndexMutator<? extends Index> mutator() {
         return DocumentMutator.of(this);
     }
 

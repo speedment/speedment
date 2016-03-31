@@ -19,6 +19,7 @@ package com.speedment.ui.config.db;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.ui.config.DocumentProperty;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import javafx.collections.ObservableList;
@@ -29,37 +30,37 @@ import org.controlsfx.control.PropertySheet.Item;
  * @author Emil Forslund
  */
 public final class PropertySheetFactory {
-    
+
     private final Map<Class<?>, Function<DocumentProperty, ObservableList<Item>>> constructors;
-    
+
     public PropertySheetFactory() {
         this.constructors = new ConcurrentHashMap<>();
     }
-    
+
     public PropertySheetFactory install(Class<?> type, Function<DocumentProperty, ObservableList<Item>> propertylister) {
         this.constructors.put(type, propertylister);
         return this;
     }
-        
+
     public ObservableList<Item> build(DocumentProperty node) {
-        final Function<DocumentProperty, ObservableList<Item>> constructor;
-        
-        if (node instanceof HasMainInterface) {
-            @SuppressWarnings("unchecked")
-            final HasMainInterface withMainInterface = (HasMainInterface) node;
-            constructor = constructors.get(withMainInterface.mainInterface());
-        } else {
-            constructor = constructors.get(node.getClass());
-        }
-        
+        requireNonNull(node);
+        final Function<DocumentProperty, ObservableList<Item>> constructor = constructors.get(node.mainInterface());
+
+//        if (node instanceof HasMainInterface) {
+//            @SuppressWarnings("unchecked")
+//            final HasMainInterface withMainInterface = (HasMainInterface) node;
+//            constructor = constructors.get(withMainInterface.mainInterface());
+//        } else {
+//            constructor = constructors.get(node.getClass());
+//        }
         if (constructor == null) {
             throw new IllegalArgumentException(
-                "The specified document '" + node + 
-                "' of type '" + node.getClass() + 
-                "' does not have a mainInterface()-method."
+                "The specified document '" + node
+                + "' of main interface type '" + node.mainInterface().getSimpleName()
+                + "' is not known."
             );
         }
-        
+
         return constructor.apply(node);
     }
 }

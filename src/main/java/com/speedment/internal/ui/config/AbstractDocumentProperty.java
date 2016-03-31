@@ -64,7 +64,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *
@@ -282,7 +281,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @param key  the key to end with (can be null)
      * @return     the constructor
      */
-    protected abstract String[] keyPathEndingWith(String key);
+    protected abstract List<String> keyPathEndingWith(String key);
     
     /**
      * Creates a new child on the specified key with the specified data and 

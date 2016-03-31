@@ -156,36 +156,50 @@ public final class AnnotationImpl implements Annotation {
 		return new AnnotationImpl(this);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.name);
-        hash = 29 * hash + Objects.hashCode(this.javadoc);
-        hash = 29 * hash + Objects.hashCode(this.annotations);
-        hash = 29 * hash + Objects.hashCode(this.fields);
-        hash = 29 * hash + Objects.hashCode(this.imports);
-        hash = 29 * hash + Objects.hashCode(this.modifiers);
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.name);
+        hash = 41 * hash + Objects.hashCode(this.javadoc);
+        hash = 41 * hash + Objects.hashCode(this.annotations);
+        hash = 41 * hash + Objects.hashCode(this.fields);
+        hash = 41 * hash + Objects.hashCode(this.imports);
+        hash = 41 * hash + Objects.hashCode(this.modifiers);
         return hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        return Optional.ofNullable(obj)
-            .filter(o -> Annotation.class.isAssignableFrom(o.getClass()))
-            .map(o -> (Annotation) o)
-            .filter(o -> Objects.equals(getName(), o.getName()))
-            .filter(o -> Objects.equals(getJavadoc(), o.getJavadoc()))
-            .filter(o -> Objects.equals(getAnnotations(), o.getAnnotations()))
-            .filter(o -> Objects.equals(getFields(), o.getFields()))
-            .filter(o -> Objects.equals(getImports(), o.getImports()))
-            .filter(o -> Objects.equals(getModifiers(), o.getModifiers()))
-            .isPresent();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AnnotationImpl other = (AnnotationImpl) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.fields, other.fields)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
+            return false;
+        }
+        if (!Objects.equals(this.modifiers, other.modifiers)) {
+            return false;
+        }
+        return true;
     }
+
+
 }

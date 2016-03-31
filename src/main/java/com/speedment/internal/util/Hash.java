@@ -17,6 +17,7 @@
 package com.speedment.internal.util;
 
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -26,15 +27,21 @@ import java.security.NoSuchAlgorithmException;
  */
 public final class Hash {
 
+    /**
+     * Creates and returns an MD5 from the given UTF-8 encoded String.
+     *
+     * @param str UTF-8 encoded String
+     * @return an MD5 from the given UTF-8 encoded String
+     */
     public static String md5(String str) {
         try {
             final MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] mdbytes = md.digest(str.getBytes());
+            final byte[] mdbytes = md.digest(str.getBytes(StandardCharsets.UTF_8));
 
             // convert the byte to hex format method 1
             final StringBuffer sb = new StringBuffer();
             for (int i = 0; i < mdbytes.length; i++) {
-              sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+                sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
             }
 
             return sb.toString();
@@ -42,9 +49,11 @@ public final class Hash {
             throw new RuntimeException("MD5 algorithm not supported.", ex);
         }
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */
-    private Hash() {instanceNotAllowed(getClass());}
+    private Hash() {
+        instanceNotAllowed(getClass());
+    }
 }

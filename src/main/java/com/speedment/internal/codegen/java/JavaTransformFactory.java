@@ -67,7 +67,7 @@ import com.speedment.internal.codegen.java.view.value.TextValueView;
 import com.speedment.codegen.model.AnnotationUsage;
 import com.speedment.codegen.model.Constructor;
 import com.speedment.codegen.model.File;
-import com.speedment.codegen.model.Initalizer;
+import com.speedment.codegen.model.Initializer;
 
 /**
  * Implementation of the {@link TransformFactory} interface that comes with
@@ -117,6 +117,6 @@ public class JavaTransformFactory extends DefaultTransformFactory {
 		install(InterfaceField.class, InterfaceFieldView.class);
 		install(Constructor.class, ConstructorView.class);
 		install(File.class, FileView.class);
-        install(Initalizer.class, InitalizerView.class);
+        install(Initializer.class, InitalizerView.class);
     }
 }

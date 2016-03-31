@@ -20,7 +20,9 @@ import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.exception.SpeedmentException;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.trait.HasColumnProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
@@ -30,10 +32,10 @@ import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
 import com.speedment.ui.config.trait.HasExpandedProperty;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -119,7 +121,7 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
     }
 }

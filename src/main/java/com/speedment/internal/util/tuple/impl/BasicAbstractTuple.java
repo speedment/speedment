@@ -19,10 +19,7 @@ package com.speedment.internal.util.tuple.impl;
 import com.speedment.util.tuple.BasicTuple;
 import java.util.Arrays;
 import java.util.Objects;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -76,7 +73,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
     @Override
     public boolean equals(Object obj) {
-        if (!baseClass.isAssignableFrom(obj.getClass())) {
+        if (!baseClass.isInstance(obj)) {
             return false;
         }
         if (obj instanceof BasicAbstractTuple) {

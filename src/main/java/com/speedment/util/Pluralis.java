@@ -193,7 +193,7 @@ public enum Pluralis {
         addUncountable("furniture", "equipment", "information", "rice", "money", "species", "series", "fish", "sheep", "data");
     }
 
-    private final class Rule implements Function<String, Optional<String>> {
+    private static final class Rule implements Function<String, Optional<String>> {
 
         protected final String expression;
         protected final Pattern expressionPattern;

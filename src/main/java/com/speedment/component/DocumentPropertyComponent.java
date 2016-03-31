@@ -24,8 +24,10 @@ import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.ui.config.DocumentProperty;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Describes which implementations the {@link Document} interface to use at
@@ -37,27 +39,27 @@ import java.util.Arrays;
 @Api(version = "2.3")
 public interface DocumentPropertyComponent extends Component {
     
-    /**
-     * Returns a new string array with the specified trail added to the end of
-     * the specified array. If trail is null, the original array is returned.
-     * 
-     * @param keys   the array to concatenate
-     * @param trail  the string to append
-     * @return       the new array
-     */
-    static String[] concat(String[] keys, String trail) {
-        if (trail == null) {
-            return keys;
-        } else {
-            final String[] newArray = Arrays.copyOf(keys, keys.length + 1);
-            newArray[keys.length] = trail;
-            return newArray;
-        }
-    }
+//    /**
+//     * Returns a new string array with the specified trail added to the end of
+//     * the specified array. If trail is null, the original array is returned.
+//     * 
+//     * @param keys   the array to concatenate
+//     * @param trail  the string to append
+//     * @return       the new array
+//     */
+//    static String[] concat(String[] keys, String trail) {
+//        if (trail == null) {
+//            return keys;
+//        } else {
+//            final String[] newArray = Arrays.copyOf(keys, keys.length + 1);
+//            newArray[keys.length] = trail;
+//            return newArray;
+//        }
+//    }
     
-    final String[]
-        PROJECTS            = {},
-        DBMSES              = {Project.DBMSES},
+    final List<String>     
+        PROJECTS            = of(),
+        DBMSES              = of(Project.DBMSES),
         SCHEMAS             = concat(DBMSES, Dbms.SCHEMAS),
         TABLES              = concat(SCHEMAS, Schema.TABLES),
         COLUMNS             = concat(TABLES, Table.COLUMNS),
@@ -66,6 +68,18 @@ public interface DocumentPropertyComponent extends Component {
         FOREIGN_KEY_COLUMNS = concat(FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS),
         INDEXES             = concat(TABLES, Table.INDEXES),
         INDEX_COLUMNS       = concat(INDEXES, Index.INDEX_COLUMNS);
+    
+//    final String[]
+//        PROJECTS            = {},
+//        DBMSES              = {Project.DBMSES},
+//        SCHEMAS             = concat(DBMSES, Dbms.SCHEMAS),
+//        TABLES              = concat(SCHEMAS, Schema.TABLES),
+//        COLUMNS             = concat(TABLES, Table.COLUMNS),
+//        PRIMARY_KEY_COLUMNS = concat(TABLES, Table.PRIMARY_KEY_COLUMNS),
+//        FOREIGN_KEYS        = concat(TABLES, Table.FOREIGN_KEYS),
+//        FOREIGN_KEY_COLUMNS = concat(FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS),
+//        INDEXES             = concat(TABLES, Table.INDEXES),
+//        INDEX_COLUMNS       = concat(INDEXES, Index.INDEX_COLUMNS);
     
     /**
      * Functional interface that describes a constructor for an observable 
@@ -104,16 +118,16 @@ public interface DocumentPropertyComponent extends Component {
      * @param constructor  the new constructor to use
      * @param keyPath      the path to the collection where to use it
      */
-    <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, String... keyPath);
+    <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, List<String> keyPath);
     
     /**
      * Creates a new observable document using the installed constructor, at
      * the path specified by {@code keyPath}. To change the implementation, use 
-     * {@link #setConstructor(Constructor, java.lang.String...) }.
+     * {@link #setConstructor(Constructor, java.util.List) }.
      * 
      * @param <PARENT>  the parent type
      * @param keyPath   the path of the constructor
      * @return          the created document
      */
-    <PARENT extends DocumentProperty> Constructor<PARENT> getConstructor(String... keyPath);
+    <PARENT extends DocumentProperty> Constructor<PARENT> getConstructor(List<String> keyPath);
 }

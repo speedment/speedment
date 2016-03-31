@@ -217,9 +217,9 @@ public interface Document {
         return stream()
             .filterValue(List.class::isInstance)
             .mapValue(List.class::cast)
-            .flatMapValue(List::stream)
+            .flatMapValue(List<?>::stream)
             .filterValue(Map.class::isInstance)
-            .mapValue(Map.class::cast);
+            .mapValue(v -> (Map<String, Object>)v);
     }
 
     /**

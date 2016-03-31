@@ -82,7 +82,7 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
     }
 
     @Override
-    public LoggerFormatter getFormatter() {
+    public synchronized LoggerFormatter getFormatter() {
         return formatter;
     }
 

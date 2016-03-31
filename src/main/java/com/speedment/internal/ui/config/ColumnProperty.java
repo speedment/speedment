@@ -23,6 +23,7 @@ import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.mutator.ColumnMutator;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.ui.config.trait.HasAliasProperty;
 import com.speedment.ui.config.trait.HasEnabledProperty;
@@ -40,24 +41,25 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.concat;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
+import java.util.List;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements 
-        Column, 
-        HasEnabledProperty, 
-        HasExpandedProperty, 
-        HasNameProperty,
-        HasAliasProperty, 
-        HasNullableProperty, 
-        HasOrdinalPositionProperty {
+public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements
+    Column,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasNameProperty,
+    HasAliasProperty,
+    HasNullableProperty,
+    HasOrdinalPositionProperty {
 
     public ColumnProperty(Table parent) {
         super(parent);
@@ -123,7 +125,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     public ColumnPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
@@ -147,9 +149,9 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
             )
         ).flatMap(s -> s);
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.COLUMNS, key);
     }
 

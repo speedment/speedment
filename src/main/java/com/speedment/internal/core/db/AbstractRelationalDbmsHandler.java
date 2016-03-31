@@ -98,7 +98,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected static final String YES = "YES";
 
     private final static String PASSWORD_PROTECTED = "********";
-    public static boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
+    public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     protected final Speedment speedment;
     protected final Dbms dbms; // No not use for metadata reads.
@@ -283,10 +283,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final Connection connection = getConnection(dbms)) {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 
-                final ResultSetMetaData rsmd = rsTable.getMetaData();
-                int numberOfColumns = rsmd.getColumnCount();
-
                 if (SHOW_METADATA) {
+                    final ResultSetMetaData rsmd = rsTable.getMetaData();
+                    int numberOfColumns = rsmd.getColumnCount();
                     for (int x = 1; x <= numberOfColumns; x++) {
                         LOGGER.debug(rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + rsmd.getColumnType(x));
                     }
@@ -294,6 +293,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
                 while (rsTable.next()) {
                     if (SHOW_METADATA) {
+                        final ResultSetMetaData rsmd = rsTable.getMetaData();
+                        int numberOfColumns = rsmd.getColumnCount();
                         for (int x = 1; x <= numberOfColumns; x++) {
                             LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
                         }
@@ -503,10 +504,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         try (final ResultSet rsChild = resultSetSupplier.get()) {
 
-            final ResultSetMetaData rsmd = rsChild.getMetaData();
-            final int numberOfColumns = rsmd.getColumnCount();
-
             if (SHOW_METADATA) {
+                final ResultSetMetaData rsmd = rsChild.getMetaData();
+                final int numberOfColumns = rsmd.getColumnCount();
                 for (int x = 1; x <= numberOfColumns; x++) {
                     final int columnType = rsmd.getColumnType(x);
                     LOGGER.info(x + ":" + rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + columnType);
@@ -515,6 +515,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             while (rsChild.next()) {
                 if (SHOW_METADATA) {
+                    final ResultSetMetaData rsmd = rsChild.getMetaData();
+                    final int numberOfColumns = rsmd.getColumnCount();
                     for (int x = 1; x <= numberOfColumns; x++) {
                         final Object val;
                         val = rsChild.getObject(x);
@@ -657,14 +659,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             for (final Object o : values) {
                 ps.setObject(i++, o);
             }
-            final ResultSet rs = ps.executeQuery();
+            try (final ResultSet rs = ps.executeQuery()) {
 
-            // Todo: Make a transparent stream with closeHandler added.
-            final Stream.Builder<T> streamBuilder = Stream.builder();
-            while (rs.next()) {
-                streamBuilder.add(rsMapper.apply(rs));
+                // Todo: Make a transparent stream with closeHandler added.
+                final Stream.Builder<T> streamBuilder = Stream.builder();
+                while (rs.next()) {
+                    streamBuilder.add(rsMapper.apply(rs));
+                }
+                return streamBuilder.build();
             }
-            return streamBuilder.build();
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Error querying " + sql);
             throw new SpeedmentException(sqle);
@@ -756,10 +759,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         // If we got here, and conn is not null, the
                         // transaction should be rolled back, as not
                         // all work has been done
-                        try {
-                            conn.rollback();
-                        } finally {
-                            conn.close();
+                        if (conn != null) {
+                            try {
+                                conn.rollback();
+                            } finally {
+                                conn.close();
+                            }
                         }
                     } catch (SQLException sqlEx) {
                         //

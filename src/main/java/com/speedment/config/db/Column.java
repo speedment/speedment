@@ -35,25 +35,25 @@ import com.speedment.config.db.trait.HasNullable;
 /**
  * A typed {@link Document} that represents a column in the database. A
  * {@code Column} is located inside a {@link Table}.
- * 
- * @author  Emil Forslund
- * @since   2.0
+ *
+ * @author Emil Forslund
+ * @since 2.0
  */
 @Api(version = "2.3")
 public interface Column extends
-        Document,
-        HasParent<Table>,
-        HasEnabled,
-        HasName,
-        HasAlias,
-        HasNullable,
-        HasOrdinalPosition,
-        HasMainInterface,
-        HasMutator<ColumnMutator> {
+    Document,
+    HasParent<Table>,
+    HasEnabled,
+    HasName,
+    HasAlias,
+    HasNullable,
+    HasOrdinalPosition,
+    HasMainInterface,
+    HasMutator<ColumnMutator<? extends Column>> {
 
     final String AUTO_INCREMENT = "autoIncrement",
-            TYPE_MAPPER         = "typeMapper",
-            DATABASE_TYPE       = "databaseType";
+        TYPE_MAPPER = "typeMapper",
+        DATABASE_TYPE = "databaseType";
 
     /**
      * Returns whether or not this column will auto increment when new values
@@ -124,7 +124,7 @@ public interface Column extends
     }
 
     @Override
-    default ColumnMutator mutator() {
+    default ColumnMutator<? extends Column> mutator() {
         return DocumentMutator.of(this);
     }
 }

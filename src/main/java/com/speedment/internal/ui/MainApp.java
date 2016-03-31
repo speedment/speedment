@@ -83,7 +83,6 @@ public final class MainApp extends Application {
     
     private UISession createSession(Stage stage, String configLocation) {
         final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
-        SpeedmentFont.loadAll();
         Statistics.onGuiStarted();
         
         return session;

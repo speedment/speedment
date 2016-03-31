@@ -18,15 +18,17 @@ package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
-import static com.speedment.component.DocumentPropertyComponent.concat;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Table;
+import com.speedment.config.db.mutator.IndexMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexPropertyMutator;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.db.BooleanPropertyItem;
+import static com.speedment.internal.util.ImmutableListUtil.*;
+import java.util.List;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -36,13 +38,13 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public final class IndexProperty extends AbstractChildDocumentProperty<Table, IndexProperty> 
+public final class IndexProperty extends AbstractChildDocumentProperty<Table, IndexProperty>
     implements Index, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
     public IndexProperty(Table parent) {
         super(parent);
     }
-    
+
     public BooleanProperty uniqueProperty() {
         return booleanPropertyOf(UNIQUE, Index.super::isUnique);
     }
@@ -56,21 +58,21 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
     public Stream<IndexColumnProperty> indexColumns() {
         return indexColumnsProperty().stream();
     }
-    
+
     public ObservableList<IndexColumnProperty> indexColumnsProperty() {
         return observableListOf(INDEX_COLUMNS);
     }
-    
+
     @Override
     public boolean isExpandedByDefault() {
         return false;
     }
-    
+
     @Override
     public IndexPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
     }
-    
+
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
@@ -78,16 +80,16 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
             HasNameProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
                 new BooleanPropertyItem(
-                    uniqueProperty(),       
+                    uniqueProperty(),
                     "Is Unique",
                     "True if elements in this index are unique."
                 )
             )
         ).flatMap(s -> s);
     }
-    
+
     @Override
-    protected String[] keyPathEndingWith(String key) {
+    protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.INDEXES, key);
     }
 }
