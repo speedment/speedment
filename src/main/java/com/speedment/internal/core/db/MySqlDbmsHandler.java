@@ -22,7 +22,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Stream;
-import com.speedment.db.metadata.ColumnMetaData2;
+import com.speedment.db.metadata.ColumnMetaData;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no
@@ -53,7 +53,7 @@ public final class MySqlDbmsHandler extends AbstractRelationalDbmsHandler {
     }
 
     @Override
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData2 md) {
+    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
         if ("BIT".equals(md.getTypeName()) && md.getColumnSize() == 1) {
             // Map a BIT(1) to boolean
             return Boolean.class;

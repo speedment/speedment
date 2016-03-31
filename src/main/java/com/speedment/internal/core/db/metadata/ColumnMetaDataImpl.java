@@ -21,15 +21,15 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.speedment.db.metadata.ColumnMetaData2;
+import com.speedment.db.metadata.ColumnMetaData;
 
 /**
  *
  * @author Per Minborg
  */
-public class ColumnMetaDataImpl2 implements ColumnMetaData2 {
+public class ColumnMetaDataImpl implements ColumnMetaData {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(ColumnMetaDataImpl2.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(ColumnMetaDataImpl.class);
 
     private final String tableCat;
     private final String tableSchem;
@@ -55,7 +55,7 @@ public class ColumnMetaDataImpl2 implements ColumnMetaData2 {
     private final String isAutoincrement;
     private final String isGeneratedcolumn;
 
-    public ColumnMetaDataImpl2(ResultSet rs) {
+    public ColumnMetaDataImpl(ResultSet rs) {
         tableCat = readSilent(rs, () -> rs.getString(1));
         tableSchem = readSilent(rs, () -> rs.getString(2));
         tableName = readSilent(rs, () -> rs.getString(3));
