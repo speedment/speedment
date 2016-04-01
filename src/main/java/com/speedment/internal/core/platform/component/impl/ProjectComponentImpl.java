@@ -17,6 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.Component;
 import com.speedment.config.db.Project;
 import com.speedment.component.ProjectComponent;
 import com.speedment.internal.license.OpenSourceLicense;
@@ -42,13 +43,19 @@ public final class ProjectComponentImpl extends InternalOpenSourceComponent impl
     public void setProject(Project project) {
         this.project = requireNonNull(project);
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.of(DEPENDENCIES);
     }
-    
+
     private final static Software[] DEPENDENCIES = {
         AbstractSoftware.with("Gson", "2.5", OpenSourceLicense.APACHE_2)
     };
+
+    @Override
+    public ProjectComponent defaultCopy(Speedment speedment) {
+        return new ProjectComponentImpl(speedment);
+    }
+
 }

@@ -42,7 +42,7 @@ import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentI
 import com.speedment.internal.core.platform.component.impl.DocumentPropertyComponentImpl;
 import com.speedment.internal.core.platform.component.impl.EntityManagerImpl;
 import com.speedment.internal.core.platform.component.impl.EventComponentImpl;
-import com.speedment.internal.core.platform.component.impl.JavaTypeMapperComponentImpl;
+import com.speedment.internal.core.platform.component.impl.ResultSetMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ManagerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.NativeStreamSupplierComponentImpl;
 import com.speedment.internal.core.platform.component.impl.PasswordComponentImpl;
@@ -57,6 +57,20 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import com.speedment.component.resultset.ResultSetMapperComponent;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -83,7 +97,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(ProjectComponentImpl::new);
         put(PrimaryKeyFactoryComponentImpl::new);
         put(DbmsHandlerComponentImpl::new);
-        put(JavaTypeMapperComponentImpl::new);
+        put(ResultSetMapperComponentImpl::new);
         put(EntityManagerImpl::new);
         put(ConnectionPoolComponentImpl::new);
         put(NativeStreamSupplierComponentImpl::new);
@@ -274,15 +288,19 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
                 .collect(joining(", ", "[", "]"));
     }
 
-    private ComponentConstructor componentConstructor(Component component) {
-        final Class<? extends Component> clazz = component.getClass();
-        return s -> {
-            try {
-                final Constructor<? extends Component> constr = clazz.getConstructor(Speedment.class);
-                return constr.newInstance(s);
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                throw new RuntimeException(ex);
-            }
-        };
+    private  ComponentConstructor<?> componentConstructor(Component component) {
+        
+        return s -> component.defaultCopy(s);
+        
+//        @SuppressWarnings("unchecked")
+//        final Class<T> clazz = (Class<T>)component.getClass();
+//        return s -> {
+//            try {
+//                final Constructor<T> constr = clazz.getConstructor(Speedment.class);
+//                return constr.newInstance(s);
+//            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        };
     }
 }

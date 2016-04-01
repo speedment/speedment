@@ -86,7 +86,7 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
     public Class<PrimaryKeyFactoryComponent> getComponentClass() {
         return PrimaryKeyFactoryComponent.class;
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
@@ -231,6 +231,11 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
             throw new UnsupportedOperationException("a primary key List is unmodifiable");
         }
 
+    }
+
+    @Override
+    public PrimaryKeyFactoryComponent defaultCopy(Speedment speedment) {
+        return new PrimaryKeyFactoryComponentImpl(speedment);
     }
 
 }

@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -46,6 +45,14 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
         this.map = new ConcurrentHashMap<>();
         StandardDbmsType.stream().forEach(this::install);
     }
+
+    public DbmsHandlerComponentImpl(Speedment speedment, DbmsHandlerComponentImpl template) {
+        super(speedment);
+        this.dbmsTypes = new ConcurrentHashMap<>(template.dbmsTypes);
+        this.map = new ConcurrentHashMap<>(template.map);
+    }
+    
+    
 
     @Override
     public Class<DbmsHandlerComponent> getComponentClass() {
@@ -96,4 +103,10 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public DbmsHandlerComponentImpl defaultCopy(Speedment speedment) {
+        return new DbmsHandlerComponentImpl(speedment, this);
+    } 
+    
 }

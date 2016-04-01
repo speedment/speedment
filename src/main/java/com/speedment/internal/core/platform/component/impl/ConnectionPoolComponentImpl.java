@@ -17,6 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.Component;
 import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.connectionpool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
@@ -33,6 +34,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -59,6 +63,10 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
         maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
+    }
+
+    private ConnectionPoolComponentImpl(Speedment speedment, ConnectionPoolComponentImpl template) {
+        this(speedment);
     }
 
     @Override
@@ -207,4 +215,10 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public ConnectionPoolComponent defaultCopy(Speedment speedment) {
+        return new ConnectionPoolComponentImpl(speedment, this);
+    }
+
 }

@@ -73,10 +73,14 @@ public final class DocumentDbUtilTest {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
     
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     private static Map.Entry<String, Object> entry(String key, Map<String, Object>... children) {
         return new AbstractMap.SimpleEntry<>(key, Stream.of(children).collect(toList()));
     }
     
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     private static Map<String, Object> map(Map.Entry<String, Object>... entries) {
         return MapStream.of(Stream.of(entries)).toMap();
     }

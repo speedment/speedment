@@ -75,6 +75,7 @@ public final class DocumentMerger {
                     final Object first = list.get(0);
                     
                     if (first instanceof Map<?, ?>) {
+                        @SuppressWarnings("unchecked")
                         final List<Document> documents = list.stream()
                             .map(data -> (Map<String, Object>) data)
                             .map(data -> new BaseDocument(proposed, data))

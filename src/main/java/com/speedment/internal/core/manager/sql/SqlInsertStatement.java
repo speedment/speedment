@@ -34,7 +34,7 @@ public final class SqlInsertStatement extends SqlStatement {
     private final List<Long> generatedKeys;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
-    public <F extends FieldTrait & ReferenceFieldTrait> SqlInsertStatement(
+    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> SqlInsertStatement(
         final String sql,
         final List<?> values,
         final List<F> generatedColumnFields,
@@ -47,7 +47,7 @@ public final class SqlInsertStatement extends SqlStatement {
     }
 
     @SuppressWarnings("unchecked")
-    public <F extends FieldTrait & ReferenceFieldTrait> List<F> getGeneratedColumnFields() {
+    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> List<F> getGeneratedColumnFields() {
         return (List<F>) generatedColumnFields;
     }
 

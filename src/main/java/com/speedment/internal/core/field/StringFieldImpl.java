@@ -53,7 +53,7 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     private final StringFieldTrait<ENTITY, D> stringField;
 
     public StringFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, String> getter,
             Setter<ENTITY, String> setter,
             TypeMapper<D, String> typeMapper,
@@ -67,8 +67,8 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
 
     @Override

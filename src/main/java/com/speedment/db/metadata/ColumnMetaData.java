@@ -90,13 +90,13 @@ public interface ColumnMetaData {
      */
     boolean isColumnSizeNull();
 
-    /**
-     * Not used
-     *
-     * @return Void
-     */
-    @Deprecated
-    Void getBufferLength();
+//    /**
+//     * Not used
+//     *
+//     * @return Void
+//     */
+//    @Deprecated
+//    Void getBufferLength();
 
     /**
      * Returns the number of fractional digits. Null is returned for data types
@@ -162,37 +162,37 @@ public interface ColumnMetaData {
      */
     String getColumnDef();
 
-    /**
-     * Unused
-     *
-     * @return int
-     */
-    @Deprecated
-    int getSqlDataType();
-
-    /**
-     * Unused
-     * 
-     * @return int
-     */
-    @Deprecated
-    boolean isSqlDataTypeNull();
-
-    /**
-     * Unused
-     * 
-     * @return int
-     */
-    @Deprecated
-    int getSqlDatetimeSub();
-
-    /**
-     * Unused
-     * 
-     * @return boolean
-     */
-    @Deprecated
-    boolean isSqlDatetimeSubNull();
+//    /**
+//     * Unused
+//     *
+//     * @return int
+//     */
+//    @Deprecated
+//    int getSqlDataType();
+//
+//    /**
+//     * Unused
+//     * 
+//     * @return int
+//     */
+//    @Deprecated
+//    boolean isSqlDataTypeNull();
+//
+//    /**
+//     * Unused
+//     * 
+//     * @return int
+//     */
+//    @Deprecated
+//    int getSqlDatetimeSub();
+//
+//    /**
+//     * Unused
+//     * 
+//     * @return boolean
+//     */
+//    @Deprecated
+//    boolean isSqlDatetimeSubNull();
 
     /**
      * Return (for char types) the maximum number of bytes in the column.

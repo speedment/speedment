@@ -75,7 +75,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
  
     private final Map<String, Object> config;
     private final transient ObservableMap<String, Property<?>> properties;
-    private final transient ObservableMap<String, ObservableList<AbstractDocumentProperty>> children;
+    private final transient ObservableMap<String, ObservableList<AbstractDocumentProperty<?>>> children;
     
     /**
      * Invalidation listeners required by the {@code Observable} interface.
@@ -106,6 +106,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
 
     @Override
     public final Optional<Object> get(String key) {
+        @SuppressWarnings("unchecked")
         final Property<Object> prop = (Property<Object>) properties.get(key);
         if (prop == null) {
             return Optional.empty();
@@ -224,6 +225,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public final ObservableMap<String, ObservableList<DocumentProperty>> childrenProperty() {
         return
             (ObservableMap<String, ObservableList<DocumentProperty>>) 
@@ -244,12 +246,13 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     @Deprecated
     public final <P extends Document, T extends Document> Stream<T> 
     children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
-        return observableListOf(key)
-            .stream()
-            .map(child -> constructor.apply(
-                (P) child.getParent().orElse(null), 
-                child.getData()
-            ));
+       throw new UnsupportedOperationException("children() shall not be called from a Property");
+//        return observableListOf(key)
+//            .stream()
+//            .map(child -> constructor.apply(
+//                (P) child.getParent().orElse(null), 
+//                child.getData()
+//            ));
     }
 
     @Override
@@ -334,7 +337,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * @param list  the list to add listeners to
      * @return      the same list but with listener attached
      */
-    private ObservableList<AbstractDocumentProperty> addListeners(String key, ObservableList<AbstractDocumentProperty> list) {
+    private ObservableList<AbstractDocumentProperty<?>> addListeners(String key, ObservableList<AbstractDocumentProperty<?>> list) {
         // When an observable children list under a specific key is
         // modified, the new children must be inserted into the source
         // equivalent as well.

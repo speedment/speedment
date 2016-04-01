@@ -30,7 +30,7 @@ import com.speedment.internal.core.field.StringFieldImpl;
  */
 public interface Entity {
     
-    enum Identifier implements FieldIdentifier {
+    enum Identifier implements FieldIdentifier<Entity> {
         ID("id"), NAME("name");
         
         private final String columnName;

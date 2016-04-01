@@ -137,7 +137,7 @@ public class DocumentPropertyComponentImplTest {
         }
 
         @Override
-        public DbmsMutator mutator() {
+        public DbmsMutator<Dbms> mutator() {
             throw new UnsupportedOperationException("Not required by test.");
         }
 

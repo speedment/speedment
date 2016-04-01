@@ -17,6 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.Component;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.mapper.identity.ArrayIdentityMapper;
@@ -136,4 +137,10 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public TypeMapperComponent defaultCopy(Speedment speedment) {
+        return new TypeMapperComponentImpl(speedment);
+    }
+    
 }

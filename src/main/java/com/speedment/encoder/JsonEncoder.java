@@ -201,10 +201,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(ReferenceFieldTrait.class::cast)
             .forEachOrdered(f
-                -> formatter.put(
+                -> {
+                final FieldIdentifier<ENTITY> fi = f.getIdentifier();
+                formatter.put(
                     formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
-                    entity -> manager.get(entity, f.getIdentifier())
-                )
+                    entity -> manager.get(entity, fi)
+                );}
             );
 
         return formatter;

@@ -33,10 +33,10 @@ import org.controlsfx.control.PropertySheet;
 public final class DefaultDocumentProperty extends 
     AbstractDocumentProperty<DefaultDocumentProperty> implements HasExpandedProperty, HasNameProperty {
     
-    private final AbstractDocumentProperty parent;
+    private final AbstractDocumentProperty<?> parent;
     private final String key;
     
-    public DefaultDocumentProperty(AbstractDocumentProperty parent, String key) {
+    public DefaultDocumentProperty(AbstractDocumentProperty<?> parent, String key) {
         this.parent = parent; // Can be null.
         this.key    = key;    // Can be null.
     }
@@ -50,7 +50,8 @@ public final class DefaultDocumentProperty extends
                 return of(key);
             }
         } else {
-            return concat(parent.keyPathEndingWith(this.key), key);
+            final List<String> path = parent.keyPathEndingWith(this.key);
+            return concat(path, key);
         }
     }
 

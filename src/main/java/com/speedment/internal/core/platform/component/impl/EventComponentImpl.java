@@ -17,6 +17,7 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.Component;
 import com.speedment.component.EventComponent;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
@@ -34,30 +35,34 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
-    
+
     private final Map<DefaultEvent, Set<Consumer<Event>>> defaultEventListeners;
     private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
     private final Set<Consumer<Event>> anyEventListeners;
-    
+
     public EventComponentImpl(Speedment speedment) {
         super(speedment);
-        
-        final EnumMap<DefaultEvent, Set<Consumer<Event>>> listeners = 
-            new EnumMap<>(DefaultEvent.class);
-        
+
+        final EnumMap<DefaultEvent, Set<Consumer<Event>>> listeners
+            = new EnumMap<>(DefaultEvent.class);
+
         for (final DefaultEvent ev : DefaultEvent.values()) {
             listeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
-        
+
         defaultEventListeners = Collections.unmodifiableMap(listeners);
-        otherEventListeners   = new ConcurrentHashMap<>();
-        anyEventListeners     = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        otherEventListeners = new ConcurrentHashMap<>();
+        anyEventListeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    }
+
+    public EventComponentImpl(Speedment speedment, EventComponentImpl template) {
+        this(speedment);
     }
 
     @Override
     public void notify(Event event) {
         final Set<Consumer<Event>> listeners;
-        
+
         if (event instanceof DefaultEvent) {
             @SuppressWarnings("unchecked")
             final DefaultEvent ev = (DefaultEvent) event;
@@ -86,19 +91,24 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     public void onAny(Consumer<Event> action) {
         anyEventListeners.add(action);
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-    
+
+    @Override
+    public EventComponent defaultCopy(Speedment speedment) {
+        return new EventComponentImpl(speedment, this);
+    }
+
     private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {
         final Set<Consumer<Event>> set = otherEventListeners
             .computeIfAbsent(event, ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
 
         return set;
     }
-    
+
     private Set<Consumer<Event>> defaultListeners(DefaultEvent event) {
         return defaultEventListeners.get(event);
     }

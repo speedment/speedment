@@ -483,7 +483,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             foreignKey.mutator().setName(foreignKeyName);
 
             final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
-            final ForeignKeyColumnMutator fkcMutator = foreignKeyColumn.mutator();
+            final ForeignKeyColumnMutator<?> fkcMutator = foreignKeyColumn.mutator();
             fkcMutator.setName(rs.getString("FKCOLUMN_NAME"));
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
@@ -696,7 +696,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public <F extends FieldTrait & ReferenceFieldTrait<?,?,?>> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(singletonList(sqlUpdateStatement));
     }

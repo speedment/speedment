@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public final class PasswordComponentImpl extends InternalOpenSourceComponent implements PasswordComponent {
-    
+
     private final transient Map<String, char[]> passwords;
 
     public PasswordComponentImpl(Speedment speedment) {
@@ -52,9 +52,15 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
     public Optional<char[]> get(String dbmsName) {
         return Optional.ofNullable(passwords.get(dbmsName));
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public PasswordComponent defaultCopy(Speedment speedment) {
+        return new PasswordComponentImpl(speedment);
+    }
+
 }

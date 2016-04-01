@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
+import com.speedment.component.Component;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
@@ -131,7 +132,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         
         @SuppressWarnings("unchecked")
         final List<UserInterfaceComponent.ContextMenuBuilder<DOC>> builders = 
-            (List<UserInterfaceComponent.ContextMenuBuilder<DOC>>) 
             MapStream.of(contextMenuBuilders)
                 .filterKey(clazz -> clazz.isAssignableFrom(doc.getClass()))
                 .values()
@@ -172,6 +172,11 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     @Override
     public Stream<Software> getDependencies() {
         return Stream.of(DEPENDENCIES);
+    }
+
+    @Override
+    public UserInterfaceComponent defaultCopy(Speedment speedment) {
+        return new UserInterfaceComponentImpl(speedment);
     }
     
     private final static Software[] DEPENDENCIES = {

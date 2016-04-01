@@ -284,14 +284,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait> Object toDatabaseType(F field, ENTITY entity) {
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, field.getIdentifier()));
         @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
         final StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(sqlTableReference());
@@ -304,7 +304,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .map(Column::getName)
             .map(fieldTraitMap::get)
             //            .peek(debug::add)
-            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
@@ -378,7 +378,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
         final List<Object> values = primaryKeyFields()
             .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 

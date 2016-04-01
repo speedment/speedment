@@ -51,7 +51,7 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     private final TypeMapper<D, V> typeMapper;
 
     public ComparableFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper,
@@ -65,8 +65,8 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
 
     @Override

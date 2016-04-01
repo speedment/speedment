@@ -24,9 +24,9 @@ import com.speedment.license.Software;
  * A Component represents the basic functionality for a Speedment Platform
  * Component.
  *
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0
  */
 @Api(version = "2.3")
 public interface Component extends Lifecyclable<Component> {
@@ -52,11 +52,20 @@ public interface Component extends Lifecyclable<Component> {
      * @return the software information of this component
      */
     Software asSoftware();
-    
+
     /**
      * Returns if this Component is part of core Speedment or not.
-     * 
-     * @return  {@code true} if this is an internal component
+     *
+     * @return {@code true} if this is an internal component
      */
     boolean isInternal();
+
+    /**
+     * Creates and returns a default copy of this component. The new component
+     * is initialized to its default state.
+     *
+     * @param speedment instance to use
+     * @return a default copy of this component
+     */
+    Component defaultCopy(Speedment speedment);
 }

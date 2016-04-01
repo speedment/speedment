@@ -236,7 +236,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         public BuilderImpl(String name) {
             this.name = requireNonNull(name);
             // Phase stuff
-            this.map = new EnumMap(Phase.class);
+            this.map = new EnumMap<>(Phase.class);
             this.foreignKeyReferencesThisTableConsumers = new EnumMap<>(Phase.class);
             for (final Phase phase : Phase.values()) {
                 map.put(phase, new HashMap<>());
@@ -308,7 +308,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
         @SuppressWarnings("unchecked")
         protected void aquireListAndAdd(Phase phase, String key, BiConsumer<T, Document> consumer) {
-            aquireList(phase, key).add(requireNonNull((BiConsumer<T, Document>) consumer));
+            aquireList(phase, key).add(requireNonNull(consumer));
         }
 
         @SuppressWarnings("unchecked")

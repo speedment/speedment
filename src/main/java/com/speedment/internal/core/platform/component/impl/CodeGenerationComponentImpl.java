@@ -32,6 +32,7 @@ import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.code.JavaClassTranslator;
 import com.speedment.code.TranslatorManager;
+import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
@@ -57,6 +58,9 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
@@ -67,11 +71,11 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
-        
-        generator         = new JavaGenerator();
+
+        generator = new JavaGenerator();
         translatorManager = new TranslatorManagerImpl(speedment);
-        map               = new ConcurrentHashMap<>();
-        
+        map = new ConcurrentHashMap<>();
+
         put(Table.class, ENTITY, EntityTranslator::new);
         put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
         put(Table.class, MANAGER, EntityManagerTranslator::new);
@@ -83,8 +87,12 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Project.class, APPLICATION, SpeedmentApplicationTranslator::new);
         put(Project.class, GENERATED_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
         put(Project.class, GENERATED_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
-        
+
         javaLanguageSupplier = DefaultJavaLanguageNamer::new;
+    }
+
+    private CodeGenerationComponentImpl(Speedment speedment, CodeGenerationComponentImpl template) {
+        this(speedment);
     }
 
     @Override
@@ -96,7 +104,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     public void setGenerator(Generator generator) {
         this.generator = requireNonNull(generator);
     }
-    
+
     @Override
     public TranslatorManager getTranslatorManager() {
         return translatorManager;
@@ -109,40 +117,40 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     @SuppressWarnings("unchecked")
     @Override
-    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
-    void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+        void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
         aquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
     }
 
     @Override
-    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
-    void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+        void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
         aquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
     }
 
     @Override
-    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
-    void remove(Class<DOC> docType, String key) {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+        void remove(Class<DOC> docType, String key) {
         aquireTranslatorSettings(docType, null, key).setConstructor(null);
     }
 
-    private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
-    TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
-        return (TranslatorSettings<DOC, T>) 
-            map.computeIfAbsent(docType, 
-                s -> new ConcurrentHashMap<>()
-            ).computeIfAbsent(key, TranslatorSettings::new);
+    private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+        TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
+        return (TranslatorSettings<DOC, T>) map.computeIfAbsent(docType,
+            s -> new ConcurrentHashMap<>()
+        ).computeIfAbsent(key, TranslatorSettings::new);
     }
 
     @Override
-    public <DOC extends HasName & HasMainInterface> 
-    Stream<? extends Translator<DOC, ?>> translators(DOC document) {
+    public <DOC extends HasName & HasMainInterface>
+        Stream<? extends Translator<DOC, ?>> translators(DOC document) {
         return translators(document, s -> true);
     }
 
     @Override
-    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
-    Translator<DOC, T> findTranslator(DOC document, Class<T> modelType, String key) {
+    @SuppressWarnings("unchecked")
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+        Translator<DOC, T> findTranslator(DOC document, Class<T> modelType, String key) {
         return translators(document, key::equals)
             .findAny()
             .map(translator -> (Translator<DOC, T>) translator)
@@ -150,8 +158,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     }
 
     @SuppressWarnings("unchecked")
-    private <DOC extends HasName & HasMainInterface> 
-    Stream<? extends Translator<DOC, ?>> translators(DOC document, Predicate<String> nameFilter) {
+    private <DOC extends HasName & HasMainInterface>
+        Stream<? extends Translator<DOC, ?>> translators(DOC document, Predicate<String> nameFilter) {
 
         return MapStream.of(map)
             .filterKey(c -> c.isInstance(document))
@@ -182,6 +190,11 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         return Stream.empty();
     }
 
+    @Override
+    public CodeGenerationComponent defaultCopy(Speedment speedment) {
+        return new CodeGenerationComponentImpl(speedment, this);
+    }
+
     private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
         return () -> new SpeedmentException(
             "Found no translator with key '"
@@ -189,7 +202,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             + doc.mainInterface().getSimpleName() + "'."
         );
     }
-    
+
     private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
 
         private final String key;
@@ -219,9 +232,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
         public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
             @SuppressWarnings("unchecked")
-            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) 
-                getConstructor().apply(speedment, generator, document);
-            
+            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) getConstructor().apply(speedment, generator, document);
+
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
             return translator;
         }

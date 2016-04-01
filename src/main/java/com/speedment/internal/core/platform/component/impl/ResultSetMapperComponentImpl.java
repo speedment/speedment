@@ -23,32 +23,29 @@ import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuples;
 import com.speedment.license.Software;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import com.speedment.component.resultset.ResultSetMapperComponent;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import com.speedment.component.resultset.ResultSetMapping;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
-public final class JavaTypeMapperComponentImpl extends InternalOpenSourceComponent implements ResultSetMapperComponent {
+public final class ResultSetMapperComponentImpl extends InternalOpenSourceComponent implements ResultSetMapperComponent {
 
     private final Map<Class<?>, ResultSetMapping<?>> map;
     private final Map<DbmsType, Map<Class<?>, ResultSetMapping<?>>> dbmsTypeMap;
 
-    public JavaTypeMapperComponentImpl(Speedment speedment) {
+    public ResultSetMapperComponentImpl(Speedment speedment) {
         super(speedment);
         map = newConcurrentMap();
         dbmsTypeMap = newConcurrentMap();
         StandardJavaTypeMapping.stream().forEach(this::put);
+    }
+
+    public ResultSetMapperComponentImpl(Speedment speedment, ResultSetMapperComponentImpl template) {
+        this(speedment);
     }
 
     public ResultSetMapping<?> put(ResultSetMapping<?> item) {
@@ -74,17 +71,22 @@ public final class JavaTypeMapperComponentImpl extends InternalOpenSourceCompone
         requireNonNull(javaClass);
         return getFromMapOrThrow(map, javaClass, javaClass::getName);
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
 
+    @Override
+    public ResultSetMapperComponent defaultCopy(Speedment speedment) {
+        return new ResultSetMapperComponentImpl(speedment, this);
+    }
+
     @SuppressWarnings("unchecked")
     private <T> ResultSetMapping<T> getFromMapOrThrow(Map<Class<?>, ResultSetMapping<?>> map, Class<T> javaClass, Supplier<String> throwMessageSupplier) {
-                requireNonNull(map);
-                requireNonNull(javaClass);
-                requireNonNull(throwMessageSupplier);
+        requireNonNull(map);
+        requireNonNull(javaClass);
+        requireNonNull(throwMessageSupplier);
         return Optional.ofNullable((ResultSetMapping<T>) map.get(javaClass))
             .orElseThrow(() -> new NullPointerException("The " + ResultSetMapperComponent.class.getSimpleName() + " does not have a mapping for " + throwMessageSupplier.get()));
     }

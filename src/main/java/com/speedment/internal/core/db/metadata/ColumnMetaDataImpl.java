@@ -180,10 +180,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
         return columnSize.isNull();
     }
 
-    @Override
-    public Void getBufferLength() {
-        return bufferLength;
-    }
+//    @Override
+//    public Void getBufferLength() {
+//        return bufferLength;
+//    }
 
     @Override
     public int getDecimalDigits() {
@@ -225,25 +225,25 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
         return columnDef;
     }
 
-    @Override
-    public int getSqlDataType() {
-        return sqlDataType.getValue();
-    }
-
-    @Override
-    public boolean isSqlDataTypeNull() {
-        return sqlDataType.isNull();
-    }
-
-    @Override
-    public int getSqlDatetimeSub() {
-        return sqlDatetimeSub.getValue();
-    }
-
-    @Override
-    public boolean isSqlDatetimeSubNull() {
-        return sqlDatetimeSub.isNull();
-    }
+//    @Override
+//    public int getSqlDataType() {
+//        return sqlDataType.getValue();
+//    }
+//
+//    @Override
+//    public boolean isSqlDataTypeNull() {
+//        return sqlDataType.isNull();
+//    }
+//
+//    @Override
+//    public int getSqlDatetimeSub() {
+//        return sqlDatetimeSub.getValue();
+//    }
+//
+//    @Override
+//    public boolean isSqlDatetimeSubNull() {
+//        return sqlDatetimeSub.isNull();
+//    }
 
     @Override
     public int getCharOctetLength() {
