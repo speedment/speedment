@@ -213,6 +213,7 @@ public interface Document {
      * @see  #children()
      * @see  #children(String, BiFunction)
      */
+    @SuppressWarnings("unchecked")
     default MapStream<String, Map<String, Object>> childrenByKey() {
         return stream()
             .filterValue(List.class::isInstance)

@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.config;
 
+import com.google.gson.annotations.Until;
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.Speedment;
 import com.speedment.config.Document;
@@ -347,6 +348,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
 
                     // Find or create a children list in the source map
                     // for the specified key
+                    @SuppressWarnings("unchecked")
                     final List<Map<String, Object>> source = 
                         (List<Map<String, Object>>) config.computeIfAbsent(
                             key, k -> new CopyOnWriteArrayList<>()
@@ -359,6 +361,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
                 }
                 
                 if (listChange.wasRemoved()) {
+                    @SuppressWarnings("unchecked")
                     final List<Map<String, Object>> source = 
                         (List<Map<String, Object>>) config.computeIfAbsent(
                             key, k -> new CopyOnWriteArrayList<>()

@@ -136,9 +136,13 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
-        return (TranslatorSettings<DOC, T>) map.computeIfAbsent(docType,
-            s -> new ConcurrentHashMap<>()
-        ).computeIfAbsent(key, TranslatorSettings::new);
+        @SuppressWarnings("unchecked")
+        final TranslatorSettings<DOC, T> result = (TranslatorSettings<DOC, T>) map
+            .computeIfAbsent(docType,
+                s -> new ConcurrentHashMap<>()
+            ).computeIfAbsent(key, k -> new TranslatorSettings<>(k));
+
+        return result;
     }
 
     @Override

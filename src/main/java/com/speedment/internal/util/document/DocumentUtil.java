@@ -230,9 +230,13 @@ public final class DocumentUtil {
         ||  Enum.class.isAssignableFrom(original.getClass())) {
             return original;
         } else if (List.class.isAssignableFrom(original.getClass())) {
-            return (V) deepCopyList((List<?>) original);
+            @SuppressWarnings("unchecked")
+            final V result = (V) deepCopyList((List<?>) original);
+            return result;
         } else if (Map.class.isAssignableFrom(original.getClass())) {
-            return (V) deepCopyMap((Map<?, ?>) original);
+            @SuppressWarnings("unchecked")
+            final V result = (V) deepCopyMap((Map<?, ?>) original);
+            return result;
         } else {
             throw new UnsupportedOperationException(
                 "Can't deep copy unknown type '" + original.getClass() + "'."

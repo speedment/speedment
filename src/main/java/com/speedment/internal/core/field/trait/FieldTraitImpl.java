@@ -26,16 +26,16 @@ import static java.util.Objects.requireNonNull;
  */
 public class FieldTraitImpl implements FieldTrait {
 
-    private final FieldIdentifier identifier;
+    private final FieldIdentifier<?> identifier;
     private final boolean unique;
 
-    public FieldTraitImpl(FieldIdentifier identifier, boolean unique) {
+    public FieldTraitImpl(FieldIdentifier<?> identifier, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.unique = unique;
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
+    public FieldIdentifier<?> getIdentifier() {
         return identifier;
     }
 

@@ -199,14 +199,16 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
         manager.fields()
             .filter(ReferenceFieldTrait.class::isInstance)
-            .map(ReferenceFieldTrait.class::cast)
+            .map(f -> castReferenceFieldTrait(manager, f))
             .forEachOrdered(f
                 -> {
+                @SuppressWarnings("unchecked")
                 final FieldIdentifier<ENTITY> fi = f.getIdentifier();
                 formatter.put(
                     formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
                     entity -> manager.get(entity, fi)
-                );}
+                );
+            }
             );
 
         return formatter;
@@ -236,7 +238,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
         manager.fields()
             .filter(ReferenceFieldTrait.class::isInstance)
-            .map(ReferenceFieldTrait.class::cast)
+            .map(f -> castReferenceFieldTrait(manager, f))
             .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
             .forEachOrdered(f
                 -> formatter.put(
@@ -247,4 +249,12 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
         return formatter;
     }
+
+
+    private static <ENTITY> ReferenceFieldTrait<ENTITY, ?, ?> castReferenceFieldTrait(Manager<ENTITY> mgr, FieldTrait f) {
+        @SuppressWarnings("unchecked")
+        final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
+        return result;
+    }
+
 }

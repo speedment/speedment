@@ -86,6 +86,8 @@ public class ReferenceFieldTraitImpl<ENTITY, D, V> implements ReferenceFieldTrai
 
     @Override
     public FieldIdentifier<ENTITY> getIdentifier() {
-        return (FieldIdentifier<ENTITY>) field.getIdentifier();
+        @SuppressWarnings("unchecked")
+        final FieldIdentifier<ENTITY> result = (FieldIdentifier<ENTITY>) field.getIdentifier();
+        return result;
     }
 }

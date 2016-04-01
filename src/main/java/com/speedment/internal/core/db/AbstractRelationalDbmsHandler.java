@@ -257,12 +257,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             schemasTask,
             catalogsTask
         ).thenCompose(v -> {
-            @SuppressWarnings("rawtypes")
+            @SuppressWarnings({"unchecked", "rawtypes"})
             final CompletableFuture<Schema>[] tablesTask
-                = dbms.schemas().map(schema
-                    -> tables(sqlTypeMappingTask, dbms, schema, progress)
-                ).toArray(CompletableFuture[]::new);
+                = dbms.schemas()
+                .map(schema -> tables(sqlTypeMappingTask, dbms, schema, progress))
+                .toArray(s -> (CompletableFuture<Schema>[]) new CompletableFuture[s]);
 
+            //CompletableFuture[] foo = new CompletableFuture[2];
             return CompletableFuture.allOf(tablesTask)
                 .handle((v2, ex) -> {
                     if (ex == null) {
@@ -696,7 +697,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     @Override
-    public <F extends FieldTrait & ReferenceFieldTrait<?,?,?>> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(singletonList(sqlUpdateStatement));
     }
