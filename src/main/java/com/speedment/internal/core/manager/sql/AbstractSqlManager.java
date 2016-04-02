@@ -284,14 +284,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait> Object toDatabaseType(F field, ENTITY entity) {
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, field.getIdentifier()));
         @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
         final StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(sqlTableReference());
@@ -299,12 +299,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" VALUES ");
         sb.append("(").append(persistColumnListWithQuestionMarks(cols)).append(")");
 
-//        final List<Object> debug = new ArrayList<>();
+        @SuppressWarnings("unchecked")
         final List<Object> values = cols.stream()
             .map(Column::getName)
             .map(fieldTraitMap::get)
-            //            .peek(debug::add)
-            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
@@ -314,6 +314,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 //            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
 //            .map(f -> toDatabaseType(f, entity))
 //            .collect(toList());
+        @SuppressWarnings("unchecked")
         final List<F> generatedFields = fields()
             .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
             .filter(ReferenceFieldTrait.class::isInstance)
@@ -354,15 +355,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = fields()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+        final List<Object> values = castedFieldsOf(this::fields)
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
-        primaryKeyFields()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (ReferenceFieldTrait<ENTITY, ?, ?>) f)
+        castedFieldsOf(this::primaryKeyFields)
             .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(f -> values.add(get(entity, f)));
 
@@ -376,14 +373,25 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = primaryKeyFields()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+        final List<Object> values = castedFieldsOf(this::primaryKeyFields)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
+//        final List<Object> values = primaryKeyFields()
+//            .filter(ReferenceFieldTrait.class::isInstance)
+//            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+//            .map(f -> toDatabaseType(f, entity))
+//            .collect(toList());
         executeDelete(sb.toString(), values, listener);
         return entity;
+    }
+
+    private <T extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Stream<T> castedFieldsOf(Supplier<Stream<FieldTrait>> supplier) {
+        @SuppressWarnings("unchecked")
+        final Stream<T> result = supplier.get()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (T) f);
+        return result;
     }
 
     private String persistColumnList(List<Column> cols) {
@@ -438,7 +446,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return true;
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> void executeInsert(
         final ENTITY entity,
         final String sql,
         final List<Object> values,

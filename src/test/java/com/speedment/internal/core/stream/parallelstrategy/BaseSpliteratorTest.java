@@ -45,7 +45,7 @@ public abstract class BaseSpliteratorTest {
     public TestName name = new TestName();
 
     protected void printTestName() {
-        System.out.println(name.getMethodName());
+        //System.out.println(name.getMethodName());
     }
 
     @Test

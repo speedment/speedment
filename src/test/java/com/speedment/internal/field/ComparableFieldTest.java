@@ -171,10 +171,10 @@ public class ComparableFieldTest extends BaseFieldTest {
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
         final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
 
-        System.out.println("Expected");
-        expected.forEach(System.out::println);
-        System.out.println("Result");
-        result.forEach(System.out::println);
+        //System.out.println("Expected");
+        //expected.forEach(System.out::println);
+        //System.out.println("Result");
+        //result.forEach(System.out::println);
 
         assertEquals(
             expected,

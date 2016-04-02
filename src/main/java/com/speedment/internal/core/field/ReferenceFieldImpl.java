@@ -43,7 +43,7 @@ public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, 
     private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
 
     public ReferenceFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper,
@@ -55,8 +55,8 @@ public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, 
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
     
     @Override

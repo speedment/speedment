@@ -36,9 +36,15 @@ public class NativeStreamSupplierComponentImpl extends InternalOpenSourceCompone
     public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {
         return getSpeedment().managerOf(entityClass).nativeStream(decorator);
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public StreamSupplierComponent defaultCopy(Speedment speedment) {
+        return new NativeStreamSupplierComponentImpl(speedment);
+    }
+
 }

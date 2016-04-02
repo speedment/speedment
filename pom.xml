@@ -124,10 +124,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
                      
@@ -138,23 +141,23 @@
             </plugin>
             
             <plugin>
-                 <groupId>org.apache.felix</groupId>
-                 <artifactId>maven-bundle-plugin</artifactId>
-                 <version>3.0.1</version>
-                 <extensions>true</extensions>
-                 <configuration>
-                     <instructions>
-                         <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
-                         <Bundle-Description>Wrap your database into Java 8!</Bundle-Description>
-                         <Import-Package>
-                             org.osgi.framework,
-                             *;resolution:=optional 
-                          </Import-Package>
-                          <Main-Class>${mainClass}</Main-Class>
-                     </instructions>
-                 </configuration>
-             </plugin>
-             
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.0.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                        <Bundle-Description>Wrap your database into Java 8!</Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                        </Import-Package>
+                        <Main-Class>${mainClass}</Main-Class>
+                    </instructions>
+                </configuration>
+            </plugin>
+                          
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -170,19 +173,6 @@
             
             <build>
                 <plugins>
-                    
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.2</version>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                            <compilerArgument>-Xlint:all</compilerArgument>
-                            <showWarnings>true</showWarnings>
-                            <showDeprecation>true</showDeprecation>
-                        </configuration>
-                    </plugin>
                     
                     <plugin>
                         <groupId>com.mycila</groupId>

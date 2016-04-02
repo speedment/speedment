@@ -75,7 +75,7 @@ public class ComputeIntensityParallelStrategyTest {
     public TestName name = new TestName();
 
     protected void printTestName() {
-        System.out.println(name.getMethodName());
+        //System.out.println(name.getMethodName());
     }
 
     @Test
@@ -94,11 +94,12 @@ public class ComputeIntensityParallelStrategyTest {
             }
             );
 
-            System.out.println("*** "+strategy.getClass().getSimpleName());
+            //System.out.println("*** "+strategy.getClass().getSimpleName());
             threadCount.entrySet().stream()
                     .sorted(comparing(Entry::getKey))
                     .forEach(e -> {
-                        System.out.printf("%36s, %7d\n", e.getKey(), e.getValue().intValue());
+                        final String res = String.format("%36s, %7d\n", e.getKey(), e.getValue().intValue());
+                        //System.out.println(res);
                     });
 
         });
@@ -113,7 +114,7 @@ public class ComputeIntensityParallelStrategyTest {
                     .map(strategy -> test(strategy, size))
                     .collect(toList());
 
-            stats.forEach(System.out::println);
+            //stats.forEach(System.out::println);
         }
     }
 

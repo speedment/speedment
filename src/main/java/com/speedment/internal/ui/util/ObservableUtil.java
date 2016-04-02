@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.util;
 
+import com.google.gson.annotations.Until;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ObjectProperty;
@@ -27,21 +28,21 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 /**
  * Utility methods for binding observable properties that can't easily be
  * matched otherwise.
- * 
+ *
  * @author Emil Forslund
  */
 public final class ObservableUtil {
-    
+
     public static void bind(ObjectProperty<Integer> property, IntegerBinding binding) {
         property.bind(new ObservableValue<Integer>() {
             @Override
             public void addListener(ChangeListener<? super Integer> listener) {
-                binding.addListener((ChangeListener<? super Number>) listener);
+                binding.addListener(numberListenerOf(listener));
             }
 
             @Override
             public void removeListener(ChangeListener<? super Integer> listener) {
-                binding.removeListener((ChangeListener<? super Number>) listener);
+                binding.removeListener(numberListenerOf(listener));
             }
 
             @Override
@@ -58,9 +59,16 @@ public final class ObservableUtil {
             public void removeListener(InvalidationListener listener) {
                 binding.removeListener(listener);
             }
+
+            private ChangeListener<? super Number> numberListenerOf(ChangeListener<? super Integer> listener) {
+                @SuppressWarnings("unchecked")
+                final ChangeListener<? super Number> result = (ChangeListener<? super Number>) listener;
+                return result;
+            }
+
         });
     }
-    
+
     /**
      * Utility classes should not be instantiated.
      */

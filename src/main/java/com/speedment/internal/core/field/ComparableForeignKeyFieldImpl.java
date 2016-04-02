@@ -54,7 +54,7 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ComparableForeignKeyFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             Finder<ENTITY, FK> finder,
@@ -69,8 +69,8 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
 
     @Override

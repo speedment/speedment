@@ -86,7 +86,6 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
 
     private BaseStream<E, ?> getStream() {
         BaseStream<?, ?> result = getInitialSupplier().get();
-        //System.out.println("Applying " + toString());
         for (Action<?, ?> action : this) {
             result = cast(result, action);
         }

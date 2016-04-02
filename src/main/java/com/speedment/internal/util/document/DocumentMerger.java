@@ -75,6 +75,7 @@ public final class DocumentMerger {
                     final Object first = list.get(0);
                     
                     if (first instanceof Map<?, ?>) {
+                        @SuppressWarnings("unchecked")
                         final List<Document> documents = list.stream()
                             .map(data -> (Map<String, Object>) data)
                             .map(data -> new BaseDocument(proposed, data))
@@ -105,7 +106,7 @@ public final class DocumentMerger {
                 ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key,  (Class<Object>) casted.getClass(), () -> casted))) {}
+                ||  setPropertyIf(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key,  castToClassObject(casted.getClass()), () -> casted))) {}
                 else {
                     throw new SpeedmentException(
                         "Property was not of any known type."
@@ -114,6 +115,13 @@ public final class DocumentMerger {
             }
         }
     }
+    
+    private static Class<Object> castToClassObject(Class<?> clazz) {
+        @SuppressWarnings("unchecked")
+        final Class<Object> result = (Class<Object>)clazz;
+        return result;
+    }
+    
     
     /**
      * Merges the specified document on the specified key with a specified list

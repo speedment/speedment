@@ -37,13 +37,12 @@ public class TranslatorManagerTest extends SimpleModel {
 
     @Test
     public void testAccept() {
-        System.out.println("accept");
-
         final TranslatorManager instance = new TranslatorManagerImpl(speedment) {
 
             @Override
             public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
-                System.out.println("Processing " + meta.getModel().getName());
+                String name = meta.getModel().getName();
+                //System.out.println("Processing " + name);
                 // Do nothing on file...
             }
 
@@ -53,15 +52,14 @@ public class TranslatorManagerTest extends SimpleModel {
 
     @Test
     public void testPreview() {
-        System.out.println("preview");
 
         final Translator<Table, Interface> translator = speedment.getCodeGenerationComponent()
-                .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
+            .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
 
         final String code = translator.toCode();
-        System.out.println(code);
+        //System.out.println(code);
 
-        JavaLanguageNamer javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
+        final JavaLanguageNamer javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
 
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getName())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));

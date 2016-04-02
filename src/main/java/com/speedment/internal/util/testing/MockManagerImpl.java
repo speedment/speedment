@@ -99,12 +99,13 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>, 
-    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
-    MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder) {
-        this.finder = (BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>>) 
-            (BiFunction<?, ?, ?>) finder;
-        
+    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+        MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder) {
+        @SuppressWarnings("unchecked")
+        final BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> castedFinder
+            = (BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>>) (BiFunction<?, ?, ?>) finder;
+        this.finder = castedFinder;
+
         return this;
     }
 
@@ -148,7 +149,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Tuple getPrimaryKeyClasses() {
         return inner.getPrimaryKeyClasses();
     }
-    
+
     @Override
     public String toJson(ENTITY entity) {
         return inner.toJson(entity);
@@ -180,9 +181,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>, 
-    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
-    Optional<ENTITY> findAny(F field, V value) {
+    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+        Optional<ENTITY> findAny(F field, V value) {
         return finder.apply(field, value);
     }
 
@@ -205,7 +205,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Manager<ENTITY> initialize() {
         return inner.initialize();
     }
-    
+
     @Override
     public Manager<ENTITY> load() {
         return inner.load();
@@ -230,7 +230,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public State getState() {
         return inner.getState();
     }
-    
+
     @Override
     public void setState(State state) {
         inner.setState(state);
@@ -240,7 +240,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public boolean isInitialized() {
         return inner.isInitialized();
     }
-    
+
     @Override
     public boolean isLoaded() {
         return inner.isLoaded();
@@ -270,7 +270,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Stream<FieldTrait> fields() {
         return inner.fields();
     }
-    
+
     @Override
     public Stream<FieldTrait> primaryKeyFields() {
         return inner.primaryKeyFields();

@@ -35,7 +35,7 @@ public interface ComponentConstructor<C extends Component> {
      * Instantiates a new {@link Component} with the specified 
      * {@link Speedment} handle.
      * <p>
-     * This method is ment to be implemented using a functional reference to the
+     * This method is meant to be implemented using a functional reference to the
      * implementing classes constructor method.
      * 
      * @param speedment  the speedment instance

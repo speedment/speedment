@@ -137,7 +137,7 @@ public abstract class SimpleModel {
         column = table.columns().findAny().get();
         pkColumn = table.primaryKeyColumns().findAny().get();
 
-        System.out.println(project);
+        //System.out.println(project);
 
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();

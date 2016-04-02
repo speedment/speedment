@@ -75,7 +75,6 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationTitle() {
-        System.out.println("getImplementationTitle");
         //String expResult = getPackage().getImplementationTitle();
         final String expResult = "Speedment";
         final String result = SpeedmentVersion.getImplementationTitle();
@@ -84,7 +83,6 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationVendor() {
-        System.out.println("getImplementationVendor");
         //String expResult = getPackage().getImplementationVendor();
         final String expResult = "Speedment Inc.";
         final String result = SpeedmentVersion.getImplementationVendor();
@@ -93,7 +91,6 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationVersion() {
-        System.out.println("getImplementationVersion");
 //        String expResult = getPackage().getImplementationVersion();
 //        String expResult2 = getFromManifest("ImplementationVersion");
 
@@ -104,7 +101,6 @@ public class SpeedmentVersionTest {
     
     @Test
     public void testGetSpecificationVersion() {
-        System.out.println("getSpecificationVersion");
         final String expResult = EXPECTED_SPECIFICATION_VERSION;
         final String result = SpeedmentVersion.getSpecificationVersion();
         assertEquals(expResult, result);

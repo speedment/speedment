@@ -42,6 +42,10 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
         tableMap = new ConcurrentHashMap<>();
     }
 
+    public ManagerComponentImpl(Speedment speedment, ManagerComponentImpl template) {
+        this(speedment);
+    }
+
     @Override
     public <ENTITY> void put(Manager<ENTITY> manager) {
         requireNonNull(manager);
@@ -54,8 +58,8 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
         requireNonNull(entityClass);
         @SuppressWarnings("unchecked")
-        final Manager<E> manager = (Manager<E>)managersByEntity.get(entityClass);
-        if (manager==null) {
+        final Manager<E> manager = (Manager<E>) managersByEntity.get(entityClass);
+        if (manager == null) {
             throw new SpeedmentException("No manager exists for " + entityClass);
         }
         return manager;
@@ -77,4 +81,10 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
+
+    @Override
+    public ManagerComponent defaultCopy(Speedment speedment) {
+        return new ManagerComponentImpl(speedment, this);
+    }
+
 }

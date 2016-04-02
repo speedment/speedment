@@ -96,7 +96,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testGetConnection() throws Exception {
-        System.out.println("getConnection");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -110,7 +109,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testReturnConnection() throws Exception {
-        System.out.println("returnConnection");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -124,7 +122,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testNewConnection() throws Exception {
-        System.out.println("newConnection");
         String uri = "someurl";
         String user = "a";
         String password = "b";
@@ -138,7 +135,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testGetMaxAge() {
-        System.out.println("getMaxAge");
         long result = instance.getMaxAge();
         assertTrue(result >= 0);
         instance.setMaxAge(60_000);
@@ -150,7 +146,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testSetMaxAge() {
-        System.out.println("setMaxAge");
         instance.setMaxAge(40_000);
         assertEquals(40_000, instance.getMaxAge());
     }
@@ -160,7 +155,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testGetPoolSize() {
-        System.out.println("getPoolSize");
         final int result = instance.getMaxRetainSize();
         assertTrue(result >= 0);
         instance.setMaxRetainSize(10);
@@ -171,7 +165,6 @@ public class ConnectionPoolComponentImplTest {
     @Test
     @Ignore
     public void testLeak() throws Exception {
-        System.out.println("leak");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -186,7 +179,6 @@ public class ConnectionPoolComponentImplTest {
 
     @Test
     public void testMaxOutAndReturn() throws Exception {
-        System.out.println("maxOutAndReturn");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -215,7 +207,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testSetPoolSize() {
-        System.out.println("setPoolSize");
         int poolSize = 40;
         instance.setMaxRetainSize(poolSize);
         assertEquals(instance.getMaxRetainSize(), 40);
@@ -511,7 +502,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     private void log(String msg) {
-        System.out.println(new Timestamp(System.currentTimeMillis()) + " " + msg);
+        //System.out.println(new Timestamp(System.currentTimeMillis()) + " " + msg);
     }
 
 }

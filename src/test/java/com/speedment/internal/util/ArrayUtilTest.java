@@ -59,14 +59,13 @@ public class ArrayUtilTest {
      */
     @Test
     public void testRequireNonNulls_Object_Object() {
-        System.out.println("requireNonNulls");
         Object o0 = "A";
         Object o1 = null;
         try {
             NullUtil.requireNonNulls(o0, o1);
             fail("No NPE");
         } catch (NullPointerException npe) {
-            System.out.println(npe);
+            //System.out.println(npe);
 // ignore
         }
 

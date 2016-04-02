@@ -47,7 +47,7 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ReferenceForeignKeyFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, V> getter,
             Setter<ENTITY, V> setter,
             Finder<ENTITY, FK> finder,
@@ -61,8 +61,8 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
     
     @Override

@@ -75,6 +75,10 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         root.find(FOREIGN_KEY_COLUMNS).set(parent -> new ForeignKeyColumnProperty((ForeignKey) parent));
     }
 
+    public DocumentPropertyComponentImpl(Speedment speedment, DocumentPropertyComponentImpl template) {
+        this(speedment);
+    }
+    
     @Override
     public <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, List<String> keyPath) {
         root.find(keyPath).set(constructor);
@@ -133,6 +137,11 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         public String toString() {
             return children.toString();
         }
+    }
+
+    @Override
+    public DocumentPropertyComponent defaultCopy(Speedment speedment) {
+        return new DocumentPropertyComponentImpl(speedment, this);
     }
 
     private final static class ConstructorHolder {

@@ -290,7 +290,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
                 final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport(getSpeedment(), referencingTable).entityType())));
+                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport<>(getSpeedment(), referencingTable).entityType())));
 
                 method.set(Javadoc.of(
                         "Creates and returns a <em>distinct</em> {@link Stream} of all " +

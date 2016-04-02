@@ -91,7 +91,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
         traverseOver(getSupport().projectOrThrow(), Table.class)
             .filter(HasEnabled::test)
             .forEachOrdered(t -> {
-                final TranslatorSupport<Table> support = new TranslatorSupport(getSpeedment(), t);
+                final TranslatorSupport<Table> support = new TranslatorSupport<>(getSpeedment(), t);
                 final Type managerType = support.managerImplType();
                 final String managerName = support.managerImplName();
                 if (ambigousNames.contains(t.getName())) {

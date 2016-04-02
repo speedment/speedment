@@ -76,20 +76,17 @@ public class LazyTest {
 
     @Test
     public void testGetOrCompute() {
-        System.out.println("getOrCompute");
         assertEquals(ONE, instance.getOrCompute(ONE_SUPPLIER));
         assertEquals(ONE, instance.getOrCompute(TWO_SUPPLIER));
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetOrComputeSuppliedNull() {
-        System.out.println("testGetOrComputeSuppliedNull");
         instance.getOrCompute(NULL_SUPPLIER);
     }
 
     @Test
     public void testConcurrency() throws InterruptedException, ExecutionException {
-        System.out.println("testConcurrency");
         final int threads = 8;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 

@@ -79,14 +79,12 @@ public class PredicateTypeTest {
 
     @Test
     public void testGetComplementType() {
-        System.out.println("getComplementType");
         assertEquals(EQUAL, NOT_EQUAL.negate());
         assertEquals(NOT_EQUAL, EQUAL.negate());
     }
 
     @Test
     public void testEffectiveType() {
-        System.out.println("effectiveType");
         assertEquals(EQUAL, EQUAL.effectiveType(false));
         assertEquals(NOT_EQUAL, EQUAL.effectiveType(true));
     }

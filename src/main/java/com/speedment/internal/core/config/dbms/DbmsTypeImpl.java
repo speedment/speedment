@@ -93,7 +93,7 @@ public final class DbmsTypeImpl implements DbmsType {
         this.dbmsMapper             = requireNonNull(dbmsMapper);
         this.resultSetTableSchema   = requireNonNull(resultSetTableSchema);
         this.connectionUrlGenerator = requireNonNull(connectionUrlGenerator);
-        this.dataTypes              = unmodifiableSet(new HashSet(requireNonNull(dataTypes))); // Defensive copy
+        this.dataTypes              = unmodifiableSet(new HashSet<>(requireNonNull(dataTypes))); // Defensive copy
         this.speedmentPredicateView = requireNonNull(speedmentPredicateView);
         this.defaultDbmsName        = defaultDbmsName;
         this.initialQuery           = intitialQuery;

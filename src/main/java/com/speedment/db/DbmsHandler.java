@@ -173,7 +173,7 @@ public interface DbmsHandler {
      * parameters in the SQL command
      * @throws SQLException if an error occurs
      */
-    public <F extends FieldTrait & ReferenceFieldTrait> void executeInsert(
+    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(
         final String sql,
         final List<?> values,
         final List<F> generatedKeyFields,

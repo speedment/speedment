@@ -63,6 +63,15 @@ import java.util.stream.Stream;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed
@@ -479,7 +488,6 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             final Class<? extends Document> clazz = t2.get0();
             @SuppressWarnings("unchecked")
             final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
-            // System.out.println("Class "+clazz.getSimpleName());
             DocumentDbUtil.traverseOver(project)
                 // .peek(System.out::println)
                 .filter(clazz::isInstance)
@@ -648,7 +656,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
         @Override
         public Map<String, String> apply(ResultSet rs) throws SQLException {
-            final Map<String, String> map = new LinkedHashMap();
+            final Map<String, String> map = new LinkedHashMap<>();
             final ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             for (int i = 0; i < columns; i++) {

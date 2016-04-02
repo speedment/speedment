@@ -58,7 +58,7 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public StringForeignKeyFieldImpl(
-            FieldIdentifier identifier,
+            FieldIdentifier<ENTITY> identifier,
             Getter<ENTITY, String> getter,
             Setter<ENTITY, String> setter,
             Finder<ENTITY, FK> finder,
@@ -74,8 +74,8 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     }
 
     @Override
-    public FieldIdentifier getIdentifier() {
-        return field.getIdentifier();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
     }
 
     @Override

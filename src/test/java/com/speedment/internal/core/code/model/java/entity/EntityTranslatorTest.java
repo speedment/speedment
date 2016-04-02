@@ -36,8 +36,6 @@ public class EntityTranslatorTest extends SimpleModel {
 
     @Test
     public void testApply() {
-        System.out.println("apply");
-
         final Generator cg = new JavaGenerator();
 
         final Table table2 = traverseOver(project, Table.class)
@@ -52,11 +50,11 @@ public class EntityTranslatorTest extends SimpleModel {
 
         final Optional<String> code = cg.on(file);
 
-        System.out.println(code.get());
+        //System.out.println(code.get());
     }
     
     private void print(Document d) {
-        System.out.println(d);
+        //System.out.println(d);
     }
     
     

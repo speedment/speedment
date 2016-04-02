@@ -25,7 +25,6 @@ import com.speedment.license.Software;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -54,10 +53,15 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
         requireNonNull(entity);
         managerOf(entity).remove(entity);
     }
-    
+
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
+    }
+
+    @Override
+    public EntityManager defaultCopy(Speedment speedment) {
+        return new EntityManagerImpl(speedment);
     }
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
