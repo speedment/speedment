@@ -56,11 +56,6 @@ public final class MainApp extends Application {
             SPEEDMENT = new DefaultSpeedmentApplicationLifecycle().build();
         }
         
-        SPEEDMENT.getEventComponent().on(UIEvent.OPEN_MAIN_WINDOW, ev -> {
-            SPEEDMENT.getUserInterfaceComponent().getUISession()
-                .showNotification("Hello, World!");
-        });
-        
         final Parameters parameters = getParameters();
         final List<String> params   = parameters.getRaw();
         if (params.isEmpty()) {

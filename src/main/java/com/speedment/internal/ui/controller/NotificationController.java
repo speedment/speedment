@@ -204,9 +204,10 @@ public final class NotificationController implements Initializable {
             );
         }
         
-        final ObservableList<Node> siblings;
         try {
-            siblings = (ObservableList<Node>) getChildren.invoke(parent);
+            @SuppressWarnings("unchecked")
+            final ObservableList<Node> siblings = (ObservableList<Node>) getChildren.invoke(parent);
+            return siblings;
         } catch (final IllegalAccessException 
                      | IllegalArgumentException 
                      | InvocationTargetException 
@@ -216,8 +217,6 @@ public final class NotificationController implements Initializable {
                 parent.getClass() + "'."
             );
         }
-        
-        return siblings;
     }
     
     private final static int 

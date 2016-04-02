@@ -109,16 +109,12 @@ public final class LayoutAnimator implements ChangeListener<Number>, ListChangeL
     }
 
     @Override
-    public void onChanged(Change change) {
+    public void onChanged(Change<? extends Node> change) {
         while (change.next()) {
             if (change.wasAdded()) {
-                for (Node node : (List<Node>) change.getAddedSubList()) {
-                    this.observe(node);
-                }
+                change.getAddedSubList().forEach(this::observe);
             } else if (change.wasRemoved()) {
-                for (Node node : (List<Node>) change.getRemoved()) {
-                    this.unobserve(node);
-                }
+                change.getRemoved().forEach(this::unobserve);
             }
         }
     }
