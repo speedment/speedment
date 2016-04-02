@@ -19,6 +19,7 @@ package com.speedment.component;
 import com.speedment.annotation.Api;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
+import com.speedment.event.UIEvent;
 import java.util.function.Consumer;
 
 /**
@@ -48,7 +49,7 @@ public interface EventComponent extends Component {
     
     /**
      * Listens to a particular type of event. The specified action
-     * will be called when the appropriate {@link #notify(com.speedment.event.Event) notify()}
+     * will be called when the appropriate {@link #notify(Event) notify()}
      * method is called.
      * 
      * @param <E>    the event implementation
@@ -59,13 +60,23 @@ public interface EventComponent extends Component {
     
     /**
      * Listens to a particular type of event. The specified action
-     * will be called when the appropriate {@link #notify(com.speedment.event.Event) notify()}
+     * will be called when the appropriate {@link #notify(Event) notify()}
      * method is called.
      * 
      * @param event  the event type to listen for
      * @param action the action to call
      */
     void on(DefaultEvent event, Consumer<DefaultEvent> action);
+    
+    /**
+     * Listens to a particular type of event. The specified action
+     * will be called when the appropriate {@link #notify(Event) notify()}
+     * method is called.
+     * 
+     * @param event  the event type to listen for
+     * @param action the action to call
+     */
+    void on(UIEvent event, Consumer<UIEvent> action);
     
     /**
      * Listens to all kind of events.

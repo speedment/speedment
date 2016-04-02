@@ -33,6 +33,7 @@ import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty; // Exposes internal  
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ConnectController;
+import com.speedment.internal.ui.controller.NotificationController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
@@ -86,6 +87,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ExecutionException;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -291,6 +293,13 @@ public final class UISession {
                     + "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
+                
+                showNotification(
+                    "Generation completed! " + instance.getFilesCreated() + 
+                    " files created.", 
+                    FontAwesomeIcon.STAR,
+                    NotificationController.GREEN
+                );
             } catch (final Exception ex) {
                 if (!stopwatch.isStopped()) {
                     stopwatch.stop();
@@ -303,9 +312,10 @@ public final class UISession {
                     + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
-
-                LOGGER.error(ex, "Error! Failed to generate code.");
-
+                
+                final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
+                
+                LOGGER.error(ex, msg);
                 showError("Failed to generate code", ex.getMessage(), ex);
             }
         });
@@ -326,6 +336,8 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E togglePreview() {
         return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
     }
+    
+    
 
     private final static class StoredNode {
 
@@ -584,6 +596,30 @@ public final class UISession {
             dialog.showAndWait();
         }
     }
+    
+    public void showNotification(String message) {
+        NotificationController.showNotification(this, message);
+    }
+    
+    public void showNotification(String message, FontAwesomeIcon icon) {
+        NotificationController.showNotification(this, message, icon);
+    }
+    
+    public void showNotification(String message, Runnable action) {
+        NotificationController.showNotification(this, message, action);
+    }
+    
+    public void showNotification(String message, Color color) {
+        NotificationController.showNotification(this, message, color);
+    }
+    
+    public void showNotification(String message, FontAwesomeIcon icon, Color color) {
+        NotificationController.showNotification(this, message, icon, color, () -> {});
+    }
+    
+    public void showNotification(String message, FontAwesomeIcon icon, Color color, Runnable action) {
+        NotificationController.showNotification(this, message, icon, color, action);
+    }
 
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
@@ -612,7 +648,17 @@ public final class UISession {
 
             showProgressDialog("Loading Database Metadata", progress, future);
 
-            return future.get();
+            final boolean status = future.get();
+            
+            if (status) {
+                showNotification(
+                    "Database metadata has been loaded.", 
+                    FontAwesomeIcon.DATABASE, 
+                    NotificationController.GREEN
+                );
+            }
+            
+            return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
             showError("Error Executing Connection Task", 
@@ -727,6 +773,7 @@ public final class UISession {
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
             log(success("Saved project file to '" + absolute + "'."));
+            showNotification("Configuration saved.", FontAwesomeIcon.SAVE, NotificationController.GREEN);
             currentlyOpenFile = file;
 
         } catch (IOException ex) {

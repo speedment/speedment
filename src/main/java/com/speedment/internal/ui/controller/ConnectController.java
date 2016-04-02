@@ -21,11 +21,8 @@ import static com.speedment.internal.ui.controller.ToolbarController.ICON_SIZE;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -37,20 +34,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
-
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.event.UIEvent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.util.Settings;
-import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 
 /**
  *
@@ -212,6 +207,7 @@ public final class ConnectController implements Initializable {
     
     public static void createAndShow(UISession session) {
         Loader.createAndShow(session, "Connect", ConnectController::new);
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_CONNECT_WINDOW);
 	}
     
     private Stream<String> getDbmsTypes() {

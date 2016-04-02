@@ -43,6 +43,15 @@
     -fx-font-family: 'Advent Pro';
 }
 
+/*** Terms and Conditions ***/
+.titled-pane.termsContainer {
+    -fx-text-fill: black;
+}
+
+.titled-pane.termsContainer > .title {
+    -fx-background-color: transparent;
+}
+
 /*** Border Panes ***/
 .border-pane {
     -fx-border-width: 0px;
@@ -353,4 +362,12 @@
 
 .label.msg.success {
     -fx-background-color: #90ee90;
+}
+
+/*** Notifications ***/
+.notification {
+    -fx-border-width: 0px 0px 0px 8px;
+    -fx-border-color: -fx-speedment-lightblue;
+    -fx-background-color: #eee; 
+    -fx-padding: 16;
 }

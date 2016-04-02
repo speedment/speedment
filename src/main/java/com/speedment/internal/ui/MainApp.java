@@ -17,9 +17,8 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.event.UiStarting;
+import com.speedment.event.UIEvent;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
-import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.ui.controller.ConnectController;
@@ -31,9 +30,9 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
-import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 
 /**
  *
@@ -56,6 +55,11 @@ public final class MainApp extends Application {
             LOGGER.warn("Creating new Speedment instance for UI session.");
             SPEEDMENT = new DefaultSpeedmentApplicationLifecycle().build();
         }
+        
+        SPEEDMENT.getEventComponent().on(UIEvent.OPEN_MAIN_WINDOW, ev -> {
+            SPEEDMENT.getUserInterfaceComponent().getUISession()
+                .showNotification("Hello, World!");
+        });
         
         final Parameters parameters = getParameters();
         final List<String> params   = parameters.getRaw();
@@ -85,7 +89,7 @@ public final class MainApp extends Application {
     private UISession createSession(Stage stage, String configLocation) {
         final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
         Statistics.onGuiStarted();
-        SPEEDMENT.getEventComponent().notify(new UiStarting());
+        SPEEDMENT.getEventComponent().notify(UIEvent.STARTED);
         return session;
     }
 }

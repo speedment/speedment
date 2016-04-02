@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.component.EventComponent;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
+import com.speedment.event.UIEvent;
 import com.speedment.license.Software;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -35,38 +36,49 @@ import java.util.stream.Stream;
  */
 public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
     
-    private final Map<DefaultEvent, Set<Consumer<Event>>> defaultEventListeners;
+    private final Map<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultEventListeners;
+    private final Map<UIEvent, Set<Consumer<UIEvent>>> uiEventListeners;
     private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
     private final Set<Consumer<Event>> anyEventListeners;
     
     public EventComponentImpl(Speedment speedment) {
         super(speedment);
         
-        final EnumMap<DefaultEvent, Set<Consumer<Event>>> listeners = 
+        final EnumMap<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultListeners = 
             new EnumMap<>(DefaultEvent.class);
         
         for (final DefaultEvent ev : DefaultEvent.values()) {
-            listeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+            defaultListeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
         
-        defaultEventListeners = Collections.unmodifiableMap(listeners);
+        defaultEventListeners = Collections.unmodifiableMap(defaultListeners);
+        
+        final EnumMap<UIEvent, Set<Consumer<UIEvent>>> uiListeners = 
+            new EnumMap<>(UIEvent.class);
+        
+        for (final UIEvent ev : UIEvent.values()) {
+            uiListeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        }
+        
+        uiEventListeners = Collections.unmodifiableMap(uiListeners);
+        
         otherEventListeners   = new ConcurrentHashMap<>();
         anyEventListeners     = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     @Override
     public void notify(Event event) {
-        final Set<Consumer<Event>> listeners;
-        
+
         if (event instanceof DefaultEvent) {
-            @SuppressWarnings("unchecked")
             final DefaultEvent ev = (DefaultEvent) event;
-            listeners = defaultListeners(ev);
+            defaultListeners(ev).forEach(listener -> listener.accept(ev));
+        } else if (event instanceof UIEvent) {
+            final UIEvent ev = (UIEvent) event;
+            uiListeners(ev).forEach(listener -> listener.accept(ev));
         } else {
-            listeners = listeners(event.getClass());
+            listeners(event.getClass()).forEach(listener -> listener.accept(event));
         }
 
-        listeners.forEach(listener -> listener.accept(event));
         anyEventListeners.forEach(listener -> listener.accept(event));
     }
 
@@ -77,9 +89,13 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void on(DefaultEvent event, Consumer<DefaultEvent> action) {
-        defaultListeners(event).add((Consumer<Event>) (Object) action);
+        defaultListeners(event).add(action);
+    }
+    
+    @Override
+    public void on(UIEvent event, Consumer<UIEvent> action) {
+        uiListeners(event).add(action);
     }
 
     @Override
@@ -99,7 +115,11 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
         return set;
     }
     
-    private Set<Consumer<Event>> defaultListeners(DefaultEvent event) {
+    private Set<Consumer<DefaultEvent>> defaultListeners(DefaultEvent event) {
         return defaultEventListeners.get(event);
+    }
+    
+    private Set<Consumer<UIEvent>> uiListeners(UIEvent event) {
+        return uiEventListeners.get(event);
     }
 }

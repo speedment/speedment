@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
 
@@ -18,28 +19,47 @@
 
 -->
 
-<?import javafx.scene.web.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="540.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxWidth="1.7976931348623157E308" 
+      maxHeight="1.7976931348623157E308" 
+      minWidth="-Infinity"
+      minHeight="-Infinity" 
+      prefWidth="540" 
+      spacing="20.0" 
+      alignment="BOTTOM_RIGHT" 
+      xmlns="http://javafx.com/javafx/8.0.65" 
+      xmlns:fx="http://javafx.com/fxml/1">
+    
     <children>
-        <Label styleClass="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Welcome to The Community!" />
-        <Label text="Please enter your email adress:" maxWidth="1.7976931348623157E308" />
+        <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Welcome to The Community!" />
+        <Label maxWidth="1.7976931348623157E308" text="Please enter your email adress:" />
+        
         <TextField fx:id="email" promptText="Email">
             <padding>
                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
             </padding>
         </TextField>
-        <Button fx:id="okey" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, got it!">
+        
+        <TitledPane expanded="false" text="Terms and Conditions" maxHeight="1.7976931348623157E308" styleClass="termsContainer" VBox.vgrow="ALWAYS">
+            <content>
+                <TextArea fx:id="terms" editable="false" minHeight="100.0" maxHeight="1.7976931348623157E308" prefWidth="200.0" wrapText="true" />
+            </content>
+        </TitledPane>
+        
+        <Button fx:id="okey" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, I accept!">
             <padding>
                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
             </padding>
         </Button>
     </children>
+    
     <padding>
         <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
     </padding>

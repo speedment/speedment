@@ -25,6 +25,7 @@ import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.resource.SpeedmentFont;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
@@ -314,5 +315,7 @@ public final class ComponentsController implements Initializable {
         dialog.initOwner(session.getStage());
         dialog.setScene(scene);
         dialog.show();
+        
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_COMPONENTS_WINDOW);
     }
 }

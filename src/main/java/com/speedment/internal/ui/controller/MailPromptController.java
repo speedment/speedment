@@ -16,9 +16,14 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.util.EmailUtil;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
@@ -27,8 +32,11 @@ import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  *
@@ -46,6 +54,7 @@ public final class MailPromptController implements Initializable {
     
     private final UISession session;
     private @FXML TextField email;
+    private @FXML TextArea terms;
     private @FXML Button okey;
     
     private MailPromptController(UISession session) {
@@ -64,9 +73,45 @@ public final class MailPromptController implements Initializable {
             ConnectController.createAndShow(session);
             EmailUtil.setEmail(email.getText());
         });
+        
+        try {
+            final InputStream in = MailPromptController.class.getResourceAsStream("/text/terms.txt");
+            final String str = inputToString(in);
+            terms.setText(str);
+        } catch (final IOException ex) {
+            session.showError(
+                "Failed to load file", 
+                "The terms and conditions of this software couldn't be loaded.", 
+                ex
+            );
+        }
+        
     }
     
     public static void createAndShow(UISession session) {
         Loader.createAndShow(session, "MailPrompt", MailPromptController::new);
+        
+        final Stage stage = session.getStage();
+        stage.sizeToScene();
+        
+        final Scene scene = stage.getScene();
+        final double top = scene.getY();
+        
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_MAIL_PROMPT_WINDOW);
+        
 	}
+    
+    private static String inputToString(InputStream in) throws IOException {
+        try (final BufferedInputStream bis = new BufferedInputStream(in)) {
+            try (final ByteArrayOutputStream buf = new ByteArrayOutputStream()) {
+                int result = bis.read();
+                while(result != -1) {
+                    byte b = (byte) result;
+                    buf.write(b);
+                    result = bis.read();
+                }        
+                return buf.toString();
+            }
+        }
+    }
 }

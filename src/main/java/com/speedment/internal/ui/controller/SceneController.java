@@ -17,11 +17,11 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.component.UserInterfaceComponent.Brand;
+import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import java.net.URL;
 import java.util.ResourceBundle;
-import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
 
 /**
  *
@@ -60,6 +61,8 @@ public final class SceneController implements Initializable {
             
             horizontal.setDividerPositions(0.2, 0.7);
             vertical.setDividerPositions(0.7, 0.3);
+            
+            session.toggleOutput();
         });
     }
     
@@ -75,5 +78,7 @@ public final class SceneController implements Initializable {
         stage.setMaximized(screenIsSmall);
         stage.setScene(scene);
         stage.show();
+        
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_MAIN_WINDOW);
 	}
 }

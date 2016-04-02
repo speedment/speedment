@@ -50,7 +50,6 @@ import javafx.scene.control.TreeView;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.MenuItem;
 import javafx.collections.ListChangeListener;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;

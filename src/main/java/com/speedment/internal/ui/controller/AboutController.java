@@ -19,6 +19,7 @@ package com.speedment.internal.ui.controller;
 import com.speedment.SpeedmentVersion;
 import com.speedment.component.Component;
 import com.speedment.component.UserInterfaceComponent.Brand;
+import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.util.Trees;
@@ -115,5 +116,7 @@ public final class AboutController implements Initializable {
         dialog.initOwner(session.getStage());
         dialog.setScene(scene);
         dialog.show();
+        
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_ABOUT_WINDOW);
     }
 }
