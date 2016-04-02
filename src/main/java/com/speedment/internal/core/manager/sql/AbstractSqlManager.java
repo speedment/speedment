@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Project;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.manager.AbstractManager;
 import com.speedment.db.MetaResult;
@@ -55,6 +56,7 @@ import com.speedment.internal.util.document.DocumentDbUtil;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
+import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
@@ -76,6 +78,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private SqlFunction<ResultSet, ENTITY> entityMapper;
     //private final Map<String, FieldIdentifier<ENTITY>> fieldIdentifierMap;
     private final Map<String, FieldTrait> fieldTraitMap;
+    private final boolean hasPrimaryKeyColumns;
 
     protected AbstractSqlManager(Speedment speedment) {
         super(speedment);
@@ -93,6 +96,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .filter(f -> f.getIdentifier().tableName().equals(getTable().getName())) // Protect against "VirtualFields"
             .filter(f -> f.getIdentifier().schemaName().equals(getTable().getParentOrThrow().getName()))
             .collect(toMap(ft -> ft.getIdentifier().columnName(), Function.identity()));
+        this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
 
     @Override
@@ -348,7 +352,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-
+        assertHasPrimaryKeyColumns();
         final StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ").append(sqlTableReference()).append(" SET ");
         sb.append(sqlColumnList(n -> n + " = ?"));
@@ -368,6 +372,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+        assertHasPrimaryKeyColumns();
         final StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ").append(sqlTableReference());
         sb.append(" WHERE ");
@@ -496,6 +501,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             throw new SpeedmentException(sqle);
         } finally {
             listener.ifPresent(c -> c.accept(meta));
+        }
+    }
+
+    private void assertHasPrimaryKeyColumns() {
+        if (!hasPrimaryKeyColumns) {
+            throw new SpeedmentException("The table " + DocumentUtil.relativeName(getTable(), Project.class) + " does not have any primary keys. Some operations like update() and remove() requires at least one primary key.");
         }
     }
 

@@ -157,7 +157,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
             LOGGER.error(ex, "Failed to write file " + fname);
         }
 
-        LOGGER.info("done");
+        //LOGGER.info("done");
 
         printCode(fname, content);
 
