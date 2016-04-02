@@ -238,7 +238,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Column_Column() {
-        System.out.println("Testing: isSame(Column, Column)");
         final Column[] columns = new Column[] {
             columnA1, columnA2, columnB1, columnB2,
             columnC1, columnC2, columnD1, columnD2
@@ -261,7 +260,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_IndexColumn_IndexColumn() {
-        System.out.println("Testing: isSame(IndexColumn, IndexColumn)");
         final IndexColumn[] indexColumns = new IndexColumn[] {
             indexColumnA2, indexColumnB2
         };
@@ -283,7 +281,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Index_Index() {
-        System.out.println("Testing: isSame(Index, Index)");
         final Index[] indexes = new Index[] {
             indexA2, indexB2
         };
@@ -305,7 +302,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_PrimaryKeyColumn_PrimaryKeyColumn() {
-        System.out.println("Testing: isSame(PrimaryKeyColumn, PrimaryKeyColumn)");
         final PrimaryKeyColumn[] primaryKeyColumns = new PrimaryKeyColumn[] {
             primaryKeyColumnA1, primaryKeyColumnB1, 
             primaryKeyColumnC1, primaryKeyColumnD1
@@ -328,7 +324,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_ForeignKeyColumn_ForeignKeyColumn() {
-        System.out.println("Testing: isSame(ForeignKeyColumn, ForeignKeyColumn)");
         final ForeignKeyColumn[] foreignKeyColumns = new ForeignKeyColumn[] {
             foreignKeyColumnA2_C1, foreignKeyColumnB2_D1
         };
@@ -350,7 +345,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_ForeignKey_ForeignKey() {
-        System.out.println("Testing: isSame(ForeignKey, ForeignKey)");
         final ForeignKey[] foreignKeys = new ForeignKey[] {
             foreignKeyA2_C1, foreignKeyB2_D1
         };
@@ -372,7 +366,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Table_Table() {
-        System.out.println("Testing: isSame(Table, Table)");
         final Table[] tables = new Table[] {
             tableA, tableB, tableC, tableD
         };
@@ -394,7 +387,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Schema_Schema() {
-        System.out.println("Testing: isSame(Schema, Schema)");
         final Schema[] schemas = new Schema[] {
             schemaA, schemaB
         };
@@ -416,7 +408,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Dbms_Dbms() {
-        System.out.println("Testing: isSame(Dbms, Dbms)");
         final Dbms[] dbmses = new Dbms[] {
             dbmsA, dbmsB
         };
@@ -438,7 +429,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsSame_Project_Project() {
-        System.out.println("Testing: isSame(Project, Project)");
         assertTrue(
             "  Is " + project.getName() + 
             " same as " + project.getName() + ": ",
@@ -451,7 +441,6 @@ public final class DocumentDbUtilTest {
      */
     @Test
     public void testIsUnique() {
-        System.out.println("Testing: isUnique(Column)");
         assertTrue("  Is " + columnA1.getName() + " unique: ", DocumentDbUtil.isUnique(columnA1));
         assertFalse("  Is " + columnA2.getName() + " unique: ", DocumentDbUtil.isUnique(columnA2));
         assertTrue("  Is " + columnB1.getName() + " unique: ", DocumentDbUtil.isUnique(columnB1));

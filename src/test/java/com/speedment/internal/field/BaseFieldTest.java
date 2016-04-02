@@ -57,8 +57,8 @@ public class BaseFieldTest {
     }
 
     protected <T> void printList(String header, List<T> list) {
-        System.out.println("*** " + header + " ***");
-        list.forEach(System.out::println);
+//        System.out.println("*** " + header + " ***");
+//        list.forEach(System.out::println);
     }
 
 }

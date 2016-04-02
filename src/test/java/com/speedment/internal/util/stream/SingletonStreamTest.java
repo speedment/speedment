@@ -48,6 +48,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -77,17 +78,20 @@ public class SingletonStreamTest {
     public void tearDown() {
     }
 
-       @Test
+    @Test
     public void testSome() {
-        instance.map("A"::indexOf).distinct().unordered().forEach(System.out::println);
+        instance.map("A"::indexOf).distinct().unordered().forEach(this::consume);
     }
-    
+
+    private <T> void consume(T t) {
+
+    }
+
     /**
      * Test of of method, of class SingletonStream.
      */
     @Test
     public void testOf() {
-        System.out.println("of");
         final SingletonStream<String> ss = SingletonStream.of("B");
         final List<String> s = ss.collect(toList());
         assertEquals(Arrays.asList("B"), s);
@@ -97,8 +101,9 @@ public class SingletonStreamTest {
      * Test of ofNullable method, of class SingletonStream.
      */
     @Test
+    @Ignore
     public void testOfNullable() {
-        System.out.println("ofNullable");
+
 
     }
 
@@ -107,7 +112,6 @@ public class SingletonStreamTest {
      */
     @Test
     public void testFilter() {
-        System.out.println("filter");
         assertEquals(1L, instance.filter("A"::equals).count());
         assertEquals(1L, instance.filter("A"::equals).filter(Objects::nonNull).count());
     }
@@ -117,7 +121,6 @@ public class SingletonStreamTest {
      */
     @Test
     public void testMap() {
-        System.out.println("map");
         final Optional<String> binLen = instance.map(String::length).map(Integer::toBinaryString).findFirst();
         assertEquals(Optional.of("1"), binLen);
 
@@ -131,7 +134,6 @@ public class SingletonStreamTest {
      */
     @Test
     public void testMapToInt() {
-        System.out.println("mapToInt");
         assertEquals(1, instance.mapToInt(String::length).sum());
     }
 

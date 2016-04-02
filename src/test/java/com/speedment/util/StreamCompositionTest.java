@@ -173,7 +173,7 @@ public class StreamCompositionTest {
     }
 
     private void printTestName() {
-        System.out.println(name.getMethodName());
+        //System.out.println(name.getMethodName());
     }
 
 }

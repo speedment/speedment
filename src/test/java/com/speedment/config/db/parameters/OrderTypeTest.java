@@ -76,20 +76,17 @@ public class OrderTypeTest {
 
     @Test
     public void testValues() {
-        System.out.println("values");
         assertEquals(3, OrderType.values().length);
     }
 
     @Test
     public void testSelectLazilyASC() {
-        System.out.println("selectLazily");
         assertEquals("A", OrderType.ASC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertAscSelected();
     }
 
     @Test
     public void testSelectLazilyDESC() {
-        System.out.println("selectLazily");
         assertEquals("B", OrderType.DESC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertDescSelected();
     }
@@ -103,7 +100,6 @@ public class OrderTypeTest {
 
     @Test
     public void testSelect() {
-        System.out.println("select");
         assertEquals("A", OrderType.ASC.select("A", "B"));
         assertEquals("B", OrderType.DESC.select("A", "B"));
         assertEquals("A", OrderType.NONE.select("A", "B"));
@@ -111,14 +107,12 @@ public class OrderTypeTest {
 
     @Test
     public void testSelectRunnableASC() {
-        System.out.println("selectRunnable");
         OrderType.ASC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertAscSelected();
     }
 
     @Test
     public void testSelectRunnableDesc() {
-        System.out.println("selectRunnable");
         OrderType.DESC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertDescSelected();
     }

@@ -66,7 +66,6 @@ public class TreesTest {
      */
     @Test
     public void testTraverse() {
-        System.out.println("traverse");
 
         final Node nodeE = new Node("E");
         
@@ -97,7 +96,7 @@ public class TreesTest {
 
     private static void test(Node f, Trees.TraversalOrder traversalOrder, String expectedResult) {
         final String result = Trees.traverse(f, Node::stream, traversalOrder).map(Node::getName).collect(JOINING_COMAS);
-        System.out.printf("%-20s: %s\n", traversalOrder, result);
+        //System.out.printf("%-20s: %s\n", traversalOrder, result);
         assertEquals(expectedResult, result);
     }
 

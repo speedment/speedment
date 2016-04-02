@@ -82,7 +82,7 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
                 .peek(i -> threadNames.add(Thread.currentThread().getName()))
                 .collect(toSet());
         assertEquals(expectedSet, set);
-        System.out.println("Threads used:" + threadNames);
+        //System.out.println("Threads used:" + threadNames);
         assertTrue(threadNames.size() > Runtime.getRuntime().availableProcessors()/2-1);
     }
 

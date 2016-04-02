@@ -61,31 +61,26 @@ public class PrimaryKeyFactoryComponentImplTest {
 
     @Test
     public void testMake_GenericType_GenericType() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1), instance.make(k0, k1));
     }
 
     @Test
     public void testMake_3args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2), instance.make(k0, k1, k2));
     }
 
     @Test
     public void testMake_4args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2, k3), instance.make(k0, k1, k2, k3));
     }
 
     @Test
     public void testMake_5args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2, k3, k4), instance.make(k0, k1, k2, k3, k4));
     }
 
     @Test
     public void testMake_6args() {
-        System.out.println("make");
         final List<Object> expResult = new ArrayList<>();
         expResult.add(k0);
         expResult.add(k1);
@@ -103,13 +98,11 @@ public class PrimaryKeyFactoryComponentImplTest {
 
     @Test
     public void testGetComponentClass() {
-        System.out.println("getComponentClass");
         assertEquals(PrimaryKeyFactoryComponent.class, instance.getComponentClass());
     }
 
     @Test
     public void testImmutability() {
-        System.out.println("immutability");
         final List<?> pks = instance.make(k0, k1, k2, k3, k4, k5, k6, k7, k8);
 
         isImmutable(pks::clear);

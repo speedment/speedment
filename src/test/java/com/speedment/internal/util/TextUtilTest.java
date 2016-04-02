@@ -62,7 +62,6 @@ public class TextUtilTest {
 
     @Test
     public void testWordsOf() {
-        System.out.println("wordsOf");
         final String text = Stream.of(TEXT_ARRAY).collect(Collectors.joining(" "));
         final List<String> expResult = Stream.of(TEXT_ARRAY).collect(toList());
         final List<String> result = TextUtil.wordsOf(text).collect(toList());
@@ -72,7 +71,6 @@ public class TextUtilTest {
 
     @Test
     public void testFormatTextBox() {
-        System.out.println("formatTextBox");
         String text = "A AB ABC AB Abc ad skh sjh ajsh a aksjka ka sdja aVeryLongWordThatCertainlyWillOverflow bye";
         int width = 10;
         String tenChars
@@ -87,16 +85,15 @@ public class TextUtilTest {
             + "aVeryLongWordThatCertainlyWillOverflow\n"
             + "bye";
 
-        String result = TextUtil.formatTextBox(text, width);
+        final String result = TextUtil.formatTextBox(text, width);
 
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(expResult, result);
     }
 
     @Test
     public void testFormatJavaDocBox() {
-        System.out.println("formatJavaDocBox");
         String text = "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789.";
         String eRes = "123456789 123456789 123456789 123456789 123456789 123456789 123456789\n123456789 123456789 123456789 123456789 123456789 123456789.";
         String result = TextUtil.formatJavaDocBox(text);

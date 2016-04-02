@@ -55,7 +55,6 @@ public class StandardJavaTypeMappingTest {
 
     @Test
     public void testParse() {
-        System.out.println("parse");
         assertEquals(Boolean.TRUE, StandardJavaTypeMapping.BOOLEAN.parse("true"));
         assertEquals(Boolean.FALSE, StandardJavaTypeMapping.BOOLEAN.parse("false"));
         assertEquals(Byte.valueOf((byte) -47), StandardJavaTypeMapping.BYTE.parse("-47"));

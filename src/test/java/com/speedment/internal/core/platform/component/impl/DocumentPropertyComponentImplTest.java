@@ -76,7 +76,8 @@ public class DocumentPropertyComponentImplTest {
                 throw new NullPointerException("Root is null.");
             }
             
-            System.out.println(toString.invoke(rootObj));
+            final Object o = toString.invoke(rootObj);
+            //System.out.println(o);
             
         } catch (final NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new SpeedmentException("Could not call toString on component", ex);

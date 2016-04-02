@@ -68,26 +68,22 @@ public class Tuple2NullableTest {
 
     @Test
     public void testGet0() {
-        System.out.println("get0");
         assertEquals(FIRST, instance.get0().get().intValue());
     }
 
     @Test
     public void testGet1() {
-        System.out.println("get1");
         assertEquals(SECOND, instance.get1().get().intValue());
     }
 
     @Test
     public void testGet() {
-        System.out.println("get");
         assertEquals(FIRST, instance.get(0).get());
         assertEquals(SECOND, instance.get(1).get());
     }
 
     @Test
     public void testCasting() {
-        System.out.println("nullInfere");
         Tuple2OfNullables<Integer, String> t2 = Tuples.ofNullables(1, null);
         assertEquals(Optional.of(1), t2.get0());
         assertEquals(Optional.empty(), t2.get1());
@@ -108,7 +104,6 @@ public class Tuple2NullableTest {
 //    }
     @Test
     public void testDefConstructor() {
-        System.out.println("Default constructor");
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(1, 2);
         assertTrue(newInstance.get0().isPresent());
         assertTrue(newInstance.get1().isPresent());
@@ -116,7 +111,6 @@ public class Tuple2NullableTest {
 
     @Test
     public void testHash() {
-        System.out.println("hashCode");
         int hashCodeInstance = instance.hashCode();
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, SECOND);
         int hashCodenewInstance = newInstance.hashCode();
@@ -125,35 +119,29 @@ public class Tuple2NullableTest {
 
     @Test
     public void testEquals() {
-        System.out.println("equals");
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, SECOND);
         assertEquals(instance, newInstance);
     }
 
     @Test
     public void testToString() {
-        System.out.println("toString");
-        System.out.println(instance);
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(null, null);
-        System.out.println(newInstance);
     }
 
     @Test
     public void testStream() {
-        System.out.println("Stream");
-        List<Object> content = instance.stream().collect(toList());
-        List<Optional<Integer>> expected = Arrays.asList(Optional.of(FIRST), Optional.of(SECOND));
+        final List<Object> content = instance.stream().collect(toList());
+        final List<Optional<Integer>> expected = Arrays.asList(Optional.of(FIRST), Optional.of(SECOND));
         assertEquals(expected, content);
 
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, null);
-        List<Object> content2 = newInstance.stream().collect(toList());
-        List<Optional<Integer>> expected2 = Arrays.asList(Optional.of(FIRST), Optional.empty());
+        final List<Object> content2 = newInstance.stream().collect(toList());
+        final List<Optional<Integer>> expected2 = Arrays.asList(Optional.of(FIRST), Optional.empty());
         assertEquals(expected2, content2);
     }
 
     @Test
     public void testStreamOf() {
-        System.out.println("StreamOf");
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, null);
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Arrays.asList(FIRST);
@@ -162,7 +150,6 @@ public class Tuple2NullableTest {
 
     @Test
     public void testStreamOf2() {
-        System.out.println("StreamOf2");
         final Tuple2OfNullables<Integer, String> newInstance = Tuples.ofNullables(FIRST, "Tryggve");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Arrays.asList(FIRST);

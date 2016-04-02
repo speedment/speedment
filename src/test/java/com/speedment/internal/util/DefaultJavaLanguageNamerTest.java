@@ -63,7 +63,6 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testJavaTypeName() {
-        System.out.println("javaTypeName");
         assertEquals("MyObject", instance.javaTypeName("my_object"));
         assertEquals("MyObject", instance.javaTypeName("my.object"));
         assertEquals("MyObject", instance.javaTypeName("my object"));
@@ -74,7 +73,6 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testJavaVariableName() {
-        System.out.println("javaVariableName");
         assertEquals("myObject", instance.javaVariableName("my_object"));
         assertEquals("myObject", instance.javaVariableName("my.object"));
         assertEquals("myObject", instance.javaVariableName("my object"));
@@ -84,7 +82,6 @@ public class DefaultJavaLanguageNamerTest {
     @Test
     @Ignore
     public void testJavaStaticFieldName() {
-        System.out.println("javaStaticFieldName");
         // Fix me
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("myObject"));
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("my.object"));
@@ -96,7 +93,6 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testJavaNameFromExternal() {
-        System.out.println("javaNameFromExternal");
         assertEquals("MyObject", instance.javaNameFromExternal("my_object"));
         assertEquals("MyObject", instance.javaNameFromExternal("my.object"));
         assertEquals("MyObject", instance.javaNameFromExternal("my object"));
@@ -107,7 +103,6 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testReplaceIfJavaUsedWord() {
-        System.out.println("replaceIfJavaUsedWord");
         assertEquals("integer_", instance.replaceIfJavaUsedWord("integer"));
     }
 
@@ -116,7 +111,6 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testJavaObjectName() {
-        System.out.println("javaObjectName");
         assertEquals("Integer", instance.javaObjectName("int"));
         assertEquals("Integer[]", instance.javaObjectName("int[]"));
     }
@@ -126,14 +120,12 @@ public class DefaultJavaLanguageNamerTest {
      */
     @Test
     public void testToUnderscoreSeparated() {
-        System.out.println("toUnderscoreSeparated");
         assertEquals("my_variable_name", instance.toUnderscoreSeparated("myVariableName"));
 
     }
     
     @Test
     public void testreplaceIfIllegalJavaIdentifierCharacter() {
-        System.out.println("replaceIfIllegalJavaIdentifierCharacter");
         assertEquals("_2my", instance.replaceIfIllegalJavaIdentifierCharacter("2my"));
         assertEquals("_2my_test_case_one", instance.replaceIfIllegalJavaIdentifierCharacter("2my test+case.one"));
     }
@@ -142,8 +134,7 @@ public class DefaultJavaLanguageNamerTest {
      * Test of toHumanReadable method, of class JavaLanguage.
      */
     @Test
-    public void testToHumanReadable() {
-        System.out.println("toHumanReadable");
+    public void testToHumanReadable() {        
         assertEquals("My Variable Name", toHumanReadable("myVariableName"));
     }
 

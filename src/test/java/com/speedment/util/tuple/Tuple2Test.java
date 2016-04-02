@@ -67,19 +67,16 @@ public class Tuple2Test {
 
     @Test
     public void testGet0() {
-        System.out.println("get0");
-        assertEquals(FIRST, instance.get0().intValue());
+       assertEquals(FIRST, instance.get0().intValue());
     }
 
     @Test
     public void testGet1() {
-        System.out.println("get1");
         assertEquals(SECOND, instance.get1().intValue());
     }
 
     @Test
     public void testGet() {
-        System.out.println("get");
         assertEquals(FIRST, instance.get(0));
         assertEquals(SECOND, instance.get(1));
     }
@@ -106,7 +103,6 @@ public class Tuple2Test {
 //    }
     @Test
     public void testHash() {
-        System.out.println("hashCode");
         int hashCodeInstance = instance.hashCode();
         final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         int hashCodenewInstance = newInstance.hashCode();
@@ -115,22 +111,18 @@ public class Tuple2Test {
 
     @Test
     public void testEquals() {
-        System.out.println("equals");
         final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         assertEquals(instance, newInstance);
     }
 
     @Test
     public void testToString() {
-        System.out.println("toString");
-        System.out.println(instance);
         final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
-        System.out.println(newInstance);
+        final String result = newInstance.toString();
     }
 
     @Test
     public void testStream() {
-        System.out.println("Stream");
         List<Object> content = instance.stream().collect(toList());
         List<Integer> expected = Arrays.asList(FIRST, SECOND);
         assertEquals(expected, content);
@@ -138,7 +130,6 @@ public class Tuple2Test {
 
     @Test
     public void testStreamOf() {
-        System.out.println("StreamOf");
         final Tuple2<Integer, String> newInstance = Tuples.of(FIRST, "Olle");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Arrays.asList(FIRST);
