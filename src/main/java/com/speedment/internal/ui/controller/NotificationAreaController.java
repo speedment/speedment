@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.component.UserInterfaceComponent.Notification;
+import com.speedment.component.notification.Notification;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.LayoutAnimator;
 import java.net.URL;

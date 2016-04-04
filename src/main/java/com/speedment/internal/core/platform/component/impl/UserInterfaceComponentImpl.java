@@ -19,6 +19,8 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.brand.Brand;
+import com.speedment.component.notification.Notification;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.license.OpenSourceLicense;

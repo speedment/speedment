@@ -25,8 +25,8 @@ import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
-import com.speedment.component.UserInterfaceComponent.Brand;
-import com.speedment.component.UserInterfaceComponent.Notification;
+import com.speedment.component.brand.Brand;
+import com.speedment.component.notification.Notification;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;

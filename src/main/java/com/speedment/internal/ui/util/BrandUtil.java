@@ -18,6 +18,7 @@ package com.speedment.internal.ui.util;
 
 import com.speedment.Speedment;
 import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.brand.Brand;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -40,7 +41,7 @@ public final class BrandUtil {
     
     public static void applyBrandToStage(Speedment speedment, Stage stage) {
         final UserInterfaceComponent ui = speedment.getUserInterfaceComponent();
-        final UserInterfaceComponent.Brand brand = ui.getBrand();
+        final Brand brand = ui.getBrand();
         
         stage.setTitle(brand.title());
         brand.logoSmall()

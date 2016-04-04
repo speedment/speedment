@@ -16,15 +16,17 @@
  */
 package com.speedment.internal.ui.brand;
 
-import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.brand.Brand;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
- *
- * @author Emil Forslund
+ * A default implementation of the {@link Brand} interface.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
  */
-public class DefaultBrand implements UserInterfaceComponent.Brand {
+public class DefaultBrand implements Brand {
         
     private final String title, subtitle, version, website, logoSmall, logoLarge;
 

@@ -22,7 +22,7 @@ import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.Component;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.TypeMapperComponent;
-import com.speedment.component.UserInterfaceComponent;
+import com.speedment.component.brand.Brand;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.event.UIEvent;
@@ -301,7 +301,7 @@ public final class ComponentsController implements Initializable {
             ((ComponentsController) control).dialog = dialog;
         });
         
-        final UserInterfaceComponent.Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
+        final Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
 
         final Scene scene = new Scene(root);
         session.getSpeedment()

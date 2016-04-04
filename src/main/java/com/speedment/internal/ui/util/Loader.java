@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.util;
 
-import com.speedment.component.UserInterfaceComponent.Brand;
+import com.speedment.component.brand.Brand;
 import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
 import java.io.IOException;
@@ -33,7 +33,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- *
+ * A utility class resposible for loading FXML-files and setting up their 
+ * corresponding controller instance using reflection.
+ * 
  * @author Emil Forslund
  */
 public final class Loader {

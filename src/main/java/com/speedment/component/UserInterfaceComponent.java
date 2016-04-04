@@ -17,29 +17,28 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
+import com.speedment.component.brand.Brand;
+import com.speedment.component.notification.Notification;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.UISession;
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 
 /**
- *
+ * The user interface component contains a number of useful methods required to
+ * pass information between different parts of the UI.
+ * 
  * @author Emil Forslund
  * @since 2.3
  */
@@ -102,8 +101,6 @@ public interface UserInterfaceComponent extends Component {
      */
     ObservableList<Node> getOutputMessages();
     
-    
-    
     /**
      * Returns a stream of all the css-file that should be used to style the UI.
      * 
@@ -120,45 +117,6 @@ public interface UserInterfaceComponent extends Component {
     void addStylesheetFile(String filename);
     
     /**
-     * A branding container.
-     */
-    interface Brand {
-        
-        String title();
-        String subtitle();
-        String version();
-        String website();
-        Optional<String> logoSmall();
-        Optional<String> logoLarge();
-        
-        static void apply(UISession session, Scene scene) {
-            final Stage stage = session.getStage();
-            final Brand brand = session
-                .getSpeedment()
-                .getUserInterfaceComponent()
-                .getBrand();
-            
-            stage.setTitle(brand.title());
-            brand.logoSmall()
-                .map(Image::new)
-                .ifPresent(icon -> {
-                    stage.getIcons().add(icon);
-                    
-                    @SuppressWarnings("unchecked")
-                    final Stage dialogStage = (Stage) scene.getWindow();
-                    if (dialogStage != null) {
-                        dialogStage.getIcons().add(icon);
-                    }
-                });
-
-            session.getSpeedment()
-                .getUserInterfaceComponent()
-                .stylesheetFiles()
-                .forEachOrdered(scene.getStylesheets()::add);
-        }
-    }
-    
-    /**
      * Sets the brand that is shown in the top-left part of the UI.
      * 
      * @param brand  the new brand
@@ -171,16 +129,6 @@ public interface UserInterfaceComponent extends Component {
      * @return  the brand
      */
     Brand getBrand();
-    
-    /**
-     * Container for the fields required to show a notification in the UI.
-     */
-    interface Notification {
-        FontAwesomeIcon icon();
-        String text();
-        Color color();
-        Runnable onClose();
-    }
     
     /**
      * Returns an observable list of the notifications that has yet to be shown 

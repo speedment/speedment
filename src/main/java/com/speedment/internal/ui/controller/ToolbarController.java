@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.component.UserInterfaceComponent.Brand;
+import com.speedment.component.brand.Brand;
 import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
 import de.jensd.fx.glyphs.GlyphsDude;
