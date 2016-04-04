@@ -22,7 +22,7 @@ import com.speedment.internal.core.stream.autoclose.AutoClosingDoubleStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingIntStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingLongStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingReferenceStream;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.function.Function;
 import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
@@ -75,28 +75,28 @@ public class StreamComposition {
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static <T> Stream<T> concatAndAutoClose(Stream<T>... streams) {
-        requireNonNulls(streams);
+        requireNonNullElements(streams);
         return configureAutoCloseStream(new AutoClosingReferenceStream<>(Stream.of(streams).flatMap(Function.identity())), streams);
     }
 
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static IntStream concatAndAutoClose(IntStream... streams) {
-        requireNonNulls(streams);
+        requireNonNullElements(streams);
         return configureAutoCloseStream(new AutoClosingIntStream(Stream.of(streams).flatMapToInt(Function.identity())), streams);
     }
 
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static LongStream concatAndAutoClose(LongStream... streams) {
-        requireNonNulls(streams);
+        requireNonNullElements(streams);
         return configureAutoCloseStream(new AutoClosingLongStream(Stream.of(streams).flatMapToLong(Function.identity())), streams);
     }
 
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static DoubleStream concatAndAutoClose(DoubleStream... streams) {
-        requireNonNulls(streams);
+        requireNonNullElements(streams);
         return configureAutoCloseStream(new AutoClosingDoubleStream(Stream.of(streams).flatMapToDouble(Function.identity())), streams);
     }
 
@@ -133,7 +133,7 @@ public class StreamComposition {
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static <T> Stream<T> concat(Stream<T>... streams) {
-        requireNonNulls(streams);
+        requireNonNullElements(streams);
         return Stream.of(streams).flatMap(Function.identity());
     }
 

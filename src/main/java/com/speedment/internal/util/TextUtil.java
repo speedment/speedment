@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util;
 
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collections;
@@ -79,7 +80,7 @@ public final class TextUtil {
      */
     public static String formatTextBox(String text, int width, Pattern splitter, Set<String> singleRowers) {
         requireNonNulls(text, splitter);
-        requireNonNulls(singleRowers);
+        requireNonNullElements(singleRowers);
 
         final StringBuilder sb = new StringBuilder();
         final AtomicInteger col = new AtomicInteger();

@@ -17,7 +17,7 @@
 package com.speedment.internal.core.stream.autoclose;
 
 import com.speedment.exception.SpeedmentException;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -156,7 +156,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
     @SafeVarargs // Creating a Stream of an array is safe.
     @SuppressWarnings({"unchecked", "varargs"})
     public static <T extends AutoCloseable> void composedClose(T... closeables) {
-        requireNonNulls(closeables);
+        requireNonNullElements(closeables);
         Exception exception = null;
 
         for (final T closable : closeables) {
@@ -189,7 +189,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
      * an exception
      */
     public static void composedRunnable(Collection<Runnable> runnables) {
-        requireNonNulls(runnables);
+        requireNonNullElements(runnables);
         final AutoCloseable[] closables = new AutoCloseable[runnables.size()];
         int i = 0;
         for (final Runnable r : runnables) {

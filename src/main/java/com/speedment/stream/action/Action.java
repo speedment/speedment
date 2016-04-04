@@ -16,7 +16,7 @@
  */
 package com.speedment.stream.action;
 
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +75,7 @@ public abstract class Action<T extends BaseStream<?, T>, R extends BaseStream<?,
 
     protected final void set(Statement firstStatement, Statement... otherStatements) {
         requireNonNull(firstStatement);
-        requireNonNulls(otherStatements);
+        requireNonNullElements(otherStatements);
         set(firstStatement);
         Stream.of(otherStatements).forEach(this::set);
     }
@@ -93,7 +93,7 @@ public abstract class Action<T extends BaseStream<?, T>, R extends BaseStream<?,
 
     public boolean is(Statement firstStatement, Statement... otherStatements) {
         requireNonNull(firstStatement);
-        requireNonNulls(otherStatements);
+        requireNonNullElements(otherStatements);
         if (!is(firstStatement)) {
             return false;
         }

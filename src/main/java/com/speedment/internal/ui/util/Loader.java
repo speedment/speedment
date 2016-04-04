@@ -33,7 +33,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * A utility class resposible for loading FXML-files and setting up their 
+ * A utility class responsible for loading FXML-files and setting up their 
  * corresponding controller instance using reflection.
  * 
  * @author Emil Forslund

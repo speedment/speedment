@@ -21,7 +21,7 @@ import com.speedment.encoder.JsonEncoder;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.stream.MapStream;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -180,7 +180,7 @@ public final class CollectorUtil {
     public static <T> T of(Supplier<T> supplier, Consumer<T> modifier, Consumer<T>... additionalModifiers) {
         requireNonNull(supplier, "supplier" + NULL_TEXT);
         requireNonNull(modifier, "modifier" + NULL_TEXT);
-        requireNonNulls(additionalModifiers, "additionalModifiers" + NULL_TEXT);
+        requireNonNullElements(additionalModifiers, "additionalModifiers" + NULL_TEXT);
         final T result = supplier.get();
         modifier.accept(result);
         Stream.of(additionalModifiers).forEach((Consumer<T> c) -> {
@@ -215,7 +215,7 @@ public final class CollectorUtil {
     @SafeVarargs
     @SuppressWarnings({"unchecked", "varargs"})
     public static <T> Set<T> unmodifiableSetOf(T... items) {
-        requireNonNulls(items);
+        requireNonNullElements(items);
         return Stream.of(items).collect(toUnmodifiableSet());
     }
 

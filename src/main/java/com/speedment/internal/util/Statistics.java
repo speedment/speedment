@@ -26,7 +26,7 @@ import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
 import com.speedment.internal.util.testing.TestSettings;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +38,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
@@ -50,11 +51,8 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Statistics {
 
-    private final static String ENCODING = "UTF-8";
     private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
-
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
-    private final static String VERSION = SpeedmentVersion.getImplementationVersion();
 
     public static void onGuiStarted() {
 
@@ -77,20 +75,20 @@ public final class Statistics {
         AnalyticsUtil.notify(APP_STARTED);
     }
 
-    private static void notifyEvent(String event) {
-        notifyEvent(event, Collections.emptyList());
+    private static void notifyEvent(final String event) {
+        notifyEvent(event, emptyList());
     }
 
-    private static void notifyEvent(String event, Param param) {
-        notifyEvent(event, Collections.singletonList(requireNonNull(param)));
+    private static void notifyEvent(final String event, final Param param) {
+        notifyEvent(event, singletonList(requireNonNull(param)));
     }
 
-    private static void notifyEvent(String event, Collection<Param> params) {
+    private static void notifyEvent(final String event, final Collection<Param> params) {
         requireNonNull(event);
-        requireNonNulls(params);
+        requireNonNullElements(params);
         final List<Param> allParams = new ArrayList<>(params);
         allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
-        allParams.add(new Param("version", VERSION));
+        allParams.add(new Param("version", SpeedmentVersion.getImplementationVersion()));
         allParams.add(new Param("event", event));
         sendPostRequest(allParams);
     }
@@ -99,8 +97,8 @@ public final class Statistics {
         return new Param("mail", EmailUtil.getEmail());
     }
 
-    private static void sendPostRequest(Collection<Param> params) {
-        requireNonNulls(params);
+    private static void sendPostRequest(final Collection<Param> params) {
+        requireNonNullElements(params);
 
         if (!TestSettings.isTestMode()) {
 
@@ -109,6 +107,8 @@ public final class Statistics {
 
                 try {
                     final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    
+                    con.connect(); // Added for 3.2.0 !
 
                     final int responseCode = con.getResponseCode();
                     final String responseMessage = con.getResponseMessage();
@@ -123,14 +123,14 @@ public final class Statistics {
                         //LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
                     }
 
-                } catch (IOException ex) {
+                } catch (final IOException ex) {
                     LOGGER.debug(ex);
                 }
             });
         }
     }
 
-    private static URL createRequestURL(Collection<Param> params) {
+    private static URL createRequestURL(final Collection<Param> params) {
         requireNonNull(params);
         try {
             return new URL(PING_URL + "?"
@@ -138,16 +138,18 @@ public final class Statistics {
                 .map(Param::encode)
                 .collect(joining("&"))
             );
-        } catch (MalformedURLException ex) {
+        } catch (final MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
         }
     }
 
     private final static class Param {
 
+        private static final String ENCODING = "UTF-8";
+        
         private final String key, value;
 
-        public Param(String key, String value) {
+        public Param(final String key, final String value) {
             this.key = requireNonNull(key);
             this.value = requireNonNull(value);
         }

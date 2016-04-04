@@ -19,7 +19,7 @@ package com.speedment.internal.codegen.model;
 import com.speedment.codegen.model.Generic;
 import com.speedment.codegen.model.Type;
 import com.speedment.internal.codegen.util.Copier;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.List;
@@ -74,7 +74,7 @@ public final class GenericImpl implements Generic {
      * @param upperBounds  the upper bounds
      */
 	public GenericImpl(Type... upperBounds) {
-		this (null, requireNonNulls(upperBounds));
+		this (null, requireNonNullElements(upperBounds));
 	}
 	
     /**
@@ -87,7 +87,7 @@ public final class GenericImpl implements Generic {
      * @param upperBounds  the upper bounds
      */
 	public GenericImpl(String lowerBound, Type... upperBounds) {
-        requireNonNulls(upperBounds);
+        requireNonNullElements(upperBounds);
         // lowerBound nullable
 		this.lowerBound  = lowerBound;
 		this.upperBounds = asList(upperBounds);

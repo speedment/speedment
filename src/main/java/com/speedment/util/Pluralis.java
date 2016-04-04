@@ -16,6 +16,7 @@
  */
 package com.speedment.util;
 
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,7 +150,7 @@ public enum Pluralis {
     }
 
     protected void addUncountable(String... words) {
-        requireNonNulls(words);
+        requireNonNullElements(words);
         Arrays.asList(words).stream().map(normalizeMapper()).forEach(uncountables::add);
     }
 

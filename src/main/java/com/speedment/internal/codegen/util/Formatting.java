@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.util;
 
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
@@ -40,7 +40,7 @@ public final class Formatting {
      * @return The concatenated string.
      */
     public static String separate(String separator, String... blocks) {
-        requireNonNulls(blocks);
+        requireNonNullElements(blocks);
         return Stream.of(blocks)
             .collect(joining(separator));
     }
@@ -121,7 +121,7 @@ public final class Formatting {
      */
     public static String block(String row, String... rows) {
         requireNonNull(row);
-        requireNonNulls(rows);
+        requireNonNullElements(rows);
         return block(
 			Arrays.stream(rows).collect(joining(
 				nl(), row + nl(), EMPTY)

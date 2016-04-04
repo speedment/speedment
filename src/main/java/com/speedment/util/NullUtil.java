@@ -40,7 +40,7 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the array or if the
      * array itself is null
      */
-    public static <T> T[] requireNonNulls(T[] array) {
+    public static <T> T[] requireNonNullElements(T[] array) {
         requireNonNull(array, "The provided array is null.");
         int len = array.length;
         for (int i = 0; i < len; i++) {
@@ -62,7 +62,7 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the collection or if
      * the array itself is null
      */
-    public static <E, T extends Collection<E>> T requireNonNulls(T collection) {
+    public static <E, T extends Collection<E>> T requireNonNullElements(T collection) {
         requireNonNull(collection, "The provided collection is null.");
         int i = 0;
         for (E item : collection) {
@@ -85,7 +85,7 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the array or if the
      * array itself is null
      */
-    public static <T> T[] requireNonNulls(T[] array, String msg) {
+    public static <T> T[] requireNonNullElements(T[] array, String msg) {
         requireNonNull(array, msg);
         int len = array.length;
         for (int i = 0; i < len; i++) {
@@ -94,6 +94,12 @@ public class NullUtil {
             }
         }
         return array;
+    }
+
+    public static void requireNonNulls(Object o0) {
+        if (o0 == null) {
+            throwNpeFor(1, 0);
+        }
     }
 
     public static void requireNonNulls(Object o0, Object o1) {
@@ -263,7 +269,7 @@ public class NullUtil {
         if (count == 1) {
             throw new NullPointerException("The argument was null.");
         } else {
-            throw new NullPointerException("The " + Pluralis.INSTANCE.ordinalize(i + 1) + " of the " + count + " arguments was null.");
+            throw new NullPointerException("The " + Pluralis.INSTANCE.ordinalize(i + 1) + " (index=" + i + ") of the " + count + " arguments was null.");
         }
     }
 

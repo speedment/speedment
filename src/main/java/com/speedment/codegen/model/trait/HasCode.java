@@ -18,7 +18,7 @@ package com.speedment.codegen.model.trait;
 
 import com.speedment.annotation.Api;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +55,7 @@ public interface HasCode<T extends HasCode<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(String... rows) {
-        requireNonNulls(rows);
+        requireNonNullElements(rows);
         for (final String row : rows) {
             Collections.addAll(getCode(), row.split(nl()));
         }

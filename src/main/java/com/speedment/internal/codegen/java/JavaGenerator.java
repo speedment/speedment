@@ -19,7 +19,7 @@ package com.speedment.internal.codegen.java;
 import com.speedment.codegen.TransformFactory;
 import com.speedment.internal.codegen.DefaultDependencyManager;
 import com.speedment.internal.codegen.DefaultGenerator;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -67,7 +67,7 @@ public class JavaGenerator extends DefaultGenerator {
      * @param factories  an array of the factories to use
      */
 	public JavaGenerator(TransformFactory... factories) {
-		super(new DefaultDependencyManager(IGNORED), requireNonNulls(factories));
+		super(new DefaultDependencyManager(IGNORED), requireNonNullElements(factories));
 	}
 
     private static Pattern[] compileAll(String... regexp) {

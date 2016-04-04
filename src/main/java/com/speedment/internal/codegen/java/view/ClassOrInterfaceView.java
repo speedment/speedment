@@ -30,7 +30,7 @@ import com.speedment.internal.codegen.java.view.trait.HasMethodsView;
 import com.speedment.internal.codegen.java.view.trait.HasModifiersView;
 import com.speedment.internal.codegen.java.view.trait.HasNameView;
 import static com.speedment.internal.codegen.util.Formatting.*;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
@@ -152,7 +152,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements
      * @return         the combined string
      */
 	private String separate(Object... strings) {
-        requireNonNulls(strings);
+        requireNonNullElements(strings);
 		return Stream.of(strings)
 			.map(Object::toString)
 			.filter(s -> s.length() > 0)

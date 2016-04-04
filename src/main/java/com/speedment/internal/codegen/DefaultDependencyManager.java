@@ -17,7 +17,7 @@
 package com.speedment.internal.codegen;
 
 import com.speedment.codegen.DependencyManager;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Collections;
 import static java.util.Collections.emptySet;
 import java.util.HashSet;
@@ -53,7 +53,7 @@ public class DefaultDependencyManager implements DependencyManager {
      * @param ignoredPatterns to add to the ignore list
      */
     public DefaultDependencyManager(Pattern... ignoredPatterns) {
-        ignorePatterns = Stream.of(requireNonNulls(ignoredPatterns))
+        ignorePatterns = Stream.of(requireNonNullElements(ignoredPatterns))
             .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 

@@ -22,7 +22,7 @@ import com.speedment.codegen.Meta;
 import com.speedment.codegen.RenderStack;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.TransformFactory;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Arrays;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -49,7 +49,7 @@ public class DefaultGenerator implements Generator {
 	 * @param factories  the factories to use
 	 */
 	public DefaultGenerator(TransformFactory... factories) {
-		this(new DefaultDependencyManager(), requireNonNulls(factories));
+		this(new DefaultDependencyManager(), requireNonNullElements(factories));
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class DefaultGenerator implements Generator {
 	 * @param factories  the factories to use 
 	 */
 	public DefaultGenerator(DependencyManager mgr, TransformFactory... factories) {
-		this.factories = Arrays.asList(requireNonNulls(factories));
+		this.factories = Arrays.asList(requireNonNullElements(factories));
 		this.mgr = requireNonNull(mgr);
 		this.renderStack = new DefaultRenderStack();
 	}

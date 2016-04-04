@@ -24,7 +24,7 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.manager.Manager;
 import com.speedment.util.JavaLanguageNamer;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -228,7 +228,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
     public static <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, FieldTrait... fields) {
         requireNonNull(manager);
-        requireNonNulls(fields);
+        requireNonNullElements(fields);
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
 
         final Set<String> fieldNames = Stream.of(fields)

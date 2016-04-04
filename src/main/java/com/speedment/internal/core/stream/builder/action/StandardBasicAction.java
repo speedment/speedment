@@ -26,7 +26,7 @@ import static com.speedment.stream.action.Property.TYPE;
 import com.speedment.stream.action.Statement;
 import static com.speedment.stream.action.Verb.PRESERVE;
 import static com.speedment.stream.action.Verb.SET;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.stream.Stream;
 
 
@@ -106,7 +106,7 @@ public enum StandardBasicAction implements BasicAction {
     private final Statement[] statements;
 
     private StandardBasicAction(Statement... statements) {
-        this.statements = requireNonNulls(statements);
+        this.statements = requireNonNullElements(statements);
     }
 
     @Override
