@@ -18,7 +18,6 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
-import com.speedment.component.Component;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
@@ -58,6 +57,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     
     private final ObservableList<PropertySheet.Item> properties;
     private final ObservableList<Node> outputMessages;
+    private final ObservableList<Notification> notifications;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     private final List<String> stylesheets;
@@ -68,6 +68,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         super(speedment);
         properties          = observableArrayList();
         outputMessages      = observableArrayList();
+        notifications       = observableArrayList();
         selectedTreeItems   = observableArrayList();
         contextMenuBuilders = new ConcurrentHashMap<>();
         stylesheets         = new CopyOnWriteArrayList<>(DEFAULT_STYLESHEETS);
@@ -119,6 +120,11 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
                 "The UI isn't running so no session was found."
             );
         } else return session;
+    }
+
+    @Override
+    public ObservableList<Notification> getNotifications() {
+        return notifications;
     }
     
     @Override

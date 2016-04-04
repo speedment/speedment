@@ -16,9 +16,14 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.component.UserInterfaceComponent.Notification;
+import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.LayoutAnimator;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
@@ -31,11 +36,13 @@ import javafx.scene.layout.FlowPane;
  */
 public class NotificationAreaController implements Initializable {
     
+    private final UISession session;
     private final LayoutAnimator animator;
     private @FXML FlowPane notificationArea;
     
-    public NotificationAreaController() {
-        animator = new LayoutAnimator();
+    public NotificationAreaController(UISession session) {
+        this.session  = requireNonNull(session);
+        this.animator = new LayoutAnimator();
     }
 
     /**
@@ -44,5 +51,31 @@ public class NotificationAreaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         animator.observe(notificationArea.getChildren());
+        
+        final ObservableList<Notification> notifications = session.getSpeedment()
+                .getUserInterfaceComponent()
+                .getNotifications();
+        
+        notifications.addListener((ListChangeListener.Change<? extends Notification> change) -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    change.getAddedSubList().forEach(n -> {
+                        NotificationController.showNotification(
+                            session, n.text(), n.icon(), n.color(), n.onClose()
+                        );
+                        
+                        notifications.remove(n);
+                    });
+                }
+            }
+        });
+        
+        while (!notifications.isEmpty()) {
+            final Notification n = notifications.get(0);
+            NotificationController.showNotification(
+                session, n.text(), n.icon(), n.color(), n.onClose()
+            );
+            notifications.remove(0);
+        }
     }
 }

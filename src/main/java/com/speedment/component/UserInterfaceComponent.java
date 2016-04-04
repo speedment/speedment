@@ -23,6 +23,7 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 
@@ -99,6 +101,8 @@ public interface UserInterfaceComponent extends Component {
      * @return  the currently visible output messages
      */
     ObservableList<Node> getOutputMessages();
+    
+    
     
     /**
      * Returns a stream of all the css-file that should be used to style the UI.
@@ -167,6 +171,24 @@ public interface UserInterfaceComponent extends Component {
      * @return  the brand
      */
     Brand getBrand();
+    
+    /**
+     * Container for the fields required to show a notification in the UI.
+     */
+    interface Notification {
+        FontAwesomeIcon icon();
+        String text();
+        Color color();
+        Runnable onClose();
+    }
+    
+    /**
+     * Returns an observable list of the notifications that has yet to be shown 
+     * in the UI.
+     * 
+     * @return  the observable list of notifications
+     */
+    ObservableList<Notification> getNotifications();
     
     /**
      * Installs a new context menu builder that will be used in the 

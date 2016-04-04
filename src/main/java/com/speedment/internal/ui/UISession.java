@@ -26,6 +26,7 @@ import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.code.TranslatorManager;
 import com.speedment.component.UserInterfaceComponent.Brand;
+import com.speedment.component.UserInterfaceComponent.Notification;
 import com.speedment.internal.ui.config.ProjectProperty; // Exposes internal -> To if and expose all *Property and Mutators
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -86,6 +87,7 @@ import static com.speedment.internal.util.TextUtil.alignRight;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ExecutionException;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
@@ -126,6 +128,7 @@ public final class UISession {
     private final String defaultConfigLocation;
     private final ProjectProperty project;
     private final PropertySheetFactory propertySheetFactory;
+    private final ObservableList<Notification> notifications;
 
     private File currentlyOpenFile = null;
 
@@ -135,12 +138,14 @@ public final class UISession {
 
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
 
-        this.speedment = requireNonNull(speedment);
-        this.application = requireNonNull(application);
-        this.stage = requireNonNull(stage);
+        this.speedment             = requireNonNull(speedment);
+        this.application           = requireNonNull(application);
+        this.stage                 = requireNonNull(stage);
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
+        this.notifications =
+            speedment.getUserInterfaceComponent().getNotifications();
         
         speedment.getUserInterfaceComponent().setUISession(this);
 
@@ -597,28 +602,63 @@ public final class UISession {
         }
     }
     
+    private final static class NotificationImpl implements Notification {
+        
+        private final String message;
+        private final FontAwesomeIcon icon;
+        private final Color color;
+        private final Runnable onClose;
+
+        public NotificationImpl(String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+            this.message = requireNonNull(message);
+            this.icon    = requireNonNull(icon);
+            this.color   = requireNonNull(color);
+            this.onClose = requireNonNull(onClose);
+        }
+        
+        @Override
+        public String text() {
+            return message;
+        }
+
+        @Override
+        public FontAwesomeIcon icon() {
+            return icon;
+        }
+        
+        @Override
+        public Color color() {
+            return color;
+        }
+
+        @Override
+        public Runnable onClose() {
+            return onClose;
+        }
+    }
+    
     public void showNotification(String message) {
-        NotificationController.showNotification(this, message);
+        showNotification(message, FontAwesomeIcon.EXCLAMATION);
     }
     
     public void showNotification(String message, FontAwesomeIcon icon) {
-        NotificationController.showNotification(this, message, icon);
+        showNotification(message, icon, NotificationController.BLUE);
     }
     
     public void showNotification(String message, Runnable action) {
-        NotificationController.showNotification(this, message, action);
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, NotificationController.BLUE, action);
     }
     
     public void showNotification(String message, Color color) {
-        NotificationController.showNotification(this, message, color);
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, color);
     }
     
     public void showNotification(String message, FontAwesomeIcon icon, Color color) {
-        NotificationController.showNotification(this, message, icon, color, () -> {});
+        showNotification(message, icon, color, () -> {});
     }
     
     public void showNotification(String message, FontAwesomeIcon icon, Color color, Runnable action) {
-        NotificationController.showNotification(this, message, icon, color, action);
+        notifications.add(new NotificationImpl(message, icon, color, action));
     }
 
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {

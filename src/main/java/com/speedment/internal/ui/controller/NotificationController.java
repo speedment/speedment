@@ -103,31 +103,17 @@ public final class NotificationController implements Initializable {
             seq.play();
         }
     }
-    
-    public static void showNotification(UISession session, String message) {
-        showNotification(session, message, DEFAULT_ICON);
-    }
-    
-    public static void showNotification(UISession session, String message, Color color) {
-        showNotification(session, message, DEFAULT_ICON, color, () -> {});
-    }
-    
-    public static void showNotification(UISession session, String message, FontAwesomeIcon icon) {
-        showNotification(session, message, icon, DEFAULT_COLOR, () -> {});
-    }
-    
-    public static void showNotification(UISession session, String message, Runnable onClose) {
-        showNotification(session, message, DEFAULT_ICON, DEFAULT_COLOR, onClose);
-    }
-    
-    public static void showNotification(UISession session, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+
+    static void showNotification(UISession session, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
         final FlowPane area = (FlowPane) session.getStage().getScene().lookup(NOTIFICATION_AREA_ID);
         
         if (area == null) {
-            throw new SpeedmentException(
+            session.showError(
+                "Error Creating Notification",
                 "Could not find the '" + NOTIFICATION_AREA_ID + 
                 "' node in the JavaFX scene."
             );
+            return;
         }
         
         final FXMLLoader loader = new FXMLLoader(NotificationController.class.getResource(NOTIFICATION_FXML));

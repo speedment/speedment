@@ -54,9 +54,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -300,8 +297,8 @@ public final class ComponentsController implements Initializable {
     public static void createAndShow(UISession session) {
         final Stage dialog = new Stage();
 
-        final Parent root = Loader.create(session, "Components", ComponentsController::new, control -> {
-            control.dialog = dialog;
+        final Parent root = Loader.create(session, "Components", control -> {
+            ((ComponentsController) control).dialog = dialog;
         });
         
         final UserInterfaceComponent.Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();

@@ -20,7 +20,6 @@ import com.speedment.component.UserInterfaceComponent.Brand;
 import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
 import java.io.IOException;
-import java.util.function.Function;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -29,6 +28,9 @@ import java.util.function.Consumer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -40,19 +42,38 @@ public final class Loader {
         FILENAME_PREFIX = "/fxml/",
         FILENAME_SUFFIX = ".fxml";
     
-    public static <T extends Initializable> Parent create(UISession session, String filename, Function<UISession, T> constructor) {
-        return create(session, filename, constructor, e -> {});
+    public static <T extends Initializable> Parent create(UISession session, String filename) {
+        return create(session, filename, e -> {});
 	}
     
-    public static <T extends Initializable> Parent create(UISession session, String filename, Function<UISession, T> constructor, Consumer<T> consumer) {
-        requireNonNulls(session, filename, constructor, consumer);
+    public static <T extends Initializable> Parent create(UISession session, String filename, Consumer<T> consumer) {
+        requireNonNulls(session, filename, consumer);
 		final FXMLLoader loader = new FXMLLoader(Loader.class.getResource(FILENAME_PREFIX + filename + FILENAME_SUFFIX));
-		final T control = constructor.apply(session);
-        loader.setController(control);
+        final AtomicReference<Object> constructed = new AtomicReference<>();
+        loader.setControllerFactory(clazz -> {
+            try {
+                final Constructor constructor = clazz.getConstructor(UISession.class);
+                constructor.setAccessible(true);
+                
+                final Object obj = constructor.newInstance(session);
+                constructed.set(obj);
+                return obj;
+            } catch (final IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+                session.showError(
+                    "Error Constructing JavaFX Controller", 
+                    "Could not construct a controller '" + clazz.getName() + 
+                    "' for file '" + filename + "' using reflection.", ex
+                );
+                return null;
+            }
+        });
 
         try {
             final Parent loaded = loader.load();
-            consumer.accept(control);
+            
+            @SuppressWarnings("unchecked")
+            final T casted = (T) constructed.get();
+            consumer.accept(casted);
             return loaded;
         } catch (final IOException ex) {
             throw new SpeedmentException("Failed to load FXML file '" + filename + "'.", ex);
@@ -60,15 +81,15 @@ public final class Loader {
 	}
     
     public static <T extends Initializable> Parent createAndShow(
-        UISession session, String filename, Function<UISession, T> constructor) {
+        UISession session, String filename) {
         
-        return createAndShow(session, filename, constructor, e -> {});
+        return createAndShow(session, filename, e -> {});
     }
     
     public static <T extends Initializable> Parent createAndShow(
-        UISession session, String filename, Function<UISession, T> constructor, Consumer<T> consumer) {
+        UISession session, String filename, Consumer<T> consumer) {
         
-        final Parent root = Loader.create(session, filename, constructor, consumer);
+        final Parent root = Loader.create(session, filename, consumer);
         final Scene scene = new Scene(root);
         
         final Stage stage = session.getStage();

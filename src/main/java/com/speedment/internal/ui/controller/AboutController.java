@@ -42,12 +42,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -104,8 +98,8 @@ public final class AboutController implements Initializable {
     public static void createAndShow(UISession session) {
         final Stage dialog = new Stage();
         
-        final Parent root = Loader.create(session, "About", AboutController::new, control -> {
-            control.dialog = dialog;
+        final Parent root = Loader.create(session, "About", control -> {
+            ((AboutController) control).dialog = dialog;
         });
         
         final Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
