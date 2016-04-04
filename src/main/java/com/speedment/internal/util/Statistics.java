@@ -55,7 +55,6 @@ public final class Statistics {
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
 
     public static void onGuiStarted() {
-
         notifyEvent("gui-started", includeMail());
         AnalyticsUtil.notify(GUI_STARTED);
     }
@@ -100,7 +99,7 @@ public final class Statistics {
     private static void sendPostRequest(final Collection<Param> params) {
         requireNonNullElements(params);
 
-        if (!TestSettings.isTestMode()) {
+        if (!TestSettings.isTestMode()) { // Wolkswagen Pattern
 
             CompletableFuture.runAsync(() -> {
                 final URL url = createRequestURL(params);
@@ -108,19 +107,16 @@ public final class Statistics {
                 try {
                     final HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     
-                    con.connect(); // Added for 3.2.0 !
-
-                    final int responseCode = con.getResponseCode();
-                    final String responseMessage = con.getResponseMessage();
+                    con.connect();
+                    con.getResponseCode(); // Might have side effects...
+                    con.getResponseMessage(); 
+                    
                     try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                         final StringBuilder response = new StringBuilder();
                         String inputLine;
                         while ((inputLine = in.readLine()) != null) {
                             response.append(inputLine);
                         }
-
-                        // Do not show...
-                        //LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
                     }
 
                 } catch (final IOException ex) {
