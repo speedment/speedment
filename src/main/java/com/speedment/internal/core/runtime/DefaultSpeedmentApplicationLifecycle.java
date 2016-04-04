@@ -30,6 +30,7 @@ public final class DefaultSpeedmentApplicationLifecycle extends
     SpeedmentApplicationLifecycle<DefaultSpeedmentApplicationLifecycle> {
 
     private final ApplicationMetadata metadata; // Can be null.
+    private boolean validateRuntimeConfig, printWelcomeMessage;
 
     public DefaultSpeedmentApplicationLifecycle() {
         this((File) null);
@@ -57,6 +58,8 @@ public final class DefaultSpeedmentApplicationLifecycle extends
         } else {
             metadata = null;
         }
+        this.validateRuntimeConfig = true;
+        this.printWelcomeMessage = true;
     }
 
     @Override
@@ -73,4 +76,29 @@ public final class DefaultSpeedmentApplicationLifecycle extends
     protected ApplicationMetadata getSpeedmentApplicationMetadata() {
         return metadata;
     }
+
+    public DefaultSpeedmentApplicationLifecycle withValidateRuntimeConfig(boolean validateRuntimeConfig) {
+        this.validateRuntimeConfig = validateRuntimeConfig;
+        return this;
+    }
+
+    public DefaultSpeedmentApplicationLifecycle withPrintWelcomeMessage(boolean printWelcomeMessage) {
+        this.printWelcomeMessage = printWelcomeMessage;
+        return this;
+    }
+
+    @Override
+    protected void validateRuntimeConfig() {
+        if (validateRuntimeConfig) {
+            super.validateRuntimeConfig();
+        }
+    }
+
+    @Override
+    protected void printWelcomeMessage() {
+        if (printWelcomeMessage) {
+            super.printWelcomeMessage();
+        }
+    }
+
 }

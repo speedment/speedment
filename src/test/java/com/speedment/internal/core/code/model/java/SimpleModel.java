@@ -44,10 +44,10 @@ import org.junit.Before;
  * @author pemi
  */
 public abstract class SimpleModel {
-
+    
     protected static final String TABLE_NAME = "user";
     protected static final String COLUMN_NAME = "first_name";
-
+    
     protected Speedment speedment;
     protected Project project;
     protected Dbms dbms;
@@ -55,81 +55,82 @@ public abstract class SimpleModel {
     protected Table table;
     protected Column column;
     protected PrimaryKeyColumn pkColumn;
-
+    
     private String quote(String s) {
         return "\"" + s + "\"";
     }
-
+    
     private String name(String s) {
         return quote(HasName.NAME) + " : " + quote(s);
     }
-
+    
     private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
         return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
     }
-
+    
     private String dbTypeName(String dbmsTypeName) {
         return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
     }
-
+    
     private String columnDatabaseType(String typeName) {
         return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
     }
-
+    
     private String array(String name, String... s) {
         return quote(name) + " : [\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n]";
     }
-
+    
     private String objectWithKey(String name, String... s) {
         return quote(name) + " : " + object(s);
     }
-
+    
     private String object(String... s) {
         return "{\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n}";
     }
-
+    
     @Before
     public void simpleModelTestSetUp() {
-
+        
         final String json = "{"
-                + objectWithKey(DocumentTranscoder.ROOT,
-                        name("myProject"),
-                        array(Project.DBMSES,
-                                object(
-                                        name("myDbms"),
-                                        dbTypeName(StandardDbmsType.defaultType().getName()),
-                                        array(Dbms.SCHEMAS,
-                                                object(
-                                                        name("mySchema"),
-                                                        array(Schema.TABLES,
-                                                                object(
-                                                                        name(TABLE_NAME),
-                                                                        array(Table.COLUMNS,
-                                                                                object(
-                                                                                        name(COLUMN_NAME),
-                                                                                        typeMapper(StringIdentityMapper.class),
-                                                                                        columnDatabaseType(String.class.getName())
-                                                                                )
-                                                                        ),
-                                                                        array(Table.PRIMARY_KEY_COLUMNS,
-                                                                                object(
-                                                                                        name(COLUMN_NAME)
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                )
+            + objectWithKey(DocumentTranscoder.ROOT,
+                name("myProject"),
+                array(Project.DBMSES,
+                    object(
+                        name("myDbms"),
+                        dbTypeName(StandardDbmsType.defaultType().getName()),
+                        array(Dbms.SCHEMAS,
+                            object(
+                                name("mySchema"),
+                                array(Schema.TABLES,
+                                    object(
+                                        name(TABLE_NAME),
+                                        array(Table.COLUMNS,
+                                            object(
+                                                name(COLUMN_NAME),
+                                                typeMapper(StringIdentityMapper.class),
+                                                columnDatabaseType(String.class.getName())
+                                            )
+                                        ),
+                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                            object(
+                                                name(COLUMN_NAME)
+                                            )
                                         )
+                                    )
                                 )
+                            )
                         )
+                    )
                 )
-                + "}";
+            )
+            + "}";
 
         //System.out.println(json);
         speedment = new DefaultSpeedmentApplicationLifecycle(json)
-                .withCheckDatabaseConnectivity(false)
-                .build();
-
+            .withCheckDatabaseConnectivity(false)
+            .withValidateRuntimeConfig(false)
+            .build();
+        
         project = speedment.getProjectComponent().getProject();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
@@ -138,7 +139,6 @@ public abstract class SimpleModel {
         pkColumn = table.primaryKeyColumns().findAny().get();
 
         //System.out.println(project);
-
 //        project = new ProjectImpl(speedment);
 //        dbms = project.addNewDbms();
 //        schema = dbms.addNewSchema();

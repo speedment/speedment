@@ -43,6 +43,7 @@ import com.speedment.internal.util.Statistics;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.internal.util.testing.TestSettings;
 import com.speedment.manager.Manager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.tuple.Tuple2;
@@ -446,10 +447,22 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         final String msg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
             + " API version is " + getSpecificationVersion();
 
+        printWelcomeMessage();
+    }
+
+    protected void printWelcomeMessage() {
+        final String title = speedment.getUserInterfaceComponent().getBrand().title();
+        final String subTitle = speedment.getUserInterfaceComponent().getBrand().subtitle();
+        final String version = speedment.getUserInterfaceComponent().getBrand().version();
+
+        final String msg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
+            + " API version is " + getSpecificationVersion();
+
         LOGGER.info(msg);
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
         }
+
     }
 
     @Override
@@ -468,7 +481,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         if (meta != null) {
             project = DocumentTranscoder.load(meta.getMetadata());
         } else {
-            LOGGER.warn("Creating empty project since no metadata is present.");
+            //LOGGER.warn("Creating empty project since no metadata is present.");
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasName.NAME, "Project");
             project = new ProjectImpl(data);
@@ -604,7 +617,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 // Make sure the driver is loaded. This is a must for some JavaEE servers.
                 Class.forName(driverName);
             } catch (ClassNotFoundException cnfe) {
-                LOGGER.error("The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
+                LOGGER.error(cnfe, "The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
             }
         });
 

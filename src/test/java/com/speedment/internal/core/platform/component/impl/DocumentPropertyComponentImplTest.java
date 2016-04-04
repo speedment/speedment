@@ -52,33 +52,37 @@ import org.junit.Test;
  * @author Emil Forslund
  */
 public class DocumentPropertyComponentImplTest {
-    
+
     private Speedment speedment;
     private DocumentPropertyComponent component;
-    
+
     @Before
     public void setUp() {
-        speedment = new DefaultSpeedmentApplicationLifecycle().build();
+        speedment = new DefaultSpeedmentApplicationLifecycle()
+            .withCheckDatabaseConnectivity(false)
+            .withValidateRuntimeConfig(false)
+            .withPrintWelcomeMessage(false)
+            .build();
         component = speedment.getDocumentPropertyComponent();
     }
-    
+
     @Test
     public void testStructure() {
         final Field root;
         try {
             root = DocumentPropertyComponentImpl.class.getDeclaredField("root");
             root.setAccessible(true);
-            
+
             final Method toString = root.getType().getMethod("toString");
-            final Object rootObj  = root.get(component);
-            
+            final Object rootObj = root.get(component);
+
             if (rootObj == null) {
                 throw new NullPointerException("Root is null.");
             }
-            
+
             final Object o = toString.invoke(rootObj);
             //System.out.println(o);
-            
+
         } catch (final NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new SpeedmentException("Could not call toString on component", ex);
         }
@@ -97,7 +101,7 @@ public class DocumentPropertyComponentImplTest {
         final DocumentProperty foreignKey = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEYS).create(table);
         final DocumentProperty foreignKeyColumn = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS).create(foreignKey);
         final DocumentProperty primaryKey = component.getConstructor(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS).create(table);
-        
+
         assertEquals("Make sure ProjectProperty is used by default: ", ProjectProperty.class, project.getClass());
         assertEquals("Make sure DbmsProperty is used by default: ", DbmsProperty.class, dbms.getClass());
         assertEquals("Make sure SchemaProperty is used by default: ", SchemaProperty.class, schema.getClass());
@@ -109,24 +113,24 @@ public class DocumentPropertyComponentImplTest {
         assertEquals("Make sure ForeignKeyColumnProperty is used by default: ", ForeignKeyColumnProperty.class, foreignKeyColumn.getClass());
         assertEquals("Make sure PrimaryKeyColumnProperty is used by default: ", PrimaryKeyColumnProperty.class, primaryKey.getClass());
     }
-    
+
     @Test
     public void testAlternateInstallments() {
         component.setConstructor(parent -> new AlternativeDbms((Project) parent), DocumentPropertyComponent.DBMSES);
-        
+
         final DocumentProperty project = component.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
         final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
-        
+
         assertEquals(ProjectProperty.class, project.getClass());
         assertEquals(AlternativeDbms.class, dbms.getClass());
     }
-    
+
     private final static class AlternativeDbms extends AbstractChildDocumentProperty<Project, AlternativeDbms> implements Dbms {
 
         public AlternativeDbms(Project parent) {
             super(parent);
         }
-        
+
         @Override
         protected List<String> keyPathEndingWith(String key) {
             return ImmutableListUtil.concat(DocumentPropertyComponent.DBMSES, key);

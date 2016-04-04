@@ -283,7 +283,7 @@ public final class UISession {
             saveConfigFile(currentlyOpenFile);
 
             final Stopwatch stopwatch = Stopwatch.createStarted();
-            log(info("Generating classes " + project.getPackageName() + "." + project.getName() + ".*"));
+            log(info("Generating classes " + project.findPackageName(speedment.getCodeGenerationComponent().javaLanguageNamer()) + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
 
             final TranslatorManager instance = speedment.getCodeGenerationComponent().getTranslatorManager();

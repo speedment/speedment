@@ -74,7 +74,12 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle().build();
+        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
+            .withCheckDatabaseConnectivity(false)
+            .withValidateRuntimeConfig(false)
+            .withPrintWelcomeMessage(false)
+            .withPrintWelcomeMessage(false)
+            .build();
         instance = new ConnectionPoolComponentImpl(speedment) {
 
             @Override
@@ -91,6 +96,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of getConnection method, of class ConnectionPoolComponentImpl.
+     *
      * @throws java.lang.Exception
      */
     @Test
@@ -104,6 +110,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of returnConnection method, of class ConnectionPoolComponentImpl.
+     *
      * @throws java.lang.Exception
      */
     @Test
@@ -117,6 +124,7 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of newConnection method, of class ConnectionPoolComponentImpl.
+     *
      * @throws java.lang.Exception
      */
     @Test
