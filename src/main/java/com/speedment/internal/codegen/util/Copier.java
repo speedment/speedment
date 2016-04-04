@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.codegen.util;
 
+import com.speedment.codegen.model.trait.HasCopy;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,10 +26,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import static java.util.Objects.requireNonNull;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

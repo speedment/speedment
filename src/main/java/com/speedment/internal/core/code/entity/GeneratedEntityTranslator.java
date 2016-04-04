@@ -18,9 +18,7 @@ package com.speedment.internal.core.code.entity;
 
 import com.speedment.Entity;
 import com.speedment.Speedment;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Table;
-import com.speedment.field.FieldIdentifier;
+import com.speedment.code.TranslatorSupport;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Constructor;
 import com.speedment.codegen.model.Enum;
@@ -33,6 +31,9 @@ import com.speedment.codegen.model.Interface;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
+import com.speedment.field.FieldIdentifier;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.RETURN;
@@ -44,15 +45,14 @@ import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
-import com.speedment.code.TranslatorSupport;
 import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

@@ -23,7 +23,6 @@ package com.speedment.internal.codegen.model;
 
 import com.speedment.codegen.model.Value;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The default implementation of the {@link Value} interface.

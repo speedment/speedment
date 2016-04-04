@@ -18,8 +18,8 @@ package com.speedment.config;
 
 import com.google.gson.reflect.TypeToken;
 import com.speedment.annotation.Api;
-import com.speedment.util.OptionalBoolean;
 import com.speedment.stream.MapStream;
+import com.speedment.util.OptionalBoolean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

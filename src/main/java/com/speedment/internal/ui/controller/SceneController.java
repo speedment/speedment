@@ -18,10 +18,12 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.component.brand.Brand;
 import com.speedment.event.UIEvent;
-import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.util.Loader;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -31,8 +33,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Platform.runLater;
 
 /**
  *

@@ -18,17 +18,17 @@ package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
 import com.speedment.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.codegen.model.trait.HasCall;
 import com.speedment.codegen.model.trait.HasClasses;
-import com.speedment.codegen.model.trait.HasJavadoc;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasFields;
 import com.speedment.codegen.model.trait.HasGenerics;
-import com.speedment.codegen.model.trait.HasInitalizers;
 import com.speedment.codegen.model.trait.HasImplements;
+import com.speedment.codegen.model.trait.HasInitalizers;
+import com.speedment.codegen.model.trait.HasJavadoc;
 import com.speedment.codegen.model.trait.HasMethods;
 import com.speedment.codegen.model.trait.HasModifiers;
 import com.speedment.codegen.model.trait.HasName;
-import com.speedment.codegen.model.trait.HasCall;
-import com.speedment.codegen.model.trait.HasCopy;
 
 /**
  * An abstract base class to share functionality between the models 

@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.manager.Manager;
 import com.speedment.db.SqlFunction;
+import com.speedment.manager.Manager;
 import java.sql.ResultSet;
 
 /**

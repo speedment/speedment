@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.doubles;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.FILTER;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;

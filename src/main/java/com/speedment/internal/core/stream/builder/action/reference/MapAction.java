@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.reference;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.MAP;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.stream.Stream;

@@ -16,12 +16,12 @@
  */
 package com.speedment.event;
 
-import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
+import com.speedment.code.TranslatorManager;
+import com.speedment.codegen.Generator;
 import com.speedment.config.db.Project;
 import com.speedment.event.trait.GeneratorEvent;
-import com.speedment.codegen.Generator;
-import com.speedment.code.TranslatorManager;
+import com.speedment.event.trait.ProjectEvent;
 import static java.util.Objects.requireNonNull;
 
 /**

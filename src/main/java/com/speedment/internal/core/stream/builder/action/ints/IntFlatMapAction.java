@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.ints;
 
-import com.speedment.stream.action.Action;
 import com.speedment.internal.core.stream.builder.action.StandardBasicAction;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;

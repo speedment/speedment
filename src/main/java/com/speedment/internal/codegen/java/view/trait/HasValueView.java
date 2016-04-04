@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.codegen.java.view.trait;
 
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.Transform;
+import com.speedment.codegen.model.trait.HasValue;
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.internal.codegen.util.Formatting.EQUALS;
 import static com.speedment.internal.codegen.util.Formatting.SPACE;
 import static com.speedment.internal.codegen.util.Formatting.ifelse;
-import com.speedment.codegen.Generator;
-import com.speedment.codegen.Transform;
-import com.speedment.codegen.model.trait.HasValue;
 
 /**
  * A trait with the functionality to render models with the trait 

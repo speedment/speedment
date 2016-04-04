@@ -19,9 +19,9 @@ package com.speedment.config.db.mutator;
 import com.speedment.config.db.Index;
 import static com.speedment.config.db.Index.*;
 import com.speedment.config.db.IndexColumn;
-import com.speedment.internal.core.config.db.IndexColumnImpl;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.internal.core.config.db.IndexColumnImpl;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

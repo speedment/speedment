@@ -16,25 +16,25 @@
  */
 package com.speedment.internal.core.code;
 
-import com.speedment.code.TranslatorManager;
-import com.speedment.code.Translator;
 import com.speedment.Speedment;
-import com.speedment.component.CodeGenerationComponent;
-import com.speedment.internal.codegen.util.Formatting;
+import com.speedment.code.Translator;
+import com.speedment.code.TranslatorManager;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Meta;
-import com.speedment.internal.codegen.java.JavaGenerator;
 import com.speedment.codegen.model.File;
+import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.event.AfterGenerate;
 import com.speedment.event.BeforeGenerate;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.codegen.java.JavaGenerator;
+import com.speedment.internal.codegen.util.Formatting;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-
 import com.speedment.internal.util.Statistics;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -43,12 +43,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

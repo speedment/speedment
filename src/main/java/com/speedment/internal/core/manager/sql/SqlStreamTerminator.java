@@ -16,54 +16,33 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.manager.SqlPredicateFragment;
-import com.speedment.manager.SpeedmentPredicateView;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.field.FieldIdentifier;
-import com.speedment.stream.action.Action;
-import static com.speedment.stream.action.Property.SIZE;
-import static com.speedment.stream.action.Verb.PRESERVE;
+import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.internal.core.stream.builder.pipeline.DoublePipeline;
 import com.speedment.internal.core.stream.builder.pipeline.IntPipeline;
 import com.speedment.internal.core.stream.builder.pipeline.LongPipeline;
-import com.speedment.stream.Pipeline;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
+import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
+import com.speedment.manager.SpeedmentPredicateView;
+import com.speedment.manager.SqlPredicateFragment;
+import com.speedment.stream.Pipeline;
+import com.speedment.stream.StreamDecorator;
+import com.speedment.stream.action.Action;
+import static com.speedment.stream.action.Property.SIZE;
+import static com.speedment.stream.action.Verb.PRESERVE;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.trait.FieldTrait;
-import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminatorUtil;
-import com.speedment.stream.StreamDecorator;
-import java.util.ArrayList;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *

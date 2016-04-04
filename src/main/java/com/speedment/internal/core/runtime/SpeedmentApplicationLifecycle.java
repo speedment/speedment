@@ -16,11 +16,8 @@
  */
 package com.speedment.internal.core.runtime;
 
-import com.speedment.SpeedmentVersion;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Project;
-import com.speedment.manager.Manager;
 import com.speedment.Speedment;
+import com.speedment.SpeedmentVersion;
 import static com.speedment.SpeedmentVersion.getImplementationVendor;
 import static com.speedment.SpeedmentVersion.getSpecificationVersion;
 import com.speedment.component.Component;
@@ -29,7 +26,8 @@ import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.Lifecyclable;
 import com.speedment.component.ManagerComponent;
 import com.speedment.config.Document;
-import com.speedment.internal.util.document.DocumentTranscoder;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.config.db.trait.HasEnabled;
@@ -43,6 +41,10 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import com.speedment.internal.util.document.DocumentDbUtil;
+import com.speedment.internal.util.document.DocumentTranscoder;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.manager.Manager;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuple3;
 import com.speedment.util.tuple.Tuples;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -60,9 +63,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This Class provides the foundation for a SpeedmentApplication and is needed

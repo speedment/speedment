@@ -16,13 +16,11 @@
  */
 package com.speedment.internal.codegen.controller;
 
-import com.speedment.codegen.model.trait.HasMethods;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.modifier.Keyword;
-
-import java.util.function.Consumer;
-
+import com.speedment.codegen.model.trait.HasMethods;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * This control makes sure all method parameters in the specified model is set

@@ -18,14 +18,15 @@ package com.speedment.internal.util;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.analytics.AnalyticsUtil;
 import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
 import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
-import com.speedment.internal.logging.Logger;
-import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.testing.TestSettings;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,9 +40,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CompletableFuture;
 import static java.util.stream.Collectors.joining;
 
 /**

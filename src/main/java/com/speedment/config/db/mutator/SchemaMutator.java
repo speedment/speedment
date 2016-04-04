@@ -20,10 +20,10 @@ import com.speedment.config.db.Schema;
 import static com.speedment.config.db.Schema.DEFAULT_SCHEMA;
 import static com.speedment.config.db.Schema.TABLES;
 import com.speedment.config.db.Table;
-import com.speedment.internal.core.config.db.TableImpl;
 import com.speedment.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.internal.core.config.db.TableImpl;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

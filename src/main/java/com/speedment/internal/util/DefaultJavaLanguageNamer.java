@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.util;
 
-import com.speedment.util.JavaLanguageNamer;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import static com.speedment.internal.util.sql.SqlUtil.unQuote;
+import com.speedment.util.JavaLanguageNamer;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

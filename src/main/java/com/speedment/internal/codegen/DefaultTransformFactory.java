@@ -16,16 +16,14 @@
  */
 package com.speedment.internal.codegen;
 
-import com.speedment.codegen.TransformFactory;
 import com.speedment.codegen.Transform;
+import com.speedment.codegen.TransformFactory;
 import java.util.AbstractMap;
 import java.util.HashSet;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 
 /**

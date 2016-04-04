@@ -17,14 +17,14 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasType;
 import com.speedment.codegen.model.trait.HasValue;
 import com.speedment.internal.codegen.model.AnnotationUsageImpl;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import com.speedment.codegen.model.trait.HasCopy;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  * A model that represents the usage of a particular annotation in code.

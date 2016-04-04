@@ -17,8 +17,8 @@
 package com.speedment.codegen.model.trait;
 
 import com.speedment.annotation.Api;
-import java.util.List;
 import com.speedment.codegen.model.Initializer;
+import java.util.List;
 
 /**
  * A trait for models that contain {@link Initializer} components.

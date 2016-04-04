@@ -16,16 +16,16 @@
  */
 package com.speedment.internal.core.field.predicate.impl;
 
+import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.AbstractBasePredicate;
-import com.speedment.internal.util.Cast;
 import com.speedment.internal.core.field.predicate.iface.type.HasFirstOperand;
 import com.speedment.internal.core.field.predicate.iface.type.HasSecondOperand;
 import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
+import com.speedment.internal.util.Cast;
 
 /**
  *

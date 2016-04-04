@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.codegen.java.view.trait;
 
-import static com.speedment.internal.codegen.util.Formatting.dnl;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.trait.HasClasses;
+import static com.speedment.internal.codegen.util.Formatting.dnl;
 import static java.util.stream.Collectors.joining;
 
 /**

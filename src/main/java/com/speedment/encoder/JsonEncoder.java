@@ -16,24 +16,24 @@
  */
 package com.speedment.encoder;
 
-import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.manager.Manager;
 import com.speedment.util.JavaLanguageNamer;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Stream;
-import static java.util.stream.Collectors.toSet;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *

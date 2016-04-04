@@ -22,16 +22,16 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.util.ProgressMeasure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import com.speedment.util.ProgressMeasure;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * A DbmsHandler provides the interface between Speedment and an underlying

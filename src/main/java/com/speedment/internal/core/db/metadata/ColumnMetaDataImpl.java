@@ -17,11 +17,11 @@
 package com.speedment.internal.core.db.metadata;
 
 import com.speedment.db.SqlSupplier;
+import com.speedment.db.metadata.ColumnMetaData;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.speedment.db.metadata.ColumnMetaData;
 
 /**
  *

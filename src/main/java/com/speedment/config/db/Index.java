@@ -18,14 +18,14 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.IndexMutator;
 import com.speedment.config.db.trait.HasChildren;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasParent;
-import com.speedment.config.db.mutator.DocumentMutator;
-import com.speedment.config.db.mutator.IndexMutator;
 import java.util.stream.Stream;
 
 /**

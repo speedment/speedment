@@ -17,20 +17,20 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.resultset.ResultSetMapperComponent;
+import com.speedment.component.resultset.ResultSetMapping;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.license.Software;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuples;
-import com.speedment.license.Software;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import com.speedment.component.resultset.ResultSetMapperComponent;
-import com.speedment.component.resultset.ResultSetMapping;
-import static java.util.Objects.requireNonNull;
 
 public final class ResultSetMapperComponentImpl extends InternalOpenSourceComponent implements ResultSetMapperComponent {
 

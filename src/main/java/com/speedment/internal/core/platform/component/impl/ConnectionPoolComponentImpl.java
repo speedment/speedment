@@ -17,7 +17,6 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.Component;
 import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.connectionpool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
@@ -31,13 +30,10 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.

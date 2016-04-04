@@ -23,7 +23,6 @@ import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * This is the default implementation of the {@link Enum} interface.

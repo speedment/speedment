@@ -17,38 +17,35 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
+import com.speedment.code.TranslatorSupport;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.Constructor;
 import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Generic;
 import com.speedment.codegen.model.Import;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
-import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
-import com.speedment.internal.codegen.model.JavadocImpl;
-import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
-import static com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasEnabled;
-import com.speedment.codegen.model.Generic;
+import com.speedment.internal.codegen.model.JavadocImpl;
+import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
+import com.speedment.internal.core.code.DefaultJavaClassTranslator;
+import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
+import static com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import com.speedment.code.TranslatorSupport;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import com.speedment.stream.MapStream;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

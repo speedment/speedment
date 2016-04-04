@@ -19,8 +19,8 @@ package com.speedment.internal.util.tuple.impl;
 import com.speedment.util.tuple.BasicTuple;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * The BasicAbstractTuple implements parts of a generic Tuple of any order.

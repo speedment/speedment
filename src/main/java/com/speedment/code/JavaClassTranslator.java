@@ -17,11 +17,11 @@
 package com.speedment.code;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.File;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.util.JavaLanguageNamer;
 import java.util.function.Supplier;
 

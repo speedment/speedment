@@ -20,15 +20,13 @@ import com.speedment.Speedment;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.util.EditorsUtil;
+import static java.util.Comparator.comparing;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
-import org.controlsfx.property.editor.PropertyEditor;
 import javafx.beans.property.StringProperty;
-import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNull;
-import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNull;
+import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *

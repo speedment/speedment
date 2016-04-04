@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.PEEK;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.LongConsumer;
 import java.util.stream.LongStream;

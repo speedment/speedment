@@ -18,12 +18,11 @@ package com.speedment.internal.core.field.predicate.impl.reference;
 
 import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import java.util.Objects;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
+import java.util.Objects;
 
 /**
  *

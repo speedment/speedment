@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
 /**
  *

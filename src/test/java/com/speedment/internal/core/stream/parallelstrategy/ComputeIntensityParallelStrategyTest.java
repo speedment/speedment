@@ -23,6 +23,7 @@ package com.speedment.internal.core.stream.parallelstrategy;
 
 import com.speedment.stream.ParallelStrategy;
 import java.util.Collection;
+import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,9 +39,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static java.util.Comparator.comparing;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TestName;
 
 /**

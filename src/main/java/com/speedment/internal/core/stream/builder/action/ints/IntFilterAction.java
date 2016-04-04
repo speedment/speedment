@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.ints;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.FILTER;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;

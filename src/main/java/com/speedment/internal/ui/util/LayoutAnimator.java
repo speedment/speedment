@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.ui.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -24,10 +26,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.util.Duration;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Animates an object when its position is changed. For instance, when

@@ -17,19 +17,19 @@
 package com.speedment.internal.ui.controller;
 
 import com.speedment.component.brand.Brand;
-import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.util.Loader;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
-import static java.util.Objects.requireNonNull;
+import javafx.scene.image.ImageView;
 
 /**
  *

@@ -28,7 +28,6 @@ import com.speedment.internal.ui.config.AbstractDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.DefaultDocumentProperty;
-import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.ForeignKeyColumnProperty;
 import com.speedment.internal.ui.config.ForeignKeyProperty;
 import com.speedment.internal.ui.config.IndexColumnProperty;
@@ -39,11 +38,12 @@ import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.util.ImmutableListUtil;
 import com.speedment.license.Software;
+import com.speedment.ui.config.DocumentProperty;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

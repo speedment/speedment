@@ -16,8 +16,6 @@
  */
 package com.speedment.internal.core.stream.builder;
 
-import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
-import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.internal.core.stream.builder.action.reference.DistinctAction;
 import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
 import com.speedment.internal.core.stream.builder.action.reference.FlatMapAction;
@@ -33,7 +31,9 @@ import com.speedment.internal.core.stream.builder.action.reference.PeekAction;
 import com.speedment.internal.core.stream.builder.action.reference.SkipAction;
 import com.speedment.internal.core.stream.builder.action.reference.SortedAction;
 import com.speedment.internal.core.stream.builder.action.reference.SortedComparatorAction;
+import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
+import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import java.util.Comparator;
 import java.util.Iterator;
 import static java.util.Objects.requireNonNull;

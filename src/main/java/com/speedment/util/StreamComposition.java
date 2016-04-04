@@ -22,13 +22,13 @@ import com.speedment.internal.core.stream.autoclose.AutoClosingDoubleStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingIntStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingLongStream;
 import com.speedment.internal.core.stream.autoclose.AutoClosingReferenceStream;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.function.Function;
 import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * Utility methods for making sure composed streams are closed properly.

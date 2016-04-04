@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.config.db.immutable;
 
-import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.internal.util.Lazy;

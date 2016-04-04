@@ -17,9 +17,9 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.EnumModifier;
 import com.speedment.codegen.model.trait.HasConstructors;
 import com.speedment.internal.codegen.model.EnumImpl;
-import com.speedment.codegen.model.modifier.EnumModifier;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;

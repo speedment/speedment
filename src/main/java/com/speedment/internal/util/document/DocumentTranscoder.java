@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.util.document;
 
-import com.speedment.config.db.Project;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.speedment.annotation.Api;
+import com.speedment.config.db.Project;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;

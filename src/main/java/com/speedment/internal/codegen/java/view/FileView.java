@@ -16,15 +16,15 @@
  */
 package com.speedment.internal.codegen.java.view;
 
-import static com.speedment.internal.codegen.util.Formatting.*;
-import com.speedment.codegen.Generator;
 import com.speedment.codegen.DependencyManager;
+import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
-import com.speedment.internal.codegen.java.view.trait.HasClassesView;
-import com.speedment.internal.codegen.java.view.trait.HasJavadocView;
-import com.speedment.internal.codegen.java.view.trait.HasImportsView;
 import com.speedment.codegen.model.File;
+import com.speedment.internal.codegen.java.view.trait.HasClassesView;
+import com.speedment.internal.codegen.java.view.trait.HasImportsView;
+import com.speedment.internal.codegen.java.view.trait.HasJavadocView;
 import com.speedment.internal.codegen.util.Formatting;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

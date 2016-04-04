@@ -21,18 +21,16 @@ import static com.speedment.field.Inclusion.START_EXCLUSIVE_END_INCLUSIVE;
 import static com.speedment.field.Inclusion.START_INCLUSIVE_END_INCLUSIVE;
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
-import static java.util.Comparator.nullsFirst;
-import java.util.List;
-import static java.util.stream.Collectors.toList;
-import org.junit.Test;
-import static java.util.Comparator.nullsLast;
-import static org.junit.Assert.assertEquals;
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsFirst;
+import static java.util.Comparator.nullsLast;
+import java.util.List;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
-import static java.util.Comparator.comparing;
+import org.junit.Test;
 
 /**
  *

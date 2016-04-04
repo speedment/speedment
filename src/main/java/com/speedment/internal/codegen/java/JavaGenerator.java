@@ -16,16 +16,14 @@
  */
 package com.speedment.internal.codegen.java;
 
+import com.speedment.codegen.TransformFactory;
 import com.speedment.internal.codegen.DefaultDependencyManager;
 import com.speedment.internal.codegen.DefaultGenerator;
-import com.speedment.codegen.TransformFactory;
-
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * A hook to the generator that can be passed to various stages in the pipeline.

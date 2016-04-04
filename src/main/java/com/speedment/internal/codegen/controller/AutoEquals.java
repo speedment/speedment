@@ -16,30 +16,28 @@
  */
 package com.speedment.internal.codegen.controller;
 
-import com.speedment.codegen.model.trait.HasName;
-import com.speedment.codegen.model.trait.HasMethods;
-import com.speedment.codegen.model.trait.HasSupertype;
-import com.speedment.codegen.model.trait.HasImports;
-import com.speedment.codegen.model.trait.HasFields;
-import com.speedment.codegen.model.Javadoc;
-import com.speedment.codegen.model.Type;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.File;
 import com.speedment.codegen.model.Import;
+import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
+import com.speedment.codegen.model.Type;
+import com.speedment.codegen.model.trait.HasFields;
+import com.speedment.codegen.model.trait.HasImports;
+import com.speedment.codegen.model.trait.HasMethods;
+import com.speedment.codegen.model.trait.HasName;
+import com.speedment.codegen.model.trait.HasSupertype;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.internal.codegen.model.constant.DefaultType.*;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.codegen.util.Formatting.tab;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * This control can be applied on a class, enum or similar to auto generate

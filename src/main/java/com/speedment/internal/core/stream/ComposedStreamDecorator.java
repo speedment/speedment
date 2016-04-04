@@ -17,12 +17,12 @@
 package com.speedment.internal.core.stream;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.stream.HasParallelStrategy;
 import com.speedment.stream.Pipeline;
 import com.speedment.stream.StreamDecorator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import com.speedment.stream.HasParallelStrategy;
 
 /**
  *

@@ -19,9 +19,9 @@ package com.speedment.config.db.mutator;
 import com.speedment.config.db.ForeignKey;
 import static com.speedment.config.db.ForeignKey.FOREIGN_KEY_COLUMNS;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.internal.core.config.db.ForeignKeyColumnImpl;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

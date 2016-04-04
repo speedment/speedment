@@ -17,22 +17,20 @@
 package com.speedment.internal.core.config.dbms;
 
 import com.speedment.config.db.Dbms;
-import static java.util.stream.Collectors.toSet;
-
-import java.util.Set;
-import java.util.stream.Stream;
-
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
+import com.speedment.db.metadata.TypeInfoMetaData;
+import static com.speedment.db.metadata.TypeInfoMetaData.of;
 import com.speedment.internal.core.db.AbstractDatabaseNamingConvention;
 import com.speedment.internal.core.db.PostgresDbmsHandler;
 import com.speedment.internal.core.manager.sql.PostgresSpeedmentPredicateView;
-import static com.speedment.db.metadata.TypeInfoMetaData.of;
 import java.util.Collections;
-import static java.util.stream.Collectors.collectingAndThen;
-import com.speedment.db.metadata.TypeInfoMetaData;
 import java.util.Optional;
+import java.util.Set;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  * Created by fdirlikl on 11/13/2015.

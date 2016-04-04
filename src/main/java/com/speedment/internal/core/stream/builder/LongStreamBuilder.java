@@ -29,8 +29,8 @@ import com.speedment.internal.core.stream.builder.action.longs.LongMapToObjActio
 import com.speedment.internal.core.stream.builder.action.longs.LongPeekAction;
 import com.speedment.internal.core.stream.builder.action.longs.LongSkipAction;
 import com.speedment.internal.core.stream.builder.action.longs.LongSortedAction;
-import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.pipeline.LongPipeline;
+import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import java.util.LongSummaryStatistics;
 import static java.util.Objects.requireNonNull;

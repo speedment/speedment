@@ -17,7 +17,6 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.Component;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.mapper.identity.ArrayIdentityMapper;
@@ -35,8 +34,8 @@ import com.speedment.config.db.mapper.identity.NClobIdentityMapper;
 import com.speedment.config.db.mapper.identity.ObjectIdentityMapper;
 import com.speedment.config.db.mapper.identity.RefIdentityMapper;
 import com.speedment.config.db.mapper.identity.RowIdIdentityMapper;
-import com.speedment.config.db.mapper.identity.ShortIdentityMapper;
 import com.speedment.config.db.mapper.identity.SQLXMLIdentityMapper;
+import com.speedment.config.db.mapper.identity.ShortIdentityMapper;
 import com.speedment.config.db.mapper.identity.StringIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
@@ -52,7 +51,6 @@ import com.speedment.config.db.mapper.time.TimeToLongMapper;
 import com.speedment.config.db.mapper.time.TimestampToIntMapper;
 import com.speedment.config.db.mapper.time.TimestampToLongMapper;
 import com.speedment.license.Software;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

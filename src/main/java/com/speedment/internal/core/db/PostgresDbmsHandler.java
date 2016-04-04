@@ -19,12 +19,9 @@ package com.speedment.internal.core.db;
 import com.speedment.Speedment;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
+import com.speedment.db.metadata.ColumnMetaData;
 import java.sql.SQLException;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.db.metadata.ColumnMetaData;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

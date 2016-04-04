@@ -16,27 +16,25 @@
  */
 package com.speedment.internal.codegen.java.view;
 
-import com.speedment.internal.codegen.java.view.trait.HasModifiersView;
-import com.speedment.internal.codegen.java.view.trait.HasClassesView;
-import com.speedment.internal.codegen.java.view.trait.HasGenericsView;
-import com.speedment.internal.codegen.java.view.trait.HasJavadocView;
-import com.speedment.internal.codegen.java.view.trait.HasNameView;
-import com.speedment.internal.codegen.java.view.trait.HasInitalizersView;
-import com.speedment.internal.codegen.java.view.trait.HasMethodsView;
-import com.speedment.internal.codegen.java.view.trait.HasFieldsView;
-import com.speedment.internal.codegen.java.view.trait.HasAnnotationUsageView;
-import com.speedment.internal.codegen.java.view.trait.HasImplementsView;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.ClassOrInterface;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-
+import com.speedment.internal.codegen.java.view.trait.HasAnnotationUsageView;
+import com.speedment.internal.codegen.java.view.trait.HasClassesView;
+import com.speedment.internal.codegen.java.view.trait.HasFieldsView;
+import com.speedment.internal.codegen.java.view.trait.HasGenericsView;
+import com.speedment.internal.codegen.java.view.trait.HasImplementsView;
+import com.speedment.internal.codegen.java.view.trait.HasInitalizersView;
+import com.speedment.internal.codegen.java.view.trait.HasJavadocView;
+import com.speedment.internal.codegen.java.view.trait.HasMethodsView;
+import com.speedment.internal.codegen.java.view.trait.HasModifiersView;
+import com.speedment.internal.codegen.java.view.trait.HasNameView;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 
 /**

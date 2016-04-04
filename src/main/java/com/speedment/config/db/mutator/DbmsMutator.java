@@ -19,9 +19,9 @@ package com.speedment.config.db.mutator;
 import com.speedment.config.db.Dbms;
 import static com.speedment.config.db.Dbms.*;
 import com.speedment.config.db.Schema;
-import com.speedment.internal.core.config.db.SchemaImpl;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.internal.core.config.db.SchemaImpl;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

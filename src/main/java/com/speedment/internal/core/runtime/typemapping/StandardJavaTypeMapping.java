@@ -16,9 +16,10 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
-import com.speedment.exception.SpeedmentException;
+import com.speedment.component.resultset.ResultSetMapping;
 import static com.speedment.component.resultset.ResultSetMapping.unableToMapLong;
 import static com.speedment.component.resultset.ResultSetMapping.unableToMapString;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.util.LongUtil;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.Field;
@@ -37,14 +38,12 @@ import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import com.speedment.component.resultset.ResultSetMapping;
-import com.speedment.internal.core.config.dbms.PostgresDbmsType;
-import static java.util.Objects.requireNonNull;
-import java.util.UUID;
 
 public final class StandardJavaTypeMapping {
 

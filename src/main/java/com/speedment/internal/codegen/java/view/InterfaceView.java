@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.codegen.java.view;
 
-import com.speedment.internal.codegen.util.Formatting;
-import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Interface;
 import com.speedment.codegen.model.Method;
 import com.speedment.internal.codegen.model.InterfaceMethodImpl;
+import com.speedment.internal.codegen.util.Formatting;
+import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 
 /**
  * Transforms from an {@link Interface} to java code.

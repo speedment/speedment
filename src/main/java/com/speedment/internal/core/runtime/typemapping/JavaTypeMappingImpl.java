@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
-import com.speedment.config.db.Dbms;
-import java.util.function.Function;
 import com.speedment.component.resultset.ResultSetMapping;
+import com.speedment.config.db.Dbms;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  *

@@ -26,10 +26,10 @@ import com.speedment.config.db.Dbms;
 import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
+import com.speedment.db.metadata.TypeInfoMetaData;
 import com.speedment.manager.SpeedmentPredicateView;
 import java.util.Set;
 import java.util.function.BiFunction;
-import com.speedment.db.metadata.TypeInfoMetaData;
 
 /**
  *

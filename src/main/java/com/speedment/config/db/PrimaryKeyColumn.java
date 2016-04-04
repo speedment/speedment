@@ -18,14 +18,14 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 import com.speedment.config.db.trait.HasColumn;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.config.db.trait.HasParent;
-import com.speedment.config.db.mutator.DocumentMutator;
-import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 
 /**
  * A typed {@link Document} that represents the primary key column instance in

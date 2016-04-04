@@ -20,13 +20,13 @@ import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceField;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**

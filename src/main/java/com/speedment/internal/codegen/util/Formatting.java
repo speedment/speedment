@@ -19,11 +19,11 @@ package com.speedment.internal.codegen.util;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *

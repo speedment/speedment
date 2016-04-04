@@ -33,11 +33,11 @@ import com.speedment.internal.logging.LoggerManager;
 import com.speedment.ui.config.trait.HasIconPath;
 import java.io.InputStream;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

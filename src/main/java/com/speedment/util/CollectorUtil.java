@@ -17,11 +17,12 @@
 package com.speedment.util;
 
 import com.speedment.annotation.Api;
-import com.speedment.stream.MapStream;
+import com.speedment.encoder.JsonEncoder;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.encoder.JsonEncoder;
-
+import com.speedment.stream.MapStream;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,23 +33,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
-import java.util.stream.Stream;
-import java.util.Optional;
-import java.util.StringJoiner;
-
 import static java.util.stream.Collector.Characteristics.CONCURRENT;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * Utility methods for collecting Speedment streams in various ways.

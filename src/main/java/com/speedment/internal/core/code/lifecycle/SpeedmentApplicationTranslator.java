@@ -17,11 +17,11 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Project;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.File;
 import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Project;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 

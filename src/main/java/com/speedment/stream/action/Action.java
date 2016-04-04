@@ -16,17 +16,16 @@
  */
 package com.speedment.stream.action;
 
-import com.speedment.stream.action.BasicAction;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

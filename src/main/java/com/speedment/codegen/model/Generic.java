@@ -17,14 +17,13 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.codegen.model.constant.DefaultType;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.internal.codegen.model.GenericImpl;
+import com.speedment.internal.codegen.model.constant.DefaultType;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Supplier;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents the generic part of a type declaration in code. A

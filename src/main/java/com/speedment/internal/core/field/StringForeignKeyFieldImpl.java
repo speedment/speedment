@@ -21,25 +21,25 @@ import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
 import com.speedment.field.StringForeignKeyField;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
-import com.speedment.internal.core.field.trait.StringFieldTraitImpl;
 import com.speedment.field.methods.Finder;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.field.trait.StringFieldTrait;
+import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
+import com.speedment.internal.core.field.trait.StringFieldTraitImpl;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Comparator;
 import java.util.Set;
-import com.speedment.field.predicate.StringSpeedmentPredicate;
-import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that

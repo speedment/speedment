@@ -18,12 +18,12 @@ package com.speedment.internal.core.stream.builder.action;
 
 import com.speedment.stream.action.BasicAction;
 import com.speedment.stream.action.Property;
-import com.speedment.stream.action.Statement;
 import static com.speedment.stream.action.Property.ORDER;
 import static com.speedment.stream.action.Property.SIDE_EFFECT;
 import static com.speedment.stream.action.Property.SIZE;
 import static com.speedment.stream.action.Property.STREAM_TYPE;
 import static com.speedment.stream.action.Property.TYPE;
+import com.speedment.stream.action.Statement;
 import static com.speedment.stream.action.Verb.PRESERVE;
 import static com.speedment.stream.action.Verb.SET;
 import static com.speedment.util.NullUtil.requireNonNulls;

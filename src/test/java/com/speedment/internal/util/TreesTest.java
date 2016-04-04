@@ -21,7 +21,6 @@
  */
 package com.speedment.internal.util;
 
-import com.speedment.internal.util.Trees;
 import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
 import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_POST;
 import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_PRE;

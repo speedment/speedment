@@ -16,7 +16,6 @@
  */
 package com.speedment.ui.config.db;
 
-import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.ui.config.DocumentProperty;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

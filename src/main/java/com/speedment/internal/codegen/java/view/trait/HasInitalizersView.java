@@ -16,12 +16,11 @@
  */
 package com.speedment.internal.codegen.java.view.trait;
 
-import static com.speedment.internal.codegen.util.Formatting.dnl;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.trait.HasInitalizers;
-import java.util.stream.Collectors;
 import static com.speedment.internal.codegen.util.Formatting.dnl;
+import java.util.stream.Collectors;
 
 /**
  * A trait with the functionality to render models with the trait 

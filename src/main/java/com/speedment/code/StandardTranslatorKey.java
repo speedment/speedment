@@ -17,12 +17,12 @@
 package com.speedment.code;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.internal.core.code.TranslatorKeyImpl;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.Interface;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
+import com.speedment.internal.core.code.TranslatorKeyImpl;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.stream.Stream;
 

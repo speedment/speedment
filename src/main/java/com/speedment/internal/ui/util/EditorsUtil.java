@@ -22,14 +22,14 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
+import static javafx.collections.FXCollections.observableArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
-import javafx.scene.control.TextArea;
-import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Utility methods for creating custom {@link PropertyEditor editors} for a 

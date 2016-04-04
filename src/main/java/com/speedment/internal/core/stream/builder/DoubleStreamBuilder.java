@@ -28,8 +28,8 @@ import com.speedment.internal.core.stream.builder.action.doubles.DoubleMapToObjA
 import com.speedment.internal.core.stream.builder.action.doubles.DoublePeekAction;
 import com.speedment.internal.core.stream.builder.action.doubles.DoubleSkipAction;
 import com.speedment.internal.core.stream.builder.action.doubles.DoubleSortedAction;
-import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.pipeline.DoublePipeline;
+import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import java.util.DoubleSummaryStatistics;
 import static java.util.Objects.requireNonNull;

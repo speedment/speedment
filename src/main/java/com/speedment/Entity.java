@@ -16,10 +16,10 @@
  */
 package com.speedment;
 
-import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
+import com.speedment.exception.SpeedmentException;
 import java.util.function.Consumer;
 
 /**

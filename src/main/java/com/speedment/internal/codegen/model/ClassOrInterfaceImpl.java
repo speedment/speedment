@@ -20,6 +20,7 @@ import com.speedment.codegen.model.AnnotationUsage;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Initializer;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
@@ -32,8 +33,6 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
-import com.speedment.codegen.model.Initializer;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This is the abstract base implementation used by the classes {@link ClassImpl},

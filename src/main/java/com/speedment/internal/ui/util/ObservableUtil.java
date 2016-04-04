@@ -16,14 +16,12 @@
  */
 package com.speedment.internal.ui.util;
 
-import com.google.gson.annotations.Until;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * Utility methods for binding observable properties that can't easily be

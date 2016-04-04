@@ -17,28 +17,13 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
-import com.speedment.codegen.model.trait.HasCode;
-import com.speedment.internal.codegen.model.InitializerImpl;
 import com.speedment.codegen.model.modifier.InitalizerModifier;
+import com.speedment.codegen.model.trait.HasCall;
+import com.speedment.codegen.model.trait.HasCode;
+import com.speedment.codegen.model.trait.HasCopy;
+import com.speedment.internal.codegen.model.InitializerImpl;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
-import com.speedment.codegen.model.trait.HasCall;
-import static java.util.Objects.requireNonNull;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents an initializer in code.

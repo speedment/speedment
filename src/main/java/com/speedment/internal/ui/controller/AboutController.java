@@ -20,28 +20,28 @@ import com.speedment.SpeedmentVersion;
 import com.speedment.component.Component;
 import com.speedment.component.brand.Brand;
 import com.speedment.event.UIEvent;
-import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.util.Trees;
 import com.speedment.license.License;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
 import java.net.URL;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import static javafx.stage.Modality.APPLICATION_MODAL;
-import javafx.stage.Stage;
-import java.util.stream.Collectors;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
+import static javafx.stage.Modality.APPLICATION_MODAL;
+import javafx.stage.Stage;
 
 /**
  *

@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.codegen.java.view.trait;
 
-import static com.speedment.internal.codegen.util.Formatting.EMPTY;
-import static com.speedment.internal.codegen.util.Formatting.dnl;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.trait.HasImports;
+import static com.speedment.internal.codegen.util.Formatting.EMPTY;
+import static com.speedment.internal.codegen.util.Formatting.dnl;
+import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**

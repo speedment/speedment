@@ -16,21 +16,21 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.field.predicate.StringSpeedmentPredicate;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.field.trait.StringFieldTrait;
+import com.speedment.internal.core.field.predicate.impl.string.AlwaysFalseStringPredicate;
+import com.speedment.internal.core.field.predicate.impl.string.AlwaysTrueStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.ContainsPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.EndsWithPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.EqualIgnoreCasePredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsEmptyPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotEmptyPredicate;
-import com.speedment.internal.core.field.predicate.impl.string.NotEqualIgnoreCasePredicate;
-import com.speedment.internal.core.field.predicate.impl.string.StartsWithPredicate;
-import com.speedment.field.trait.StringFieldTrait;
-import com.speedment.field.predicate.StringSpeedmentPredicate;
-import com.speedment.field.trait.FieldTrait;
-import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.field.predicate.impl.string.AlwaysFalseStringPredicate;
-import com.speedment.internal.core.field.predicate.impl.string.AlwaysTrueStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotNullStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredicate;
+import com.speedment.internal.core.field.predicate.impl.string.NotEqualIgnoreCasePredicate;
+import com.speedment.internal.core.field.predicate.impl.string.StartsWithPredicate;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -16,11 +16,11 @@
  */
 package com.speedment.internal.core.config.db;
 
-import com.speedment.internal.core.config.BaseDocument;
 import com.speedment.config.Document;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.BaseDocument;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;

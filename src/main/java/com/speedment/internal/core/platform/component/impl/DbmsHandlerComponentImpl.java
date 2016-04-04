@@ -17,18 +17,18 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.parameters.DbmsType;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.db.DbmsHandler;
-import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.license.Software;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.doubles;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.MAP_TO_SAME;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;

@@ -21,13 +21,12 @@ import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
-import com.speedment.exception.SpeedmentException;
 import com.speedment.config.db.mutator.DbmsMutator;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.ui.config.AbstractChildDocumentProperty;
 import com.speedment.internal.ui.config.ColumnProperty;
 import com.speedment.internal.ui.config.DbmsProperty;
-import com.speedment.ui.config.DocumentProperty;
 import com.speedment.internal.ui.config.ForeignKeyColumnProperty;
 import com.speedment.internal.ui.config.ForeignKeyProperty;
 import com.speedment.internal.ui.config.IndexColumnProperty;
@@ -37,15 +36,16 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.util.ImmutableListUtil;
+import com.speedment.ui.config.DocumentProperty;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

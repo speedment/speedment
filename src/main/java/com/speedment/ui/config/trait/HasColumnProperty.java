@@ -16,8 +16,8 @@
  */
 package com.speedment.ui.config.trait;
 
-import com.speedment.config.db.trait.*;
 import com.speedment.config.db.Column;
+import com.speedment.config.db.trait.*;
 import com.speedment.ui.config.DocumentProperty;
 import java.util.Optional;
 import static javafx.beans.binding.Bindings.createObjectBinding;

@@ -18,11 +18,11 @@ package com.speedment.event;
 
 import com.speedment.annotation.Api;
 import com.speedment.ui.config.DocumentProperty;
+import static java.util.Objects.requireNonNull;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

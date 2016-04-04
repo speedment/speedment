@@ -16,8 +16,6 @@
  */
 package com.speedment.stream.action;
 
-import com.speedment.stream.action.ActionProperty;
-
 /**
  *
  * @author pemi

@@ -23,14 +23,19 @@ import static com.speedment.config.db.Column.AUTO_INCREMENT;
 import static com.speedment.config.db.Column.DATABASE_TYPE;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.mutator.ColumnMutator;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.ui.config.trait.HasAliasProperty;
-import com.speedment.ui.config.trait.HasEnabledProperty;
-import com.speedment.ui.config.trait.HasNameProperty;
-import com.speedment.ui.config.trait.HasNullableProperty;
+import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.concat;
 import com.speedment.ui.config.db.BooleanPropertyItem;
 import com.speedment.ui.config.db.TypeMapperPropertyItem;
+import com.speedment.ui.config.trait.HasAliasProperty;
+import com.speedment.ui.config.trait.HasEnabledProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.ui.config.trait.HasNullableProperty;
+import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -41,12 +46,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
-import com.speedment.internal.ui.config.mutator.ColumnPropertyMutator;
-import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
-import static com.speedment.internal.util.ImmutableListUtil.concat;
-import com.speedment.ui.config.trait.HasExpandedProperty;
-import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
-import java.util.List;
 
 /**
  *

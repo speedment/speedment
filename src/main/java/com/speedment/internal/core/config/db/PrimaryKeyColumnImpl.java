@@ -16,10 +16,9 @@
  */
 package com.speedment.internal.core.config.db;
 
-import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
+import com.speedment.internal.core.config.AbstractChildDocument;
 import java.util.Map;
 
 /**

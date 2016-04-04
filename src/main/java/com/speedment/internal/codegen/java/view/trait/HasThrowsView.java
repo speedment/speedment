@@ -16,11 +16,11 @@
  */
 package com.speedment.internal.codegen.java.view.trait;
 
-import static com.speedment.internal.codegen.util.Formatting.COMMA_SPACE;
-import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.trait.HasThrows;
+import static com.speedment.internal.codegen.util.Formatting.COMMA_SPACE;
+import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 
 /**

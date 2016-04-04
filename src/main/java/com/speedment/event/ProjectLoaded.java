@@ -16,9 +16,9 @@
  */
 package com.speedment.event;
 
-import com.speedment.event.trait.ProjectEvent;
 import com.speedment.annotation.Api;
 import com.speedment.config.db.Project;
+import com.speedment.event.trait.ProjectEvent;
 import static java.util.Objects.requireNonNull;
 
 /**

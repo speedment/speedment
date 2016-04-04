@@ -17,20 +17,20 @@
 package com.speedment.internal.ui.util;
 
 import com.speedment.component.brand.Brand;
-import com.speedment.internal.ui.UISession;
 import com.speedment.exception.SpeedmentException;
-import java.io.IOException;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import java.util.function.Consumer;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import com.speedment.internal.ui.UISession;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * A utility class resposible for loading FXML-files and setting up their 

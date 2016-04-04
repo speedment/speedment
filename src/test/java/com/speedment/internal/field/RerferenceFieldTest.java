@@ -20,8 +20,8 @@ import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import static com.speedment.internal.field.Entity.NAME;
 import java.util.List;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *

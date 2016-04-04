@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.field.predicate.impl.reference;
 
-import com.speedment.field.predicate.SpeedmentPredicate;
 import static com.speedment.field.predicate.PredicateType.ALWAYS_TRUE;
+import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;

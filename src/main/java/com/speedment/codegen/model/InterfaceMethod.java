@@ -17,17 +17,17 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.InterfaceMethodModifier;
 import com.speedment.codegen.model.trait.HasAnnotationUsage;
 import com.speedment.codegen.model.trait.HasCode;
-import com.speedment.codegen.model.trait.HasJavadoc;
-import com.speedment.codegen.model.trait.HasThrows;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasFields;
 import com.speedment.codegen.model.trait.HasGenerics;
+import com.speedment.codegen.model.trait.HasJavadoc;
 import com.speedment.codegen.model.trait.HasName;
+import com.speedment.codegen.model.trait.HasThrows;
 import com.speedment.codegen.model.trait.HasType;
 import com.speedment.internal.codegen.model.InterfaceMethodImpl;
-import com.speedment.codegen.model.modifier.InterfaceMethodModifier;
-import com.speedment.codegen.model.trait.HasCopy;
 
 /**
  * A model that represents a method of an interface in code.

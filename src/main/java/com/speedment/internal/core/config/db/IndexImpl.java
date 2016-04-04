@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.core.config.db;
 
-import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
 import com.speedment.config.db.Table;
+import com.speedment.internal.core.config.AbstractChildDocument;
 import java.util.Map;
 import java.util.stream.Stream;
 

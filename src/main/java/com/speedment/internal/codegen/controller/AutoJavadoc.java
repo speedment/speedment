@@ -16,23 +16,21 @@
  */
 package com.speedment.internal.codegen.controller;
 
-import com.speedment.codegen.model.trait.HasJavadoc;
-import com.speedment.codegen.model.trait.HasClasses;
-import com.speedment.codegen.model.trait.HasMethods;
-import com.speedment.codegen.model.trait.HasGenerics;
-import com.speedment.codegen.model.trait.HasConstructors;
-import com.speedment.codegen.model.trait.HasFields;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.JavadocTag;
 import com.speedment.codegen.model.Method;
-
-import java.util.function.Consumer;
-
+import com.speedment.codegen.model.trait.HasClasses;
+import com.speedment.codegen.model.trait.HasConstructors;
+import com.speedment.codegen.model.trait.HasFields;
+import com.speedment.codegen.model.trait.HasGenerics;
+import com.speedment.codegen.model.trait.HasJavadoc;
+import com.speedment.codegen.model.trait.HasMethods;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.*;
 import static com.speedment.internal.codegen.util.Formatting.SE;
 import static com.speedment.internal.codegen.util.Formatting.SS;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * This control generates javadoc stubs for all models descending from the

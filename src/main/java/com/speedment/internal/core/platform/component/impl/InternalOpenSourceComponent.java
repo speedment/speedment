@@ -18,8 +18,8 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
-import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.license.License;
 import com.speedment.license.Software;
 import java.util.stream.Stream;

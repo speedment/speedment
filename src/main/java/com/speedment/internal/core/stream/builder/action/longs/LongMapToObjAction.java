@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.MAP_TO;
+import com.speedment.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.LongFunction;
 import java.util.stream.LongStream;

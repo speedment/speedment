@@ -16,20 +16,19 @@
  */
 package com.speedment.internal.codegen;
 
-import com.speedment.codegen.TransformFactory;
-import com.speedment.codegen.Transform;
-import com.speedment.codegen.RenderStack;
 import com.speedment.codegen.DependencyManager;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Meta;
+import com.speedment.codegen.RenderStack;
+import com.speedment.codegen.Transform;
+import com.speedment.codegen.TransformFactory;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Arrays;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link Generator} interface.

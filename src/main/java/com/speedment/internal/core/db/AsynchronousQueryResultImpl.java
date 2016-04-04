@@ -23,9 +23,9 @@ package com.speedment.internal.core.db;
 
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.stream.StreamUtil;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.core.stream.StreamUtil;
 import com.speedment.stream.ParallelStrategy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

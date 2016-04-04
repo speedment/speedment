@@ -18,8 +18,8 @@ package com.speedment.internal.field;
 
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *

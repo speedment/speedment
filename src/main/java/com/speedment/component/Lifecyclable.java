@@ -18,8 +18,8 @@ package com.speedment.component;
 
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * A <code>Lifecyclable</code> is an object that has a defined life-cycles. The

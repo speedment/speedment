@@ -23,6 +23,7 @@ import com.speedment.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
 import com.speedment.config.db.mutator.trait.HasOrdinalPositionMutator;
+import static com.speedment.config.db.trait.HasNullable.NULLABLE;
 
 /**
  *

@@ -16,13 +16,13 @@
  */
 package com.speedment.ui.config.db;
 
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

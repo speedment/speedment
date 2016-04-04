@@ -17,9 +17,8 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import com.speedment.field.Inclusion;
-import static com.speedment.field.predicate.PredicateType.BETWEEN;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import static com.speedment.field.predicate.PredicateType.BETWEEN;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;

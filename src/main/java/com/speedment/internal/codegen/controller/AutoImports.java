@@ -16,27 +16,25 @@
  */
 package com.speedment.internal.codegen.controller;
 
-import com.speedment.codegen.model.trait.HasThrows;
-import com.speedment.codegen.model.trait.HasImplements;
-import com.speedment.codegen.model.trait.HasMethods;
-import com.speedment.codegen.model.trait.HasClasses;
-import com.speedment.codegen.model.trait.HasType;
-import com.speedment.codegen.model.trait.HasSupertype;
-import com.speedment.codegen.model.trait.HasGenerics;
-import com.speedment.codegen.model.trait.HasConstructors;
-import com.speedment.codegen.model.trait.HasFields;
-import com.speedment.codegen.model.trait.HasAnnotationUsage;
 import com.speedment.codegen.DependencyManager;
 import com.speedment.codegen.model.File;
 import com.speedment.codegen.model.Type;
+import com.speedment.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.codegen.model.trait.HasClasses;
+import com.speedment.codegen.model.trait.HasConstructors;
+import com.speedment.codegen.model.trait.HasFields;
+import com.speedment.codegen.model.trait.HasGenerics;
+import com.speedment.codegen.model.trait.HasImplements;
+import com.speedment.codegen.model.trait.HasMethods;
+import com.speedment.codegen.model.trait.HasSupertype;
+import com.speedment.codegen.model.trait.HasThrows;
+import com.speedment.codegen.model.trait.HasType;
 import com.speedment.internal.codegen.model.ImportImpl;
-
+import static com.speedment.internal.codegen.util.Formatting.DOT;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-
-import static com.speedment.internal.codegen.util.Formatting.DOT;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports

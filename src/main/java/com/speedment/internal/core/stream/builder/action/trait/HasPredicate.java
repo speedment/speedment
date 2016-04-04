@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.stream.builder.action.trait;
 
-import java.util.Comparator;
 import java.util.function.Predicate;
 
 /**

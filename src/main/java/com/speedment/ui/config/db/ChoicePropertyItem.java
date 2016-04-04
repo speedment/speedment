@@ -16,15 +16,15 @@
  */
 package com.speedment.ui.config.db;
 
+import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.util.StringConverter;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
-import javafx.beans.property.Property;
-import javafx.util.StringConverter;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

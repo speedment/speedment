@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.core.code.entity;
 
-import com.speedment.internal.core.code.EntityAndManagerTranslator;
+import com.speedment.Speedment;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.File;
 import com.speedment.config.db.Table;
-import com.speedment.Speedment;
+import com.speedment.internal.core.code.EntityAndManagerTranslator;
 
 /**
  *

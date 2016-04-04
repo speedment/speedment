@@ -16,17 +16,17 @@
  */
 package com.speedment.internal.core.manager;
 
-import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.encoder.JsonEncoder;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.runtime.AbstractLifecycle;
+import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
-import java.util.stream.Stream;
-import java.util.Optional;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *

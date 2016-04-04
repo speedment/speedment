@@ -17,14 +17,13 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.Component;
-import com.speedment.config.db.Project;
 import com.speedment.component.ProjectComponent;
-import com.speedment.internal.license.OpenSourceLicense;
+import com.speedment.config.db.Project;
 import com.speedment.internal.license.AbstractSoftware;
+import com.speedment.internal.license.OpenSourceLicense;
 import com.speedment.license.Software;
-import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 public final class ProjectComponentImpl extends InternalOpenSourceComponent implements ProjectComponent {
 

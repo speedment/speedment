@@ -17,10 +17,10 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.codegen.model.InterfaceImpl;
 import com.speedment.codegen.model.modifier.InterfaceModifier;
-import java.util.function.Function;
+import com.speedment.internal.codegen.model.InterfaceImpl;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  * A model that represents an interface in code.

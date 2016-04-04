@@ -16,6 +16,10 @@
  */
 package com.speedment.internal.codegen.java.view;
 
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.Transform;
+import com.speedment.codegen.model.InterfaceMethod;
+import static com.speedment.codegen.model.modifier.Modifier.*;
 import static com.speedment.internal.codegen.util.Formatting.COMMA_SPACE;
 import static com.speedment.internal.codegen.util.Formatting.EMPTY;
 import static com.speedment.internal.codegen.util.Formatting.PE;
@@ -25,10 +29,6 @@ import static com.speedment.internal.codegen.util.Formatting.SPACE;
 import static com.speedment.internal.codegen.util.Formatting.block;
 import static com.speedment.internal.codegen.util.Formatting.ifelse;
 import static com.speedment.internal.codegen.util.Formatting.nl;
-import com.speedment.codegen.Generator;
-import com.speedment.codegen.Transform;
-import com.speedment.codegen.model.InterfaceMethod;
-import static com.speedment.codegen.model.modifier.Modifier.*;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;

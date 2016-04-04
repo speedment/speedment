@@ -16,13 +16,13 @@
  */
 package com.speedment.field.predicate;
 
-import com.speedment.field.predicate.trait.HasGetter;
-import com.speedment.field.predicate.trait.HasEffectivePredicateType;
-import com.speedment.field.predicate.trait.HasReferenceFieldTrait;
-import com.speedment.field.predicate.trait.HasFieldTrait;
-import com.speedment.field.predicate.trait.HasPredicateType;
-import com.speedment.field.predicate.trait.HasNegated;
 import com.speedment.annotation.Api;
+import com.speedment.field.predicate.trait.HasEffectivePredicateType;
+import com.speedment.field.predicate.trait.HasFieldTrait;
+import com.speedment.field.predicate.trait.HasGetter;
+import com.speedment.field.predicate.trait.HasNegated;
+import com.speedment.field.predicate.trait.HasPredicateType;
+import com.speedment.field.predicate.trait.HasReferenceFieldTrait;
 import java.util.function.Predicate;
 
 /**

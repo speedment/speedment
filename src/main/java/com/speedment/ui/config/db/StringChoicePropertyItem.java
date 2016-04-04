@@ -16,6 +16,7 @@
  */
 package com.speedment.ui.config.db;
 
+import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +24,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

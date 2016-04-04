@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.codegen.java.view.value;
 
-import com.speedment.internal.codegen.model.value.ArrayValue;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
+import com.speedment.internal.codegen.model.value.ArrayValue;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Transforms from an {@link ArrayValue} to java code.

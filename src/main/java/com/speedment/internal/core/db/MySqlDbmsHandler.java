@@ -18,11 +18,11 @@ package com.speedment.internal.core.db;
 
 import com.speedment.Speedment;
 import com.speedment.config.db.Dbms;
+import com.speedment.db.metadata.ColumnMetaData;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Stream;
-import com.speedment.db.metadata.ColumnMetaData;
 
 /**
  * Specific MySQL implementation of a DbmsHandler. Currently, there are no

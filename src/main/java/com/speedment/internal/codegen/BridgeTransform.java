@@ -16,16 +16,15 @@
  */
 package com.speedment.internal.codegen;
 
-import com.speedment.codegen.TransformFactory;
-import com.speedment.codegen.Transform;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Meta;
+import com.speedment.codegen.Transform;
+import com.speedment.codegen.TransformFactory;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A transform that uses a series of transforms to complete the transformation.

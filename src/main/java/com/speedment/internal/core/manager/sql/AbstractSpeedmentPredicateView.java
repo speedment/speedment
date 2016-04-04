@@ -16,8 +16,6 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.manager.SqlPredicateFragment;
-import com.speedment.manager.SpeedmentPredicateView;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.PredicateType;
@@ -32,6 +30,8 @@ import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirst
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRawSet;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getSecondOperandAsRaw;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getThirdOperandAsInclusion;
+import com.speedment.manager.SpeedmentPredicateView;
+import com.speedment.manager.SqlPredicateFragment;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;

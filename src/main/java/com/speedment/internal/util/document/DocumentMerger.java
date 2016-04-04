@@ -28,13 +28,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
-import javafx.collections.ObservableList;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 
 /**
  * A utility class for merging two documents to preserve maximum amount of

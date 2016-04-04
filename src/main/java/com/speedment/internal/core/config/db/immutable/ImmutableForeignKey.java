@@ -19,11 +19,10 @@ package com.speedment.internal.core.config.db.immutable;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.ForeignKeyImpl;
-import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.List;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 

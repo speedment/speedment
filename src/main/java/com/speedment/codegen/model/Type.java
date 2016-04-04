@@ -18,14 +18,13 @@ package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
 import com.speedment.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasGenerics;
 import com.speedment.codegen.model.trait.HasName;
 import com.speedment.internal.codegen.model.TypeImpl;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Supplier;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents a type in code. When classes, enumerations and

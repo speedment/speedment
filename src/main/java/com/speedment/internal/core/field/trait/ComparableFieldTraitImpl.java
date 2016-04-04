@@ -17,31 +17,31 @@
 package com.speedment.internal.core.field.trait;
 
 import com.speedment.field.Inclusion;
+import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.comparator.impl.NullOrder;
+import com.speedment.internal.comparator.impl.SpeedmentComparatorImpl;
+import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysFalseComparablePredicate;
+import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysTrueComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.BetweenPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.EqualPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.GreaterOrEqualPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.GreaterThanPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.InPredicate;
+import com.speedment.internal.core.field.predicate.impl.comparable.IsNotNullComparablePredicate;
+import com.speedment.internal.core.field.predicate.impl.comparable.IsNullComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.LessOrEqualPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.LessThanPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.NotEqualPredicate;
-import com.speedment.field.predicate.ComparableSpeedmentPredicate;
-import com.speedment.internal.comparator.impl.NullOrder;
-import com.speedment.internal.comparator.impl.SpeedmentComparatorImpl;
+import com.speedment.internal.core.field.predicate.impl.comparable.NotInPredicate;
+import static com.speedment.internal.util.CollectionsUtil.getAnyFrom;
 import java.util.Comparator;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import com.speedment.field.trait.ComparableFieldTrait;
-import com.speedment.field.trait.FieldTrait;
-import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysFalseComparablePredicate;
-import com.speedment.internal.core.field.predicate.impl.comparable.AlwaysTrueComparablePredicate;
-import com.speedment.internal.core.field.predicate.impl.comparable.IsNotNullComparablePredicate;
-import com.speedment.internal.core.field.predicate.impl.comparable.IsNullComparablePredicate;
-import com.speedment.internal.core.field.predicate.impl.comparable.NotInPredicate;
-import static com.speedment.internal.util.CollectionsUtil.getAnyFrom;
-import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type

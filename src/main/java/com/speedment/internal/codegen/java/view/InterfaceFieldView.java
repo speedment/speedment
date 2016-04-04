@@ -16,11 +16,11 @@
  */
 package com.speedment.internal.codegen.java.view;
 
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
 import com.speedment.codegen.model.InterfaceField;
 import static com.speedment.codegen.model.modifier.Modifier.FINAL;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

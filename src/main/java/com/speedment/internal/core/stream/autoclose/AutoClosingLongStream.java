@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.stream.autoclose;
 
-import java.util.HashSet;
 import java.util.LongSummaryStatistics;
 import java.util.OptionalDouble;
 import java.util.OptionalLong;

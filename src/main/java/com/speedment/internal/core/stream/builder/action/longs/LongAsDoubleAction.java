@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.AS;
+import com.speedment.stream.action.Action;
 import java.util.stream.DoubleStream;
 import java.util.stream.LongStream;
 

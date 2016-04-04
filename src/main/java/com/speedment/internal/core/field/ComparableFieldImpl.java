@@ -17,23 +17,23 @@
 package com.speedment.internal.core.field;
 
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.field.Inclusion;
-import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.field.methods.Getter;
-import com.speedment.field.methods.Setter;
-import java.util.Set;
 import com.speedment.field.ComparableField;
 import com.speedment.field.FieldIdentifier;
+import com.speedment.field.Inclusion;
 import com.speedment.field.methods.FieldSetter;
+import com.speedment.field.methods.Getter;
+import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.Comparator;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.Comparator;
+import java.util.Set;
 
 /**
  * This class represents a Comparable Reference Field. A Reference Field is

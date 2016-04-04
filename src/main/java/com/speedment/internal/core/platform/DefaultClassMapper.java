@@ -17,11 +17,11 @@
 package com.speedment.internal.core.platform;
 
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

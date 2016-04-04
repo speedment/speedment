@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.codegen.model.value;
 
-import com.speedment.codegen.model.trait.HasType;
 import com.speedment.codegen.model.Type;
+import com.speedment.codegen.model.trait.HasType;
 import com.speedment.internal.codegen.model.ValueImpl;
 import java.util.Objects;
 

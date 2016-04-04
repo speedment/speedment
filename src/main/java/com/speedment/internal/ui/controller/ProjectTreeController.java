@@ -21,42 +21,42 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.event.ProjectLoaded;
-import com.speedment.internal.ui.config.ProjectProperty;  // Exposes internal -> To if and expose all *Property and Mutators
+import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.ui.config.ForeignKeyProperty;
+import com.speedment.internal.ui.config.IndexProperty;
+import com.speedment.internal.ui.config.ProjectProperty;
+import com.speedment.internal.ui.config.SchemaProperty;
+import com.speedment.internal.ui.config.TableProperty;
+import com.speedment.internal.ui.resource.SilkIcon;
 import com.speedment.internal.ui.resource.SpeedmentIcon;
 import com.speedment.internal.ui.util.Loader;
-import com.speedment.internal.ui.UISession; // Exposes internal
-import com.speedment.internal.ui.config.DbmsProperty;
+import com.speedment.internal.util.document.DocumentUtil;
 import com.speedment.ui.config.DocumentProperty;
-import com.speedment.internal.ui.config.ForeignKeyProperty; // Exposes internal
-import com.speedment.internal.ui.config.IndexProperty; // Exposes internal
-import com.speedment.internal.ui.config.SchemaProperty; // Exposes internal
-import com.speedment.internal.ui.config.TableProperty; // Exposes internal
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasIconPath;
 import com.speedment.ui.config.trait.HasNameProperty;
-import com.speedment.internal.ui.resource.SilkIcon;
-import com.speedment.internal.util.document.DocumentUtil;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
+import java.util.stream.Stream;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.MenuItem;
+import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.beans.value.ChangeListener;
-import javafx.scene.control.MenuItem;
-import javafx.collections.ListChangeListener;
-import java.util.stream.Stream;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
-import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -20,23 +20,22 @@ import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
 import static com.speedment.internal.util.ImmutableListUtil.*;
+import com.speedment.ui.config.db.StringPropertyItem;
 import com.speedment.ui.config.trait.HasColumnProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
 import com.speedment.ui.config.trait.HasOrdinalPositionProperty;
-import com.speedment.ui.config.db.StringPropertyItem;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
-import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
-import com.speedment.internal.ui.config.mutator.ForeignKeyColumnPropertyMutator;
-import com.speedment.ui.config.trait.HasExpandedProperty;
-import java.util.List;
-import java.util.Optional;
 
 /**
  *

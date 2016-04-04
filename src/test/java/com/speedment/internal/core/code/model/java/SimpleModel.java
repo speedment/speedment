@@ -22,7 +22,6 @@
 package com.speedment.internal.core.code.model.java;
 
 import com.speedment.Speedment;
-import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
@@ -30,14 +29,15 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.trait.HasName;
-import com.speedment.internal.core.config.dbms.StandardDbmsType;
 import com.speedment.config.db.mapper.identity.StringIdentityMapper;
+import com.speedment.config.db.trait.HasName;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import com.speedment.internal.core.config.dbms.StandardDbmsType;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.internal.util.document.DocumentTranscoder;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
-import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.stream.Collectors.joining;
 
 /**
  *

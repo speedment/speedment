@@ -21,8 +21,8 @@
  */
 package com.speedment.internal.core.code.model.java;
 
-import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 /**
  *

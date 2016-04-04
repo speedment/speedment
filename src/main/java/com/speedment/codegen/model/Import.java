@@ -17,14 +17,13 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.ImportModifier;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasType;
 import com.speedment.internal.codegen.model.ImportImpl;
-import com.speedment.codegen.model.modifier.ImportModifier;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents the explicit import of an dependency in code.

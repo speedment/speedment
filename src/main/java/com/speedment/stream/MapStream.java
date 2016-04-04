@@ -19,7 +19,6 @@ package com.speedment.stream;
 import com.speedment.annotation.Api;
 import com.speedment.util.CollectorUtil;
 import java.util.AbstractMap;
-import java.util.Collections;
 import static java.util.Collections.newSetFromMap;
 import java.util.Comparator;
 import java.util.Iterator;

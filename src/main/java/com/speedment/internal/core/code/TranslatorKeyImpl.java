@@ -17,8 +17,8 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.code.TranslatorKey;
-import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.config.db.trait.HasMainInterface;
 import static java.util.Objects.requireNonNull;
 
 /**

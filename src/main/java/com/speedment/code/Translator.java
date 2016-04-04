@@ -17,9 +17,14 @@
 package com.speedment.code;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.Meta;
+import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Import;
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
-import com.speedment.config.Document;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
@@ -28,21 +33,16 @@ import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasEnabled;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.codegen.Generator;
-import com.speedment.codegen.Meta;
-import com.speedment.codegen.model.ClassOrInterface;
-import com.speedment.codegen.model.File;
-import com.speedment.codegen.model.Import;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Something that can translate a {@link Document} into something else. This

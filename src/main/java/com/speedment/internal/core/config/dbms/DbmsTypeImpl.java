@@ -33,18 +33,16 @@ import com.speedment.config.db.parameters.DbmsTypeBuilder.WithSpeedmentPredicate
 import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
+import com.speedment.db.metadata.TypeInfoMetaData;
 import com.speedment.internal.core.db.DefaultDatabaseNamingConvention;
 import com.speedment.manager.SpeedmentPredicateView;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableSet;
 import java.util.HashSet;
-
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import com.speedment.db.metadata.TypeInfoMetaData;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

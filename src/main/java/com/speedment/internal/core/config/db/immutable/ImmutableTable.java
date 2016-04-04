@@ -21,8 +21,8 @@ import com.speedment.config.db.Table;
 import com.speedment.internal.core.config.db.TableImpl;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Map;
+import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 

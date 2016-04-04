@@ -16,9 +16,9 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.stream.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.LIMIT;
 import com.speedment.internal.core.stream.builder.action.trait.HasLimit;
+import com.speedment.stream.action.Action;
 import java.util.stream.LongStream;
 
 /**

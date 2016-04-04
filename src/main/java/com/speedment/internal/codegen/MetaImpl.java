@@ -21,10 +21,10 @@
  */
 package com.speedment.internal.codegen;
 
-import com.speedment.codegen.TransformFactory;
+import com.speedment.codegen.Meta;
 import com.speedment.codegen.RenderStack;
 import com.speedment.codegen.Transform;
-import com.speedment.codegen.Meta;
+import com.speedment.codegen.TransformFactory;
 
 /**
  * Meta implementation.

@@ -16,17 +16,17 @@
  */
 package com.speedment.internal.core.code.model.java.entity;
 
-import com.speedment.config.Document;
-import com.speedment.internal.core.code.entity.EntityTranslator;
 import com.speedment.codegen.Generator;
-import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.controller.AutoImports;
 import com.speedment.codegen.model.File;
-import com.speedment.internal.core.code.model.java.SimpleModel;
+import com.speedment.config.Document;
 import com.speedment.config.db.Table;
+import com.speedment.internal.codegen.controller.AutoImports;
+import com.speedment.internal.codegen.java.JavaGenerator;
+import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.core.code.model.java.SimpleModel;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;
 import org.junit.Test;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *

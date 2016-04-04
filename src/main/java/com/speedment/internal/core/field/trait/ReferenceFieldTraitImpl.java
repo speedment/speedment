@@ -19,14 +19,14 @@ package com.speedment.internal.core.field.trait;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.predicate.impl.reference.IsNotNullPredicate;
-import com.speedment.internal.core.field.predicate.impl.reference.IsNullPredicate;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.FieldSetterImpl;
+import com.speedment.internal.core.field.predicate.impl.reference.IsNotNullPredicate;
+import com.speedment.internal.core.field.predicate.impl.reference.IsNullPredicate;
 import static java.util.Objects.requireNonNull;
 
 /**

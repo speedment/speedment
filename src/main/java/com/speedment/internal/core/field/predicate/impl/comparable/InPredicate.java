@@ -16,14 +16,14 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import static com.speedment.field.predicate.PredicateType.IN;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import static com.speedment.field.predicate.PredicateType.IN;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import java.util.Set;
-import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
 
 /**
  *

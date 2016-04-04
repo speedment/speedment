@@ -26,8 +26,8 @@ import com.speedment.stream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Map;
+import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 

@@ -19,18 +19,18 @@ package com.speedment.config.db;
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
 import com.speedment.config.db.mapper.TypeMapper;
-import com.speedment.config.db.trait.HasAlias;
-import com.speedment.config.db.trait.HasEnabled;
-import com.speedment.config.db.trait.HasName;
-import com.speedment.config.db.trait.HasParent;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasMutator;
-import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.config.db.mutator.ColumnMutator;
 import com.speedment.config.db.mutator.DocumentMutator;
-import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
+import com.speedment.config.db.trait.HasAlias;
+import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasMutator;
+import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasNullable;
+import com.speedment.config.db.trait.HasOrdinalPosition;
+import com.speedment.config.db.trait.HasParent;
+import com.speedment.exception.SpeedmentException;
+import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  * A typed {@link Document} that represents a column in the database. A

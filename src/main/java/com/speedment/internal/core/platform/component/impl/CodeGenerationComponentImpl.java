@@ -17,22 +17,21 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
+import com.speedment.code.JavaClassTranslator;
 import static com.speedment.code.StandardTranslatorKey.*;
 import com.speedment.code.Translator;
 import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.TranslatorDecorator;
+import com.speedment.code.TranslatorManager;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.component.CodeGenerationComponent;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.codegen.Generator;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.codegen.model.ClassOrInterface;
-import com.speedment.code.JavaClassTranslator;
-import com.speedment.code.TranslatorManager;
-import com.speedment.component.PrimaryKeyFactoryComponent;
 import com.speedment.internal.core.code.TranslatorManagerImpl;
 import com.speedment.internal.core.code.entity.EntityImplTranslator;
 import com.speedment.internal.core.code.entity.EntityTranslator;
@@ -46,21 +45,18 @@ import com.speedment.internal.core.code.manager.EntityManagerTranslator;
 import com.speedment.internal.core.code.manager.GeneratedEntityManagerImplTranslator;
 import com.speedment.internal.core.code.manager.GeneratedEntityManagerTranslator;
 import com.speedment.internal.util.DefaultJavaLanguageNamer;
-import com.speedment.stream.MapStream;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import com.speedment.util.JavaLanguageNamer;
 import com.speedment.license.Software;
+import com.speedment.stream.MapStream;
+import com.speedment.util.JavaLanguageNamer;
 import java.util.List;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 

@@ -16,11 +16,9 @@
  */
 package com.speedment;
 
-import com.speedment.manager.Manager;
-import com.speedment.component.Component;
 import com.speedment.annotation.Api;
 import com.speedment.component.CodeGenerationComponent;
-import com.speedment.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.component.Component;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.component.EntityManager;
@@ -32,9 +30,11 @@ import com.speedment.component.ProjectComponent;
 import com.speedment.component.StreamSupplierComponent;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.component.UserInterfaceComponent;
-import com.speedment.exception.SpeedmentException;
-import java.util.stream.Stream;
+import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.resultset.ResultSetMapperComponent;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.manager.Manager;
+import java.util.stream.Stream;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system

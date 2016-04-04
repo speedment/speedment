@@ -17,17 +17,16 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.AnnotationModifier;
 import com.speedment.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.codegen.model.trait.HasCopy;
+import com.speedment.codegen.model.trait.HasFields;
 import com.speedment.codegen.model.trait.HasImports;
 import com.speedment.codegen.model.trait.HasJavadoc;
-import com.speedment.codegen.model.trait.HasFields;
 import com.speedment.codegen.model.trait.HasName;
 import com.speedment.internal.codegen.model.AnnotationImpl;
-import com.speedment.codegen.model.modifier.AnnotationModifier;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents an annotation in code.

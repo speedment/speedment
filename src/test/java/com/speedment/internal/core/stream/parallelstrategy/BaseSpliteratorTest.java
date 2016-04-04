@@ -24,11 +24,9 @@ package com.speedment.internal.core.stream.parallelstrategy;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import static org.junit.Assert.assertTrue;
 
 /**
  *

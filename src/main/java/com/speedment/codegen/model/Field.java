@@ -17,20 +17,17 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.FieldModifier;
 import com.speedment.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.codegen.model.trait.HasCall;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasJavadoc;
 import com.speedment.codegen.model.trait.HasName;
 import com.speedment.codegen.model.trait.HasType;
 import com.speedment.codegen.model.trait.HasValue;
 import com.speedment.internal.codegen.model.FieldImpl;
-import com.speedment.codegen.model.modifier.FieldModifier;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
-import com.speedment.codegen.model.trait.HasCall;
-import static java.util.Objects.requireNonNull;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents a field in code. This can be either as a method

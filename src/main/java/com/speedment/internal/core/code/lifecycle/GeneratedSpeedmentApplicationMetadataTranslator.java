@@ -17,28 +17,25 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
-import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
+import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Initializer;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Project;
+import com.speedment.internal.codegen.model.JavadocImpl;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
-import com.speedment.internal.codegen.model.JavadocImpl;
-import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import com.speedment.config.db.Project;
-import com.speedment.codegen.model.Field;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
+import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
+import com.speedment.internal.util.document.DocumentTranscoder;
+import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import com.speedment.codegen.model.Initializer;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

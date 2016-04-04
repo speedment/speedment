@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.db;
 
-import com.speedment.internal.util.function.TriFunction;
 import java.util.Collections;
 import java.util.Set;
 

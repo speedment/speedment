@@ -21,13 +21,13 @@ import static com.speedment.config.db.Table.COLUMNS;
 import static com.speedment.config.db.Table.FOREIGN_KEYS;
 import static com.speedment.config.db.Table.INDEXES;
 import static com.speedment.config.db.Table.PRIMARY_KEY_COLUMNS;
+import com.speedment.config.db.mutator.trait.HasAliasMutator;
+import com.speedment.config.db.mutator.trait.HasEnabledMutator;
+import com.speedment.config.db.mutator.trait.HasNameMutator;
 import com.speedment.internal.core.config.db.ColumnImpl;
 import com.speedment.internal.core.config.db.ForeignKeyImpl;
 import com.speedment.internal.core.config.db.IndexImpl;
 import com.speedment.internal.core.config.db.PrimaryKeyColumnImpl;
-import com.speedment.config.db.mutator.trait.HasAliasMutator;
-import com.speedment.config.db.mutator.trait.HasEnabledMutator;
-import com.speedment.config.db.mutator.trait.HasNameMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

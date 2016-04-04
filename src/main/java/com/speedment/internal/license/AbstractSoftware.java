@@ -19,8 +19,8 @@ package com.speedment.internal.license;
 import com.speedment.license.License;
 import com.speedment.license.Software;
 import java.util.Objects;
-import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *

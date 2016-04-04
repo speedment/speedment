@@ -22,9 +22,9 @@ import static com.speedment.config.db.Project.CONFIG_PATH;
 import static com.speedment.config.db.Project.DBMSES;
 import static com.speedment.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.config.db.Project.PACKAGE_NAME;
-import com.speedment.internal.core.config.db.DbmsImpl;
 import com.speedment.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.config.db.mutator.trait.HasNameMutator;
+import com.speedment.internal.core.config.db.DbmsImpl;
 import static com.speedment.internal.util.document.DocumentUtil.newDocument;
 
 /**

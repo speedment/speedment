@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.config.db;
 
-import com.speedment.internal.core.config.AbstractChildDocument;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.ForeignKey;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
+import com.speedment.internal.core.config.AbstractChildDocument;
 import java.util.Map;
 import java.util.stream.Stream;
 

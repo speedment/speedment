@@ -17,15 +17,12 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.trait.HasCall;
+import com.speedment.codegen.model.trait.HasCopy;
 import com.speedment.codegen.model.trait.HasJavadocTags;
 import com.speedment.internal.codegen.model.JavadocImpl;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
-import com.speedment.codegen.model.trait.HasCall;
-import static java.util.Objects.requireNonNull;
-import com.speedment.codegen.model.trait.HasCopy;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents a block of documentation in code. 

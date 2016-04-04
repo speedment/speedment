@@ -17,19 +17,18 @@
 package com.speedment.internal.codegen.controller;
 
 import com.speedment.codegen.model.Class;
-import com.speedment.codegen.model.Method;
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.JavadocTag;
+import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OPTIONAL;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Control that is used to generate setters, getters and adders for fields in 

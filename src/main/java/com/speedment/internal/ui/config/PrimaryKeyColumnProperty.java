@@ -20,7 +20,6 @@ import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Table;
-import com.speedment.config.db.mutator.PrimaryKeyColumnMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.PrimaryKeyColumnPropertyMutator;
 import static com.speedment.internal.util.ImmutableListUtil.*;

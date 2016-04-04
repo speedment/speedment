@@ -16,12 +16,12 @@
  */
 package com.speedment.internal.codegen.java.view.value;
 
-import com.speedment.internal.codegen.model.value.EnumValue;
-import java.util.Optional;
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
+import com.speedment.internal.codegen.model.value.EnumValue;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * Transforms from an {@link EnumValue} to java code.

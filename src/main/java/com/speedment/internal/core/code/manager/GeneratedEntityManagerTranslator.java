@@ -17,9 +17,6 @@
 package com.speedment.internal.core.code.manager;
 
 import com.speedment.Speedment;
-import com.speedment.component.ProjectComponent;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Table;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.File;
@@ -28,12 +25,15 @@ import com.speedment.codegen.model.Import;
 import com.speedment.codegen.model.Interface;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
+import com.speedment.component.ProjectComponent;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.SqlManager;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

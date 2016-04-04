@@ -16,9 +16,8 @@
  */
 package com.speedment.config.db.mapper.string;
 
-import java.util.Locale;
-
 import com.speedment.config.db.mapper.TypeMapper;
+import java.util.Locale;
 
 /**
 *

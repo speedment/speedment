@@ -25,7 +25,6 @@ import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
 import java.util.Collections;
 import java.util.Set;
-
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;

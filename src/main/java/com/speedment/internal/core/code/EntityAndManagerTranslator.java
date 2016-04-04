@@ -21,11 +21,11 @@ import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.codegen.model.Generic;
 import com.speedment.codegen.model.Type;
-import com.speedment.internal.codegen.model.constant.DefaultType;
 import com.speedment.config.db.Table;
 import com.speedment.exception.SpeedmentException;
-import java.util.function.Function;
+import com.speedment.internal.codegen.model.constant.DefaultType;
 import com.speedment.util.tuple.Tuple1;
+import java.util.function.Function;
 
 /**
  *

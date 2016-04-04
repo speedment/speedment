@@ -17,8 +17,6 @@
 package com.speedment.internal.core.code.entity;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.Table;
-import com.speedment.exception.SpeedmentException;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.Constructor;
@@ -28,30 +26,30 @@ import com.speedment.codegen.model.Generic;
 import com.speedment.codegen.model.Import;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultType.BOOLEAN_PRIMITIVE;
 import static com.speedment.internal.codegen.model.constant.DefaultType.INT_PRIMITIVE;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
+import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.code.AbstractBaseEntity;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
+import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
+import com.speedment.util.JavaLanguageNamer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import com.speedment.util.JavaLanguageNamer;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

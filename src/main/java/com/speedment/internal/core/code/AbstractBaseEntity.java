@@ -16,14 +16,14 @@
  */
 package com.speedment.internal.core.code;
 
-import com.speedment.exception.SpeedmentException;
-import com.speedment.encoder.JsonEncoder;
-import com.speedment.manager.Manager;
-import com.speedment.db.MetaResult;
-import java.util.function.Consumer;
 import com.speedment.Entity;
 import com.speedment.Speedment;
+import com.speedment.db.MetaResult;
+import com.speedment.encoder.JsonEncoder;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.manager.Manager;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  *

@@ -19,12 +19,14 @@ package com.speedment.internal.ui.controller;
 import com.speedment.component.UserInterfaceComponent;
 import com.speedment.event.TreeSelectionChange;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.ui.config.db.AbstractPropertyItem;
-import com.speedment.internal.ui.util.Loader;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.util.Loader;
 import com.speedment.ui.config.DocumentProperty;
+import com.speedment.ui.config.db.AbstractPropertyItem;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -34,8 +36,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
-import javafx.beans.binding.Bindings;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

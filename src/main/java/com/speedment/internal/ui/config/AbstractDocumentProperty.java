@@ -16,8 +16,6 @@
  */
 package com.speedment.internal.ui.config;
 
-import com.google.gson.annotations.Until;
-import com.speedment.ui.config.DocumentProperty;
 import com.speedment.Speedment;
 import com.speedment.config.Document;
 import com.speedment.exception.SpeedmentException;
@@ -26,6 +24,7 @@ import com.speedment.internal.ui.util.NumericProperty;
 import com.speedment.internal.ui.util.SimpleNumericProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
+import com.speedment.ui.config.DocumentProperty;
 import com.speedment.util.FloatSupplier;
 import com.speedment.util.OptionalBoolean;
 import static java.util.Collections.newSetFromMap;
@@ -60,11 +59,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *

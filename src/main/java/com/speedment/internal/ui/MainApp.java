@@ -21,18 +21,17 @@ import com.speedment.event.UIEvent;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.internal.ui.controller.ConnectController;
 import com.speedment.internal.ui.controller.MailPromptController;
 import com.speedment.internal.util.EmailUtil;
 import com.speedment.internal.util.Statistics;
 import java.io.File;
 import java.util.List;
-import javafx.application.Application;
-import javafx.stage.Stage;
-
-import static com.speedment.internal.ui.UISession.ReuseStage.USE_EXISTING_STAGE;
 import static java.util.Objects.requireNonNull;
+import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.stage.Stage;
 
 /**
  *

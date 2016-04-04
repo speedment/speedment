@@ -27,14 +27,12 @@ import com.speedment.config.db.Table;
 import com.speedment.config.db.trait.HasAlias;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import com.speedment.internal.util.document.DocumentUtil;
 import com.speedment.util.JavaLanguageNamer;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A support class for the {@link Translator} interface that holds various

@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;

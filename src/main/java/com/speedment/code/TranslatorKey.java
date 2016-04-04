@@ -17,8 +17,8 @@
 package com.speedment.code;
 
 import com.speedment.annotation.Api;
-import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.config.db.trait.HasMainInterface;
 
 /**
  * A key associated with a specific {@link Translator}. This is used to 

@@ -20,7 +20,6 @@ import com.speedment.Speedment;
 import com.speedment.component.DocumentPropertyComponent;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.IndexColumn;
-import com.speedment.config.db.mutator.IndexColumnMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.IndexColumnPropertyMutator;
 import static com.speedment.internal.util.ImmutableListUtil.*;

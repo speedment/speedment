@@ -18,9 +18,9 @@ package com.speedment.code;
 
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
-import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.config.db.trait.HasMainInterface;
 
 /**
  * A functional interface that describes a constructor for a class that 

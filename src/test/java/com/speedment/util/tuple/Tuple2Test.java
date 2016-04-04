@@ -21,17 +21,15 @@
  */
 package com.speedment.util.tuple;
 
-import com.speedment.util.tuple.Tuples;
-import com.speedment.util.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

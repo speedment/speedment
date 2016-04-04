@@ -17,7 +17,6 @@
 package com.speedment.internal.core.field.predicate.impl.string;
 
 import static com.speedment.field.predicate.PredicateType.EQUAL_IGNORE_CASE;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;

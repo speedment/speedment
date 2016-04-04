@@ -17,17 +17,17 @@
 package com.speedment.manager;
 
 import com.speedment.Speedment;
-import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
+import com.speedment.component.Lifecyclable;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
+import com.speedment.db.MetaResult;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.component.Lifecyclable;
-import com.speedment.field.FieldIdentifier;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
 import java.util.Optional;

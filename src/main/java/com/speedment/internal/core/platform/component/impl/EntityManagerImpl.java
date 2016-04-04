@@ -16,15 +16,15 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.exception.SpeedmentException;
-import com.speedment.manager.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.EntityManager;
 import com.speedment.component.ManagerComponent;
+import com.speedment.exception.SpeedmentException;
 import com.speedment.license.Software;
+import com.speedment.manager.Manager;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

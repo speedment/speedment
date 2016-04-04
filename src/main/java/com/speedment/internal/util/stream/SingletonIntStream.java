@@ -16,12 +16,11 @@
  */
 package com.speedment.internal.util.stream;
 
-import java.util.IntSummaryStatistics;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.stream.SingletonUtil.*;
+import java.util.IntSummaryStatistics;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
+import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;

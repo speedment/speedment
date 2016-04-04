@@ -17,21 +17,21 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.Translator;
+import com.speedment.code.TranslatorConstructor;
 import com.speedment.code.TranslatorDecorator;
 import com.speedment.code.TranslatorKey;
 import com.speedment.code.TranslatorManager;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.ClassOrInterface;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.codegen.Generator;
-import com.speedment.codegen.model.ClassOrInterface;
-import java.util.stream.Stream;
-import com.speedment.util.JavaLanguageNamer;
 import com.speedment.stream.MapStream;
+import com.speedment.util.JavaLanguageNamer;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * This Component interface is used for Speedmens's code generation.

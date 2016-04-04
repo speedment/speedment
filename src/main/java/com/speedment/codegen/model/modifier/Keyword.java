@@ -17,8 +17,8 @@
 package com.speedment.codegen.model.modifier;
 
 import com.speedment.annotation.Api;
-import com.speedment.codegen.model.trait.HasModifiers;
 import static com.speedment.codegen.model.modifier.Modifier.*;
+import com.speedment.codegen.model.trait.HasModifiers;
 
 /**
  *

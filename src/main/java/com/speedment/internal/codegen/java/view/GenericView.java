@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.codegen.java.view;
 
-import com.speedment.codegen.model.Generic;
-import java.util.Optional;
-import static com.speedment.internal.codegen.util.Formatting.*;
 import com.speedment.codegen.Generator;
 import com.speedment.codegen.Transform;
-import static java.util.Objects.requireNonNull;
+import com.speedment.codegen.model.Generic;
+import static com.speedment.internal.codegen.util.Formatting.*;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * Transforms from a {@link Generic} to java code.

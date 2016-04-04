@@ -16,16 +16,15 @@
  */
 package com.speedment.internal.codegen.model;
 
+import com.speedment.codegen.model.Initializer;
 import com.speedment.codegen.model.modifier.Modifier;
 import com.speedment.internal.codegen.util.Copier;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import com.speedment.codegen.model.Initializer;
 import static java.util.Objects.requireNonNull;
+import java.util.Set;
 
 /**
  * This is the default implementation of the {@link Initializer} interface.

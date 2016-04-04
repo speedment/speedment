@@ -17,12 +17,12 @@
 package com.speedment.codegen.model;
 
 import com.speedment.annotation.Api;
+import com.speedment.codegen.model.modifier.ClassModifier;
 import com.speedment.codegen.model.trait.HasConstructors;
 import com.speedment.codegen.model.trait.HasSupertype;
 import com.speedment.internal.codegen.model.ClassImpl;
-import com.speedment.codegen.model.modifier.ClassModifier;
-import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  * A model that represents a class in code.

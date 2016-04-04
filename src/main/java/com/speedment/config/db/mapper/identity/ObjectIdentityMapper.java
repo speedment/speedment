@@ -16,8 +16,6 @@
  */
 package com.speedment.config.db.mapper.identity;
 
-import java.sql.Clob;
-
 /**
  *
  * @author Emil Forslund

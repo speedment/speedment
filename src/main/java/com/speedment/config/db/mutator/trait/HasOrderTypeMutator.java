@@ -16,9 +16,9 @@
  */
 package com.speedment.config.db.mutator.trait;
 
-import com.speedment.config.db.trait.*;
-import com.speedment.config.db.parameters.OrderType;
 import com.speedment.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.parameters.OrderType;
+import com.speedment.config.db.trait.*;
 
 /**
  *

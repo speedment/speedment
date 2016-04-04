@@ -16,8 +16,6 @@
  */
 package com.speedment.util.tuple;
 
-import java.util.Optional;
-
 /**
  * {@inheritDoc}
  *

@@ -16,10 +16,10 @@
  */
 package com.speedment.internal.util.testing;
 
-import com.speedment.manager.Manager;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
 import java.util.Optional;
 import java.util.function.BiFunction;

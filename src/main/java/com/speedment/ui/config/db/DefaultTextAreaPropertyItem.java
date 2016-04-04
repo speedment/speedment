@@ -27,10 +27,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import static javafx.scene.layout.HBox.setHgrow;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
-import static javafx.scene.layout.HBox.setHgrow;
 
 /**
  *

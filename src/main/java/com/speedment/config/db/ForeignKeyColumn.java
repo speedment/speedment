@@ -18,6 +18,8 @@ package com.speedment.config.db;
 
 import com.speedment.annotation.Api;
 import com.speedment.config.Document;
+import com.speedment.config.db.mutator.DocumentMutator;
+import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import com.speedment.config.db.trait.HasColumn;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
@@ -25,8 +27,6 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.config.db.trait.HasOrdinalPosition;
 import com.speedment.config.db.trait.HasParent;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.config.db.mutator.DocumentMutator;
-import com.speedment.config.db.mutator.ForeignKeyColumnMutator;
 import static com.speedment.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 import java.util.Optional;
 
