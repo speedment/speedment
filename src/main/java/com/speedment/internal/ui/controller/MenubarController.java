@@ -96,6 +96,6 @@ public final class MenubarController implements Initializable {
     }
 
     public static Node create(UISession session) {
-        return Loader.create(session, "Menubar", MenubarController::new);
+        return Loader.create(session, "Menubar");
     }
 }

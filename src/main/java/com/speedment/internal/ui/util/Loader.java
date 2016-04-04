@@ -42,52 +42,58 @@ public final class Loader {
         FILENAME_PREFIX = "/fxml/",
         FILENAME_SUFFIX = ".fxml";
     
-    public static <T extends Initializable> Parent create(UISession session, String filename) {
+    public static Parent create(UISession session, String filename) {
         return create(session, filename, e -> {});
 	}
     
-    public static <T extends Initializable> Parent create(UISession session, String filename, Consumer<T> consumer) {
+    public static Parent create(UISession session, String filename, Consumer<Initializable> consumer) {
         requireNonNulls(session, filename, consumer);
 		final FXMLLoader loader = new FXMLLoader(Loader.class.getResource(FILENAME_PREFIX + filename + FILENAME_SUFFIX));
-        final AtomicReference<Object> constructed = new AtomicReference<>();
+        final AtomicReference<Initializable> constructed = new AtomicReference<>();
         loader.setControllerFactory(clazz -> {
             try {
-                final Constructor constructor = clazz.getConstructor(UISession.class);
+                @SuppressWarnings("unchecked")
+                final Constructor<? extends Initializable> constructor = 
+                    (Constructor<? extends Initializable>) 
+                    clazz.getDeclaredConstructor(UISession.class);
+                
                 constructor.setAccessible(true);
                 
-                final Object obj = constructor.newInstance(session);
+                final Initializable obj = constructor.newInstance(session);
                 constructed.set(obj);
                 return obj;
             } catch (final IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-                session.showError(
-                    "Error Constructing JavaFX Controller", 
+                throw new SpeedmentException(
                     "Could not construct a controller '" + clazz.getName() + 
                     "' for file '" + filename + "' using reflection.", ex
                 );
-                return null;
             }
         });
 
         try {
             final Parent loaded = loader.load();
-            
-            @SuppressWarnings("unchecked")
-            final T casted = (T) constructed.get();
-            consumer.accept(casted);
+            consumer.accept(constructed.get());
             return loaded;
         } catch (final IOException ex) {
-            throw new SpeedmentException("Failed to load FXML file '" + filename + "'.", ex);
+            throw new SpeedmentException(
+                "Failed to load FXML file '" + filename + "'.", ex
+            );
+        } catch (final NullPointerException ex) {
+            throw new SpeedmentException(
+                "Produced instance for FXML-file: '" + filename + 
+                "' was set to null.", ex
+            );
         }
 	}
     
-    public static <T extends Initializable> Parent createAndShow(
+    public static Parent createAndShow(
         UISession session, String filename) {
         
         return createAndShow(session, filename, e -> {});
     }
     
-    public static <T extends Initializable> Parent createAndShow(
-        UISession session, String filename, Consumer<T> consumer) {
+    public static Parent createAndShow(
+        UISession session, String filename, Consumer<Initializable> consumer) {
         
         final Parent root = Loader.create(session, filename, consumer);
         final Scene scene = new Scene(root);

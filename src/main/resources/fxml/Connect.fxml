@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<HBox fx:id="container" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="6.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="container" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="6.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.internal.ui.controller.ConnectController">
     <children>
         <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="320.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
             <children>

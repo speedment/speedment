@@ -184,7 +184,7 @@ public final class ProjectTreeController implements Initializable {
     }
     
     public static Node create(UISession session) {
-        return Loader.create(session, "ProjectTree", ProjectTreeController::new);
+        return Loader.create(session, "ProjectTree");
 	}
     
     private final static class DocumentPropertyCell extends TreeCell<DocumentProperty> {

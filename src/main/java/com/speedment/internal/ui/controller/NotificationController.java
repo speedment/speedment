@@ -104,18 +104,8 @@ public final class NotificationController implements Initializable {
         }
     }
 
-    static void showNotification(UISession session, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
-        final FlowPane area = (FlowPane) session.getStage().getScene().lookup(NOTIFICATION_AREA_ID);
-        
-        if (area == null) {
-            session.showError(
-                "Error Creating Notification",
-                "Could not find the '" + NOTIFICATION_AREA_ID + 
-                "' node in the JavaFX scene."
-            );
-            return;
-        }
-        
+    static void showNotification(FlowPane area, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+
         final FXMLLoader loader = new FXMLLoader(NotificationController.class.getResource(NOTIFICATION_FXML));
         final AtomicReference<NotificationController> ref = new AtomicReference<>();
         loader.setControllerFactory(clazz -> {

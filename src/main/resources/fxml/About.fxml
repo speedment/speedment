@@ -29,7 +29,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" 
+      maxHeight="-Infinity" 
+      maxWidth="-Infinity" 
+      minHeight="-Infinity" 
+      minWidth="-Infinity" 
+      prefWidth="320.0" 
+      spacing="8.0" 
+      xmlns="http://javafx.com/javafx/8.0.40" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.speedment.internal.ui.controller.AboutController">
     <children>
         <ImageView fx:id="titleImage" fitHeight="32.0" preserveRatio="true" smooth="true" />
         <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />

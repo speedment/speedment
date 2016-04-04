@@ -67,7 +67,7 @@ public final class SceneController implements Initializable {
     }
     
     public static void createAndShow(UISession session) {
-        final Parent root           = Loader.create(session, "Scene", SceneController::new);
+        final Parent root           = Loader.create(session, "Scene");
         final Scene scene           = new Scene(root);
         final Stage stage           = session.getStage();
         final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();

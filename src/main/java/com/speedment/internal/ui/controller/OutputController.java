@@ -49,6 +49,6 @@ public final class OutputController implements Initializable {
     }
     
     public static Node create(UISession session) {
-        return Loader.create(session, "Output", OutputController::new);
+        return Loader.create(session, "Output");
 	}
 }

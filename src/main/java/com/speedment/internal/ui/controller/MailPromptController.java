@@ -89,7 +89,7 @@ public final class MailPromptController implements Initializable {
     }
     
     public static void createAndShow(UISession session) {
-        Loader.createAndShow(session, "MailPrompt", MailPromptController::new);
+        Loader.createAndShow(session, "MailPrompt");
         
         final Stage stage = session.getStage();
         stage.sizeToScene();

@@ -63,6 +63,6 @@ public final class ToolbarController implements Initializable {
     }
     
     public static Node create(UISession session) {
-        return Loader.create(session, "Toolbar", ToolbarController::new);
+        return Loader.create(session, "Toolbar");
 	}
 }

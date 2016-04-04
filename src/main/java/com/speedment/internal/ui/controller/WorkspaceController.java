@@ -102,6 +102,6 @@ public final class WorkspaceController implements Initializable {
     }
     
     public static Node create(UISession session) {
-        return Loader.create(session, "Workspace", WorkspaceController::new);
+        return Loader.create(session, "Workspace");
 	}
 }

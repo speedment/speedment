@@ -206,7 +206,7 @@ public final class ConnectController implements Initializable {
     }
     
     public static void createAndShow(UISession session) {
-        Loader.createAndShow(session, "Connect", ConnectController::new);
+        Loader.createAndShow(session, "Connect");
         session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_CONNECT_WINDOW);
 	}
     
