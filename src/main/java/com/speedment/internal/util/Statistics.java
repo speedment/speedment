@@ -113,7 +113,7 @@ public final class Statistics {
                     final int responseCode = con.getResponseCode();
                     final String responseMessage = con.getResponseMessage();
                     try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                        final StringBuffer response = new StringBuffer();
+                        final StringBuilder response = new StringBuilder();
                         String inputLine;
                         while ((inputLine = in.readLine()) != null) {
                             response.append(inputLine);
