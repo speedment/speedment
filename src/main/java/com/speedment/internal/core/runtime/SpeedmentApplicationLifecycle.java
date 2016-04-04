@@ -43,7 +43,6 @@ import com.speedment.internal.util.Statistics;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import com.speedment.internal.util.testing.TestSettings;
 import com.speedment.manager.Manager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.tuple.Tuple2;
@@ -82,6 +81,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     private final List<Tuple3<Class<? extends Document>, String, Consumer<? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
     private boolean checkDatabaseConnectivity;
+    private boolean validateRuntimeConfig;
     private final List<Function<Speedment, Manager<?>>> customManagers;
 
     private ApplicationMetadata speedmentApplicationMetadata;
@@ -94,6 +94,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         withsNamed = newList();
         withsAll = newList();
         checkDatabaseConnectivity = true;
+        validateRuntimeConfig = true;
         customManagers = new CopyOnWriteArrayList<>();
     }
 
@@ -383,6 +384,19 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     /**
+     * Sets if an initial validation if the configuration shall be performed
+     * upon build(). The default value is <code>true</code>
+     *
+     * @param <C> the component type
+     * @param validateRuntimeConfig if the configuration shall be performed
+     * @return this instance
+     */
+    public <C extends Component> T withValidateRuntimeConfig(final boolean validateRuntimeConfig) {
+        this.validateRuntimeConfig = validateRuntimeConfig;
+        return self();
+    }
+
+    /**
      * Adds a custom manager constructor, being called before build to replace
      * an existing manager.
      *
@@ -428,7 +442,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     public void onStart() {
         super.onStart();
         bringRemainingUpTo(State.RESOLVED); // We need to double check since an inheriting class may have added things
-        validateRuntimeConfig();
+        if (validateRuntimeConfig) {
+            validateRuntimeConfig();
+        }
         makeConfigImmutable();
 
         if (checkDatabaseConnectivity) {
