@@ -20,6 +20,7 @@ import com.speedment.component.brand.Brand;
 import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.Loader;
+import com.speedment.internal.util.Statistics;
 import java.net.URL;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
@@ -63,6 +64,8 @@ public final class SceneController implements Initializable {
             vertical.setDividerPositions(0.7, 0.3);
             
             session.toggleOutput();
+            
+            Statistics.onGuiProjectLoaded();
         });
     }
     
