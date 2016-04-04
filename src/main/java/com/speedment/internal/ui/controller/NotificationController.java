@@ -206,5 +206,5 @@ public final class NotificationController implements Initializable {
     private final static String NOTIFICATION_FXML = "/fxml/Notification.fxml";
     private final static String NOTIFICATION_AREA_ID = "#notificationArea";
     
-    private final static Duration TIMER = Duration.seconds(30);
+    private final static Duration TIMER = Duration.seconds(10);
 }
