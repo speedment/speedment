@@ -77,6 +77,17 @@
             <email>emil@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
+        <developer>
+            <id>HSaltin</id>
+            <name>Håkan Saltin</name>
+            <email>hakan@speedment.com</email>
+            <timezone>America/Los_Angeles</timezone>
+        </developer>
+        <developer>
+            <id>Rajvinder</id>
+            <name>Rajvinder Kaur Janjuha</name>
+            <timezone>IST</timezone>
+        </developer>
     </developers>
     
     <contributors>
@@ -96,6 +107,10 @@
         <contributor>
             <name>Anton Johansson (GitHub:anton-johansson)</name>
             <timezone>Europe/Stockholm</timezone>
+        </contributor>
+        <contributor>
+            <name>Valeriy Vyrva (GitHub:valery1707)</name>
+            <timezone>Asia/Almaty</timezone>
         </contributor>
     </contributors>
 
