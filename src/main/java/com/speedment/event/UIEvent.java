@@ -20,7 +20,7 @@ import com.speedment.annotation.Api;
 
 /**
  * Event that is created when the User Interface is starting. This happens when
- * the {@link UISession} instance is accessible but no window have been created
+ * the {@link com.speedment.internal.ui.UISession UISession} instance is accessible but no window have been created
  * yet.
  * 
  * @author  Emil Forslund
