@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.StreamSupplierComponent;
+import com.speedment.license.Software;
 import com.speedment.stream.StreamDecorator;
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public class NativeStreamSupplierComponentImpl extends Apache2AbstractComponent implements StreamSupplierComponent {
+public class NativeStreamSupplierComponentImpl extends InternalOpenSourceComponent implements StreamSupplierComponent {
 
     public NativeStreamSupplierComponentImpl(Speedment speedment) {
         super(speedment);
@@ -35,4 +36,15 @@ public class NativeStreamSupplierComponentImpl extends Apache2AbstractComponent 
     public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {
         return getSpeedment().managerOf(entityClass).nativeStream(decorator);
     }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+
+    @Override
+    public StreamSupplierComponent defaultCopy(Speedment speedment) {
+        return new NativeStreamSupplierComponentImpl(speedment);
+    }
+
 }

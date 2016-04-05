@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,10 +18,10 @@ package com.speedment.internal.core.stream.builder.streamterminator;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate;
-import com.speedment.internal.core.stream.builder.action.Action;
 import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.internal.util.Cast;
+import com.speedment.stream.Pipeline;
+import com.speedment.stream.action.Action;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -35,15 +35,15 @@ import static java.util.stream.Collectors.toList;
  */
 public class StreamTerminatorUtil {
 
-    public static <T extends Pipeline, ENTITY> List<SpeedmentPredicate<ENTITY, ?>> topLevelAndPredicates(T initialPipeline) {
-        final List<SpeedmentPredicate<ENTITY, ?>> andPredicateBuilders = new ArrayList<>();
+    public static <T extends Pipeline, ENTITY> List<SpeedmentPredicate<ENTITY, ?, ?>> topLevelAndPredicates(T initialPipeline) {
+        final List<SpeedmentPredicate<ENTITY, ?, ?>> andPredicateBuilders = new ArrayList<>();
 
         for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
             @SuppressWarnings("rawtypes")
             final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
             if (oFilterAction.isPresent()) {
                 @SuppressWarnings("unchecked")
-                final List<SpeedmentPredicate<ENTITY, ?>> newAndPredicates = andPredicates(oFilterAction.get());
+                final List<SpeedmentPredicate<ENTITY, ?, ?>> newAndPredicates = andPredicates(oFilterAction.get());
                 andPredicateBuilders.addAll(newAndPredicates);
             } else {
                 break; // We can only do initial consecutive FilterAction(s)
@@ -53,9 +53,9 @@ public class StreamTerminatorUtil {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <ENTITY> List<SpeedmentPredicate<?, ?>> andPredicates(FilterAction<ENTITY> action) {
+    public static <ENTITY> List<SpeedmentPredicate<?, ?, ?>> andPredicates(FilterAction<ENTITY> action) {
         requireNonNull(action);
-        final List<SpeedmentPredicate<?, ?>> andPredicateBuilders = new ArrayList<>();
+        final List<SpeedmentPredicate<?, ?, ?>> andPredicateBuilders = new ArrayList<>();
         final Predicate<? super ENTITY> predicate = action.getPredicate();
 
         final Optional<SpeedmentPredicate> oPredicateBuilder = Cast.cast(predicate, SpeedmentPredicate.class);

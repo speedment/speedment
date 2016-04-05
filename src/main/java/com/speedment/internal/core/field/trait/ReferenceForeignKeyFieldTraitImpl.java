@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,23 +18,23 @@ package com.speedment.internal.core.field.trait;
 
 import com.speedment.field.methods.Finder;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
  * @param <FK> the foreign entity type
  * @author pemi
  */
-public class ReferenceForeignKeyFieldTraitImpl<ENTITY, FK> implements ReferenceForeignKeyFieldTrait<ENTITY, FK> {
+public class ReferenceForeignKeyFieldTraitImpl<ENTITY, D, FK> implements ReferenceForeignKeyFieldTrait<ENTITY, D, FK> {
 
     private final Finder<ENTITY, FK> finder;
 
     public ReferenceForeignKeyFieldTraitImpl(Finder<ENTITY, FK> finder) {
-        this.finder = finder;
+        this.finder = requireNonNull(finder);
     }
 
     @Override
     public Finder<ENTITY, FK> finder() {
         return finder;
     }
-
 }

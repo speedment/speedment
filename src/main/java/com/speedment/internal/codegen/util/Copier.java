@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.codegen.util;
 
-import com.speedment.internal.codegen.lang.interfaces.Copyable;
+import com.speedment.codegen.model.trait.HasCopy;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +26,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -34,11 +33,11 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Copier {
     
-	public static <T extends Copyable<T>> T copy(T prototype) {
+	public static <T extends HasCopy<T>> T copy(T prototype) {
         return prototype == null ? null : prototype.copy();
     }
     
-    public static <T extends Copyable<T>> Optional<T> copy(Optional<T> prototype) {
+    public static <T extends HasCopy<T>> Optional<T> copy(Optional<T> prototype) {
 		return Copier.copy(prototype, c -> c.copy());
 	}
 	
@@ -52,7 +51,7 @@ public final class Copier {
 		}
 	}
 	
-	public static <T extends Copyable<T>> List<T> copy(List<T> prototype) {
+	public static <T extends HasCopy<T>> List<T> copy(List<T> prototype) {
 		return Copier.copy(requireNonNull(prototype), c -> c.copy());
 	}
 	
@@ -60,7 +59,7 @@ public final class Copier {
 		return copy(requireNonNull(prototype), copier, new ArrayList<>());
 	}
 	
-	public static <T extends Copyable<T>> Set<T> copy(Set<T> prototype) {
+	public static <T extends HasCopy<T>> Set<T> copy(Set<T> prototype) {
 		return Copier.copy(requireNonNull(prototype), c -> c.copy());
 	}
 

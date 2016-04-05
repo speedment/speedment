@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,28 +18,28 @@ package com.speedment.internal.core.field.predicate.impl.string;
 
 import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
-import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
 /**
  *
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String>, StringSpeedmentPredicate<ENTITY> {
+public class BaseStringPredicate<ENTITY, D> extends SpeedmentPredicateImpl<ENTITY, D, String>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String>, StringSpeedmentPredicate<ENTITY, D> {
 
     private final String operand0;
     private final BiStringPredicate innerPredicate;
 
     public BaseStringPredicate(PredicateType predicateType,
-        FieldTrait field,
-        ReferenceFieldTrait<ENTITY, String> referenceField,
-        String operand0,
-        BiStringPredicate innerPredicate
+            FieldTrait field,
+            ReferenceFieldTrait<ENTITY, D, String> referenceField,
+            String operand0,
+            BiStringPredicate innerPredicate
     ) {
         super(predicateType, field, referenceField);
         this.operand0 = operand0;
@@ -63,18 +63,18 @@ public class BaseStringPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, 
     }
 
     public static final BiStringPredicate EQUALS_IGNORE_CASE_PREDICATE
-        = (v, f) -> (v == f) || (f != null && f.equalsIgnoreCase(v));
+            = (v, f) -> (v == f) || (f != null && f.equalsIgnoreCase(v));
 
     public static final BiStringPredicate NOT_EQUALS_IGNORE_CASE_PREDICATE
-        = (v, f) -> !EQUALS_IGNORE_CASE_PREDICATE.test(v, f);
+            = (v, f) -> !EQUALS_IGNORE_CASE_PREDICATE.test(v, f);
 
     public static final BiStringPredicate STARTS_WITH_PREDICATE
-        = (v, f) -> (v != null && f != null) && (f.startsWith(v));
+            = (v, f) -> (v != null && f != null) && (f.startsWith(v));
 
     public static final BiStringPredicate ENDS_WITH_PREDICATE
-        = (v, f) -> (v != null && f != null) && (f.endsWith(v));
+            = (v, f) -> (v != null && f != null) && (f.endsWith(v));
 
     public static final BiStringPredicate CONTAINS_PREDICATE
-        = (v, f) -> (v != null && f != null) && (f.contains(v));
+            = (v, f) -> (v != null && f != null) && (f.contains(v));
 
 }

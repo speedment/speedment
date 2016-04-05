@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,10 +24,10 @@ package com.speedment.internal.util;
 import com.speedment.util.NullUtil;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -59,14 +59,13 @@ public class ArrayUtilTest {
      */
     @Test
     public void testRequireNonNulls_Object_Object() {
-        System.out.println("requireNonNulls");
         Object o0 = "A";
         Object o1 = null;
         try {
             NullUtil.requireNonNulls(o0, o1);
             fail("No NPE");
         } catch (NullPointerException npe) {
-            System.out.println(npe);
+            //System.out.println(npe);
 // ignore
         }
 

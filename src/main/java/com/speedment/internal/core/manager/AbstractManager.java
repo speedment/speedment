@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,36 +16,31 @@
  */
 package com.speedment.internal.core.manager;
 
-import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.encoder.JsonEncoder;
-import com.speedment.field.ComparableField;
-import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.runtime.AbstractLifecycle;
+import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
-import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
- *
- * @param <ENTITY> Entity type for this Manager
+ * @author          Emil Forslund
+ * @param <ENTITY>  entity type for this Manager
  */
-public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
+public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<ENTITY>> implements Manager<ENTITY> {
 
     protected final Speedment speedment;
 
-    private Lifecyclable.State state;
-
     private final JsonEncoder<ENTITY> sharedJasonFormatter;
 
-    public AbstractManager(Speedment speedment) {
+    protected AbstractManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        state = Lifecyclable.State.CREATED;
         sharedJasonFormatter = JsonEncoder.allOf(this);
     }
 
@@ -62,60 +57,17 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    Optional<ENTITY> findAny(F field, V value) {
+        
         requireNonNull(field);
         return speedment.getStreamSupplierComponent()
                 .findAny(getEntityClass(), field, value);
     }
 
-//    @Override
-//    @SuppressWarnings("unchecked")
-//    public Optional<Object> find(ENTITY entity, Column column) {
-//        requireNonNull(entity);
-//        requireNonNull(column);
-//        return getTable()
-//            .streamOf(ForeignKey.class)
-//            .flatMap(fk -> fk.stream().filter(fkc -> fkc.getColumn().equals(column)))
-//            .map(oFkc -> {
-//                Table fkTable = oFkc.getForeignTable();
-//                Column fkColumn = oFkc.getForeignColumn();
-//
-//                @SuppressWarnings("rawtypes")
-//                final Manager fkManager = speedment.get(ManagerComponent.class).findByTable(fkTable);
-//
-//                Object key = get(entity, column);
-//
-//                // This is an O(n) operation. We must use our short curcuit Fields...
-//                return fkManager.stream().filter(e -> fkManager.get(e, fkColumn).equals(key)).findAny();
-//            }).filter(o -> o.isPresent()).map(i -> i.get()).findAny();
-//    }
     @Override
-    public Manager<ENTITY> initialize() {
-        state = State.INIITIALIZED;
-        return this;
+    public Speedment speedment() {
+        return speedment;
     }
-
-    @Override
-    public Manager<ENTITY> resolve() {
-        state = State.RESOLVED;
-        return this;
-    }
-
-    @Override
-    public Manager<ENTITY> start() {
-        state = State.STARTED;
-        return this;
-    }
-
-    @Override
-    public Manager<ENTITY> stop() {
-        state = State.STOPPED;
-        return this;
-    }
-
-    @Override
-    public Lifecyclable.State getState() {
-        return state;
-    }
-
 }

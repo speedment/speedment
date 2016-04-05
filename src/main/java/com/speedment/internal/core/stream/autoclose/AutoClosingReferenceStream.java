@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,6 @@
 package com.speedment.internal.core.stream.autoclose;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -41,18 +40,15 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
- *
- * @author pemi
- */
-/**
- * A Stream that will call its {@link #close() ) method automatically after
+ * A Stream that will call its {@link #close()} method automatically after
  * a terminating operation has been called.
  * <p>
- * N.B. The {@link #iterator() } {@link #spliterator() } methods will throw
- * an {@link UnsupportedOperationException } because otherwise the AutoClose
+ * N.B. The {@link #iterator()} {@link #spliterator()} methods will throw
+ * an {@link UnsupportedOperationException} because otherwise the AutoClose
  * property cannot be guaranteed.
  *
- * @param <T> Stream type
+ * @param <T>  Stream type
+ * @author     Per Minborg
  */
 public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream implements Stream<T> {
 

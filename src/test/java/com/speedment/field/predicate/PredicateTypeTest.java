@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,10 +29,10 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -79,14 +79,12 @@ public class PredicateTypeTest {
 
     @Test
     public void testGetComplementType() {
-        System.out.println("getComplementType");
         assertEquals(EQUAL, NOT_EQUAL.negate());
         assertEquals(NOT_EQUAL, EQUAL.negate());
     }
 
     @Test
     public void testEffectiveType() {
-        System.out.println("effectiveType");
         assertEquals(EQUAL, EQUAL.effectiveType(false));
         assertEquals(NOT_EQUAL, EQUAL.effectiveType(true));
     }

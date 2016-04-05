@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,14 +27,13 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
  * @author pemi
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public final class SpeedmentVersion {
 
-    private static final String
-        IMPLEMENTATION_TITLE   = "Speedment",
-        IMPLEMENTATION_VENDOR  = "Speedment Inc.",  // "Speedment, Inc." difficult to enter into POM because of ','
-        IMPLEMENTATION_VERSION = "2.2.3",
-        SPECIFICATION_VERSION  = "2.2";
+    private static final String IMPLEMENTATION_TITLE = "Speedment",
+        IMPLEMENTATION_VENDOR = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
+        IMPLEMENTATION_VERSION = "2.3.0",
+        SPECIFICATION_VERSION = "2.3";
 
     private static final boolean PRODUCTION_MODE = true;
 
@@ -95,13 +94,6 @@ public final class SpeedmentVersion {
         return SPECIFICATION_VERSION;
     }
 
-    public static String getWelcomeMessage() {
-        return getImplementationTitle()
-            + " (" + getImplementationVersion() + ")"
-            + " by " + getImplementationVendor() + " started."
-            + " API version is " + getSpecificationVersion();
-    }
-    
     /**
      * Utility classes should not be instantiated.
      */

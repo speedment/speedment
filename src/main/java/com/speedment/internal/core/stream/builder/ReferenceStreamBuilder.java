@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,6 @@
  */
 package com.speedment.internal.core.stream.builder;
 
-import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
-import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.internal.core.stream.builder.action.reference.DistinctAction;
 import com.speedment.internal.core.stream.builder.action.reference.FilterAction;
 import com.speedment.internal.core.stream.builder.action.reference.FlatMapAction;
@@ -32,7 +30,10 @@ import com.speedment.internal.core.stream.builder.action.reference.MapToLongActi
 import com.speedment.internal.core.stream.builder.action.reference.PeekAction;
 import com.speedment.internal.core.stream.builder.action.reference.SkipAction;
 import com.speedment.internal.core.stream.builder.action.reference.SortedAction;
+import com.speedment.internal.core.stream.builder.action.reference.SortedComparatorAction;
+import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.pipeline.ReferencePipeline;
+import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import java.util.Comparator;
 import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
@@ -140,7 +141,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Stream<T> sorted(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return append(new SortedAction<>(comparator));
+        return append(new SortedComparatorAction<>(comparator));
     }
 
     @Override

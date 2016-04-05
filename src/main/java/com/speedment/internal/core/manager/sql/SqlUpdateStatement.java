@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,11 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  *
@@ -28,25 +24,13 @@ import java.util.function.Consumer;
  */
 public final class SqlUpdateStatement extends SqlStatement {
 
-    private final List<Long> generatedKeys;
-    private final Consumer<List<Long>> generatedKeysConsumer;
-
-    public SqlUpdateStatement(final String sql, final List<?> values, final Consumer<List<Long>> generatedKeysConsumer) {
+    public SqlUpdateStatement(final String sql, final List<?> values) {
         super(sql, values);
-        this.generatedKeys = new ArrayList<>();
-        this.generatedKeysConsumer = Objects.requireNonNull(generatedKeysConsumer);
     }
 
-    public List<Long> getGeneratedKeys() {
-        return Collections.unmodifiableList(generatedKeys);
-    }
-
-    public void addGeneratedKey(Long generatedKey) {
-        generatedKeys.add(generatedKey);
-    }
-
-    public void acceptGeneratedKeys() {
-        generatedKeysConsumer.accept(generatedKeys);
+    @Override
+    public Type getType() {
+        return Type.UPDATE;
     }
 
 }

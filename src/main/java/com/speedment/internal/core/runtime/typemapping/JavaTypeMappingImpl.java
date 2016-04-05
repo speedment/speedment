@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,8 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
-import com.speedment.config.Dbms;
+import com.speedment.component.resultset.ResultSetMapping;
+import com.speedment.config.db.Dbms;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
@@ -25,14 +26,19 @@ import java.util.function.Function;
  * @author pemi
  * @param <T> the Java Class to map
  */
-public final class JavaTypeMappingImpl<T> implements JavaTypeMapping<T> {
+public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
 
     private final Class<T> clazz;
     private final String resultSetMethodName;
-    private final Function<String, T> stringMapper;
-    private final Function<Long, T> longMapper;
+    private final Function<String, ? extends T> stringMapper;
+    private final Function<Long, ? extends T> longMapper;
 
-    public JavaTypeMappingImpl(Class<T> clazz, String resultSetMethodName, Function<String, T> stringMapper, Function<Long, T> longMapper) {
+    public JavaTypeMappingImpl(
+        Class<T> clazz,
+        String resultSetMethodName,
+        Function<String, ? extends T> stringMapper,
+        Function<Long, ? extends T> longMapper
+    ) {
         this.clazz = requireNonNull(clazz);
         this.resultSetMethodName = requireNonNull(resultSetMethodName);
         this.stringMapper = requireNonNull(stringMapper);

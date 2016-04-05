@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util;
 
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collections;
@@ -79,7 +80,7 @@ public final class TextUtil {
      */
     public static String formatTextBox(String text, int width, Pattern splitter, Set<String> singleRowers) {
         requireNonNulls(text, splitter);
-        requireNonNulls(singleRowers);
+        requireNonNullElements(singleRowers);
 
         final StringBuilder sb = new StringBuilder();
         final AtomicInteger col = new AtomicInteger();

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.IS_NOT_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
@@ -29,9 +28,11 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class IsNotNullComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class IsNotNullComparablePredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends BaseComparablePredicate<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public IsNotNullComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+    public IsNotNullComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(IS_NOT_NULL, field, referenceField, null, (v, f) -> f != null);
     }
 }

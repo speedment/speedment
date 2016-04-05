@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,8 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import com.speedment.field.Inclusion;
-import static com.speedment.field.predicate.PredicateType.BETWEEN;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import static com.speedment.field.predicate.PredicateType.BETWEEN;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -32,15 +31,21 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class BetweenPredicate<ENTITY, V extends Comparable<? super V>>
-    extends SpeedmentPredicateImpl<ENTITY, V>
-    implements SpeedmentPredicate<ENTITY, V>, QuaternaryInclusionOperation<V, V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class BetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, QuaternaryInclusionOperation<V, V>, ComparableSpeedmentPredicate<ENTITY, D, V> {
 
     private final V operand0;
     private final V operand1;
     private final Inclusion operand2;
 
-    public BetweenPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V start, V end, Inclusion inclusion) {
+    public BetweenPredicate(
+            FieldTrait field,
+            ReferenceFieldTrait<ENTITY, D, V> referenceField,
+            V start,
+            V end,
+            Inclusion inclusion
+    ) {
         super(BETWEEN, field, referenceField);
         this.operand0 = start;
         this.operand1 = end;

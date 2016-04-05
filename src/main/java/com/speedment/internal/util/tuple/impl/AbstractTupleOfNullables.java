@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.TupleOfNullables;
+import com.speedment.util.tuple.TupleOfNullables;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -40,12 +40,12 @@ public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<Abstra
         return Optional.ofNullable(values[assertIndexBounds(index)]);
     }
 
-    @Override
-    public Optional<Object> remove(int index) {
-        final Object previousValue = get(index);
-        values[index] = null;
-        return Optional.ofNullable(previousValue);
-    }
+//    @Override
+//    public Optional<Object> remove(int index) {
+//        final Object previousValue = get(index);
+//        values[index] = null;
+//        return Optional.ofNullable(previousValue);
+//    }
 
     @Override
     public Stream<Optional<Object>> stream() {

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,14 +22,23 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <V> the field value type
- * @param <FK> the foreign entity type
+ * A field that represents a value that implements the 
+ * {@link ReferenceFieldTrait} and the {ReferenceForeignKeyFieldTrait}.
+ * 
+ * @param <ENTITY>     the entity type
+ * @param <D>          the database type
+ * @param <V>          the field value type
+ * @param <FK_ENTITY>  the foreign entity type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @since  ReferenceFieldTrait
+ * @since  ReferenceForeignKeyFieldTrait
  */
-@Api(version = "2.2")
-public interface ReferenceForeignKeyField<ENTITY, V, FK> extends
-    FieldTrait,
-    ReferenceFieldTrait<ENTITY, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}
+@Api(version = "2.3")
+public interface ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> extends
+    FieldTrait, 
+    ReferenceFieldTrait<ENTITY, D, V>,
+    ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {}

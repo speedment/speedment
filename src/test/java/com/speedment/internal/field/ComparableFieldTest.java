@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,18 +21,16 @@ import static com.speedment.field.Inclusion.START_EXCLUSIVE_END_INCLUSIVE;
 import static com.speedment.field.Inclusion.START_INCLUSIVE_END_INCLUSIVE;
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
-import static java.util.Comparator.nullsFirst;
-import java.util.List;
-import static java.util.stream.Collectors.toList;
-import org.junit.Test;
-import static java.util.Comparator.nullsLast;
-import static org.junit.Assert.assertEquals;
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsFirst;
+import static java.util.Comparator.nullsLast;
+import java.util.List;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
-import static java.util.Comparator.comparing;
+import org.junit.Test;
 
 /**
  *
@@ -171,10 +169,10 @@ public class ComparableFieldTest extends BaseFieldTest {
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
         final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
 
-        System.out.println("Expected");
-        expected.forEach(System.out::println);
-        System.out.println("Result");
-        result.forEach(System.out::println);
+        //System.out.println("Expected");
+        //expected.forEach(System.out::println);
+        //System.out.println("Result");
+        //result.forEach(System.out::println);
 
         assertEquals(
             expected,

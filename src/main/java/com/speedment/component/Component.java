@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,43 +16,56 @@
  */
 package com.speedment.component;
 
-import com.speedment.License;
 import com.speedment.Speedment;
 import com.speedment.annotation.Api;
-import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.license.Software;
 
 /**
  * A Component represents the basic functionality for a Speedment Platform
  * Component.
  *
- * @author pemi
+ * @author Per Minborg
+ * @author Emil Forslund
  * @since 2.0
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Component extends Lifecyclable<Component> {
 
     /**
      * Returns the Component interface Class this Component implements.
      *
-     * @return the Component interface Class this Component implements
+     * @return the interface class
      */
     Class<? extends Component> getComponentClass();
 
     /**
      * Returns the Speedment platform.
      *
-     * @return the Returns the Speedment platform
+     * @return the Speedment platform
      */
     Speedment getSpeedment();
 
     /**
-     * Returns the license for this Components.
+     * Returns information about this components title, version, license and any
+     * dependencies on third-party software that it may have.
      *
-     * @return the license for this Components
+     * @return the software information of this component
      */
-    License getLicense();
+    Software asSoftware();
 
-    String getTitle();
+    /**
+     * Returns if this Component is part of core Speedment or not.
+     *
+     * @return {@code true} if this is an internal component
+     */
+    boolean isInternal();
 
-    String getVersion();
+    /**
+     * Creates and returns a default copy of this component. The new component
+     * is initialized to its default state.
+     *
+     * @param speedment instance to use
+     * @return a default copy of this component
+     */
+    Component defaultCopy(Speedment speedment);
 }

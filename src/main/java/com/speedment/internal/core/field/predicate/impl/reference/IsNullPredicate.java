@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,18 +20,20 @@ import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import java.util.Objects;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
+import java.util.Objects;
 
 /**
  *
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNullPredicate<ENTITY, V> extends SpeedmentPredicateImpl<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, UnaryOperation {
+public class IsNullPredicate<ENTITY, D, V>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, UnaryOperation {
 
-    public IsNullPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+    public IsNullPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(IS_NULL, field, referenceField);
     }
 

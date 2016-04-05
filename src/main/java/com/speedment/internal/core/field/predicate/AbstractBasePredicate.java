@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.field.predicate;
 
-import com.speedment.field.predicate.HasNegated;
+import com.speedment.field.predicate.trait.HasNegated;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
 import com.speedment.internal.core.field.predicate.AbstractCombinedBasePredicate.OrCombinedBasePredicate;
 import static java.util.Objects.requireNonNull;

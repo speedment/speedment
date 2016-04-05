@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.field.predicate.impl.string;
 
-import com.speedment.field.methods.Getter;
 import static com.speedment.field.predicate.PredicateType.IS_NULL;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
@@ -28,10 +27,10 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNotNullStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public class IsNotNullStringPredicate<ENTITY, D> extends BaseStringPredicate<ENTITY, D>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
-    public IsNotNullStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+    public IsNotNullStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
         super(IS_NULL, field, referenceField, null, (o, f) -> f != null);
     }
 

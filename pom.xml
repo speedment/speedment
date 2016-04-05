@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,10 @@
     the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <!-- For OSSRH on SonaType -->
@@ -31,14 +34,15 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.2.3</version>
-    <packaging>jar</packaging>
+    <version>2.3.0</version>
+    <packaging>bundle</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mainClass>com.speedment.gui.MainApp</mainClass>
+        <mainClass>com.speedment.internal.ui.MainApp</mainClass>
     </properties>
+    
     <name>Speedment</name>
     
     <licenses>
@@ -57,13 +61,13 @@
     
     <developers>
         <developer>
-            <id>minborg</id>
+            <id>Minborg</id>
             <name>Per Ake Minborg</name>
             <email>minborg@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
-            <id>Pycnic</id>
+            <id>Pyknic</id>
             <name>Emil Forslund</name>
             <email>emil@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
@@ -83,6 +87,10 @@
         <contributor>
             <name>Maria Sparenberg (GitHub:marylla)</name>
             <timezone>Europe/Berlin</timezone>
+        </contributor>
+        <contributor>
+            <name>Anton Johansson (GitHub:anton-johansson)</name>
+            <timezone>Europe/Stockholm</timezone>
         </contributor>
     </contributors>
 
@@ -116,96 +124,49 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
+            </plugin>
+                     
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
             </plugin>
             
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack-dependencies</id>
-                        
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${java.home}/../bin/javafxpackager</executable>
-                            <arguments>
-                                <argument>-createjar</argument>
-                                <argument>-nocss2bin</argument>
-                                <argument>-appclass</argument>
-                                <argument>${mainClass}</argument>
-                                <argument>-srcdir</argument>
-                                <argument>${project.build.directory}/classes</argument>
-                                <argument>-outdir</argument>
-                                <argument>${project.build.directory}</argument>
-                                <argument>-outfile</argument>
-                                <argument>${project.build.finalName}.jar</argument>
-                                <argument>-manifestAttrs</argument>
-                                <argument>
-                                    Implementation-Title=Speedment,
-                                    Implementation-Version=${project.version},
-                                    Implementation-Vendor=Speedment Inc.,
-                                    Implementation-Vendor-Id=${project.groupId},
-                                    Implementation-URL=https://github.com/speedment/speedment,
-                                    Built-By=${user.name},
-                                    Build-Jdk=${java.version},
-                                    Created-By=Apache Maven ${maven.version}
-                                </argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-cli</id>
-                        <goals>
-                            <goal>exec</goal>                            
-                        </goals>
-                        <configuration>
-                            <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>${runfx.args}</commandlineArgs>
-                        </configuration>
-                    </execution>
-                </executions> 
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.0.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                        <Bundle-Description>Wrap your database into Java 8!</Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                        </Import-Package>
+                        <Main-Class>${mainClass}</Main-Class>
+                    </instructions>
+                </configuration>
+            </plugin>
+                          
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
             </plugin>
         </plugins>
     </build>
     
     <profiles>
-        
-        <profile>
-            <id>debug</id>
-            
-            <activation>
-                <property>
-                    <name>debug</name>
-                </property>
-            </activation>
-            
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.2</version>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                            <compilerArgument>-Xlint:all</compilerArgument>
-                            <showWarnings>true</showWarnings>
-                            <showDeprecation>true</showDeprecation>
-                        </configuration>
-
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         
         <profile>
             <id>release</id>
@@ -220,10 +181,11 @@
                         <configuration>
                             <header>license_header.txt</header>
                             <properties>
-                                <currentYear>2015</currentYear>
+                                <currentYear>2016</currentYear>
                             </properties>
                             <excludes>
                                 <exclude>**/README</exclude>
+                                <exclude>**/package-info.java</exclude>
                                 <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
                                 <exclude>README.md</exclude>
                                 <exclude>LICENSE</exclude>
@@ -293,19 +255,16 @@
             </build>
         </profile>
     </profiles>
-            
-    <!--    Make sure that the Log4J API and Log4J Core versionw stay in sync-->
-    <!--    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-bom</artifactId>
-                <version>2.3</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>-->
+        
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
         
     <dependencies>
 
@@ -330,83 +289,24 @@
         </dependency>
 
         <!-- LICENSE INFORMATION
-        Groovy:2.4.0
+        Gson:2.5
         Apache 2 License
-        http://groovy.codehaus.org/License+Information
-        2015-02-20
-        permin
-        -
-        Groovy:2.2.2
-        Apache 2 License
-        http://groovy.codehaus.org/License+Information
-        2015-01-29
-        permin
-        -->
-        <dependency>
-            <artifactId>groovy-all</artifactId>
-            <groupId>org.codehaus.groovy</groupId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <!-- The logger "Log4j2" was selected because of license terms (SLF4J (MIT), Logback(LGPL)) -->
-        <!-- LICENSE INFORMATION
-        Log4j2:2.1
-        Apache 2 License
-        http://logging.apache.org/log4j/2.x/license.html
-        2015-01-05
-        permin
-        -->        
-        <!--        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.1</version>
-        </dependency>-->
-        <!-- LICENSE INFORMATION
-        Log4j2:2.1
-        Apache 2 License
-        http://logging.apache.org/log4j/2.x/license.html
-        2015-01-05
-        permin
-        -->
-        <!--        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.1</version>
-        </dependency>-->
-        
-        <!--
-        MySQL Connector:5.1.34
-        GPL 2 with FOSS exception
-        http://www.gnu.org/licenses/gpl-2.0.html
-        https://www.mysql.com/about/legal/licensing/foss-exception/
-        2015-06-02
+        https://github.com/google/gson
+        2016-01-05
         emifor
         -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.34</version>
+            <artifactId>gson</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <version>2.5</version>
         </dependency>
-        
-        <!-- LICENSE INFORMATION
-        OpenHFT, Chronicle Map
-        Apache 2 License
-        https://github.com/OpenHFT/Chronicle-Map/blob/master/LICENSE
-        2015-03-01
-        permin
-        -->
-        <!--        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-map</artifactId>
-            <version>2.1.3</version>
-        </dependency>-->
         	
         <!-- LICENSE INFORMATION
-        Silk 1.3
+        Silk:1.3
         Creative Commons 2.5
         http://creativecommons.org/licenses/by/2.5/
         2015-03-31
-        emifo
+        emifor
         -->
         <dependency>
             <groupId>com.famfamfam</groupId>
@@ -415,11 +315,11 @@
         </dependency>
         
         <!-- LICENSE INFORMATION
-        ControlsFX
+        ControlsFX:8.40.10
         BSD 3-Clause
         https://opensource.org/licenses/BSD-3-Clause
         2015-11-24
-        emifo
+        emifor
         -->
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -428,23 +328,16 @@
         </dependency>
         
         <!-- LICENSE INFORMATION
-        FontawesomeFX
+        FontawesomeFX:8.8
         Apache 2 License
-        http://logging.apache.org/log4j/2.x/license.html
+        http://www.apache.org/licenses/LICENSE-2.0.txt
         2015-12-04
-        emifo
+        emifor
         -->
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
-            <version>8.6</version>
+            <version>8.8</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.4-1205-jdbc4</version>
-        </dependency>
-
     </dependencies>
 </project>

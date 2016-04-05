@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,11 +21,19 @@ import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <V> the field value type
+ * A field that implements the {@link ReferenceFieldTrait}.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the field value type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see  ReferenceFieldTrait
  */
-@Api(version = "2.2")
-public interface ReferenceField<ENTITY, V> extends
-    FieldTrait, ReferenceFieldTrait<ENTITY, V> {}
+@Api(version = "2.3")
+public interface ReferenceField<ENTITY, D, V> extends 
+    FieldTrait, 
+    ReferenceFieldTrait<ENTITY, D, V> {}

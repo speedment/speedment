@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,11 +19,14 @@ package com.speedment.field.predicate;
 import com.speedment.annotation.Api;
 
 /**
- *
- * @author pemi
- * @param <T> the predicate type
+ * A {@link SpeedmentPredicate} where the value are {@link String Strings}.
+ * 
+ * @param <T>  the predicate type
+ * @param <D>  the database type
+ * 
+ * @author  Per Minborg
+ * @since   2.1
  */
-@Api(version = "2.2")
-public interface StringSpeedmentPredicate<T> extends ComparableSpeedmentPredicate<T, String> {
-
-}
+@Api(version = "2.3")
+public interface StringSpeedmentPredicate<T, D> 
+    extends ComparableSpeedmentPredicate<T, D, String> {}

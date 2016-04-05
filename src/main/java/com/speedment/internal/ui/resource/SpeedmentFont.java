@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,29 +24,25 @@ import javafx.scene.text.Font;
  * @author Emil Forslund
  */
 public enum SpeedmentFont {
-    
+
     HEADER("AdventPro-Bold.ttf"),
     LABEL("SourceSansPro-Bold.ttf"),
     BODY("SourceSansPro-Regular.ttf");
 
     private final static String PATH = "/fonts/";
     private final static int DEFAULT_SIZE = 32;
-    
+
     private final Font font;
-    
+
     SpeedmentFont(String fontname) {
-        this.font = requireNonNull(Font.loadFont(
-            SpeedmentFont.class.getResource(PATH + fontname).toExternalForm(), 
-            DEFAULT_SIZE
-        ));
+        this.font = requireNonNull(
+            Font.loadFont(
+                SpeedmentFont.class.getResource(PATH + fontname).toExternalForm(),
+                DEFAULT_SIZE
+            )
+        );
     }
-    
-    public static void loadAll() {
-        for (final SpeedmentFont font : SpeedmentFont.values()) {
-            font.get();
-        }
-    }
-    
+
     public Font get() {
         return font;
     }

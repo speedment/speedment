@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.config.parameters.DbmsType;
+import com.speedment.config.db.parameters.DbmsType;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,14 +27,14 @@ import java.util.stream.Stream;
  */
 public final class StandardDbmsType {
 
-    private static final MySqlDbmsType MYSQL_DBMS_TYPE = new MySqlDbmsType();
-    private static final MariaDbDbmsType MARIADB_DBMS_TYPE = new MariaDbDbmsType();
-    private static final PostgresDbmsType POSTGRE_DBMS_TYPE = new PostgresDbmsType();
+    private static final DbmsType MYSQL    = MySqlDbmsType.INSTANCE;
+    private static final DbmsType MARIADB  = MariaDbDbmsType.INSTANCE;
+    private static final DbmsType POSTGRES = PostgresDbmsType.INSTANCE;
 
     private final static List<DbmsType> STANDARD_TYPES = Stream.of(
-        MYSQL_DBMS_TYPE,
-        MARIADB_DBMS_TYPE,
-        POSTGRE_DBMS_TYPE
+        MYSQL,
+        MARIADB,
+        POSTGRES
     ).collect(Collectors.toList());
 
     public static Stream<DbmsType> stream() {
@@ -42,6 +42,6 @@ public final class StandardDbmsType {
     }
 
     public static DbmsType defaultType() {
-        return MYSQL_DBMS_TYPE; 
+        return MYSQL; 
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,67 +16,99 @@
  */
 package com.speedment.internal.core.config.dbms;
 
-import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.db.DbmsHandler;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.db.ConnectionUrlGenerator;
+import com.speedment.db.DatabaseNamingConvention;
+import com.speedment.internal.core.db.AbstractDatabaseNamingConvention;
 import com.speedment.internal.core.db.MySqlDbmsHandler;
 import com.speedment.internal.core.manager.sql.MySqlSpeedmentPredicateView;
-import com.speedment.internal.core.manager.sql.SpeedmentPredicateView;
-
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import java.util.Collections;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.Set;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
+
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-public final class MySqlDbmsType extends AbstractDbmsType {
+public final class MySqlDbmsType {
+    
+    private final static DatabaseNamingConvention NAMER = new MySqlNamingConvention();
 
-    private static final String QUOTE = "`";
-    private static final BiFunction<Speedment, Dbms, DbmsHandler> DBMS_MAPPER = MySqlDbmsHandler::new; // JAVA8 bug: Cannot use method ref in this() or super()
-    private static final String RESULTSET_TABLE_SCHEMA = "TABLE_SCHEMA";
-    private static final String JDBC_CONNECTOR_NAME = "mysql";
-    private static final Optional<String> DEFAULT_CONNECTOR_PARAMS = Optional.of("useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=true&useCursorFetch=true&zeroDateTimeBehavior=convertToNull");
-    private static final Function<Dbms, String> CONNECTION_URL_GENERATOR = dbms -> {
-        final StringBuilder result = new StringBuilder();
-        result.append("jdbc:").append(JDBC_CONNECTOR_NAME).append("://");
-        dbms.getIpAddress().ifPresent(ip -> result.append(ip));
-        dbms.getPort().ifPresent(p -> result.append(":").append(p));
-        result.append("/");
-        DEFAULT_CONNECTOR_PARAMS.ifPresent(d -> result.append("?").append(d));
-        return result.toString();
-    };
+    public static final DbmsType INSTANCE = DbmsType.builder()
+        // Mandatory parameters
+        .withName("MySQL")
+        .withDriverManagerName("MySQL-AB JDBC Driver")
+        .withDefaultPort(3306)
+        .withDbmsNameMeaning("Just a name")
+        .withDriverName("com.mysql.jdbc.Driver")
+        .withDatabaseNamingConvention(NAMER)
+        .withDbmsMapper(MySqlDbmsHandler::new)
+        .withConnectionUrlGenerator(new MySqlConnectionUrlGenerator())
+        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView(NAMER))
 
-    public MySqlDbmsType() {
+        // Optional parameters
+        .withInitialQuery("select version() as `MySQL version`")
+        .build();
+    
+    private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 
-        super(
-                "MySQL",
-                "MySQL-AB JDBC Driver",
-                3306,
-                ".",
-                "Just a name",
-                "com.mysql.jdbc.Driver",
-                unwrap(DEFAULT_CONNECTOR_PARAMS),
-                JDBC_CONNECTOR_NAME,
-                QUOTE,
-                QUOTE,
-                Stream.of("MySQL", "information_schema").collect(collectingAndThen(toSet(), Collections::unmodifiableSet)),
-                DBMS_MAPPER,
-                RESULTSET_TABLE_SCHEMA,
-                CONNECTION_URL_GENERATOR
-        );
+        private final static String 
+            ENCLOSER = "`",
+            QUOTE = "'";
+        
+        private final static Set<String> EXCLUDE_SET = Stream.of( 
+            "information_schema"
+        ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+        
+        @Override
+        public Set<String> getSchemaExcludeSet() {
+            return EXCLUDE_SET;
+        }
+        
+        @Override
+        protected String getFieldQuoteStart() {
+            return QUOTE;
+        }
+
+        @Override
+        protected String getFieldQuoteEnd() {
+            return QUOTE;
+        }
+
+        @Override
+        protected String getFieldEncloserStart() {
+            return ENCLOSER;
+        }
+
+        @Override
+        protected String getFieldEncloserEnd() {
+            return ENCLOSER;
+        }
     }
+    
+    private final static class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
 
-    private static final MySqlSpeedmentPredicateView VIEW = new MySqlSpeedmentPredicateView(QUOTE, QUOTE);
-
-    @Override
-    public SpeedmentPredicateView getSpeedmentPredicateView() {
-        return VIEW;
+        @Override
+        public String from(Dbms dbms) {
+            final StringBuilder result = new StringBuilder()
+                .append("jdbc:mysql://")
+                .append(dbms.getIpAddress().orElse(""));
+            
+            dbms.getPort().ifPresent(p -> result.append(":").append(p));
+            result.append(
+                "/?useUnicode=true" +
+                "&characterEncoding=UTF-8" +
+                "&useServerPrepStmts=true" +
+                "&useCursorFetch=true" +
+                "&zeroDateTimeBehavior=convertToNull"
+            );
+            
+            return result.toString();
+        }
     }
 }

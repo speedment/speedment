@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,10 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.action.reference;
 
-import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SORTED;
-import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
+import com.speedment.stream.action.Action;
 import java.util.stream.Stream;
 
 /**
@@ -31,10 +29,6 @@ public final class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public SortedAction() {
         super(s -> s.sorted(), Stream.class, SORTED);
-    }
-
-    public SortedAction(Comparator<? super T> comparator) {
-        super(s -> s.sorted(requireNonNull(comparator)), Stream.class, SORTED);
     }
 
 }

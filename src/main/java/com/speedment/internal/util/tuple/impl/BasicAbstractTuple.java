@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.util.tuple.impl;
 
-import com.speedment.internal.util.tuple.BasicTuple;
+import com.speedment.util.tuple.BasicTuple;
 import java.util.Arrays;
 import java.util.Objects;
 import static java.util.stream.Collectors.joining;
@@ -55,14 +55,14 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     protected abstract boolean isNullable();
 
     protected int assertIndexBounds(int index) {
-        if (index < 0 || index >= order()) {
-            throw new IndexOutOfBoundsException("index " + index + " is illegal. There is capacity for " + order() + " items in this class.");
+        if (index < 0 || index >= length()) {
+            throw new IndexOutOfBoundsException("index " + index + " is illegal. There is capacity for " + length() + " items in this class.");
         }
         return index;
     }
 
     @Override
-    public int order() {
+    public int length() {
         return values.length;
     }
 
@@ -73,7 +73,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
     @Override
     public boolean equals(Object obj) {
-        if (!baseClass.isAssignableFrom(obj.getClass())) {
+        if (!baseClass.isInstance(obj)) {
             return false;
         }
         if (obj instanceof BasicAbstractTuple) {
@@ -85,7 +85,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         // Must be a BasicTuple since baseClass is a BasicTuple
         @SuppressWarnings("unchecked")
         final BasicTuple<?> tuple = (BasicTuple<?>) obj;
-        final int capacity = tuple.order();
+        final int capacity = tuple.length();
         for (int i = 0; i < capacity; i++) {
             if (!Objects.equals(get(i), tuple.get(i))) {
                 return false;
@@ -106,7 +106,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     public <C> Stream<C> streamOf(Class<C> clazz) {
         return Stream.of(values)
             .filter(Objects::nonNull)
-            .filter(e -> clazz.isAssignableFrom(e.getClass()))
+            .filter(clazz::isInstance)
             .map(clazz::cast);
     }
 

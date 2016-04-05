@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -38,11 +38,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
@@ -77,7 +77,6 @@ public class AbstractLoggerTest {
      */
     @Test
     public void testOutput() {
-        System.out.println("output");
         String message = "Hi";
         instance.output(message);
         // TODO review the generated test code and remove the default call to fail.
@@ -91,7 +90,6 @@ public class AbstractLoggerTest {
      */
     @Test
     public void testLog_3args_1() {
-        System.out.println("log");
         Level level = Level.ERROR;
         Optional<Throwable> throwable = Optional.of(new IllegalArgumentException("Olle"));
         String message = "Stor Stina";
@@ -108,7 +106,6 @@ public class AbstractLoggerTest {
      */
     @Test
     public void reproduceThrowableProblem() {
-        System.out.println("reproduceProblem");
         Level level = Level.ERROR;
         Throwable throwable = new SQLException("Unable to get connection");
         String message = "Stor Stina";
@@ -152,7 +149,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testLog_4args() {
-        System.out.println("log");
         Level level = null;
         Optional<Throwable> throwable = null;
         String message = "";
@@ -169,7 +165,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testLog_5args() {
-        System.out.println("log");
         Level level = null;
         Optional<Throwable> throwable = null;
         String message = "";
@@ -187,7 +182,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testLog_6args() {
-        System.out.println("log");
         Level level = null;
         Optional<Throwable> throwable = null;
         String message = "";
@@ -206,7 +200,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testLog_7args() {
-        System.out.println("log");
         Level level = null;
         Optional<Throwable> throwable = null;
         String message = "";
@@ -226,7 +219,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testLog_3args_2() {
-        System.out.println("log");
         Level msgLevel = null;
         Optional<Throwable> throwable = null;
         Supplier<String> supplier = null;
@@ -242,7 +234,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testFixMessage() {
-        System.out.println("fixMessage");
         Level level = null;
         String msg = "";
         Optional<Throwable> throwable = null;
@@ -260,7 +251,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testGetLevel() {
-        System.out.println("getLevel");
         AbstractLogger instance = null;
         Level expResult = null;
         Level result = instance.getLevel();
@@ -275,7 +265,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testSetLevel() {
-        System.out.println("setLevel");
         Level level = null;
         AbstractLogger instance = null;
         instance.setLevel(level);
@@ -289,7 +278,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testGetName() {
-        System.out.println("getName");
         AbstractLogger instance = null;
         String expResult = "";
         String result = instance.getName();
@@ -304,7 +292,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testSetFormatter() {
-        System.out.println("setFormatter");
         LoggerFormatter formatter = null;
         AbstractLogger instance = null;
         instance.setFormatter(formatter);
@@ -318,7 +305,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testGetFormatter() {
-        System.out.println("getFormatter");
         AbstractLogger instance = null;
         LoggerFormatter expResult = null;
         LoggerFormatter result = instance.getFormatter();
@@ -333,7 +319,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testAddListener() {
-        System.out.println("addListener");
         LoggerEventListener listener = null;
         AbstractLogger instance = null;
         instance.addListener(listener);
@@ -347,7 +332,6 @@ public class AbstractLoggerTest {
     @Test
     @Ignore
     public void testRemoveListener() {
-        System.out.println("removeListener");
         LoggerEventListener listener = null;
         AbstractLogger instance = null;
         instance.removeListener(listener);

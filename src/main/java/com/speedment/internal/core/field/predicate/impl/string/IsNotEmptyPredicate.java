@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,21 +18,21 @@ package com.speedment.internal.core.field.predicate.impl.string;
 
 import static com.speedment.field.predicate.PredicateType.IS_NOT_EMPTY;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
-import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.predicate.iface.type.UnaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
 /**
  *
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class IsNotEmptyPredicate<ENTITY> extends SpeedmentPredicateImpl<ENTITY, String>
-    implements SpeedmentPredicate<ENTITY, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY> {
+public class IsNotEmptyPredicate<ENTITY, D> extends SpeedmentPredicateImpl<ENTITY, D, String>
+        implements SpeedmentPredicate<ENTITY, D, String>, UnaryOperation, StringSpeedmentPredicate<ENTITY, D> {
 
-    public IsNotEmptyPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+    public IsNotEmptyPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
         super(IS_NOT_EMPTY, field, referenceField);
     }
 

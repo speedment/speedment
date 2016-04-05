@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,21 +22,29 @@
 package com.speedment.field.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 
 /**
- * Indicates that an extending interface is related to a reference field.
+ * A representation of an Entity field that is a reference type (eg 
+ * {@code Integer} and not {@code int}).
  *
- * @param <ENTITY> the entity type
- * @param <V> the field value type
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database value type
+ * @param <V>       the field value type
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-@Api(version = "2.2")
-public interface ReferenceFieldTrait<ENTITY, V> {
+@Api(version = "2.3")
+public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
+
+    @Override
+    FieldIdentifier<ENTITY> getIdentifier();
 
     /**
      * Returns a reference to the setter for this field.
@@ -51,6 +59,13 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return the getter
      */
     Getter<ENTITY, V> getter();
+
+    /**
+     * Returns the type mapper of this field.
+     *
+     * @return type mapper
+     */
+    TypeMapper<D, V> typeMapper();
 
     /**
      * Gets the value form the Entity field.
@@ -88,7 +103,7 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is {@code null}
      */
-    SpeedmentPredicate<ENTITY, V> isNull();
+    SpeedmentPredicate<ENTITY, D, V> isNull();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -97,6 +112,6 @@ public interface ReferenceFieldTrait<ENTITY, V> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not</em> {@code null}
      */
-    SpeedmentPredicate<ENTITY, V> isNotNull();
+    SpeedmentPredicate<ENTITY, D, V> isNotNull();
 
 }

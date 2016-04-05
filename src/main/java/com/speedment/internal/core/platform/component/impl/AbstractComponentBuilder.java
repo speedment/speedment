@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,31 +18,26 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.component.ComponentBuilder;
-import java.util.function.Function;
+import com.speedment.component.ComponentConstructor;
+import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Emil Forslund
- * @param <C>
+ * Abstract builder for a {@link Component} implementation.
+ * 
+ * @author     Emil Forslund
+ * @param <C>  the component type
  */
-public abstract class AbstractComponentBuilder<C extends Component> implements ComponentBuilder<C> {
+public abstract class AbstractComponentBuilder<C extends Component> 
+    implements ComponentConstructor<C> {
     
-    private final Function<Speedment, C> constructor;
-    private Speedment speedment;
+    private final ComponentConstructor<C> constructor;
     
-    protected AbstractComponentBuilder(Function<Speedment, C> constructor) {
-        this.constructor = constructor;
+    protected AbstractComponentBuilder(ComponentConstructor<C> constructor) {
+        this.constructor = requireNonNull(constructor);
     }
 
     @Override
-    public final ComponentBuilder<C> withSpeedment(Speedment speedment) {
-        this.speedment = speedment;
-        return this;
-    }
-
-    @Override
-    public final C build() {
-        return constructor.apply(speedment);
+    public final C create(Speedment speedment) {
+        return constructor.create(speedment);
     }
 }

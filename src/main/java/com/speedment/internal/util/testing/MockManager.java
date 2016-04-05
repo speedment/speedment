@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,10 @@
  */
 package com.speedment.internal.util.testing;
 
-import com.speedment.Manager;
-import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -28,13 +30,13 @@ import java.util.stream.Stream;
 /**
  *
  * @author pemi
- * @param <ENTITY> type
+ * @param <ENTITY> the entity type
  */
 public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
     /**
      * Sets the instance factory of this {@code MockManager}. The instance
-     * factory is invoked each time a Managers {@link Manager#newInstance() }
+     * factory is invoked each time a Managers {@link Manager#newEmptyEntity() }
      * method is called.
      *
      * @param factory the new instance factory to use
@@ -45,8 +47,8 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
     /**
      * Sets the native streamer of this {@code MockManager}.
      *
-     * The native streamer is invoked each time a Managers {@link Manager#nativeStream() ()
-     * } method is called.
+     * The native streamer is invoked each time a Managers 
+     * {@link Manager#nativeStream(StreamDecorator)} method is called.
      *
      * @param nativeStreamer the new native streamer supplier
      * @return this instance
@@ -100,16 +102,27 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
     /**
      * Sets the finder of this {@code MockManager}.
      *
-     * The finder is invoked each time a Managers {@link Manager#findAny(com.speedment.field.ComparableField, java.lang.Comparable) ()
-     * } method is called.
+     * The finder is invoked each time a Managers 
+     * {@code Manager#findAny(F, Comparable)} method is called.
      *
-     * @param finder the new finder supplier
-     * @return this instance
+     * @param <D>     the database type
+     * @param <V>     the value type
+     * @param <F>     the field type
+     * @param finder  the new finder supplier
+     * @return        this instance
      */
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder);
+    public <D, V extends Comparable<? super V>, 
+    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
+    MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder);
 
+    /**
+     * Wraps the specified manager in a new {@link MockManager}.
+     * 
+     * @param <ENTITY>  the entity type
+     * @param manager   the manager to wrap
+     * @return          the new {@code MockManager}
+     */
     static <ENTITY> MockManager<ENTITY> of(Manager<ENTITY> manager) {
         return new MockManagerImpl<>(manager);
     }
-
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,20 +19,22 @@ package com.speedment.field.predicate;
 import com.speedment.annotation.Api;
 
 /**
- * The PredicateType that exists for Speedment. A predicate type must always
- * have a negated PredicateType that is the exact negation of itself.
+ * The predicate types that exists in Speedment. A predicate type must always
+ * have a negated {@code PredicateType} that is the exact negation of itself.
  *
- * @author pemi
+ * @author Per Minborg
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public enum PredicateType {
 
     // Constants
     ALWAYS_TRUE,
     ALWAYS_FALSE,
+    
     // Reference
     IS_NULL,
     IS_NOT_NULL,
+    
     // Comparable
     EQUAL,
     NOT_EQUAL,
@@ -44,6 +46,7 @@ public enum PredicateType {
     NOT_BETWEEN, // Currently not exposed in external predicates
     IN,
     NOT_IN, // Currently not exposed in external predicates
+    
     // String
     EQUAL_IGNORE_CASE,
     NOT_EQUAL_IGNORE_CASE,
@@ -85,5 +88,4 @@ public enum PredicateType {
         a.negatedType = b;
         b.negatedType = a;
     }
-
 }

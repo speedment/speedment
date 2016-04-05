@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,14 +18,15 @@ package com.speedment.internal.util;
 
 import com.speedment.SpeedmentVersion;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.analytics.AnalyticsUtil;
 import static com.speedment.internal.util.analytics.FocusPoint.APP_STARTED;
 import static com.speedment.internal.util.analytics.FocusPoint.GENERATE;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
 import static com.speedment.internal.util.analytics.FocusPoint.GUI_STARTED;
-import com.speedment.internal.logging.Logger;
-import com.speedment.internal.logging.LoggerManager;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import com.speedment.internal.util.testing.TestSettings;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +38,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
@@ -49,14 +51,10 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Statistics {
 
-    private final static String ENCODING = "UTF-8";
     private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
-
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
-    private final static String VERSION = SpeedmentVersion.getImplementationVersion();
 
     public static void onGuiStarted() {
-
         notifyEvent("gui-started", includeMail());
         AnalyticsUtil.notify(GUI_STARTED);
     }
@@ -76,20 +74,20 @@ public final class Statistics {
         AnalyticsUtil.notify(APP_STARTED);
     }
 
-    private static void notifyEvent(String event) {
-        notifyEvent(event, Collections.emptyList());
+    private static void notifyEvent(final String event) {
+        notifyEvent(event, emptyList());
     }
 
-    private static void notifyEvent(String event, Param param) {
-        notifyEvent(event, Collections.singletonList(requireNonNull(param)));
+    private static void notifyEvent(final String event, final Param param) {
+        notifyEvent(event, singletonList(requireNonNull(param)));
     }
 
-    private static void notifyEvent(String event, Collection<Param> params) {
+    private static void notifyEvent(final String event, final Collection<Param> params) {
         requireNonNull(event);
-        requireNonNulls(params);
+        requireNonNullElements(params);
         final List<Param> allParams = new ArrayList<>(params);
         allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
-        allParams.add(new Param("version", VERSION));
+        allParams.add(new Param("version", SpeedmentVersion.getImplementationVersion()));
         allParams.add(new Param("event", event));
         sendPostRequest(allParams);
     }
@@ -98,33 +96,37 @@ public final class Statistics {
         return new Param("mail", EmailUtil.getEmail());
     }
 
-    private static void sendPostRequest(Collection<Param> params) {
-        requireNonNulls(params);
+    private static void sendPostRequest(final Collection<Param> params) {
+        requireNonNullElements(params);
 
-        CompletableFuture.runAsync(() -> {
-            final URL url = createRequestURL(params);
+        if (!TestSettings.isTestMode()) { // Wolkswagen Pattern
 
-            try {
-                final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            CompletableFuture.runAsync(() -> {
+                final URL url = createRequestURL(params);
 
-                final int responseCode = con.getResponseCode();
-                final String responseMessage = con.getResponseMessage();
-                try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                    final StringBuffer response = new StringBuffer();
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
+                try {
+                    final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    
+                    con.connect();
+                    con.getResponseCode(); // Might have side effects...
+                    con.getResponseMessage(); 
+                    
+                    try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                        final StringBuilder response = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
                     }
-                    LOGGER.info(Integer.toString(responseCode) + " " + responseMessage + " -> " + response.length() + " bytes");
-                }
 
-            } catch (IOException ex) {
-                LOGGER.error(ex);
-            }
-        });
+                } catch (final IOException ex) {
+                    LOGGER.debug(ex);
+                }
+            });
+        }
     }
 
-    private static URL createRequestURL(Collection<Param> params) {
+    private static URL createRequestURL(final Collection<Param> params) {
         requireNonNull(params);
         try {
             return new URL(PING_URL + "?"
@@ -132,16 +134,18 @@ public final class Statistics {
                 .map(Param::encode)
                 .collect(joining("&"))
             );
-        } catch (MalformedURLException ex) {
+        } catch (final MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
         }
     }
 
     private final static class Param {
 
+        private static final String ENCODING = "UTF-8";
+        
         private final String key, value;
 
-        public Param(String key, String value) {
+        public Param(final String key, final String value) {
             this.key = requireNonNull(key);
             this.value = requireNonNull(value);
         }

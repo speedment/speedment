@@ -1,0 +1,20 @@
+* Copyright Notice
+Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License. You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+* Privacy Policy
+This privacy policy applies to the Speedment software (the "Software") developed by Speedment, Inc (referred to as "we" and "us"). We respect the privacy of our users. We collect only such personal information as is needed to provide the information, service, or assistance that you request.
+
+* Information We Collect Automatically
+We will collect (and may retain) usage data gathered automatically every time you run the software and/or an application built using the software. The collected data contains information such as, but not limited to, your email address and computer name. We will not disclose such information to third parties, except as specified in this privacy policy.
+
+* How Long We Keep Information
+We may keep information that we collect for an unlimited period of time.
+
+* Confidential Information
+We will not collect any information or credentials about your database or information contained therein. The software might ask for this information as part of the connection process, but the entered information will only be stored locally on your computer.

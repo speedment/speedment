@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,16 +22,23 @@ import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 
 /**
- * A representation of an Entity field that is a reference type (eg Integer and
- * not int) and that is {@link Comparable}.
+ * A field that implements the {@link ReferenceFieldTrait} and 
+ * {@link ComparableFieldTrait}.
  *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
- * @param <V> the field value type
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * @param <V>       the field value type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see    ReferenceFieldTrait
+ * @see    ComparableFieldTrait
  */
-@Api(version = "2.2")
-public interface ComparableField<ENTITY, V extends Comparable<? super V>> extends
-    FieldTrait,
-    ReferenceFieldTrait<ENTITY, V>,
-    ComparableFieldTrait<ENTITY, V> {
+@Api(version = "2.3")
+public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends
+    FieldTrait, 
+    ReferenceFieldTrait<ENTITY, D, V>,
+    ComparableFieldTrait<ENTITY, D, V> {
 }

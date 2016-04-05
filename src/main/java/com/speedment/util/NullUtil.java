@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,14 +18,16 @@ package com.speedment.util;
 
 import com.speedment.annotation.Api;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public class NullUtil {
 
     /**
@@ -38,12 +40,12 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the array or if the
      * array itself is null
      */
-    public static <T> T[] requireNonNulls(T[] array) {
+    public static <T> T[] requireNonNullElements(T[] array) {
         requireNonNull(array, "The provided array is null.");
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException("Item " + i + " in the array " + array + " is null");
+                throw new NullPointerException("Item " + i + " in the array " + Arrays.toString(array) + " is null");
             }
         }
         return array;
@@ -60,7 +62,7 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the collection or if
      * the array itself is null
      */
-    public static <E, T extends Collection<E>> T requireNonNulls(T collection) {
+    public static <E, T extends Collection<E>> T requireNonNullElements(T collection) {
         requireNonNull(collection, "The provided collection is null.");
         int i = 0;
         for (E item : collection) {
@@ -83,15 +85,21 @@ public class NullUtil {
      * @throws NullPointerException if a null is found in the array or if the
      * array itself is null
      */
-    public static <T> T[] requireNonNulls(T[] array, String msg) {
+    public static <T> T[] requireNonNullElements(T[] array, String msg) {
         requireNonNull(array, msg);
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException(msg + ", item " + i + " in the array " + array + " is null");
+                throw new NullPointerException(msg + ", item " + i + " in the array " + Arrays.toString(array) + " is null");
             }
         }
         return array;
+    }
+
+    public static void requireNonNulls(Object o0) {
+        if (o0 == null) {
+            throwNpeFor(1, 0);
+        }
     }
 
     public static void requireNonNulls(Object o0, Object o1) {
@@ -220,11 +228,48 @@ public class NullUtil {
         }
     }
 
+    @SafeVarargs // Ierating over an array is safe
+    @SuppressWarnings("varargs")
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K... requiredKeys) {
+        requireNonNulls(map, requiredKeys);
+
+        for (final K key : requiredKeys) {
+            if (key == null || !map.containsKey(key)) {
+                throw new NullPointerException("Key " + key + " in the map is not defined.");
+            }
+        }
+
+        return map;
+    }
+
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKey) {
+        requireNonNull(map);
+
+        if (requiredKey == null || !map.containsKey(requiredKey)) {
+            throw new NullPointerException("Key " + requiredKey + " in the map is not defined.");
+        }
+
+        return map;
+    }
+
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB) {
+        requireKeys(map, requiredKeyA);
+        requireKeys(map, requiredKeyB);
+        return map;
+    }
+
+    public static <K, V> Map<K, V> requireKeys(Map<K, V> map, K requiredKeyA, K requiredKeyB, K requiredKeyC) {
+        requireKeys(map, requiredKeyA);
+        requireKeys(map, requiredKeyB);
+        requireKeys(map, requiredKeyC);
+        return map;
+    }
+
     private static void throwNpeFor(int count, int i) {
         if (count == 1) {
             throw new NullPointerException("The argument was null.");
         } else {
-            throw new NullPointerException("The " + Pluralis.INSTANCE.ordinalize(i + 1) + " of the " + count + " arguments was null.");
+            throw new NullPointerException("The " + Pluralis.INSTANCE.ordinalize(i + 1) + " (index=" + i + ") of the " + count + " arguments was null.");
         }
     }
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,6 +23,7 @@ package com.speedment.internal.core.stream.parallelstrategy;
 
 import com.speedment.stream.ParallelStrategy;
 import java.util.Collection;
+import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,9 +39,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static java.util.Comparator.comparing;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TestName;
 
 /**
@@ -75,7 +75,7 @@ public class ComputeIntensityParallelStrategyTest {
     public TestName name = new TestName();
 
     protected void printTestName() {
-        System.out.println(name.getMethodName());
+        //System.out.println(name.getMethodName());
     }
 
     @Test
@@ -94,11 +94,12 @@ public class ComputeIntensityParallelStrategyTest {
             }
             );
 
-            System.out.println("*** "+strategy.getClass().getSimpleName());
+            //System.out.println("*** "+strategy.getClass().getSimpleName());
             threadCount.entrySet().stream()
                     .sorted(comparing(Entry::getKey))
                     .forEach(e -> {
-                        System.out.printf("%36s, %7d\n", e.getKey(), e.getValue().intValue());
+                        final String res = String.format("%36s, %7d\n", e.getKey(), e.getValue().intValue());
+                        //System.out.println(res);
                     });
 
         });
@@ -113,7 +114,7 @@ public class ComputeIntensityParallelStrategyTest {
                     .map(strategy -> test(strategy, size))
                     .collect(toList());
 
-            stats.forEach(System.out::println);
+            //stats.forEach(System.out::println);
         }
     }
 

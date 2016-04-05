@@ -7,3 +7,6 @@
 *~
 settings.properties
 /nbproject/
+/.settings/
+/.classpath
+/.project

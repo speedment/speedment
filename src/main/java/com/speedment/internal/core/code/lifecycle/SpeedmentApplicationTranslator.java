@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,104 +17,53 @@
 package com.speedment.internal.core.code.lifecycle;
 
 import com.speedment.Speedment;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.Class;
-import com.speedment.internal.codegen.lang.models.Constructor;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.VOID;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.Class;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Project;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
-import static com.speedment.internal.core.code.lifecycle.SpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.internal.core.code.manager.EntityManagerImplTranslator;
-import com.speedment.config.Project;
-import com.speedment.config.Table;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
-import com.speedment.stream.MapStream;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toSet;
 
 /**
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
-    
-    private final String className = typeName(project()) + "Application";
-    
-    public SpeedmentApplicationTranslator(Speedment speedment, Generator cg, Project configEntity) {
-        super(speedment, cg, configEntity);
-    }
-    
-    @Override
-    protected Class make(File file) {
-        requireNonNull(file);
-        
-        final Map<String, List<Table>> nameMap = project().traverseOver(Table.class)
-                .filter(Table::isEnabled)
-                .collect(Collectors.groupingBy(Table::getName));
-        
-        final Set<String> ambigousNames = MapStream.of(nameMap)
-                .filterValue(l -> l.size() > 1)
-                .keys()
-                .collect(toSet());
-        
-        final Method onInit = Method.of("onInit", VOID)
-                .protected_()
-                .add(OVERRIDE)
-                .add("super.onInit();")
-                .add("loadAndSetProject();");
-        
-        project().traverseOver(Table.class)
-                .filter(Table::isEnabled)
-                .forEachOrdered(t -> {
-                    EntityManagerImplTranslator entityManagerImplTranslator = new EntityManagerImplTranslator(getSpeedment(), getCodeGenerator(), t);
-                    final Type managerType = entityManagerImplTranslator.getImplType();
-                    if (ambigousNames.contains(t.getName())) {
-                        onInit.add("put(new " + managerType.getName() + "(speedment));");
-                    } else {
-                        file.add(Import.of(managerType));
-                        onInit.add("put(new " + entityManagerImplTranslator.managerTypeName() + "Impl(speedment));");
-                    }
-                    
-                });
 
-        //final Path path = project().getConfigPath();
-        return Class.of(className)
-                .public_()
-                .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(new GenericImpl(className)))
-                .add(Constructor.of()
-                        .public_()
-                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
-                )
-                .add(onInit)
-                .add(generated());
-    }
+    private final String className = getSupport().typeName(getSupport().projectOrThrow()) + "Application";
     
+    public SpeedmentApplicationTranslator(
+            Speedment speedment, 
+            Generator generator, 
+            Project project) {
+        
+        super(speedment, generator, project, Class::of);
+    }
+
     @Override
-    protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE).add(AUTHOR.setValue("Speedment"));
+    protected String getClassOrInterfaceName() {
+        return className;
     }
-    
+
+    @Override
+    protected Class makeCodeGenModel(File file) {
+        return newBuilder(file, className).build()
+            .public_().final_()
+            .setSupertype(generatedType());
+    }
+
     @Override
     protected String getJavadocRepresentText() {
-        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + "} class for the {@link " + Project.class.getName() + "} named " + project().getName() + ".";
+        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + 
+            "} class for the {@link " + Project.class.getName() + 
+            "} named " + getSupport().projectOrThrow().getName() + ".";
     }
     
-    @Override
-    protected String getFileName() {
-        return className;
+    private Type generatedType() {
+        return Type.of(
+            getSupport().basePackageName() + ".generated.Generated" + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
+        );
     }
 }

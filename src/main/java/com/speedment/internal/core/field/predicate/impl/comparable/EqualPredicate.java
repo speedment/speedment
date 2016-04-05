@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,9 +29,11 @@ import java.util.Objects;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class EqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class EqualPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends BaseComparablePredicate<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public EqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V operand0) {
+    public EqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField, V operand0) {
         super(EQUAL, field, referenceField, operand0, (a, b) -> Objects.equals(a, b));
     }
 }

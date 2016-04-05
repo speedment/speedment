@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,14 +16,14 @@
  */
 package com.speedment.internal.codegen.util;
 
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *
@@ -40,7 +40,7 @@ public final class Formatting {
      * @return The concatenated string.
      */
     public static String separate(String separator, String... blocks) {
-        requireNonNulls(blocks);
+        requireNonNullElements(blocks);
         return Stream.of(blocks)
             .collect(joining(separator));
     }
@@ -79,8 +79,8 @@ public final class Formatting {
             return EMPTY;
         } else {
             return String.join(EMPTY,
-                    callback.apply(input.charAt(0)),
-                    input.subSequence(1, input.length())
+                callback.apply(input.charAt(0)),
+                input.subSequence(1, input.length())
             );
         }
     }
@@ -121,7 +121,7 @@ public final class Formatting {
      */
     public static String block(String row, String... rows) {
         requireNonNull(row);
-        requireNonNulls(rows);
+        requireNonNullElements(rows);
         return block(
 			Arrays.stream(rows).collect(joining(
 				nl(), row + nl(), EMPTY)
@@ -148,6 +148,18 @@ public final class Formatting {
      */
     public static String indent(String text) {
         return tab + text.replaceAll("\\r?\\n", nltab);
+    }
+    
+    /**
+     * Indents one level after each new-line-character as defined by
+     * <code>nl()</code>. f multiple strings are specified, new-line characters
+     * will be added between them.
+     *
+     * @param text The text to indent.
+     * @return The indented text.
+     */
+    public static String indent(String... text) {
+        return tab + String.join(nl(), text).replaceAll("\\r?\\n", nltab);
     }
     
     /**

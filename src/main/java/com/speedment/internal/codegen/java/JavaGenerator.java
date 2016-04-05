@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,16 +16,14 @@
  */
 package com.speedment.internal.codegen.java;
 
-import com.speedment.internal.codegen.base.DefaultDependencyManager;
-import com.speedment.internal.codegen.base.DefaultGenerator;
-import com.speedment.internal.codegen.base.TransformFactory;
-
+import com.speedment.codegen.TransformFactory;
+import com.speedment.internal.codegen.DefaultDependencyManager;
+import com.speedment.internal.codegen.DefaultGenerator;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * A hook to the generator that can be passed to various stages in the pipeline.
@@ -69,7 +67,7 @@ public class JavaGenerator extends DefaultGenerator {
      * @param factories  an array of the factories to use
      */
 	public JavaGenerator(TransformFactory... factories) {
-		super(new DefaultDependencyManager(IGNORED), requireNonNulls(factories));
+		super(new DefaultDependencyManager(IGNORED), requireNonNullElements(factories));
 	}
 
     private static Pattern[] compileAll(String... regexp) {

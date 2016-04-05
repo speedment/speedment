@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,95 +16,161 @@
  */
 package com.speedment.internal.core.code;
 
+
 import com.speedment.Speedment;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.controller.AutoImports;
-import com.speedment.internal.codegen.lang.models.AnnotationUsage;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.codegen.lang.models.Constructor;
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Interface;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultAnnotationUsage.GENERATED;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.AUTHOR;
-import com.speedment.internal.codegen.lang.models.implementation.FileImpl;
-import com.speedment.internal.codegen.lang.models.implementation.JavadocImpl;
-import com.speedment.internal.codegen.lang.models.values.TextValue;
+import com.speedment.code.JavaClassTranslator;
+import com.speedment.code.Translator;
+import com.speedment.code.Translator.Builder;
+import com.speedment.code.Translator.Phase;
+import com.speedment.code.TranslatorSupport;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.AnnotationUsage;
+import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.codegen.model.Constructor;
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Interface;
+import com.speedment.codegen.model.Javadoc;
+import com.speedment.codegen.model.Type;
+import com.speedment.config.Document;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.Index;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Schema;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.internal.codegen.controller.AutoImports;
+import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.GENERATED;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
+import com.speedment.internal.codegen.model.value.TextValue;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Index;
-import com.speedment.config.Project;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Child;
-import com.speedment.config.aspects.Enableable;
-import com.speedment.config.Node;
-import com.speedment.config.PrimaryKeyColumn;
-import static com.speedment.internal.core.code.entity.EntityImplTranslator.SPEEDMENT_NAME;
+import com.speedment.internal.core.config.BaseDocument;
+import com.speedment.internal.core.config.db.ColumnImpl;
+import com.speedment.internal.core.config.db.DbmsImpl;
+import com.speedment.internal.core.config.db.ForeignKeyImpl;
+import com.speedment.internal.core.config.db.IndexImpl;
+import com.speedment.internal.core.config.db.ProjectImpl;
+import com.speedment.internal.core.config.db.SchemaImpl;
+import com.speedment.internal.core.config.db.TableImpl;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.stream.MapStream;
+import com.speedment.util.JavaLanguageNamer;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
- * @param <C> ConfigEntity type.
- * @param <J> Java type (Interface or Class) to generate
+ * @param <DOC> document type.
+ * @param <T> Java type (Interface, Class or Enum) to generate
  */
-public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J extends ClassOrInterface<J>> implements JavaClassTranslator<C> {
+public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
+    implements JavaClassTranslator<DOC, T> {
 
     public static final String GETTER_METHOD_PREFIX = "get",
-            SETTER_METHOD_PREFIX = "set",
-            BUILDER_METHOD_PREFIX = SETTER_METHOD_PREFIX,
-            GENERATED_JAVADOC_MESSAGE
-            = "\n<p>\nThis Class or Interface has been automatically generated by Speedment.\n"
-            + "Any changes made to this Class or Interface will be overwritten.";
+        SETTER_METHOD_PREFIX = "set",
+        JAVADOC_MESSAGE
+        = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
+        + "code generator.",
+        GENERATED_JAVADOC_MESSAGE
+        = "\n<p>\nThis file has been automatically generated by Speedment. "
+        + "Any changes made to it will be overwritten.";
 
-    private final C configEntity;
-    private final Generator codeGenerator;
     private final Speedment speedment;
+    private final Generator generator;
+    private final DOC document;
+    private final Function<String, T> mainModelConstructor;
 
-    public DefaultJavaClassTranslator(Speedment speedment, Generator codeGenerator, C configEntity) {
+    private final JavaLanguageNamer javaLanguageNamer;
+    private final TranslatorSupport<DOC> support;
+
+    private final List<BiConsumer<File, Builder<T>>> listeners;
+
+    protected DefaultJavaClassTranslator(Speedment speedment, Generator generator, DOC document, Function<String, T> constructor) {
         this.speedment = requireNonNull(speedment);
-        this.configEntity = requireNonNull(configEntity);
-        this.codeGenerator = requireNonNull(codeGenerator);
+        this.generator = requireNonNull(generator);
+        this.document = requireNonNull(document);
+        this.mainModelConstructor = requireNonNull(constructor);
+        this.javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
+        this.listeners = new CopyOnWriteArrayList<>();
+        this.support = new TranslatorSupport<>(speedment, document);
     }
 
     @Override
-    public C getNode() {
-        return configEntity;
+    public final TranslatorSupport<DOC> getSupport() {
+        return support;
     }
 
-    protected Speedment getSpeedment() {
+    @Override
+    public final DOC getDocument() {
+        return document;
+    }
+
+    protected final Speedment getSpeedment() {
         return speedment;
     }
 
     protected AnnotationUsage generated() {
-        return GENERATED.set(new TextValue("Speedment"));
+        final String owner = speedment.getUserInterfaceComponent().getBrand().title();
+        return GENERATED.set(new TextValue(owner));
     }
 
-    protected abstract String getFileName();
+    /**
+     * Returns the name of the {@link Class}/{@link Interface}/{@link Enum} that
+     * this translator will create. The name is only the short name. It does not
+     * include package information.
+     * <p>
+     * Example: {@code HareImpl}
+     *
+     * @return the short filename of the file to generate
+     */
+    protected abstract String getClassOrInterfaceName();
 
-    protected abstract J make(File file);
+    /**
+     * Creates and configures a {@link Class}/{@link Interface}/{@link Enum} for
+     * the specified {@code File}. This method uses a builder created using the
+     * {@link #newBuilder(File, String)} method to make sure all the listeners
+     * are notified when the model is built.
+     * <p>
+     * Observe that this method doesn't add the created model to the file.
+     *
+     * @param file the file to make a model for
+     * @return the model made
+     */
+    protected abstract T makeCodeGenModel(File file);
 
+    /**
+     * This method is executed after the file has been created but before it is
+     * returned to the code generator.
+     *
+     * @param file the file to operate on
+     */
     protected void finializeFile(File file) {
         // Do nothing
     }
 
     @Override
     public File get() {
-        final File file = new FileImpl(baseDirectoryName() + "/" + (isInImplPackage() ? "impl/" : "") + getFileName() + ".java");
-        final J item = make(file);
+        final File file = File.of(support.baseDirectoryName() + "/"
+            + (isInGeneratedPackage() ? "generated/" : "")
+            + getClassOrInterfaceName() + ".java"
+        );
+
+        final T item = makeCodeGenModel(file);
         item.set(getJavaDoc());
         file.add(item);
         finializeFile(file);
@@ -115,161 +181,200 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        return new JavadocImpl(getJavadocRepresentText() + " representing an entity (for example, a row) in the " + getNode().toString() + "." + GENERATED_JAVADOC_MESSAGE)
-                .add(AUTHOR.setValue("Speedment"));
+        final String owner, message;
+
+        if (isInGeneratedPackage()) {
+            owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+            message = GENERATED_JAVADOC_MESSAGE;
+        } else {
+            owner = getSpeedment().getProjectComponent().getProject().getCompanyName();
+            message = JAVADOC_MESSAGE;
+
+        }
+
+        return Javadoc.of(
+            getJavadocRepresentText()
+            + " representing an entity (for example, a row) in the "
+            + getDocument().mainInterface().getSimpleName()
+            + " " + relativeName(getDocument(), Project.class)
+            + "." + message
+        ).add(AUTHOR.setValue(owner));
     }
 
+    @Override
     public Generator getCodeGenerator() {
-        return codeGenerator;
+        return generator;
     }
 
-    protected boolean isInImplPackage() {
+    @Override
+    public boolean isInGeneratedPackage() {
         return false;
     }
 
-    protected abstract class Builder<T extends ClassOrInterface<T>> {
+    @Override
+    public void onMake(BiConsumer<File, Builder<T>> action) {
+        listeners.add(action);
+    }
 
+    @Override
+    public Stream<BiConsumer<File, Builder<T>>> listeners() {
+        return listeners.stream();
+    }
+
+    protected final class BuilderImpl implements Translator.Builder<T> {
+
+        private final static String PROJECTS = "projects";
         private final String name;
-        private final Map<Class<?>, List<BiConsumer<T, ? extends Node>>> map;
+        private final Map<Phase, Map<String, List<BiConsumer<T, Document>>>> map;
 
         // Special for this case
-        private final List<BiConsumer<T, ForeignKey>> foreignKeyReferencesThisTableConsumers;
+        private final Map<Phase, List<BiConsumer<T, ForeignKey>>> foreignKeyReferencesThisTableConsumers;
 
-        public Builder(String name) {
+        public BuilderImpl(String name) {
             this.name = requireNonNull(name);
-            this.map = new HashMap<>();
-            this.foreignKeyReferencesThisTableConsumers = new ArrayList<>();
+            // Phase stuff
+            this.map = new EnumMap<>(Phase.class);
+            this.foreignKeyReferencesThisTableConsumers = new EnumMap<>(Phase.class);
+            for (final Phase phase : Phase.values()) {
+                map.put(phase, new HashMap<>());
+                foreignKeyReferencesThisTableConsumers.put(phase, new ArrayList<>());
+            }
         }
 
-        public Builder<T> addProjectConsumer(BiConsumer<T, Project> consumer) {
-            aquireListAndAdd(Project.class, requireNonNull(consumer));
+        @Override
+        public <P extends Document, D extends Document> Builder<T> forEvery(Phase phase, String key, BiFunction<P, Map<String, Object>, D> constructor, BiConsumer<T, D> consumer) {
+            aquireListAndAdd(phase, key, wrap(consumer, constructor));
             return this;
         }
 
-        public Builder<T> addDbmsConsumer(BiConsumer<T, Dbms> consumer) {
-            aquireListAndAdd(Dbms.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryProject(Phase phase, BiConsumer<T, Project> consumer) {
+            aquireListAndAdd(phase, PROJECTS, wrap(consumer, ProjectImpl::new));
             return this;
         }
 
-        public Builder<T> addSchemaConsumer(BiConsumer<T, Schema> consumer) {
-            aquireListAndAdd(Schema.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
+            aquireListAndAdd(phase, Project.DBMSES, wrap(consumer, DbmsImpl::new));
             return this;
         }
 
-        public Builder<T> addTableConsumer(BiConsumer<T, Table> consumer) {
-            aquireListAndAdd(Table.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
+            aquireListAndAdd(phase, Dbms.SCHEMAS, wrap(consumer, SchemaImpl::new));
             return this;
         }
 
-        public Builder<T> addColumnConsumer(BiConsumer<T, Column> consumer) {
-            aquireListAndAdd(Column.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
+            aquireListAndAdd(phase, Schema.TABLES, wrap(consumer, TableImpl::new));
             return this;
         }
 
-        public Builder<T> addIndexConsumer(BiConsumer<T, Index> consumer) {
-            aquireListAndAdd(Index.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
+            aquireListAndAdd(phase, Table.COLUMNS, wrap(consumer, ColumnImpl::new));
             return this;
         }
 
-        public Builder<T> addForeignKeyConsumer(BiConsumer<T, ForeignKey> consumer) {
-            aquireListAndAdd(ForeignKey.class, requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
+            aquireListAndAdd(phase, Table.INDEXES, wrap(consumer, IndexImpl::new));
             return this;
         }
 
-        public Builder<T> addForeignKeyReferencesThisTableConsumer(BiConsumer<T, ForeignKey> consumer) {
-            foreignKeyReferencesThisTableConsumers.add(requireNonNull(consumer));
+        @Override
+        public BuilderImpl forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
+            aquireListAndAdd(phase, Table.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
+            return this;
+        }
+
+        private <P extends Document, D extends Document> BiConsumer<T, Document> wrap(BiConsumer<T, D> consumer, BiFunction<P, Map<String, Object>, D> constructor) {
+            return (t, doc) -> {
+                @SuppressWarnings("unchecked")
+                final P parent = (P) doc.getParent().orElse(null);
+                consumer.accept(t, constructor.apply(parent, doc.getData()));
+            };
+        }
+
+        @Override
+        public BuilderImpl forEveryForeignKeyReferencingThis(Phase phase, BiConsumer<T, ForeignKey> consumer) {
+            foreignKeyReferencesThisTableConsumers.get(phase).add(requireNonNull(consumer));
             return this;
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Node> void aquireListAndAdd(Class<C> clazz, BiConsumer<T, C> consumer) {
-            aquireList(requireNonNull(clazz))
-                    .add(requireNonNull((BiConsumer<T, Node>) consumer));
+        protected void aquireListAndAdd(Phase phase, String key, BiConsumer<T, Document> consumer) {
+            aquireList(phase, key).add(requireNonNull(consumer));
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Node> List<BiConsumer<T, C>> aquireList(Class<?> clazz) {
-            return (List<BiConsumer<T, C>>) (List<?>) map.computeIfAbsent(requireNonNull(clazz), $ -> new ArrayList<>());
+        protected <C extends Document> List<BiConsumer<T, C>> aquireList(Phase phase, String key) {
+            return (List<BiConsumer<T, C>>) (List<?>) map.get(phase).computeIfAbsent(key, $ -> new CopyOnWriteArrayList<>());
         }
 
-        public void act(T item, Node node) {
-            aquireList(node.getInterfaceMainClass())
-                    .forEach(c -> c.accept(requireNonNull(item), requireNonNull(node)));
-        }
-
-        public abstract T newInstance(String name);
-
-        public T build() {
-            final T i = newInstance(name);
-            act(i, project());
-            act(i, dbms());
-            act(i, schema());
-            act(i, table());
-
-            Stream.of(
-                    PrimaryKeyColumn.class,
-                    Index.class,
-                    Column.class,
-                    ForeignKey.class
-            ).forEachOrdered(ifType
-                    -> aquireList(ifType)
-                    .forEach(actor -> table().stream()
-                            .filter(ifType::isInstance)
-                            .filter(Child<Table>::isEnabled)
-                            .forEachOrdered(c -> actor.accept(i, c)))
+        public <D extends Document & HasMainInterface> void act(Phase phase, String key, T item, D document) {
+            aquireList(phase, key).forEach(c
+                -> c.accept(requireNonNull(item), requireNonNull(document))
             );
+        }
 
-            if (Table.class.equals(getNode().getInterfaceMainClass())) {
-                schema().stream()
-                        .filter(Table::isEnabled)
-                        .flatMap(t -> t.streamOfForeignKeys())
-                        .filter(fk -> fk.stream()
-                                .filter(ForeignKeyColumn::isEnabled)
-                                .filter(fkc -> fkc.getForeignTableName().equals(getNode().getName()))
-                                .findFirst()
-                                .isPresent()
-                        )
-                        .forEachOrdered(fk
-                                -> foreignKeyReferencesThisTableConsumers.forEach(
-                                        c -> c.accept(i, fk)
-                                )
-                        );
+        @Override
+        public T build() {
+            final T model = mainModelConstructor.apply(name);
+
+            if (isInGeneratedPackage()) {
+                model.add(generated());
             }
 
-            i.add(generated());
-            return i;
-        }
+            for (Phase phase : Phase.values()) {
+                project().ifPresent(p -> act(phase, PROJECTS, model, p));
+                dbms().ifPresent(d -> act(phase, Project.DBMSES, model, d));
+                schema().ifPresent(s -> act(phase, Dbms.SCHEMAS, model, s));
+                table().ifPresent(t -> act(phase, Schema.TABLES, model, t));
 
+                MapStream.of(map.get(phase))
+                    .flatMapValue(List::stream)
+                    .forEachOrdered((key, actor)
+                        -> table().ifPresent(table -> table.childrenByKey()
+                            .filterKey(key::equals)
+                            .values()
+                            .map(data -> new BaseDocument(table, data))
+                            .filter(HasEnabled::test)
+                            .forEachOrdered(c -> actor.accept(model, c))
+                        )
+                    );
+
+                if (Table.class.equals(getDocument().mainInterface())) {
+                    schema().ifPresent(schema -> schema.tables()
+                        .filter(HasEnabled::test)
+                        .flatMap(t -> t.foreignKeys())
+                        .filter(fk -> fk.foreignKeyColumns()
+                            .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
+                            .findFirst()
+                            .isPresent()
+                        ).forEachOrdered(fk
+                            -> foreignKeyReferencesThisTableConsumers.get(phase).forEach(
+                            c -> c.accept(model, fk)
+                        )
+                        )
+                    );
+                }
+            }
+
+            return model;
+        }
     }
 
-    protected class ClassBuilder extends Builder<com.speedment.internal.codegen.lang.models.Class> {
-
-        public ClassBuilder(String name) {
-            super(name);
-        }
-
-        @Override
-        public com.speedment.internal.codegen.lang.models.Class newInstance(String name) {
-            return com.speedment.internal.codegen.lang.models.Class.of(name);
-        }
-
-    }
-
-    protected class InterfaceBuilder extends Builder<Interface> {
-
-        public InterfaceBuilder(String name) {
-            super(name);
-        }
-
-        @Override
-        public Interface newInstance(String name) {
-            return Interface.of(name);
-        }
-
+    protected final Builder<T> newBuilder(File file, String className) {
+        requireNonNulls(file, className);
+        final Builder<T> builder = new BuilderImpl(className);
+        listeners().forEachOrdered(action -> action.accept(file, builder));
+        return builder;
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(variableName(c), Type.of(c.getTypeMapper().getJavaType()));
+        return Field.of(support.variableName(c), Type.of(c.findTypeMapper().getJavaType()));
     }
 
     public Constructor emptyConstructor() {
@@ -277,48 +382,54 @@ public abstract class DefaultJavaClassTranslator<C extends Node & Enableable, J 
     }
 
     public enum CopyConstructorMode {
-
-        SETTER, FIELD, BUILDER;
+        SETTER, FIELD;
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {
-        final Constructor constructor = Constructor.of().public_()
-                .add(Field.of(SPEEDMENT_NAME, Type.of(Speedment.class)))
-                .add("super(" + SPEEDMENT_NAME + ");")
-                .add(Field.of(variableName(), type).final_());
+        final Constructor constructor = Constructor.of().protected_()
+            .add(Field.of(support.variableName(), type));
 
         columns().forEachOrdered(c -> {
             switch (mode) {
                 case FIELD: {
-                    constructor.add("this." + variableName(c) + " = " + variableName() + "." + GETTER_METHOD_PREFIX + typeName(c) + "();");
+                    constructor.add(
+                        "this." + support.variableName(c) + 
+                        " = " + support.variableName() + 
+                        "." + GETTER_METHOD_PREFIX + 
+                        support.typeName(c) + "();");
                     break;
                 }
-                case SETTER:
-                case BUILDER: {
-                    final String setterPrefix = (mode == SETTER)
-                            ? SETTER_METHOD_PREFIX : BUILDER_METHOD_PREFIX;
-
+                case SETTER: {
                     if (c.isNullable()) {
                         constructor.add(
-                                variableName() + "."
-                                + GETTER_METHOD_PREFIX + typeName(c)
-                                + "().ifPresent(this::"
-                                + setterPrefix + typeName(c)
-                                + ");"
+                            support.variableName() + "."
+                            + GETTER_METHOD_PREFIX + support.typeName(c)
+                            + "().ifPresent(this::"
+                            + SETTER_METHOD_PREFIX + support.typeName(c)
+                            + ");"
                         );
                     } else {
                         constructor.add(
-                                setterPrefix + typeName(c)
-                                + "(" + variableName()
-                                + ".get" + typeName(c)
-                                + "());"
+                            SETTER_METHOD_PREFIX + support.typeName(c)
+                            + "(" + support.variableName()
+                            + ".get" + support.typeName(c)
+                            + "());"
                         );
                     }
                     break;
                 }
+                default:
+                    throw new UnsupportedOperationException(
+                        "Unknown mode '" + mode + "'."
+                    );
             }
         });
 
         return constructor;
+    }
+
+    @Override
+    public final JavaLanguageNamer getNamer() {
+        return javaLanguageNamer;
     }
 }

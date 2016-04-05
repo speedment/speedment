@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,8 +19,6 @@ package com.speedment.stream;
 import com.speedment.annotation.Api;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.internal.core.stream.ComposedStreamDecorator;
-import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
-import com.speedment.internal.core.stream.builder.pipeline.Pipeline;
 import com.speedment.internal.util.Cast;
 import java.util.stream.Stream;
 
@@ -32,7 +30,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface StreamDecorator {
 
     final static StreamDecorator IDENTITY = new StreamDecorator() {
@@ -50,11 +48,20 @@ public interface StreamDecorator {
         return new ComposedStreamDecorator(this, other);
     }
 
-    default <ENTITY> ReferenceStreamBuilder<ENTITY> apply(ReferenceStreamBuilder<ENTITY> stream) {
+     /**
+     * Method to be used to modify or configure the final stream before it is
+     * returned to the application.
+     *
+     * @param <ENTITY>  the entity type
+     * @param <S>       the stream type
+     * @param stream    final stream before it is returned to the application
+     * @return          the modified or configured final stream
+     */
+    default <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
         return stream;
     }
 
-    default <ENTITY, V> SpeedmentPredicate<ENTITY, V> apply(SpeedmentPredicate<ENTITY, V> predicate) {
+    default <ENTITY, D, V> SpeedmentPredicate<ENTITY, D, V> apply(SpeedmentPredicate<ENTITY, D, V> predicate) {
         return predicate;
     }
 
@@ -66,11 +73,12 @@ public interface StreamDecorator {
      * Method to be used to modify or configure the initial stream from the data
      * source.
      *
-     * @param <ENTITY> entity type
-     * @param stream from the data source
-     * @return the modified or configured stream
+     * @param <ENTITY>  the entity type
+     * @param <S>       the stream type
+     * @param stream    from the data source
+     * @return          the modified or configured stream
      */
-    default <ENTITY> Stream<ENTITY> apply(Stream<ENTITY> stream) {
+    default <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
         return stream;
     }
 
@@ -79,10 +87,10 @@ public interface StreamDecorator {
      * {@link ParallelStrategy} defines how parallel streams are divided amongst
      * the available execution threads.
      *
-     * @param <H> type of strategy receiver
-     * @param hasParallelStrategy to apply the strategy on
-     * @return the object {@link HasParallelStrategy} to use for this
-     * {@link Stream}
+     * @param <H>                  type of strategy receiver
+     * @param hasParallelStrategy  to apply the strategy on
+     * @return                     the object {@link HasParallelStrategy} to use 
+     *                             for this {@link Stream}
      */
     default <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
         return hasParallelStrategy;
@@ -96,6 +104,7 @@ public interface StreamDecorator {
      * @see ParallelStrategy#COMPUTE_INTENSITY_MEDIUM COMPUTE_INTENSITY_MEDIUM
      */
     final static StreamDecorator COMPUTE_INTENSITY_MEDIUM = of(ParallelStrategy.COMPUTE_INTENSITY_MEDIUM);
+    
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH}
@@ -103,8 +112,8 @@ public interface StreamDecorator {
      *
      * @see ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH
      */
-
     final static StreamDecorator COMPUTE_INTENSITY_HIGH = of(ParallelStrategy.COMPUTE_INTENSITY_HIGH);
+    
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME}
@@ -112,7 +121,6 @@ public interface StreamDecorator {
      *
      * @see ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME
      */
-
     final static StreamDecorator COMPUTE_INTENSITY_EXTREAM = of(ParallelStrategy.COMPUTE_INTENSITY_EXTREME);
 
     static StreamDecorator of(final ParallelStrategy parallelStrategy) {
@@ -125,5 +133,4 @@ public interface StreamDecorator {
 
         };
     }
-
 }

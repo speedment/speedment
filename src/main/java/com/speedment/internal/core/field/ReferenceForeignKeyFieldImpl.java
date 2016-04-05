@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,20 +16,21 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceForeignKeyField;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
 import com.speedment.field.methods.Finder;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.function.Predicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
-import static java.util.Objects.requireNonNull;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -39,26 +40,34 @@ import static java.util.Objects.requireNonNull;
  * @param <ENTITY> The entity type
  * @param <V> The value type
  */
-public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceForeignKeyField<ENTITY, V, FK> {
+public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements ReferenceForeignKeyField<ENTITY, D, V, FK> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
-    private final ReferenceForeignKeyFieldTrait<ENTITY, FK> referenceForeignKeyField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
+    private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ReferenceForeignKeyFieldImpl(
-        String columnName,
-        Getter<ENTITY, V> getter,
-        Setter<ENTITY, V> setter,
-        Finder<ENTITY, FK> finder
+            FieldIdentifier<ENTITY> identifier,
+            Getter<ENTITY, V> getter,
+            Setter<ENTITY, V> setter,
+            Finder<ENTITY, FK> finder,
+            TypeMapper<D, V> typeMapper,
+            boolean unique
     ) {
-        field = new FieldTraitImpl(requireNonNull(columnName));
-        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
-        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
+        requireNonNulls(identifier, getter, setter, finder, typeMapper);
+        field = new FieldTraitImpl(identifier, unique);
+        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
+        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
+    }
+    
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override
@@ -72,23 +81,28 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, V, FK> implements ReferenceFor
     }
 
     @Override
+    public Finder<ENTITY, FK> finder() {
+        return referenceForeignKeyField.finder();
+    }
+
+    @Override
+    public TypeMapper<D, V> typeMapper() {
+        return referenceField.typeMapper();
+    }
+
+    @Override
     public FieldSetter<ENTITY, V> setTo(V value) {
         return referenceField.setTo(value);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNotNull() {
         return referenceField.isNotNull();
-    }
-
-    @Override
-    public Finder<ENTITY, FK> finder() {
-        return referenceForeignKeyField.finder();
     }
 
 }

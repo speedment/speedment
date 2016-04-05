@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,74 +17,31 @@
 package com.speedment.internal.core.code;
 
 import com.speedment.Speedment;
-import com.speedment.internal.codegen.util.Formatting;
-import com.speedment.internal.codegen.base.Generator;
-import com.speedment.internal.codegen.lang.models.ClassOrInterface;
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.Type;
-import com.speedment.internal.codegen.lang.models.constants.DefaultType;
-import com.speedment.internal.codegen.lang.models.implementation.GenericImpl;
-import com.speedment.config.Table;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.ClassOrInterface;
+import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.codegen.model.constant.DefaultType;
+import com.speedment.util.tuple.Tuple1;
+import java.util.function.Function;
 
 /**
  *
  * @author pemi
- * @param <T> Type of item to generate
+ * @param <T> type of model to translate into
  */
-public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> extends DefaultJavaClassTranslator<Table, T> {
+public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
+        extends DefaultJavaClassTranslator<Table, T> {
 
-//    private final CodeGenerator cg;
-    public class ClassType {
+    protected EntityAndManagerTranslator(
+            Speedment speedment,
+            Generator gen,
+            Table table,
+            Function<String, T> modelConstructor) {
 
-        private ClassType(String typeName, String implTypeName) {
-            requireNonNull(typeName);
-            requireNonNull(implTypeName);
-            this.type = Type.of(fullyQualifiedTypeName() + typeName);
-            this.optionalType = Type.of(Optional.class).add(new GenericImpl().add(type));
-            this.implType = Type.of(fullyQualifiedTypeName("impl") + typeName + implTypeName);
-
-        }
-
-        private final Type type;
-        private final Type optionalType;
-        private final Type implType;
-
-        public Type getType() {
-            return type;
-        }
-
-        public Type getImplType() {
-            return implType;
-        }
-
-        public String getName() {
-            return Formatting.shortName(type.getName());
-        }
-
-        public String getImplName() {
-            return Formatting.shortName(implType.getName());
-        }
-
-        public Type getOptionalType() {
-            return optionalType;
-        }
-    }
-
-    public final ClassType ENTITY = new ClassType("", "Impl"),
-            BUILDER = new ClassType("Builder", "Impl"),
-            CONFIG = new ClassType("Config", "Impl"),
-            MANAGER = new ClassType("Manager", "Impl");
-//            FIELD = new ClassType("Field", "Impl");
-
-    public final Generic GENERIC_OF_PK = Generic.of().add(typeOfPK()),
-            GENERIC_OF_ENTITY = Generic.of().add(ENTITY.getType()),
-            GENERIC_OF_MANAGER = Generic.of().add(MANAGER.getType());
-            //GENERIC_OF_BUILDER = Generic.of().add(BUILDER.getType());
-
-    public EntityAndManagerTranslator(Speedment speedment, Generator cg, Table configEntity) {
-        super(speedment, cg, configEntity);
+        super(speedment, gen, table, modelConstructor);
     }
 
     protected Type typeOfPK() {
@@ -92,19 +49,45 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>> 
 
         if (pks == 0) {
             return DefaultType.list(DefaultType.WILDCARD);
-            //throw new UnsupportedOperationException("Table '" + table().getName() + "' does not have a valid primary key.");
         }
 
-        final Class<?> first = primaryKeyColumns().findFirst().get().getColumn().getTypeMapper().getJavaType();
+        final Class<?> first = primaryKeyColumns()
+                .findFirst().get()
+                .findColumn().get()
+                .findTypeMapper().getJavaType();
 
         if (pks == 1) {
             return Type.of(first);
+        } else if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
+                .findTypeMapper().getJavaType().equals(first))) {
+
+            return DefaultType.list(Type.of(first));
         } else {
-            if (primaryKeyColumns().allMatch(c -> c.getColumn().getTypeMapper().getJavaType().equals(first))) {
-                return DefaultType.list(Type.of(first));
-            } else {
-                return DefaultType.list(DefaultType.WILDCARD);
-            }
+            return DefaultType.list(DefaultType.WILDCARD);
         }
+    }
+
+    protected Type pkTupleType() {
+        final long pks = primaryKeyColumns().count();
+        final Package package_ = Tuple1.class.getPackage();
+        final String tupleClassName = package_.getName() + ".Tuple" + pks;
+        final java.lang.Class<?> tupleClass;
+        try {
+            tupleClass = java.lang.Class.forName(tupleClassName);
+        } catch (ClassNotFoundException cnf) {
+            throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
+        }
+        final Type result = Type.of(tupleClass);
+        primaryKeyColumns().forEachOrdered(pk -> {
+            result.add(
+                    Generic.of().add(
+                            Type.of(java.lang.Class.class)
+                            .add(Generic.of().add(
+                                    Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
+                            )
+                    )
+            );
+        });
+        return result;
     }
 }

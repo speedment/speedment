@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,9 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -24,20 +26,26 @@ import com.speedment.field.trait.FieldTrait;
  */
 public class FieldTraitImpl implements FieldTrait {
 
-    private final String columnName;
+    private final FieldIdentifier<?> identifier;
+    private final boolean unique;
 
-    public FieldTraitImpl(String columnName) {
-        this.columnName = columnName;
+    public FieldTraitImpl(FieldIdentifier<?> identifier, boolean unique) {
+        this.identifier = requireNonNull(identifier);
+        this.unique = unique;
     }
 
     @Override
-    public String getColumnName() {
-        return columnName;
+    public FieldIdentifier<?> getIdentifier() {
+        return identifier;
+    }
+
+    @Override
+    public boolean isUnique() {
+        return unique;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " {columnName: '" + getColumnName() + "'}";
+        return getClass().getSimpleName() + " {columnName: '" + getIdentifier().columnName() + "'}";
     }
-
 }

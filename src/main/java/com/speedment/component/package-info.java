@@ -1,21 +1,14 @@
 /**
- *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-/**
- * This package contains the {@link com.speedment.component.Component Components}
- * of the {@link com.speedment.Speedment Speedment} platform.
+ * The {@link com.speedment.component.Component Components} of the 
+ * {@link com.speedment.Speedment Speedment} platform. These are modularized
+ * units of logic that together make up Speedment.
+ * <p>
+ * A general description of the component system can be found here:
+ * <a href="http://minborgsjavapot.blogspot.com/2016/02/plugin-your-own-components-with-java-8.html">
+ *      Plugin Your Own Components with Java 8
+ * </a> by Per-Åke Minborg
+ * <p>
+ * This package is part of the API. Modifications to classes here should only
+ * (if ever) be done in major releases.
  */
 package com.speedment.component;

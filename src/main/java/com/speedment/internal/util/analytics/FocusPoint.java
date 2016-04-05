@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,7 @@
 package com.speedment.internal.util.analytics;
 
 import com.speedment.SpeedmentVersion;
-import com.speedment.internal.util.Settings;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import com.speedment.internal.util.EmailUtil;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
@@ -30,9 +28,7 @@ public enum FocusPoint {
     APP_STARTED        ("AppStarted"),
     GENERATE           ("Generate");
 
-    private static final String 
-        ENCODING  = "UTF-8",
-        SEPARATOR = "/";
+    private static final String SEPARATOR = "/";
     
     private final String eventName;
     
@@ -49,15 +45,7 @@ public enum FocusPoint {
             SpeedmentVersion.getImplementationTitle(),
             SpeedmentVersion.getImplementationVersion(),
             eventName,
-            Settings.inst().get("user_mail", "no-mail-specified")
+            EmailUtil.getEmail()
         ).collect(joining(SEPARATOR));
-    }
-
-    private static String encode(String name) {
-        try {
-            return URLEncoder.encode(name, ENCODING);
-        } catch (UnsupportedEncodingException e) {
-            return name;
-        }
     }
 }

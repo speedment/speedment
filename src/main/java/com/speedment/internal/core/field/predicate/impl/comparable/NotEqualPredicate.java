@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,11 +17,11 @@
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
 import static com.speedment.field.predicate.PredicateType.NOT_EQUAL;
-import java.util.Objects;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
+import java.util.Objects;
 
 /**
  *
@@ -29,9 +29,11 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class NotEqualPredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class NotEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends BaseComparablePredicate<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public NotEqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, V operand0) {
+    public NotEqualPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField, V operand0) {
         super(NOT_EQUAL, field, referenceField, operand0, (a, b) -> !Objects.equals(a, b));
     }
 

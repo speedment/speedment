@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,25 +16,27 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.ComparableForeignKeyField;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
 import com.speedment.field.methods.Finder;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
 import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.Comparator;
+import java.util.Set;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -44,28 +46,36 @@ import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
  * @param <ENTITY> The entity type
  * @param <V> The value type
  */
-public class ComparableForeignKeyFieldImpl<ENTITY, V extends Comparable<? super V>, FK> implements ComparableForeignKeyField<ENTITY, V, FK> {
+public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? super V>, FK> implements ComparableForeignKeyField<ENTITY, D, V, FK> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
-    private final ComparableFieldTrait<ENTITY, V> comparableField;
-    private final ReferenceForeignKeyFieldTrait<ENTITY, FK> referenceForeignKeyField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
+    private final ComparableFieldTrait<ENTITY, D, V> comparableField;
+    private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public ComparableForeignKeyFieldImpl(
-        String columnName,
-        Getter<ENTITY, V> getter,
-        Setter<ENTITY, V> setter,
-        Finder<ENTITY, FK> finder
+            FieldIdentifier<ENTITY> identifier,
+            Getter<ENTITY, V> getter,
+            Setter<ENTITY, V> setter,
+            Finder<ENTITY, FK> finder,
+            TypeMapper<D, V> typeMapper,
+            boolean unique
     ) {
-        field = new FieldTraitImpl(requireNonNull(columnName));
-        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
+        requireNonNulls(identifier, getter, setter, finder, typeMapper);
+        field = new FieldTraitImpl(identifier, unique);
+        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
         comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
-        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(requireNonNull(finder));
+        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
+    }
+
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override
@@ -79,17 +89,27 @@ public class ComparableForeignKeyFieldImpl<ENTITY, V extends Comparable<? super 
     }
 
     @Override
+    public Finder<ENTITY, FK> finder() {
+        return referenceForeignKeyField.finder();
+    }
+
+    @Override
+    public TypeMapper<D, V> typeMapper() {
+        return referenceField.typeMapper();
+    }
+
+    @Override
     public FieldSetter<ENTITY, V> setTo(V value) {
         return referenceField.setTo(value);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNotNull() {
         return referenceField.isNotNull();
     }
 
@@ -109,72 +129,67 @@ public class ComparableForeignKeyFieldImpl<ENTITY, V extends Comparable<? super 
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> equal(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> equal(V value) {
         return comparableField.equal(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> notEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notEqual(V value) {
         return comparableField.notEqual(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> lessThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> lessThan(V value) {
         return comparableField.lessThan(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> lessOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> lessOrEqual(V value) {
         return comparableField.lessOrEqual(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> greaterThan(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> greaterThan(V value) {
         return comparableField.greaterThan(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> greaterOrEqual(V value) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> greaterOrEqual(V value) {
         return comparableField.greaterOrEqual(value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end) {
         return comparableField.between(start, end);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> between(V start, V end, Inclusion inclusion) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs") // delegator is safe
     @Override
-    public final ComparableSpeedmentPredicate<ENTITY, V> in(V... values) {
+    public final ComparableSpeedmentPredicate<ENTITY, D, V> in(V... values) {
         return comparableField.in(values);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> in(Set<V> values) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> in(Set<V> values) {
         return comparableField.in(values);
     }
-    
+
     @SafeVarargs
     @SuppressWarnings("varargs") // delegator is safe
     @Override
-    public final ComparableSpeedmentPredicate<ENTITY, V> notIn(V... values) {
+    public final ComparableSpeedmentPredicate<ENTITY, D, V> notIn(V... values) {
         return comparableField.notIn(values);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, V> notIn(Set<V> values) {
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notIn(Set<V> values) {
         return comparableField.notIn(values);
-    }
-    
-    @Override
-    public Finder<ENTITY, FK> finder() {
-        return referenceForeignKeyField.finder();
     }
 
 }

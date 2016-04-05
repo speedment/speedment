@@ -30,21 +30,8 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER" prefHeight="38.0" prefWidth="900.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" prefHeight="38.0" prefWidth="900.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.internal.ui.controller.ToolbarController">
     <children>
-        <Button fx:id="buttonNew" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" text="New" textAlignment="CENTER">
-            <HBox.margin>
-                <Insets left="4.0" />
-            </HBox.margin>
-            <padding>
-                <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
-            </padding>
-        </Button>
-        <Button fx:id="buttonOpen" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Open" textAlignment="CENTER">
-            <padding>
-                <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
-            </padding>
-        </Button>
         <Button fx:id="buttonReload" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Reload" textAlignment="CENTER">
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
@@ -56,16 +43,10 @@
             </padding>
         </Button>
         <Pane prefHeight="200.0" HBox.hgrow="ALWAYS" />
-        <ImageView fx:id="logo" fitHeight="48.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../images/logo.png" />
-            </image>
+        <ImageView fx:id="brand" fitHeight="48.0" preserveRatio="true" smooth="true" >
             <HBox.margin>
-                <Insets right="16.0" />
+                <Insets right="8.0" />
             </HBox.margin>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
         </ImageView>
     </children>
     <padding>

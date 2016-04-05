@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,13 +16,13 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
+import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 
 /**
  *
@@ -30,18 +30,19 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class BaseComparablePredicate<ENTITY, V extends Comparable<? super V>> extends SpeedmentPredicateImpl<ENTITY, V> implements
-    SpeedmentPredicate<ENTITY, V>, BinaryOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class BaseComparablePredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V>, ComparableSpeedmentPredicate<ENTITY, D, V> {
 
     private final V operand0;
     private final BiPredicate<V> innerPredicate;
 
     public BaseComparablePredicate(
-        PredicateType predicateType,
-        FieldTrait field,
-        ReferenceFieldTrait<ENTITY, V> referenceField,
-        V operand0,
-        BiPredicate<V> innerPredicate
+            PredicateType predicateType,
+            FieldTrait field,
+            ReferenceFieldTrait<ENTITY, D, V> referenceField,
+            V operand0,
+            BiPredicate<V> innerPredicate
     ) {
         super(predicateType, field, referenceField);
         this.operand0 = operand0;

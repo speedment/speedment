@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,18 +16,27 @@
  */
 package com.speedment.internal.core.stream.builder.action.longs;
 
-import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.SKIP;
+import com.speedment.internal.core.stream.builder.action.trait.HasSkip;
+import com.speedment.stream.action.Action;
 import java.util.stream.LongStream;
 
 /**
  *
  * @author pemi
  */
-public final class LongSkipAction extends Action<LongStream, LongStream> {
+public final class LongSkipAction extends Action<LongStream, LongStream> implements HasSkip {
+
+    private final long skip;
 
     public LongSkipAction(long n) {
         super(s -> s.skip(n), LongStream.class, SKIP);
+        this.skip = n;
+    }
+
+    @Override
+    public long getSkip() {
+        return skip;
     }
 
 }

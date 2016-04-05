@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.Manager;
 import com.speedment.db.SqlFunction;
+import com.speedment.manager.Manager;
 import java.sql.ResultSet;
 
 /**
@@ -27,8 +27,8 @@ import java.sql.ResultSet;
  */
 public interface SqlManager<ENTITY> extends Manager<ENTITY> {
 
-    SqlFunction<ResultSet, ENTITY> getSqlEntityMapper();
+    SqlFunction<ResultSet, ENTITY> getEntityMapper();
 
-    void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper);
+    void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
 
 }

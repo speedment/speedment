@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,68 +20,114 @@ import com.speedment.Speedment;
 import com.speedment.component.EventComponent;
 import com.speedment.event.DefaultEvent;
 import com.speedment.event.Event;
+import com.speedment.event.UIEvent;
+import com.speedment.license.Software;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EventComponentImpl extends Apache2AbstractComponent implements EventComponent {
-    
+public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
+
     private final Map<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultEventListeners;
-    private final Map<String, Set<Consumer<? extends Event>>> otherEventListeners;
+    private final Map<UIEvent, Set<Consumer<UIEvent>>> uiEventListeners;
+    private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
     private final Set<Consumer<Event>> anyEventListeners;
-    
+
     public EventComponentImpl(Speedment speedment) {
         super(speedment);
         
-        final EnumMap<DefaultEvent, Set<Consumer<DefaultEvent>>> listeners = new EnumMap<>(DefaultEvent.class);
+        final EnumMap<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultListeners = 
+            new EnumMap<>(DefaultEvent.class);
+        
         for (final DefaultEvent ev : DefaultEvent.values()) {
-            listeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+            defaultListeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
         
-        defaultEventListeners = Collections.unmodifiableMap(listeners);
+        defaultEventListeners = Collections.unmodifiableMap(defaultListeners);
+        
+        final EnumMap<UIEvent, Set<Consumer<UIEvent>>> uiListeners = 
+            new EnumMap<>(UIEvent.class);
+        
+        for (final UIEvent ev : UIEvent.values()) {
+            uiListeners.put(ev, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        }
+        
+        uiEventListeners = Collections.unmodifiableMap(uiListeners);
+        
         otherEventListeners   = new ConcurrentHashMap<>();
         anyEventListeners     = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
-    @Override
-    public void notify(Event event) {
-        final Consumer<Consumer<Event>> notifier = listener -> listener.accept(event);
-        listeners(event).forEach(notifier);
-        anyEventListeners.forEach(notifier);
+    public EventComponentImpl(Speedment speedment, EventComponentImpl template) {
+        this(speedment);
     }
 
     @Override
-    public <E extends Event> void on(E event, Consumer<E> action) {
-        listeners(event).add(action);
+    public void notify(Event event) {
+        if (event instanceof DefaultEvent) {
+            final DefaultEvent ev = (DefaultEvent) event;
+            defaultListeners(ev).forEach(listener -> listener.accept(ev));
+        } else if (event instanceof UIEvent) {
+            final UIEvent ev = (UIEvent) event;
+            uiListeners(ev).forEach(listener -> listener.accept(ev));
+        } else {
+            listeners(event.getClass()).forEach(listener -> listener.accept(event));
+        }
+
+        anyEventListeners.forEach(listener -> listener.accept(event));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <E extends Event> void on(Class<E> event, Consumer<E> action) {
+        listeners(event).add((Consumer<Event>) action);
+    }
+
+    @Override
+    public void on(DefaultEvent event, Consumer<DefaultEvent> action) {
+        defaultListeners(event).add(action);
+    }
+    
+    @Override
+    public void on(UIEvent event, Consumer<UIEvent> action) {
+        uiListeners(event).add(action);
     }
 
     @Override
     public void onAny(Consumer<Event> action) {
         anyEventListeners.add(action);
     }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+
+    @Override
+    public EventComponent defaultCopy(Speedment speedment) {
+        return new EventComponentImpl(speedment, this);
+    }
+
+    private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {
+        final Set<Consumer<Event>> set = otherEventListeners
+            .computeIfAbsent(event, ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+
+        return set;
+    }
+
+    private Set<Consumer<DefaultEvent>> defaultListeners(DefaultEvent event) {
+        return defaultEventListeners.get(event);
+    }
     
-    private <E extends Event> Set<Consumer<E>> listeners(E event) {
-        if (event instanceof DefaultEvent) {
-            @SuppressWarnings("unchecked")
-            final DefaultEvent key = (DefaultEvent) event;
-            
-            @SuppressWarnings("unchecked")
-            final Set<Consumer<E>> set = (Set<Consumer<E>>) (Object) defaultEventListeners.get(key);
-            
-            return set;
-        } else {
-            @SuppressWarnings("unchecked")
-            final Set<Consumer<E>> set = (Set<Consumer<E>>) (Object) otherEventListeners
-                .computeIfAbsent(event.name(), ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
-            
-            return set;
-        }
+    private Set<Consumer<UIEvent>> uiListeners(UIEvent event) {
+        return uiEventListeners.get(event);
     }
 }

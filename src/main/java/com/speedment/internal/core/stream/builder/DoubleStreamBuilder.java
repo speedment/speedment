@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,8 +28,8 @@ import com.speedment.internal.core.stream.builder.action.doubles.DoubleMapToObjA
 import com.speedment.internal.core.stream.builder.action.doubles.DoublePeekAction;
 import com.speedment.internal.core.stream.builder.action.doubles.DoubleSkipAction;
 import com.speedment.internal.core.stream.builder.action.doubles.DoubleSortedAction;
-import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.pipeline.DoublePipeline;
+import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.core.stream.builder.streamterminator.StreamTerminator;
 import java.util.DoubleSummaryStatistics;
 import static java.util.Objects.requireNonNull;

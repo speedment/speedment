@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,18 +16,27 @@
  */
 package com.speedment.internal.core.stream.builder.action.ints;
 
-import com.speedment.internal.core.stream.builder.action.Action;
 import static com.speedment.internal.core.stream.builder.action.StandardBasicAction.LIMIT;
+import com.speedment.internal.core.stream.builder.action.trait.HasLimit;
+import com.speedment.stream.action.Action;
 import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
  */
-public final class IntLimitAction extends Action<IntStream, IntStream> {
+public final class IntLimitAction extends Action<IntStream, IntStream> implements HasLimit {
+
+    private final long limit;
 
     public IntLimitAction(long maxSize) {
         super(s -> s.limit(maxSize), IntStream.class, LIMIT);
+        this.limit = maxSize;
+    }
+
+    @Override
+    public long getLimit() {
+        return limit;
     }
 
 }

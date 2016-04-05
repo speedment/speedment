@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.internal.core.runtime;
 
 import com.speedment.SpeedmentVersion;
@@ -23,10 +22,10 @@ import java.io.InputStream;
 import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -34,8 +33,8 @@ import static org.junit.Assert.*;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.2.3";
-    private static final String EXPECTED_SPECIFICATION_VERSION = "2.2";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.3.0";
+    private static final String EXPECTED_SPECIFICATION_VERSION = "2.3";
 
     public SpeedmentVersionTest() {
     }
@@ -76,38 +75,34 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationTitle() {
-        System.out.println("getImplementationTitle");
         //String expResult = getPackage().getImplementationTitle();
-        String expResult = "Speedment";
-        String result = SpeedmentVersion.getImplementationTitle();
+        final String expResult = "Speedment";
+        final String result = SpeedmentVersion.getImplementationTitle();
         assertEquals(expResult, result);
     }
 
     @Test
     public void testGetImplementationVendor() {
-        System.out.println("getImplementationVendor");
         //String expResult = getPackage().getImplementationVendor();
-        String expResult = "Speedment Inc.";
-        String result = SpeedmentVersion.getImplementationVendor();
+        final String expResult = "Speedment Inc.";
+        final String result = SpeedmentVersion.getImplementationVendor();
         assertEquals(expResult, result);
     }
 
     @Test
     public void testGetImplementationVersion() {
-        System.out.println("getImplementationVersion");
 //        String expResult = getPackage().getImplementationVersion();
 //        String expResult2 = getFromManifest("ImplementationVersion");
 
         // Todo: Implement a real test. Like extract version from POM or MANIFEST.MF
-        String result = SpeedmentVersion.getImplementationVersion();
+        final String result = SpeedmentVersion.getImplementationVersion();
         assertEquals(EXPECTED_IMPLEMENTATION_VERSION, result);
     }
     
     @Test
     public void testGetSpecificationVersion() {
-        System.out.println("getSpecificationVersion");
-        String expResult = EXPECTED_SPECIFICATION_VERSION;
-        String result = SpeedmentVersion.getSpecificationVersion();
+        final String expResult = EXPECTED_SPECIFICATION_VERSION;
+        final String result = SpeedmentVersion.getSpecificationVersion();
         assertEquals(expResult, result);
     }
     

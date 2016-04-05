@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,16 +16,18 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceField;
 import com.speedment.field.methods.FieldSetter;
-import com.speedment.internal.core.field.trait.FieldTraitImpl;
-import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.field.methods.Getter;
 import com.speedment.field.methods.Setter;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
-import static java.util.Objects.requireNonNull;
+import com.speedment.internal.core.field.trait.FieldTraitImpl;
+import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import static com.speedment.util.NullUtil.requireNonNulls;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -35,23 +37,31 @@ import static java.util.Objects.requireNonNull;
  * @param <ENTITY> The entity type
  * @param <V> The value type
  */
-public class ReferenceFieldImpl<ENTITY, V> implements ReferenceField<ENTITY, V> {
+public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, D, V> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
 
     public ReferenceFieldImpl(
-        String columnName,
-        Getter<ENTITY, V> getter,
-        Setter<ENTITY, V> setter
+            FieldIdentifier<ENTITY> identifier,
+            Getter<ENTITY, V> getter,
+            Setter<ENTITY, V> setter,
+            TypeMapper<D, V> typeMapper,
+            boolean unique
     ) {
-        field = new FieldTraitImpl(requireNonNull(columnName));
-        referenceField = new ReferenceFieldTraitImpl<>(field, requireNonNull(getter), requireNonNull(setter));
+        requireNonNulls(identifier, getter, setter, typeMapper);
+        field = new FieldTraitImpl(identifier, unique);
+        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
     }
 
     @Override
-    public String getColumnName() {
-        return field.getColumnName();
+    public FieldIdentifier<ENTITY> getIdentifier() {
+        return referenceField.getIdentifier();
+    }
+    
+    @Override
+    public boolean isUnique() {
+        return field.isUnique();
     }
 
     @Override
@@ -65,17 +75,22 @@ public class ReferenceFieldImpl<ENTITY, V> implements ReferenceField<ENTITY, V> 
     }
 
     @Override
+    public TypeMapper<D, V> typeMapper() {
+        return referenceField.typeMapper();
+    }
+
+    @Override
     public FieldSetter<ENTITY, V> setTo(V value) {
         return referenceField.setTo(value);
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNull() {
         return referenceField.isNull();
     }
 
     @Override
-    public SpeedmentPredicate<ENTITY, V> isNotNull() {
+    public SpeedmentPredicate<ENTITY, D, V> isNotNull() {
         return referenceField.isNotNull();
     }
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util;
 
+import com.speedment.exception.SpeedmentException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -50,8 +51,8 @@ public final class Settings {
 
 		try (final InputStream is = new FileInputStream(SETTINGS_FILE)) {
 			props.load(is);
-		} catch (Exception e) {
-			throw new RuntimeException(
+		} catch (IOException e) {
+			throw new SpeedmentException(
 				"Could not find file '" + filename() + "'."
 			);
 		}

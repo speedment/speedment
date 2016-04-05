@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,6 +29,10 @@ public abstract class SqlStatement {
     private final String sql;
     private final List<?> values;
 
+    public enum Type {
+        INSERT, UPDATE, DELETE;
+    }
+
     public SqlStatement(final String sql, final List<?> values) {
         this.sql = Objects.requireNonNull(sql);
         this.values = new ArrayList<>(Objects.requireNonNull(values));
@@ -46,5 +50,7 @@ public abstract class SqlStatement {
     public String toString() {
         return getSql() + ", " + values.toString();
     }
+
+    public abstract Type getType();
 
 }

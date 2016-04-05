@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,19 +21,16 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
+import com.speedment.Speedment;
 import com.speedment.component.PrimaryKeyFactoryComponent;
-import com.speedment.internal.core.platform.SpeedmentFactory;
-import com.speedment.internal.util.AssertUtil;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -41,7 +38,7 @@ import static org.junit.Assert.*;
  */
 public class PrimaryKeyFactoryComponentImplTest {
 
-    private final PrimaryKeyFactoryComponentImpl instance = new PrimaryKeyFactoryComponentImpl(SpeedmentFactory.newSpeedmentInstance());
+    private PrimaryKeyFactoryComponentImpl instance;
     private final Integer k0 = 1;
     private final String k1 = "Arne";
     private final String k2 = "Sven";
@@ -52,52 +49,38 @@ public class PrimaryKeyFactoryComponentImplTest {
     private final Integer k7 = 43;
     private final String k8 = "Objects";
 
-    public PrimaryKeyFactoryComponentImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
+            .withCheckDatabaseConnectivity(false)
+            .withValidateRuntimeConfig(false)
+            .withPrintWelcomeMessage(false)
+            .build();
+        instance = new PrimaryKeyFactoryComponentImpl(speedment);
     }
 
     @Test
     public void testMake_GenericType_GenericType() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1), instance.make(k0, k1));
     }
 
     @Test
     public void testMake_3args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2), instance.make(k0, k1, k2));
     }
 
     @Test
     public void testMake_4args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2, k3), instance.make(k0, k1, k2, k3));
     }
 
     @Test
     public void testMake_5args() {
-        System.out.println("make");
         assertEquals(Arrays.asList(k0, k1, k2, k3, k4), instance.make(k0, k1, k2, k3, k4));
     }
 
     @Test
     public void testMake_6args() {
-        System.out.println("make");
         final List<Object> expResult = new ArrayList<>();
         expResult.add(k0);
         expResult.add(k1);
@@ -115,13 +98,11 @@ public class PrimaryKeyFactoryComponentImplTest {
 
     @Test
     public void testGetComponentClass() {
-        System.out.println("getComponentClass");
         assertEquals(PrimaryKeyFactoryComponent.class, instance.getComponentClass());
     }
 
     @Test
     public void testImmutability() {
-        System.out.println("immutability");
         final List<?> pks = instance.make(k0, k1, k2, k3, k4, k5, k6, k7, k8);
 
         isImmutable(pks::clear);
@@ -135,7 +116,13 @@ public class PrimaryKeyFactoryComponentImplTest {
     }
 
     private void isImmutable(Runnable r) {
-        AssertUtil.assertThrown(r).isInstanceOf(UnsupportedOperationException.class).test();
+        try {
+            r.run();
+            fail("Did not throw an exception as expected");
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+        //AssertUtil.assertThrown(r).isInstanceOf(UnsupportedOperationException.class).test();
     }
 
 }

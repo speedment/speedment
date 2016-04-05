@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,23 +16,22 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.config.Table;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.Manager;
 import com.speedment.Speedment;
 import com.speedment.component.ManagerComponent;
+import com.speedment.config.db.Table;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.license.Software;
+import com.speedment.manager.Manager;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ManagerComponentImpl extends Apache2AbstractComponent implements ManagerComponent {
+public final class ManagerComponentImpl extends InternalOpenSourceComponent implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?>> managersByEntity;
     private final Map<Table, Manager<?>> tableMap;
@@ -41,6 +40,10 @@ public final class ManagerComponentImpl extends Apache2AbstractComponent impleme
         super(speedment);
         managersByEntity = new ConcurrentHashMap<>();
         tableMap = new ConcurrentHashMap<>();
+    }
+
+    public ManagerComponentImpl(Speedment speedment, ManagerComponentImpl template) {
+        this(speedment);
     }
 
     @Override
@@ -55,8 +58,8 @@ public final class ManagerComponentImpl extends Apache2AbstractComponent impleme
     public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
         requireNonNull(entityClass);
         @SuppressWarnings("unchecked")
-        final Manager<E> manager = (Manager<E>)managersByEntity.get(entityClass);
-        if (manager==null) {
+        final Manager<E> manager = (Manager<E>) managersByEntity.get(entityClass);
+        if (manager == null) {
             throw new SpeedmentException("No manager exists for " + entityClass);
         }
         return manager;
@@ -72,6 +75,16 @@ public final class ManagerComponentImpl extends Apache2AbstractComponent impleme
     public <ENTITY> Manager<ENTITY> findByTable(Table table) {
         requireNonNull(table);
         return (Manager<ENTITY>) tableMap.get(table);
+    }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+
+    @Override
+    public ManagerComponent defaultCopy(Speedment speedment) {
+        return new ManagerComponentImpl(speedment, this);
     }
 
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.util.analytics;
 
+import com.speedment.internal.util.testing.TestSettings;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
@@ -29,13 +30,17 @@ public final class AnalyticsUtil {
 
     public static void notify(final FocusPoint focusPoint) {
         requireNonNull(focusPoint);
-        final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
-        tracker.setLoggingAdapter(new LoggingAdapterImpl());
-        tracker.trackAsynchronously(focusPoint);
+        if (!TestSettings.isTestMode()) {
+            final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
+            tracker.setLoggingAdapter(new LoggingAdapterImpl());
+            tracker.trackAsynchronously(focusPoint);
+        }
     }
 
     /**
      * Utility classes should not be instantiated.
      */
-    private AnalyticsUtil() { instanceNotAllowed(getClass()); }
+    private AnalyticsUtil() {
+        instanceNotAllowed(getClass());
+    }
 }

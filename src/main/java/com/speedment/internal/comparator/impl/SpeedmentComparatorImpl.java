@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,14 +28,14 @@ import static java.util.Objects.requireNonNull;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
-public class SpeedmentComparatorImpl<ENTITY, V extends Comparable<? super V>> implements SpeedmentComparator<ENTITY, V> {
+public class SpeedmentComparatorImpl<ENTITY, D, V extends Comparable<? super V>> implements SpeedmentComparator<ENTITY, V> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
     private final NullOrder nullOrder;
     private boolean reversed;
 
-    public SpeedmentComparatorImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, NullOrder nullOrder) {
+    public SpeedmentComparatorImpl(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField, NullOrder nullOrder) {
         this.field = field;
         this.referenceField = referenceField;
         this.nullOrder = nullOrder;

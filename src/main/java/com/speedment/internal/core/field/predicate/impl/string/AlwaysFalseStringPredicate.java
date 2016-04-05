@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,10 +27,10 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public class AlwaysFalseStringPredicate<ENTITY> extends BaseStringPredicate<ENTITY>
-    implements SpeedmentPredicate<ENTITY, String>, BinaryOperation<String> {
+public class AlwaysFalseStringPredicate<ENTITY, D> extends BaseStringPredicate<ENTITY, D>
+        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
-    public AlwaysFalseStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, String> referenceField) {
+    public AlwaysFalseStringPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField) {
         super(ALWAYS_FALSE, field, referenceField, null, (a, b) -> false);
     }
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.encoder;
 
+import com.speedment.Entity;
 import com.speedment.annotation.Api;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * The EntityFormatter can be used to format an Entity into any kind of strings.
+ * The Encoder can be used to format an {@link Entity} into any kind of strings.
  * Fields can be added, removed and it is also possible to change the way a
  * field is rendered into the resulting String.
  * <p>
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  * @param <R> Type of formatter
  * @param <OUTPUT_TYPE> Target encoder output type
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTPUT_TYPE> {
 
     OUTPUT_TYPE apply(ENTITY entity);
@@ -46,12 +47,13 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * Adds this Field to the output renderer. The field will be rendered using
      * its default class renderer.
      *
+     * @param <D> the database type
      * @param <T> the mapped Java type of the Field
      * @param <I> Field type
      * @param field to add to the renderer
      * @return a reference to a resulting Encoder
      */
-    <T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T>> R put(I field);
+    <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> R put(I field);
 
     // Foreign key fields.
     /**
@@ -59,6 +61,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * be rendered such that the foreign key object will be retrieved and then
      * the foreign key object will be rendered using the provided Encoder.
      *
+     * @param <D> the database type
      * @param <T> the mapped Java type of the Field
      * @param <FK_ENTITY> the mapped Java type of the foreign key Field
      * @param <I> Field type
@@ -66,7 +69,7 @@ public interface Encoder<ENTITY, R extends Encoder<ENTITY, R, OUTPUT_TYPE>, OUTP
      * @param fkFormatter the foreign key encoder
      * @return a reference to a resulting Encoder
      */
-    <T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, T> & ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY>>
+    <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
         R put(I field, Encoder<FK_ENTITY, ?, OUTPUT_TYPE> fkFormatter);
 
     // Label-and-getter pairs

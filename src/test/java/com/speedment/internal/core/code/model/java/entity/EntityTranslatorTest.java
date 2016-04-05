@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,13 +16,15 @@
  */
 package com.speedment.internal.core.code.model.java.entity;
 
-import com.speedment.internal.core.code.entity.EntityTranslator;
-import com.speedment.internal.codegen.base.Generator;
+import com.speedment.codegen.Generator;
+import com.speedment.codegen.model.File;
+import com.speedment.config.Document;
+import com.speedment.config.db.Table;
+import com.speedment.internal.codegen.controller.AutoImports;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.codegen.lang.controller.AutoImports;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.core.code.model.java.SimpleModelTest;
-import com.speedment.config.Table;
+import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.internal.core.code.model.java.SimpleModel;
+import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;
 import org.junit.Test;
 
@@ -30,17 +32,16 @@ import org.junit.Test;
  *
  * @author pemi
  */
-public class EntityTranslatorTest extends SimpleModelTest {
+public class EntityTranslatorTest extends SimpleModel {
 
     @Test
     public void testApply() {
-        System.out.println("apply");
-
         final Generator cg = new JavaGenerator();
 
-        final Table table2 = project.traverseOver(Table.class)
-            .filter(e -> TABLE_NAME.equals(e.getName()))
-            .findAny().get();
+        final Table table2 = traverseOver(project, Table.class)
+                .peek(this::print)
+                .filter(e -> TABLE_NAME.equals(e.getName()))
+                .findAny().get();
 
         final EntityTranslator instance = new EntityTranslator(speedment, cg, table2);
         final File file = instance.get();
@@ -49,6 +50,12 @@ public class EntityTranslatorTest extends SimpleModelTest {
 
         final Optional<String> code = cg.on(file);
 
-        System.out.println(code.get());
+        //System.out.println(code.get());
     }
+    
+    private void print(Document d) {
+        //System.out.println(d);
+    }
+    
+    
 }

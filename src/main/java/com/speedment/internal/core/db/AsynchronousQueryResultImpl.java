@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,9 +23,9 @@ package com.speedment.internal.core.db;
 
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.stream.StreamUtil;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.core.stream.StreamUtil;
 import com.speedment.stream.ParallelStrategy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,10 +16,13 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.internal.ui.resource.SpeedmentIcon;
-import com.speedment.internal.ui.util.Loader;
+import com.speedment.component.brand.Brand;
+import com.speedment.event.UIEvent;
 import com.speedment.internal.ui.UISession;
+import com.speedment.internal.ui.util.Loader;
+import com.speedment.internal.util.Statistics;
 import java.net.URL;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
@@ -28,12 +31,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -43,7 +43,6 @@ public final class SceneController implements Initializable {
     
     private final UISession session;
     
-    private @FXML StackPane stack;
     private @FXML VBox top;
     private @FXML SplitPane horizontal;
     private @FXML SplitPane vertical;
@@ -61,25 +60,28 @@ public final class SceneController implements Initializable {
             vertical.getItems().add(WorkspaceController.create(session));
             vertical.getItems().add(OutputController.create(session));
             
-            horizontal.setDividerPositions(0.2, 0.8);
+            horizontal.setDividerPositions(0.2, 0.7);
             vertical.setDividerPositions(0.7, 0.3);
+            
+            session.toggleOutput();
+            
+            Statistics.onGuiProjectLoaded();
         });
     }
     
     public static void createAndShow(UISession session) {
-        final Parent root           = Loader.create(session, "Scene", SceneController::new);
+        final Parent root           = Loader.create(session, "Scene");
         final Scene scene           = new Scene(root);
         final Stage stage           = session.getStage();
         final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();
-        final boolean screenIsSmall = screen.getWidth() <= 1920;
-
+        final boolean screenIsSmall = screen.getWidth() <= 1600; // TODO Save maximized setting.
+        
         stage.hide();
-        stage.setTitle("Speedment");
+        Brand.apply(session, scene);
         stage.setMaximized(screenIsSmall);
-        stage.getIcons().add(SpeedmentIcon.SPIRE.load());
         stage.setScene(scene);
         stage.show();
         
-        scene.getStylesheets().add(session.getSpeedment().getUserInterfaceComponent().getStylesheetFile());
+        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_MAIN_WINDOW);
 	}
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,11 +24,9 @@ package com.speedment.internal.core.stream.parallelstrategy;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -45,7 +43,7 @@ public abstract class BaseSpliteratorTest {
     public TestName name = new TestName();
 
     protected void printTestName() {
-        System.out.println(name.getMethodName());
+        //System.out.println(name.getMethodName());
     }
 
     @Test

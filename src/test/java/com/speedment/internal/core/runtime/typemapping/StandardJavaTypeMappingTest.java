@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,13 +21,12 @@
  */
 package com.speedment.internal.core.runtime.typemapping;
 
-import com.speedment.internal.core.runtime.typemapping.StandardJavaTypeMapping;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -56,7 +55,6 @@ public class StandardJavaTypeMappingTest {
 
     @Test
     public void testParse() {
-        System.out.println("parse");
         assertEquals(Boolean.TRUE, StandardJavaTypeMapping.BOOLEAN.parse("true"));
         assertEquals(Boolean.FALSE, StandardJavaTypeMapping.BOOLEAN.parse("false"));
         assertEquals(Byte.valueOf((byte) -47), StandardJavaTypeMapping.BYTE.parse("-47"));

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<MenuBar BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.internal.ui.controller.MenubarController">
     <menus>
         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
             <items>
@@ -25,10 +25,20 @@
                 <MenuItem fx:id="mbGenerate" mnemonicParsing="false" text="Generate" />
             </items>
         </Menu>
+        <Menu fx:id="menuWindow" mnemonicParsing="false" text="Window">
+            <items>
+                <MenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
+                <MenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
+                <MenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
+                <!--<MenuItem fx:id="mbPreview" mnemonicParsing="false" text="Preview" />-->
+            </items>
+        </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
             <items>
                 <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />
-                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About" />
+                <MenuItem fx:id="mbGitter" mnemonicParsing="false" text="Open Gitter-page" />
+                <MenuItem fx:id="mbComponents" mnemonicParsing="false" text="Components..." />
+                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About..." />
             </items>
         </Menu>
     </menus>

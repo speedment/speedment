@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,18 +17,28 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.internal.ui.config.AbstractNodeProperty;
+import com.speedment.component.brand.Brand;
+import com.speedment.component.notification.Notification;
+import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
+import com.speedment.ui.config.DocumentProperty;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import org.controlsfx.control.PropertySheet;
 
 /**
- *
+ * The user interface component contains a number of useful methods required to
+ * pass information between different parts of the UI.
+ * 
  * @author Emil Forslund
  * @since 2.3
  */
@@ -39,6 +49,25 @@ public interface UserInterfaceComponent extends Component {
     default Class<UserInterfaceComponent> getComponentClass() {
         return UserInterfaceComponent.class;
     }
+    
+    /**
+     * Sets the {@code UISession} to use. This should only be called by 
+     * UISession itself to update the session in use once the platform has 
+     * loaded.
+     * 
+     * @param session  the new UISession
+     */
+    void setUISession(UISession session);
+    
+    /**
+     * Returns the UISession used. This method might throw an exception if the
+     * UISession has not yet updated the component with a reference to itself
+     * or if the UI isn't running.
+     * 
+     * @return                      the current session
+     * @throws  SpeedmentException  if the UI isn't running
+     */
+    UISession getUISession() throws SpeedmentException;
 
     /**
      * Returns a observable and modifiable view of all the currently visible properties
@@ -51,14 +80,14 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  a view of the properties area
      */
-    ObservableList<Node> getProperties();
+    ObservableList<PropertySheet.Item> getProperties();
 
     /**
      * Returns a read-only view of the currently selected tree items in the GUI.
      * 
      * @return  the view of currently selected tree items.
      */
-    ObservableList<TreeItem<AbstractNodeProperty>> getSelectedTreeItems();
+    ObservableList<TreeItem<DocumentProperty>> getSelectedTreeItems();
     
     /**
      * Returns an observable list with all the output messages currently
@@ -73,18 +102,41 @@ public interface UserInterfaceComponent extends Component {
     ObservableList<Node> getOutputMessages();
     
     /**
-     * Returns the css-file that should be used to style the GUI.
+     * Returns a stream of all the css-file that should be used to style the UI.
      * 
      * @return  the stylesheet
      */
-    String getStylesheetFile();
+    Stream<String> stylesheetFiles();
     
     /**
-     * Returns the css-file used to style the GUI.
+     * Appends an additional stylesheet file to be used when styling the UI.
+     * The specified file can override any rules specified by earlier files.
      * 
      * @param filename  the new css stylesheet
      */
-    void setStylesheetFile(String filename);
+    void addStylesheetFile(String filename);
+    
+    /**
+     * Sets the brand that is shown in the top-left part of the UI.
+     * 
+     * @param brand  the new brand
+     */
+    void setBrand(Brand brand);
+    
+    /**
+     * Returns the brand that is currently used in the top-left part of the UI.
+     * 
+     * @return  the brand
+     */
+    Brand getBrand();
+    
+    /**
+     * Returns an observable list of the notifications that has yet to be shown 
+     * in the UI.
+     * 
+     * @return  the observable list of notifications
+     */
+    ObservableList<Notification> getNotifications();
     
     /**
      * Installs a new context menu builder that will be used in the 
@@ -92,26 +144,26 @@ public interface UserInterfaceComponent extends Component {
      * that require a custom menu to handle custom project tree nodes. If no
      * builder exists for a particular type of node, no menu will be displayed.
      * 
-     * @param <NODE>       the implementation type of the node
-     * @param nodeType     the interface main type of the node
-     * @param menuBuilder  the builder to use
+     * @param <DOC>       the implementation type of the node
+     * @param nodeType    the interface main type of the node
+     * @param menuBuilder the builder to use
      */
-    <NODE extends AbstractNodeProperty> void installContextMenu(Class<? super NODE> nodeType, ContextMenuBuilder<NODE> menuBuilder);
+    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
     
     /**
      * If a builder exists for the interface main type of the specified node,
      * it will be called and the result will be returned. If no builder exists,
      * an {@code empty} will be returned.
      * 
-     * @param <NODE>    the implementation type of the node
+     * @param <DOC>    the implementation type of the node
      * @param treeCell  the tree cell that invoced the context menu
      * @param node      the node to create a context menu for
      * @return          the created context menu or {@code empty}
      */
-    <NODE extends AbstractNodeProperty> Optional<ContextMenu> createContextMenu(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC node);
     
     @FunctionalInterface
-    interface ContextMenuBuilder<NODE extends AbstractNodeProperty> {
-        Optional<ContextMenu> build(TreeCell<AbstractNodeProperty> treeCell, NODE node);
+    interface ContextMenuBuilder<DOC extends DocumentProperty> {
+        Stream<MenuItem> build(TreeCell<DocumentProperty> treeCell, DOC doc);
     }
 }

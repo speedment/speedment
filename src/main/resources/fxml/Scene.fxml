@@ -4,7 +4,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="stack" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/8.0.40"
+           fx:id="stack" 
+           prefWidth="1280.0" 
+           prefHeight="720.0"
+           fx:controller="com.speedment.internal.ui.controller.SceneController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0">
             <top>
@@ -18,5 +23,6 @@
                 </SplitPane>
             </center>
         </BorderPane>
+        <fx:include source="NotificationArea.fxml" />
     </children>
 </StackPane>

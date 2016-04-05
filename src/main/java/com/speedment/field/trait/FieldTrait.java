@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,13 +17,28 @@
 package com.speedment.field.trait;
 
 import com.speedment.annotation.Api;
+import com.speedment.field.FieldIdentifier;
 
 /**
- *
- * @author pemi
+ * A trait that every field implements.
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface FieldTrait {
+    
+    /**
+     * Returns the unique identifier of this field.
+     * 
+     * @return  the identifier
+     */
+    FieldIdentifier<?> getIdentifier();
 
-    String getColumnName();
+    /**
+     * Returns {@code true} if the column that this field represents is UNIQUE.
+     * 
+     * @return  {@code true} if unique
+     */
+    boolean isUnique();
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,48 +16,49 @@
  */
 package com.speedment.internal.core.code.entity;
 
-import com.speedment.internal.codegen.lang.models.Field;
-import com.speedment.internal.codegen.lang.models.File;
-import com.speedment.internal.codegen.lang.models.Generic;
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.internal.codegen.lang.models.Javadoc;
-import com.speedment.internal.codegen.lang.models.Method;
-import com.speedment.internal.codegen.lang.models.Type;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.PARAM;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.RETURN;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultJavadocTag.SEE;
-import static com.speedment.internal.codegen.lang.models.constants.DefaultType.STRING;
-import static com.speedment.internal.codegen.util.Formatting.DOT;
-import com.speedment.config.Column;
-import com.speedment.config.ForeignKey;
-import com.speedment.config.ForeignKeyColumn;
-import com.speedment.config.Project;
-import com.speedment.config.Table;
-import com.speedment.field.ComparableField;
-import com.speedment.field.ComparableForeignKeyField;
-import com.speedment.field.StringForeignKeyField;
-import com.speedment.field.StringField;
-import com.speedment.field.ReferenceField;
-import com.speedment.field.ReferenceForeignKeyField;
-import com.speedment.exception.SpeedmentException;
-
-import com.speedment.internal.core.field.ComparableFieldImpl;
-import com.speedment.internal.core.field.ComparableForeignKeyFieldImpl;
-import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
-import com.speedment.internal.core.field.StringFieldImpl;
-import com.speedment.internal.core.field.ReferenceFieldImpl;
-import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
-
+import com.speedment.codegen.model.Field;
+import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Generic;
+import com.speedment.codegen.model.Import;
+import com.speedment.codegen.model.Javadoc;
+import com.speedment.codegen.model.Method;
+import com.speedment.codegen.model.Type;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.field.ComparableField;
+import com.speedment.field.ComparableForeignKeyField;
+import com.speedment.field.ReferenceField;
+import com.speedment.field.ReferenceForeignKeyField;
+import com.speedment.field.StringField;
+import com.speedment.field.StringForeignKeyField;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.SEE;
+import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
+import static com.speedment.internal.codegen.util.Formatting.DOT;
+import com.speedment.internal.core.field.ComparableFieldImpl;
+import com.speedment.internal.core.field.ComparableForeignKeyFieldImpl;
+import com.speedment.internal.core.field.ReferenceFieldImpl;
+import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
+import com.speedment.internal.core.field.StringFieldImpl;
+import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.util.JavaLanguageNamer;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.Pluralis;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.internal.util.JavaLanguage;
-import static com.speedment.internal.util.JavaLanguage.javaTypeName;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -72,14 +73,14 @@ public final class EntityTranslatorSupport {
         instanceNotAllowed(getClass());
     }
 
-    public static Type getEntityType(Table table) {
+    public static Type getEntityType(Table table, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(table);
-        final Project project = table.ancestor(Project.class).get();
+        requireNonNull(javaLanguageNamer);
+        final Project project = ancestor(table, Project.class).get();
 
-        return Type.of(
-            project.getPackageName().toLowerCase() + DOT
-            + table.getRelativeName(Project.class, JavaLanguage::javaPacketName) + DOT
-            + javaTypeName(table.getName())
+        return Type.of(project.findPackageName(javaLanguageNamer) + DOT
+            + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
+            + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }
 
@@ -93,48 +94,65 @@ public final class EntityTranslatorSupport {
         }
     }
 
-    public static ReferenceFieldType getReferenceFieldType(File file, Table table, Column column, Type entityType) {
-        requireNonNull(file);
-        requireNonNull(table);
-        requireNonNull(column);
-        requireNonNull(entityType);
+    public static ReferenceFieldType getReferenceFieldType(
+        File file,
+        Table table,
+        Column column,
+        Type entityType,
+        JavaLanguageNamer javaLanguageNamer
+    ) {
+        requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
-        final Class<?> mapping = column.getTypeMapper().getJavaType();
+        final Class<?> mapping = column.findTypeMapper().getJavaType();
+        final Type databaseType = Type.of(column.findTypeMapper().getDatabaseType());
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(fkc.getForeignTable());
+                final Type fkType = getEntityType(
+                    fkc.findForeignTable().orElseThrow(
+                        () -> new SpeedmentException(
+                            "Could not find referenced foreign table '"
+                            + fkc.getForeignTableName() + "'."
+                        )),
+                    javaLanguageNamer
+                );
 
                 file.add(Import.of(fkType));
 
                 if (String.class.equals(mapping)) {
                     type = Type.of(StringForeignKeyField.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(fkType));
 
                     implType = Type.of(StringForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(fkType));
                 } else if (Comparable.class.isAssignableFrom(mapping)) {
                     type = Type.of(ComparableForeignKeyField.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
 
                     implType = Type.of(ComparableForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
                 } else {
                     type = Type.of(ReferenceForeignKeyField.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
 
                     implType = Type.of(ReferenceForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(Type.of(mapping)))
                         .add(Generic.of().add(fkType));
                 }
@@ -147,25 +165,32 @@ public final class EntityTranslatorSupport {
 
             if (String.class.equals(mapping)) {
                 type = Type.of(StringField.class)
-                    .add(Generic.of().add(entityType));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType));
 
                 implType = Type.of(StringFieldImpl.class)
-                    .add(Generic.of().add(entityType));
+                    .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType));
+
             } else if (Comparable.class.isAssignableFrom(mapping)) {
                 type = Type.of(ComparableField.class)
                     .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
                     .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ComparableFieldImpl.class)
                     .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
                     .add(Generic.of().add(Type.of(mapping)));
             } else {
                 type = Type.of(ReferenceField.class)
                     .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
                     .add(Generic.of().add(Type.of(mapping)));
 
                 implType = Type.of(ReferenceFieldImpl.class)
                     .add(Generic.of().add(entityType))
+                    .add(Generic.of().add(databaseType))
                     .add(Generic.of().add(Type.of(mapping)));
             }
 
@@ -173,32 +198,34 @@ public final class EntityTranslatorSupport {
         });
     }
 
-    public static String pluralis(Table table) {
-        return Pluralis.INSTANCE.pluralizeJavaIdentifier(JavaLanguage.javaTypeName(requireNonNull(table).getName()));
+    public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {
+        requireNonNull(table);
+        return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getJavaName()), javaLanguageNamer);
     }
 
     public static Method toJson() {
         return Method.of("toJson", STRING)
             .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the default {@link JsonFormatter}. "
+                "Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}. "
                 + "All of the fields in this Entity will appear in the returned JSON String."
             )
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link JsonFormatter}"))
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}"))
             );
     }
 
     public static Method toJsonExtended(Type entityType) {
         requireNonNull(entityType);
-        final String paramName = "jsonFormatter";
+        final String paramName = "jsonEncoder";
         return Method.of("toJson", STRING)
             .add(Field.of(paramName, Type.of(JsonEncoder.class)
                 .add(Generic.of().add(entityType))))
             .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the provided {@link JsonFormatter}."
+                "Returns a JSON representation of this Entity using the provided {@link "
+                + JsonEncoder.class.getSimpleName() + "}."
             )
-                .add(PARAM.setValue(paramName).setText("to use as a formatter"))
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link JsonFormatter}"))
-                .add(SEE.setText("JsonFormatter"))
+                .add(PARAM.setValue(paramName).setText("to use as encoder"))
+                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link " + JsonEncoder.class.getSimpleName() + "}"))
+                .add(SEE.setText(JsonEncoder.class.getSimpleName()))
             );
 
     }
@@ -206,11 +233,10 @@ public final class EntityTranslatorSupport {
     public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {
         requireNonNull(table);
         requireNonNull(column);
-        return table.streamOfForeignKeys()
-            .filter(ForeignKey::isEnabled)
-            .flatMap(fk -> fk.streamOf(ForeignKeyColumn.class))
-            .filter(ForeignKeyColumn::isEnabled)
-            .filter(fkc -> fkc.getColumn().equals(column))
+        return table.foreignKeys()
+            .filter(HasEnabled::test)
+            .flatMap(ForeignKey::foreignKeyColumns)
+            .filter(fkc -> DocumentDbUtil.isSame(column, fkc.findColumn().orElse(null)))
             .findFirst();
     }
 
@@ -218,15 +244,15 @@ public final class EntityTranslatorSupport {
         requireNonNull(name);
         requireNonNull(entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class));
-        //.add("return " + MANAGER.getName() + ".get()." + name + "(this);");
     }
 
     public static Method dbMethodWithListener(String name, Type entityType) {
         requireNonNull(name);
         requireNonNull(entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
-            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class).add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))));
-        //.add("return " + MANAGER.getName() + ".get()." + name + "(this, " + CONSUMER_NAME + ");");
+            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
+                .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
+            ));
     }
 
     public static Method persist(Type entityType) {
@@ -235,7 +261,6 @@ public final class EntityTranslatorSupport {
 
     public static Method update(Type entityType) {
         return EntityTranslatorSupport.dbMethod("update", requireNonNull(entityType));
-
     }
 
     public static Method remove(Type entityType) {
@@ -253,5 +278,4 @@ public final class EntityTranslatorSupport {
     public static Method removeWithListener(Type entityType) {
         return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
     }
-
 }

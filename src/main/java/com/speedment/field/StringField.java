@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,13 +23,23 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.StringFieldTrait;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
+ * A field that implements the {@link ReferenceFieldTrait}, the 
+ * {@link ComparableFieldTrait} and the {@link StringFieldTrait}.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2
+ * 
+ * @see  ReferenceFieldTrait
+ * @see  ComparableFieldTrait
+ * @see  StringFieldTrait
  */
-@Api(version = "2.2")
-public interface StringField<ENTITY> extends
-    FieldTrait,
-    ReferenceFieldTrait<ENTITY, String>,
-    ComparableFieldTrait<ENTITY, String>,
-    StringFieldTrait<ENTITY> {}
+@Api(version = "2.3")
+public interface StringField<ENTITY, D> extends
+    FieldTrait, 
+    ReferenceFieldTrait<ENTITY, D, String>,
+    ComparableFieldTrait<ENTITY, D, String>,
+    StringFieldTrait<ENTITY, D> {}

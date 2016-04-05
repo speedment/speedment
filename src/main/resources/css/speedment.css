@@ -43,6 +43,15 @@
     -fx-font-family: 'Advent Pro';
 }
 
+/*** Terms and Conditions ***/
+.titled-pane.termsContainer {
+    -fx-text-fill: black;
+}
+
+.titled-pane.termsContainer > .title {
+    -fx-background-color: transparent;
+}
+
 /*** Border Panes ***/
 .border-pane {
     -fx-border-width: 0px;
@@ -102,6 +111,7 @@
     -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
+    -fx-opacity: 1.0;
 }
 
 .text-field:focused, 
@@ -109,6 +119,17 @@
 .text-area:focused, 
 .text-area:hover {
     -fx-border-color: -fx-speedment-green;
+}
+
+.text-field:disabled,
+.text-area:disabled,
+.text-area:disabled > .content {
+    -fx-text-fill: #000;
+    -fx-opacity: 0.5;
+}
+
+.text-input > .scroll-pane:disabled { /* JavaFX bug workaround */
+    -fx-opacity: 1;
 }
 
 /*** Buttons ***/
@@ -320,6 +341,10 @@
     -fx-background-color: -fx-speedment-blue;
 }
 
+.progress .header-panel {
+    -fx-background-color: -fx-speedment-blue;
+}
+
 /*** Output messages ***/
 .label.msg {
     -fx-font-family: 'Monospaced';
@@ -337,4 +362,12 @@
 
 .label.msg.success {
     -fx-background-color: #90ee90;
+}
+
+/*** Notifications ***/
+.notification {
+    -fx-border-width: 0px 0px 0px 8px;
+    -fx-border-color: -fx-speedment-lightblue;
+    -fx-background-color: #eee; 
+    -fx-padding: 16;
 }

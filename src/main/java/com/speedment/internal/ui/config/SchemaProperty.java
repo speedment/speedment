@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,278 +17,73 @@
 package com.speedment.internal.ui.config;
 
 import com.speedment.Speedment;
-import com.speedment.config.Dbms;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.aspects.Parent;
-import com.speedment.config.parameters.ColumnCompressionType;
-import com.speedment.config.parameters.FieldStorageType;
-import com.speedment.config.parameters.StorageEngineType;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.internal.core.config.utils.ConfigUtil;
-import com.speedment.internal.ui.property.BooleanPropertyItem;
-import com.speedment.internal.ui.property.StringPropertyItem;
-import groovy.lang.Closure;
-import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import com.speedment.component.DocumentPropertyComponent;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Schema;
+import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
+import com.speedment.internal.ui.config.mutator.SchemaPropertyMutator;
+import static com.speedment.internal.util.ImmutableListUtil.*;
+import com.speedment.ui.config.trait.HasAliasProperty;
+import com.speedment.ui.config.trait.HasEnabledProperty;
+import com.speedment.ui.config.trait.HasExpandedProperty;
+import com.speedment.ui.config.trait.HasNameProperty;
+import java.util.List;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import static javafx.collections.FXCollections.observableSet;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class SchemaProperty extends AbstractParentProperty<Schema, Table> implements Schema, ChildHelper<Schema, Dbms> {
+public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, SchemaProperty>
+    implements Schema, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 
-    private final ObservableSet<Table> tableChildren;
-    private final StringProperty schemaName;
-    private final StringProperty catalogName;
-    private final BooleanProperty defaultSchema;
-    private final Property<FieldStorageType> fieldStorageType;
-    private final Property<ColumnCompressionType> columnCompressionType;
-    private final Property<StorageEngineType> storageEngineType;
-    
-    private Dbms parent;
-    
-    public SchemaProperty(Speedment speedment) {
-        super(speedment);
-        tableChildren         = observableSet(newSetFromMap(new ConcurrentHashMap<>()));
-        schemaName            = new SimpleStringProperty();
-        catalogName           = new SimpleStringProperty();
-        defaultSchema         = new SimpleBooleanProperty();
-        fieldStorageType      = new SimpleObjectProperty<>();
-        columnCompressionType = new SimpleObjectProperty<>();
-        storageEngineType     = new SimpleObjectProperty<>();
-        setDefaults();
+    public SchemaProperty(Dbms parent) {
+        super(parent);
     }
-    
-    public SchemaProperty(Speedment speedment, Dbms parent, Schema prototype) {
-        super(speedment, prototype);
-        this.tableChildren         = copyChildrenFrom(prototype, Table.class, TableProperty::new);
-        this.schemaName            = new SimpleStringProperty(prototype.getSchemaName().orElse(null));
-        this.catalogName           = new SimpleStringProperty(prototype.getCatalogName().orElse(null));
-        this.defaultSchema         = new SimpleBooleanProperty(prototype.isDefaultSchema());
-        this.fieldStorageType      = new SimpleObjectProperty<>(prototype.getFieldStorageType());
-        this.columnCompressionType = new SimpleObjectProperty<>(prototype.getColumnCompressionType());
-        this.storageEngineType     = new SimpleObjectProperty<>(prototype.getStorageEngineType());
-        this.parent                = parent;
-    }
-    
-    private void setDefaults() {
-        setFieldStorageType(FieldStorageType.WRAPPER);
-        setColumnCompressionType(ColumnCompressionType.NONE);
-        setStorageEngineType(StorageEngineType.ON_HEAP);
-    }
-    
+
     @Override
-    protected Stream<PropertySheet.Item> guiVisibleProperties() {
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
+    }
+
+    public final BooleanProperty defaultSchemaProperty() {
+        return booleanPropertyOf(DEFAULT_SCHEMA, Schema.super::isDefaultSchema);
+    }
+
+    @Override
+    public boolean isDefaultSchema() {
+        return defaultSchemaProperty().get();
+    }
+
+    public ObservableList<TableProperty> tablesProperty() {
+        return observableListOf(TABLES);
+    }
+
+    @Override
+    public Stream<TableProperty> tables() {
+        return tablesProperty().stream();
+    }
+
+    @Override
+    public SchemaPropertyMutator mutator() {
+        return DocumentPropertyMutator.of(this);
+    }
+
+    @Override
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new StringPropertyItem(
-                schemaName,
-                "Schema Name",
-                "The name for this schema in the database."
-            ),
-            new StringPropertyItem(
-                catalogName,
-                "Package Location",
-                "The catalog name for this schema."
-            ),
-            new BooleanPropertyItem(
-                defaultSchema,
-                "Is Default Schema",
-                "True if this is the default schema to use."
-            )
-        );
-    }
-    
-    @Override
-    public Optional<Dbms> getParent() {
-        return Optional.ofNullable(parent);
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
+            HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment)
+        ).flatMap(s -> s);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void setParent(Parent<?> parent) {
-        if (parent instanceof Dbms) {
-            this.parent = (Dbms) parent;
-        } else {
-            throw wrongParentClass(parent.getClass());
-        }
-    }
-    
-    @Override
-    public ObservableList<Table> children() {
-        return createChildrenView(tableChildren);
-    }
-    
-    public ObservableSet<Table> tableChildren() {
-        return tableChildren;
-    }
-
-    @Override
-    public void setSchemaName(String schemaName) {
-        this.schemaName.setValue(schemaName);
-    }
-
-    @Override
-    public Optional<String> getSchemaName() {
-        return Optional.ofNullable(schemaName.getValue());
-    }
-    
-    public StringProperty schemaNameProperty() {
-        return schemaName;
-    }
-    
-    @Override
-    public void setCatalogName(String catalogName) {
-        this.catalogName.setValue(catalogName);
-    }
-
-    @Override
-    public Optional<String> getCatalogName() {
-        return Optional.ofNullable(catalogName.getValue());
-    }
-    
-    public StringProperty catalogNameProperty() {
-        return catalogName;
-    }
-    
-    @Override
-    public void setDefaultSchema(Boolean defaultSchema) {
-        this.defaultSchema.setValue(defaultSchema);
-    }
-
-    @Override
-    public Boolean isDefaultSchema() {
-        return defaultSchema.getValue();
-    }
-    
-    public BooleanProperty defaultSchemaProperty() {
-        return defaultSchema;
-    }
-    
-    @Override
-    public void setFieldStorageType(FieldStorageType fieldStorageType) {
-        this.fieldStorageType.setValue(fieldStorageType);
-    }
-
-    @Override
-    public FieldStorageType getFieldStorageType() {
-        return fieldStorageType.getValue();
-    }
-    
-    public Property<FieldStorageType> fieldStorageTypeProperty() {
-        return fieldStorageType;
-    }
-    
-    @Override
-    public void setColumnCompressionType(ColumnCompressionType columnCompressionType) {
-        this.columnCompressionType.setValue(columnCompressionType);
-    }
-
-    @Override
-    public ColumnCompressionType getColumnCompressionType() {
-        return columnCompressionType.getValue();
-    }
-    
-    public Property<ColumnCompressionType> columnCompressionTypeProperty() {
-        return columnCompressionType;
-    }
-    
-    @Override
-    public void setStorageEngineType(StorageEngineType storageEngineType) {
-        this.storageEngineType.setValue(storageEngineType);
-    }
-
-    @Override
-    public StorageEngineType getStorageEngineType() {
-        return storageEngineType.getValue();
-    }
-    
-    public Property<StorageEngineType> storageEngineTypeProperty() {
-        return storageEngineType;
-    }
-    
-    @Override
-    public Table addNewTable() {
-        final Table table = new TableProperty(getSpeedment());
-        add(table);
-        return table;
-    }
-    
-    @Override
-    public Table table(Closure<?> c) {
-        return ConfigUtil.groovyDelegatorHelper(c, () -> addNewTable());
-    }
-    
-    @Override
-    public Optional<Table> add(Table child) throws IllegalStateException {
-        requireNonNull(child);
-        return tableChildren.add(child) ? Optional.empty() : Optional.of(child);
-    }
-    
-    @Override
-    public Optional<Table> remove(Table child) {
-        requireNonNull(child);
-        if (tableChildren.remove(child)) {
-            child.setParent(null);
-            return Optional.of(child);
-        } else return Optional.empty();
-    }
-
-    @Override
-    public Stream<Table> stream() {
-        return tableChildren.stream().sorted(COMPARATOR);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Table> Stream<T> streamOf(Class<T> childType) {
-        requireNonNull(childType);
-        
-        if (Table.class.isAssignableFrom(childType)) {
-            return (Stream<T>) tableChildren.stream().sorted(COMPARATOR);
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-    
-    @Override
-    public int count() {
-        return tableChildren.size();
-    }
-
-    @Override
-    public int countOf(Class<? extends Table> childType) {
-        if (Table.class.isAssignableFrom(childType)) {
-            return tableChildren.size();
-        } else {
-            throw wrongChildTypeException(childType);
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Table> T find(Class<T> childType, String name) throws SpeedmentException {
-        requireNonNull(childType);
-        requireNonNull(name);
-        
-        if (Table.class.isAssignableFrom(childType)) {
-            return (T) tableChildren.stream().filter(child -> name.equals(child.getName()))
-                .findAny().orElseThrow(() -> noChildWithNameException(childType, name));
-        } else {
-            throw wrongChildTypeException(childType);
-        }
+    protected List<String> keyPathEndingWith(String key) {
+        return concat(DocumentPropertyComponent.SCHEMAS, key);
     }
 }

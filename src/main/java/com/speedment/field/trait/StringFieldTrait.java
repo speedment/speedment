@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,12 +20,18 @@ import com.speedment.annotation.Api;
 import com.speedment.field.predicate.StringSpeedmentPredicate;
 
 /**
- *
- * @author pemi, Emil Forslund
- * @param <ENTITY> the entity type
+ * A representation of an Entity field that is a {@code String} type. String 
+ * fields have additional methods that makes it easier to create string-related 
+ * predicates.
+ * 
+ * @param <ENTITY>  the entity type
+ * @param <D>       the database type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-@Api(version = "2.2")
-public interface StringFieldTrait<ENTITY> {
+@Api(version = "2.3")
+public interface StringFieldTrait<ENTITY, D> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -39,7 +45,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> equalIgnoreCase(String value);
+    StringSpeedmentPredicate<ENTITY, D> equalIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -53,7 +59,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value);
+    StringSpeedmentPredicate<ENTITY, D> notEqualIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -66,7 +72,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> startsWith(String value);
+    StringSpeedmentPredicate<ENTITY, D> startsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -79,7 +85,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> endsWith(String value);
+    StringSpeedmentPredicate<ENTITY, D> endsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -92,7 +98,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY> contains(String value);
+    StringSpeedmentPredicate<ENTITY, D> contains(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -104,7 +110,7 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY> isEmpty();
+    StringSpeedmentPredicate<ENTITY, D> isEmpty();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -116,5 +122,5 @@ public interface StringFieldTrait<ENTITY> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY> isNotEmpty();
+    StringSpeedmentPredicate<ENTITY, D> isNotEmpty();
 }

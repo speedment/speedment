@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,59 +18,33 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.Component;
-import com.speedment.internal.core.runtime.Lifecyclable;
+import com.speedment.internal.core.runtime.AbstractLifecycle;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-public abstract class AbstractComponent implements Component {
+public abstract class AbstractComponent extends AbstractLifecycle<Component> implements Component {
+    
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractComponent.class);
 
     private final Speedment speedment;
-    private Lifecyclable.State state;
 
     public AbstractComponent(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
     }
-
+    
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+    
     @Override
     public Speedment getSpeedment() {
         return speedment;
     }
-
-    @Override
-    public String getTitle() {
-        return getClass().getSimpleName();
-    }
-    
-    @Override
-    public AbstractComponent initialize() {
-        state = State.INIITIALIZED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent resolve() {
-        state = State.RESOLVED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent start() {
-        state = State.STARTED;
-        return this;
-    }
-
-    @Override
-    public AbstractComponent stop() {
-        state = State.STOPPED;
-        return this;
-    }
-
-    @Override
-    public Lifecyclable.State getState() {
-        return state;
-    }
-
 }

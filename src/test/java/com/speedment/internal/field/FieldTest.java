@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,8 +18,8 @@ package com.speedment.internal.field;
 
 import static com.speedment.internal.field.Entity.ID;
 import static com.speedment.internal.field.Entity.NAME;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *
@@ -29,8 +29,8 @@ public class FieldTest extends BaseFieldTest {
 
     @Test
     public void testField() throws Exception {
-        assertEquals("id", ID.getColumnName());
-        assertEquals("name", NAME.getColumnName());
+        assertEquals("id", ID.getIdentifier().columnName());
+        assertEquals("name", NAME.getIdentifier().columnName());
     }
 
 }

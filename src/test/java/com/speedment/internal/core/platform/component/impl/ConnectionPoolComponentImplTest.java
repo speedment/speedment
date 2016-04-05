@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,8 +21,9 @@
  */
 package com.speedment.internal.core.platform.component.impl;
 
-import com.speedment.internal.core.platform.SpeedmentFactory;
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.Speedment;
+import com.speedment.component.connectionpool.PoolableConnection;
+import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -38,7 +39,6 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,11 +47,11 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
@@ -74,7 +74,13 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        instance = new ConnectionPoolComponentImpl(SpeedmentFactory.newSpeedmentInstance()) {
+        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
+            .withCheckDatabaseConnectivity(false)
+            .withValidateRuntimeConfig(false)
+            .withPrintWelcomeMessage(false)
+            .withPrintWelcomeMessage(false)
+            .build();
+        instance = new ConnectionPoolComponentImpl(speedment) {
 
             @Override
             public Connection newConnection(String uri, String user, String password) throws SQLException {
@@ -90,10 +96,11 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of getConnection method, of class ConnectionPoolComponentImpl.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetConnection() throws Exception {
-        System.out.println("getConnection");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -103,10 +110,11 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of returnConnection method, of class ConnectionPoolComponentImpl.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testReturnConnection() throws Exception {
-        System.out.println("returnConnection");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -116,10 +124,11 @@ public class ConnectionPoolComponentImplTest {
 
     /**
      * Test of newConnection method, of class ConnectionPoolComponentImpl.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testNewConnection() throws Exception {
-        System.out.println("newConnection");
         String uri = "someurl";
         String user = "a";
         String password = "b";
@@ -133,7 +142,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testGetMaxAge() {
-        System.out.println("getMaxAge");
         long result = instance.getMaxAge();
         assertTrue(result >= 0);
         instance.setMaxAge(60_000);
@@ -145,7 +153,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testSetMaxAge() {
-        System.out.println("setMaxAge");
         instance.setMaxAge(40_000);
         assertEquals(40_000, instance.getMaxAge());
     }
@@ -155,7 +162,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testGetPoolSize() {
-        System.out.println("getPoolSize");
         final int result = instance.getMaxRetainSize();
         assertTrue(result >= 0);
         instance.setMaxRetainSize(10);
@@ -166,7 +172,6 @@ public class ConnectionPoolComponentImplTest {
     @Test
     @Ignore
     public void testLeak() throws Exception {
-        System.out.println("leak");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -181,7 +186,6 @@ public class ConnectionPoolComponentImplTest {
 
     @Test
     public void testMaxOutAndReturn() throws Exception {
-        System.out.println("maxOutAndReturn");
         String uri = "thecooldatabase";
         String user = "tryggve";
         String password = "arne";
@@ -210,7 +214,6 @@ public class ConnectionPoolComponentImplTest {
      */
     @Test
     public void testSetPoolSize() {
-        System.out.println("setPoolSize");
         int poolSize = 40;
         instance.setMaxRetainSize(poolSize);
         assertEquals(instance.getMaxRetainSize(), 40);
@@ -506,7 +509,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     private void log(String msg) {
-        System.out.println(new Timestamp(System.currentTimeMillis()) + " " + msg);
+        //System.out.println(new Timestamp(System.currentTimeMillis()) + " " + msg);
     }
 
 }

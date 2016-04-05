@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,9 +28,11 @@ import com.speedment.internal.core.field.predicate.iface.type.BinaryOperation;
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class AlwaysFalseComparablePredicate<ENTITY, V extends Comparable<? super V>> extends BaseComparablePredicate<ENTITY, V> implements SpeedmentPredicate<ENTITY, V>, BinaryOperation<V> {
+public class AlwaysFalseComparablePredicate<ENTITY, D, V extends Comparable<? super V>> 
+        extends BaseComparablePredicate<ENTITY,D, V> 
+        implements SpeedmentPredicate<ENTITY, D, V>, BinaryOperation<V> {
 
-    public AlwaysFalseComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField) {
+    public AlwaysFalseComparablePredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField) {
         super(ALWAYS_FALSE, field, referenceField, null, (a, b) -> false);
     }
 }

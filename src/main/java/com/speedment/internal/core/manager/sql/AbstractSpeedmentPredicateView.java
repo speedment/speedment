@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.core.manager.sql;
 
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.PredicateType;
 import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
@@ -29,6 +30,8 @@ import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirst
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRawSet;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getSecondOperandAsRaw;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getThirdOperandAsInclusion;
+import com.speedment.manager.SpeedmentPredicateView;
+import com.speedment.manager.SqlPredicateFragment;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
@@ -39,20 +42,216 @@ import static java.util.stream.Collectors.joining;
  * @author pemi
  */
 public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
-
-    private final String openingFieldQuote;
-    private final String closingFieldQuote;
-
-    public AbstractSpeedmentPredicateView(String openingFieldQuote, String closingFieldQuote) {
-        this.openingFieldQuote = openingFieldQuote;
-        this.closingFieldQuote = closingFieldQuote;
+    
+    private final DatabaseNamingConvention namingConvention;
+    
+    protected AbstractSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
+        this.namingConvention = requireNonNull(namingConvention);
     }
+    
+    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
+
+    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
     @Override
-    public SqlPredicateFragment transform(SpeedmentPredicate<?, ?> model) {
+    public SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model) {
         return render(requireNonNull(model));
     }
 
+    protected SqlPredicateFragment render(SpeedmentPredicate<?, ?, ?> model) {
+        final PredicateType pt = model.getEffectivePredicateType();
+        
+        final String cn = namingConvention.fullNameOf(model.getField().getIdentifier());
+        
+        switch (pt) {
+            // Constants
+            case ALWAYS_TRUE:
+                return alwaysTrue();
+            case ALWAYS_FALSE:
+                return alwaysFalse();
+            // Reference
+            case IS_NULL:
+                return isNull(cn);
+            case IS_NOT_NULL:
+                return isNotNull(cn);
+            // Comparable
+            case EQUAL:
+                return equal(cn, model);
+            case NOT_EQUAL:
+                return notEqual(cn, model);
+            case GREATER_THAN:
+                return greaterThan(cn, model);
+            case GREATER_OR_EQUAL:
+                return greaterOrEqual(cn, model);
+            case LESS_THAN:
+                return lessThan(cn, model);
+            case LESS_OR_EQUAL:
+                return lessOrEqual(cn, model);
+
+            case BETWEEN:
+                return between(cn, model);
+            case NOT_BETWEEN:
+                return notBetween(cn, model);
+            case IN:
+                return in(cn, model);
+            case NOT_IN:
+                return notIn(cn, model);
+
+            case EQUAL_IGNORE_CASE:
+                return equalIgnoreCase(cn, model);
+            case NOT_EQUAL_IGNORE_CASE:
+                return notEqualIgnoreCase(cn, model);
+
+            case STARTS_WITH:
+                return startsWith(cn, model);
+            case NOT_STARTS_WITH:
+                return notStartsWith(cn, model);
+
+            case ENDS_WITH:
+                return endsWith(cn, model);
+            case NOT_ENDS_WITH:
+                return notEndsWith(cn, model);
+
+            case CONTAINS:
+                return contains(cn, model);
+            case NOT_CONTAINS:
+                return notContains(cn, model);
+
+            case IS_EMPTY:
+                return isEmpty(cn);
+            case IS_NOT_EMPTY:
+                return isNotEmpty(cn);
+            default:
+                throw new UnsupportedOperationException(
+                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getIdentifier().columnName()
+                );
+        }
+    }
+
+    protected SqlPredicateFragment alwaysTrue() {
+        return of("(TRUE)");
+    }
+
+    protected SqlPredicateFragment alwaysFalse() {
+        return of("(FALSE)");
+    }
+
+    protected SqlPredicateFragment isNull(String cn) {
+        return of("(" + cn + " IS NULL)");
+    }
+
+    protected SqlPredicateFragment isNotNull(String cn) {
+        return of("(" + cn + " IS NOT NULL)");
+    }
+
+    protected SqlPredicateFragment equal(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(" + cn + " = ?)").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment notEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(NOT (" + cn + " = ?))").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment greaterThan(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment greaterOrEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment lessThan(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment lessOrEqual(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
+    }
+
+    protected SqlPredicateFragment between(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return betweenHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notBetween(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return betweenHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment betweenHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+        final Inclusion inclusion = getThirdOperandAsInclusion(model);
+        switch (inclusion) {
+            case START_EXCLUSIVE_END_EXCLUSIVE: {
+                return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+            }
+            case START_INCLUSIVE_END_EXCLUSIVE: {
+                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+            }
+            case START_EXCLUSIVE_END_INCLUSIVE: {
+                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+            }
+            case START_INCLUSIVE_END_INCLUSIVE: {
+                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
+            }
+        }
+        throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
+    }
+
+    protected SqlPredicateFragment in(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return inHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notIn(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return inHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment inHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+        final Set<?> set = getFirstOperandAsRawSet(model);
+        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
+    }
+
+    protected SqlPredicateFragment equalIgnoreCase(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return equalIgnoreCaseHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notEqualIgnoreCase(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return equalIgnoreCaseHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment startsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return startsWithHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notStartsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return startsWithHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment endsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return endsWithHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notEndsWith(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return endsWithHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment contains(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return containsHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notContains(String cn, SpeedmentPredicate<?, ?, ?> model) {
+        return containsHelper(cn, model, true);
+    }
+
+    protected SqlPredicateFragment isEmpty(String cn) {
+        return of("(" + cn + " = '')");
+    }
+
+    protected SqlPredicateFragment isNotEmpty(String cn) {
+        return of("(" + cn + " <> '')");
+    }
+    
     public static SqlPredicateFragment of(String sql) {
         return SqlPredicateFragment.of(sql);
     }
@@ -89,212 +288,4 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
         }
 
     }
-
-    protected SqlPredicateFragment render(SpeedmentPredicate<?,?> model) {
-        requireNonNull(model);
-        final PredicateType pt = model.getEffectivePredicateType();
-        final String cn = getOpeningFieldQuote() + model.getField().getColumnName() + getClosingFieldQuote();
-        switch (pt) {
-            // Constants
-            case ALWAYS_TRUE:
-                return alwaysTrue();
-            case ALWAYS_FALSE:
-                return alwaysFalse();
-            // Reference
-            case IS_NULL:
-                return isNull(cn);
-            case IS_NOT_NULL:
-                return isNotNull(cn);
-            // Comparable
-            case EQUAL:
-                return equal(cn, model);
-            case NOT_EQUAL:
-                return notEqual(cn, model);
-            case GREATER_THAN:
-                return greaterThan(cn, model);
-            case GREATER_OR_EQUAL:
-                return greaterOrEqual(cn, model);
-            case LESS_THAN:
-                return lessThan(cn, model);
-            case LESS_OR_EQUAL:
-                return lessOrEqual(cn, model);
-
-            case BETWEEN:   
-                return between(cn, model);
-            case NOT_BETWEEN:
-                return notBetween(cn, model);
-            case IN:    
-                return in(cn, model);
-            case NOT_IN:
-                return notIn(cn, model);
-
-            case EQUAL_IGNORE_CASE:
-                return equalIgnoreCase(cn, model);
-            case NOT_EQUAL_IGNORE_CASE:
-                return notEqualIgnoreCase(cn, model);
-
-            case STARTS_WITH:
-                return startsWith(cn, model);
-            case NOT_STARTS_WITH:
-                return notStartsWith(cn, model);
-
-            case ENDS_WITH: 
-                return endsWith(cn, model);
-            case NOT_ENDS_WITH:
-                return notEndsWith(cn, model);
-
-            case CONTAINS:
-                return contains(cn, model);
-            case NOT_CONTAINS:
-                return notContains(cn, model);
-
-            case IS_EMPTY:
-                return isEmpty(cn);
-            case IS_NOT_EMPTY:
-                return isNotEmpty(cn);
-            default:
-                throw new UnsupportedOperationException(
-                        "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().getColumnName()
-                );
-        }
-    }
-
-    protected SqlPredicateFragment alwaysTrue() {
-        return of("(TRUE)");
-    }
-
-    protected SqlPredicateFragment alwaysFalse() {
-        return of("(FALSE)");
-    }
-
-    protected SqlPredicateFragment isNull(String cn) {
-        return of("(" + cn + " IS NULL)");
-    }
-
-    protected SqlPredicateFragment isNotNull(String cn) {
-        return of("(" + cn + " IS NOT NULL)");
-    }
-
-    protected SqlPredicateFragment equal(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(" + cn + " = ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment notEqual(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(NOT (" + cn + " = ?))").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment greaterThan(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment greaterOrEqual(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment lessThan(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment lessOrEqual(String cn, SpeedmentPredicate<?,?> model) {
-        return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    protected SqlPredicateFragment between(String cn, SpeedmentPredicate<?,?> model) {
-        return betweenHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notBetween(String cn, SpeedmentPredicate<?,?> model) {
-        return betweenHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment betweenHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        final Inclusion inclusion = getThirdOperandAsInclusion(model);
-        switch (inclusion) {
-            case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
-            }
-            case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
-            }
-            case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
-            }
-            case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));
-            }
-        }
-        throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
-    }
-
-    protected SqlPredicateFragment in(String cn, SpeedmentPredicate<?,?> model) {
-        return inHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notIn(String cn, SpeedmentPredicate<?,?> model) {
-        return inHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment inHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated) {
-        final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
-    }
-
-    protected SqlPredicateFragment equalIgnoreCase(String cn, SpeedmentPredicate<?,?> model) {
-        return equalIgnoreCaseHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notEqualIgnoreCase(String cn, SpeedmentPredicate<?,?> model) {
-        return equalIgnoreCaseHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment startsWith(String cn, SpeedmentPredicate<?,?> model) {
-        return startsWithHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notStartsWith(String cn, SpeedmentPredicate<?,?> model) {
-        return startsWithHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment endsWith(String cn, SpeedmentPredicate<?,?> model) {
-        return endsWithHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notEndsWith(String cn, SpeedmentPredicate<?,?> model) {
-        return endsWithHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment contains(String cn, SpeedmentPredicate<?,?> model) {
-        return containsHelper(cn, model, false);
-    }
-
-    protected SqlPredicateFragment notContains(String cn, SpeedmentPredicate<?,?> model) {
-        return containsHelper(cn, model, true);
-    }
-
-    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
-
-    protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?,?> model, boolean negated);
-
-    protected SqlPredicateFragment isEmpty(String cn) {
-        return of("(" + cn + " = '')");
-    }
-
-    protected SqlPredicateFragment isNotEmpty(String cn) {
-        return of("(" + cn + " <> '')");
-    }
-
-    @Override
-    public String getOpeningFieldQuote() {
-        return openingFieldQuote;
-    }
-
-    @Override
-    public String getClosingFieldQuote() {
-        return closingFieldQuote;
-    }
-
 }

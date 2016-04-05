@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,6 +18,7 @@ package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
 import com.speedment.component.PrimaryKeyFactoryComponent;
+import com.speedment.license.Software;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,12 +32,13 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
  */
-public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractComponent implements PrimaryKeyFactoryComponent {
+public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComponent implements PrimaryKeyFactoryComponent {
 
     public PrimaryKeyFactoryComponentImpl(Speedment speedment) {
         super(speedment);
@@ -83,6 +85,11 @@ public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractCompone
     @Override
     public Class<PrimaryKeyFactoryComponent> getComponentClass() {
         return PrimaryKeyFactoryComponent.class;
+    }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
     }
 
     private List<?> makeHelper(Object... keys) {
@@ -224,6 +231,11 @@ public final class PrimaryKeyFactoryComponentImpl extends Apache2AbstractCompone
             throw new UnsupportedOperationException("a primary key List is unmodifiable");
         }
 
+    }
+
+    @Override
+    public PrimaryKeyFactoryComponent defaultCopy(Speedment speedment) {
+        return new PrimaryKeyFactoryComponentImpl(speedment);
     }
 
 }

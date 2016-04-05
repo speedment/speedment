@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -78,9 +78,17 @@ public final class JGoogleAnalyticsTracker {
     }
 
     private void logMessage(String message) {
-        if (loggingAdapter != null) {
-            loggingAdapter.logMessage(message);
-        }
+        // Do not show the logging messages
+//        if (loggingAdapter != null) {
+//            loggingAdapter.logMessage(message);
+//        }
+    }
+
+    /**
+     * @return the loggingAdapter
+     */
+    public LoggingAdapter getLoggingAdapter() {
+        return loggingAdapter;
     }
 
     private class TrackingThread extends Thread {

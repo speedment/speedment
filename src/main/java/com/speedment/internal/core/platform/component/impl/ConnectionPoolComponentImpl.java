@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,11 +17,12 @@
 package com.speedment.internal.core.platform.component.impl;
 
 import com.speedment.Speedment;
-import com.speedment.component.ConnectionPoolComponent;
-import com.speedment.internal.core.pool.PoolableConnection;
+import com.speedment.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.component.connectionpool.PoolableConnection;
 import com.speedment.internal.core.pool.impl.PoolableConnectionImpl;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
+import com.speedment.license.Software;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,16 +30,17 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  * A fully concurrent implementation of a connection pool.
  *
  * @author pemi
  */
-public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implements ConnectionPoolComponent {
+public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent implements ConnectionPoolComponent {
 
     private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
@@ -57,6 +59,10 @@ public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implem
         maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
+    }
+
+    private ConnectionPoolComponentImpl(Speedment speedment, ConnectionPoolComponentImpl template) {
+        this(speedment);
     }
 
     @Override
@@ -199,6 +205,16 @@ public class ConnectionPoolComponentImpl extends Apache2AbstractComponent implem
 
     private Logger getLogger() {
         return logger;
+    }
+
+    @Override
+    public Stream<Software> getDependencies() {
+        return Stream.empty();
+    }
+
+    @Override
+    public ConnectionPoolComponent defaultCopy(Speedment speedment) {
+        return new ConnectionPoolComponentImpl(speedment, this);
     }
 
 }

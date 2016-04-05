@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,11 +30,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *
@@ -82,7 +82,7 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
                 .peek(i -> threadNames.add(Thread.currentThread().getName()))
                 .collect(toSet());
         assertEquals(expectedSet, set);
-        System.out.println("Threads used:" + threadNames);
+        //System.out.println("Threads used:" + threadNames);
         assertTrue(threadNames.size() > Runtime.getRuntime().availableProcessors()/2-1);
     }
 

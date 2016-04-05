@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,13 +16,17 @@
  */
 package com.speedment.internal.util.testing;
 
-import com.speedment.Manager;
-import com.speedment.config.Column;
-import com.speedment.config.Table;
+import com.speedment.Speedment;
+import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.field.ComparableField;
+import com.speedment.field.FieldIdentifier;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
+import com.speedment.util.tuple.Tuple;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -44,11 +48,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     private Function<ENTITY, ENTITY> remover;
-    private BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder;
+    private BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-        this.instanceSupplier = inner::newInstance;
+        this.instanceSupplier = inner::newEmptyEntity;
         this.nativeStreamer = inner::nativeStream;
         this.streamer = inner::stream;
         this.persister = inner::persist;
@@ -92,10 +96,15 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         this.remover = remover;
         return this;
     }
-    
+
     @Override
-    public MockManager<ENTITY> setFinder(BiFunction<ComparableField<ENTITY, ? extends Comparable<?>>, Comparable<?>, Optional<ENTITY>> finder) {
-        this.finder = finder;
+    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+        MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder) {
+        @SuppressWarnings("unchecked")
+        final BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> castedFinder
+            = (BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>>) (BiFunction<?, ?, ?>) finder;
+        this.finder = castedFinder;
+
         return this;
     }
 
@@ -106,13 +115,13 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Object get(ENTITY entity, Column column) {
-        return inner.get(entity, column);
+    public Object get(ENTITY entity, FieldIdentifier<ENTITY> identifier) {
+        return inner.get(entity, identifier);
     }
 
     @Override
-    public void set(ENTITY entity, Column column, Object value) {
-        inner.set(entity, column, value);
+    public void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value) {
+        inner.set(entity, identifier, value);
     }
 
     @Override
@@ -121,13 +130,23 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public ENTITY newInstance() {
+    public ENTITY newEmptyEntity() {
         return instanceSupplier.get();
     }
 
     @Override
     public Class<ENTITY> getEntityClass() {
         return inner.getEntityClass();
+    }
+
+    @Override
+    public Class<? extends Manager<ENTITY>> getManagerClass() {
+        return inner.getManagerClass();
+    }
+
+    @Override
+    public Tuple getPrimaryKeyClasses() {
+        return inner.getPrimaryKeyClasses();
     }
 
     @Override
@@ -161,7 +180,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(ComparableField<ENTITY, V> field, V value) {
+    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+        Optional<ENTITY> findAny(F field, V value) {
         return finder.apply(field, value);
     }
 
@@ -186,6 +206,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Manager<ENTITY> load() {
+        return inner.load();
+    }
+
+    @Override
     public Manager<ENTITY> resolve() {
         return inner.resolve();
     }
@@ -206,8 +231,18 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public void setState(State state) {
+        inner.setState(state);
+    }
+
+    @Override
     public boolean isInitialized() {
         return inner.isInitialized();
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return inner.isLoaded();
     }
 
     @Override
@@ -225,4 +260,18 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return inner.isStopped();
     }
 
+    @Override
+    public Speedment speedment() {
+        return inner.speedment();
+    }
+
+    @Override
+    public Stream<FieldTrait> fields() {
+        return inner.fields();
+    }
+
+    @Override
+    public Stream<FieldTrait> primaryKeyFields() {
+        return inner.primaryKeyFields();
+    }
 }

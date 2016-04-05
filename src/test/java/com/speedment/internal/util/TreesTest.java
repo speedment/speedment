@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,7 +21,6 @@
  */
 package com.speedment.internal.util;
 
-import com.speedment.internal.util.Trees;
 import static com.speedment.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
 import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_POST;
 import static com.speedment.internal.util.Trees.TraversalOrder.DEPTH_FIRST_PRE;
@@ -66,7 +65,6 @@ public class TreesTest {
      */
     @Test
     public void testTraverse() {
-        System.out.println("traverse");
 
         final Node nodeE = new Node("E");
         
@@ -97,7 +95,7 @@ public class TreesTest {
 
     private static void test(Node f, Trees.TraversalOrder traversalOrder, String expectedResult) {
         final String result = Trees.traverse(f, Node::stream, traversalOrder).map(Node::getName).collect(JOINING_COMAS);
-        System.out.printf("%-20s: %s\n", traversalOrder, result);
+        //System.out.printf("%-20s: %s\n", traversalOrder, result);
         assertEquals(expectedResult, result);
     }
 

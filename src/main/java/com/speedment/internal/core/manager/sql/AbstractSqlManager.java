@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,56 +17,51 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.Speedment;
-import com.speedment.config.Column;
-import com.speedment.config.Dbms;
-import com.speedment.config.PrimaryKeyColumn;
-import com.speedment.config.Schema;
-import com.speedment.config.Table;
-import com.speedment.config.parameters.DbmsType;
-import com.speedment.internal.core.manager.AbstractManager;
-import com.speedment.db.MetaResult;
-import com.speedment.internal.core.manager.metaresult.SqlMetaResultImpl;
+import com.speedment.config.db.Column;
+import com.speedment.config.db.Dbms;
+import com.speedment.config.db.PrimaryKeyColumn;
+import com.speedment.config.db.Project;
+import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.AsynchronousQueryResult;
+import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
+import com.speedment.db.MetaResult;
 import com.speedment.db.SqlFunction;
+import com.speedment.db.SqlRunnable;
 import com.speedment.exception.SpeedmentException;
-import com.speedment.config.mapper.TypeMapper;
+import com.speedment.field.FieldIdentifier;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.manager.AbstractManager;
+import com.speedment.internal.core.manager.metaresult.SqlMetaResultImpl;
+import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
 import com.speedment.internal.core.stream.builder.ReferenceStreamBuilder;
 import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.Ref;
+import com.speedment.internal.util.LazyString;
+import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.ancestor;
+import com.speedment.stream.StreamDecorator;
+import static com.speedment.util.NullUtil.requireNonNulls;
 import java.sql.ResultSet;
-import java.sql.RowId;
 import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import java.util.stream.Stream;
-import java.util.Optional;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import com.speedment.internal.util.Lazy;
-import com.speedment.stream.StreamDecorator;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.core.stream.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -76,90 +71,89 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
-    private SqlFunction<ResultSet, ENTITY> sqlEntityMapper;
-    private final Lazy<String> sqlColumnList;
-    private final Lazy<String> sqlColumnListQuestionMarks;
+    private final LazyString sqlColumnList;
+    private final LazyString sqlColumnListQuestionMarks;
+    private final LazyString sqlTableReference;
+    private final LazyString sqlSelect;
+    private SqlFunction<ResultSet, ENTITY> entityMapper;
+    //private final Map<String, FieldIdentifier<ENTITY>> fieldIdentifierMap;
+    private final Map<String, FieldTrait> fieldTraitMap;
+    private final boolean hasPrimaryKeyColumns;
 
-    public AbstractSqlManager(Speedment speedment) {
+    protected AbstractSqlManager(Speedment speedment) {
         super(speedment);
-        sqlColumnList = new Lazy<>();
-        sqlColumnListQuestionMarks = new Lazy<>();
+        this.sqlColumnList = LazyString.create();
+        this.sqlColumnListQuestionMarks = LazyString.create();
+        this.sqlTableReference = LazyString.create();
+        this.sqlSelect = LazyString.create();
+//        this.fieldIdentifierMap = fields()
+//            .filter(f -> f.getIdentifier().tableName().equals(getTable().getName())) // Protect against "VirtualFields"
+//            .filter(f -> f.getIdentifier().schemaName().equals(getTable().getParentOrThrow().getName()))
+//            .map(FieldTrait::getIdentifier)
+//            .map(f -> (FieldIdentifier<ENTITY>) f)
+//            .collect(toMap(FieldIdentifier::columnName, Function.identity()));
+        this.fieldTraitMap = fields()
+            .filter(f -> f.getIdentifier().tableName().equals(getTable().getName())) // Protect against "VirtualFields"
+            .filter(f -> f.getIdentifier().schemaName().equals(getTable().getParentOrThrow().getName()))
+            .collect(toMap(ft -> ft.getIdentifier().columnName(), Function.identity()));
+        this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(""), Collections.emptyList(), sqlEntityMapper.unWrap()));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(), Collections.emptyList(), entityMapper.unWrap()));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
-        final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.apply(asynchronousQueryResult.stream());
-        final Stream<ENTITY> result = decorator.apply(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
-        result.onClose(asynchronousQueryResult::close); // Make sure we are closing the ResultSet, Statement and Connection later
+        final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.applyOnInitial(asynchronousQueryResult.stream());
+        final Stream<ENTITY> result = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
+
+        // Make sure we are closing the ResultSet, Statement and Connection later
+        result.onClose(asynchronousQueryResult::close);
+
         return result;
     }
 
-    public <T> Stream<T> synchronousStreamOf(final String sql, final List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
-        //LOGGER.debug(sql + " <- " + values);
-        requireNonNull(sql);
-        requireNonNull(values);
-        requireNonNull(rsMapper);
+    public <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
+        requireNonNulls(sql, values, rsMapper);
         return dbmsHandler().executeQuery(sql, values, rsMapper);
     }
 
-    private final Supplier<String> columnListSupplier = () -> sqlColumnList(Function.identity());
-    
-    public String sqlColumnList() {
-        if (getTable().isImmutable()) {
-            return sqlColumnList.getOrCompute(columnListSupplier);
-        } else {
-            return columnListSupplier.get();
-        }
+    /**
+     * Counts the number of elements in the current table by querying the
+     * database.
+     *
+     * @return the number of elements in the table
+     */
+    public long count() {
+        return synchronousStreamOf(
+            "SELECT COUNT(*) FROM " + sqlTableReference(),
+            Collections.emptyList(),
+            rs -> rs.getLong(1)
+        ).findAny().get();
     }
 
-    private final Supplier<String> columnListWithQuestionMarkSupplier = () -> sqlColumnList(c -> "?");
-    
-    public String sqlColumnListWithQuestionMarks() {
-        if (getTable().isImmutable()) {
-            return sqlColumnListQuestionMarks.getOrCompute(columnListWithQuestionMarkSupplier);
-        } else {
-            return columnListWithQuestionMarkSupplier.get();
-        }
-    }
-
-    private String sqlColumnList(Function<String, String> postMapper) {
-        requireNonNull(postMapper);
-        return getTable().streamOfColumns()
-                .map(Column::getName)
-                .map(this::quoteField)
-                .map(postMapper)
-                .collect(Collectors.joining(","));
-    }
-
-    public String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
-        requireNonNull(postMapper);
-        return getTable().streamOfPrimaryKeyColumns()
-                .map(PrimaryKeyColumn::getName)
-                .map(this::quoteField)
-                .map(postMapper)
-                .collect(Collectors.joining(" AND "));
-    }
-
-    public String sqlTableReference() {
-        return getTable().getRelativeName(Schema.class, this::quoteField);
-    }
-
-    public String sqlSelect(String suffix) {
-        requireNonNull(suffix);
-        final String sql = "select " + sqlColumnList() + " from " + sqlTableReference() + suffix;
-        return sql;
+    /**
+     * Returns a {@code SELECT/FROM} SQL statement with the full column list and
+     * the current table specified in accordance to the current
+     * {@link DbmsType}. The specified statement will not have any trailing
+     * spaces or semicolons.
+     * <p>
+     * <b>Example:</b>
+     * <code>SELECT `id`, `name` FROM `myschema`.`users`</code>
+     *
+     * @return the SQL statement
+     */
+    public String sqlSelect() {
+        return sqlSelect.getOrCompute(() -> "SELECT " + sqlColumnList() + " FROM " + sqlTableReference());
     }
 
     @Override
-    public SqlFunction<ResultSet, ENTITY> getSqlEntityMapper() {
-        return sqlEntityMapper;
+    public SqlFunction<ResultSet, ENTITY> getEntityMapper() {
+        return entityMapper;
     }
 
     @Override
-    public void setSqlEntityMapper(SqlFunction<ResultSet, ENTITY> sqlEntityMapper) {
-        this.sqlEntityMapper = requireNonNull(sqlEntityMapper);
+    public void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper) {
+        this.entityMapper = requireNonNull(entityMapper);
     }
 
     @Override
@@ -169,8 +163,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return persistHelp(entity, Optional.of(listener));
     }
 
@@ -182,8 +175,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return updateHelper(entity, Optional.of(listener));
     }
 
@@ -195,317 +187,314 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     @Override
     public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(listener);
+        requireNonNulls(entity, listener);
         return removeHelper(entity, Optional.of(listener));
     }
 
-    protected Dbms getDbms() {
-        return getTable().ancestor(Dbms.class).get();
+    /**
+     * Short-cut for retrieving the current {@link Dbms}.
+     *
+     * @return the current dbms
+     */
+    protected final Dbms getDbms() {
+        return ancestor(getTable(), Dbms.class).get();
     }
 
-    protected DbmsType getDbmsType() {
-        return getDbms().getType();
+    /**
+     * Short-cut for retrieving the current {@link DbmsType}.
+     *
+     * @return the current dbms type
+     */
+    protected final DbmsType getDbmsType() {
+        return dbmsTypeOf(speedment, getDbms());
     }
 
-    private String quoteField(final String s) {
-        final DbmsType dbmsType = getDbms().getType();
-        return dbmsType.getFieldEncloserStart() + s + dbmsType.getFieldEncloserEnd();
-    }
-
-    protected DbmsHandler dbmsHandler() {
+    /**
+     * Short-cut for retrieving the current {@link DbmsHandler}.
+     *
+     * @return the current dbms handler
+     */
+    protected final DbmsHandler dbmsHandler() {
         return speedment.getDbmsHandlerComponent().get(getDbms());
     }
 
-    // Null safe RS getters, must have the same name as ResultSet getters
-    protected Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getObject(columnName));
+    /**
+     * Short-cut for retrieving the current {@link DatabaseNamingConvention}.
+     *
+     * @return the current naming convention
+     */
+    protected final DatabaseNamingConvention naming() {
+        return getDbmsType().getDatabaseNamingConvention();
     }
 
-    protected Boolean getBoolean(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBoolean(columnName));
+    /**
+     * Returns a comma separated list of column names, fully formatted in
+     * accordance to the current {@link DbmsType}.
+     *
+     * @return the comma separated column list
+     */
+    private String sqlColumnList() {
+        return sqlColumnList.getOrCompute(() -> sqlColumnList(Function.identity()));
     }
 
-    protected Byte getByte(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getByte(columnName));
+    /**
+     * Returns a comma separated list of question marks (?), fully formatted in
+     * accordance to the current {@link DbmsType} to represent column value
+     * wildcards.
+     *
+     * @return the comma separated question mark list
+     */
+    private String sqlColumnListWithQuestionMarks() {
+        return sqlColumnListQuestionMarks.getOrCompute(() -> sqlColumnList(c -> "?"));
     }
 
-    protected Short getShort(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getShort(columnName));
+    /**
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
+     * names, formatted in accordance to the current {@link DbmsType}.
+     *
+     * @param postMapper mapper to be applied to each column name
+     * @return list of fully quoted primary key column names
+     */
+    protected String sqlColumnList(Function<String, String> postMapper) {
+        requireNonNull(postMapper);
+        return getTable().columns()
+            .map(naming()::fullNameOf)
+            .map(postMapper)
+            .collect(joining(","));
     }
 
-    protected Integer getInt(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getInt(columnName));
+    /**
+     * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
+     * names, formatted in accordance to the current {@link DbmsType}.
+     *
+     * @return list of fully quoted primary key column names
+     */
+    private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
+        requireNonNull(postMapper);
+        return getTable().primaryKeyColumns()
+            .map(naming()::fullNameOf)
+            .map(postMapper)
+            .collect(joining(" AND "));
     }
 
-    protected Long getLong(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getLong(columnName));
+    /**
+     * Returns the full name of a table formatted in accordance to the current
+     * {@link DbmsType}. The returned value will be within quotes if that is
+     * what the database expects.
+     *
+     * @return the full quoted table name
+     */
+    protected String sqlTableReference() {
+        return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    protected Float getFloat(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getFloat(columnName));
-    }
-
-    protected Double getDouble(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDouble(columnName));
-    }
-
-    protected String getString(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getString(columnName));
-    }
-
-    protected Date getDate(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDate(columnName));
-    }
-
-    protected Time getTime(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTime(columnName));
-    }
-
-    protected Timestamp getTimestamp(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTimestamp(columnName));
-    }
-
-    protected BigDecimal getBigDecimal(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(columnName));
-    }
-
-    protected Blob getBlob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBlob(columnName));
-    }
-
-    protected Clob getClob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getClob(columnName));
-    }
-
-    protected Array getArray(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getArray(columnName));
-    }
-
-    protected Ref getRef(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRef(columnName));
-    }
-
-    protected URL getURL(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getURL(columnName));
-    }
-
-    protected RowId getRowId(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRowId(columnName));
-    }
-
-    protected NClob getNClob(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getNClob(columnName));
-    }
-
-    protected SQLXML getSQLXML(final ResultSet resultSet, final String columnName) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getSQLXML(columnName));
-    }
-
-    // Null safe RS getters (int), must have the same name as ResultSet getters
-    protected Object getObject(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getObject(ordinalPosition));
-    }
-
-    protected Boolean getBoolean(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBoolean(ordinalPosition));
-    }
-
-    protected Byte getByte(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getByte(ordinalPosition));
-    }
-
-    protected Short getShort(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getShort(ordinalPosition));
-    }
-
-    protected Integer getInt(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getInt(ordinalPosition));
-    }
-
-    protected Long getLong(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getLong(ordinalPosition));
-    }
-
-    protected Float getFloat(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getFloat(ordinalPosition));
-    }
-
-    protected Double getDouble(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDouble(ordinalPosition));
-    }
-
-    protected String getString(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getString(ordinalPosition));
-    }
-
-    protected Date getDate(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getDate(ordinalPosition));
-    }
-
-    protected Time getTime(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTime(ordinalPosition));
-    }
-
-    protected Timestamp getTimestamp(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getTimestamp(ordinalPosition));
-    }
-
-    protected BigDecimal getBigDecimal(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBigDecimal(ordinalPosition));
-    }
-
-    protected Blob getBlob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getBlob(ordinalPosition));
-    }
-
-    protected Clob getClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getClob(ordinalPosition));
-    }
-
-    protected Array getArray(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getArray(ordinalPosition));
-    }
-
-    protected Ref getRef(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRef(ordinalPosition));
-    }
-
-    protected URL getURL(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getURL(ordinalPosition));
-    }
-
-    protected RowId getRowId(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getRowId(ordinalPosition));
-    }
-
-    protected NClob getNClob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getNClob(ordinalPosition));
-    }
-
-    protected SQLXML getSQLXML(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-        return getNullableFrom(resultSet, rs -> rs.getSQLXML(ordinalPosition));
-    }
-
-    private <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
-        final T result = mapper.apply(rs);
-        if (rs.wasNull()) {
-            return null;
-        } else {
-            return result;
-        }
-
-    }
-
-    private final Function<ENTITY, Consumer<List<Long>>> NOTHING = b -> l -> { // Nothing to do for updates...
-    };
-
-    private Object toDatabaseType(Column column, ENTITY entity) {
-        final Object javaValue = unwrap(get(entity, column));
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Object toDatabaseType(F field, ENTITY entity) {
+        final Object javaValue = unwrap(get(entity, field.getIdentifier()));
         @SuppressWarnings("unchecked")
-        final Object dbValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toDatabaseType(javaValue);
+        final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
         return dbValue;
     }
 
-    private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+        final List<Column> cols = persistColumns(entity);
         final StringBuilder sb = new StringBuilder();
-        sb.append("insert into ").append(sqlTableReference());
-        sb.append(" (").append(sqlColumnList()).append(")");
-        sb.append(" values ");
-        sb.append("(").append(sqlColumnListWithQuestionMarks()).append(")");
+        sb.append("INSERT INTO ").append(sqlTableReference());
+        sb.append(" (").append(persistColumnList(cols)).append(")");
+        sb.append(" VALUES ");
+        sb.append("(").append(persistColumnListWithQuestionMarks(cols)).append(")");
 
-        final List<Object> values = table.streamOfColumns()
-                .map(c -> toDatabaseType(c, entity))
-                .collect(Collectors.toList());
+        @SuppressWarnings("unchecked")
+        final List<Object> values = cols.stream()
+            .map(Column::getName)
+            .map(fieldTraitMap::get)
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(toList());
+
+        // TODO: Make autoinc part of FieldTrait
+//        final List<Object> values = fields()
+//            .filter(ReferenceFieldTrait.class::isInstance)
+//            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
+//            .map(f -> toDatabaseType(f, entity))
+//            .collect(toList());
+        @SuppressWarnings("unchecked")
+        final List<F> generatedFields = fields()
+            .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (F) f)
+            .collect(toList());
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
-                    table.streamOfColumns()
-                            .filter(Column::isAutoincrement)
-                            .forEachOrdered(column -> {
-                                // Cast from Long to the column target type
+                    generatedFields
+                        .forEach(f -> {
 
-                                final Object val = speedment
-                                        .getJavaTypeMapperComponent()
-                                        .apply(column.getTypeMapper().getJavaType())
-                                        .parse(
-                                                l.get(cnt.getAndIncrement())
-                                        );
+                            // Cast from Long to the column target type
+                            final Object val = speedment
+                                .getResultSetMapperComponent()
+                                .apply(f.typeMapper().getJavaType())
+                                .parse(l.get(cnt.getAndIncrement()));
 
-                                //final Object val = StandardJavaTypeMappingOld.parse(column.getMapping(), l.get(cnt.getAndIncrement()));
-                                @SuppressWarnings("unchecked")
-                                final Object javaValue = ((TypeMapper<Object, Object>) column.getTypeMapper()).toJavaType(val);
-                                set(builder, column, javaValue);
-                            });
+                            @SuppressWarnings("unchecked")
+                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(val);
+                            set(builder, f.getIdentifier(), javaValue);
+                        });
                 }
             };
         };
 
-        executeUpdate(entity, sb.toString(), values, generatedKeyconsumer, listener);
+        executeInsert(entity, sb.toString(), values, generatedFields, generatedKeyconsumer, listener);
         return entity;
     }
 
     private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
-
+        assertHasPrimaryKeyColumns();
         final StringBuilder sb = new StringBuilder();
-        sb.append("update ").append(sqlTableReference()).append(" set ");
+        sb.append("UPDATE ").append(sqlTableReference()).append(" SET ");
         sb.append(sqlColumnList(n -> n + " = ?"));
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = table.streamOfColumns()
-                .map(c -> toDatabaseType(c, entity))
-                .collect(Collectors.toList());
+        final List<Object> values = castedFieldsOf(this::fields)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(Collectors.toList());
 
-        table.streamOfPrimaryKeyColumns().map(pkc -> pkc.getColumn()).forEachOrdered(c -> values.add(get(entity, c)));
+        castedFieldsOf(this::primaryKeyFields)
+            .map(ReferenceFieldTrait::getIdentifier)
+            .forEachOrdered(f -> values.add(get(entity, f)));
 
-        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        executeUpdate(sb.toString(), values, listener);
         return entity;
     }
 
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
-        final Table table = getTable();
+        assertHasPrimaryKeyColumns();
         final StringBuilder sb = new StringBuilder();
-        sb.append("delete from ").append(sqlTableReference());
-        sb.append(" where ");
+        sb.append("DELETE FROM ").append(sqlTableReference());
+        sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
-        final List<Object> values = table.streamOfPrimaryKeyColumns()
-                .map(pk -> toDatabaseType(pk.getColumn(), entity))
-                .collect(Collectors.toList());
 
-        executeUpdate(entity, sb.toString(), values, NOTHING, listener);
+        final List<Object> values = castedFieldsOf(this::primaryKeyFields)
+            .map(f -> toDatabaseType(f, entity))
+            .collect(toList());
+
+//        final List<Object> values = primaryKeyFields()
+//            .filter(ReferenceFieldTrait.class::isInstance)
+//            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+//            .map(f -> toDatabaseType(f, entity))
+//            .collect(toList());
+        executeDelete(sb.toString(), values, listener);
         return entity;
     }
 
-    private void executeUpdate(
-            final ENTITY entity,
-            final String sql,
-            final List<Object> values,
-            final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
-            final Optional<Consumer<MetaResult<ENTITY>>> listener
-    ) throws SpeedmentException {
-        requireNonNull(entity);
-        requireNonNull(sql);
-        requireNonNull(values);
-        requireNonNull(generatedKeyconsumer);
-        requireNonNull(listener);
+    private <T extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Stream<T> castedFieldsOf(Supplier<Stream<FieldTrait>> supplier) {
+        @SuppressWarnings("unchecked")
+        final Stream<T> result = supplier.get()
+            .filter(ReferenceFieldTrait.class::isInstance)
+            .map(f -> (T) f);
+        return result;
+    }
 
-        final SqlMetaResultImpl<ENTITY> meta;
+    private String persistColumnList(List<Column> cols) {
+        return cols.stream()
+            .map(naming()::fullNameOf)
+            .collect(joining(","));
+    }
 
-        if (listener.isPresent()) {
-            meta = new SqlMetaResultImpl<ENTITY>().setQuery(sql).setParameters(values);
-        } else {
-            meta = null;
+    private String persistColumnListWithQuestionMarks(List<Column> cols) {
+        return cols.stream()
+            .map(c -> "?")
+            .collect(joining(","));
+    }
+
+    /**
+     * Returns a List of the columns that shall be used in an insert/update
+     * statement. Some database types (e.g. Postgres) does not allow auto
+     * increment columns that are null in an insert/update statement.
+     *
+     * @param entity to be inserted/updated
+     * @return a List of the columns that shall be used in an insert/update
+     * statement
+     */
+    protected List<Column> persistColumns(ENTITY entity) {
+        return getTable().columns()
+            .filter(c -> isPersistColumn(entity, c))
+            .collect(toList());
+    }
+
+    /**
+     * Returns if a columns that shall be used in an insert/update statement.
+     * Some database types (e.g. Postgres) does not allow auto increment columns
+     * that are null in an insert/update statement.
+     *
+     * @param entity to be inserted/updated
+     * @param c column
+     * @return if a columns that shall be used in an insert/update statement
+     */
+    protected boolean isPersistColumn(ENTITY entity, Column c) {
+        if (c.isAutoIncrement()) {
+            final FieldTrait ft = fieldTraitMap.get(c.getName());
+            if (ft != null) {
+                @SuppressWarnings("unchecked")
+                final FieldIdentifier<ENTITY> fi = (FieldIdentifier<ENTITY>) ft.getIdentifier();
+                final Object colValue = get(entity, fi);
+                if (colValue != null) {
+                    return true;
+                }
+            }
+            return false;
         }
+        return true;
+    }
+
+    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> void executeInsert(
+        final ENTITY entity,
+        final String sql,
+        final List<Object> values,
+        final List<F> generatedFields,
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener
+    ) throws SpeedmentException {
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeInsert(sql, values, generatedFields, generatedKeyconsumer.apply(entity)));
+    }
+
+    private void executeUpdate(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener
+    ) throws SpeedmentException {
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeUpdate(sql, values));
+    }
+
+    private void executeDelete(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener
+    ) throws SpeedmentException {
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeDelete(sql, values));
+    }
+
+    private void executeHelper(
+        final String sql,
+        final List<Object> values,
+        final Optional<Consumer<MetaResult<ENTITY>>> listener,
+        final SqlRunnable action
+    ) throws SpeedmentException {
+        requireNonNulls(sql, values, listener, action);
+
+        final SqlMetaResultImpl<ENTITY> meta = listener.isPresent()
+            ? new SqlMetaResultImpl<ENTITY>()
+            .setQuery(sql)
+            .setParameters(values)
+            : null;
+
         try {
-            executeUpdate(entity, sql, values, generatedKeyconsumer);
-        } catch (SQLException sqle) {
-            //LOGGER.error("Unable to persist", sqle);
+            action.run();
+        } catch (final SQLException sqle) {
             if (meta != null) {
                 meta.setThrowable(sqle);
             }
@@ -515,25 +504,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         }
     }
 
-    private void executeUpdate(
-            final ENTITY entity,
-            final String sql,
-            final List<Object> values,
-            final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
-    ) throws SQLException {
-        //final ENTITY builder = toBuilder(entity);
-        dbmsHandler().executeUpdate(sql, values, generatedKeyconsumer.apply(entity));
-        //return entity;
-    }
-
-    private String sqlQuote(Object o) {
-        if (o == null) {
-            return "null";
+    private void assertHasPrimaryKeyColumns() {
+        if (!hasPrimaryKeyColumns) {
+            throw new SpeedmentException("The table " + DocumentUtil.relativeName(getTable(), Project.class) + " does not have any primary keys. Some operations like update() and remove() requires at least one primary key.");
         }
-        if (o instanceof Number) {
-            return o.toString();
-        }
-        return "'" + o.toString() + "'";
     }
 
 }

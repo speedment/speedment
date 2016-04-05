@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,16 +16,16 @@
  */
 package com.speedment.internal.core.field.predicate.impl;
 
+import com.speedment.field.methods.Getter;
 import com.speedment.field.predicate.PredicateType;
 import com.speedment.field.predicate.SpeedmentPredicate;
-import com.speedment.field.methods.Getter;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.predicate.AbstractBasePredicate;
-import com.speedment.internal.util.Cast;
 import com.speedment.internal.core.field.predicate.iface.type.HasFirstOperand;
 import com.speedment.internal.core.field.predicate.iface.type.HasSecondOperand;
 import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
+import com.speedment.internal.util.Cast;
 
 /**
  *
@@ -33,13 +33,17 @@ import com.speedment.internal.core.field.predicate.iface.type.HasThirdOperand;
  * @param <ENTITY> entity type
  * @param <V> value type
  */
-public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, V> {
+public abstract class SpeedmentPredicateImpl<ENTITY, D, V> extends AbstractBasePredicate<ENTITY> implements SpeedmentPredicate<ENTITY, D, V> {
 
     private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, V> referenceField;
+    private final ReferenceFieldTrait<ENTITY, D, V> referenceField;
     private final PredicateType predicateType;
 
-    protected SpeedmentPredicateImpl(PredicateType predicateType, FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField/*, Getter<ENTITY, V> getter*//*, Predicate<V> fieldPredicate*/) {
+    protected SpeedmentPredicateImpl(
+            PredicateType predicateType, 
+            FieldTrait field, 
+            ReferenceFieldTrait<ENTITY, D, V> referenceField
+    ) {
         this.predicateType = predicateType;
         this.field = field;
         this.referenceField = referenceField;
@@ -73,12 +77,12 @@ public abstract class SpeedmentPredicateImpl<ENTITY, V> extends AbstractBasePred
     }
 
     @Override
-    public ReferenceFieldTrait<ENTITY, V> getReferenceField() {
+    public ReferenceFieldTrait<ENTITY, D, V> getReferenceField() {
         return referenceField;
     }
 
     @Override
-    public SpeedmentPredicateImpl<ENTITY, V> negate() {
+    public SpeedmentPredicateImpl<ENTITY, D, V> negate() {
         super.negate();
         return this;
     }

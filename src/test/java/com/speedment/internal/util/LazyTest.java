@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,11 +13,6 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
  */
 package com.speedment.internal.util;
 
@@ -36,13 +31,12 @@ import static java.util.stream.Collectors.toSet;
 import java.util.stream.IntStream;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
- *
  * @author pemi
  */
 public class LazyTest {
@@ -68,7 +62,7 @@ public class LazyTest {
 
     @Before
     public void setUp() {
-        instance = new Lazy<>();
+        instance = Lazy.create();
     }
 
     @After
@@ -77,28 +71,23 @@ public class LazyTest {
 
     @Test
     public void testGetOrCompute() {
-        System.out.println("getOrCompute");
         assertEquals(ONE, instance.getOrCompute(ONE_SUPPLIER));
         assertEquals(ONE, instance.getOrCompute(TWO_SUPPLIER));
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetOrComputeSuppliedNull() {
-        System.out.println("testGetOrComputeSuppliedNull");
         instance.getOrCompute(NULL_SUPPLIER);
     }
 
     @Test
     public void testConcurrency() throws InterruptedException, ExecutionException {
-        System.out.println("testConcurrency");
         final int threads = 8;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         for (int i = 0; i < 10000; i++) {
-            final Lazy<Long> lazy = new Lazy<>();
-            final Callable<Long> callable = () -> {
-                return lazy.getOrCompute(() -> Thread.currentThread().getId());
-            };
+            final Lazy<Long> lazy = Lazy.create();
+            final Callable<Long> callable = () -> lazy.getOrCompute(() -> Thread.currentThread().getId());
             List<Future<Long>> futures
                     = IntStream.rangeClosed(0, threads)
                     .mapToObj($ -> executorService.submit(callable))
@@ -107,7 +96,7 @@ public class LazyTest {
             while (!futures.stream().allMatch(Future::isDone)) {
             }
 
-            Set<Long> ids = futures.stream()
+            final Set<Long> ids = futures.stream()
                     .map(LazyTest::getFutureValue)
                     .collect(toSet());
 

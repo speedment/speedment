@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,8 +16,8 @@
  */
 package com.speedment.internal.core.code;
 
-import com.speedment.internal.codegen.lang.models.Import;
-import com.speedment.config.Table;
+import com.speedment.codegen.model.Import;
+import com.speedment.config.db.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 

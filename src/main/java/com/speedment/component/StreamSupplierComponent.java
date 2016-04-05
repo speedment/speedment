@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,8 +17,9 @@
 package com.speedment.component;
 
 import com.speedment.annotation.Api;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.field.ComparableField;
+import com.speedment.field.trait.ComparableFieldTrait;
+import com.speedment.field.trait.FieldTrait;
+import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.stream.StreamDecorator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  * @author pemi
  * @since 2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface StreamSupplierComponent extends Component {
 
     @Override
@@ -47,11 +48,22 @@ public interface StreamSupplierComponent extends Component {
      */
     <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
 
-    default <ENTITY, V extends Comparable<? super V>>
-            Optional<ENTITY> findAny(Class<ENTITY> entityClass, ComparableField<ENTITY, V> field, V value) {
+    default <ENTITY, D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+            Optional<ENTITY> findAny(Class<ENTITY> entityClass, F field, V value) {
         return stream(entityClass, StreamDecorator.IDENTITY)
                 .filter(field.equal(value))
                 .findAny();
+    }
+
+    /**
+     * Returns if this stream component will return the same stream result over
+     * time (immutable or analytics type of data).
+     *
+     * @return if this stream component will return the same stream result over
+     * time.
+     */
+    default boolean isImmutable() {
+        return false;
     }
 
 }

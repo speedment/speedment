@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,23 +26,29 @@ import com.speedment.field.trait.FieldTrait;
 import java.util.function.UnaryOperator;
 
 /**
- *
- * @author pemi
- * @param <ENTITY> entity type
- * @param <V> column value type
+ * Represents a set-operation with all the metadata contained.
+ * 
+ * @param <ENTITY>  entity type
+ * @param <V>       column value type
+ * 
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * @since   2.2
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface FieldSetter<ENTITY, V> extends UnaryOperator<ENTITY> {
 
+    /**
+     * Returns the field that this setter sets.
+     * 
+     * @return  the field
+     */
     FieldTrait getField();
     
+    /**
+     * Returns the value that this setter will set the field to when applied.
+     * 
+     * @return  the value
+     */
     V getValue();
-    
-    // Arne::setFoo
-    
-    // users.stream()
-    //   .filter(User.NAME.equal("Eric"))
-    //   .map(User.NAME.setTo("Emil"))
-    //   .forEach()
-
 }

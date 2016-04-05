@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,28 +16,28 @@
  */
 package com.speedment.internal.core.field.predicate.impl.comparable;
 
-import static com.speedment.field.predicate.PredicateType.IN;
 import com.speedment.field.predicate.ComparableSpeedmentPredicate;
+import static com.speedment.field.predicate.PredicateType.IN;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
+import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
 import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
 import java.util.Set;
-import com.speedment.internal.core.field.predicate.iface.type.BinarySetOperation;
-    
+
 /**
  *
  * @author pemi
  * @param <ENTITY> the entity type
  * @param <V> value type
  */
-public class InPredicate<ENTITY, V extends Comparable<? super V>>
-    extends SpeedmentPredicateImpl<ENTITY, V>
-    implements SpeedmentPredicate<ENTITY, V>, BinarySetOperation<V>, ComparableSpeedmentPredicate<ENTITY, V> {
+public class InPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends SpeedmentPredicateImpl<ENTITY, D, V>
+        implements SpeedmentPredicate<ENTITY, D, V>, BinarySetOperation<V>, ComparableSpeedmentPredicate<ENTITY, D, V> {
 
     private final Set<V> operand0;
 
-    public InPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, V> referenceField, Set<V> values) {
+    public InPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, V> referenceField, Set<V> values) {
         super(IN, field, referenceField);
         this.operand0 = values;
     }

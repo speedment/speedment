@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,8 @@
  */
 package com.speedment.internal.core.stream.builder.pipeline;
 
-import com.speedment.internal.core.stream.builder.action.Action;
+import com.speedment.stream.Pipeline;
+import com.speedment.stream.action.Action;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -85,7 +86,6 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
 
     private BaseStream<E, ?> getStream() {
         BaseStream<?, ?> result = getInitialSupplier().get();
-        //System.out.println("Applying " + toString());
         for (Action<?, ?> action : this) {
             result = cast(result, action);
         }

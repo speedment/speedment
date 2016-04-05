@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,20 +16,23 @@
  */
 package com.speedment;
 
-import com.speedment.db.MetaResult;
 import com.speedment.annotation.Api;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.db.MetaResult;
 import com.speedment.encoder.JsonEncoder;
+import com.speedment.exception.SpeedmentException;
 import java.util.function.Consumer;
 
 /**
  * This interface contains the common methods that are the same for all
  * entities. Do not assume that an entity must implement this interface.
  *
- * @author pemi, Emil Forslund
- * @param <ENTITY> type
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * @since   2.1
  */
-@Api(version = "2.2")
+@Api(version = "2.3")
 public interface Entity<ENTITY> {
 
     /**
@@ -53,12 +56,12 @@ public interface Entity<ENTITY> {
      * Returns a JSON representation of this Entity using the provided {@link
      * JsonEncoder}.
      *
-     * @param jsonFormatter to use as a formatter
+     * @param encoder to use as a JSON encoder
      * @return Returns a JSON representation of this Entity using the provided
      * {@link JsonEncoder}
      * @see JsonEncoder
      */
-    String toJson(JsonEncoder<ENTITY> jsonFormatter);
+    String toJson(JsonEncoder<ENTITY> encoder);
 
     /**
      * Persists this entity to the underlying database and returns a potentially
