@@ -190,6 +190,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final static Software[] DEPENDENCIES = {
         AbstractSoftware.with("Silk",          "1.3",     OpenSourceLicense.CC_BY_2_5),
         AbstractSoftware.with("ControlsFX",    "8.40.10", OpenSourceLicense.BSD_3_CLAUSE),
-        AbstractSoftware.with("FontawesomeFX", "8.8",     OpenSourceLicense.APACHE_2),
+        AbstractSoftware.with("FontawesomeFX", "8.9",     OpenSourceLicense.APACHE_2),
     };
 }
