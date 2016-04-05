@@ -311,7 +311,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final double noTables = schema.tables().count();
 
         return CompletableFuture.allOf(
-            schema.tables().map(table -> sqlTypeMapping.thenAccept(mapping -> {
+            schema.tables().map(table -> sqlTypeMapping.thenAcceptAsync(mapping -> {
                 try (final Connection connection = getConnection(dbms)) {
                     progressListener.setCurrentAction(actionName(table));
                     columns(connection, mapping, table, progressListener);
