@@ -44,7 +44,7 @@ public final class MariaDbDbmsType {
         .withDriverManagerName("MariaDB JDBC Driver")
         .withDefaultPort(3305)
         .withDbmsNameMeaning("Just a name")
-        .withDriverName("com.mysql.jdbc.Driver")
+        .withDriverName("org.mariadb.jdbc.Driver")
         .withDatabaseNamingConvention(NAMER)
         .withDbmsMapper(MySqlDbmsHandler::new)
         .withConnectionUrlGenerator(new MariaDbConnectionUrlGenerator())
