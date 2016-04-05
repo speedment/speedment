@@ -36,6 +36,7 @@
     <artifactId>speedment</artifactId>
     <version>2.3.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -44,6 +45,10 @@
     </properties>
     
     <name>Speedment</name>
+    <description>
+        Read and modify your database using standard Java 8-streams and 
+        generated entity classes.
+    </description>
     
     <licenses>
         <license>
