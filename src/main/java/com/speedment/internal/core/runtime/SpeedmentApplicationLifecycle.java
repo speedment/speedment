@@ -467,14 +467,31 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     protected void printWelcomeMessage() {
+
+        try {
+            final Package package_ = Runtime.class.getPackage();
+            final String javaMsg = package_.getSpecificationTitle()
+                + " " + package_.getSpecificationVersion()
+                + " by " + package_.getSpecificationVendor()
+                + ". Implementation "
+                + package_.getImplementationVendor()
+                + " " + package_.getImplementationVersion()
+                + " by " + package_.getImplementationVendor();
+            LOGGER.info(javaMsg);
+            if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
+                LOGGER.warn("The current Java version is out dated. Please upgrate to a more recent Java version.");
+            }
+        } catch (Exception e) {
+            LOGGER.info("Unknown Java version.");
+        }
+
         final String title = speedment.getUserInterfaceComponent().getBrand().title();
         final String subTitle = speedment.getUserInterfaceComponent().getBrand().subtitle();
         final String version = speedment.getUserInterfaceComponent().getBrand().version();
 
-        final String msg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
+        final String speedmentMsg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
             + " API version is " + getSpecificationVersion();
-
-        LOGGER.info(msg);
+        LOGGER.info(speedmentMsg);
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
         }
