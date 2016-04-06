@@ -17,6 +17,7 @@
 package com.speedment.internal.core.code;
 
 
+import com.google.gson.Gson;
 import com.speedment.Speedment;
 import com.speedment.code.JavaClassTranslator;
 import com.speedment.code.Translator;
@@ -36,6 +37,7 @@ import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
@@ -338,9 +340,39 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     .forEachOrdered((key, actor)
                         -> table().ifPresent(table -> table.childrenByKey()
                             .filterKey(key::equals)
+                            
+                            // the foreignKeys-property is special in that only
+                            // keys that reference enabled and existing table
+                            // and columns are to be included.
+                            .filter((k, v) -> {
+                                if (Table.FOREIGN_KEYS.equals(k)) {
+                                    return new ForeignKeyImpl(table, v)
+                                        .foreignKeyColumns()
+                                        .map(ForeignKeyColumn::findColumn)
+                                        .allMatch(c -> 
+                                            c.filter(Column::isEnabled)
+                                                .map(Column::getParentOrThrow)
+                                                .filter(Table::isEnabled)
+                                                .isPresent()
+                                        );
+                                    
+                                // Indexes, PrimaryKeyColumns and Columns should
+                                // be handled as usual.
+                                } else return true;
+                            })
+                            
+                            .peek((k, v) -> {
+                                System.out.println("Parsing first " + table.getName() + "." + k + ": " + v.get("name"));
+                            })
+                            
                             .values()
                             .map(data -> new BaseDocument(table, data))
                             .filter(HasEnabled::test)
+                            
+                            .peek(doc -> {
+                                System.out.println("Parsing second " + table.getName() + ": " + doc.getData().get("name"));
+                            })
+                            
                             .forEachOrdered(c -> actor.accept(model, c))
                         )
                     );
@@ -349,14 +381,17 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     schema().ifPresent(schema -> schema.tables()
                         .filter(HasEnabled::test)
                         .flatMap(t -> t.foreignKeys())
+                        .filter(HasEnabled::test)
                         .filter(fk -> fk.foreignKeyColumns()
                             .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
+                            .filter(HasEnabled::test)
+                            .filter(fkc -> fkc.findForeignColumn().map(HasEnabled::test).orElse(false))
                             .findFirst()
                             .isPresent()
                         ).forEachOrdered(fk
                             -> foreignKeyReferencesThisTableConsumers.get(phase).forEach(
-                            c -> c.accept(model, fk)
-                        )
+                                c -> c.accept(model, fk)
+                            )
                         )
                     );
                 }

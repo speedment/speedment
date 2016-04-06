@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 /**
  * Trait used to separate open source from commercial components.
  *
- * @author     Emil Forslund
+ * @author  Emil Forslund
  */
 @Api(version = "2.3")
 public interface License {

@@ -147,12 +147,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             /*** Fields ***/
             .forEveryColumn((intrf, col) -> {
                 
-                if (col.getName().startsWith("sales")) {
-                    int foo = 1;
-                }
-                
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
-                    EntityTranslatorSupport.getReferenceFieldType(file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
+                    EntityTranslatorSupport.getReferenceFieldType(
+                        file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
 
                 final String typeMapper      = col.getTypeMapper();
@@ -217,7 +214,6 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 Import imp = Import.of(fu.getEmt().getSupport().entityType());
                 file.add(imp);
 
-                fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
@@ -252,7 +248,6 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             .forEveryForeignKey((intrf, fk) -> {
 
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                fu.imports().forEachOrdered(file::add);
 
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {

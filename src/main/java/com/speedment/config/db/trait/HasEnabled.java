@@ -61,9 +61,7 @@ public interface HasEnabled extends Document {
      * @return     {@code true} if enabled, else {@code false}
      */
     static boolean test(Document doc) {
-        if (doc instanceof HasEnabled) {
-            return ((HasEnabled) doc).isEnabled();
-        } else return true;
+        return of(doc).isEnabled();
     }
     
     /**

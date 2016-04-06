@@ -71,7 +71,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
         final Class newClass = newBuilder(file, getSupport().generatedEntityImplName())
             /**
-             * * Getters **
+             * Getters
              */
             .forEveryColumn((clazz, col) -> {
                 final Type retType;
@@ -92,7 +92,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
             })
             /**
-             * * Setters **
+             * Setters
              */
             .forEveryColumn((clazz, col) -> {
                 clazz
@@ -104,11 +104,10 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                         .add("return this;"));
             })
             /**
-             * * Add streamers from back pointing foreign keys **
+             * Add streamers from back pointing foreign keys
              */
             .forEveryForeignKeyReferencingThis((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
@@ -120,12 +119,11 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 clazz.add(method);
             })
             /**
-             * * Add getter for ordinary foreign keys **
+             * Add getter for ordinary foreign keys
              */
             .forEveryForeignKey((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                fu.imports().forEachOrdered(file::add);
-
+                
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(OPTIONAL));
@@ -158,7 +156,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 clazz.add(method);
             })
             /**
-             * * Class details *
+             * Class details
              */
             .build()
             .public_()
@@ -166,10 +164,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .setSupertype(Type.of(AbstractBaseEntity.class).add(Generic.of().add(getSupport().entityType())))
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
-//            .add(copyConstructor(entity.getType(), CopyConstructorMode.SETTER));
 
         /**
-         * * Create aggregate streaming functions, if any **
+         * Create aggregate streaming functions, if any
          */
         fkStreamers.keySet().stream().forEach((referencingTable) -> {
             final List<String> methodNames = fkStreamers.get(referencingTable);
@@ -212,8 +209,6 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         final String entityName = namer.javaVariableName(getSupport().entityName());
         final Method result = Method.of("copy", getSupport().entityType()).public_().add(OVERRIDE)
             .add(
-                //"final " + Speedment.class.getSimpleName() + " speedment = speedment();",
-                // "",
                 "final " + getSupport().entityName() + " " + entityName + " = new " + getSupport().entityImplName() + "() {", indent(
                     "@Override",
                     "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(

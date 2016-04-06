@@ -19,6 +19,8 @@ package com.speedment.internal.license;
 import com.speedment.license.License;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
@@ -53,6 +55,29 @@ public abstract class AbstractLicense implements License {
     @Override
     public final Type getType() {
         return commercial;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Arrays.deepHashCode(this.urls);
+        hash = 97 * hash + Objects.hashCode(this.commercial);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { return true; }
+        else if (obj == null) { return false; }
+        else if (getClass() != obj.getClass()) { return false; }
+        
+        final AbstractLicense other = (AbstractLicense) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        } else if (!Arrays.deepEquals(this.urls, other.urls)) {
+            return false;
+        } else return this.commercial == other.commercial;
     }
     
     private AbstractLicense(String name, Type commercial, String... sources) {
