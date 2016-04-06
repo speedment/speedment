@@ -122,6 +122,9 @@ Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers
 Using Maven
 -----------
 To use Speedment, just add the following lines (between the ... marker lines) to your project's `pom.xml` file.
+
+### MySQL
+
 ```xml
 <build>
     <plugins>
@@ -129,7 +132,14 @@ To use Speedment, just add the following lines (between the ... marker lines) to
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
-            <version>${speedment.version}</version>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.38</version>
+                </dependency>
+            </dependencies> 
         </plugin>
         ...
     </plugins>
@@ -139,11 +149,91 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>${speedment.version}</version>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.38</version>
     </dependency>
     ...
 </dependencies>
 ```
+
+### PostgreSQL
+
+```xml
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>9.4-1206-jdbc4</version>
+                </dependency>
+            </dependencies> 
+        </plugin>
+        ...
+    </plugins>
+</build>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.4-1206-jdbc4</version>
+    </dependency>
+    ...
+</dependencies>
+```
+
+### MariaDB
+
+```xml
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mariadb.jdbc</groupId>
+                    <artifactId>mariadb-java-client</artifactId>
+                    <version>1.4.0</version>
+                </dependency>
+            </dependencies> 
+        </plugin>
+        ...
+    </plugins>
+</build>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>1.4.0</version>
+    </dependency>
+    ...
+</dependencies>
+```
+
 
 Make sure that you use the latest `${speedment.version}` available.
 
