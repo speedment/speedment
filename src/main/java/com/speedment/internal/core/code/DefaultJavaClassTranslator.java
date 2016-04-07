@@ -17,7 +17,6 @@
 package com.speedment.internal.core.code;
 
 
-import com.google.gson.Gson;
 import com.speedment.Speedment;
 import com.speedment.code.JavaClassTranslator;
 import com.speedment.code.Translator;
@@ -360,19 +359,9 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                                 // be handled as usual.
                                 } else return true;
                             })
-                            
-                            .peek((k, v) -> {
-                                System.out.println("Parsing first " + table.getName() + "." + k + ": " + v.get("name"));
-                            })
-                            
                             .values()
                             .map(data -> new BaseDocument(table, data))
-                            .filter(HasEnabled::test)
-                            
-                            .peek(doc -> {
-                                System.out.println("Parsing second " + table.getName() + ": " + doc.getData().get("name"));
-                            })
-                            
+                            .filter(HasEnabled::test)                            
                             .forEachOrdered(c -> actor.accept(model, c))
                         )
                     );
