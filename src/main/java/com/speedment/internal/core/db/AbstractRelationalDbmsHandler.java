@@ -543,8 +543,9 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      */
     protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
         final String isAutoIncrementString = md.getIsAutoincrement();
+        final String isGeneratedColumnString = md.getIsGeneratedcolumn();
 
-        if (YES.equalsIgnoreCase(isAutoIncrementString) /* || YES.equalsIgnoreCase(isGeneratedColumnString)*/) {
+        if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
             column.mutator().setAutoIncrement(true);
         }
     }
