@@ -479,7 +479,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
             if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
-                LOGGER.warn("The current Java version is out dated. Please upgrate to a more recent Java version.");
+                LOGGER.warn("The current Java version is outdated. Please upgrate to a more recent Java version.");
             }
         } catch (Exception e) {
             LOGGER.info("Unknown Java version.");
