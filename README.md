@@ -244,7 +244,9 @@ Speedment comes with support for the following databases out-of-the-box:
 * MariaDB
 * PostgreSQL
 
-As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
+Support for commercial databases like Oracle can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
+
+As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
 
 License
 -------
