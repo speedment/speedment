@@ -63,7 +63,7 @@ public final class TypeView implements Transform<Type, String> {
         requireNonNull(name);
         
 		return Optional.of(
-			name + gen.onEach(model.getGenerics()).collect(
+			name.replace(DOLLAR, DOT) + gen.onEach(model.getGenerics()).collect(
 				joinIfNotEmpty(
 					COMMA_SPACE, 
 					SS, 

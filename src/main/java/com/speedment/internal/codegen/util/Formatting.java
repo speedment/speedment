@@ -289,10 +289,11 @@ public final class Formatting {
      * @return The name part.
      */
     public static String shortName(String longName) {
-        if (longName.contains(DOT)) {
-            return longName.substring(longName.lastIndexOf(DOT) + 1);
+        final String temp = longName.replace(DOLLAR, DOT);
+        if (temp.contains(DOT)) {
+            return temp.substring(temp.lastIndexOf(DOT) + 1);
         } else {
-            return longName;
+            return temp;
         }
     }
 
