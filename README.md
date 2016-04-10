@@ -34,7 +34,7 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy initialization
 A `HareApplication` class is generated from the database.
 ```java
-Speedment speedment = new HareApplication().withPassword(new String("myPwd729").toCharArray()).build();
+Speedment speedment = new HareApplication().withPassword("myPwd729").build();
 Manager<Hare> hares = speedment.managerOf(Hare.class);
 ```
 
@@ -122,6 +122,9 @@ Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers
 Using Maven
 -----------
 To use Speedment, just add the following lines (between the ... marker lines) to your project's `pom.xml` file.
+
+### MySQL
+
 ```xml
 <build>
     <plugins>
@@ -129,7 +132,14 @@ To use Speedment, just add the following lines (between the ... marker lines) to
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
-            <version>${speedment.version}</version>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.38</version>
+                </dependency>
+            </dependencies> 
         </plugin>
         ...
     </plugins>
@@ -139,11 +149,91 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>${speedment.version}</version>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.38</version>
     </dependency>
     ...
 </dependencies>
 ```
+
+### PostgreSQL
+
+```xml
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>9.4-1206-jdbc4</version>
+                </dependency>
+            </dependencies> 
+        </plugin>
+        ...
+    </plugins>
+</build>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.4-1206-jdbc4</version>
+    </dependency>
+    ...
+</dependencies>
+```
+
+### MariaDB
+
+```xml
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>2.3.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mariadb.jdbc</groupId>
+                    <artifactId>mariadb-java-client</artifactId>
+                    <version>1.4.0</version>
+                </dependency>
+            </dependencies> 
+        </plugin>
+        ...
+    </plugins>
+</build>
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>1.4.0</version>
+    </dependency>
+    ...
+</dependencies>
+```
+
 
 Make sure that you use the latest `${speedment.version}` available.
 
@@ -154,7 +244,9 @@ Speedment comes with support for the following databases out-of-the-box:
 * MariaDB
 * PostgreSQL
 
-As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8.
+Support for commercial databases like Oracle can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
+
+As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
 
 License
 -------
@@ -165,7 +257,6 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 #### Copyright
 
 Copyright (c) 2015, Speedment, Inc. All Rights Reserved.
-
 Visit [www.speedment.org](http://www.speedment.org/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
