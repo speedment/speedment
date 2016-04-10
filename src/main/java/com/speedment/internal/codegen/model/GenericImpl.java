@@ -25,6 +25,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import static com.speedment.util.NullUtil.requireNonNullElements;
 
 /**
  * This is the default implementation of the {@link Generic} interface.

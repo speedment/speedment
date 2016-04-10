@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports

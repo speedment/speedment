@@ -36,6 +36,9 @@ import com.speedment.internal.core.runtime.ApplicationMetadata;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

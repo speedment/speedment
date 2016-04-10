@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Constant implementations of the {@link Type} interface that can be used to

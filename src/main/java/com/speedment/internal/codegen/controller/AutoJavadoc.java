@@ -31,6 +31,7 @@ import static com.speedment.internal.codegen.util.Formatting.SE;
 import static com.speedment.internal.codegen.util.Formatting.SS;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control generates javadoc stubs for all models descending from the

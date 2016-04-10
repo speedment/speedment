@@ -56,6 +56,34 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

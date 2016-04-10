@@ -24,6 +24,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents the generic part of a type declaration in code. A
@@ -152,7 +153,7 @@ public interface Generic extends HasCopy<Generic> {
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * {@link #setMapper(Supplier) setSupplier} method.
      *
      * @return the new instance
      */
@@ -166,7 +167,7 @@ public interface Generic extends HasCopy<Generic> {
      *
      * @param supplier the new constructor
      */
-    static void setSupplier(Supplier<Generic> supplier) {
+    static void setMapper(Supplier<Generic> supplier) {
         Factory.INST.supplier = requireNonNull(supplier);
     }
 }

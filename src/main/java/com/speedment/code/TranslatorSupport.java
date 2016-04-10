@@ -33,6 +33,7 @@ import com.speedment.internal.util.document.DocumentUtil;
 import com.speedment.util.JavaLanguageNamer;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A support class for the {@link Translator} interface that holds various

@@ -34,6 +34,13 @@ import com.speedment.internal.core.manager.sql.SqlManager;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

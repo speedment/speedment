@@ -29,6 +29,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Control that is used to generate setters, getters and adders for fields in 

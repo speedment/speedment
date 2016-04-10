@@ -59,6 +59,27 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
