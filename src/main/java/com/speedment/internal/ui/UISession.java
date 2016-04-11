@@ -829,16 +829,18 @@ public final class UISession {
         speedment.getUserInterfaceComponent().getOutputMessages().add(line);
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGitter() {
-        return on(event -> browse(GITTER_URI));
+        @SuppressWarnings("unchecked")
+        final E handler = (E) on(event -> browse(GITTER_URI));
+        return handler;
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        return on(event -> browse(GITHUB_URI));
+        @SuppressWarnings("unchecked")
+        final E handler = (E) on(event -> browse(GITHUB_URI));
+        return handler;
     }
-
+    
     public void browse(String url) {
         application.getHostServices().showDocument(url);
     }
