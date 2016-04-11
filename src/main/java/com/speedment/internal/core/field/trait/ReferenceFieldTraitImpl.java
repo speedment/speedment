@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.methods.FieldSetter;
@@ -27,7 +29,9 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.FieldSetterImpl;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNotNullPredicate;
 import com.speedment.internal.core.field.predicate.impl.reference.IsNullPredicate;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * @param <ENTITY> the entity type
@@ -89,5 +93,10 @@ public class ReferenceFieldTraitImpl<ENTITY, D, V> implements ReferenceFieldTrai
         @SuppressWarnings("unchecked")
         final FieldIdentifier<ENTITY> result = (FieldIdentifier<ENTITY>) field.getIdentifier();
         return result;
+    }
+
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
     }
 }

@@ -16,9 +16,13 @@
  */
 package com.speedment.internal.core.field.trait;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  *
@@ -47,5 +51,10 @@ public class FieldTraitImpl implements FieldTrait {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {columnName: '" + getIdentifier().columnName() + "'}";
+    }
+
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, identifier));
     }
 }

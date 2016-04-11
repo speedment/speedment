@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.ReferenceField;
@@ -27,7 +29,9 @@ import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.util.Optional;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that
@@ -62,6 +66,11 @@ public class ReferenceFieldImpl<ENTITY, D, V> implements ReferenceField<ENTITY, 
     @Override
     public boolean isUnique() {
         return field.isUnique();
+    }
+    
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
     }
 
     @Override

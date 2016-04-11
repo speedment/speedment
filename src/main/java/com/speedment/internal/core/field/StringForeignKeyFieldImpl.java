@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
@@ -37,8 +39,10 @@ import com.speedment.internal.core.field.trait.FieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
 import com.speedment.internal.core.field.trait.StringFieldTraitImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -81,6 +85,11 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     @Override
     public boolean isUnique() {
         return field.isUnique();
+    }
+    
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
     }
 
     @Override
