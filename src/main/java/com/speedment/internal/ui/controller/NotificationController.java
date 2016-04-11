@@ -65,7 +65,6 @@ public final class NotificationController implements Initializable {
     
     private @FXML Label notification;
     
-    
     private NotificationController(String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
         this.message = requireNonNull(message);
         this.icon    = requireNonNull(icon);
@@ -88,19 +87,26 @@ public final class NotificationController implements Initializable {
     public @FXML void close() {
         if (destroyed.compareAndSet(false, true)) {
             onClose.run();
-
-            final FadeTransition fade = new FadeTransition(millis(EXIT_SPEED), notification);
-            fade.setFromValue(1);
-            fade.setToValue(0);
-
-            final TranslateTransition trans = new TranslateTransition(millis(EXIT_SPEED), notification);
-            trans.setFromY(0);
-            trans.setToY(ENTER_Y);
-
-            final SequentialTransition seq = new SequentialTransition(fade, trans);
-            seq.setOnFinished(ev -> remove(notification));
-            seq.play();
+            remove(notification);
         }
+    }
+    
+    private void fadeAway() {
+        final FadeTransition fade = new FadeTransition(millis(EXIT_SPEED), notification);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+
+        final TranslateTransition trans = new TranslateTransition(millis(EXIT_SPEED), notification);
+        trans.setFromY(0);
+        trans.setToY(ENTER_Y);
+
+        final SequentialTransition seq = new SequentialTransition(fade, trans);
+        seq.setOnFinished(ev -> {
+            if (destroyed.compareAndSet(false, true)) {
+                remove(notification);
+            }
+        });
+        seq.play();
     }
 
     static void showNotification(FlowPane area, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
@@ -133,7 +139,7 @@ public final class NotificationController implements Initializable {
         fade.play();
         
         final Timeline timeline = new Timeline(new KeyFrame(
-            TIMER, ev -> ref.get().close()
+            TIMER, ev -> ref.get().fadeAway()
         ));
         timeline.play();
     }
@@ -200,11 +206,6 @@ public final class NotificationController implements Initializable {
         ENTER_Y = 100;
     
     private final static String ICON_SIZE = "24";
-    private final static FontAwesomeIcon DEFAULT_ICON = FontAwesomeIcon.EXCLAMATION;
-    private final static Color DEFAULT_COLOR = BLUE;
-    
     private final static String NOTIFICATION_FXML = "/fxml/Notification.fxml";
-    private final static String NOTIFICATION_AREA_ID = "#notificationArea";
-    
     private final static Duration TIMER = Duration.seconds(10);
 }

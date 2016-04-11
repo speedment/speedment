@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.Cursor?>
 
 <Label fx:id="notification" 
        styleClass="notification"
@@ -14,6 +15,9 @@
        xmlns="http://javafx.com/javafx/8.0.65" 
        fx:controller="com.speedment.internal.ui.controller.NotificationController">
     <effect>
-      <DropShadow color="#00000080" height="8.0" offsetY="1.0" radius="3.5" width="8.0" />
-   </effect>
+        <DropShadow color="#00000080" height="8.0" offsetY="1.0" radius="3.5" width="8.0" />
+    </effect>
+    <cursor>
+        <Cursor fx:constant="HAND" />
+    </cursor>
 </Label>
