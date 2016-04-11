@@ -716,7 +716,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 conn = getConnection(dbms);
                 conn.setAutoCommit(false);
                 for (final SqlStatement sqlStatement : sqlStatementList) {
-
+                    lastSqlStatement = sqlStatement;
                     switch (sqlStatement.getType()) {
                         case INSERT: {
                             final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
