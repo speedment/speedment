@@ -31,9 +31,9 @@ import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 public final class SpeedmentVersion {
 
     private static final String IMPLEMENTATION_TITLE = "Speedment",
-        IMPLEMENTATION_VENDOR = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
+        IMPLEMENTATION_VENDOR  = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
         IMPLEMENTATION_VERSION = "2.3.2",
-        SPECIFICATION_VERSION = "2.3";
+        SPECIFICATION_VERSION  = "2.3";
 
     private static final boolean PRODUCTION_MODE = true;
 
