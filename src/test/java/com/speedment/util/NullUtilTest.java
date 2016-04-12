@@ -7,7 +7,6 @@ package com.speedment.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -91,165 +90,134 @@ public class NullUtilTest {
     public void testRequireNonNullElements_GenericType_String() {
         final String msg = "OlleOchTryggve";
         try {
-            final Object[] result = NullUtil.requireNonNullElements(ARRAY_WITH_NULL, msg);
+            final String[] result = NullUtil.requireNonNullElements(ARRAY_WITH_NULL, msg);
         } catch (NullPointerException ex) {
             assertTrue(ex.getMessage().contains(msg));
             throw ex;
         }
     }
 
+    @Test
+    public void testRequireNonNullElements_GenericType_String_Ok() {
+        final String[] result = NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL, "A");
+        assertArrayEquals(ARRAY_WITHOUT_NULL, result);
+    }
+
     @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_Object() {
-        Object o0 = null;
+        final String o0 = null;
         NullUtil.requireNonNulls(o0);
     }
 
     @Test
     public void testRequireNonNulls_Object_NotNull() {
-        Object o0 = "A";
+        final String o0 = "A";
         NullUtil.requireNonNulls(o0);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRequireNonNulls_Object_Object() {
-        Object o0 = "A";
-        Object o1 = null;
-        NullUtil.requireNonNulls(o0, o1);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj0));
+        NullUtil.requireNonNulls(obj0, obj1);
     }
 
     @Test
-    public void testRequireNonNulls_Object_Object_NotNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        NullUtil.requireNonNulls(o0, o1);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_3args() {
-        Object o0 = "A";
-        Object o1 = null;
-        Object o2 = "C";
-        NullUtil.requireNonNulls(o0, o1, o2);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2);
     }
 
     @Test
-    public void testRequireNonNulls_3args_NotNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        NullUtil.requireNonNulls(o0, o1, o2);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_4args() {
-        Object o0 = null;
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = null;
-        NullUtil.requireNonNulls(o0, o1, o2, o3);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        final String obj3 = "D";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2, obj3));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2, obj3));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null, obj3));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2, obj3);
     }
 
     @Test
-    public void testRequireNonNulls_4args_NotNul() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        NullUtil.requireNonNulls(o0, o1, o2, o3);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_5args() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = null;
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        final String obj3 = "D";
+        final String obj4 = "E";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2, obj3, obj4));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2, obj3, obj4));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null, obj3, obj4));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, null, obj4));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4);
     }
 
     @Test
-    public void testRequireNonNulls_5args_NotNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = "E";
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_6args() {
-        Object o0 = null;
-        Object o1 = null;
-        Object o2 = null;
-        Object o3 = null;
-        Object o4 = null;
-        Object o5 = null;
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4, o5);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        final String obj3 = "D";
+        final String obj4 = "E";
+        final String obj5 = "F";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2, obj3, obj4, obj5));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2, obj3, obj4, obj5));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null, obj3, obj4, obj5));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, null, obj4, obj5));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, null, obj5));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5);
     }
 
     @Test
-    public void testRequireNonNulls_6args_NotNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = "E";
-        Object o5 = "F";
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4, o5);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testRequireNonNulls_7args() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = "E";
-        Object o5 = null;
-        Object o6 = "G";
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4, o5, o6);
-    }
-
-    @Test
-    public void testRequireNonNulls_7args_NotNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = "E";
-        Object o5 = "F";
-        Object o6 = "G";
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4, o5, o6);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        final String obj3 = "D";
+        final String obj4 = "E";
+        final String obj5 = "F";
+        final String obj6 = "G";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2, obj3, obj4, obj5, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2, obj3, obj4, obj5, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null, obj3, obj4, obj5, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, null, obj4, obj5, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, null, obj5, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, null, obj6));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, obj6);
     }
 
     @Test
     public void testRequireNonNulls_8args() {
-        final List<String> list = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H");
-        for (int i = 0; i < 8; i++) {
-            final List<String> l = new ArrayList<>(list);
-            l.set(i, null);
-            try {
-                NullUtil.requireNonNulls(l.get(0), l.get(1), l.get(2), l.get(3), l.get(4), l.get(5), l.get(6), l.get(7));
-                fail(l + " did not render an NPE");
-            } catch (NullPointerException npe) {
-                // Ignored
-            }
-        }
-    }
-
-    @Test
-    public void testRequireNonNulls_8args_NoNull() {
-        Object o0 = "A";
-        Object o1 = "B";
-        Object o2 = "C";
-        Object o3 = "D";
-        Object o4 = "E";
-        Object o5 = "F";
-        Object o6 = "G";
-        Object o7 = "H";
-        NullUtil.requireNonNulls(o0, o1, o2, o3, o4, o5, o6, o7);
+        final String obj0 = "A";
+        final String obj1 = "B";
+        final String obj2 = "C";
+        final String obj3 = "D";
+        final String obj4 = "E";
+        final String obj5 = "F";
+        final String obj6 = "G";
+        final String obj7 = "H";
+        requireNullPointerException(() -> NullUtil.requireNonNulls(null, obj1, obj2, obj3, obj4, obj5, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null, obj2, obj3, obj4, obj5, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, null, obj3, obj4, obj5, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, null, obj4, obj5, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, null, obj5, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, null, obj6, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, null, obj7));
+        requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, obj6, null));
+        NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7);
     }
 
     @Test(expected = NullPointerException.class)
@@ -264,7 +232,8 @@ public class NullUtilTest {
 
     @Test(expected = NullPointerException.class)
     public void testRequireKeys_2args_2() {
-        NullUtil.requireKeys(null, "A");
+        final String[] arr = {"A"};
+        NullUtil.requireKeys((Map<String, String>) null, arr);
     }
 
     @Test(expected = NullPointerException.class)
@@ -272,11 +241,22 @@ public class NullUtilTest {
         NullUtil.requireKeys(new HashMap<String, String>(), (String) null);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testRequireKeys_2args_2_3_err() {
+        final Map<String, String> map = new HashMap<>();
+        map.put("A", "Tryggve");
+        map.put("B", "Sven");
+        final String[] arr = {"A", "B", "StangeKey"};
+        final Map<String, String> result = NullUtil.requireKeys(map, arr);
+    }
+
     @Test
     public void testRequireKeys_2args_2_3() {
         final Map<String, String> map = new HashMap<>();
         map.put("A", "Tryggve");
-        final Map<String, String> result = NullUtil.requireKeys(map, "A");
+        map.put("B", "Sven");
+        final String[] arr = {"A", "B"};
+        final Map<String, String> result = NullUtil.requireKeys(map, arr);
         assertEquals(map, result);
     }
 
@@ -286,7 +266,6 @@ public class NullUtilTest {
         map.put("A", "Tryggve");
         map.put("B", "Sven");
         final Map<String, String> result = NullUtil.requireKeys(map, "A", "Z");
-        assertEquals(map, result);
     }
 
     @Test
@@ -305,7 +284,6 @@ public class NullUtilTest {
         map.put("B", "Sven");
         map.put("C", "Glenn");
         final Map<String, String> result = NullUtil.requireKeys(map, "A", "B", "Z");
-        assertEquals(map, result);
     }
 
     @Test
@@ -326,6 +304,15 @@ public class NullUtilTest {
             final NullUtil nullUtil = constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             // Must fail
+        }
+    }
+
+    private void requireNullPointerException(Runnable r) {
+        try {
+            r.run();
+            fail(NullPointerException.class.getSimpleName() + " was not thrown");
+        } catch (NullPointerException npe) {
+            // Ignore
         }
     }
 
