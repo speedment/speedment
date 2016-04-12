@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.ui.controller;
 
-import com.speedment.SpeedmentVersion;
 import com.speedment.component.Component;
 import com.speedment.component.brand.Brand;
 import com.speedment.event.UIEvent;
@@ -55,6 +54,7 @@ public final class AboutController implements Initializable {
     private @FXML Button close;
     private @FXML Label version;
     private @FXML Label external;
+    private @FXML Label license;
     
     private Stage dialog;
     
@@ -65,14 +65,12 @@ public final class AboutController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        session.getSpeedment().getUserInterfaceComponent()
-            .getBrand()
-            .logoLarge()
-            .map(Image::new)
-            .ifPresent(titleImage::setImage);
+        final Brand brand = session.getSpeedment().getUserInterfaceComponent().getBrand();
+        brand.logoLarge().map(Image::new).ifPresent(titleImage::setImage);
         
-        version.setText(SpeedmentVersion.getImplementationVersion());
-
+        license.setText(license.getText().replace("{title}", brand.title()));
+        version.setText(brand.version());
+        
         external.setText(
             MapStream.of(session.getSpeedment().components()
                 .map(Component::asSoftware)
