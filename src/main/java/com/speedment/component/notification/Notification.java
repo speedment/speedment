@@ -17,8 +17,8 @@
 package com.speedment.component.notification;
 
 import com.speedment.annotation.Api;
+import com.speedment.component.brand.Palette;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.scene.paint.Color;
 
 /**
  * Container for the fields required to show a notification in the UI.
@@ -44,11 +44,11 @@ public interface Notification {
     String text();
     
     /**
-     * The color to use for the icon and border.
+     * The color palette to use for the icon and border.
      * 
-     * @return  the color
+     * @return  the color palette
      */
-    Color color();
+    Palette palette();
     
     /**
      * An action that should be called when the notification is closed.

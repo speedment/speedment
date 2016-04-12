@@ -20,6 +20,7 @@ import com.speedment.Speedment;
 import com.speedment.code.TranslatorManager;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.brand.Brand;
+import com.speedment.component.brand.Palette;
 import com.speedment.component.notification.Notification;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
@@ -32,13 +33,11 @@ import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.controller.ConnectController;
-import com.speedment.internal.ui.controller.NotificationController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
 import static com.speedment.internal.ui.util.OutputUtil.success;
 import com.speedment.internal.util.Settings;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.internal.util.testing.Stopwatch;
 import com.speedment.ui.config.DocumentProperty;
@@ -54,7 +53,6 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -86,10 +84,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -303,7 +302,7 @@ public final class UISession {
                     "Generation completed! " + instance.getFilesCreated() + 
                     " files created.", 
                     FontAwesomeIcon.STAR,
-                    NotificationController.GREEN
+                    Palette.SUCCESS
                 );
             } catch (final Exception ex) {
                 if (!stopwatch.isStopped()) {
@@ -606,13 +605,13 @@ public final class UISession {
         
         private final String message;
         private final FontAwesomeIcon icon;
-        private final Color color;
+        private final Palette palette;
         private final Runnable onClose;
 
-        public NotificationImpl(String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+        public NotificationImpl(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
             this.message = requireNonNull(message);
             this.icon    = requireNonNull(icon);
-            this.color   = requireNonNull(color);
+            this.palette = requireNonNull(palette);
             this.onClose = requireNonNull(onClose);
         }
         
@@ -627,8 +626,8 @@ public final class UISession {
         }
         
         @Override
-        public Color color() {
-            return color;
+        public Palette palette() {
+            return palette;
         }
 
         @Override
@@ -642,23 +641,23 @@ public final class UISession {
     }
     
     public void showNotification(String message, FontAwesomeIcon icon) {
-        showNotification(message, icon, NotificationController.BLUE);
+        showNotification(message, icon, Palette.INFO);
     }
     
     public void showNotification(String message, Runnable action) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, NotificationController.BLUE, action);
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, Palette.INFO, action);
     }
     
-    public void showNotification(String message, Color color) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, color);
+    public void showNotification(String message, Palette palette) {
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, palette);
     }
     
-    public void showNotification(String message, FontAwesomeIcon icon, Color color) {
-        showNotification(message, icon, color, () -> {});
+    public void showNotification(String message, FontAwesomeIcon icon, Palette palette) {
+        showNotification(message, icon, palette, () -> {});
     }
     
-    public void showNotification(String message, FontAwesomeIcon icon, Color color, Runnable action) {
-        notifications.add(new NotificationImpl(message, icon, color, action));
+    public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
+        notifications.add(new NotificationImpl(message, icon, palette, action));
     }
 
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
@@ -694,7 +693,7 @@ public final class UISession {
                 showNotification(
                     "Database metadata has been loaded.", 
                     FontAwesomeIcon.DATABASE, 
-                    NotificationController.GREEN
+                    Palette.INFO
                 );
             }
             
@@ -813,7 +812,7 @@ public final class UISession {
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
             log(success("Saved project file to '" + absolute + "'."));
-            showNotification("Configuration saved.", FontAwesomeIcon.SAVE, NotificationController.GREEN);
+            showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
             currentlyOpenFile = file;
 
         } catch (IOException ex) {
