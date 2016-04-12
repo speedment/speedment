@@ -379,6 +379,10 @@
     -fx-background-color: -fx-speedment-red;
 }
 
+.warning .header-panel {
+    -fx-background-color: -fx-sencha-orange1;
+}
+
 .confirmation .header-panel {
     -fx-background-color: -fx-speedment-orange;
 }
