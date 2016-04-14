@@ -33,7 +33,6 @@ import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.db.DbmsHandler;
-import com.speedment.db.SqlFunction;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
@@ -42,17 +41,14 @@ import com.speedment.internal.logging.LoggerManager;
 import com.speedment.internal.util.Statistics;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentTranscoder;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.manager.Manager;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuple3;
 import com.speedment.util.tuple.Tuples;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -531,10 +527,10 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void loadAndSetProject() {
         final ApplicationMetadata meta = getSpeedmentApplicationMetadata();
         final Project project;
+        
         if (meta != null) {
             project = DocumentTranscoder.load(meta.getMetadata());
         } else {
-            //LOGGER.warn("Creating empty project since no metadata is present.");
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasName.NAME, "Project");
             project = new ProjectImpl(data);
@@ -546,13 +542,12 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             @SuppressWarnings("unchecked")
             final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
             DocumentDbUtil.traverseOver(project)
-                // .peek(System.out::println)
                 .filter(clazz::isInstance)
                 .map(Document.class::cast)
                 .forEachOrdered(consumer::accept);
         });
 
-        // Apply a named overidden item (if any) for all ConfigEntities of a given class
+        // Apply a named overidden item (if any) for all Entities of a given class
         withsNamed.forEach(t3 -> {
             final Class<? extends Document> clazz = t3.get0();
             final String name = t3.get1();
@@ -563,8 +558,8 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
                 .filter(HasName.class::isInstance)
-                .map(d -> (Document & HasName) d)
-                .filter(c -> name.equals(relativeName(c, Project.class)))
+                .map(HasName.class::cast)
+                .filter(c -> name.equals(relativeName(c, Project.class, DATABASE_NAME)))
                 .forEachOrdered(consumer::accept);
         });
 
@@ -689,41 +684,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void checkDatabaseConnectivity() {
         final Project project = speedment.getProjectComponent().getProject();
         project.dbmses().forEachOrdered(dbms -> {
-            //final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(speedment, dbms);
             final DbmsHandler dbmsHandler = speedment.getDbmsHandlerComponent().get(dbms);
             try {
                 LOGGER.info(dbmsHandler.getDbmsInfoString());
             } catch (Exception e) {
                 LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
             }
-//            try (Connection conn = dbmsHandler.executeDelete(sql, withsAll)){
-            //final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
-//                if (!oInfo.isPresent()) {
-//                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
-//                } else {
-//                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
-//                }
-//            } catch (Exception e) {
-//                LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
-//            }
         });
-    }
-
-    private class RsMapper implements SqlFunction<ResultSet, Map<String, String>> {
-
-        @Override
-        public Map<String, String> apply(ResultSet rs) throws SQLException {
-            final Map<String, String> map = new LinkedHashMap<>();
-            final ResultSetMetaData md = rs.getMetaData();
-            int columns = md.getColumnCount();
-            for (int i = 0; i < columns; i++) {
-                final String key = md.getColumnLabel(i + 1);
-                final String value = rs.getObject(i + 1).toString();
-                map.put(key, value);
-            }
-            return map;
-        }
-
     }
 
     private char[] stringToCharArray(String s) {

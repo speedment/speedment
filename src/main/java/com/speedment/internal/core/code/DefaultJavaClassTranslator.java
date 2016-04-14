@@ -57,27 +57,19 @@ import com.speedment.internal.core.config.db.IndexImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.SchemaImpl;
 import com.speedment.internal.core.config.db.TableImpl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.stream.MapStream;
 import com.speedment.util.JavaLanguageNamer;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -206,7 +198,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
             getJavadocRepresentText()
             + " representing an entity (for example, a row) in the "
             + getDocument().mainInterface().getSimpleName()
-            + " " + relativeName(getDocument(), Project.class)
+            + " " + relativeName(getDocument(), Project.class, DATABASE_NAME)
             + "." + message
         ).add(AUTHOR.setValue(owner));
     }

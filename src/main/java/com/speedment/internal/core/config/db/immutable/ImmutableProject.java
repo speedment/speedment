@@ -22,6 +22,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.stream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
@@ -63,7 +64,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         
         this.tablesByName = MapStream.fromValues(
             DocumentDbUtil.traverseOver(this, ImmutableTable.class),
-            table -> DocumentUtil.relativeName(table, Dbms.class)
+            table -> DocumentUtil.relativeName(table, Dbms.class, DATABASE_NAME)
         ).toMap();
     }
 

@@ -30,8 +30,8 @@ import com.speedment.config.db.trait.HasName;
 import static com.speedment.internal.codegen.util.Formatting.shortName;
 import static com.speedment.internal.codegen.util.Formatting.ucfirst;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.util.JavaLanguageNamer;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
@@ -371,7 +371,7 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         if (document() instanceof Project) {
             return packName + namer().javaPackageName(projectOrThrow().getName());
         } else {
-            return packName + DocumentUtil.relativeName(document(), Project.class, namer()::javaPackageName);
+            return packName + DocumentUtil.relativeName(document(), Project.class, JAVA_NAME, namer()::javaPackageName);
         }
     }
     

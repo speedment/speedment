@@ -44,6 +44,7 @@ import com.speedment.internal.util.LazyString;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.stream.MapStream;
 import com.speedment.stream.StreamDecorator;
@@ -503,7 +504,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         if (!hasPrimaryKeyColumns) {
             throw new SpeedmentException(
                 "The table " + 
-                DocumentUtil.relativeName(getTable(), Project.class) + 
+                DocumentUtil.relativeName(getTable(), Project.class, DATABASE_NAME) + 
                 " does not have any primary keys. Some operations like " + 
                 "update() and remove() requires at least one primary key."
             );
