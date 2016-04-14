@@ -39,11 +39,7 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     public ManagerComponentImpl(Speedment speedment) {
         super(speedment);
         managersByEntity = new ConcurrentHashMap<>();
-        tableMap = new ConcurrentHashMap<>();
-    }
-
-    public ManagerComponentImpl(Speedment speedment, ManagerComponentImpl template) {
-        this(speedment);
+        tableMap         = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -84,7 +80,6 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
 
     @Override
     public ManagerComponent defaultCopy(Speedment speedment) {
-        return new ManagerComponentImpl(speedment, this);
+        return new ManagerComponentImpl(speedment);
     }
-
 }

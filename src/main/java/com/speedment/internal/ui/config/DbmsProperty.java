@@ -33,6 +33,7 @@ import com.speedment.ui.config.db.DefaultIntegerPropertyItem;
 import com.speedment.ui.config.db.DefaultStringPropertyItem;
 import com.speedment.ui.config.db.DefaultTextAreaPropertyItem;
 import com.speedment.ui.config.db.StringChoicePropertyItem;
+import com.speedment.ui.config.trait.HasAliasProperty;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
@@ -56,7 +57,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
-    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
+    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 
     public DbmsProperty(Project parent) {
         super(parent);
@@ -148,8 +149,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 .collect(toList())
         );
         
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(new StringChoicePropertyItem(
                     supportedTypes,
                     typeNameProperty(),
@@ -191,5 +194,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     @Override
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.DBMSES, key);
+    }
+
+    @Override
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
     }
 }

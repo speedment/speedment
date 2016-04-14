@@ -34,7 +34,6 @@ import static com.speedment.internal.codegen.model.constant.DefaultType.INT_PRIM
 import static com.speedment.internal.codegen.model.constant.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
-import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.code.AbstractBaseEntity;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
@@ -45,23 +44,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.internal.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 
@@ -81,9 +67,11 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     @Override
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
+        
+        file.add(Import.of(Type.of(Speedment.class)));
 
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
-        final Class newClass = newBuilder(file, getSupport().generatedEntityImplName())
+        return newBuilder(file, getSupport().generatedEntityImplName())
             /**
              * Getters
              */
@@ -126,6 +114,9 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
+                
+                
+                
                 final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
                 final Method method = Method.of(methodName, returnType).public_().add(OVERRIDE)
                     .add("return " + MANAGER_OF_METHOD + "(" + getSupport().typeName(fu.getTable()) + ".class)")
@@ -169,50 +160,48 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 }
                 clazz.add(method);
             })
+            
             /**
              * Class details
              */
+            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
+                clazz.add(copy(file))
+                    .add(toString(file))
+                    .add(equalsMethod())
+                    .add(hashCodeMethod())
+                    .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(getSupport().entityType()))).public_().add(OVERRIDE)
+                        .add("return " + getSupport().entityName() + ".class;")
+                    );
+                
+                /**
+                 * Create aggregate streaming functions, if any
+                 */
+                fkStreamers.keySet().stream().forEach(referencingTable -> {
+                    final List<String> methodNames = fkStreamers.get(referencingTable);
+                    if (!methodNames.isEmpty()) {
+                        final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable, getNamer()),
+                            Type.of(Stream.class).add(Generic.of().setLowerBound(getSupport().typeName(referencingTable)))
+                        ).public_().add(OVERRIDE);
+
+                        if (methodNames.size() == 1) {
+                            method.add("return " + methodNames.get(0) + "();");
+                        } else {
+                            file.add(Import.of(Type.of(Function.class)));
+                            method.add("return Stream.of("
+                                + methodNames.stream().map(n -> n + "()").collect(Collectors.joining(", "))
+                                + ").flatMap(Function.identity()).distinct();");
+                        }
+                        clazz.add(method);
+                    }
+                });
+            })
+            
             .build()
             .public_()
             .abstract_()
             .setSupertype(Type.of(AbstractBaseEntity.class).add(Generic.of().add(getSupport().entityType())))
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
-
-        /**
-         * Create aggregate streaming functions, if any
-         */
-        fkStreamers.keySet().stream().forEach((referencingTable) -> {
-            final List<String> methodNames = fkStreamers.get(referencingTable);
-            if (!methodNames.isEmpty()) {
-                final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable, getNamer()),
-                    Type.of(Stream.class).add(Generic.of().setLowerBound(getSupport().typeName(referencingTable)))
-                ).public_().add(OVERRIDE);
-
-                if (methodNames.size() == 1) {
-                    method.add("return " + methodNames.get(0) + "();");
-                } else {
-                    file.add(Import.of(Type.of(Function.class)));
-                    method.add("return Stream.of("
-                        + methodNames.stream().map(n -> n + "()").collect(Collectors.joining(", "))
-                        + ").flatMap(Function.identity()).distinct();");
-                }
-                newClass.add(method);
-            }
-        });
-
-        file.add(Import.of(Type.of(Speedment.class)));
-
-        newClass
-            .add(copy(file))
-            .add(toString(file))
-            .add(equalsMethod())
-            .add(hashCodeMethod())
-            .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(getSupport().entityType()))).public_().add(OVERRIDE)
-                .add("return " + getSupport().entityName() + ".class;")
-            );
-
-        return newClass;
 
     }
 
@@ -235,18 +224,16 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         columns().forEachOrdered(c -> {
             if (c.isNullable()) {
                 result.add(
-                    entityName + "."
-                    + GETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + "().ifPresent(this::"
-                    + SETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + ");"
+                    GETTER_METHOD_PREFIX + getSupport().typeName(c) +
+                    "().ifPresent(" + entityName + "::" +
+                    SETTER_METHOD_PREFIX + getSupport().typeName(c) +
+                    ");"
                 );
             } else {
                 result.add(
-                    SETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + "(" + entityName
-                    + ".get" + getSupport().typeName(c)
-                    + "());"
+                    entityName + "." + SETTER_METHOD_PREFIX + 
+                    getSupport().typeName(c) + "(get" + 
+                    getSupport().typeName(c) + "());"
                 );
             }
         });

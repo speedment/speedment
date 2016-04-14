@@ -46,19 +46,13 @@ import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
@@ -126,7 +120,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                             " of this " + getSupport().entityName() + 
                             ". The " + getSupport().variableName(col) + 
                             " field corresponds to the database column " +
-                            relativeName(col, Dbms.class) + "."
+                            relativeName(col, Dbms.class, DATABASE_NAME) + "."
                         ).add(RETURN.setText(
                             "the " + getSupport().variableName(col) + 
                             " of this " + getSupport().entityName()
@@ -144,7 +138,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         " of this " + getSupport().entityName() + 
                         ". The " + getSupport().variableName(col) + 
                         " field corresponds to the database column " +
-                        relativeName(col, Dbms.class) + "."
+                        relativeName(col, Dbms.class, DATABASE_NAME) + "."
                     )
                     .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
                     .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
