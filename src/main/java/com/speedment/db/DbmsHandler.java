@@ -20,6 +20,7 @@ import com.speedment.annotation.Api;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
+import com.speedment.db.trait.HasCreateFromConnectionMethods;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.util.ProgressMeasure;
@@ -42,7 +43,7 @@ import java.util.stream.Stream;
  * @since 2.0
  */
 @Api(version = "2.3")
-public interface DbmsHandler {
+public interface DbmsHandler extends HasCreateFromConnectionMethods {
 
     /**
      * A String predicate that always returns true.

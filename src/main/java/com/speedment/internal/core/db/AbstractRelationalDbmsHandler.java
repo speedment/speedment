@@ -62,15 +62,19 @@ import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.ProgressMeasure;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
@@ -1023,6 +1027,46 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static String normalize(String string) {
         return string.toUpperCase();
+    }
+
+    @Override
+    public Clob createClob() throws SQLException {
+        return applyOnConnection(Connection::createClob);
+    }
+
+    @Override
+    public Blob createBlob() throws SQLException {
+        return applyOnConnection(Connection::createBlob);
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return applyOnConnection(Connection::createNClob);
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return applyOnConnection(Connection::createSQLXML);
+    }
+
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        try (final Connection connection = getConnection(dbms)) {
+            return connection.createArrayOf(typeName, elements);
+        }
+    }
+
+    @Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        try (final Connection connection = getConnection(dbms)) {
+            return connection.createStruct(typeName, attributes);
+        }
+    }
+
+    private <T> T applyOnConnection(SqlFunction<Connection, T> mapper) throws SQLException {
+        try (final Connection c = getConnection(dbms)) {
+            return mapper.apply(c);
+        }
     }
 
 }

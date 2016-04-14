@@ -48,8 +48,14 @@ import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.stream.MapStream;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.NClob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Struct;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +84,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final LazyString sqlSelect;
     private final Map<String, FieldTrait> fieldTraitMap;
     private final boolean hasPrimaryKeyColumns;
-    
+
     private SqlFunction<ResultSet, ENTITY> entityMapper;
 
     protected AbstractSqlManager(Speedment speedment) {
@@ -86,7 +92,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         this.sqlColumnList = LazyString.create();
         this.sqlTableReference = LazyString.create();
         this.sqlSelect = LazyString.create();
-        
+
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
@@ -107,7 +113,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .mapKey(FieldTrait::getIdentifier)
             .mapKey(FieldIdentifier::columnName)
             .toMap();
-        
+
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
 
@@ -450,7 +456,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, 
+        executeHelper(sql, values, listener,
             () -> dbmsHandler().executeInsert(
                 sql, values, generatedFields, generatedKeyconsumer.apply(entity)
             )
@@ -502,11 +508,42 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private void assertHasPrimaryKeyColumns() {
         if (!hasPrimaryKeyColumns) {
             throw new SpeedmentException(
-                "The table " + 
-                DocumentUtil.relativeName(getTable(), Project.class) + 
-                " does not have any primary keys. Some operations like " + 
-                "update() and remove() requires at least one primary key."
+                "The table "
+                + DocumentUtil.relativeName(getTable(), Project.class)
+                + " does not have any primary keys. Some operations like "
+                + "update() and remove() requires at least one primary key."
             );
         }
     }
+
+    @Override
+    public Clob createClob() throws SQLException {
+        return dbmsHandler().createClob();
+    }
+
+    @Override
+    public Blob createBlob() throws SQLException {
+        return dbmsHandler().createBlob();
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return dbmsHandler().createNClob();
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return dbmsHandler().createSQLXML();
+    }
+
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        return dbmsHandler().createArrayOf(typeName, elements);
+    }
+
+    @Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        return dbmsHandler().createStruct(typeName, attributes);
+    }
+
 }
