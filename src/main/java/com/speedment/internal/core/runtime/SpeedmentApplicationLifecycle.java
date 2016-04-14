@@ -357,16 +357,36 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     /**
      * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform by applying the provided component mapper with the
+     * runtime platform by applying the provided component constructor with the
      * internal Speedment instance.
      *
-     * @param <C> the component type
-     * @param componentMapper to use when adding/replacing a component
+     * @param <C> the component constructor type
+     * @param componentConstructor to use when adding/replacing a component
      * @return this instance
      */
-    public <C extends Component> T with(final ComponentConstructor<C> componentMapper) {
-        speedment.put(requireNonNull(componentMapper).create(speedment));
+    public <C extends Component> T with(final ComponentConstructor<C> componentConstructor) {
+        speedment.put(requireNonNull(componentConstructor).create(speedment));
         return self();
+    }
+
+    /**
+     * Adds a (and replaces any existing) {@link Component} to the Speedment
+     * runtime platform by first creating a new instance of the provided
+     * component constructor class and then applying the component constructor
+     * with the internal Speedment instance.
+     *
+     * @param <C> the component constructor type
+     * @param componentConstructorClass to use when adding/replacing a component
+     * @return this instance
+     */
+    public <C extends Component> T with(final Class<ComponentConstructor<C>> componentConstructorClass) {
+        try {
+            final ComponentConstructor<C> cc = componentConstructorClass.newInstance();
+            return with(cc);
+        } catch (IllegalAccessException | InstantiationException e) {
+
+        }
+        throw new SpeedmentException("Unable to make a new instance of the " + componentConstructorClass + " class");
     }
 
     /**
