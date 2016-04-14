@@ -132,7 +132,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
-            <version>2.3.0</version>
+            <version>2.3.1</version>
             <dependencies>
                 <dependency>
                     <groupId>mysql</groupId>
@@ -149,7 +149,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>2.3.0</version>
+        <version>2.3.1</version>
     </dependency>
     <dependency>
         <groupId>mysql</groupId>
@@ -186,7 +186,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>2.3.0</version>
+        <version>2.3.1</version>
     </dependency>
     <dependency>
         <groupId>org.postgresql</groupId>
@@ -206,7 +206,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
-            <version>2.3.0</version>
+            <version>2.3.1</version>
             <dependencies>
                 <dependency>
                     <groupId>org.mariadb.jdbc</groupId>
@@ -223,7 +223,7 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>2.3.0</version>
+        <version>2.3.1</version>
     </dependency>
     <dependency>
         <groupId>org.mariadb.jdbc</groupId>
