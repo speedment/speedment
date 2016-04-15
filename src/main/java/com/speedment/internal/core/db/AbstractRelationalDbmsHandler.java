@@ -792,11 +792,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
-                if (o instanceof Clob) {
-                    @SuppressWarnings("unchecked")
-                    final Clob clob = (Clob) o;
-                    ps.setClob(i, clob);
-                }
                 ps.setObject(i++, o);
             }
 
