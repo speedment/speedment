@@ -88,7 +88,7 @@ public interface Type extends HasCopy<Type>, HasName<Type>, HasGenerics<Type>,
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use
-     * the {@link #setMapper(java.util.function.Supplier) setSupplier} method.
+     * the {@link #setMapper(java.util.function.Function) setSupplier} method.
      * 
      * @param name  the type name
      * @return      the new instance

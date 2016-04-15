@@ -794,18 +794,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             for (Object o : sqlStatement.getValues()) {
                 ps.setObject(i++, o);
             }
-
             ps.executeUpdate();
 
             try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 while (generatedKeys.next()) {
-                    final Object genKey = generatedKeys.getObject(1);
-                    if (!"oracle.sql.ROWID".equals(genKey.getClass().getName())) {
-                        sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                    } else {
-                        // Handle ROWID, make result = map<,String>
-                        // instead...
-                    }
+                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                 }
             }
         }
