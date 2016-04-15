@@ -298,13 +298,7 @@ public class NullUtilTest {
 
     @Test
     public void createInstance() {
-        try {
-            final Constructor<NullUtil> constructor = NullUtil.class.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            final NullUtil nullUtil = constructor.newInstance();
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            // Must fail
-        }
+        TestUtil.assertNonInstansiable(NullUtil.class);
     }
 
     private void requireNullPointerException(Runnable r) {

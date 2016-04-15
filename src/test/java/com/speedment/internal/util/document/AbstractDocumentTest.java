@@ -15,6 +15,7 @@
  */
 package com.speedment.internal.util.document;
 
+import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
@@ -50,7 +51,7 @@ import org.junit.Before;
  * @author Emil Forslund
  */
 public abstract class AbstractDocumentTest {
-    
+
     protected Project project;
     protected Dbms dbmsA, dbmsB;
     protected Schema schemaA, schemaB;
@@ -61,7 +62,7 @@ public abstract class AbstractDocumentTest {
     protected IndexColumn indexColumnA2, indexColumnB2;
     protected ForeignKey foreignKeyA2_C1, foreignKeyB2_D1;
     protected ForeignKeyColumn foreignKeyColumnA2_C1, foreignKeyColumnB2_D1;
-    
+
     @Before
     public void setUp() {
         final Map<String, Object> data = map(
@@ -192,8 +193,9 @@ public abstract class AbstractDocumentTest {
                 ))
             ))
         );
-        
+
         project = new ProjectImpl(data);
+
         dbmsA = project.children(Project.DBMSES, DbmsImpl::new).findFirst().get();
         dbmsB = project.children(Project.DBMSES, DbmsImpl::new).skip(1).findFirst().get();
         schemaA = dbmsA.children(Dbms.SCHEMAS, SchemaImpl::new).findFirst().get();
@@ -223,21 +225,44 @@ public abstract class AbstractDocumentTest {
         foreignKeyColumnA2_C1 = foreignKeyA2_C1.children(ForeignKey.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new).findFirst().get();
         foreignKeyColumnB2_D1 = foreignKeyB2_D1.children(ForeignKey.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new).findFirst().get();
     }
-    
+
+    public Stream<Document> stream() {
+        return Stream.of(
+            project,
+            dbmsA, dbmsB,
+            schemaA, schemaB,
+            tableA, tableB, tableC, tableD,
+            columnA1, columnA2, columnB1, columnB2, columnC1, columnC2, columnD1, columnD2,
+            primaryKeyColumnA1, primaryKeyColumnB1, primaryKeyColumnC1, primaryKeyColumnD1,
+            indexA2, indexB2,
+            indexColumnA2, indexColumnB2,
+            foreignKeyA2_C1, foreignKeyB2_D1,
+            foreignKeyColumnA2_C1, foreignKeyColumnB2_D1
+        );
+    }
+
+    public Stream<Project> projects() {
+        return Stream.of(project);
+    }
+
+    public <T extends Document> Stream<T> streamOf(Class<T> clazz) {
+        return stream().filter(clazz::isInstance).map(clazz::cast);
+    }
+
     private static Map.Entry<String, Object> entry(String key, String value) {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
-    
+
     private static Map.Entry<String, Object> entry(String key, boolean value) {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
-    
+
     @SafeVarargs
     @SuppressWarnings("varargs")
     private static Map.Entry<String, Object> entry(String key, Map<String, Object>... children) {
         return new AbstractMap.SimpleEntry<>(key, Stream.of(children).collect(toList()));
     }
-    
+
     @SafeVarargs
     @SuppressWarnings("varargs")
     private static Map<String, Object> map(Map.Entry<String, Object>... entries) {

@@ -120,9 +120,10 @@ public final class Trees {
         }
         final Stream<? extends T> next = traverser.apply(first);
         if (next != null) {
-            next.filter(Objects::nonNull).forEach((T n) -> {
-                traverse(n, traverser, traversalOrder, builder);
-            });
+            next.filter(Objects::nonNull)
+                .forEach((T n) -> {
+                    traverse(n, traverser, traversalOrder, builder);
+                });
         }
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_POST) {
             builder.add(first);
