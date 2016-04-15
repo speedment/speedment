@@ -41,6 +41,7 @@ import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
 import com.speedment.config.db.mapper.identity.URLIdentityMapper;
 import com.speedment.config.db.mapper.identity.UUIDIdentityMapper;
+import com.speedment.config.db.mapper.largeobject.ClobToStringMapper;
 import com.speedment.config.db.mapper.string.StringToLocaleMapper;
 import com.speedment.config.db.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.config.db.mapper.string.YesNoStringToBooleanMapper;
@@ -111,8 +112,12 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(TrueFalseStringToBooleanMapper::new);
         install(YesNoStringToBooleanMapper::new);
 
+        // Large object mappers
+        install(ClobToStringMapper::new);
+
         // Other mappers
         install(UUIDIdentityMapper::new);
+
     }
 
     @Override
@@ -140,5 +145,5 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public TypeMapperComponent defaultCopy(Speedment speedment) {
         return new TypeMapperComponentImpl(speedment);
     }
-    
+
 }
