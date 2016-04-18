@@ -14,35 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.config.db.mapper.time;
+package com.speedment.config.db.mapper.bigdecimal;
 
 import com.speedment.config.db.mapper.TypeMapper;
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 
 /**
  *
- * @author Emil Forslund
+ * @author Per Minborg
  */
-public class TimestampToIntMapper implements TypeMapper<Timestamp, Integer> {
+public class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> {
 
     @Override
-    public Class<Integer> getJavaType() {
-        return Integer.class;
+    public Class<Double> getJavaType() {
+        return Double.class;
     }
 
     @Override
-    public Class<Timestamp> getDatabaseType() {
-        return Timestamp.class;
+    public Class<BigDecimal> getDatabaseType() {
+        return BigDecimal.class;
     }
 
     @Override
-    public Integer toJavaType(Timestamp value) {
-        return value == null ? null : (int) (value.getTime() / 1000);
+    public Double toJavaType(BigDecimal value) {
+        return value == null ? null : value.doubleValue();
     }
 
     @Override
-    public Timestamp toDatabaseType(Integer value) {
-        return value == null ? null : new Timestamp(value * 1000);
+    public BigDecimal toDatabaseType(Double value) {
+        return value == null ? null : BigDecimal.valueOf(value);
     }
 
     @Override

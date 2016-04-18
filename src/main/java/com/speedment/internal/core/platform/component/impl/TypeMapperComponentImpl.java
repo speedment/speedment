@@ -19,6 +19,7 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.mapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.config.db.mapper.identity.ArrayIdentityMapper;
 import com.speedment.config.db.mapper.identity.BigDecimalIdentityMapper;
 import com.speedment.config.db.mapper.identity.BlobIdentityMapper;
@@ -112,7 +113,10 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(TrueFalseStringToBooleanMapper::new);
         install(YesNoStringToBooleanMapper::new);
 
-        // Large object mappers
+        // Special BigDecimal object mappers
+        install(BigDecimalToDouble::new);
+
+        // Special Large object mappers
         install(ClobToStringMapper::new);
 
         // Other mappers
