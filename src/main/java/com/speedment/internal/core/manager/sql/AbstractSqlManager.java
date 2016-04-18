@@ -21,7 +21,6 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
@@ -43,10 +42,10 @@ import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.util.LazyString;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.internal.util.document.DocumentDbUtil.isSame;
 import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import com.speedment.stream.MapStream;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.sql.Array;
@@ -65,6 +64,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import static java.util.function.Function.identity;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
@@ -94,26 +94,19 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         this.sqlTableReference = LazyString.create();
         this.sqlSelect = LazyString.create();
 
+        final Table thisTable = getTable();
+
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
-        this.fieldTraitMap = MapStream.fromValues(fields(), Function.identity())
-            .mapValue(f -> f.findColumn(speedment))
-            .filterValue(Optional::isPresent).mapValue(Optional::get)
-            .filter((k, v) -> k.getIdentifier().columnName().equals(v.getName()))
-            .mapValue(Column::getParent)
-            .filterValue(Optional::isPresent).mapValue(Optional::get)
-            .filter((k, v) -> k.getIdentifier().tableName().equals(v.getName()))
-            .mapValue(Table::getParent)
-            .filterValue(Optional::isPresent).mapValue(Optional::get)
-            .filter((k, v) -> k.getIdentifier().schemaName().equals(v.getName()))
-            .mapValue(Schema::getParent)
-            .filterValue(Optional::isPresent).mapValue(Optional::get)
-            .filter((k, v) -> k.getIdentifier().dbmsName().equals(v.getName()))
-            .mapValue((k, v) -> k)
-            .mapKey(FieldTrait::getIdentifier)
-            .mapKey(FieldIdentifier::columnName)
-            .toMap();
+        this.fieldTraitMap = fields()
+            .filter(f
+                -> f.findColumn(speedment)
+                .map(c -> c.getParent())
+                .map(t -> isSame(thisTable, t.get()))
+                .orElse(false)
+            )
+            .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()));
 
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
@@ -509,11 +502,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private void assertHasPrimaryKeyColumns() {
         if (!hasPrimaryKeyColumns) {
             throw new SpeedmentException(
-                "The table " + 
-                DocumentUtil.relativeName(getTable(), Project.class, DATABASE_NAME) + 
-                " does not have any primary keys. Some operations like " + 
-                "update() and remove() requires at least one primary key."
-
+                "The table "
+                + DocumentUtil.relativeName(getTable(), Project.class, DATABASE_NAME)
+                + " does not have any primary keys. Some operations like "
+                + "update() and remove() requires at least one primary key."
             );
         }
     }
