@@ -59,7 +59,7 @@ SELECT * FROM `Hare`
 ###### Easy persistence
 Entities can be persisted in a database using the "Active Record Pattern"
 ```java
-Hare dbHarry = hares.newInstance()
+Hare dbHarry = hares.newEmptyEntity()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3)
@@ -68,7 +68,7 @@ Hare dbHarry = hares.newInstance()
 
 ###### JPA-style persistance if you prefer that over the "Active Record Pattern".
 ```java
-Hare harry = hares.newInstance()
+Hare harry = hares.newEmptyEntity()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3);
