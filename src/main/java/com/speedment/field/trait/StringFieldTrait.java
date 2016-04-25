@@ -76,6 +76,19 @@ public interface StringFieldTrait<ENTITY, D> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>not starts with</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>not starts with</em> the given value
+     *
+     * @see String#startsWith(java.lang.String)
+     */
+    StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field <em>ends with</em> the given
      * value.
      *
@@ -86,6 +99,19 @@ public interface StringFieldTrait<ENTITY, D> {
      * @see String#endsWith(java.lang.String)
      */
     StringSpeedmentPredicate<ENTITY, D> endsWith(String value);
+    
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>not ends with</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>not ends with</em> the given value
+     *
+     * @see String#endsWith(java.lang.String)
+     */
+    StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -96,9 +122,22 @@ public interface StringFieldTrait<ENTITY, D> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field <em>contains</em> the given value
      *
-     * @see String#endsWith(java.lang.String)
+     * @see String#contains(java.lang.CharSequence)
      */
     StringSpeedmentPredicate<ENTITY, D> contains(String value);
+    
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>not contains</em> the given
+     * value.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>not contains</em> the given value
+     *
+     * @see String#contains(java.lang.CharSequence)
+     */
+    StringSpeedmentPredicate<ENTITY, D> notContains(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

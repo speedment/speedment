@@ -192,8 +192,10 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
         return comparableField.notBetween(start, end, inclusion);
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
+    public final ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
         return comparableField.in(values);
     }
 
@@ -230,13 +232,28 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     }
 
     @Override
+    public StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value) {
+        return stringField.notStartsWith(value);
+    }
+
+    @Override
     public StringSpeedmentPredicate<ENTITY, D> endsWith(String value) {
         return stringField.endsWith(value);
     }
 
     @Override
+    public StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value) {
+        return stringField.notEndsWith(value);
+    }
+
+    @Override
     public StringSpeedmentPredicate<ENTITY, D> contains(String value) {
         return stringField.contains(value);
+    }
+
+    @Override
+    public StringSpeedmentPredicate<ENTITY, D> notContains(String value) {
+        return stringField.notContains(value);
     }
 
     @Override

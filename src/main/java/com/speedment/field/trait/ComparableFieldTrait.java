@@ -23,7 +23,7 @@ import java.util.Comparator;
 import java.util.Set;
 
 /**
- * A representation of an Entity field that is a reference type (eg
+ * A representation of an Entity field that is a reference type (e.g.
  * {@code Integer} and not {@code int}) and that implements {@link Comparable}.
  *
  * @param <ENTITY> the entity type
