@@ -62,12 +62,12 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
 
     public StringForeignKeyFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, String> getter,
-            Setter<ENTITY, String> setter,
-            Finder<ENTITY, FK> finder,
-            TypeMapper<D, String> typeMapper,
-            boolean unique
+        FieldIdentifier<ENTITY> identifier,
+        Getter<ENTITY, String> getter,
+        Setter<ENTITY, String> setter,
+        Finder<ENTITY, FK> finder,
+        TypeMapper<D, String> typeMapper,
+        boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, finder, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
@@ -86,7 +86,7 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     public boolean isUnique() {
         return field.isUnique();
     }
-    
+
     @Override
     public Optional<Column> findColumn(Speedment speedment) {
         return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
@@ -183,6 +183,16 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     }
 
     @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end) {
+        return comparableField.notBetween(start, end);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
+    }
+
+    @Override
     public ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
         return comparableField.in(values);
     }
@@ -196,12 +206,12 @@ public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKe
     @SuppressWarnings("varargs") // delegator is safe
     @Override
     public final ComparableSpeedmentPredicate<ENTITY, D, String> notIn(String... values) {
-        return comparableField.in(values);
+        return comparableField.notIn(values);
     }
 
     @Override
     public ComparableSpeedmentPredicate<ENTITY, D, String> notIn(Set<String> values) {
-        return comparableField.in(values);
+        return comparableField.notIn(values);
     }
 
     @Override

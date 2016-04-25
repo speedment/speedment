@@ -55,11 +55,11 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     private final TypeMapper<D, V> typeMapper;
 
     public ComparableFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, V> getter,
-            Setter<ENTITY, V> setter,
-            TypeMapper<D, V> typeMapper,
-            boolean unique
+        FieldIdentifier<ENTITY> identifier,
+        Getter<ENTITY, V> getter,
+        Setter<ENTITY, V> setter,
+        TypeMapper<D, V> typeMapper,
+        boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
@@ -77,7 +77,7 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     public boolean isUnique() {
         return field.isUnique();
     }
-    
+
     @Override
     public Optional<Column> findColumn(Speedment speedment) {
         return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
@@ -166,6 +166,11 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     @Override
     public ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
     }
 
     @SafeVarargs

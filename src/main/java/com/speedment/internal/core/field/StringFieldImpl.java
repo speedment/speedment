@@ -57,11 +57,11 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     private final StringFieldTrait<ENTITY, D> stringField;
 
     public StringFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, String> getter,
-            Setter<ENTITY, String> setter,
-            TypeMapper<D, String> typeMapper,
-            boolean unique
+        FieldIdentifier<ENTITY> identifier,
+        Getter<ENTITY, String> getter,
+        Setter<ENTITY, String> setter,
+        TypeMapper<D, String> typeMapper,
+        boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
@@ -79,7 +79,7 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     public boolean isUnique() {
         return field.isUnique();
     }
-    
+
     @Override
     public Optional<Column> findColumn(Speedment speedment) {
         return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
@@ -168,6 +168,16 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     @Override
     public ComparableSpeedmentPredicate<ENTITY, D, String> between(String start, String end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end) {
+        return comparableField.notBetween(start, end);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
     }
 
     @Override

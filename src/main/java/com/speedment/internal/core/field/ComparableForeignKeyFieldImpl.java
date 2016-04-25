@@ -177,6 +177,16 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
         return comparableField.between(start, end, inclusion);
     }
 
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
+        return comparableField.notBetween(start, end);
+    }
+    
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
+    }    
+
     @SafeVarargs
     @SuppressWarnings("varargs") // delegator is safe
     @Override

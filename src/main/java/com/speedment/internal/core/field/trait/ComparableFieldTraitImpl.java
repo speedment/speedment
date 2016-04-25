@@ -34,6 +34,7 @@ import com.speedment.internal.core.field.predicate.impl.comparable.IsNotNullComp
 import com.speedment.internal.core.field.predicate.impl.comparable.IsNullComparablePredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.LessOrEqualPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.LessThanPredicate;
+import com.speedment.internal.core.field.predicate.impl.comparable.NotBetweenPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.NotEqualPredicate;
 import com.speedment.internal.core.field.predicate.impl.comparable.NotInPredicate;
 import static com.speedment.internal.util.CollectionsUtil.getAnyFrom;
@@ -189,6 +190,75 @@ public class ComparableFieldTraitImpl<ENTITY, D, V extends Comparable<? super V>
         return new BetweenPredicate<>(field, referenceFieldTrait, start, end, inclusion);
     }
 
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
+        // First, take a look at the case when either or both start or/and end are null
+        if (start == null || end == null) {
+            switch (inclusion) {
+                case START_EXCLUSIVE_END_EXCLUSIVE: {
+                    return newAlwaysTruePredicate();
+                }
+                case START_EXCLUSIVE_END_INCLUSIVE: {
+                    if (end == null) {
+                        return newIsNotNullPredicate();
+                    }
+                    return newAlwaysTruePredicate();
+                }
+                case START_INCLUSIVE_END_EXCLUSIVE: {
+                    if (end == null) {
+                        return newIsNotNullPredicate();
+                    }
+                    return newAlwaysTruePredicate();
+                }
+                case START_INCLUSIVE_END_INCLUSIVE: {
+                    return newIsNotNullPredicate();
+                }
+            }
+        }
+        // Secondly, take a look at the case when neither start nor end end is null
+        // We need to make sure that start < end or posibly start <= end
+        final int comparison = end.compareTo(start);
+        switch (inclusion) {
+            case START_EXCLUSIVE_END_EXCLUSIVE: {
+                if (comparison <= 0) {
+                    return newAlwaysTruePredicate();
+                }
+                break;
+            }
+            case START_EXCLUSIVE_END_INCLUSIVE: {
+                if (comparison == 0) {
+                    return new NotEqualPredicate<>(field, referenceFieldTrait, end);
+                }
+                if (comparison < 0) {
+                    return newAlwaysTruePredicate();
+                }
+                break;
+            }
+
+            case START_INCLUSIVE_END_EXCLUSIVE: {
+                if (comparison == 0) {
+                    return new NotEqualPredicate<>(field, referenceFieldTrait, start);
+                }
+                if (comparison < 0) {
+                    return newAlwaysTruePredicate();
+                }
+                break;
+            }
+            case START_INCLUSIVE_END_INCLUSIVE: {
+                if (comparison == 0) {
+                    return new NotEqualPredicate<>(field, referenceFieldTrait, start);
+                }
+                if (comparison < 0) {
+                    return newAlwaysTruePredicate();
+                }
+                break;
+            }
+        }
+        // Normal case:
+        return new NotBetweenPredicate<>(field, referenceFieldTrait, start, end, inclusion);
+    }
+    
+    
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a stream from an array is safe
     @Override
