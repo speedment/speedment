@@ -28,6 +28,7 @@ import java.util.Set;
  *
  * @param <ENTITY> the entity type
  * @param <D> the database type
+ * @param <V> the field value type
  *
  * @author Per Minborg
  * @author Emil Forslund
