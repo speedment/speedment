@@ -16,7 +16,7 @@
  */
 package com.speedment.internal.core.field.predicate.impl.string;
 
-import static com.speedment.field.predicate.PredicateType.CONTAINS;
+import static com.speedment.field.predicate.PredicateType.NOT_CONTAINS;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
@@ -31,7 +31,7 @@ public class NotContainsPredicate<ENTITY, D> extends BaseStringPredicate<ENTITY,
         implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String> {
 
     public NotContainsPredicate(FieldTrait field, ReferenceFieldTrait<ENTITY, D, String> referenceField, String operand0) {
-        super(CONTAINS, field, referenceField, operand0, CONTAINS_PREDICATE);
+        super(NOT_CONTAINS, field, referenceField, operand0, NOT_CONTAINS_PREDICATE);
     }
 
 }
