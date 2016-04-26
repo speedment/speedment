@@ -100,7 +100,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 .collect(toList());
         
         final String sql = manager.sqlSelect() + 
-            " where " +
+            " WHERE " +
             fragments.stream()
                 .map(SqlPredicateFragment::getSql)
                 .collect(joining(" AND "))
@@ -116,8 +116,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         }
         
         qr.setSql(sql);
-        qr.setValues(values);
-    }
+            qr.setValues(values);
+        }
     
     private Column findColumn(String name) {
         return manager.getTable().columns()
