@@ -392,6 +392,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setDatabaseType(selectedJdbcClass);
 
             setAutoIncrement(column, md);
+            progressListener.setCurrentAction(actionName(column));
 
         };
 
@@ -928,7 +929,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
-        return "Reading metadata from " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
+        return doc.mainInterface().getSimpleName() + " " + doc.getName() + " in " + doc.getParentOrThrow().getName();
+        //return "Read " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
     }
 
     protected String encloseField(Dbms dbms, String fieldName) {
