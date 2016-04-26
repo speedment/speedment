@@ -169,6 +169,11 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     }
 
     @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
+        return comparableField.notBetween(start, end);
+    }
+        
+    @Override
     public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
         return comparableField.notBetween(start, end, inclusion);
     }
