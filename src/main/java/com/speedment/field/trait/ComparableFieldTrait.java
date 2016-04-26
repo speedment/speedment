@@ -184,7 +184,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * value but exclusive the end value)
      */
     default ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
-        return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        return notBetween(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
     /**
