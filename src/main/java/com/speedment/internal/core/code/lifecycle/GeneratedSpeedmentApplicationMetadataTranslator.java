@@ -21,6 +21,7 @@ import com.speedment.codegen.Generator;
 import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.File;
+import com.speedment.codegen.model.Import;
 import com.speedment.codegen.model.Initializer;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
@@ -30,15 +31,16 @@ import com.speedment.internal.codegen.model.JavadocImpl;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
+import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import com.speedment.internal.util.document.DocumentTranscoder;
-import static java.util.Objects.requireNonNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -46,6 +48,9 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedSpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
+    private static final int LINES_PER_METHOD = 100;
+    private static final String INIT_PART_METHOD_NAME = "initPart";
+    private static final String STRING_BUILDER_NAME = "sb";
     public static final String METADATA = "Metadata";
 
     private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application" + METADATA;
@@ -65,29 +70,57 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         final Method getMetadata = Method.of("getMetadata", STRING)
             .public_()
             .add(OVERRIDE);
-        
-        final Field metadataField = Field.of("METADATA", Type.of(StringBuilder.class))
+
+        final Field metadataField = Field.of("METADATA", Type.of(String.class))
             .private_().final_().static_();
-        
-        final Initializer initializer = Initializer.of().static_();
-        
-        Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R"))
-            .forEachOrdered(l -> {
-                initializer.add("METADATA.append(\"" + 
-                    l.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + 
-                    "\\n\");"
-                );
-            });
-        
-        metadataField.set(new ReferenceValue("new StringBuilder()"));
-        getMetadata.add("return METADATA.toString();");
-        
-        return newBuilder(file, className).build()
+
+        final Method initializer = Method.of("init", STRING).static_().private_();
+
+        final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R")).collect(toList());
+
+        final List<Method> subInitializers = new ArrayList<>();
+
+        int subMethodLineCount = 0;
+        Method subMethod = addNewMethod(subInitializers);
+        for (final String line : lines) {
+            subMethod.add(
+                STRING_BUILDER_NAME + ".append(\""
+                + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+                + "\\n\");"
+            );
+            if (subMethodLineCount++ > LINES_PER_METHOD) {
+                subMethod = addNewMethod(subInitializers);
+                subMethodLineCount = 0;
+            }
+        }
+
+        file.add(Import.of(Type.of(StringBuilder.class)));
+        initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
+        subInitializers.stream().forEachOrdered(si -> {
+            initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");");
+        });
+        initializer.add("return " + STRING_BUILDER_NAME + ".toString();");
+
+        metadataField.set(new ReferenceValue("init()"));
+        getMetadata.add("return METADATA;");
+
+        final Class result = newBuilder(file, className).build()
             .public_()
             .add(Type.of(ApplicationMetadata.class))
             .add(metadataField)
             .add(initializer)
             .add(getMetadata);
+
+        subInitializers.forEach(result::add);
+
+        return result;
+    }
+
+    private Method addNewMethod(List<Method> methods) {
+        final Method m = Method.of(INIT_PART_METHOD_NAME + methods.size(), VOID).private_().static_()
+            .add(Field.of(STRING_BUILDER_NAME, Type.of(StringBuilder.class)));
+        methods.add(m);
+        return m;
     }
 
     @Override
@@ -99,9 +132,9 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A {@link " + ApplicationMetadata.class.getName() + 
-            "} class for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getName() + "."
+        return "A {@link " + ApplicationMetadata.class.getName()
+            + "} class for the {@link " + Project.class.getName()
+            + "} named " + getSupport().projectOrThrow().getName() + "."
             + " This class contains the meta data present at code generation time.";
     }
 
