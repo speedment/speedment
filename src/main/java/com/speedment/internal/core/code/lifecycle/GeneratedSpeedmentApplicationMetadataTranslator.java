@@ -22,7 +22,6 @@ import com.speedment.codegen.model.Class;
 import com.speedment.codegen.model.Field;
 import com.speedment.codegen.model.File;
 import com.speedment.codegen.model.Import;
-import com.speedment.codegen.model.Initializer;
 import com.speedment.codegen.model.Javadoc;
 import com.speedment.codegen.model.Method;
 import com.speedment.codegen.model.Type;
@@ -33,6 +32,7 @@ import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AU
 import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
 import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
+import static com.speedment.internal.codegen.util.Formatting.indent;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
 import com.speedment.internal.core.runtime.ApplicationMetadata;
 import com.speedment.internal.util.document.DocumentTranscoder;
@@ -77,24 +77,48 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         final Method initializer = Method.of("init", STRING).static_().private_();
 
         final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R")).collect(toList());
-
-        final List<Method> subInitializers = new ArrayList<>();
-
-        int subMethodLineCount = 0;
-        Method subMethod = addNewMethod(subInitializers);
+        final List<List<String>> segments = new ArrayList<>();
+        List<String> segment = new ArrayList<>();
+        segments.add(segment);
         for (final String line : lines) {
-            subMethod.add(
-                STRING_BUILDER_NAME + ".append(\""
-                + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
-                + "\\n\");"
-            );
-            if (subMethodLineCount++ > LINES_PER_METHOD) {
-                subMethod = addNewMethod(subInitializers);
-                subMethodLineCount = 0;
+            segment.add(line);
+            if (segment.size() > LINES_PER_METHOD) {
+                segment = new ArrayList<>();
+                segments.add(segment);
             }
         }
 
+        final List<Method> subInitializers = new ArrayList<>();
+
+        for (List<String> seg : segments) {
+            Method subMethod = addNewSubMethod(subInitializers);
+            int lineCnt = 0;
+            for (String line : seg) {
+                subMethod.add(
+                    indent("\"" + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"" + (++lineCnt == seg.size() ? "" : ","))
+                );
+            }
+            subMethod.add(").forEachOrdered(" + STRING_BUILDER_NAME + "::append);");
+        }
+
+//        int subMethodLineCount = 0;
+//        Method subMethod = addNewSubMethod(subInitializers);
+//        for (final String line : lines) {
+//
+//            subMethod.add(
+//                "\"" + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"" + (subMethodLineCount == 0 ? "" : ",")
+//            //                STRING_BUILDER_NAME + ".append(\""
+//            //                + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+//            //                + "\\n\");"
+//            );
+//            if (subMethodLineCount++ > LINES_PER_METHOD) {
+//
+//                subMethod = addNewSubMethod(subInitializers);
+//                subMethodLineCount = 0;
+//            }
+//        }
         file.add(Import.of(Type.of(StringBuilder.class)));
+        file.add(Import.of(Type.of(Stream.class)));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
         subInitializers.stream().forEachOrdered(si -> {
             initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");");
@@ -116,10 +140,17 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         return result;
     }
 
-    private Method addNewMethod(List<Method> methods) {
+    private Method addSubMethodEnd(Method method) {
+        method.add(")");
+        method.add(".forEachOrdered(" + STRING_BUILDER_NAME + "::add);");
+        return method;
+    }
+
+    private Method addNewSubMethod(List<Method> methods) {
         final Method m = Method.of(INIT_PART_METHOD_NAME + methods.size(), VOID).private_().static_()
             .add(Field.of(STRING_BUILDER_NAME, Type.of(StringBuilder.class)));
         methods.add(m);
+        m.add("Stream.of(");
         return m;
     }
 
