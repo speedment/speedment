@@ -32,7 +32,6 @@ import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.util.JavaLanguageNamer;
-import com.speedment.util.NullUtil;
 import com.speedment.util.TestUtil;
 import java.util.Arrays;
 import java.util.Collection;
@@ -255,22 +254,22 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         assertEquals("Check project java name: ", "project", DocumentUtil.relativeName(project, Project.class, JAVA_NAME, ".", namer::javaPackageName));
         assertEquals("Check project database name: ", "project", DocumentUtil.relativeName(project, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check dbms java name: ", "dbms_a", DocumentUtil.relativeName(dbmsA, Dbms.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check dbms database name: ", "dbms_a", DocumentUtil.relativeName(dbmsA, Dbms.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check dbms java name: ", "dbmsa", DocumentUtil.relativeName(dbmsA, Dbms.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check dbms database name: ", "dbmsa", DocumentUtil.relativeName(dbmsA, Dbms.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check project.dbms java name: ", "project.dbms_a", DocumentUtil.relativeName(dbmsA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check project.dbms database name: ", "project.dbms_a", DocumentUtil.relativeName(dbmsA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms java name: ", "project.dbmsa", DocumentUtil.relativeName(dbmsA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms database name: ", "project.dbmsa", DocumentUtil.relativeName(dbmsA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check schema java name: ", "custom_schema_a", DocumentUtil.relativeName(schemaA, Schema.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check schema database name: ", "schema_a", DocumentUtil.relativeName(schemaA, Schema.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check schema java name: ", "customschemaa", DocumentUtil.relativeName(schemaA, Schema.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check schema database name: ", "schemaa", DocumentUtil.relativeName(schemaA, Schema.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check dbms.schema java name: ", "dbms_a.custom_schema_a", DocumentUtil.relativeName(schemaA, Dbms.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check dbms.schema database name: ", "dbms_a.schema_a", DocumentUtil.relativeName(schemaA, Dbms.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check dbms.schema java name: ", "dbmsa.customschemaa", DocumentUtil.relativeName(schemaA, Dbms.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check dbms.schema database name: ", "dbmsa.schemaa", DocumentUtil.relativeName(schemaA, Dbms.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check project.dbms.schema java name: ", "project.dbms_a.custom_schema_a", DocumentUtil.relativeName(schemaA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check project.dbms.schema database name: ", "project.dbms_a.schema_a", DocumentUtil.relativeName(schemaA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms.schema java name: ", "project.dbmsa.customschemaa", DocumentUtil.relativeName(schemaA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms.schema database name: ", "project.dbmsa.schemaa", DocumentUtil.relativeName(schemaA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
 
-        assertEquals("Check project.dbms.schema.table java name: ", "project.dbms_a.custom_schema_a.custom_table_a", DocumentUtil.relativeName(tableA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
-        assertEquals("Check project.dbms.schema.table database name: ", "project.dbms_a.schema_a.table_a", DocumentUtil.relativeName(tableA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms.schema.table java name: ", "project.dbmsa.customschemaa.customtablea", DocumentUtil.relativeName(tableA, Project.class, JAVA_NAME, ".", namer::javaPackageName));
+        assertEquals("Check project.dbms.schema.table database name: ", "project.dbmsa.schemaa.tablea", DocumentUtil.relativeName(tableA, Project.class, DATABASE_NAME, ".", namer::javaPackageName));
     }
 }

@@ -52,7 +52,9 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
     public String javaPackageName(final String externalName) {
         requireNonNull(externalName);
         return replaceIfIllegalJavaIdentifierCharacter(
-            replaceIfJavaUsedWord(externalName)
+            replaceIfJavaUsedWord(
+                externalName.replace(" ", "") // For package name, just remove all spaces (see #167)
+            )
         ).toLowerCase();
     }
 
@@ -109,7 +111,7 @@ public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
     public String replaceIfIllegalJavaIdentifierCharacter(final String word) {
         requireNonNull(word);
         if (word.isEmpty()) {
-            return "_"; // No name is translated to REPLACEMENT_CHARACTER only
+            return REPLACEMENT_CHARACTER.toString(); // No name is translated to REPLACEMENT_CHARACTER only
         }
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < word.length(); i++) {
