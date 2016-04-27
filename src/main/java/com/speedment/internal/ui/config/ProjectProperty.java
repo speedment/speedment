@@ -26,7 +26,6 @@ import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
-import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.internal.util.document.DocumentMerger;
 import com.speedment.ui.config.db.DefaultStringPropertyItem;

@@ -40,6 +40,7 @@ import com.speedment.ui.config.trait.HasNameProperty;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -188,7 +189,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                     "DbmsType will generate one."
                 )
             )
-        ).flatMap(s -> s);
+        ).flatMap(identity());
     }
     
     @Override
