@@ -97,29 +97,32 @@ import static java.util.Objects.requireNonNull;
  */
 public final class UISession {
 
-    public final static String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
-    public final static String DIALOG_PANE_ICON_SIZE = "2.5em";
+    private static final Logger LOGGER = LoggerManager.getLogger(UISession.class);
+
+    public static final String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
+    public static final String DIALOG_PANE_ICON_SIZE = "2.5em";
+
+    private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
+    private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
 
     public enum ReuseStage {
         USE_EXISTING_STAGE,
         CREATE_A_NEW_STAGE
     }
 
-    private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-
-    private final static Predicate<File> OPEN_FILE_CONDITIONS = file
+    private static final Predicate<File> OPEN_FILE_CONDITIONS = file
         -> file != null
         && file.exists()
         && file.isFile()
         && file.canRead()
         && file.getName().toLowerCase().endsWith(".json");
 
-    private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
+    private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
         -> file != null
         && file.exists()
         && file.isDirectory();
 
-    private final static Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
+    private static final Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
         = pass -> !pass.isPresent() || pass.get().length == 0;
 
     private final Speedment speedment;
@@ -132,20 +135,25 @@ public final class UISession {
 
     private File currentlyOpenFile = null;
 
+    private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenWorkspace = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenOutput = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenPreview = new SimpleObjectProperty<>();
+
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
         this(speedment, application, stage, defaultConfigLocation, null);
     }
 
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
 
-        this.speedment             = requireNonNull(speedment);
-        this.application           = requireNonNull(application);
-        this.stage                 = requireNonNull(stage);
+        this.speedment = requireNonNull(speedment);
+        this.application = requireNonNull(application);
+        this.stage = requireNonNull(stage);
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
-        this.project               = new ProjectProperty();
-        this.propertySheetFactory  = new PropertySheetFactory();
-        this.notifications         = speedment.getUserInterfaceComponent().getNotifications();
-        
+        this.project = new ProjectProperty();
+        this.propertySheetFactory = new PropertySheetFactory();
+        this.notifications = speedment.getUserInterfaceComponent().getNotifications();
+
         speedment.getUserInterfaceComponent().setUISession(this);
 
         if (project != null) {
@@ -226,9 +234,7 @@ public final class UISession {
 
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
-        return on(event -> {
-            saveConfigFile();
-        });
+        return on(event -> saveConfigFile());
     }
 
     @SuppressWarnings("unchecked")
@@ -249,7 +255,7 @@ public final class UISession {
 
                 project.dbmses()
                     .filter(dbms -> NO_PASSWORD_SPECIFIED.test(pass.get(dbms)))
-                    .forEach(dbms -> showPasswordDialog(dbms));
+                    .forEach(this::showPasswordDialog);
 
                 final Optional<String> schemaName = project
                     .dbmses().flatMap(Dbms::schemas)
@@ -286,10 +292,10 @@ public final class UISession {
             log(info("Target directory is " + project.getPackageLocation()));
 
             final TranslatorManager instance = speedment.getCodeGenerationComponent().getTranslatorManager();
-            
+
             final Project immutableProject = ImmutableProject.wrap(project);
             speedment.getProjectComponent().setProject(immutableProject);
-            
+
             try {
                 instance.accept(immutableProject);
                 stopwatch.stop();
@@ -297,13 +303,13 @@ public final class UISession {
                 log(success(
                     "+------------: Generation completed! :------------+" + "\n"
                     + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(instance.getFilesCreated()), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
-                
+
                 showNotification(
-                    "Generation completed! " + instance.getFilesCreated() + 
-                    " files created.", 
+                    "Generation completed! " + instance.getFilesCreated()
+                    + " files created.",
                     FontAwesomeIcon.STAR,
                     Palette.SUCCESS
                 );
@@ -315,13 +321,13 @@ public final class UISession {
                 log(error(
                     "+--------------: Generation failed! :-------------+" + "\n"
                     + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(instance.getFilesCreated()), 30) + " |\n"
                     + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
-                
+
                 final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
-                
+
                 LOGGER.error(ex, msg);
                 showError("Failed to generate code", ex.getMessage(), ex);
             }
@@ -343,10 +349,8 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E togglePreview() {
         return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
     }
-    
-    
 
-    private final static class StoredNode {
+    private static final class StoredNode {
 
         private enum InsertAt {
             BEGINNING, END
@@ -360,11 +364,6 @@ public final class UISession {
             this.parent = requireNonNull(parent);
         }
     }
-
-    private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>(),
-        hiddenWorkspace = new SimpleObjectProperty<>(),
-        hiddenOutput = new SimpleObjectProperty<>(),
-        hiddenPreview = new SimpleObjectProperty<>();
 
     private <T extends Event, E extends EventHandler<T>> E toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
         return on(event -> {
@@ -589,9 +588,7 @@ public final class UISession {
             });
         });
 
-        cancel.setOnAction(ev -> {
-            task.cancel(true);
-        });
+        cancel.setOnAction(ev -> task.cancel(true));
 
         pane.setContent(box);
         pane.setMaxWidth(Double.MAX_VALUE);
@@ -603,9 +600,9 @@ public final class UISession {
             dialog.showAndWait();
         }
     }
-    
+
     private final static class NotificationImpl implements Notification {
-        
+
         private final String message;
         private final FontAwesomeIcon icon;
         private final Palette palette;
@@ -613,11 +610,11 @@ public final class UISession {
 
         public NotificationImpl(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
             this.message = requireNonNull(message);
-            this.icon    = requireNonNull(icon);
+            this.icon = requireNonNull(icon);
             this.palette = requireNonNull(palette);
             this.onClose = requireNonNull(onClose);
         }
-        
+
         @Override
         public String text() {
             return message;
@@ -627,7 +624,7 @@ public final class UISession {
         public FontAwesomeIcon icon() {
             return icon;
         }
-        
+
         @Override
         public Palette palette() {
             return palette;
@@ -638,27 +635,28 @@ public final class UISession {
             return onClose;
         }
     }
-    
+
     public void showNotification(String message) {
         showNotification(message, FontAwesomeIcon.EXCLAMATION);
     }
-    
+
     public void showNotification(String message, FontAwesomeIcon icon) {
         showNotification(message, icon, Palette.INFO);
     }
-    
+
     public void showNotification(String message, Runnable action) {
         showNotification(message, FontAwesomeIcon.EXCLAMATION, Palette.INFO, action);
     }
-    
+
     public void showNotification(String message, Palette palette) {
         showNotification(message, FontAwesomeIcon.EXCLAMATION, palette);
     }
-    
+
     public void showNotification(String message, FontAwesomeIcon icon, Palette palette) {
-        showNotification(message, icon, palette, () -> {});
+        showNotification(message, icon, palette, () -> {
+        });
     }
-    
+
     public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
         notifications.add(new NotificationImpl(message, icon, palette, action));
     }
@@ -676,8 +674,17 @@ public final class UISession {
                     progress.setProgress(ProgressMeasure.DONE);
 
                     if (ex == null) {
+//                        if (p.dbmses().flatMap(Dbms::children).count() == 0) {
+//                            runLater(() -> {
+//                                showError("Error in Database meta data",
+//                                    "No schemas were found in the database."
+//                                );
+//                            });
+//                            return false;
+//                        } else {
                         project.merge(speedment, p);
                         return true;
+//                        }
                     } else {
                         runLater(() -> {
                             showError("Error Connecting to Database",
@@ -691,19 +698,19 @@ public final class UISession {
             showProgressDialog("Loading Database Metadata", progress, future);
 
             final boolean status = future.get();
-            
+
             if (status) {
                 showNotification(
-                    "Database metadata has been loaded.", 
-                    FontAwesomeIcon.DATABASE, 
+                    "Database metadata has been loaded.",
+                    FontAwesomeIcon.DATABASE,
                     Palette.INFO
                 );
             }
-            
+
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
-            showError("Error Executing Connection Task", 
+            showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
         }
@@ -831,18 +838,16 @@ public final class UISession {
         speedment.getUserInterfaceComponent().getOutputMessages().add(line);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGitter() {
-        @SuppressWarnings("unchecked")
-        final E handler = (E) on(event -> browse(GITTER_URI));
-        return handler;
+        return (E) on(event -> browse(GITTER_URI));
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        @SuppressWarnings("unchecked")
-        final E handler = (E) on(event -> browse(GITHUB_URI));
-        return handler;
+        return (E) on(event -> browse(GITHUB_URI));
     }
-    
+
     public void browse(String url) {
         application.getHostServices().showDocument(url);
     }
@@ -855,10 +860,7 @@ public final class UISession {
                 listener.accept(event);
             }
         };
-
         return handler;
     }
 
-    private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
-    private final static String GITTER_URI = "https://gitter.im/speedment/speedment/";
 }

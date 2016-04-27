@@ -38,18 +38,19 @@ import java.util.function.BiFunction;
 public interface DbmsTypeBuilder {
 
     public interface Builder extends
-            WithName,
-            WithDriverManagerName,
-            WithDefaultPort,
-            WithDbmsNameMeaning,
-            WithDriverName,
-            WithDatabaseNamingConvention,
-            WithDbmsMapper,
-            WithConnectionUrlGenerator,
-            WithSpeedmentPredicateView,
-            Optionals {
+        WithName,
+        WithDriverManagerName,
+        WithDefaultPort,
+        WithDbmsNameMeaning,
+        WithDriverName,
+        WithDatabaseNamingConvention,
+        WithDbmsMapper,
+        WithConnectionUrlGenerator,
+        WithSpeedmentPredicateView,
+        Optionals {
     }
 
+    @FunctionalInterface
     public interface WithName {
 
         /**
@@ -62,6 +63,7 @@ public interface DbmsTypeBuilder {
         WithDriverManagerName withName(String name);
     }
 
+    @FunctionalInterface
     public interface WithDriverManagerName {
 
         /**
@@ -74,6 +76,7 @@ public interface DbmsTypeBuilder {
         WithDefaultPort withDriverManagerName(String driverManagerName);
     }
 
+    @FunctionalInterface
     public interface WithDefaultPort {
 
         /**
@@ -86,6 +89,7 @@ public interface DbmsTypeBuilder {
         WithDbmsNameMeaning withDefaultPort(int port);
     }
 
+    @FunctionalInterface
     public interface WithDbmsNameMeaning {
 
         /**
@@ -100,6 +104,7 @@ public interface DbmsTypeBuilder {
         WithDriverName withDbmsNameMeaning(String nameMeaning);
     }
 
+    @FunctionalInterface
     public interface WithDriverName {
 
         /**
@@ -113,6 +118,7 @@ public interface DbmsTypeBuilder {
         WithDatabaseNamingConvention withDriverName(String driverName);
     }
 
+    @FunctionalInterface
     public interface WithDatabaseNamingConvention {
 
         /**
@@ -124,6 +130,7 @@ public interface DbmsTypeBuilder {
         WithDbmsMapper withDatabaseNamingConvention(DatabaseNamingConvention namingConvention);
     }
 
+    @FunctionalInterface
     public interface WithDbmsMapper {
 
         /**
@@ -138,6 +145,7 @@ public interface DbmsTypeBuilder {
         WithConnectionUrlGenerator withDbmsMapper(BiFunction<Speedment, Dbms, DbmsHandler> mapper);
     }
 
+    @FunctionalInterface
     public interface WithConnectionUrlGenerator {
 
         /**
@@ -151,6 +159,7 @@ public interface DbmsTypeBuilder {
         WithSpeedmentPredicateView withConnectionUrlGenerator(ConnectionUrlGenerator generator);
     }
 
+    @FunctionalInterface
     public interface WithSpeedmentPredicateView {
 
         /**

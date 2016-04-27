@@ -25,16 +25,9 @@ import com.speedment.codegen.model.Type;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.internal.codegen.util.Formatting.*;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

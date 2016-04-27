@@ -17,7 +17,6 @@
 package com.speedment.util;
 
 import com.speedment.annotation.Api;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -30,6 +29,15 @@ import static java.util.Objects.requireNonNull;
  */
 @Api(version = "2.3")
 public final class NullUtil {
+
+    private static final String FIRST_ARG_IS_NULL = "First argument is null";
+    private static final String SECOND_ARG_IS_NULL = "Second argument is null";
+    private static final String THIRD_ARG_IS_NULL = "Third argument is null";
+    private static final String FOURTH_ARG_IS_NULL = "Fourth argument is null";
+    private static final String FIFTH_ARG_IS_NULL = "Fifth argument is null";
+    private static final String SIXTH_ARG_IS_NULL = "Sixth argument is null";
+    private static final String SEVENTH_ARG_IS_NULL = "Seventh argument is null";
+    private static final String EIGHT_ARG_IS_NULL = "Eight argument is null";
 
     /**
      * Checks if this array is non null and also that all members are non-null.
@@ -106,7 +114,7 @@ public final class NullUtil {
      */
     public static void requireNonNulls(Object o0) {
         if (o0 == null) {
-            throw new NullPointerException("First argument is null");
+            throw new NullPointerException(FIRST_ARG_IS_NULL);
         }
     }
 
@@ -120,10 +128,10 @@ public final class NullUtil {
      */
     public static void requireNonNulls(Object o0, Object o1) {
         if (o0 == null) {
-            throw new NullPointerException("First argument is null");
+            throw new NullPointerException(FIRST_ARG_IS_NULL);
         }
         if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
+            throw new NullPointerException(SECOND_ARG_IS_NULL);
         }
     }
 
@@ -138,13 +146,13 @@ public final class NullUtil {
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2) {
         if (o0 == null) {
-            throw new NullPointerException("First argument is null");
+            throw new NullPointerException(FIRST_ARG_IS_NULL);
         }
         if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
+            throw new NullPointerException(SECOND_ARG_IS_NULL);
         }
         if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
+            throw new NullPointerException(THIRD_ARG_IS_NULL);
         }
     }
 
@@ -160,16 +168,16 @@ public final class NullUtil {
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2, Object o3) {
         if (o0 == null) {
-            throw new NullPointerException("First argument is null");
+            throw new NullPointerException(FIRST_ARG_IS_NULL);
         }
         if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
+            throw new NullPointerException(SECOND_ARG_IS_NULL);
         }
         if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
+            throw new NullPointerException(THIRD_ARG_IS_NULL);
         }
         if (o3 == null) {
-            throw new NullPointerException("Fourth argument is null");
+            throw new NullPointerException(FOURTH_ARG_IS_NULL);
         }
     }
 
@@ -186,26 +194,26 @@ public final class NullUtil {
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2, Object o3, Object o4) {
         if (o0 == null) {
-            throw new NullPointerException("First argument is null");
+            throw new NullPointerException(FIRST_ARG_IS_NULL);
         }
         if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
+            throw new NullPointerException(SECOND_ARG_IS_NULL);
         }
         if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
+            throw new NullPointerException(THIRD_ARG_IS_NULL);
         }
         if (o3 == null) {
-            throw new NullPointerException("Fourth argument is null");
+            throw new NullPointerException(FOURTH_ARG_IS_NULL);
         }
         if (o4 == null) {
-            throw new NullPointerException("Fifth argument is null");
+            throw new NullPointerException(FIFTH_ARG_IS_NULL);
         }
     }
 
     /**
      * Checks if the provided elements all are non null. If a null is detected a
      * NullPointerException is thrown.
-     *
+     *s
      * @param o0 object to check
      * @param o1 object to check
      * @param o2 object to check
@@ -215,23 +223,9 @@ public final class NullUtil {
      * @throws NullPointerException if at least one of the elements are null
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5) {
-        if (o0 == null) {
-            throw new NullPointerException("First argument is null");
-        }
-        if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
-        }
-        if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
-        }
-        if (o3 == null) {
-            throw new NullPointerException("Fourth argument is null");
-        }
-        if (o4 == null) {
-            throw new NullPointerException("Fifth argument is null");
-        }
+        requireNonNulls(o0, o1, o2, o3, o4);
         if (o5 == null) {
-            throw new NullPointerException("Sixth argument is null");
+            throw new NullPointerException(SIXTH_ARG_IS_NULL);
         }
     }
 
@@ -249,26 +243,12 @@ public final class NullUtil {
      * @throws NullPointerException if at least one of the elements are null
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6) {
-        if (o0 == null) {
-            throw new NullPointerException("First argument is null");
-        }
-        if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
-        }
-        if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
-        }
-        if (o3 == null) {
-            throw new NullPointerException("Fourth argument is null");
-        }
-        if (o4 == null) {
-            throw new NullPointerException("Fifth argument is null");
-        }
+        requireNonNulls(o0, o1, o2, o3, o4);
         if (o5 == null) {
-            throw new NullPointerException("Sixth argument is null");
+            throw new NullPointerException(SIXTH_ARG_IS_NULL);
         }
         if (o6 == null) {
-            throw new NullPointerException("Seventh argument is null");
+            throw new NullPointerException(SEVENTH_ARG_IS_NULL);
         }
     }
 
@@ -287,29 +267,15 @@ public final class NullUtil {
      * @throws NullPointerException if at least one of the elements are null
      */
     public static void requireNonNulls(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6, Object o7) {
-        if (o0 == null) {
-            throw new NullPointerException("First argument is null");
-        }
-        if (o1 == null) {
-            throw new NullPointerException("Second argument is null");
-        }
-        if (o2 == null) {
-            throw new NullPointerException("Third argument is null");
-        }
-        if (o3 == null) {
-            throw new NullPointerException("Fourth argument is null");
-        }
-        if (o4 == null) {
-            throw new NullPointerException("Fifth argument is null");
-        }
+        requireNonNulls(o0, o1, o2, o3, o4);
         if (o5 == null) {
-            throw new NullPointerException("Sixth argument is null");
+            throw new NullPointerException(SIXTH_ARG_IS_NULL);
         }
         if (o6 == null) {
-            throw new NullPointerException("Seventh argument is null");
+            throw new NullPointerException(SEVENTH_ARG_IS_NULL);
         }
         if (o7 == null) {
-            throw new NullPointerException("Eight argument is null");
+            throw new NullPointerException(EIGHT_ARG_IS_NULL);
         }
     }
 

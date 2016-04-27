@@ -50,16 +50,16 @@ public interface SqlPredicate<T> {
 
     default SqlPredicate<T> and(SqlPredicate<? super T> other) {
         Objects.requireNonNull(other);
-        return (t) -> test(t) && other.test(t);
+        return t -> test(t) && other.test(t);
     }
 
     default SqlPredicate<T> negate() {
-        return (t) -> !test(t);
+        return t -> !test(t);
     }
 
     default SqlPredicate<T> or(Predicate<? super T> other) {
         Objects.requireNonNull(other);
-        return (t) -> test(t) || other.test(t);
+        return t -> test(t) || other.test(t);
     }
 
 }

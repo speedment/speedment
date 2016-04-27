@@ -146,6 +146,7 @@ public class ComparableFieldTraitImpl<ENTITY, D, V extends Comparable<? super V>
                     return newIsNullPredicate();
                 }
             }
+            throw new IllegalStateException("Illegal Inclusion");
         }
         // Secondly, take a look at the case when neither start nor end end is null
         // We need to make sure that start < end or posibly start <= end
@@ -214,6 +215,7 @@ public class ComparableFieldTraitImpl<ENTITY, D, V extends Comparable<? super V>
                     return newIsNotNullPredicate();
                 }
             }
+            throw new IllegalStateException("Illegal Inclusion");
         }
         // Secondly, take a look at the case when neither start nor end end is null
         // We need to make sure that start < end or posibly start <= end

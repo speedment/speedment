@@ -30,6 +30,7 @@ import com.speedment.config.db.mutator.DocumentMutator;
  * @since 2.3
  */
 @Api(version = "2.3")
+@FunctionalInterface
 public interface HasMutator<T extends DocumentMutator<?>> {
 
     /**

@@ -33,7 +33,6 @@ import com.speedment.internal.codegen.model.ImportImpl;
 import static com.speedment.internal.codegen.util.Formatting.DOT;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
@@ -103,21 +102,21 @@ public final class AutoImports implements Consumer<File> {
 		}
 		
 		if (HasAnnotationUsage.class.isAssignableFrom(model.getClass())) {
-			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
-				addType(a.getType(), types);
-			});
+			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> 
+				addType(a.getType(), types)
+			);
 		}
 		
 		if (HasClasses.class.isAssignableFrom(model.getClass())) {
-			((HasClasses<?>) model).getClasses().forEach(c -> {
-				findTypesIn(c, types);
-			});
+			((HasClasses<?>) model).getClasses().forEach(c -> 
+				findTypesIn(c, types)
+			);
 		}
 		
 		if (HasConstructors.class.isAssignableFrom(model.getClass())) {
-			((HasConstructors<?>) model).getConstructors().forEach(c -> {
-				findTypesIn(c, types);
-			});
+			((HasConstructors<?>) model).getConstructors().forEach(c -> 
+				findTypesIn(c, types)
+			);
 		}
 		
 		if (HasFields.class.isAssignableFrom(model.getClass())) {
@@ -129,16 +128,16 @@ public final class AutoImports implements Consumer<File> {
 		
 		if (HasGenerics.class.isAssignableFrom(model.getClass())) {
 			((HasGenerics<?>) model).getGenerics().forEach(g -> {
-				g.getUpperBounds().forEach(ub -> {
-					addType(ub, types);
-				});
+				g.getUpperBounds().forEach(ub -> 
+					addType(ub, types)
+				);
 			});
 		}
 		
 		if (HasImplements.class.isAssignableFrom(model.getClass())) {
-			((HasImplements<?>) model).getInterfaces().forEach(i -> {
-				addType(i, types);
-			});
+			((HasImplements<?>) model).getInterfaces().forEach(i -> 
+				addType(i, types)
+			);
 		}
 		
 		if (HasMethods.class.isAssignableFrom(model.getClass())) {
@@ -149,9 +148,9 @@ public final class AutoImports implements Consumer<File> {
 		}
         
         if (HasThrows.class.isAssignableFrom(model.getClass())) {
-			((HasThrows<?>) model).getExceptions().forEach(e -> {
-				addType(e, types);
-			});
+			((HasThrows<?>) model).getExceptions().forEach(e -> 
+				addType(e, types)
+			);
 		}
 		
 		if (HasType.class.isAssignableFrom(model.getClass())) {
