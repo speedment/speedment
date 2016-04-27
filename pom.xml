@@ -227,7 +227,13 @@
                     </execution>
                 </executions>
             </plugin>
-                 
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+                                                   
         </plugins>
     </build>
     
@@ -316,9 +322,11 @@
                             </execution>
                         </executions>
                     </plugin>
+                    
                 </plugins>
             </build>
         </profile>
+                
     </profiles>
         
     <reporting>
