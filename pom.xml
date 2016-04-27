@@ -321,8 +321,13 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <useagent>true</useagent>
+                            <keyname>${gpg.keyname}</keyname>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                            <executable>${gpg.executable}</executable>
+                        </configuration>
                     </plugin>
-                    
                 </plugins>
             </build>
         </profile>
