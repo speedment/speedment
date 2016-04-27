@@ -51,14 +51,14 @@ public final class ConfigurableIteratorSpliterator<T> implements Spliterator<T> 
         this.iterator = iterator;
         this.sizeEstimate = size;
         this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
-                ? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
-                : characteristics;
+            ? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
+            : characteristics;
         this.batchSizes = Arrays.copyOf(batchSizes, batchSizes.length);
     }
 
     /**
      * Creates a {@link Spliterator} using the given iterator for traversal, and
-     * reporting the given initial size and characteristics.
+     * reporting the given characteristics. The size is unknown.
      *
      * @param iterator the iterator for the source
      * @param characteristics properties of this {@link Spliterator}'s source or
