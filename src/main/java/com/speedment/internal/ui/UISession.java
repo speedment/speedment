@@ -144,8 +144,7 @@ public final class UISession {
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project               = new ProjectProperty();
         this.propertySheetFactory  = new PropertySheetFactory();
-        this.notifications =
-            speedment.getUserInterfaceComponent().getNotifications();
+        this.notifications         = speedment.getUserInterfaceComponent().getNotifications();
         
         speedment.getUserInterfaceComponent().setUISession(this);
 

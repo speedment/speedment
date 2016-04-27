@@ -26,6 +26,7 @@ import static com.speedment.config.db.trait.HasName.NAME;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
+import com.speedment.internal.util.DefaultJavaLanguageNamer;
 import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.internal.util.document.DocumentMerger;
 import com.speedment.ui.config.db.DefaultStringPropertyItem;
@@ -33,6 +34,7 @@ import com.speedment.ui.config.db.StringPropertyItem;
 import com.speedment.ui.config.trait.HasEnabledProperty;
 import com.speedment.ui.config.trait.HasExpandedProperty;
 import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.util.JavaLanguageNamer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -87,8 +89,9 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     public StringBinding defaultPackageNameProperty() {
+        final JavaLanguageNamer namer = new DefaultJavaLanguageNamer(); //Todo: use speedments namer instead
         return Bindings.createStringBinding(
-            () -> Project.DEFAULT_PACKAGE_NAME + getCompanyName(),
+            () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()
         );
     }
@@ -144,7 +147,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             new StringPropertyItem(
                 companyNameProperty(),
                 "Company Name",
-                "The name that should be used for this project."
+                "The company name that should be used for this project. It is used in the generated code."
             ),
             new DefaultStringPropertyItem(
                 packageNameProperty(),
