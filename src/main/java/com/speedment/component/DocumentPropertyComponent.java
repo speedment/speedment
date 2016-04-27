@@ -25,7 +25,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.config.db.Table;
 import static com.speedment.internal.util.ImmutableListUtil.*;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.List;
 
 /**

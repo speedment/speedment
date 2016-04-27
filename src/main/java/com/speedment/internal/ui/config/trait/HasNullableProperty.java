@@ -14,39 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.*;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.ui.config.db.BooleanPropertyItem;
+import com.speedment.config.db.trait.HasNullable;
+import static com.speedment.config.db.trait.HasNullable.NULLABLE;
+import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.BooleanProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil
+ * @author Emil Forslund
  */
-public interface HasEnabledProperty extends DocumentProperty, HasEnabled {
-    
-    default BooleanProperty enabledProperty() {
-        return booleanPropertyOf(HasEnabled.ENABLED, HasEnabled.super::isEnabled);
-    }
-    
-    @Override
-    default boolean isEnabled() {
-        return enabledProperty().get();
-    }
-    
+public interface HasNullableProperty extends DocumentProperty, HasNullable {
+
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
             new BooleanPropertyItem(
-                enabledProperty(), 
-                "Enabled", 
-                "True if this node should be included in the code generation."
+                nullableProperty(),
+                "Is Nullable",
+                "If this node can hold 'null'-values or not."
             )
         );
+    }
+    
+    default BooleanProperty nullableProperty() {
+        return booleanPropertyOf(NULLABLE, HasNullable.super::isNullable);
+    }
+
+    @Override
+    default boolean isNullable() {
+        return nullableProperty().get();
     }
 }

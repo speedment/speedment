@@ -14,39 +14,38 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.ui.config.db.StringPropertyItem;
+import com.speedment.config.db.trait.*;
+import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.BooleanPropertyItem;
 import java.util.stream.Stream;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.BooleanProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil Forslund
+ * @author Emil
  */
-public interface HasNameProperty extends DocumentProperty {
-
-    default StringProperty nameProperty() {
-        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
+public interface HasEnabledProperty extends DocumentProperty, HasEnabled {
+    
+    default BooleanProperty enabledProperty() {
+        return booleanPropertyOf(HasEnabled.ENABLED, HasEnabled.super::isEnabled);
     }
-
+    
     @Override
-    default String getName() throws SpeedmentException {
-        return nameProperty().get();
+    default boolean isEnabled() {
+        return enabledProperty().get();
     }
-
+    
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new StringPropertyItem(
-                nameProperty(), 
-                "Database Name", 
-                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
+            new BooleanPropertyItem(
+                enabledProperty(), 
+                "Enabled", 
+                "True if this node should be included in the code generation."
             )
         );
     }

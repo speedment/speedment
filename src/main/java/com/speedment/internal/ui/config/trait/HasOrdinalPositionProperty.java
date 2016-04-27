@@ -14,30 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
-import com.speedment.config.db.Column;
 import com.speedment.config.db.trait.*;
-import com.speedment.ui.config.DocumentProperty;
-import java.util.Optional;
-import static javafx.beans.binding.Bindings.createObjectBinding;
-import javafx.beans.binding.ObjectBinding;
+import com.speedment.internal.ui.config.DocumentProperty;
+import javafx.beans.property.IntegerProperty;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasColumnProperty extends DocumentProperty, HasColumn, HasNameProperty {
+public interface HasOrdinalPositionProperty extends DocumentProperty, HasOrdinalPosition {
     
-    default ObjectBinding<Column> columnProperty() {
-        return createObjectBinding(() ->
-            HasColumn.super.findColumn().orElse(null), 
-            nameProperty()
-        );
+    default IntegerProperty ordinalPositionProperty() {
+        return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
     }
 
     @Override
-    default Optional<? extends Column> findColumn() {
-        return Optional.ofNullable(columnProperty().get());
+    default int getOrdinalPosition() {
+        return ordinalPositionProperty().get();
     }
 }

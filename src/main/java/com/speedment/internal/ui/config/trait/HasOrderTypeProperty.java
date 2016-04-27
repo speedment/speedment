@@ -14,40 +14,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.HasNullable;
-import static com.speedment.config.db.trait.HasNullable.NULLABLE;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.ui.config.db.BooleanPropertyItem;
+import com.speedment.config.db.parameters.OrderType;
+import com.speedment.config.db.trait.*;
+import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.EnumPropertyItem;
 import java.util.stream.Stream;
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasNullableProperty extends DocumentProperty, HasNullable {
+public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
+    
+    default ObjectProperty<OrderType> orderTypeProperty() {
+        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class, HasOrderType.super::getOrderType);
+    }
+
+    @Override
+    default OrderType getOrderType() {
+        return orderTypeProperty().get();
+    }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         return Stream.of(
-            new BooleanPropertyItem(
-                nullableProperty(),
-                "Is Nullable",
-                "If this node can hold 'null'-values or not."
+            new EnumPropertyItem<>(
+                OrderType.class,
+                orderTypeProperty(),
+                "Order Type",
+                "The order in which elements will be considered."
             )
         );
-    }
-    
-    default BooleanProperty nullableProperty() {
-        return booleanPropertyOf(NULLABLE, HasNullable.super::isNullable);
-    }
-
-    @Override
-    default boolean isNullable() {
-        return nullableProperty().get();
     }
 }

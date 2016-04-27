@@ -24,7 +24,7 @@ import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.controller.ProjectTreeController;
 import com.speedment.internal.ui.util.OutputUtil;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;

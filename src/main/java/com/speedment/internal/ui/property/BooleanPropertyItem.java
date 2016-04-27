@@ -14,36 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.db;
+package com.speedment.internal.ui.property;
 
-import com.speedment.internal.ui.util.EditorsUtil;
 import java.util.function.Consumer;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.BooleanProperty;
+import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
- * A property item for strings that gives the user a bit more space to enter
- * longer pieces of text.
- * 
+ *
  * @author Emil Forslund
  */
-public final class StringAreaPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty> {
 
-    public StringAreaPropertyItem(StringProperty value, String name, String description) {
+    public BooleanPropertyItem(BooleanProperty value, String name, String description) {
         super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
     }
     
-    public StringAreaPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public BooleanPropertyItem(BooleanProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
         super(value, name, description, decorator);
     }
 
     @Override
-    public Class<String> getType() {
-        return String.class;
+    public Class<Boolean> getType() {
+        return Boolean.class;
     }
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        return EditorsUtil.createTextAreaEditor(this);
+        return Editors.createCheckEditor(this);
     }
 }

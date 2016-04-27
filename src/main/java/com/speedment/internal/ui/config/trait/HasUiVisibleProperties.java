@@ -14,24 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
-import com.speedment.config.db.trait.*;
-import com.speedment.ui.config.DocumentProperty;
-import javafx.beans.property.IntegerProperty;
+import com.speedment.Speedment;
+import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasOrdinalPositionProperty extends DocumentProperty, HasOrdinalPosition {
-    
-    default IntegerProperty ordinalPositionProperty() {
-        return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
-    }
-
-    @Override
-    default int getOrdinalPosition() {
-        return ordinalPositionProperty().get();
-    }
+public interface HasUiVisibleProperties {
+    Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment);
 }

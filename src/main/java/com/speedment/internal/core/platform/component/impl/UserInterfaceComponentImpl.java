@@ -29,7 +29,7 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.brand.DefaultBrand;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.List;
 import java.util.Map;

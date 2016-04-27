@@ -14,28 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
-
-import com.speedment.ui.config.DocumentProperty;
-import javafx.beans.property.BooleanProperty;
+package com.speedment.internal.ui.config.trait;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasExpandedProperty extends DocumentProperty {
-    
-    final String EXPANDED = "expanded";
-
-    default BooleanProperty expandedProperty() {
-        return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);
-    }
-    
-    default boolean isExpanded() {
-        return expandedProperty().get();
-    }
-    
-    default boolean isExpandedByDefault() {
-        return true;
-    }
+public interface HasIconPath {
+    String getIconPath();
 }

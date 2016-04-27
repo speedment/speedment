@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.db;
+package com.speedment.internal.ui.property;
 
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;

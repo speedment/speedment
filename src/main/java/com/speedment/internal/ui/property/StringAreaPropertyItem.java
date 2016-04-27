@@ -14,24 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.db;
+package com.speedment.internal.ui.property;
 
+import com.speedment.internal.ui.util.EditorsUtil;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
-import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 /**
- *
+ * A property item for strings that gives the user a bit more space to enter
+ * longer pieces of text.
+ * 
  * @author Emil Forslund
  */
-public final class StringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringAreaPropertyItem extends AbstractPropertyItem<String, StringProperty> {
 
-    public StringPropertyItem(StringProperty value, String name, String description) {
+    public StringAreaPropertyItem(StringProperty value, String name, String description) {
         super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
     }
     
-    public StringPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public StringAreaPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
         super(value, name, description, decorator);
     }
 
@@ -42,6 +44,6 @@ public final class StringPropertyItem extends AbstractPropertyItem<String, Strin
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        return Editors.createTextEditor(this);
+        return EditorsUtil.createTextAreaEditor(this);
     }
 }

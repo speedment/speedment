@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.db;
+package com.speedment.internal.ui.property;
 
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;

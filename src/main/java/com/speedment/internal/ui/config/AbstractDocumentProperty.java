@@ -24,7 +24,6 @@ import com.speedment.internal.ui.util.NumericProperty;
 import com.speedment.internal.ui.util.SimpleNumericProperty;
 import static com.speedment.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.stream.MapStream;
-import com.speedment.ui.config.DocumentProperty;
 import com.speedment.util.FloatSupplier;
 import com.speedment.util.OptionalBoolean;
 import static java.util.Collections.newSetFromMap;

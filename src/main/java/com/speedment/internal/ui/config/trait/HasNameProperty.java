@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
 import com.speedment.Speedment;
-import com.speedment.config.db.trait.*;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.ui.config.db.DefaultStringPropertyItem;
-import java.util.Optional;
+import com.speedment.config.db.trait.HasName;
+import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.StringPropertyItem;
 import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
@@ -29,26 +29,24 @@ import org.controlsfx.control.PropertySheet;
  *
  * @author Emil Forslund
  */
-public interface HasAliasProperty extends DocumentProperty, HasAlias {
+public interface HasNameProperty extends DocumentProperty {
 
-    StringProperty nameProperty();
-    
-    default StringProperty aliasProperty() {
-        return stringPropertyOf(HasAlias.ALIAS, () -> null);
+    default StringProperty nameProperty() {
+        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
     }
-    
+
     @Override
-    default Optional<String> getAlias() {
-        return Optional.ofNullable(aliasProperty().get());
+    default String getName() throws SpeedmentException {
+        return nameProperty().get();
     }
 
     @Override
     default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(new DefaultStringPropertyItem(
-                aliasProperty(),
-                nameProperty(),
-                "Java Alias", 
-                "The name that will be used for this in generated code."
+        return Stream.of(
+            new StringPropertyItem(
+                nameProperty(), 
+                "Database Name", 
+                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
             )
         );
     }

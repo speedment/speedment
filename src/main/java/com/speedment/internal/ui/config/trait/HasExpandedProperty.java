@@ -14,16 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.ui.config.trait;
+package com.speedment.internal.ui.config.trait;
 
-import com.speedment.Speedment;
-import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
+import com.speedment.internal.ui.config.DocumentProperty;
+import javafx.beans.property.BooleanProperty;
 
 /**
  *
  * @author Emil Forslund
  */
-public interface HasUiVisibleProperties {
-    Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment);
+public interface HasExpandedProperty extends DocumentProperty {
+    
+    final String EXPANDED = "expanded";
+
+    default BooleanProperty expandedProperty() {
+        return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);
+    }
+    
+    default boolean isExpanded() {
+        return expandedProperty().get();
+    }
+    
+    default boolean isExpandedByDefault() {
+        return true;
+    }
 }
