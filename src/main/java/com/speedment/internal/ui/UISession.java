@@ -27,6 +27,8 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.db.DbmsImpl;
+import com.speedment.internal.core.config.db.immutable.ImmutableDbms;
 import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
@@ -89,7 +91,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import static com.speedment.internal.util.TextUtil.alignRight;
+import com.speedment.internal.util.document.DocumentUtil;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -663,28 +668,33 @@ public final class UISession {
 
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
-            dbms.schemasProperty().clear();
+            
+            // Create a copy of everything in Dbms EXCEPT the schema key. This
+            // is a hack to prevent duplication errors that would otherwise
+            // occure if you change name of a node and reload.
+            final Map<String, Object> dbmsData = new ConcurrentHashMap<>(dbms.getData());
+            dbmsData.remove(Dbms.SCHEMAS);
+            final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
-            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
+            // Find the DbmsHandler to use when loading the metadata
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbmsCopy);
 
+            // Begin executing the loading with a progress measurer
             final ProgressMeasure progress = ProgressMeasure.create();
             final CompletableFuture<Boolean> future
                 = dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase)
-                .handle((p, ex) -> {
+                .handleAsync((p, ex) -> {
                     progress.setProgress(ProgressMeasure.DONE);
 
-                    if (ex == null) {
-//                        if (p.dbmses().flatMap(Dbms::children).count() == 0) {
-//                            runLater(() -> {
-//                                showError("Error in Database meta data",
-//                                    "No schemas were found in the database."
-//                                );
-//                            });
-//                            return false;
-//                        } else {
+                    // If the loading was successfull
+                    if (ex == null && p != null) {
+                        
+                        // Make sure any old data is cleared before merging in
+                        // the new state from the database.
+                        dbms.schemasProperty().clear();
                         project.merge(speedment, p);
                         return true;
-//                        }
+                        
                     } else {
                         runLater(() -> {
                             showError("Error Connecting to Database",
