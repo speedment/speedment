@@ -88,8 +88,8 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
         return Optional.ofNullable(packageNameProperty().get());
     }
 
-    public StringBinding defaultPackageNameProperty() {
-        final JavaLanguageNamer namer = new DefaultJavaLanguageNamer(); //Todo: use speedments namer instead
+    public StringBinding defaultPackageNameProperty(Speedment speedment) {
+        final JavaLanguageNamer namer = speedment.getCodeGenerationComponent().javaLanguageNamer();
         return Bindings.createStringBinding(
             () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()
@@ -151,7 +151,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             ),
             new DefaultStringPropertyItem(
                 packageNameProperty(),
-                defaultPackageNameProperty(),
+                defaultPackageNameProperty(speedment),
                 "Package Name",
                 "The name of the package to place all generated files in. This should be a fully qualified java package name."
             ),
