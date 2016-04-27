@@ -27,6 +27,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
@@ -287,8 +288,11 @@ public final class UISession {
 
             final TranslatorManager instance = speedment.getCodeGenerationComponent().getTranslatorManager();
             
+            final Project immutableProject = ImmutableProject.wrap(project);
+            speedment.getProjectComponent().setProject(immutableProject);
+            
             try {
-                instance.accept(project);
+                instance.accept(immutableProject);
                 stopwatch.stop();
 
                 log(success(

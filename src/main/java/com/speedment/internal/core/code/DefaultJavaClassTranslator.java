@@ -189,9 +189,8 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
             owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
             message = GENERATED_JAVADOC_MESSAGE;
         } else {
-            owner = getSpeedment().getProjectComponent().getProject().getCompanyName();
+            owner = project().get().getCompanyName();
             message = JAVADOC_MESSAGE;
-
         }
 
         return Javadoc.of(
