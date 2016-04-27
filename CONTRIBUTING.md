@@ -13,6 +13,12 @@ Please review and <a href="https://www.clahub.com/agreements/speedment/speedment
 
 When you have signed the CLA, your name will be added to the project's ```<contributors>...</contributors>``` tags :-)
 
+
+Creating a Pull Request
+-----------------------------
+Make sure that you are creating a **pull request against the 'develop' branch**. This makes it much easier for us to merge the pull request in the proper way (since all new stuff is funneled through the 'develop' branch). It also enables your name as a contributor to be retained for the changes files, which is nice.
+
+
 Code Style
 ----------
 
