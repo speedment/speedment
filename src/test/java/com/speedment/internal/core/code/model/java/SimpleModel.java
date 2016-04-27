@@ -44,10 +44,13 @@ import org.junit.Before;
  * @author pemi
  */
 public abstract class SimpleModel {
-    
+
     protected static final String TABLE_NAME = "user";
+    protected static final String TABLE_NAME2 = "S_P";
+    protected static final String SCHEMA_NAME = "mySchema";
     protected static final String COLUMN_NAME = "first_name";
-    
+    protected static final String COLUMN_NAME2 = "item";
+
     protected Speedment speedment;
     protected Project project;
     protected Dbms dbms;
@@ -55,42 +58,44 @@ public abstract class SimpleModel {
     protected Table table;
     protected Column column;
     protected PrimaryKeyColumn pkColumn;
-    
+    protected Table table2;
+    protected Column column2;
+
     private String quote(String s) {
         return "\"" + s + "\"";
     }
-    
+
     private String name(String s) {
         return quote(HasName.NAME) + " : " + quote(s);
     }
-    
+
     private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
         return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
     }
-    
+
     private String dbTypeName(String dbmsTypeName) {
         return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
     }
-    
+
     private String columnDatabaseType(String typeName) {
         return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
     }
-    
+
     private String array(String name, String... s) {
         return quote(name) + " : [\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n]";
     }
-    
+
     private String objectWithKey(String name, String... s) {
         return quote(name) + " : " + object(s);
     }
-    
+
     private String object(String... s) {
         return "{\n" + indent(Stream.of(s).collect(joining(",\n"))) + "\n}";
     }
-    
+
     @Before
     public void simpleModelTestSetUp() {
-        
+
         final String json = "{"
             + objectWithKey(DocumentTranscoder.ROOT,
                 name("myProject"),
@@ -100,7 +105,7 @@ public abstract class SimpleModel {
                         dbTypeName(StandardDbmsType.defaultType().getName()),
                         array(Dbms.SCHEMAS,
                             object(
-                                name("mySchema"),
+                                name(SCHEMA_NAME),
                                 array(Schema.TABLES,
                                     object(
                                         name(TABLE_NAME),
@@ -114,6 +119,21 @@ public abstract class SimpleModel {
                                         array(Table.PRIMARY_KEY_COLUMNS,
                                             object(
                                                 name(COLUMN_NAME)
+                                            )
+                                        )
+                                    ),
+                                    object(
+                                        name(TABLE_NAME2),
+                                        array(Table.COLUMNS,
+                                            object(
+                                                name(COLUMN_NAME2),
+                                                typeMapper(StringIdentityMapper.class),
+                                                columnDatabaseType(String.class.getName())
+                                            )
+                                        ),
+                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                            object(
+                                                name(COLUMN_NAME2)
                                             )
                                         )
                                     )
@@ -130,13 +150,16 @@ public abstract class SimpleModel {
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
-        
+
         project = speedment.getProjectComponent().getProject();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
-        table = schema.tables().findAny().get();
+        table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();
         column = table.columns().findAny().get();
         pkColumn = table.primaryKeyColumns().findAny().get();
+
+        table2 = schema.tables().filter(t -> TABLE_NAME2.equals(t.getName())).findAny().get();
+        column2 = table2.columns().findAny().get();
 
         //System.out.println(project);
 //        project = new ProjectImpl(speedment);
