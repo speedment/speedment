@@ -272,7 +272,7 @@ public final class UISession {
                 } else {
                     showError(
                         "No Schema Found",
-                        "Can not connect to the database without atleast one schema specified."
+                        "Can not connect to the database without at least one schema specified."
                     );
                 }
             }

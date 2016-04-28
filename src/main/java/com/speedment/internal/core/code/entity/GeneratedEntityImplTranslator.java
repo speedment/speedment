@@ -67,7 +67,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     @Override
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
-        
+
         file.add(Import.of(Type.of(Speedment.class)));
 
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
@@ -114,9 +114,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-                
-                
-                
+
                 final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
                 final Method method = Method.of(methodName, returnType).public_().add(OVERRIDE)
                     .add("return " + MANAGER_OF_METHOD + "(" + getSupport().typeName(fu.getTable()) + ".class)")
@@ -128,7 +126,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              */
             .forEveryForeignKey((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                
+
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
                     file.add(Import.of(OPTIONAL));
@@ -160,19 +158,18 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 }
                 clazz.add(method);
             })
-            
             /**
              * Class details
              */
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
-                clazz.add(copy(file))
+                clazz
                     .add(toString(file))
                     .add(equalsMethod())
                     .add(hashCodeMethod())
                     .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(getSupport().entityType()))).public_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")
                     );
-                
+
                 /**
                  * Create aggregate streaming functions, if any
                  */
@@ -195,7 +192,6 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     }
                 });
             })
-            
             .build()
             .public_()
             .abstract_()
@@ -203,42 +199,6 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
 
-    }
-
-    private Method copy(File file) {
-        file.add(Import.of(getSupport().entityImplType()));
-
-        final JavaLanguageNamer namer = getSpeedment().getCodeGenerationComponent().javaLanguageNamer();
-        final String entityName = namer.javaVariableName(getSupport().entityName());
-        final Method result = Method.of("copy", getSupport().entityType()).public_().add(OVERRIDE)
-            .add(
-                "final " + getSupport().entityName() + " " + entityName + " = new " + getSupport().entityImplName() + "() {", indent(
-                    "@Override",
-                    "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                        "return " + getSupport().generatedEntityImplName() + ".this.speedment();"
-                    ), "}"
-                ), "};",
-                ""
-            );
-
-        columns().forEachOrdered(c -> {
-            if (c.isNullable()) {
-                result.add(
-                    GETTER_METHOD_PREFIX + getSupport().typeName(c) +
-                    "().ifPresent(" + entityName + "::" +
-                    SETTER_METHOD_PREFIX + getSupport().typeName(c) +
-                    ");"
-                );
-            } else {
-                result.add(
-                    entityName + "." + SETTER_METHOD_PREFIX + 
-                    getSupport().typeName(c) + "(get" + 
-                    getSupport().typeName(c) + "());"
-                );
-            }
-        });
-
-        return result.add("", "return " + entityName + ";");
     }
 
     protected Method toString(File file) {

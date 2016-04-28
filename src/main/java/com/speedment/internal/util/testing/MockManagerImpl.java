@@ -312,4 +312,9 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return inner.createStruct(typeName, attributes);
     }
 
+    @Override
+    public ENTITY newCopyOf(ENTITY source) {
+        return inner.newCopyOf(source);
+    }
+
 }
