@@ -47,8 +47,8 @@ public final class ImportView implements Transform<Import, String> {
             return Optional.of(
                 IMPORT_STRING
                 + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE))
-                + model.getType().getName()
-                + model.getStaticMember().map(str -> DOT + str).orElse(EMPTY)
+                + replaceDollarsWithDots(model.getType().getName())
+                + replaceDollarsWithDots(model.getStaticMember().map(str -> DOT + str).orElse(EMPTY))
                 + SC
             ).filter(x -> {
                 gen.getDependencyMgr().load(model.getType().getName());
@@ -57,6 +57,10 @@ public final class ImportView implements Transform<Import, String> {
         } else {
             return Optional.empty();
         }
+    }
+
+    private String replaceDollarsWithDots(String s) {
+        return s.replace('$', '.');
     }
 
     /**
@@ -81,9 +85,8 @@ public final class ImportView implements Transform<Import, String> {
 
         final Optional<String> current = mgr.getCurrentPackage();
         final Optional<String> suggested = packageName(type.getName());
-        
-        // TODO: Inner classes might still be imported explicitly.
 
+        // TODO: Inner classes might still be imported explicitly.
         return !(current.isPresent()
             && suggested.isPresent()
             && current.get().equals(suggested.get()));
