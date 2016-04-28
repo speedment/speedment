@@ -30,34 +30,37 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
-    
+
     private final StringProperty textProperty;
     private final ObservableStringValue defaultValue;
-    
+
     public DefaultStringPropertyItem(
-            StringProperty value, 
-            ObservableStringValue defaultValue, 
-            String name,
-            String description) {
-        
+        StringProperty value,
+        ObservableStringValue defaultValue,
+        String name,
+        String description) {
+
         super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
         this.textProperty = value;
         this.defaultValue = defaultValue;
     }
-    
+
     public DefaultStringPropertyItem(
-            StringProperty value, 
-            ObservableStringValue defaultValue, 
-            String name, 
-            String description, 
-            Consumer<PropertyEditor<?>> decorator) {
-        
+        StringProperty value,
+        ObservableStringValue defaultValue,
+        String name,
+        String description,
+        Consumer<PropertyEditor<?>> decorator) {
+
         super(value, name, description, decorator);
         this.textProperty = value;
         this.defaultValue = defaultValue;
@@ -72,74 +75,73 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
     protected PropertyEditor<?> createUndecoratedEditor() {
         return new DefaultStringPropertyEditor(this);
     }
-    
+
     private final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
 
         private DefaultStringPropertyEditor(DefaultStringPropertyItem item) {
             super(item, new DefaultStringNode(item.textProperty, item.defaultValue));
         }
-        
+
         @Override
         protected ObservableValue<String> getObservableValue() {
-            return super.getEditor().text.textProperty();
+            //return getEditor().text.textProperty();
+            return new SimpleStringProperty(); // Hack to avoid round trip error
         }
 
         @Override
         public void setValue(String value) {
-            super.getEditor().setValue(value);
+            getEditor().setValue(value);
         }
     }
-    
+
     private final static class DefaultStringNode extends HBox {
-        
+
+        private final StringProperty textProperty;
         private final ObservableStringValue defaultValue;
         private final StringProperty enteredValue;
         private final CheckBox auto;
         private final TextField text;
-        
+
         private final static double SPACING = 8.0d;
-        
-        private DefaultStringNode(StringProperty textProperty, ObservableStringValue defaultValue) {
+
+        private DefaultStringNode(final StringProperty textProperty, final ObservableStringValue defaultValue) {
+            this.textProperty = requireNonNull(textProperty); // Avoid Garbage Collection
             this.defaultValue = requireNonNull(defaultValue); // Avoid Garbage Collection
-            this.auto         = new CheckBox("Auto");
-            this.text         = new TextField();
-            
-            final boolean isAutoByDefault = 
-                textProperty.isEmpty().get() || 
-                textProperty.get().equals(defaultValue.get());
-            
-            this.enteredValue = new SimpleStringProperty();
-            this.auto.selectedProperty().setValue(isAutoByDefault);
-            
-            if (isAutoByDefault) {
+            auto = new CheckBox("Auto");
+            text = new TextField();
+            enteredValue = new SimpleStringProperty();
+            init();
+        }
+
+        private void init() {
+
+            final boolean sameAsDefault = isSameAsDefaultValue(textProperty);
+
+            auto.selectedProperty().setValue(sameAsDefault);
+
+            if (sameAsDefault) {
                 enteredValue.setValue(defaultValue.get());
                 text.textProperty().bind(defaultValue);
             } else {
                 enteredValue.setValue(textProperty.get());
-                text.textProperty().setValue(defaultValue.get());
+                text.textProperty().setValue(textProperty.get()); ///
             }
-            
-            this.text.disableProperty().bind(auto.selectedProperty());
 
-            this.auto.selectedProperty().addListener((ob, o, isAuto) -> {
+            text.disableProperty().bind(auto.selectedProperty());
+
+            auto.selectedProperty().addListener((ob, o, isAuto) -> {
                 text.textProperty().unbind();
-                
+
                 if (isAuto) {
                     enteredValue.setValue(text.textProperty().getValue());
-                    text.textProperty().bind(this.defaultValue);
-                } else {
-                    if (text.textProperty().isEmpty().get()
-                    ||  Objects.equals(
-                            this.defaultValue.get(), 
-                            this.text.textProperty().get()
-                    )) {
-                        text.textProperty().setValue(enteredValue.get());
-                    }
+                    text.textProperty().bind(defaultValue);
+                } else if (isSameAsDefaultValue(text.textProperty())) {
+                    text.textProperty().setValue(enteredValue.get());
                 }
             });
-            
-            super.getChildren().addAll(auto, text);
-            
+
+            getChildren().addAll(auto, text);
+
             setAlignment(Pos.CENTER_LEFT);
             auto.setAlignment(Pos.CENTER_LEFT);
             text.setAlignment(Pos.CENTER_LEFT);
@@ -148,7 +150,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
             setHgrow(auto, Priority.SOMETIMES);
             setSpacing(SPACING);
         }
-        
+
         private void setValue(String value) {
             if (auto.isSelected()) {
                 if (value == null || value.isEmpty()) {
@@ -161,5 +163,10 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
                 text.textProperty().setValue(value);
             }
         }
+
+        private boolean isSameAsDefaultValue(StringProperty stringProperty) {
+            return stringProperty.isEmpty().get() || Objects.equals(stringProperty.get(), defaultValue.get());
+        }
+
     }
 }
