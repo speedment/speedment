@@ -122,9 +122,9 @@ Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers
 
 Using Maven
 -----------
-To use Speedment, just add the following lines (between the ... marker lines) to your project's `pom.xml` file.
+The easiest way to get started with Speedment and Maven is to use one of [the existing archetypes](https://github.com/speedment/speedment-archetypes). An archetype is similar to a template project. When you start a new project, it will add all the dependencies you need to your `pom.xml`-file so that you can begin program immetiatly.
 
-### MySQL
+If you do not want to use an archetype, for an example if you already have a project you want to use Speedment with, you can always write your `pom.xml`-file manually. Just add the following lines (between the ... marker lines) to your project's `pom.xml` file, and then assign values to the parameters in the `<properties>`-section of the file.
 
 ```xml
 <build>
@@ -133,12 +133,12 @@ To use Speedment, just add the following lines (between the ... marker lines) to
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
-            <version>2.3.1</version>
+            <version>${speedment.version}</version>
             <dependencies>
                 <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.38</version>
+                    <groupId>${db.groupId}</groupId>
+                    <artifactId>${db.artifactId}</artifactId>
+                    <version>${db.version}</version>
                 </dependency>
             </dependencies> 
         </plugin>
@@ -150,94 +150,50 @@ To use Speedment, just add the following lines (between the ... marker lines) to
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>2.3.1</version>
+        <version>${speedment.version}</version>
     </dependency>
     <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.38</version>
+        <groupId>${db.groupId}</groupId>
+        <artifactId>${db.artifactId}</artifactId>
+        <version>${db.version}</version>
     </dependency>
     ...
 </dependencies>
 ```
 
-### PostgreSQL
+To set which database connector you want to use to communicate with your database, please add one of the following to your `<properties>`-section in the `pom.xml`-file:
 
+#### MySQL
 ```xml
-<build>
-    <plugins>
-        ...
-        <plugin>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-maven-plugin</artifactId>
-            <version>2.3.1</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.4-1206-jdbc4</version>
-                </dependency>
-            </dependencies> 
-        </plugin>
-        ...
-    </plugins>
-</build>
-<dependencies>
-    ...
-    <dependency>
-        <groupId>com.speedment</groupId>
-        <artifactId>speedment</artifactId>
-        <version>2.3.1</version>
-    </dependency>
-    <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>9.4-1206-jdbc4</version>
-    </dependency>
-    ...
-</dependencies>
+<properties>
+    <speedment.version>2.3.1</speedment.version>
+	<db.groupId>mysql</db.groupId>
+	<db.artifactId>mysql-connector-java</db.artifactId>
+	<db.version>5.1.38</db.version>
+</properties>
 ```
 
-### MariaDB
-
+#### PostgreSQL
 ```xml
-<build>
-    <plugins>
-        ...
-        <plugin>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-maven-plugin</artifactId>
-            <version>2.3.1</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.mariadb.jdbc</groupId>
-                    <artifactId>mariadb-java-client</artifactId>
-                    <version>1.4.0</version>
-                </dependency>
-            </dependencies> 
-        </plugin>
-        ...
-    </plugins>
-</build>
-<dependencies>
-    ...
-    <dependency>
-        <groupId>com.speedment</groupId>
-        <artifactId>speedment</artifactId>
-        <version>2.3.1</version>
-    </dependency>
-    <dependency>
-        <groupId>org.mariadb.jdbc</groupId>
-        <artifactId>mariadb-java-client</artifactId>
-        <version>1.4.0</version>
-    </dependency>
-    ...
-</dependencies>
+<properties>
+    <speedment.version>2.3.1</speedment.version>
+	<db.groupId>org.postgresql</db.groupId>
+	<db.artifactId>postgresql</db.artifactId>
+	<db.version>9.4-1206-jdbc4</db.version>
+</properties>
 ```
 
+#### MariaDB
+```xml
+<properties>
+    <speedment.version>2.3.1</speedment.version>
+	<db.groupId>org.mariadb.jdbc</db.groupId>
+	<db.artifactId>mariadb-java-client</db.artifactId>
+	<db.version>1.4.0</db.version>
+</properties>
+```
 
 Make sure that you use the latest `${speedment.version}` available.
-
 
 ### Requirements
 Speedment comes with support for the following databases out-of-the-box:
@@ -245,7 +201,7 @@ Speedment comes with support for the following databases out-of-the-box:
 * MariaDB
 * PostgreSQL
 
-Support for commercial databases like Oracle can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
+Support for commercial databases like Oracle DB can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
 
 As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
 
