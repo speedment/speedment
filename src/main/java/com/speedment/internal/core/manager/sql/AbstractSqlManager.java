@@ -21,6 +21,7 @@ import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.PrimaryKeyColumn;
 import com.speedment.config.db.Project;
+import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.AsynchronousQueryResult;
@@ -41,12 +42,20 @@ import com.speedment.internal.core.stream.builder.pipeline.PipelineImpl;
 import com.speedment.internal.util.LazyString;
 import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.internal.util.document.DocumentDbUtil.isSame;
 import com.speedment.internal.util.document.DocumentUtil;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.stream.StreamDecorator;
 import static com.speedment.util.NullUtil.requireNonNulls;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.NClob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Struct;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +64,12 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import static java.util.function.Function.identity;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 import java.util.stream.Stream;
 
 /**
@@ -72,30 +81,33 @@ import java.util.stream.Stream;
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
     private final LazyString sqlColumnList;
-    private final LazyString sqlColumnListQuestionMarks;
     private final LazyString sqlTableReference;
     private final LazyString sqlSelect;
-    private SqlFunction<ResultSet, ENTITY> entityMapper;
-    //private final Map<String, FieldIdentifier<ENTITY>> fieldIdentifierMap;
     private final Map<String, FieldTrait> fieldTraitMap;
     private final boolean hasPrimaryKeyColumns;
+
+    private SqlFunction<ResultSet, ENTITY> entityMapper;
 
     protected AbstractSqlManager(Speedment speedment) {
         super(speedment);
         this.sqlColumnList = LazyString.create();
-        this.sqlColumnListQuestionMarks = LazyString.create();
         this.sqlTableReference = LazyString.create();
         this.sqlSelect = LazyString.create();
-//        this.fieldIdentifierMap = fields()
-//            .filter(f -> f.getIdentifier().tableName().equals(getTable().getName())) // Protect against "VirtualFields"
-//            .filter(f -> f.getIdentifier().schemaName().equals(getTable().getParentOrThrow().getName()))
-//            .map(FieldTrait::getIdentifier)
-//            .map(f -> (FieldIdentifier<ENTITY>) f)
-//            .collect(toMap(FieldIdentifier::columnName, Function.identity()));
+
+        final Table thisTable = getTable();
+
+        // Only include fields that point towards a column in this table.
+        // In the future we might add fields that reference columns in foreign
+        // tables.
         this.fieldTraitMap = fields()
-            .filter(f -> f.getIdentifier().tableName().equals(getTable().getName())) // Protect against "VirtualFields"
-            .filter(f -> f.getIdentifier().schemaName().equals(getTable().getParentOrThrow().getName()))
-            .collect(toMap(ft -> ft.getIdentifier().columnName(), Function.identity()));
+            .filter(f
+                -> f.findColumn(speedment)
+                .map(c -> c.getParent())
+                .map(t -> isSame(thisTable, t.get()))
+                .orElse(false)
+            )
+            .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()));
+
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
 
@@ -238,17 +250,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Returns a comma separated list of question marks (?), fully formatted in
-     * accordance to the current {@link DbmsType} to represent column value
-     * wildcards.
-     *
-     * @return the comma separated question mark list
-     */
-    private String sqlColumnListWithQuestionMarks() {
-        return sqlColumnListQuestionMarks.getOrCompute(() -> sqlColumnList(c -> "?"));
-    }
-
-    /**
      * Returns a {@code AND} separated list of {@link PrimaryKeyColumn} database
      * names, formatted in accordance to the current {@link DbmsType}.
      *
@@ -313,11 +314,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .collect(toList());
 
         // TODO: Make autoinc part of FieldTrait
-//        final List<Object> values = fields()
-//            .filter(ReferenceFieldTrait.class::isInstance)
-//            .map(f -> (FieldTrait & ReferenceFieldTrait) f)
-//            .map(f -> toDatabaseType(f, entity))
-//            .collect(toList());
         @SuppressWarnings("unchecked")
         final List<F> generatedFields = fields()
             .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
@@ -382,11 +378,6 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
-//        final List<Object> values = primaryKeyFields()
-//            .filter(ReferenceFieldTrait.class::isInstance)
-//            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
-//            .map(f -> toDatabaseType(f, entity))
-//            .collect(toList());
         executeDelete(sb.toString(), values, listener);
         return entity;
     }
@@ -459,7 +450,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsHandler().executeInsert(sql, values, generatedFields, generatedKeyconsumer.apply(entity)));
+        executeHelper(sql, values, listener,
+            () -> dbmsHandler().executeInsert(
+                sql, values, generatedFields, generatedKeyconsumer.apply(entity)
+            )
+        );
     }
 
     private void executeUpdate(
@@ -506,8 +501,43 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private void assertHasPrimaryKeyColumns() {
         if (!hasPrimaryKeyColumns) {
-            throw new SpeedmentException("The table " + DocumentUtil.relativeName(getTable(), Project.class) + " does not have any primary keys. Some operations like update() and remove() requires at least one primary key.");
+            throw new SpeedmentException(
+                "The table "
+                + DocumentUtil.relativeName(getTable(), Project.class, DATABASE_NAME)
+                + " does not have any primary keys. Some operations like "
+                + "update() and remove() requires at least one primary key."
+            );
         }
+    }
+
+    @Override
+    public Clob createClob() throws SQLException {
+        return dbmsHandler().createClob();
+    }
+
+    @Override
+    public Blob createBlob() throws SQLException {
+        return dbmsHandler().createBlob();
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return dbmsHandler().createNClob();
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return dbmsHandler().createSQLXML();
+    }
+
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        return dbmsHandler().createArrayOf(typeName, elements);
+    }
+
+    @Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        return dbmsHandler().createStruct(typeName, attributes);
     }
 
 }

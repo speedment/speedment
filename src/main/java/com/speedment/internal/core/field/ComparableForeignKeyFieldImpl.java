@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.ComparableForeignKeyField;
 import com.speedment.field.FieldIdentifier;
@@ -34,8 +36,10 @@ import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceForeignKeyFieldTraitImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -78,6 +82,11 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
         return field.isUnique();
     }
 
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
+    }
+    
     @Override
     public Setter<ENTITY, V> setter() {
         return referenceField.setter();
@@ -167,6 +176,16 @@ public class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? sup
     public ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
     }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
+        return comparableField.notBetween(start, end);
+    }
+    
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
+    }    
 
     @SafeVarargs
     @SuppressWarnings("varargs") // delegator is safe

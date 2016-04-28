@@ -20,13 +20,13 @@ import com.speedment.component.notification.Notification;
 import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.util.LayoutAnimator;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
+import static java.util.Objects.requireNonNull;
 
 /**
  * FXML Controller class
@@ -60,8 +60,7 @@ public class NotificationAreaController implements Initializable {
             while (change.next()) {
                 if (change.wasAdded()) {
                     change.getAddedSubList().forEach(n -> {
-                        NotificationController.showNotification(
-                            notificationArea, n.text(), n.icon(), n.color(), n.onClose()
+                        NotificationController.showNotification(notificationArea, n.text(), n.icon(), n.palette(), n.onClose()
                         );
                         
                         notifications.remove(n);
@@ -72,8 +71,7 @@ public class NotificationAreaController implements Initializable {
         
         while (!notifications.isEmpty()) {
             final Notification n = notifications.get(0);
-            NotificationController.showNotification(
-                notificationArea, n.text(), n.icon(), n.color(), n.onClose()
+            NotificationController.showNotification(notificationArea, n.text(), n.icon(), n.palette(), n.onClose()
             );
             notifications.remove(0);
         }

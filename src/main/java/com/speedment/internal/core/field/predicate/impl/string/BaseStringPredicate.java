@@ -30,16 +30,16 @@ import com.speedment.internal.core.field.predicate.impl.SpeedmentPredicateImpl;
  * @param <ENTITY> the entity type
  */
 public class BaseStringPredicate<ENTITY, D> extends SpeedmentPredicateImpl<ENTITY, D, String>
-        implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String>, StringSpeedmentPredicate<ENTITY, D> {
+    implements SpeedmentPredicate<ENTITY, D, String>, BinaryOperation<String>, StringSpeedmentPredicate<ENTITY, D> {
 
     private final String operand0;
     private final BiStringPredicate innerPredicate;
 
     public BaseStringPredicate(PredicateType predicateType,
-            FieldTrait field,
-            ReferenceFieldTrait<ENTITY, D, String> referenceField,
-            String operand0,
-            BiStringPredicate innerPredicate
+        FieldTrait field,
+        ReferenceFieldTrait<ENTITY, D, String> referenceField,
+        String operand0,
+        BiStringPredicate innerPredicate
     ) {
         super(predicateType, field, referenceField);
         this.operand0 = operand0;
@@ -63,18 +63,27 @@ public class BaseStringPredicate<ENTITY, D> extends SpeedmentPredicateImpl<ENTIT
     }
 
     public static final BiStringPredicate EQUALS_IGNORE_CASE_PREDICATE
-            = (v, f) -> (v == f) || (f != null && f.equalsIgnoreCase(v));
+        = (v, f) -> (v == f) || (f != null && f.equalsIgnoreCase(v));
 
     public static final BiStringPredicate NOT_EQUALS_IGNORE_CASE_PREDICATE
-            = (v, f) -> !EQUALS_IGNORE_CASE_PREDICATE.test(v, f);
+        = (v, f) -> !EQUALS_IGNORE_CASE_PREDICATE.test(v, f);
 
     public static final BiStringPredicate STARTS_WITH_PREDICATE
-            = (v, f) -> (v != null && f != null) && (f.startsWith(v));
+        = (v, f) -> (v != null && f != null) && (f.startsWith(v));
+
+    public static final BiStringPredicate NOT_STARTS_WITH_PREDICATE
+        = (v, f) -> !STARTS_WITH_PREDICATE.test(v, f);
 
     public static final BiStringPredicate ENDS_WITH_PREDICATE
-            = (v, f) -> (v != null && f != null) && (f.endsWith(v));
+        = (v, f) -> (v != null && f != null) && (f.endsWith(v));
+
+    public static final BiStringPredicate NOT_ENDS_WITH_PREDICATE
+        = (v, f) -> !ENDS_WITH_PREDICATE.test(v, f);
 
     public static final BiStringPredicate CONTAINS_PREDICATE
-            = (v, f) -> (v != null && f != null) && (f.contains(v));
+        = (v, f) -> (v != null && f != null) && (f.contains(v));
+
+    public static final BiStringPredicate NOT_CONTAINS_PREDICATE
+        = (v, f) -> !CONTAINS_PREDICATE.test(v, f);
 
 }

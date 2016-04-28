@@ -68,32 +68,31 @@ public class SpeedmentComparatorImpl<ENTITY, D, V extends Comparable<? super V>>
             return 0;
         }
         if (o1Value == null) {
-            switch (nullOrder) {
-                case NONE: {
-                    throw new NullPointerException("A field was null and null fields not allowed");
-                }
-                case FIRST: {
-                    return applyReversed(-1);
-                }
-                case LAST: {
-                    return applyReversed(1);
-                }
-            }
+            return forNull(Parameter.FIRST);
         }
         if (o2Value == null) {
-            switch (nullOrder) {
-                case NONE: {
-                    throw new NullPointerException("A field was null and null fields not allowed");
-                }
-                case FIRST: {
-                    return applyReversed(1);
-                }
-                case LAST: {
-                    return applyReversed(-1);
-                }
-            }
+            return forNull(Parameter.SECOND);
         }
         return applyReversed(o1Value.compareTo(o2Value));
+    }
+
+    private enum Parameter {
+        FIRST, SECOND;
+    }
+
+    private int forNull(Parameter parameter) {
+        final int firstOutcome = Parameter.FIRST.equals(parameter) ? -1 : 1;
+        final int lastOutcome = -firstOutcome;
+        switch (nullOrder) {
+            case NONE:
+                throw new NullPointerException("A field was null and null fields not allowed");
+            case FIRST:
+                return applyReversed(firstOutcome);
+            case LAST:
+                return applyReversed(lastOutcome);
+            default:
+                throw new IllegalStateException("Illegal NullOrder");
+        }
     }
 
     private int applyReversed(int compare) {

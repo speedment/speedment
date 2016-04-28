@@ -37,17 +37,22 @@ public class TimestampToIntMapper implements TypeMapper<Timestamp, Integer> {
 
     @Override
     public Integer toJavaType(Timestamp value) {
-        return value == null ? null : (int)(value.getTime() / 1000);
+        return value == null ? null : (int) (value.getTime() / 1000);
     }
 
     @Override
     public Timestamp toDatabaseType(Integer value) {
         return value == null ? null : new Timestamp(value * 1000);
     }
-    
+
     @Override
     public boolean isIdentityMapper() {
         return false;
     }
-    
+
+    @Override
+    public boolean isApproximation() {
+        return true;
+    }
+
 }

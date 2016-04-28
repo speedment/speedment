@@ -23,15 +23,15 @@ import java.util.Comparator;
 import java.util.Set;
 
 /**
- * A representation of an Entity field that is a reference type (eg 
+ * A representation of an Entity field that is a reference type (e.g.
  * {@code Integer} and not {@code int}) and that implements {@link Comparable}.
- * 
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * @param <V>       the field value type
- * 
- * @author  Per Minborg
- * @author  Emil Forslund
+ *
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ * @param <V> the field value type
+ *
+ * @author Per Minborg
+ * @author Emil Forslund
  */
 @Api(version = "2.3")
 public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
@@ -168,6 +168,45 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * be included in the Field range or not
      */
     ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not between</em>
+     * the given values (inclusive the start value but exclusive the end value).
+     * <p>
+     * N.B. if the start value is greater than the end value, then the returned
+     * Predicate will always evaluate to {@code true}
+     *
+     * @param start to compare as a start value
+     * @param end to compare as an end value
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not between</em> the given values (inclusive the start
+     * value but exclusive the end value)
+     */
+    default ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
+        return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    }
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field is <em>not between</em>
+     * the given values and taking the Inclusion parameter into account when
+     * determining if either of the end points shall be included in the Field
+     * range or not.
+     * <p>
+     * N.B. if the start value is greater than the end value, then the returned
+     * Predicate will always evaluate to {@code true}
+     *
+     * @param start to compare as a start value
+     * @param end to compare as an end value
+     * @param inclusion determines if the end points is included in the Field
+     * range.
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>not between</em> the given values and taking the
+     * Inclusion parameter into account when determining if either of the end
+     * points shall be included in the Field range or not
+     */
+    ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

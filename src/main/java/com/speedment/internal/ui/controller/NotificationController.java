@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.controller;
 
+import com.speedment.component.brand.Palette;
 import com.speedment.exception.SpeedmentException;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -40,7 +41,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import static javafx.util.Duration.millis;
 
@@ -51,25 +51,19 @@ import static javafx.util.Duration.millis;
  * @since   2.3
  */
 public final class NotificationController implements Initializable {
-    
-    public final static Color 
-        GREEN = Color.web("#1ce1b0"),
-        BLUE  = Color.web("#45a6fc"),
-        RED   = Color.web("#ff5555");
-    
+
     private final String message;
     private final FontAwesomeIcon icon;
+    private final Palette palette;
     private final Runnable onClose;
-    private final Color color;
     private final AtomicBoolean destroyed;
     
     private @FXML Label notification;
     
-    
-    private NotificationController(String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+    private NotificationController(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
         this.message = requireNonNull(message);
         this.icon    = requireNonNull(icon);
-        this.color   = requireNonNull(color);
+        this.palette = requireNonNull(palette);
         this.onClose = requireNonNull(onClose);
         
         this.destroyed = new AtomicBoolean(false);
@@ -82,33 +76,40 @@ public final class NotificationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         notification.setText(message);
         notification.setGraphic(createGlyph());
-        notification.setStyle("-fx-border-color:" + toRGBCode(color));
+        notification.getStyleClass().add(palette.name().toLowerCase());
     }
     
     public @FXML void close() {
         if (destroyed.compareAndSet(false, true)) {
             onClose.run();
-
-            final FadeTransition fade = new FadeTransition(millis(EXIT_SPEED), notification);
-            fade.setFromValue(1);
-            fade.setToValue(0);
-
-            final TranslateTransition trans = new TranslateTransition(millis(EXIT_SPEED), notification);
-            trans.setFromY(0);
-            trans.setToY(ENTER_Y);
-
-            final SequentialTransition seq = new SequentialTransition(fade, trans);
-            seq.setOnFinished(ev -> remove(notification));
-            seq.play();
+            remove(notification);
         }
     }
+    
+    private void fadeAway() {
+        final FadeTransition fade = new FadeTransition(millis(EXIT_SPEED), notification);
+        fade.setFromValue(1);
+        fade.setToValue(0);
 
-    static void showNotification(FlowPane area, String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+        final TranslateTransition trans = new TranslateTransition(millis(EXIT_SPEED), notification);
+        trans.setFromY(0);
+        trans.setToY(ENTER_Y);
+
+        final SequentialTransition seq = new SequentialTransition(fade, trans);
+        seq.setOnFinished(ev -> {
+            if (destroyed.compareAndSet(false, true)) {
+                remove(notification);
+            }
+        });
+        seq.play();
+    }
+
+    static void showNotification(FlowPane area, String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
 
         final FXMLLoader loader = new FXMLLoader(NotificationController.class.getResource(NOTIFICATION_FXML));
         final AtomicReference<NotificationController> ref = new AtomicReference<>();
         loader.setControllerFactory(clazz -> {
-            ref.set(new NotificationController(message, icon, color, onClose));
+            ref.set(new NotificationController(message, icon, palette, onClose));
             return ref.get();
         });
         final Node notification;
@@ -133,22 +134,14 @@ public final class NotificationController implements Initializable {
         fade.play();
         
         final Timeline timeline = new Timeline(new KeyFrame(
-            TIMER, ev -> ref.get().close()
+            TIMER, ev -> ref.get().fadeAway()
         ));
         timeline.play();
-    }
-    
-    private static String toRGBCode(Color color) {
-        return String.format("#%02X%02X%02X",
-            (int) (color.getRed() * 255),
-            (int) (color.getGreen() * 255),
-            (int) (color.getBlue() * 255));
     }
     
     private FontAwesomeIconView createGlyph() {
         final FontAwesomeIconView view = new FontAwesomeIconView(icon);
         view.setSize(ICON_SIZE);
-        view.setFill(color);
         return view;
     }
     
@@ -200,11 +193,6 @@ public final class NotificationController implements Initializable {
         ENTER_Y = 100;
     
     private final static String ICON_SIZE = "24";
-    private final static FontAwesomeIcon DEFAULT_ICON = FontAwesomeIcon.EXCLAMATION;
-    private final static Color DEFAULT_COLOR = BLUE;
-    
     private final static String NOTIFICATION_FXML = "/fxml/Notification.fxml";
-    private final static String NOTIFICATION_AREA_ID = "#notificationArea";
-    
     private final static Duration TIMER = Duration.seconds(10);
 }

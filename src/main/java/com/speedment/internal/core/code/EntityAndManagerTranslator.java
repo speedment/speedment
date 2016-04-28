@@ -69,8 +69,8 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
 
     protected Type pkTupleType() {
         final long pks = primaryKeyColumns().count();
-        final Package package_ = Tuple1.class.getPackage();
-        final String tupleClassName = package_.getName() + ".Tuple" + pks;
+        final Package pkg = Tuple1.class.getPackage();
+        final String tupleClassName = pkg.getName() + ".Tuple" + pks;
         final java.lang.Class<?> tupleClass;
         try {
             tupleClass = java.lang.Class.forName(tupleClassName);
@@ -78,7 +78,7 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
         }
         final Type result = Type.of(tupleClass);
-        primaryKeyColumns().forEachOrdered(pk -> {
+        primaryKeyColumns().forEachOrdered(pk -> 
             result.add(
                     Generic.of().add(
                             Type.of(java.lang.Class.class)
@@ -86,8 +86,8 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
                                     Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
                             )
                     )
-            );
-        });
+            )
+        );
         return result;
     }
 }

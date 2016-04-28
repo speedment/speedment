@@ -50,15 +50,16 @@ import com.speedment.internal.core.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.internal.core.field.StringFieldImpl;
 import com.speedment.internal.core.field.StringForeignKeyFieldImpl;
 import com.speedment.internal.util.document.DocumentDbUtil;
+import static com.speedment.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.util.JavaLanguageNamer;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.Pluralis;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -79,7 +80,7 @@ public final class EntityTranslatorSupport {
         final Project project = ancestor(table, Project.class).get();
 
         return Type.of(project.findPackageName(javaLanguageNamer) + DOT
-            + relativeName(table, Project.class, javaLanguageNamer::javaPackageName) + DOT
+            + relativeName(table, Project.class, JAVA_NAME, javaLanguageNamer::javaPackageName) + DOT
             + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }

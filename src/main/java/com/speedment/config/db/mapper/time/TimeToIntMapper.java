@@ -38,16 +38,21 @@ public class TimeToIntMapper implements TypeMapper<Time, Integer> {
 
     @Override
     public Integer toJavaType(Time value) {
-        return value == null ? null : (int)(value.getTime() / 1000);
+        return value == null ? null : (int) (value.getTime() / 1000);
     }
 
     @Override
     public Time toDatabaseType(Integer value) {
         return value == null ? null : new Time(value * 1000);
     }
-    
+
     @Override
     public boolean isIdentityMapper() {
         return false;
+    }
+
+    @Override
+    public boolean isApproximation() {
+        return true;
     }
 }

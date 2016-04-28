@@ -49,7 +49,7 @@ public final class ProjectComponentImpl extends InternalOpenSourceComponent impl
     }
 
     private final static Software[] DEPENDENCIES = {
-        AbstractSoftware.with("Gson", "2.5", OpenSourceLicense.APACHE_2)
+        AbstractSoftware.with("Gson", "2.6.2", OpenSourceLicense.APACHE_2)
     };
 
     @Override

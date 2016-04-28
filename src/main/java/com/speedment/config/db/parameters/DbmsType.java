@@ -114,11 +114,11 @@ public interface DbmsType {
      * @return the non-null name for this {@code DbmsType}
      */
     String getDriverName();
-    
+
     /**
      * Returns the naming convention used by this database.
-     * 
-     * @return  the naming convention
+     *
+     * @return the naming convention
      */
     DatabaseNamingConvention getDatabaseNamingConvention();
 
@@ -133,17 +133,49 @@ public interface DbmsType {
     DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms);
 
     // TODO: Improve javadoc in this file.
-    
     String getResultSetTableSchema();
 
+    /**
+     * Returns the ConnectionUrlGenerator for this database. A
+     * ConnectionUrlGenerator can create a default connection URL given a number
+     * of parameters.
+     *
+     * @return the ConnectionUrlGenerator for this database.
+     */
     ConnectionUrlGenerator getConnectionUrlGenerator();
 
+    /**
+     * Returns the SpeedmentPredicateView for this database. A
+     * SpeedmentPredicateView can render a SQL query given a stream pipeline.
+     *
+     * @return the SpeedmentPredicateView for this database
+     */
     SpeedmentPredicateView getSpeedmentPredicateView();
 
+    /**
+     * Returns a pre-defined Set for the TypeInfoMetaData for this database
+     * type. Some databases meta data retrieval functions (like PostgreSQL) ate
+     * very slow so this is a short cut.
+     *
+     * @return a pre-defined Set for the TypeInfoMetaData for this database type
+     */
     Set<TypeInfoMetaData> getDataTypes();
-    
+
+    /**
+     * Returns the initial SQL connection verification query to send to the
+     * database during speedment startup.
+     *
+     * @return the initial SQL connection verification query to send to the
+     * database during speedment startup
+     */
     String getInitialQuery();
 
+    /**
+     * Creates and returns a new DbmsType builder. The builder is initialized
+     * with default values for some optional parameters.
+     *
+     * @return a new DbmsType builder
+     */
     public static WithName builder() {
         return DbmsTypeImpl.builder();
     }

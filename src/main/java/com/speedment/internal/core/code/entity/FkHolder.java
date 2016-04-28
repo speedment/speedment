@@ -58,12 +58,6 @@ public final class FkHolder {
         emt           = new EntityManagerTranslator(speedment, generator, getTable());
         foreignEmt    = new EntityManagerTranslator(speedment, generator, getForeignTable());
     }
-    
-    public Stream<Import> imports() {
-        final Stream.Builder<Type> sb = Stream.builder();
-
-        return sb.build().map(t -> Import.of(t));
-    }
 
     public Column getColumn() {
         return column;

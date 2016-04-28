@@ -36,6 +36,7 @@ import com.speedment.config.Document;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.ForeignKey;
+import com.speedment.config.db.ForeignKeyColumn;
 import com.speedment.config.db.Index;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
@@ -56,21 +57,22 @@ import com.speedment.internal.core.config.db.IndexImpl;
 import com.speedment.internal.core.config.db.ProjectImpl;
 import com.speedment.internal.core.config.db.SchemaImpl;
 import com.speedment.internal.core.config.db.TableImpl;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.stream.MapStream;
 import com.speedment.util.JavaLanguageNamer;
-import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -187,16 +189,15 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
             owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
             message = GENERATED_JAVADOC_MESSAGE;
         } else {
-            owner = getSpeedment().getProjectComponent().getProject().getCompanyName();
+            owner = project().get().getCompanyName();
             message = JAVADOC_MESSAGE;
-
         }
 
         return Javadoc.of(
             getJavadocRepresentText()
             + " representing an entity (for example, a row) in the "
             + getDocument().mainInterface().getSimpleName()
-            + " " + relativeName(getDocument(), Project.class)
+            + " " + relativeName(getDocument(), Project.class, DATABASE_NAME)
             + "." + message
         ).add(AUTHOR.setValue(owner));
     }
@@ -338,9 +339,29 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     .forEachOrdered((key, actor)
                         -> table().ifPresent(table -> table.childrenByKey()
                             .filterKey(key::equals)
+                            
+                            // the foreignKeys-property is special in that only
+                            // keys that reference enabled and existing table
+                            // and columns are to be included.
+                            .filter((k, v) -> {
+                                if (Table.FOREIGN_KEYS.equals(k)) {
+                                    return new ForeignKeyImpl(table, v)
+                                        .foreignKeyColumns()
+                                        .map(ForeignKeyColumn::findColumn)
+                                        .allMatch(c -> 
+                                            c.filter(Column::isEnabled)
+                                                .map(Column::getParentOrThrow)
+                                                .filter(Table::isEnabled)
+                                                .isPresent()
+                                        );
+                                    
+                                // Indexes, PrimaryKeyColumns and Columns should
+                                // be handled as usual.
+                                } else return true;
+                            })
                             .values()
                             .map(data -> new BaseDocument(table, data))
-                            .filter(HasEnabled::test)
+                            .filter(HasEnabled::test)                            
                             .forEachOrdered(c -> actor.accept(model, c))
                         )
                     );
@@ -349,14 +370,17 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
                     schema().ifPresent(schema -> schema.tables()
                         .filter(HasEnabled::test)
                         .flatMap(t -> t.foreignKeys())
+                        .filter(HasEnabled::test)
                         .filter(fk -> fk.foreignKeyColumns()
                             .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
+                            .filter(HasEnabled::test)
+                            .filter(fkc -> fkc.findForeignColumn().map(HasEnabled::test).orElse(false))
                             .findFirst()
                             .isPresent()
                         ).forEachOrdered(fk
                             -> foreignKeyReferencesThisTableConsumers.get(phase).forEach(
-                            c -> c.accept(model, fk)
-                        )
+                                c -> c.accept(model, fk)
+                            )
                         )
                     );
                 }

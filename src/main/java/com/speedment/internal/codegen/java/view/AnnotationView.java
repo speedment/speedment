@@ -26,6 +26,7 @@ import static com.speedment.internal.codegen.util.Formatting.*;
 import static com.speedment.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Transforms from an {@link Annotation} to java code.
@@ -61,7 +62,7 @@ public final class AnnotationView implements Transform<Annotation, String>,
                     + // Default value (optional)
                     ifelse(gen.on(f.getValue()), v -> (DEFAULT_STRING + v), EMPTY)
                     + SC
-                ).collect(joinIfNotEmpty(nl()))
+                ).collect(joining(nl()))
             )
         );
     }

@@ -191,7 +191,7 @@ public final class ComponentsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final Speedment speedment = session.getSpeedment();
-        title.setTextFill(Color.web("#45a6fc"));
+        title.setTextFill(Color.web("#45a6fc")); // TODO Use styleClass instead
         title.setFont(SpeedmentFont.HEADER.get());
 
         header.setText("Component Explorer");
@@ -223,10 +223,7 @@ public final class ComponentsController implements Initializable {
 
     private TreeItem<String> treeItem(Component comp) {
         final ComponentItem item = new ComponentItem(comp);
-        
-        // Show License
-//        item.getChildren().add(new LicenseItem(comp.asSoftware().getLicense()));
-        
+
         // Show Translators
         final TranslatorsItem translators = new TranslatorsItem();
         cast(comp, CodeGenerationComponent.class).ifPresent(cg -> {

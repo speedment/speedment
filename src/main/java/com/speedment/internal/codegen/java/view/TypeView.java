@@ -26,6 +26,7 @@ import java.util.Collections;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from a {@link Type} to java code.
@@ -63,7 +64,7 @@ public final class TypeView implements Transform<Type, String> {
         requireNonNull(name);
         
 		return Optional.of(
-			name + gen.onEach(model.getGenerics()).collect(
+			name.replace(DOLLAR, DOT) + gen.onEach(model.getGenerics()).collect(
 				joinIfNotEmpty(
 					COMMA_SPACE, 
 					SS, 

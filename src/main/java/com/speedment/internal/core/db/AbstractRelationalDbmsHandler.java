@@ -62,15 +62,19 @@ import com.speedment.internal.util.document.DocumentUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import com.speedment.util.ProgressMeasure;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
@@ -388,6 +392,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             column.mutator().setDatabaseType(selectedJdbcClass);
 
             setAutoIncrement(column, md);
+            progressListener.setCurrentAction(actionName(column));
 
         };
 
@@ -716,7 +721,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 conn = getConnection(dbms);
                 conn.setAutoCommit(false);
                 for (final SqlStatement sqlStatement : sqlStatementList) {
-
+                    lastSqlStatement = sqlStatement;
                     switch (sqlStatement.getType()) {
                         case INSERT: {
                             final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
@@ -790,18 +795,11 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             for (Object o : sqlStatement.getValues()) {
                 ps.setObject(i++, o);
             }
-
             ps.executeUpdate();
 
             try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 while (generatedKeys.next()) {
-                    final Object genKey = generatedKeys.getObject(1);
-                    if (!"oracle.sql.ROWID".equals(genKey.getClass().getName())) {
-                        sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                    } else {
-                        // Handle ROWID, make result = map<,String>
-                        // instead...
-                    }
+                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                 }
             }
         }
@@ -931,7 +929,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
-        return "Reading metadata from " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
+        return doc.mainInterface().getSimpleName() + " " + doc.getName() + " in " + doc.getParentOrThrow().getName();
+        //return "Read " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
     }
 
     protected String encloseField(Dbms dbms, String fieldName) {
@@ -1023,6 +1022,46 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
     private static String normalize(String string) {
         return string.toUpperCase();
+    }
+
+    @Override
+    public Clob createClob() throws SQLException {
+        return applyOnConnection(Connection::createClob);
+    }
+
+    @Override
+    public Blob createBlob() throws SQLException {
+        return applyOnConnection(Connection::createBlob);
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return applyOnConnection(Connection::createNClob);
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return applyOnConnection(Connection::createSQLXML);
+    }
+
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        try (final Connection connection = getConnection(dbms)) {
+            return connection.createArrayOf(typeName, elements);
+        }
+    }
+
+    @Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        try (final Connection connection = getConnection(dbms)) {
+            return connection.createStruct(typeName, attributes);
+        }
+    }
+
+    private <T> T applyOnConnection(SqlFunction<Connection, T> mapper) throws SQLException {
+        try (final Connection c = getConnection(dbms)) {
+            return mapper.apply(c);
+        }
     }
 
 }

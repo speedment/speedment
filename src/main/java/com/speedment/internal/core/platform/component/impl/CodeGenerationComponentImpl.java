@@ -63,7 +63,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     private Generator generator;
     private TranslatorManager translatorManager;
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
-    private Supplier<? extends JavaLanguageNamer> javaLanguageSupplier;
+    //private Supplier<? extends JavaLanguageNamer> javaLanguageNamerSupplier;
+    private JavaLanguageNamer javaLanguageNamer;
 
     public CodeGenerationComponentImpl(Speedment speedment) {
         super(speedment);
@@ -84,7 +85,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Project.class, GENERATED_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
         put(Project.class, GENERATED_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
 
-        javaLanguageSupplier = DefaultJavaLanguageNamer::new;
+        javaLanguageNamer = new DefaultJavaLanguageNamer();
     }
 
     private CodeGenerationComponentImpl(Speedment speedment, CodeGenerationComponentImpl template) {
@@ -171,12 +172,12 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
     @Override
     public JavaLanguageNamer javaLanguageNamer() {
-        return javaLanguageSupplier.get();
+        return javaLanguageNamer;
     }
 
     @Override
     public void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier) {
-        this.javaLanguageSupplier = supplier;
+        javaLanguageNamer = supplier.get();
     }
 
     @Override

@@ -50,4 +50,10 @@ public class DateToIntMapper implements TypeMapper<Date, Integer> {
     public boolean isIdentityMapper() {
         return false;
     }
+
+    @Override
+    public boolean isApproximation() {
+        return true;
+    }
+    
 }

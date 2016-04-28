@@ -105,7 +105,8 @@ public final class MySqlDbmsType {
                 "&characterEncoding=UTF-8" +
                 "&useServerPrepStmts=true" +
                 "&useCursorFetch=true" +
-                "&zeroDateTimeBehavior=convertToNull"
+                "&zeroDateTimeBehavior=convertToNull"+
+                "&useSSL=false"
             );
             
             return result.toString();

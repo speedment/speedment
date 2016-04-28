@@ -19,6 +19,7 @@ package com.speedment.stream;
 import com.speedment.internal.core.stream.parallelstrategy.ComputeIntensityExtremeParallelStrategy;
 import com.speedment.internal.core.stream.parallelstrategy.ComputeIntensityHighParallelStrategy;
 import com.speedment.internal.core.stream.parallelstrategy.ComputeIntensityMediumParallelStrategy;
+import com.speedment.internal.core.stream.parallelstrategy.ConfigurableIteratorSpliterator;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -55,4 +56,13 @@ public interface ParallelStrategy {
 
     <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics);
 
+    public static <T> ParallelStrategy of(final int[] batchSizes)  {
+        return new ParallelStrategy() {
+            @Override
+            public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
+                return new ConfigurableIteratorSpliterator<>(iterator, characteristics, batchSizes);
+            }
+        };
+    }
+    
 }

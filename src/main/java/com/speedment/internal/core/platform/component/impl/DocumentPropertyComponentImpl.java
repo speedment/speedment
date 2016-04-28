@@ -38,7 +38,7 @@ import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.util.ImmutableListUtil;
 import com.speedment.license.Software;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

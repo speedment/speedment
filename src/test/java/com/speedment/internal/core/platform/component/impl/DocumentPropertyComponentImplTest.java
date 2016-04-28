@@ -36,7 +36,7 @@ import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.config.SchemaProperty;
 import com.speedment.internal.ui.config.TableProperty;
 import com.speedment.internal.util.ImmutableListUtil;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

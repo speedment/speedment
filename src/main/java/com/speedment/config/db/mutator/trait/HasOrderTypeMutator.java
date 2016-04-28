@@ -28,6 +28,6 @@ import com.speedment.config.db.trait.*;
 public interface HasOrderTypeMutator<DOC extends HasOrderType> extends DocumentMutator<DOC> {
     
     default void setOrderType(OrderType orderType) {
-         put(HasOrderType.ORDER_TYPE, orderType);
+         put(HasOrderType.ORDER_TYPE, orderType.name());
     }
 }

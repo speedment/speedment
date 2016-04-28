@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.ComparableField;
 import com.speedment.field.FieldIdentifier;
@@ -31,8 +33,10 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -51,11 +55,11 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     private final TypeMapper<D, V> typeMapper;
 
     public ComparableFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, V> getter,
-            Setter<ENTITY, V> setter,
-            TypeMapper<D, V> typeMapper,
-            boolean unique
+        FieldIdentifier<ENTITY> identifier,
+        Getter<ENTITY, V> getter,
+        Setter<ENTITY, V> setter,
+        TypeMapper<D, V> typeMapper,
+        boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
@@ -72,6 +76,11 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     @Override
     public boolean isUnique() {
         return field.isUnique();
+    }
+
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
     }
 
     @Override
@@ -157,6 +166,16 @@ public class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> imp
     @Override
     public ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion) {
         return comparableField.between(start, end, inclusion);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
+        return comparableField.notBetween(start, end);
+    }
+        
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
     }
 
     @SafeVarargs

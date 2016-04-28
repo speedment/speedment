@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.core.field;
 
+import com.speedment.Speedment;
+import com.speedment.config.db.Column;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.field.FieldIdentifier;
 import com.speedment.field.Inclusion;
@@ -34,8 +36,10 @@ import com.speedment.internal.core.field.trait.ComparableFieldTraitImpl;
 import com.speedment.internal.core.field.trait.FieldTraitImpl;
 import com.speedment.internal.core.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.internal.core.field.trait.StringFieldTraitImpl;
+import com.speedment.internal.util.document.DocumentDbUtil;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -53,11 +57,11 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     private final StringFieldTrait<ENTITY, D> stringField;
 
     public StringFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, String> getter,
-            Setter<ENTITY, String> setter,
-            TypeMapper<D, String> typeMapper,
-            boolean unique
+        FieldIdentifier<ENTITY> identifier,
+        Getter<ENTITY, String> getter,
+        Setter<ENTITY, String> setter,
+        TypeMapper<D, String> typeMapper,
+        boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
@@ -74,6 +78,11 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     @Override
     public boolean isUnique() {
         return field.isUnique();
+    }
+
+    @Override
+    public Optional<Column> findColumn(Speedment speedment) {
+        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
     }
 
     @Override
@@ -162,7 +171,19 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end) {
+        return comparableField.notBetween(start, end);
+    }
+
+    @Override
+    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end, Inclusion inclusion) {
+        return comparableField.notBetween(start, end, inclusion);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs") // delegator is safe
+    @Override
+    public final ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
         return comparableField.in(values);
     }
 
@@ -199,13 +220,28 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
+    public StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value) {
+        return stringField.notStartsWith(value);
+    }
+
+    @Override
     public StringSpeedmentPredicate<ENTITY, D> endsWith(String value) {
         return stringField.endsWith(value);
     }
 
     @Override
+    public StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value) {
+        return stringField.notEndsWith(value);
+    }
+
+    @Override
     public StringSpeedmentPredicate<ENTITY, D> contains(String value) {
         return stringField.contains(value);
+    }
+
+    @Override
+    public StringSpeedmentPredicate<ENTITY, D> notContains(String value) {
+        return stringField.notContains(value);
     }
 
     @Override

@@ -141,9 +141,9 @@ public final class ConnectController implements Initializable {
                 getDbmsTypes()
                     .findFirst()
                     .orElseThrow(() -> new SpeedmentException(
-                        "Could not find any installed JDBC drivers. Make sure to" +
+                        "Could not find any installed JDBC drivers. Make sure to " +
                         "include at least one JDBC driver as a dependency in the " +
-                        "projects pom.xml-file."
+                        "projects pom.xml-file under the speedment-maven-plugin <plugin> tag."
                     ))
             );
             

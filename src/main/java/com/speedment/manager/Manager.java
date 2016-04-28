@@ -22,6 +22,7 @@ import com.speedment.component.Lifecyclable;
 import com.speedment.config.db.Column;
 import com.speedment.config.db.Table;
 import com.speedment.db.MetaResult;
+import com.speedment.db.trait.HasCreateFromConnectionMethods;
 import com.speedment.encoder.Encoder;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.field.FieldIdentifier;
@@ -41,12 +42,12 @@ import java.util.stream.Stream;
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
  *
- * @author              Per Minborg
- * @author              Emil Forslund
- * @param <ENTITY>      Entity type for this Manager
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @param <ENTITY> Entity type for this Manager
  */
 @Api(version = "2.3")
-public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
+public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreateFromConnectionMethods {
 
     // Entity Inspection
     /**
@@ -98,19 +99,19 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * {@code null}
      */
     void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value);
-    
+
     /**
      * Returns a stream of the fields that every entity in this contains.
-     * 
-     * @return  a stream fo all fields
+     *
+     * @return a stream fo all fields
      */
     Stream<FieldTrait> fields();
-    
+
     /**
      * Returns a stream of the fields that are included in the primary key of
      * the table represented by this {@code Manager}.
-     * 
-     * @return  the primary key fields
+     *
+     * @return the primary key fields
      */
     Stream<FieldTrait> primaryKeyFields();
 
@@ -137,7 +138,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @return the entity class for this Manager
      */
     Class<ENTITY> getEntityClass();
-    
+
     /**
      * Returns the entity class for this Manager.
      *
@@ -367,7 +368,7 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @see Stream
      */
     Stream<ENTITY> nativeStream(StreamDecorator decorator);
-    
+
     /**
      * Finds and returns an Optional entity where the given field matches the
      * given value. If no entity matches, an Optional.empty() is returned. If
@@ -381,9 +382,8 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>> {
      * @param value to match with the field
      * @return An Optional entity where the given field matches the given value
      */
-    <D, V extends Comparable<? super V>, 
-    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
-    Optional<ENTITY> findAny(F field, V value);
+    <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
+        Optional<ENTITY> findAny(F field, V value);
 
     // TBI: Shall we expose this method in the API?
     // Persistence

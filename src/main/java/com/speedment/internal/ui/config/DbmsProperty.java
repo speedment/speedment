@@ -29,16 +29,18 @@ import com.speedment.internal.core.stream.OptionalUtil;
 import com.speedment.internal.ui.config.mutator.DbmsPropertyMutator;
 import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import static com.speedment.internal.util.ImmutableListUtil.concat;
-import com.speedment.ui.config.db.DefaultIntegerPropertyItem;
-import com.speedment.ui.config.db.DefaultStringPropertyItem;
-import com.speedment.ui.config.db.DefaultTextAreaPropertyItem;
-import com.speedment.ui.config.db.StringChoicePropertyItem;
-import com.speedment.ui.config.trait.HasEnabledProperty;
-import com.speedment.ui.config.trait.HasExpandedProperty;
-import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultIntegerPropertyItem;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem;
+import com.speedment.internal.ui.property.StringChoicePropertyItem;
+import com.speedment.internal.ui.config.trait.HasAliasProperty;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -56,7 +58,7 @@ import org.controlsfx.control.PropertySheet;
  * @author Emil Forslund
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
-    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
+    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 
     public DbmsProperty(Project parent) {
         super(parent);
@@ -148,8 +150,10 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 .collect(toList())
         );
         
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(
+            HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
             Stream.of(new StringChoicePropertyItem(
                     supportedTypes,
                     typeNameProperty(),
@@ -185,11 +189,16 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                     "DbmsType will generate one."
                 )
             )
-        ).flatMap(s -> s);
+        ).flatMap(identity());
     }
     
     @Override
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.DBMSES, key);
+    }
+
+    @Override
+    public StringProperty nameProperty() {
+        return HasNameProperty.super.nameProperty();
     }
 }

@@ -28,11 +28,12 @@ import com.speedment.internal.ui.config.mutator.DocumentPropertyMutator;
 import com.speedment.internal.ui.config.mutator.ProjectPropertyMutator;
 import static com.speedment.internal.util.ImmutableListUtil.*;
 import com.speedment.internal.util.document.DocumentMerger;
-import com.speedment.ui.config.db.DefaultStringPropertyItem;
-import com.speedment.ui.config.db.StringPropertyItem;
-import com.speedment.ui.config.trait.HasEnabledProperty;
-import com.speedment.ui.config.trait.HasExpandedProperty;
-import com.speedment.ui.config.trait.HasNameProperty;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem;
+import com.speedment.internal.ui.property.StringPropertyItem;
+import com.speedment.internal.ui.config.trait.HasEnabledProperty;
+import com.speedment.internal.ui.config.trait.HasExpandedProperty;
+import com.speedment.internal.ui.config.trait.HasNameProperty;
+import com.speedment.util.JavaLanguageNamer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -86,9 +87,10 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
         return Optional.ofNullable(packageNameProperty().get());
     }
 
-    public StringBinding defaultPackageNameProperty() {
+    public StringBinding defaultPackageNameProperty(Speedment speedment) {
+        final JavaLanguageNamer namer = speedment.getCodeGenerationComponent().javaLanguageNamer();
         return Bindings.createStringBinding(
-            () -> Project.DEFAULT_PACKAGE_NAME + getCompanyName(),
+            () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()
         );
     }
@@ -144,11 +146,11 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             new StringPropertyItem(
                 companyNameProperty(),
                 "Company Name",
-                "The name that should be used for this project."
+                "The company name that should be used for this project. It is used in the generated code."
             ),
             new DefaultStringPropertyItem(
                 packageNameProperty(),
-                defaultPackageNameProperty(),
+                defaultPackageNameProperty(speedment),
                 "Package Name",
                 "The name of the package to place all generated files in. This should be a fully qualified java package name."
             ),

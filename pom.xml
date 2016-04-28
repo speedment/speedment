@@ -34,8 +34,9 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.3.1</version>
+    <version>2.3.2</version>
     <packaging>bundle</packaging>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -44,6 +45,10 @@
     </properties>
     
     <name>Speedment</name>
+    <description>
+        Read and modify your database using standard Java 8-streams and 
+        generated entity classes.
+    </description>
     
     <licenses>
         <license>
@@ -72,6 +77,17 @@
             <email>emil@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
+        <developer>
+            <id>HSaltin</id>
+            <name>Håkan Saltin</name>
+            <email>hakan@speedment.com</email>
+            <timezone>America/Los_Angeles</timezone>
+        </developer>
+        <developer>
+            <id>Rajvinder</id>
+            <name>Rajvinder Kaur Janjuha</name>
+            <timezone>IST</timezone>
+        </developer>
     </developers>
     
     <contributors>
@@ -91,6 +107,10 @@
         <contributor>
             <name>Anton Johansson (GitHub:anton-johansson)</name>
             <timezone>Europe/Stockholm</timezone>
+        </contributor>
+        <contributor>
+            <name>Valeriy Vyrva (GitHub:valery1707)</name>
+            <timezone>Asia/Almaty</timezone>
         </contributor>
     </contributors>
 
@@ -126,8 +146,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
@@ -163,6 +181,57 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
             </plugin>
+            
+            <plugin>
+                <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.6.201602180812</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!--  implementation is needed only for Maven 2  -->
+                                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <!--  implementation is needed only for Maven 2  -->
+                                        <limit implementation="org.jacoco.report.check.Limit">
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.10</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+                                                   
         </plugins>
     </build>
     
@@ -177,7 +246,7 @@
                     <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
-                        <version>2.6</version>
+                        <version>2.11</version>
                         <configuration>
                             <header>license_header.txt</header>
                             <properties>
@@ -208,7 +277,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -250,10 +319,51 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <useagent>true</useagent>
+                            <keyname>${gpg.keyname}</keyname>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                            <executable>${gpg.executable}</executable>
+                        </configuration>
                     </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <configuration>
+                            <!-- Deployment is already handled by nexus-staging-maven-plugin -->
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        
+                        <configuration>
+                            <serverId>sonatype-nexus-staging</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    
                 </plugins>
             </build>
         </profile>
+                
     </profiles>
         
     <reporting>
@@ -294,11 +404,17 @@
         https://github.com/google/gson
         2016-01-05
         emifor
+        -
+        Gson:2.6.2
+        Apache 2 License
+        https://github.com/google/gson
+        2016-04-05
+        emifor
         -->
         <dependency>
             <artifactId>gson</artifactId>
             <groupId>com.google.code.gson</groupId>
-            <version>2.5</version>
+            <version>2.6.2</version>
         </dependency>
         	
         <!-- LICENSE INFORMATION
@@ -333,11 +449,35 @@
         http://www.apache.org/licenses/LICENSE-2.0.txt
         2015-12-04
         emifor
+        -
+        FontawesomeFX:8.9
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-04-05
+        permin
         -->
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
-            <version>8.8</version>
+            <version>8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <version>2.44.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

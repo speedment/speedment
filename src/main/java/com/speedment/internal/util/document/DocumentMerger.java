@@ -20,7 +20,7 @@ import com.speedment.config.Document;
 import com.speedment.config.db.trait.HasName;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.config.BaseDocument;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.HashSet;
 import java.util.Iterator;

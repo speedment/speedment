@@ -24,7 +24,7 @@ import com.speedment.codegen.model.trait.HasName;
 import com.speedment.internal.codegen.model.TypeImpl;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * A model that represents a type in code. When classes, enumerations and
@@ -82,31 +82,31 @@ public interface Type extends HasCopy<Type>, HasName<Type>, HasGenerics<Type>,
      * Factory holder.
      */
     enum Factory { INST;
-        private Supplier<Type> supplier = () -> new TypeImpl("");
+        private Function<String, Type> supplier = TypeImpl::new;
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * the {@link #setMapper(java.util.function.Function) setSupplier} method.
      * 
      * @param name  the type name
      * @return      the new instance
      */
     static Type of(String name) {
-        return Factory.INST.supplier.get().setName(name);
+        return Factory.INST.supplier.apply(name);
     }
 
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use
-     * the {@link #setSupplier(java.util.function.Supplier) setSupplier} method.
+     * the {@link #setMapper(Function) setSupplier} method.
      * 
      * @param clazz  the java implementation
      * @return       the new instance
      */
     static Type of(java.lang.Class<?> clazz) {
-        return Factory.INST.supplier.get().setJavaImpl(clazz);
+        return Factory.INST.supplier.apply(clazz.getName()).setJavaImpl(clazz);
     }
         
     /**
@@ -115,7 +115,7 @@ public interface Type extends HasCopy<Type>, HasName<Type>, HasGenerics<Type>,
      * 
      * @param supplier  the new constructor 
      */
-    static void setSupplier(Supplier<Type> supplier) {
+    static void setMapper(Function<String, Type> supplier) {
         Factory.INST.supplier = requireNonNull(supplier);
     }
 }

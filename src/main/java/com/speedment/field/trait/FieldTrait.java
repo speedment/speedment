@@ -16,8 +16,11 @@
  */
 package com.speedment.field.trait;
 
+import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.config.db.Column;
 import com.speedment.field.FieldIdentifier;
+import java.util.Optional;
 
 /**
  * A trait that every field implements.
@@ -41,4 +44,13 @@ public interface FieldTrait {
      * @return  {@code true} if unique
      */
     boolean isUnique();
+    
+    /**
+     * Locates the column that this field is referencing by using the specified
+     * {@link Speedment} instance.
+     * 
+     * @param speedment  the speedment instance
+     * @return           the column
+     */
+    Optional<Column> findColumn(Speedment speedment);
 }

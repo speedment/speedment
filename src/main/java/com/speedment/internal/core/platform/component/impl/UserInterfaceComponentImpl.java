@@ -29,7 +29,7 @@ import com.speedment.internal.ui.UISession;
 import com.speedment.internal.ui.brand.DefaultBrand;
 import com.speedment.license.Software;
 import com.speedment.stream.MapStream;
-import com.speedment.ui.config.DocumentProperty;
+import com.speedment.internal.ui.config.DocumentProperty;
 import static com.speedment.util.NullUtil.requireNonNulls;
 import java.util.List;
 import java.util.Map;
@@ -190,6 +190,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final static Software[] DEPENDENCIES = {
         AbstractSoftware.with("Silk",          "1.3",     OpenSourceLicense.CC_BY_2_5),
         AbstractSoftware.with("ControlsFX",    "8.40.10", OpenSourceLicense.BSD_3_CLAUSE),
-        AbstractSoftware.with("FontawesomeFX", "8.8",     OpenSourceLicense.APACHE_2),
+        AbstractSoftware.with("FontawesomeFX", "8.9",     OpenSourceLicense.APACHE_2),
     };
 }

@@ -39,9 +39,6 @@ import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsa
 import static com.speedment.internal.codegen.model.constant.DefaultType.OBJECT;
 import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
-import static com.speedment.internal.codegen.util.Formatting.block;
-import static com.speedment.internal.codegen.util.Formatting.indent;
-import static com.speedment.internal.codegen.util.Formatting.nl;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.AbstractSqlManager;
 import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
@@ -54,8 +51,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import static com.speedment.internal.codegen.util.Formatting.block;
+import static com.speedment.internal.codegen.util.Formatting.indent;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

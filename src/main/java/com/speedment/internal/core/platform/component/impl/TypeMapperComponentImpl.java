@@ -19,6 +19,7 @@ package com.speedment.internal.core.platform.component.impl;
 import com.speedment.Speedment;
 import com.speedment.component.TypeMapperComponent;
 import com.speedment.config.db.mapper.TypeMapper;
+import com.speedment.config.db.mapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.config.db.mapper.identity.ArrayIdentityMapper;
 import com.speedment.config.db.mapper.identity.BigDecimalIdentityMapper;
 import com.speedment.config.db.mapper.identity.BlobIdentityMapper;
@@ -41,6 +42,7 @@ import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
 import com.speedment.config.db.mapper.identity.URLIdentityMapper;
 import com.speedment.config.db.mapper.identity.UUIDIdentityMapper;
+import com.speedment.config.db.mapper.largeobject.ClobToStringMapper;
 import com.speedment.config.db.mapper.string.StringToLocaleMapper;
 import com.speedment.config.db.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.config.db.mapper.string.YesNoStringToBooleanMapper;
@@ -111,8 +113,15 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(TrueFalseStringToBooleanMapper::new);
         install(YesNoStringToBooleanMapper::new);
 
+        // Special BigDecimal object mappers
+        install(BigDecimalToDouble::new);
+
+        // Special Large object mappers
+        install(ClobToStringMapper::new);
+
         // Other mappers
         install(UUIDIdentityMapper::new);
+
     }
 
     @Override
@@ -140,5 +149,5 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public TypeMapperComponent defaultCopy(Speedment speedment) {
         return new TypeMapperComponentImpl(speedment);
     }
-    
+
 }

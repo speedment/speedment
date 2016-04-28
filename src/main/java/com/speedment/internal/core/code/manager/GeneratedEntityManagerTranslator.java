@@ -31,9 +31,10 @@ import com.speedment.config.db.Table;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.core.manager.sql.SqlManager;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -48,35 +49,35 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().generatedManagerName()).build()
-                .public_()
-                .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
-                .add(generatePrimaryKeyFor(file))
-                .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-                .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                        .add("return speedment()"
-                                + ".get(" + ProjectComponent.class.getSimpleName()
-                                + ".class).getProject().findTableByName(\""
-                                + relativeName(getSupport().tableOrThrow(), Dbms.class) + "\");"
-                        )
+            .public_()
+            .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
+            .add(generatePrimaryKeyFor(file))
+            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+            .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+                .add("return speedment()"
+                    + ".get(" + ProjectComponent.class.getSimpleName()
+                    + ".class).getProject().findTableByName(\""
+                    + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
                 )
-                .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
-                        .add("return " + getSupport().managerName() + ".class;"))
-                .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
-                        .add("return " + getSupport().entityName() + ".class;"))
-                .add(generateGetPrimaryKeyClasses(file));
+            )
+            .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
+                .add("return " + getSupport().managerName() + ".class;"))
+            .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
+                .add("return " + getSupport().entityName() + ".class;"))
+            .add(generateGetPrimaryKeyClasses(file));
     }
 
     protected Method generatePrimaryKeyFor(File file) {
         final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-                .add(Field.of("entity", getSupport().entityType()));
+            .add(Field.of("entity", getSupport().entityType()));
 
         if (primaryKeyColumns().count() == 1) {
             method.add("return entity.get" + getSupport().typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
             file.add(Import.of(Type.of(Arrays.class)));
             method.add(primaryKeyColumns()
-                    .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
-                    .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
+                .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
+                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
         }
 

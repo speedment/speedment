@@ -28,6 +28,7 @@ import com.speedment.codegen.model.trait.HasValue;
 import com.speedment.internal.codegen.model.FieldImpl;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A model that represents a field in code. This can be either as a method
@@ -52,7 +53,7 @@ public interface Field extends HasCopy<Field>, HasCall<Field>, HasName<Field>,
     /**
      * Creates a new instance implementing this interface by using the class
      * supplied by the default factory. To change implementation, please use the
-     * {@link #setSupplier(java.util.function.BiFunction) setSupplier} method.
+     * {@link #setMapper(java.util.function.BiFunction) setSupplier} method.
      *
      * @param name the name
      * @param type the type
@@ -68,7 +69,7 @@ public interface Field extends HasCopy<Field>, HasCall<Field>, HasName<Field>,
      *
      * @param mapper the new constructor
      */
-    static void setSupplier(BiFunction<String, Type, Field> mapper) {
+    static void setMapper(BiFunction<String, Type, Field> mapper) {
         Factory.INST.mapper = requireNonNull(mapper);
     }
 }

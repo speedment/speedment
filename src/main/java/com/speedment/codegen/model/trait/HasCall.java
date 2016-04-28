@@ -22,8 +22,9 @@ import java.util.function.Consumer;
 /**
  * Trait for code generator models that can be called.
  * 
- * @author Emil Forslund
  * @param <T> The extending type
+ * 
+ * @author Emil Forslund
  * @since  2.0
  */
 @Api(version = "2.3")
@@ -40,6 +41,19 @@ public interface HasCall<T> {
 	@SuppressWarnings("unchecked")
     default public T call(Consumer<T> procedure) {
 		procedure.accept((T) this);
+		return (T) this;
+	}
+    
+    /**
+     * Calls the specified {@link Runnable}. This method exists so that methods 
+     * can operate on an object without breaking the flow.
+     * 
+     * @param procedure  the procedure to call
+     * @return           a reference to this
+     */
+	@SuppressWarnings("unchecked")
+    default public T call(Runnable procedure) {
+		procedure.run();
 		return (T) this;
 	}
 }

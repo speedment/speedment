@@ -29,7 +29,10 @@ import com.speedment.internal.core.field.predicate.impl.string.IsEmptyPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotEmptyPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNotNullStringPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.IsNullStringPredicate;
+import com.speedment.internal.core.field.predicate.impl.string.NotContainsPredicate;
+import com.speedment.internal.core.field.predicate.impl.string.NotEndsWithPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.NotEqualIgnoreCasePredicate;
+import com.speedment.internal.core.field.predicate.impl.string.NotStartsWithPredicate;
 import com.speedment.internal.core.field.predicate.impl.string.StartsWithPredicate;
 import static java.util.Objects.requireNonNull;
 
@@ -70,6 +73,14 @@ public class StringFieldTraitImpl<ENTITY, D> implements StringFieldTrait<ENTITY,
         }
         return new StartsWithPredicate<>(field, referenceField, value);
     }
+    
+    @Override
+    public StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value) {
+        if (value == null) {
+            return newAlwaysTruePredicate();
+        }
+        return new NotStartsWithPredicate<>(field, referenceField, value);
+    }
 
     @Override
     public StringSpeedmentPredicate<ENTITY, D> endsWith(String value) {
@@ -78,6 +89,14 @@ public class StringFieldTraitImpl<ENTITY, D> implements StringFieldTrait<ENTITY,
         }
         return new EndsWithPredicate<>(field, referenceField, value);
     }
+    
+    @Override
+    public StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value) {
+        if (value == null) {
+            return newAlwaysTruePredicate();
+        }
+        return new NotEndsWithPredicate<>(field, referenceField, value);
+    }
 
     @Override
     public StringSpeedmentPredicate<ENTITY, D> contains(String value) {
@@ -85,6 +104,14 @@ public class StringFieldTraitImpl<ENTITY, D> implements StringFieldTrait<ENTITY,
             return newAlwaysFalsePredicate();
         }
         return new ContainsPredicate<>(field, referenceField, value);
+    }
+    
+    @Override
+    public StringSpeedmentPredicate<ENTITY, D> notContains(String value) {
+        if (value == null) {
+            return newAlwaysTruePredicate();
+        }
+        return new NotContainsPredicate<>(field, referenceField, value);
     }
 
     @Override

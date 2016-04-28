@@ -46,13 +46,14 @@ import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
 import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import static com.speedment.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
@@ -119,7 +120,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                             " of this " + getSupport().entityName() + 
                             ". The " + getSupport().variableName(col) + 
                             " field corresponds to the database column " +
-                            relativeName(col, Dbms.class) + "."
+                            relativeName(col, Dbms.class, DATABASE_NAME) + "."
                         ).add(RETURN.setText(
                             "the " + getSupport().variableName(col) + 
                             " of this " + getSupport().entityName()
@@ -137,7 +138,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         " of this " + getSupport().entityName() + 
                         ". The " + getSupport().variableName(col) + 
                         " field corresponds to the database column " +
-                        relativeName(col, Dbms.class) + "."
+                        relativeName(col, Dbms.class, DATABASE_NAME) + "."
                     )
                     .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
                     .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
@@ -147,12 +148,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             /*** Fields ***/
             .forEveryColumn((intrf, col) -> {
                 
-                if (col.getName().startsWith("sales")) {
-                    int foo = 1;
-                }
-                
                 final EntityTranslatorSupport.ReferenceFieldType ref = 
-                    EntityTranslatorSupport.getReferenceFieldType(file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
+                    EntityTranslatorSupport.getReferenceFieldType(
+                        file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
 
                 final String typeMapper      = col.getTypeMapper();
@@ -217,7 +215,6 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 Import imp = Import.of(fu.getEmt().getSupport().entityType());
                 file.add(imp);
 
-                fu.imports().forEachOrdered(file::add);
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
@@ -252,7 +249,6 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             .forEveryForeignKey((intrf, fk) -> {
 
                 final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
-                fu.imports().forEachOrdered(file::add);
 
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {

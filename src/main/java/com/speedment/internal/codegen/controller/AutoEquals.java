@@ -38,6 +38,15 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.codegen.util.Formatting.tab;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.codegen.util.Formatting.tab;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.internal.codegen.util.Formatting.nl;
+import static com.speedment.internal.codegen.util.Formatting.tab;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control can be applied on a class, enum or similar to auto generate

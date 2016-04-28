@@ -27,6 +27,13 @@ import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
 import com.speedment.util.tuple.Tuple;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.NClob;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Struct;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -274,4 +281,35 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Stream<FieldTrait> primaryKeyFields() {
         return inner.primaryKeyFields();
     }
+
+    @Override
+    public Clob createClob() throws SQLException {
+        return inner.createClob();
+    }
+
+    @Override
+    public Blob createBlob() throws SQLException {
+        return inner.createBlob();
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return createNClob();
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return createSQLXML();
+    }
+
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        return inner.createArrayOf(typeName, elements);
+    }
+
+    @Override
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        return inner.createStruct(typeName, attributes);
+    }
+
 }

@@ -219,10 +219,6 @@ public final class CollectorUtil {
         return Stream.of(items).collect(toUnmodifiableSet());
     }
 
-    public static Collector<String, ?, String> joinIfNotEmpty(String delimiter) {
-        return joinIfNotEmpty(delimiter, "", "");
-    }
-
     /**
      * Similar to the 
      * {@link java.util.stream.Collectors#joining(java.lang.CharSequence, java.lang.CharSequence, java.lang.CharSequence) }

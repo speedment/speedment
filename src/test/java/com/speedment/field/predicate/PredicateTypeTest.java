@@ -21,7 +21,9 @@
  */
 package com.speedment.field.predicate;
 
+import static com.speedment.field.predicate.PredicateType.BETWEEN;
 import static com.speedment.field.predicate.PredicateType.EQUAL;
+import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
 import static com.speedment.field.predicate.PredicateType.NOT_EQUAL;
 import java.util.EnumMap;
 import java.util.List;
@@ -87,6 +89,14 @@ public class PredicateTypeTest {
     public void testEffectiveType() {
         assertEquals(EQUAL, EQUAL.effectiveType(false));
         assertEquals(NOT_EQUAL, EQUAL.effectiveType(true));
+    }
+
+    @Test
+    public void testBetween() {
+        assertEquals(BETWEEN, BETWEEN.effectiveType(false));
+        assertEquals(NOT_BETWEEN, NOT_BETWEEN.effectiveType(false));
+        assertEquals(NOT_BETWEEN, BETWEEN.effectiveType(true));
+        assertEquals(BETWEEN, NOT_BETWEEN.effectiveType(true));
     }
 
 }

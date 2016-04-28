@@ -26,6 +26,7 @@ import com.speedment.annotation.Api;
  * @since  2.0
  */
 @Api(version = "2.3")
+@FunctionalInterface
 public interface HasCopy<T extends HasCopy<T>> {
     
     /**

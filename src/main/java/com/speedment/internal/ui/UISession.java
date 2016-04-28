@@ -20,29 +20,30 @@ import com.speedment.Speedment;
 import com.speedment.code.TranslatorManager;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.brand.Brand;
+import com.speedment.component.brand.Palette;
 import com.speedment.component.notification.Notification;
 import com.speedment.config.db.Dbms;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Schema;
 import com.speedment.db.DbmsHandler;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.core.config.db.DbmsImpl;
+import com.speedment.internal.core.config.db.immutable.ImmutableProject;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.ui.UISession.ReuseStage.CREATE_A_NEW_STAGE;
 import com.speedment.internal.ui.config.DbmsProperty;
 import com.speedment.internal.ui.config.ProjectProperty;
 import com.speedment.internal.ui.controller.ConnectController;
-import com.speedment.internal.ui.controller.NotificationController;
 import com.speedment.internal.ui.controller.SceneController;
 import static com.speedment.internal.ui.util.OutputUtil.error;
 import static com.speedment.internal.ui.util.OutputUtil.info;
 import static com.speedment.internal.ui.util.OutputUtil.success;
 import com.speedment.internal.util.Settings;
-import static com.speedment.internal.util.TextUtil.alignRight;
 import com.speedment.internal.util.document.DocumentTranscoder;
 import com.speedment.internal.util.testing.Stopwatch;
-import com.speedment.ui.config.DocumentProperty;
-import com.speedment.ui.config.db.PropertySheetFactory;
+import com.speedment.internal.ui.config.DocumentProperty;
+import com.speedment.internal.ui.property.PropertySheetFactory;
 import com.speedment.util.ProgressMeasure;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -54,7 +55,6 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -86,10 +86,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import static com.speedment.internal.util.TextUtil.alignRight;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -97,29 +100,32 @@ import javafx.util.Pair;
  */
 public final class UISession {
 
-    public final static String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
-    public final static String DIALOG_PANE_ICON_SIZE = "2.5em";
+    private static final Logger LOGGER = LoggerManager.getLogger(UISession.class);
+
+    public static final String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
+    public static final String DIALOG_PANE_ICON_SIZE = "2.5em";
+
+    private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
+    private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
 
     public enum ReuseStage {
         USE_EXISTING_STAGE,
         CREATE_A_NEW_STAGE
     }
 
-    private final static Logger LOGGER = LoggerManager.getLogger(UISession.class);
-
-    private final static Predicate<File> OPEN_FILE_CONDITIONS = file
+    private static final Predicate<File> OPEN_FILE_CONDITIONS = file
         -> file != null
         && file.exists()
         && file.isFile()
         && file.canRead()
         && file.getName().toLowerCase().endsWith(".json");
 
-    private final static Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
+    private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
         -> file != null
         && file.exists()
         && file.isDirectory();
 
-    private final static Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
+    private static final Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
         = pass -> !pass.isPresent() || pass.get().length == 0;
 
     private final Speedment speedment;
@@ -132,21 +138,25 @@ public final class UISession {
 
     private File currentlyOpenFile = null;
 
+    private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenWorkspace = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenOutput = new SimpleObjectProperty<>();
+    private final ObjectProperty<StoredNode> hiddenPreview = new SimpleObjectProperty<>();
+
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation) {
         this(speedment, application, stage, defaultConfigLocation, null);
     }
 
     public UISession(Speedment speedment, Application application, Stage stage, String defaultConfigLocation, Project project) {
 
-        this.speedment             = requireNonNull(speedment);
-        this.application           = requireNonNull(application);
-        this.stage                 = requireNonNull(stage);
+        this.speedment = requireNonNull(speedment);
+        this.application = requireNonNull(application);
+        this.stage = requireNonNull(stage);
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
-        this.project               = new ProjectProperty();
-        this.propertySheetFactory  = new PropertySheetFactory();
-        this.notifications =
-            speedment.getUserInterfaceComponent().getNotifications();
-        
+        this.project = new ProjectProperty();
+        this.propertySheetFactory = new PropertySheetFactory();
+        this.notifications = speedment.getUserInterfaceComponent().getNotifications();
+
         speedment.getUserInterfaceComponent().setUISession(this);
 
         if (project != null) {
@@ -227,9 +237,7 @@ public final class UISession {
 
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E saveProjectAs() {
-        return on(event -> {
-            saveConfigFile();
-        });
+        return on(event -> saveConfigFile());
     }
 
     @SuppressWarnings("unchecked")
@@ -250,7 +258,7 @@ public final class UISession {
 
                 project.dbmses()
                     .filter(dbms -> NO_PASSWORD_SPECIFIED.test(pass.get(dbms)))
-                    .forEach(dbms -> showPasswordDialog(dbms));
+                    .forEach(this::showPasswordDialog);
 
                 final Optional<String> schemaName = project
                     .dbmses().flatMap(Dbms::schemas)
@@ -287,23 +295,26 @@ public final class UISession {
             log(info("Target directory is " + project.getPackageLocation()));
 
             final TranslatorManager instance = speedment.getCodeGenerationComponent().getTranslatorManager();
-            
+
+            final Project immutableProject = ImmutableProject.wrap(project);
+            speedment.getProjectComponent().setProject(immutableProject);
+
             try {
-                instance.accept(project);
+                instance.accept(immutableProject);
                 stopwatch.stop();
 
                 log(success(
                     "+------------: Generation completed! :------------+" + "\n"
                     + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(instance.getFilesCreated()), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
-                
+
                 showNotification(
-                    "Generation completed! " + instance.getFilesCreated() + 
-                    " files created.", 
+                    "Generation completed! " + instance.getFilesCreated()
+                    + " files created.",
                     FontAwesomeIcon.STAR,
-                    NotificationController.GREEN
+                    Palette.SUCCESS
                 );
             } catch (final Exception ex) {
                 if (!stopwatch.isStopped()) {
@@ -313,13 +324,13 @@ public final class UISession {
                 log(error(
                     "+--------------: Generation failed! :-------------+" + "\n"
                     + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + instance.getFilesCreated(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(instance.getFilesCreated()), 30) + " |\n"
                     + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
-                
+
                 final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
-                
+
                 LOGGER.error(ex, msg);
                 showError("Failed to generate code", ex.getMessage(), ex);
             }
@@ -341,10 +352,8 @@ public final class UISession {
     public <T extends Event, E extends EventHandler<T>> E togglePreview() {
         return toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
     }
-    
-    
 
-    private final static class StoredNode {
+    private static final class StoredNode {
 
         private enum InsertAt {
             BEGINNING, END
@@ -358,11 +367,6 @@ public final class UISession {
             this.parent = requireNonNull(parent);
         }
     }
-
-    private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>(),
-        hiddenWorkspace = new SimpleObjectProperty<>(),
-        hiddenOutput = new SimpleObjectProperty<>(),
-        hiddenPreview = new SimpleObjectProperty<>();
 
     private <T extends Event, E extends EventHandler<T>> E toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
         return on(event -> {
@@ -587,9 +591,7 @@ public final class UISession {
             });
         });
 
-        cancel.setOnAction(ev -> {
-            task.cancel(true);
-        });
+        cancel.setOnAction(ev -> task.cancel(true));
 
         pane.setContent(box);
         pane.setMaxWidth(Double.MAX_VALUE);
@@ -601,21 +603,21 @@ public final class UISession {
             dialog.showAndWait();
         }
     }
-    
+
     private final static class NotificationImpl implements Notification {
-        
+
         private final String message;
         private final FontAwesomeIcon icon;
-        private final Color color;
+        private final Palette palette;
         private final Runnable onClose;
 
-        public NotificationImpl(String message, FontAwesomeIcon icon, Color color, Runnable onClose) {
+        public NotificationImpl(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
             this.message = requireNonNull(message);
-            this.icon    = requireNonNull(icon);
-            this.color   = requireNonNull(color);
+            this.icon = requireNonNull(icon);
+            this.palette = requireNonNull(palette);
             this.onClose = requireNonNull(onClose);
         }
-        
+
         @Override
         public String text() {
             return message;
@@ -625,10 +627,10 @@ public final class UISession {
         public FontAwesomeIcon icon() {
             return icon;
         }
-        
+
         @Override
-        public Color color() {
-            return color;
+        public Palette palette() {
+            return palette;
         }
 
         @Override
@@ -636,46 +638,61 @@ public final class UISession {
             return onClose;
         }
     }
-    
+
     public void showNotification(String message) {
         showNotification(message, FontAwesomeIcon.EXCLAMATION);
     }
-    
+
     public void showNotification(String message, FontAwesomeIcon icon) {
-        showNotification(message, icon, NotificationController.BLUE);
+        showNotification(message, icon, Palette.INFO);
     }
-    
+
     public void showNotification(String message, Runnable action) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, NotificationController.BLUE, action);
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, Palette.INFO, action);
     }
-    
-    public void showNotification(String message, Color color) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, color);
+
+    public void showNotification(String message, Palette palette) {
+        showNotification(message, FontAwesomeIcon.EXCLAMATION, palette);
     }
-    
-    public void showNotification(String message, FontAwesomeIcon icon, Color color) {
-        showNotification(message, icon, color, () -> {});
+
+    public void showNotification(String message, FontAwesomeIcon icon, Palette palette) {
+        showNotification(message, icon, palette, () -> {
+        });
     }
-    
-    public void showNotification(String message, FontAwesomeIcon icon, Color color, Runnable action) {
-        notifications.add(new NotificationImpl(message, icon, color, action));
+
+    public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
+        notifications.add(new NotificationImpl(message, icon, palette, action));
     }
 
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
-            dbms.schemasProperty().clear();
+            
+            // Create a copy of everything in Dbms EXCEPT the schema key. This
+            // is a hack to prevent duplication errors that would otherwise
+            // occure if you change name of a node and reload.
+            final Map<String, Object> dbmsData = new ConcurrentHashMap<>(dbms.getData());
+            dbmsData.remove(Dbms.SCHEMAS);
+            final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
-            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbms);
+            // Find the DbmsHandler to use when loading the metadata
+            final DbmsHandler dh = speedment.getDbmsHandlerComponent().make(dbmsCopy);
 
+            // Begin executing the loading with a progress measurer
             final ProgressMeasure progress = ProgressMeasure.create();
             final CompletableFuture<Boolean> future
                 = dh.readSchemaMetadata(progress, schemaName::equalsIgnoreCase)
-                .handle((p, ex) -> {
+                .handleAsync((p, ex) -> {
                     progress.setProgress(ProgressMeasure.DONE);
 
-                    if (ex == null) {
+                    // If the loading was successfull
+                    if (ex == null && p != null) {
+                        
+                        // Make sure any old data is cleared before merging in
+                        // the new state from the database.
+                        dbms.schemasProperty().clear();
                         project.merge(speedment, p);
                         return true;
+                        
                     } else {
                         runLater(() -> {
                             showError("Error Connecting to Database",
@@ -689,19 +706,19 @@ public final class UISession {
             showProgressDialog("Loading Database Metadata", progress, future);
 
             final boolean status = future.get();
-            
+
             if (status) {
                 showNotification(
-                    "Database metadata has been loaded.", 
-                    FontAwesomeIcon.DATABASE, 
-                    NotificationController.GREEN
+                    "Database metadata has been loaded.",
+                    FontAwesomeIcon.DATABASE,
+                    Palette.INFO
                 );
             }
-            
+
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
-            showError("Error Executing Connection Task", 
+            showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
         }
@@ -813,7 +830,7 @@ public final class UISession {
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
             log(success("Saved project file to '" + absolute + "'."));
-            showNotification("Configuration saved.", FontAwesomeIcon.SAVE, NotificationController.GREEN);
+            showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
             currentlyOpenFile = file;
 
         } catch (IOException ex) {
@@ -831,12 +848,12 @@ public final class UISession {
 
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGitter() {
-        return on(event -> browse(GITTER_URI));
+        return (E) on(event -> browse(GITTER_URI));
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Event, E extends EventHandler<T>> E showGithub() {
-        return on(event -> browse(GITHUB_URI));
+        return (E) on(event -> browse(GITHUB_URI));
     }
 
     public void browse(String url) {
@@ -851,10 +868,7 @@ public final class UISession {
                 listener.accept(event);
             }
         };
-
         return handler;
     }
 
-    private final static String GITHUB_URI = "https://github.com/speedment/speedment/";
-    private final static String GITTER_URI = "https://gitter.im/speedment/speedment/";
 }
