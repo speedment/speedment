@@ -3,6 +3,7 @@ Wrap your database into Java 8!
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/speedment/badge.svg)](http://www.javadoc.io/doc/com.speedment/speedment)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <p>
@@ -166,7 +167,7 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
-    <speedment.version>2.3.1</speedment.version>
+    <speedment.version>2.3.2</speedment.version>
 	<db.groupId>mysql</db.groupId>
 	<db.artifactId>mysql-connector-java</db.artifactId>
 	<db.version>5.1.38</db.version>
@@ -176,7 +177,7 @@ To set which database connector you want to use to communicate with your databas
 #### PostgreSQL
 ```xml
 <properties>
-    <speedment.version>2.3.1</speedment.version>
+    <speedment.version>2.3.2</speedment.version>
 	<db.groupId>org.postgresql</db.groupId>
 	<db.artifactId>postgresql</db.artifactId>
 	<db.version>9.4-1206-jdbc4</db.version>
@@ -186,7 +187,7 @@ To set which database connector you want to use to communicate with your databas
 #### MariaDB
 ```xml
 <properties>
-    <speedment.version>2.3.1</speedment.version>
+    <speedment.version>2.3.2</speedment.version>
 	<db.groupId>org.mariadb.jdbc</db.groupId>
 	<db.artifactId>mariadb-java-client</db.artifactId>
 	<db.version>1.4.0</db.version>
