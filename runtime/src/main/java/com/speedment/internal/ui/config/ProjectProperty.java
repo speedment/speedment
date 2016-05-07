@@ -33,7 +33,7 @@ import com.speedment.internal.ui.property.StringPropertyItem;
 import com.speedment.internal.ui.config.trait.HasEnabledProperty;
 import com.speedment.internal.ui.config.trait.HasExpandedProperty;
 import com.speedment.internal.ui.config.trait.HasNameProperty;
-import com.speedment.util.JavaLanguageNamer;
+import com.speedment.generator.internal.util.JavaLanguageNamer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;

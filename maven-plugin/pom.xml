@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>2.4.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    
+    <name>Speedment - Maven Plugin</name>
+    <description>
+        A neat plugin for using Speedment as a maven target.
+    </description>
+
+    <build>
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.4</version>
+                
+                <configuration>
+                    <goalPrefix>speedment</goalPrefix>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <id>default-descriptor</id>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                    
+                    <execution>
+                        <id>help-descriptor</id>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Trusted-Library>true</Trusted-Library>
+                            <Implementation-Vendor>Speedment, Inc.</Implementation-Vendor>
+                            <Implementation-URL>https://github.com/speedment/speedment</Implementation-URL>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <!-- LICENSE INFORMATION
+        maven-plugin-api:3.3.3
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-01-21
+        emifor
+        -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+
+        <!-- LICENSE INFORMATION
+        maven-plugin-annotations:3.4
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-01-21
+        emifor
+        -->
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.4</version>
+        </dependency>
+        
+        <!-- LICENSE INFORMATION
+        speedment:2.4.0
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-05-07
+        emifor
+        -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tool</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

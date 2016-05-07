@@ -31,7 +31,7 @@ import com.speedment.config.db.trait.HasName;
 import com.speedment.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
 import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import com.speedment.util.JavaLanguageNamer;
+import com.speedment.generator.internal.util.JavaLanguageNamer;
 import com.speedment.util.TestUtil;
 import java.util.Arrays;
 import java.util.Collection;

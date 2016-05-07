@@ -16,16 +16,16 @@
  */
 package com.speedment.internal.core.code.model.java;
 
-import com.speedment.code.StandardTranslatorKey;
-import com.speedment.code.Translator;
-import com.speedment.code.TranslatorManager;
+import com.speedment.generator.StandardTranslatorKey;
+import com.speedment.generator.Translator;
+import com.speedment.generator.TranslatorManager;
 import com.speedment.codegen.Meta;
 import com.speedment.codegen.model.File;
 import com.speedment.codegen.model.Interface;
 import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
-import com.speedment.internal.core.code.TranslatorManagerImpl;
-import com.speedment.util.JavaLanguageNamer;
+import com.speedment.generator.internal.TranslatorManagerImpl;
+import com.speedment.generator.internal.util.JavaLanguageNamer;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 

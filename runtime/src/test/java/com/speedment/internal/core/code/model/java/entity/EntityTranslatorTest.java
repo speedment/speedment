@@ -22,7 +22,7 @@ import com.speedment.config.Document;
 import com.speedment.config.db.Table;
 import com.speedment.internal.codegen.controller.AutoImports;
 import com.speedment.internal.codegen.java.JavaGenerator;
-import com.speedment.internal.core.code.entity.EntityTranslator;
+import com.speedment.generator.internal.entity.EntityTranslator;
 import com.speedment.internal.core.code.model.java.SimpleModel;
 import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.Optional;

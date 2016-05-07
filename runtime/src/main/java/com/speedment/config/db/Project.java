@@ -25,7 +25,6 @@ import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.config.db.trait.HasMainInterface;
 import com.speedment.config.db.trait.HasMutator;
 import com.speedment.config.db.trait.HasName;
-import com.speedment.util.JavaLanguageNamer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -79,11 +78,6 @@ public interface Project extends
      */
     default Optional<String> getPackageName() {
         return getAsString(PACKAGE_NAME);
-    }
-    
-    default String findPackageName(JavaLanguageNamer namer) {
-        return getPackageName()
-            .orElseGet(() -> DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()));
     }
 
     /**

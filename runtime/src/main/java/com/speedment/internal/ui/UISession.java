@@ -17,7 +17,6 @@
 package com.speedment.internal.ui;
 
 import com.speedment.Speedment;
-import com.speedment.code.TranslatorManager;
 import com.speedment.component.PasswordComponent;
 import com.speedment.component.brand.Brand;
 import com.speedment.component.brand.Palette;

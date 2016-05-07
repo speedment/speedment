@@ -17,7 +17,6 @@
 package com.speedment;
 
 import com.speedment.annotation.Api;
-import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.Component;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.DocumentPropertyComponent;
@@ -58,7 +57,6 @@ public interface Speedment {
      * <li>{@link com.speedment.component.EventComponent EventComponent}</li>
      * <li>{@link com.speedment.component.DbmsHandlerComponent DbmsHandlerComponent}</li>
      * <li>{@link com.speedment.component.DocumentPropertyComponent DocumentPropertyComponent}</li>
-     * <li>{@link com.speedment.component.CodeGenerationComponent CodeGenerationComponent}</li>
      * <li>{@link com.speedment.component.ManagerComponent ManagerComponent}</li>
      * <li>{@link com.speedment.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
      * <li>{@link com.speedment.component.ProjectComponent ProjectComponent}</li>
@@ -173,10 +171,6 @@ public interface Speedment {
     
     default PasswordComponent getPasswordComponent() {
         return get(PasswordComponent.class);
-    }
-    
-    default CodeGenerationComponent getCodeGenerationComponent() {
-        return get(CodeGenerationComponent.class);
     }
     
     default DocumentPropertyComponent getDocumentPropertyComponent() {

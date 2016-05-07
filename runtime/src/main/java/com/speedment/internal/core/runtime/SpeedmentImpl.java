@@ -17,7 +17,6 @@
 package com.speedment.internal.core.runtime;
 
 import com.speedment.Speedment;
-import com.speedment.component.CodeGenerationComponent;
 import com.speedment.component.Component;
 import com.speedment.component.ComponentConstructor;
 import com.speedment.component.DbmsHandlerComponent;
@@ -35,7 +34,6 @@ import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.resultset.ResultSetMapperComponent;
 import com.speedment.exception.SpeedmentException;
 import com.speedment.internal.core.platform.DefaultClassMapper;
-import com.speedment.internal.core.platform.component.impl.CodeGenerationComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ConnectionPoolComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DbmsHandlerComponentImpl;
 import com.speedment.internal.core.platform.component.impl.DocumentPropertyComponentImpl;
@@ -73,7 +71,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private EventComponent eventComponent;
     private UserInterfaceComponent userInterfaceComponent;
     private PasswordComponent passwordComponent;
-    private CodeGenerationComponent codeGenerationComponent;
     private DocumentPropertyComponent documentPropertyComponent;
 
     SpeedmentImpl() {
@@ -89,7 +86,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         put(EventComponentImpl::new);
         put(UserInterfaceComponentImpl::new);
         put(PasswordComponentImpl::new);
-        put(CodeGenerationComponentImpl::new);
         put(DocumentPropertyComponentImpl::new);
     }
 
@@ -153,9 +149,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         }
         if (item instanceof PasswordComponent) {
             passwordComponent = castOrFail(item, PasswordComponent.class);
-        }
-        if (item instanceof CodeGenerationComponent) {
-            codeGenerationComponent = castOrFail(item, CodeGenerationComponent.class);
         }
         if (item instanceof DocumentPropertyComponent) {
             documentPropertyComponent = castOrFail(item, DocumentPropertyComponent.class);
@@ -243,11 +236,6 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     }
 
     @Override
-    public CodeGenerationComponent getCodeGenerationComponent() {
-        return codeGenerationComponent;
-    }
-
-    @Override
     public DocumentPropertyComponent getDocumentPropertyComponent() {
         return documentPropertyComponent;
     }
@@ -272,19 +260,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
                 .collect(joining(", ", "[", "]"));
     }
 
-    private  ComponentConstructor<?> componentConstructor(Component component) {
-        
+    private ComponentConstructor<?> componentConstructor(Component component) {
         return s -> component.defaultCopy(s);
-        
-//        @SuppressWarnings("unchecked")
-//        final Class<T> clazz = (Class<T>)component.getClass();
-//        return s -> {
-//            try {
-//                final Constructor<T> constr = clazz.getConstructor(Speedment.class);
-//                return constr.newInstance(s);
-//            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        };
     }
 }

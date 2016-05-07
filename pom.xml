@@ -42,6 +42,7 @@
         <module>runtime</module>
         <module>generator</module>
         <module>tool</module>
+        <module>maven-plugin</module>
     </modules>
     
     <!-- Project Metadata -->
@@ -162,7 +163,7 @@
                 </configuration>
             </plugin>
 			
-			<plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.3</version>
@@ -258,10 +259,10 @@
                                 <currentYear>2016</currentYear>
                             </properties>
                             <excludes>
-								<exclude>**/README</exclude>
+                                <exclude>**/README</exclude>
                                 <exclude>**/package-info.java</exclude>
                                 <exclude>**/nbactions.xml</exclude>
-								<exclude>**/nb-configuration.xml</exclude>
+                                <exclude>**/nb-configuration.xml</exclude>
                                 <exclude>**/.versionsBackup</exclude>
                                 <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
                                 <exclude>README.md</exclude>
@@ -369,7 +370,7 @@
         </profile>
     </profiles>
 	
-	<reporting>
+    <reporting>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -379,7 +380,7 @@
         </plugins>
     </reporting>
 	
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>junit</groupId>
@@ -388,7 +389,7 @@
             <scope>test</scope>
         </dependency>
 		
-		<dependency>
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
@@ -407,5 +408,5 @@
                 </exclusion>
             </exclusions>
         </dependency>
-	</dependencies>
+    </dependencies>
 </project>

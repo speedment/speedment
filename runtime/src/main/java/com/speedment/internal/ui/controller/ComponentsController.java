@@ -18,7 +18,7 @@ package com.speedment.internal.ui.controller;
 
 import com.speedment.Speedment;
 import com.speedment.SpeedmentVersion;
-import com.speedment.component.CodeGenerationComponent;
+import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.component.Component;
 import com.speedment.component.DbmsHandlerComponent;
 import com.speedment.component.TypeMapperComponent;

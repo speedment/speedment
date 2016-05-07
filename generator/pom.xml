@@ -44,5 +44,11 @@
             <artifactId>runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.fika</groupId>
+            <artifactId>codegen</artifactId>
+            <version>2.4.0</version>
+        </dependency>
     </dependencies>
 </project>

@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-abstract class InternalOpenSourceComponent extends AbstractComponent {
+public abstract class InternalOpenSourceComponent extends AbstractComponent {
 
     public InternalOpenSourceComponent(Speedment speedment) {
         super(speedment);

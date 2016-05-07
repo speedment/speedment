@@ -23,7 +23,6 @@ import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.manager.Manager;
-import com.speedment.util.JavaLanguageNamer;
 import static com.speedment.util.NullUtil.requireNonNullElements;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,7 +43,6 @@ import java.util.stream.Stream;
 public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<ENTITY>, String> {
 
     protected final Map<String, Function<ENTITY, String>> getters;
-    private final JavaLanguageNamer javaLanguageNamer;
 
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
@@ -54,14 +52,13 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
      */
     public JsonEncoder(Speedment speedment) {
         this.getters = new LinkedHashMap<>();
-        this.javaLanguageNamer = speedment.getCodeGenerationComponent().javaLanguageNamer();
     }
 
     // Fields
     @Override
     public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
-        final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
+        final String columnName = jsonField((FieldTrait) field);
         final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
@@ -72,7 +69,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         JsonEncoder<ENTITY> put(I field, Encoder<FK_ENTITY, ?, String> builder) {
         requireNonNull(field);
         requireNonNull(builder);
-        final String columnName = jsonField((FieldTrait) field, javaLanguageNamer);
+        final String columnName = jsonField((FieldTrait) field);
         final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
@@ -126,7 +123,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
     @Override
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
-        getters.remove(jsonField(field, javaLanguageNamer));
+        getters.remove(jsonField(field));
         return this;
     }
 
@@ -139,9 +136,9 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             + "}";
     }
 
-    protected String jsonField(FieldTrait field, JavaLanguageNamer javaLanguageNamer) {
+    protected String jsonField(FieldTrait field) {
         requireNonNull(field);
-        return javaLanguageNamer.javaVariableName(field.getIdentifier().columnName());
+        return formatFieldName(field.getIdentifier().columnName());
     }
 
     protected static String jsonValue(Object in) {
@@ -204,7 +201,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
                 @SuppressWarnings("unchecked")
                 final FieldIdentifier<ENTITY> fi = f.getIdentifier();
                 formatter.put(
-                    formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
+                    formatFieldName(f.getIdentifier().columnName()),
                     entity -> manager.get(entity, fi)
                 );
             }
@@ -241,19 +238,38 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
             .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
             .forEachOrdered(f
                 -> formatter.put(
-                    formatter.javaLanguageNamer.javaVariableName(f.getIdentifier().columnName()),
+                    formatFieldName(f.getIdentifier().columnName()),
                     entity -> manager.get(entity, f.getIdentifier())
                 )
             );
 
         return formatter;
     }
-
-
+    
     private static <ENTITY> ReferenceFieldTrait<ENTITY, ?, ?> castReferenceFieldTrait(Manager<ENTITY> mgr, FieldTrait f) {
         @SuppressWarnings("unchecked")
         final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
         return result;
     }
 
+    private static String formatFieldName(String externalName) {
+        final StringBuilder sb = new StringBuilder(externalName);
+
+        int startIndex = 0;
+        for (int i = 0; i < externalName.length(); i++) {
+            if (Character.isAlphabetic(sb.charAt(i))) {
+                // Skip over any non alphabetic characers like "_"
+                startIndex = i;
+                break;
+            }
+        }
+
+        if (sb.length() > startIndex) {
+            sb.replace(
+                startIndex, startIndex + 1, 
+                String.valueOf(sb.charAt(startIndex)).toLowerCase()
+            );
+        }
+        return sb.toString();
+    }
 }

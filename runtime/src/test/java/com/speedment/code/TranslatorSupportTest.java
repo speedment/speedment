@@ -21,6 +21,7 @@
  */
 package com.speedment.code;
 
+import com.speedment.generator.TranslatorSupport;
 import com.speedment.config.db.Table;
 import com.speedment.internal.core.code.model.java.SimpleModel;
 import java.util.Optional;

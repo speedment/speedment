@@ -14,24 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.event;
+package com.speedment.generator.event;
 
-import com.speedment.Speedment;
 import com.speedment.annotation.Api;
+import com.speedment.generator.TranslatorManager;
+import com.speedment.event.Event;
+import com.speedment.fika.codegen.Generator;
 
 /**
  *
  * @author Emil Forslund
  * @since 2.3
  */
-@Api(version="2.3")
-public interface Event {
-    
-    default String name() {
-        return getClass().getSimpleName();
-    }
-    
-    default void publish(Speedment speedment) {
-        speedment.getEventComponent().notify(this);
-    }
+@Api(version = "2.3")
+public interface GeneratorEvent extends Event {
+    Generator generator();
+    TranslatorManager translatorManager();
 }
