@@ -142,7 +142,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     }
 
     private CompletableFuture<Project> readSchemaMetadata(
-        //            Connection connection,
         Project project,
         Dbms dbms,
         Predicate<String> filterCriteria,
@@ -866,17 +865,6 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 if (mappedClass != null) {
                     result.put(tn, mappedClass);
                 }
-//else {
-//                        final int type = ti.getJavaSqlTypeInt();
-//                        final Optional<String> sqlTypeName = SqlTypeInfo.lookupJavaSqlType(type);
-//                        sqlTypeName.ifPresent(ltn -> {
-//                            final Class<?> lookupMappedClass = JAVA_TYPE_MAP.get(ltn);
-//                            if (lookupMappedClass != null) {
-//                                result.put(tn, lookupMappedClass);
-//                            }
-//                        });
-//
-//                    }
             });
         });
 
