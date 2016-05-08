@@ -38,24 +38,44 @@
         file without writing .json-code.
     </description>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                        <Bundle-Description>
+                            The graphical user interface for Speedment.
+                        </Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                        </Import-Package>
+                        <Export-Package>
+                            com.speedment.tool.brand.*,
+                            com.speedment.tool.component.*,
+                            com.speedment.tool.config.*,
+                            com.speedment.tool.event.*,
+                            com.speedment.tool.notification.*,
+                            com.speedment.tool.property.*,
+                            com.speedment.tool.resource.*,
+                            com.speedment.tool.util.*,
+                            com.speedment.tool
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+    
     <dependencies>
-<!--        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>runtime</artifactId>
-            <version>${project.version}</version>
-        </dependency>-->
-		
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>generator</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-<!--        <dependency>
-            <groupId>com.speedment.fika</groupId>
-            <artifactId>mapstream</artifactId>
-            <version>${mapstream.version}</version>
-        </dependency>-->
         
         <!-- LICENSE INFORMATION
         Gson:2.5

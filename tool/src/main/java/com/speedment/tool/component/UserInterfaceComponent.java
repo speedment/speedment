@@ -23,7 +23,7 @@ import com.speedment.tool.notification.Notification;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.UISession;
-import com.speedment.tool.controller.ProjectTreeController;
+import com.speedment.tool.internal.controller.ProjectTreeController;
 import com.speedment.tool.util.OutputUtil;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.Optional;

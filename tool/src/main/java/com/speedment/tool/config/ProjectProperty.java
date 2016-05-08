@@ -29,7 +29,7 @@ import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
-import com.speedment.runtime.internal.util.document.DocumentMerger;
+import com.speedment.tool.util.DocumentMerger;
 import com.speedment.tool.property.DefaultStringPropertyItem;
 import com.speedment.tool.property.StringPropertyItem;
 import com.speedment.tool.config.trait.HasEnabledProperty;

@@ -58,25 +58,20 @@
                             *;resolution:=optional 
                         </Import-Package>
                         <Export-Package>
-                            com.speedment.runtime.annotation,
-                            com.speedment.runtime.component,
-                            com.speedment.runtime.config,
-                            com.speedment.runtime.config.db,
-                            com.speedment.runtime.db,
-                            com.speedment.runtime.encoder,
-                            com.speedment.runtime.event,
-                            com.speedment.runtime.exception,
-                            com.speedment.runtime.field,
-                            com.speedment.runtime.field.trait,
-                            com.speedment.runtime.license,
-                            com.speedment.runtime.manager,
-                            com.speedment.runtime.stream,
-                            com.speedment.runtime.util,
+                            com.speedment.runtime.annotation.*,
+                            com.speedment.runtime.component.*,
+                            com.speedment.runtime.config.*,
+                            com.speedment.runtime.db.*,
+                            com.speedment.runtime.encoder.*,
+                            com.speedment.runtime.event.*,
+                            com.speedment.runtime.exception.*,
+                            com.speedment.runtime.field.*,
+                            com.speedment.runtime.license.*,
+                            com.speedment.runtime.manager.*,
+                            com.speedment.runtime.stream.*,
+                            com.speedment.runtime.util.*,
                             com.speedment.runtime
                         </Export-Package>
-<!--                        <Private-Package>
-                            com.speedment.runtime.internal
-                        </Private-Package>-->
                     </instructions>
                 </configuration>
             </plugin>                            

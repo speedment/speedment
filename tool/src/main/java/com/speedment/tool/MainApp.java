@@ -21,8 +21,8 @@ import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecyc
 import com.speedment.runtime.internal.logging.Logger;
 import com.speedment.runtime.internal.logging.LoggerManager;
 import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;
-import com.speedment.tool.controller.ConnectController;
-import com.speedment.tool.controller.MailPromptController;
+import com.speedment.tool.internal.controller.ConnectController;
+import com.speedment.tool.internal.controller.MailPromptController;
 import com.speedment.runtime.internal.util.EmailUtil;
 import com.speedment.runtime.internal.util.Statistics;
 import com.speedment.tool.event.UIEvent;

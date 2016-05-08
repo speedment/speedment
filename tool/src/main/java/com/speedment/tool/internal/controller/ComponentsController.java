@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.controller;
+package com.speedment.tool.internal.controller;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentVersion;

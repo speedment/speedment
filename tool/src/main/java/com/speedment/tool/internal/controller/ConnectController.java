@@ -14,14 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.controller;
+package com.speedment.tool.internal.controller;
 
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.UISession;
 import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.config.DbmsProperty;
-import static com.speedment.tool.controller.ToolbarController.ICON_SIZE;
+import static com.speedment.tool.internal.controller.ToolbarController.ICON_SIZE;
 import com.speedment.tool.util.Loader;
 import com.speedment.runtime.internal.util.Settings;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;

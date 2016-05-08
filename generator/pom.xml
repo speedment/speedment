@@ -42,19 +42,40 @@
         <codegen.version>2.4.0</codegen.version>
     </properties>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                        <Bundle-Description>
+                            The code generating parts of Speedment.
+                        </Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                        </Import-Package>
+                        <Export-Package>
+                            com.speedment.generator.component.*,
+                            com.speedment.generator.event.*,
+                            com.speedment.generator.util.*,
+                            com.speedment.generator
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-<!--        <dependency>
-            <groupId>com.speedment.fika</groupId>
-            <artifactId>mapstream</artifactId>
-            <version>${mapstream.version}</version>
-        </dependency>-->
-        
+
         <dependency>
             <groupId>com.speedment.fika</groupId>
             <artifactId>codegen</artifactId>
