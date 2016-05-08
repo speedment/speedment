@@ -17,8 +17,8 @@
 package com.speedment.runtime.internal.runtime;
 
 import com.speedment.runtime.component.Lifecyclable;
-import com.speedment.runtime.internal.logging.Logger;
-import com.speedment.runtime.internal.logging.LoggerManager;
+import com.speedment.fika.logger.Logger;
+import com.speedment.fika.logger.LoggerManager;
 import static java.util.Objects.requireNonNull;
 
 /**

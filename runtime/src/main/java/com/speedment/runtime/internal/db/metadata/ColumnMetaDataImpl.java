@@ -18,8 +18,8 @@ package com.speedment.runtime.internal.db.metadata;
 
 import com.speedment.runtime.db.SqlSupplier;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
-import com.speedment.runtime.internal.logging.Logger;
-import com.speedment.runtime.internal.logging.LoggerManager;
+import com.speedment.fika.logger.Logger;
+import com.speedment.fika.logger.LoggerManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.util.stream;
 
-import com.speedment.runtime.internal.logging.Logger;
-import com.speedment.runtime.internal.logging.LoggerManager;
+import com.speedment.fika.logger.Logger;
+import com.speedment.fika.logger.LoggerManager;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 

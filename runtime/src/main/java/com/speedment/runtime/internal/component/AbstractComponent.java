@@ -19,8 +19,8 @@ package com.speedment.runtime.internal.component;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.runtime.AbstractLifecycle;
-import com.speedment.runtime.internal.logging.Logger;
-import com.speedment.runtime.internal.logging.LoggerManager;
+import com.speedment.fika.logger.Logger;
+import com.speedment.fika.logger.LoggerManager;
 import static java.util.Objects.requireNonNull;
 
 /**

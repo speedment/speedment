@@ -82,6 +82,12 @@
         </dependency>
         
         <dependency>
+            <groupId>com.speedment.fika</groupId>
+            <artifactId>logger</artifactId>
+            <version>${logger.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
