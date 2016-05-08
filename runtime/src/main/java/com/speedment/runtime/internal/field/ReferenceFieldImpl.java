@@ -19,7 +19,7 @@ package com.speedment.runtime.internal.field;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.method.FieldSetter;
 import com.speedment.runtime.field.method.Getter;

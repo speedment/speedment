@@ -19,7 +19,7 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import java.util.Optional;
 
 /**

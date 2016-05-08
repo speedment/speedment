@@ -17,7 +17,6 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.IndexMutator;
 import com.speedment.runtime.config.trait.HasChildren;

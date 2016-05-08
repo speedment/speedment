@@ -27,7 +27,7 @@ import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.manager.SpeedmentPredicateView;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import java.util.Set;
 import java.util.function.BiFunction;
 

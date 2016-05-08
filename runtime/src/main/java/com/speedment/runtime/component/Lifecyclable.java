@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.fika.logger.Logger;
-import com.speedment.fika.logger.LoggerManager;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

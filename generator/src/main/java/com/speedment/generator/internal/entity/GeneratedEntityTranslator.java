@@ -44,7 +44,7 @@ import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.runtime.Entity;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.ArrayList;

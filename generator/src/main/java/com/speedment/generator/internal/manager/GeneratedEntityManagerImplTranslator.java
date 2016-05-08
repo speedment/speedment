@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.util.tuple.Tuples;
 import static java.util.stream.Collectors.joining;

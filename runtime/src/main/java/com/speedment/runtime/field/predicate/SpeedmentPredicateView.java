@@ -14,9 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.manager;
-
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+package com.speedment.runtime.field.predicate;
 
 /**
  *

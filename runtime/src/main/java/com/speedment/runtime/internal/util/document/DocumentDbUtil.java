@@ -30,7 +30,7 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.runtime.util.StreamComposition;
 import java.util.Optional;

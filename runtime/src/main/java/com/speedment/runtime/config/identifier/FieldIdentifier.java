@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field;
+package com.speedment.runtime.config.identifier;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
@@ -38,11 +38,12 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
  *      <li>{@link DocumentDbUtil#referencedDbms(Speedment, FieldIdentifier)}
  * </ul>
  * 
- * @author          Emil Forslund
  * @param <ENTITY>  the entity type
- * @since           2.3
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 public interface FieldIdentifier<ENTITY> {
     
     /**

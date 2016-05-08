@@ -20,8 +20,8 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import static com.speedment.runtime.internal.manager.sql.AbstractSpeedmentPredicateView.of;
-import com.speedment.runtime.manager.SpeedmentPredicateView;
-import com.speedment.runtime.manager.SqlPredicateFragment;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
+import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 /**
  * Created by fdirlikl on 11/18/2015.

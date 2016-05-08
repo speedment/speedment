@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.field.trait;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static java.util.Objects.requireNonNull;

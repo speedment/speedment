@@ -30,8 +30,8 @@ import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFi
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRawSet;
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getSecondOperandAsRaw;
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getThirdOperandAsInclusion;
-import com.speedment.runtime.manager.SpeedmentPredicateView;
-import com.speedment.runtime.manager.SqlPredicateFragment;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
+import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;

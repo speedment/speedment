@@ -35,7 +35,7 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.internal.db.DefaultDatabaseNamingConvention;
-import com.speedment.runtime.manager.SpeedmentPredicateView;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableSet;
 import java.util.HashSet;

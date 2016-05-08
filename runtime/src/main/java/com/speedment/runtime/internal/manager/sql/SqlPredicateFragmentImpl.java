@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.manager.SqlPredicateFragment;
+import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -23,7 +23,7 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.method.FieldSetter;
 import com.speedment.runtime.field.method.Getter;
 import com.speedment.runtime.field.method.Setter;

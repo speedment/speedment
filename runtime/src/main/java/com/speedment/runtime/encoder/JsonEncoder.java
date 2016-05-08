@@ -17,7 +17,7 @@
 package com.speedment.runtime.encoder;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;

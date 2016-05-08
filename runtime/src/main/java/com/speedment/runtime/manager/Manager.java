@@ -25,7 +25,7 @@ import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.db.trait.HasCreateFromConnectionMethods;
 import com.speedment.runtime.encoder.Encoder;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;

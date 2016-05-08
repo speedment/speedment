@@ -31,7 +31,7 @@ import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.db.SqlRunnable;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.manager.AbstractManager;

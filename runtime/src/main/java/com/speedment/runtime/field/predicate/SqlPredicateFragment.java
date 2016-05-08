@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.manager;
+package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.internal.manager.sql.SqlPredicateFragmentImpl;
 import java.util.Collection;
