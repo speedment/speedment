@@ -50,16 +50,6 @@ public interface DbmsHandler extends HasCreateFromConnectionMethods {
      */
     final Predicate<String> NO_FILTER = s -> true;
 
-//    /**
-//     * Returns the {@link Dbms} document that is used by this 
-//     * {@code DbmsHandler}.
-//     * <p>
-//     * This node will be copied before the reading starts to avoid concurrency
-//     * issues.
-//     *
-//     * @return  the {@link Dbms} document to use as a prototype
-//     */
-//    Dbms getDbms();
     /**
      * Reads the schema metadata with populated {@link Schema Schemas} that are
      * available in this database. The schemas are populated by all their
@@ -151,17 +141,6 @@ public interface DbmsHandler extends HasCreateFromConnectionMethods {
         Function<ResultSet, T> rsMapper
     );
 
-//    /**
-//     * Executes an SQL update command. Generated key(s) following an insert
-//     * command (if any) will be feed to the provided {code Consumer}.
-//     *
-//     * @param sql the non-null SQL command to execute
-//     * @param generatedKeyConsumer the non-null key Consumer
-//     * @throws SQLException if an error occurs
-//     */
-//    default void executeInsert(String sql, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-//        executeInsert(sql, Collections.emptyList(), generatedKeyConsumer);
-//    }
     /**
      * Executes an SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
@@ -181,16 +160,6 @@ public interface DbmsHandler extends HasCreateFromConnectionMethods {
         final Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 
-//    /**
-//     * Executes an SQL update command. Generated key(s) following an insert
-//     * command (if any) will be feed to the provided {code Consumer}.
-//     *
-//     * @param sql the non-null SQL command to execute
-//     * @throws SQLException if an error occurs
-//     */
-//    default void executeUpdate(String sql) throws SQLException {
-//        executeUpdate(sql, Collections.emptyList());
-//    }
     /**
      * Executes an SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
@@ -201,15 +170,6 @@ public interface DbmsHandler extends HasCreateFromConnectionMethods {
      */
     public void executeUpdate(final String sql, final List<?> values) throws SQLException;
 
-//    /**
-//     * Executes an SQL delete command.
-//     *
-//     * @param sql the non-null SQL command to execute
-//     * @throws SQLException if an error occurs
-//     */
-//    default void executeDelete(String sql) throws SQLException {
-//        executeDelete(sql, Collections.emptyList());
-//    }
     /**
      * Executes an SQL delete command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
@@ -227,5 +187,4 @@ public interface DbmsHandler extends HasCreateFromConnectionMethods {
      * @throws SQLException if an error occurs
      */
     public String getDbmsInfoString() throws SQLException;
-
 }
