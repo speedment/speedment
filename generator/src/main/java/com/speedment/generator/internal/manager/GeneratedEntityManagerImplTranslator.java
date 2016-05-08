@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.manager;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;
@@ -27,14 +27,12 @@ import com.speedment.fika.codegen.model.Generic;
 import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.component.resultset.ResultSetMapperComponent;
-import com.speedment.component.resultset.ResultSetMapping;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Table;
-import com.speedment.exception.SpeedmentException;
-import com.speedment.field.FieldIdentifier;
-import com.speedment.field.trait.FieldTrait;
+import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
+import com.speedment.runtime.component.resultset.ResultSetMapping;
+import com.speedment.runtime.config.db.Column;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOID;
@@ -43,10 +41,9 @@ import static com.speedment.fika.codegen.internal.util.Formatting.block;
 import static com.speedment.fika.codegen.internal.util.Formatting.indent;
 import static com.speedment.fika.codegen.internal.util.Formatting.nl;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.internal.core.manager.sql.AbstractSqlManager;
-import static com.speedment.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import com.speedment.internal.util.sql.ResultSetUtil;
-import com.speedment.util.tuple.Tuples;
+import com.speedment.runtime.internal.core.manager.sql.AbstractSqlManager;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -57,6 +54,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
+import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.util.tuple.Tuples;
 import static java.util.stream.Collectors.joining;
 
 /**

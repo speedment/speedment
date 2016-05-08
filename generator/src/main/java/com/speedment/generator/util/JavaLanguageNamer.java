@@ -16,12 +16,12 @@
  */
 package com.speedment.generator.util;
 
-import com.speedment.config.db.Project;
-import static com.speedment.config.db.Project.DEFAULT_PACKAGE_NAME;
+import com.speedment.runtime.config.db.Project;
+import static com.speedment.runtime.config.db.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.fika.codegen.internal.util.Formatting.ucfirst;
-import static com.speedment.internal.util.sql.SqlUtil.unQuote;
-import static com.speedment.util.CollectorUtil.toUnmodifiableSet;
-import static com.speedment.util.CollectorUtil.unmodifiableSetOf;
+import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
+import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
+import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;

@@ -16,9 +16,9 @@
  */
 package com.speedment.generator;
 
-import com.speedment.Speedment;
-import com.speedment.annotation.Api;
-import com.speedment.config.db.trait.HasMainInterface;
+import com.speedment.runtime.Speedment;
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.db.trait.HasMainInterface;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 

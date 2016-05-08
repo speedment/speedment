@@ -309,7 +309,7 @@
                         </executions>
                         <configuration>
                             <docfilessubdirs>true</docfilessubdirs>
-                            <excludePackageNames>com.speedment.internal.*</excludePackageNames>
+                            <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -379,34 +379,35 @@
             </plugin>
         </plugins>
     </reporting>
-	
-    <dependencies>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-		
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <scope>test</scope>
-            <version>2.44.0</version>
-        </dependency>
-		
-        <dependency>
-            <groupId>com.opera</groupId>
-            <artifactId>operadriver</artifactId>
-            <scope>test</scope>
-            <version>1.5</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-remote-driver</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <scope>test</scope>
+                <version>2.44.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.opera</groupId>
+                <artifactId>operadriver</artifactId>
+                <scope>test</scope>
+                <version>1.5</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-remote-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

@@ -17,7 +17,7 @@
 package com.speedment.generator.internal.util;
 
 import static com.speedment.fika.codegen.internal.util.Formatting.ucfirst;
-import static com.speedment.internal.util.sql.SqlUtil.unQuote;
+import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import com.speedment.generator.util.JavaLanguageNamer;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;

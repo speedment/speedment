@@ -16,16 +16,16 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.Speedment;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Table;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.Speedment;
+import com.speedment.runtime.config.db.Column;
+import com.speedment.runtime.config.db.ForeignKey;
+import com.speedment.runtime.config.db.ForeignKeyColumn;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.Generator;
+import static com.speedment.fika.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.generator.internal.manager.EntityManagerTranslator;
-import static com.speedment.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 
 /**
  *

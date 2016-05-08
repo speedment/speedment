@@ -16,8 +16,7 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.Entity;
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Constructor;
@@ -31,9 +30,8 @@ import com.speedment.fika.codegen.model.Interface;
 import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Table;
-import com.speedment.field.FieldIdentifier;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.Table;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
@@ -45,15 +43,17 @@ import static com.speedment.fika.codegen.internal.util.Formatting.shortName;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.internal.util.document.DocumentDbUtil;
-import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import com.speedment.runtime.Entity;
+import com.speedment.runtime.field.FieldIdentifier;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

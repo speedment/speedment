@@ -16,25 +16,25 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.Meta;
 import com.speedment.fika.codegen.model.File;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasEnabled;
 import com.speedment.generator.event.AfterGenerate;
 import com.speedment.generator.event.BeforeGenerate;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.internal.java.JavaGenerator;
 import com.speedment.fika.codegen.internal.util.Formatting;
-import com.speedment.internal.logging.Logger;
-import com.speedment.internal.logging.LoggerManager;
-import com.speedment.internal.util.Statistics;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import com.speedment.runtime.internal.logging.Logger;
+import com.speedment.runtime.internal.logging.LoggerManager;
+import com.speedment.runtime.internal.util.Statistics;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

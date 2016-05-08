@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.manager;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Field;
 import com.speedment.fika.codegen.model.File;
@@ -25,16 +25,16 @@ import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Interface;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.component.ProjectComponent;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Table;
+import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.Table;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.internal.core.manager.sql.SqlManager;
-import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import com.speedment.runtime.internal.core.manager.sql.SqlManager;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

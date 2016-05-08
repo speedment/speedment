@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<MenuBar BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.internal.ui.controller.MenubarController">
+<MenuBar BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.runtime.internal.ui.controller.MenubarController">
     <menus>
         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
             <items>

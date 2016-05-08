@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;
 import com.speedment.fika.codegen.model.Constructor;
@@ -26,8 +26,8 @@ import com.speedment.fika.codegen.model.Generic;
 import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.config.db.Table;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.BOOLEAN_PRIMITIVE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.INT_PRIMITIVE;

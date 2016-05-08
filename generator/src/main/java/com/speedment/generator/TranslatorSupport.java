@@ -16,22 +16,22 @@
  */
 package com.speedment.generator;
 
-import com.speedment.Speedment;
-import com.speedment.config.Document;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasAlias;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasName;
+import com.speedment.runtime.Speedment;
+import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.db.Column;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasAlias;
+import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.db.trait.HasName;
 import static com.speedment.fika.codegen.internal.util.Formatting.shortName;
 import static com.speedment.fika.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.fika.codegen.model.Type;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.internal.util.document.DocumentUtil;
-import static com.speedment.internal.util.document.DocumentUtil.Name.JAVA_NAME;
+import com.speedment.runtime.internal.util.document.DocumentUtil;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;

@@ -19,6 +19,6 @@
     pickOnBounds="false" 
     hgap="10"
     vgap="10"
-    fx:controller="com.speedment.internal.ui.controller.NotificationAreaController">
+    fx:controller="com.speedment.runtime.internal.ui.controller.NotificationAreaController">
 
 </FlowPane>

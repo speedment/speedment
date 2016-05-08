@@ -16,20 +16,20 @@
  */
 package com.speedment.generator;
 
-import com.speedment.annotation.Api;
-import com.speedment.config.Document;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasAlias;
-import com.speedment.config.db.trait.HasEnabled;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.db.Column;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.ForeignKey;
+import com.speedment.runtime.config.db.Index;
+import com.speedment.runtime.config.db.PrimaryKeyColumn;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasAlias;
+import com.speedment.runtime.config.db.trait.HasEnabled;
+import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.Meta;
 import com.speedment.fika.codegen.model.ClassOrInterface;

@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.component;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.JavaClassTranslator;
 import static com.speedment.generator.StandardTranslatorKey.*;
 import com.speedment.generator.Translator;
@@ -24,11 +24,11 @@ import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasName;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.db.trait.HasName;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.internal.java.JavaGenerator;
 import com.speedment.fika.codegen.model.ClassOrInterface;
@@ -46,9 +46,9 @@ import com.speedment.generator.internal.manager.GeneratedEntityManagerImplTransl
 import com.speedment.generator.internal.manager.GeneratedEntityManagerTranslator;
 import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.internal.core.platform.component.impl.InternalOpenSourceComponent;
-import com.speedment.license.Software;
-import com.speedment.stream.MapStream;
+import com.speedment.runtime.internal.core.platform.component.impl.InternalOpenSourceComponent;
+import com.speedment.runtime.license.Software;
+import com.speedment.runtime.stream.MapStream;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

@@ -16,14 +16,14 @@
  */
 package com.speedment.generator;
 
-import com.speedment.annotation.Api;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
+import static com.speedment.fika.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Table;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.fika.codegen.model.Interface;
 import com.speedment.fika.codegen.model.Class;
 import com.speedment.generator.internal.TranslatorKeyImpl;
-import static com.speedment.util.StaticClassUtil.instanceNotAllowed;
 import java.util.stream.Stream;
 
 /**

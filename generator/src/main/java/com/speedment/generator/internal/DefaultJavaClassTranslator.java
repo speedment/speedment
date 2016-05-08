@@ -16,29 +16,30 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.Translator;
 import com.speedment.generator.Translator.Builder;
 import com.speedment.generator.Translator.Phase;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.config.Document;
-import com.speedment.config.db.Column;
-import com.speedment.config.db.Dbms;
-import com.speedment.config.db.ForeignKey;
-import com.speedment.config.db.ForeignKeyColumn;
-import com.speedment.config.db.Index;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Schema;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasEnabled;
-import com.speedment.config.db.trait.HasMainInterface;
-import com.speedment.config.db.trait.HasName;
+import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.db.Column;
+import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.db.ForeignKey;
+import com.speedment.runtime.config.db.ForeignKeyColumn;
+import com.speedment.runtime.config.db.Index;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasEnabled;
+import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.db.trait.HasName;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.controller.AutoImports;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.fika.codegen.internal.model.value.TextValue;
+import static com.speedment.fika.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.fika.codegen.model.AnnotationUsage;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.fika.codegen.model.Constructor;
@@ -49,16 +50,15 @@ import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Type;
 import com.speedment.generator.component.CodeGenerationComponent;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
-import com.speedment.internal.core.config.BaseDocument;
-import com.speedment.internal.core.config.db.ColumnImpl;
-import com.speedment.internal.core.config.db.DbmsImpl;
-import com.speedment.internal.core.config.db.ForeignKeyImpl;
-import com.speedment.internal.core.config.db.IndexImpl;
-import com.speedment.internal.core.config.db.ProjectImpl;
-import com.speedment.internal.core.config.db.SchemaImpl;
-import com.speedment.internal.core.config.db.TableImpl;
-import static com.speedment.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.stream.MapStream;
+import com.speedment.runtime.internal.core.config.BaseDocument;
+import com.speedment.runtime.internal.core.config.db.ColumnImpl;
+import com.speedment.runtime.internal.core.config.db.DbmsImpl;
+import com.speedment.runtime.internal.core.config.db.ForeignKeyImpl;
+import com.speedment.runtime.internal.core.config.db.IndexImpl;
+import com.speedment.runtime.internal.core.config.db.ProjectImpl;
+import com.speedment.runtime.internal.core.config.db.SchemaImpl;
+import com.speedment.runtime.internal.core.config.db.TableImpl;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -70,8 +70,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static com.speedment.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.runtime.stream.MapStream;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -127,7 +127,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     protected AnnotationUsage generated() {
-        final String owner = speedment.getUserInterfaceComponent().getBrand().title();
+        final String owner = speedment.getInfoComponent().title();
         return GENERATED.set(new TextValue(owner));
     }
 
@@ -186,7 +186,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         final String owner, message;
 
         if (isInGeneratedPackage()) {
-            owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+            owner = getSpeedment().getInfoComponent().title();
             message = GENERATED_JAVADOC_MESSAGE;
         } else {
             owner = project().get().getCompanyName();

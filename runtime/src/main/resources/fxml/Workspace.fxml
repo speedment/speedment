@@ -17,5 +17,5 @@
             text="Workspace" 
             xmlns="http://javafx.com/javafx/8.0.40" 
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.speedment.internal.ui.controller.WorkspaceController">
+            fx:controller="com.speedment.runtime.internal.ui.controller.WorkspaceController">
 </TitledPane>

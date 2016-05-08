@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;
@@ -27,9 +27,9 @@ import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.config.db.Project;
-import com.speedment.config.db.Table;
-import com.speedment.config.db.trait.HasEnabled;
+import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.db.trait.HasEnabled;
 import com.speedment.fika.codegen.internal.model.JavadocImpl;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
@@ -37,14 +37,14 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOI
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
-import com.speedment.stream.MapStream;
+import com.speedment.runtime.internal.core.runtime.SpeedmentApplicationLifecycle;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
-import static com.speedment.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import com.speedment.runtime.stream.MapStream;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -119,7 +119,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+        final String owner = getSpeedment().getInfoComponent().title();
         return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
             .add(AUTHOR.setValue(owner));
     }

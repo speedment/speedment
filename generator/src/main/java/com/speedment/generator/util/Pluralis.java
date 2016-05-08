@@ -16,8 +16,8 @@
  */
 package com.speedment.generator.util;
 
-import static com.speedment.util.NullUtil.requireNonNullElements;
-import static com.speedment.util.NullUtil.requireNonNulls;
+import static com.speedment.fika.codegen.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.fika.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

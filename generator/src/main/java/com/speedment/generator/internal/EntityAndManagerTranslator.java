@@ -16,15 +16,15 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.fika.codegen.model.Generic;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.config.db.Table;
-import com.speedment.exception.SpeedmentException;
+import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.internal.model.constant.DefaultType;
-import com.speedment.util.tuple.Tuple1;
+import com.speedment.runtime.util.tuple.Tuple1;
 import java.util.function.Function;
 
 /**

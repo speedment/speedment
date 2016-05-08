@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;
 import com.speedment.fika.codegen.model.Field;
@@ -25,7 +25,7 @@ import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.config.db.Project;
+import com.speedment.runtime.config.db.Project;
 import com.speedment.fika.codegen.internal.model.JavadocImpl;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
@@ -34,8 +34,8 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOI
 import com.speedment.fika.codegen.internal.model.value.ReferenceValue;
 import static com.speedment.fika.codegen.internal.util.Formatting.indent;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.internal.core.runtime.ApplicationMetadata;
-import com.speedment.internal.util.document.DocumentTranscoder;
+import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+import com.speedment.runtime.internal.core.runtime.ApplicationMetadata;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -44,7 +44,7 @@ import static java.util.stream.Collectors.toList;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public final class GeneratedSpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
@@ -90,33 +90,23 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
 
         final List<Method> subInitializers = new ArrayList<>();
 
-        for (List<String> seg : segments) {
+        segments.stream().map(seg -> {
             Method subMethod = addNewSubMethod(subInitializers);
             int lineCnt = 0;
             for (String line : seg) {
                 subMethod.add(
-                    indent("\"" + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"" + (++lineCnt == seg.size() ? "" : ","))
+                    indent("\"" + line.replace("\\", "\\\\")
+                        .replace("\"", "\\\"")
+                        .replace("\n", "\\n") + "\"" + 
+                        (++lineCnt == seg.size() ? "" : ",")
+                    )
                 );
             }
-            subMethod.add(").forEachOrdered(" + STRING_BUILDER_NAME + "::append);");
-        }
+            return subMethod;
+        }).forEach(subMethod -> subMethod.add(
+            ").forEachOrdered(" + STRING_BUILDER_NAME + "::append);"
+        ));
 
-//        int subMethodLineCount = 0;
-//        Method subMethod = addNewSubMethod(subInitializers);
-//        for (final String line : lines) {
-//
-//            subMethod.add(
-//                "\"" + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"" + (subMethodLineCount == 0 ? "" : ",")
-//            //                STRING_BUILDER_NAME + ".append(\""
-//            //                + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
-//            //                + "\\n\");"
-//            );
-//            if (subMethodLineCount++ > LINES_PER_METHOD) {
-//
-//                subMethod = addNewSubMethod(subInitializers);
-//                subMethodLineCount = 0;
-//            }
-//        }
         file.add(Import.of(Type.of(StringBuilder.class)));
         file.add(Import.of(Type.of(Stream.class)));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
@@ -156,7 +146,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
 
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
+        final String owner = getSpeedment().getInfoComponent().title();
         return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
             .add(AUTHOR.setValue(owner));
     }

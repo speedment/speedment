@@ -16,10 +16,10 @@
  */
 package com.speedment.generator.event;
 
-import com.speedment.annotation.Api;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.generator.TranslatorManager;
-import com.speedment.event.Event;
 import com.speedment.fika.codegen.Generator;
+import com.speedment.runtime.event.Event;
 
 /**
  *

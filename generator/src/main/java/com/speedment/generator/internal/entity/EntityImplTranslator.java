@@ -16,11 +16,11 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.Speedment;
+import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;
 import com.speedment.fika.codegen.model.File;
-import com.speedment.config.db.Table;
+import com.speedment.runtime.config.db.Table;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 
 /**

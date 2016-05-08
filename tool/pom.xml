@@ -114,5 +114,21 @@
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
         </dependency>
+        
+        <!-- Test dependencies -->	
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+        </dependency>
     </dependencies>
 </project>
