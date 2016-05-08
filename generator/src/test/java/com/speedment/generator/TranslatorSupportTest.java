@@ -22,7 +22,7 @@
 package com.speedment.generator;
 
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.generator.component.CodeGenerationComponent;
 import java.util.Optional;
 import org.junit.After;

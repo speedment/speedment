@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
 import static com.speedment.runtime.util.NullUtil.requireKeys;

@@ -38,6 +38,10 @@
         tables.
     </description>
     
+    <properties>
+        <codegen.version>2.4.0</codegen.version>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -45,10 +49,16 @@
             <version>${project.version}</version>
         </dependency>
         
+<!--        <dependency>
+            <groupId>com.speedment.fika</groupId>
+            <artifactId>mapstream</artifactId>
+            <version>${mapstream.version}</version>
+        </dependency>-->
+        
         <dependency>
             <groupId>com.speedment.fika</groupId>
             <artifactId>codegen</artifactId>
-            <version>2.4.0</version>
+            <version>${codegen.version}</version>
         </dependency>
         
         <!-- LICENSE INFORMATION

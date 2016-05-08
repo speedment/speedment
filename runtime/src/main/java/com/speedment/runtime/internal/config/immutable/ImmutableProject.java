@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.runtime.stream.MapStream;
+import com.speedment.fika.mapstream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;

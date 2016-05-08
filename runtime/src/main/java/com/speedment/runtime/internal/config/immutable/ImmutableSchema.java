@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.internal.config.SchemaImpl;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;

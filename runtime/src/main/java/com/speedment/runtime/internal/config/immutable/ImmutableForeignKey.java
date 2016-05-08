@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.ForeignKey;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.ForeignKeyImpl;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;

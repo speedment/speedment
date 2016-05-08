@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.db.trait.HasParent;
+import com.speedment.runtime.config.trait.HasParent;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 

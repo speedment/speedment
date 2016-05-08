@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config;
 
-import com.speedment.runtime.config.db.Index;
-import com.speedment.runtime.config.db.IndexColumn;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.internal.config.AbstractChildDocument;
 import java.util.Map;
 

@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.db;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import java.sql.Blob;
 import java.sql.SQLException;

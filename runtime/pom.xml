@@ -50,12 +50,33 @@
                 <configuration>
                     <instructions>
                         <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
-                        <Bundle-Description>Wrap your database into Java 8!</Bundle-Description>
+                        <Bundle-Description>
+                            The runtime environment of Speedment.
+                        </Bundle-Description>
                         <Import-Package>
                             org.osgi.framework,
                             *;resolution:=optional 
                         </Import-Package>
-                        <Main-Class>${mainClass}</Main-Class>
+                        <Export-Package>
+                            com.speedment.runtime.annotation,
+                            com.speedment.runtime.component,
+                            com.speedment.runtime.config,
+                            com.speedment.runtime.config.db,
+                            com.speedment.runtime.db,
+                            com.speedment.runtime.encoder,
+                            com.speedment.runtime.event,
+                            com.speedment.runtime.exception,
+                            com.speedment.runtime.field,
+                            com.speedment.runtime.field.trait,
+                            com.speedment.runtime.license,
+                            com.speedment.runtime.manager,
+                            com.speedment.runtime.stream,
+                            com.speedment.runtime.util,
+                            com.speedment.runtime
+                        </Export-Package>
+<!--                        <Private-Package>
+                            com.speedment.runtime.internal
+                        </Private-Package>-->
                     </instructions>
                 </configuration>
             </plugin>                            
@@ -64,9 +85,15 @@
     
     <dependencies>
         <dependency>
+            <groupId>com.speedment.fika</groupId>
+            <artifactId>mapstream</artifactId>
+            <version>${mapstream.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.6.2</version>
+            <version>${gson.version}</version>
         </dependency>
         
         <dependency>

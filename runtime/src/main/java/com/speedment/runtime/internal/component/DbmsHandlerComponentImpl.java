@@ -18,8 +18,8 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsType;

@@ -18,8 +18,8 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Schema;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.SchemaPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;

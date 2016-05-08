@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.runtime.typemapping;
 
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.Dbms;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 

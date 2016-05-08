@@ -17,7 +17,7 @@
 package com.speedment.generator.internal;
 
 import com.speedment.fika.codegen.model.Import;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 

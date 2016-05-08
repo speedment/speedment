@@ -17,8 +17,8 @@
 package com.speedment.runtime.component;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DbmsHandler;
 import java.util.Optional;
 import java.util.stream.Stream;

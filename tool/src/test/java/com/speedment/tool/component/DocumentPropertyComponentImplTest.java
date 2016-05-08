@@ -17,10 +17,10 @@
 package com.speedment.tool.component;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Schema;
-import com.speedment.runtime.config.db.mutator.DbmsMutator;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;

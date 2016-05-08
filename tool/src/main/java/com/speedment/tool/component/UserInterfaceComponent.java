@@ -20,7 +20,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.tool.brand.Brand;
 import com.speedment.tool.notification.Notification;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.UISession;
 import com.speedment.tool.controller.ProjectTreeController;

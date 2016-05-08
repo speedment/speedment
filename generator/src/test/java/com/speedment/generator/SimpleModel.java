@@ -22,15 +22,15 @@
 package com.speedment.generator;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.PrimaryKeyColumn;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Schema;
-import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
-import com.speedment.runtime.config.db.mapper.identity.StringIdentityMapper;
-import com.speedment.runtime.config.db.trait.HasName;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
 import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;

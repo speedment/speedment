@@ -25,7 +25,7 @@ import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Project;
 import com.speedment.fika.codegen.internal.model.JavadocImpl;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;

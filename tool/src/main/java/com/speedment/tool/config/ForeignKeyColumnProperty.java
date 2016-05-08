@@ -18,8 +18,8 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.ForeignKey;
-import com.speedment.runtime.config.db.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;

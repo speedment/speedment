@@ -17,8 +17,8 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
-import com.speedment.runtime.config.db.trait.HasName;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.tool.config.trait.HasUiVisibleProperties;

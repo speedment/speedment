@@ -18,7 +18,7 @@ package com.speedment.generator.event;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.generator.TranslatorManager;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Project;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.runtime.event.trait.ProjectEvent;
 import static java.util.Objects.requireNonNull;

@@ -19,7 +19,7 @@ package com.speedment.runtime.internal.util.document;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;

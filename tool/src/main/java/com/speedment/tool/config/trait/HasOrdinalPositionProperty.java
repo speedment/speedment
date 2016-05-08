@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.db.trait.*;
+import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.IntegerProperty;
 

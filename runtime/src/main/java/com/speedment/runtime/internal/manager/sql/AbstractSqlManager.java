@@ -17,13 +17,13 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.PrimaryKeyColumn;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsHandler;

@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.trait.*;
+import com.speedment.runtime.config.trait.HasColumn;
+import com.speedment.runtime.config.Column;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.Optional;
 import static javafx.beans.binding.Bindings.createObjectBinding;

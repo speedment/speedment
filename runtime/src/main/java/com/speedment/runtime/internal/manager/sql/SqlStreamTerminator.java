@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.FieldIdentifier;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;

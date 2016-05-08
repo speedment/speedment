@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.PrimaryKeyColumn;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
 import com.speedment.runtime.internal.util.Lazy;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;

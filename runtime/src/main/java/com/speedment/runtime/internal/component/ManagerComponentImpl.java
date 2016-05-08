@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;

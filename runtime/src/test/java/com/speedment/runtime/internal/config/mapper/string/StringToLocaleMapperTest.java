@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.config.mapper.string;
 
-import com.speedment.runtime.config.db.mapper.string.StringToLocaleMapper;
+import com.speedment.runtime.config.mapper.string.StringToLocaleMapper;
 import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Before;

@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.util.document;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.config.BaseDocument;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Map;

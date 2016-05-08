@@ -18,12 +18,12 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.Dbms;
-import static com.speedment.runtime.config.db.Dbms.IP_ADDRESS;
-import static com.speedment.runtime.config.db.Dbms.PORT;
-import static com.speedment.runtime.config.db.Dbms.USERNAME;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.Dbms;
+import static com.speedment.runtime.config.Dbms.IP_ADDRESS;
+import static com.speedment.runtime.config.Dbms.PORT;
+import static com.speedment.runtime.config.Dbms.USERNAME;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.stream.OptionalUtil;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;

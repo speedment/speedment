@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.controller;
 
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.UISession;
 import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;

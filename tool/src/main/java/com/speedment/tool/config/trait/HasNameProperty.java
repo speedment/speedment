@@ -17,7 +17,7 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.trait.HasName;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.StringPropertyItem;

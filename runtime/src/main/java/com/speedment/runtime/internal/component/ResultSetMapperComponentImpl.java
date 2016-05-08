@@ -19,7 +19,7 @@ package com.speedment.runtime.internal.component;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.util.tuple.Tuple2;

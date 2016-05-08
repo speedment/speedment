@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
-import com.speedment.runtime.config.db.mutator.trait.HasOrderTypeMutator;
-import com.speedment.runtime.config.db.parameter.OrderType;
+import com.speedment.runtime.config.mutator.trait.HasOrderTypeMutator;
+import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.tool.config.trait.HasOrderTypeProperty;
 
 /**

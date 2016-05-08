@@ -17,7 +17,7 @@
 package com.speedment.runtime.component;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 import java.util.stream.Stream;

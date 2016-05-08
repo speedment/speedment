@@ -18,7 +18,7 @@ package com.speedment.generator.internal;
 
 import com.speedment.generator.TranslatorKey;
 import com.speedment.fika.codegen.model.ClassOrInterface;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMainInterface;
 import static java.util.Objects.requireNonNull;
 
 /**

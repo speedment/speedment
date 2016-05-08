@@ -18,11 +18,11 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.Column;
-import static com.speedment.runtime.config.db.Column.AUTO_INCREMENT;
-import static com.speedment.runtime.config.db.Column.DATABASE_TYPE;
-import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.Column;
+import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
+import static com.speedment.runtime.config.Column.DATABASE_TYPE;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;

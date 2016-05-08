@@ -17,8 +17,8 @@
 package com.speedment.generator;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
-import com.speedment.runtime.config.db.trait.HasName;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 
 /**

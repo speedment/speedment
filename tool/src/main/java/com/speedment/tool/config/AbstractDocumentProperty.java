@@ -23,7 +23,7 @@ import com.speedment.runtime.internal.stream.OptionalUtil;
 import com.speedment.tool.util.NumericProperty;
 import com.speedment.tool.util.SimpleNumericProperty;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
-import com.speedment.runtime.stream.MapStream;
+import com.speedment.fika.mapstream.MapStream;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.tool.component.DocumentPropertyComponent;

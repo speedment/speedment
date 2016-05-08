@@ -17,7 +17,7 @@
 package com.speedment.runtime.component;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;

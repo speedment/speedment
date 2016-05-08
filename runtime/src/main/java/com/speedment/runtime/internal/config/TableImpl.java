@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.internal.config;
 
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.ForeignKey;
-import com.speedment.runtime.config.db.Index;
-import com.speedment.runtime.config.db.PrimaryKeyColumn;
-import com.speedment.runtime.config.db.Schema;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.AbstractChildDocument;
 import java.util.Map;
 import java.util.stream.Stream;

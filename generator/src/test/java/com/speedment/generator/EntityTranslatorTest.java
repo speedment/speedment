@@ -18,7 +18,7 @@ package com.speedment.generator;
 
 import static com.speedment.generator.SimpleModel.TABLE_NAME;
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.controller.AutoImports;
 import com.speedment.fika.codegen.internal.java.JavaGenerator;

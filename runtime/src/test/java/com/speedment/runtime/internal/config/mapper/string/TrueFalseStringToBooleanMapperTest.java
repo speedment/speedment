@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.config.mapper.string;
 
-import com.speedment.runtime.config.db.mapper.string.TrueFalseStringToBooleanMapper;
+import com.speedment.runtime.config.mapper.string.TrueFalseStringToBooleanMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

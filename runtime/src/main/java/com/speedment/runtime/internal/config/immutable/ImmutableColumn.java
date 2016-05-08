@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.internal.config.ColumnImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
 import java.util.Map;

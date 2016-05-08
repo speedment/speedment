@@ -18,10 +18,10 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Schema;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
 /**

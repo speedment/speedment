@@ -18,7 +18,7 @@ package com.speedment.runtime.component.resultset;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.parameter.DbmsType;
 
 /**
  * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and

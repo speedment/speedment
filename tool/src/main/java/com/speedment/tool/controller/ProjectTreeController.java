@@ -18,8 +18,8 @@ package com.speedment.tool.controller;
 
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.runtime.config.db.trait.HasEnabled;
-import com.speedment.runtime.config.db.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.event.ProjectLoaded;
 import com.speedment.tool.UISession;
 import com.speedment.tool.config.DbmsProperty;

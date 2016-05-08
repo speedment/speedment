@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.util.testing;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.FieldIdentifier;

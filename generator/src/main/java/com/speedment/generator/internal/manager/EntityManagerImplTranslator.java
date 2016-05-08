@@ -23,7 +23,7 @@ import com.speedment.fika.codegen.model.Constructor;
 import com.speedment.fika.codegen.model.Field;
 import com.speedment.fika.codegen.model.File;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 
 /**

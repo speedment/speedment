@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
-import com.speedment.runtime.config.db.Index;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.IndexImpl;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;

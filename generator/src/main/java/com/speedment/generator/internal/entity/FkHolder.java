@@ -17,10 +17,10 @@
 package com.speedment.generator.internal.entity;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.ForeignKey;
-import com.speedment.runtime.config.db.ForeignKeyColumn;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.Generator;
 import static com.speedment.fika.codegen.internal.util.NullUtil.requireNonNulls;

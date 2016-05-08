@@ -21,7 +21,7 @@
  */
 package com.speedment.runtime.config.db.parameters;
 
-import com.speedment.runtime.config.db.parameter.OrderType;
+import com.speedment.runtime.config.parameter.OrderType;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import org.junit.After;

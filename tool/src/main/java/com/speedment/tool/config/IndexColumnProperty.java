@@ -18,8 +18,8 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.Index;
-import com.speedment.runtime.config.db.IndexColumn;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexColumnPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;

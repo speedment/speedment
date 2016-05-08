@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
-import com.speedment.runtime.config.db.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
 
 /**

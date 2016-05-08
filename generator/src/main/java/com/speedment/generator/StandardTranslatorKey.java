@@ -18,8 +18,8 @@ package com.speedment.generator;
 
 import static com.speedment.fika.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Table;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.fika.codegen.model.Interface;
 import com.speedment.fika.codegen.model.Class;

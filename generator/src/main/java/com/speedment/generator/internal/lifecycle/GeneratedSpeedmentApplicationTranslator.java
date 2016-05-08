@@ -27,9 +27,9 @@ import com.speedment.fika.codegen.model.Import;
 import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.config.db.trait.HasEnabled;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.fika.codegen.internal.model.JavadocImpl;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
@@ -44,7 +44,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import com.speedment.runtime.stream.MapStream;
+import com.speedment.fika.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.db.Project;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.internal.license.OpenSourceLicense;
 import com.speedment.runtime.license.Software;

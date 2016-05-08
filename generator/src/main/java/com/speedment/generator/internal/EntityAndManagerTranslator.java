@@ -21,7 +21,7 @@ import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.fika.codegen.model.Generic;
 import com.speedment.fika.codegen.model.Type;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.internal.model.constant.DefaultType;
 import com.speedment.runtime.util.tuple.Tuple1;

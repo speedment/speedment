@@ -17,12 +17,12 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Project;
-import static com.speedment.runtime.config.db.Project.CONFIG_PATH;
-import static com.speedment.runtime.config.db.Project.DEFAULT_PROJECT_NAME;
-import static com.speedment.runtime.config.db.Project.PACKAGE_LOCATION;
-import static com.speedment.runtime.config.db.Project.PACKAGE_NAME;
-import static com.speedment.runtime.config.db.trait.HasName.NAME;
+import com.speedment.runtime.config.Project;
+import static com.speedment.runtime.config.Project.CONFIG_PATH;
+import static com.speedment.runtime.config.Project.DEFAULT_PROJECT_NAME;
+import static com.speedment.runtime.config.Project.PACKAGE_LOCATION;
+import static com.speedment.runtime.config.Project.PACKAGE_NAME;
+import static com.speedment.runtime.config.trait.HasName.NAME;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.util.JavaLanguageNamer;

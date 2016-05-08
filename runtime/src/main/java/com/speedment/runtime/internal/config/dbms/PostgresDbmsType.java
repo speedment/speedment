@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.parameter.DbmsType;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;

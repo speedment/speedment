@@ -18,8 +18,8 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.runtime.config.db.ForeignKey;
-import com.speedment.runtime.config.db.Table;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;

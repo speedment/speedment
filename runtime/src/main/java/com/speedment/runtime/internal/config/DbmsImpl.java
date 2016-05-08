@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.internal.config;
 
-import com.speedment.runtime.config.db.Dbms;
-import com.speedment.runtime.config.db.Project;
-import com.speedment.runtime.config.db.Schema;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.internal.config.AbstractChildDocument;
 import java.util.Map;
 import java.util.stream.Stream;

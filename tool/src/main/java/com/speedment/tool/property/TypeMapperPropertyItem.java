@@ -17,7 +17,7 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.util.EditorsUtil;
 import static java.util.Comparator.comparing;

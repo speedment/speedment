@@ -17,7 +17,7 @@
 package com.speedment.runtime.db;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.db.Dbms;
+import com.speedment.runtime.config.Dbms;
 
 /**
  * A functional interface that given a certain {@link Dbms} instance can produce

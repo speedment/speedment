@@ -18,7 +18,7 @@ package com.speedment.runtime.config;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import com.speedment.runtime.stream.MapStream;
+import com.speedment.fika.mapstream.MapStream;
 import com.speedment.runtime.util.OptionalBoolean;
 import java.util.ArrayList;
 import java.util.Collections;

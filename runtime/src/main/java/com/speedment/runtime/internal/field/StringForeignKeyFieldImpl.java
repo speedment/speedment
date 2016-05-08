@@ -17,8 +17,8 @@
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.db.Column;
-import com.speedment.runtime.config.db.mapper.TypeMapper;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.FieldIdentifier;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.StringForeignKeyField;

@@ -39,18 +39,24 @@
     </description>
     
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>runtime</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency>-->
 		
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>generator</artifactId>
             <version>${project.version}</version>
         </dependency>
-		
+        
+<!--        <dependency>
+            <groupId>com.speedment.fika</groupId>
+            <artifactId>mapstream</artifactId>
+            <version>${mapstream.version}</version>
+        </dependency>-->
+        
         <!-- LICENSE INFORMATION
         Gson:2.5
         Apache 2 License
@@ -65,9 +71,9 @@
         emifor
         -->
         <dependency>
-            <artifactId>gson</artifactId>
             <groupId>com.google.code.gson</groupId>
-            <version>2.6.2</version>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
         	
         <!-- LICENSE INFORMATION
