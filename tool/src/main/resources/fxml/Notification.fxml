@@ -13,7 +13,7 @@
        wrapText="true" 
        xmlns:fx="http://javafx.com/fxml/1" 
        xmlns="http://javafx.com/javafx/8.0.65" 
-       fx:controller="com.speedment.runtime.internal.ui.controller.NotificationController">
+       fx:controller="com.speedment.tool.internal.controller.NotificationController">
     <effect>
         <DropShadow color="#00000080" height="8.0" offsetY="1.0" radius="3.5" width="8.0" />
     </effect>

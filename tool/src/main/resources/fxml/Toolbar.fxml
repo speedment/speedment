@@ -30,7 +30,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER" prefHeight="38.0" prefWidth="900.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.runtime.internal.ui.controller.ToolbarController">
+<HBox alignment="CENTER" 
+      prefHeight="38.0" 
+      prefWidth="900.0" 
+      spacing="8.0" 
+      xmlns="http://javafx.com/javafx/8.0.40" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.speedment.tool.internal.controller.ToolbarController">
     <children>
         <Button fx:id="buttonReload" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Reload" textAlignment="CENTER">
             <padding>
