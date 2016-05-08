@@ -31,6 +31,7 @@ import com.speedment.config.db.mapper.identity.FloatIdentityMapper;
 import com.speedment.config.db.mapper.identity.IntegerIdentityMapper;
 import com.speedment.config.db.mapper.identity.LongIdentityMapper;
 import com.speedment.config.db.mapper.identity.NClobIdentityMapper;
+import com.speedment.config.db.mapper.identity.NumericIdentityMapper;
 import com.speedment.config.db.mapper.identity.ObjectIdentityMapper;
 import com.speedment.config.db.mapper.identity.RefIdentityMapper;
 import com.speedment.config.db.mapper.identity.RowIdIdentityMapper;
@@ -88,6 +89,7 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(IntegerIdentityMapper::new);
         install(LongIdentityMapper::new);
         install(NClobIdentityMapper::new);
+        install(NumericIdentityMapper::new);
         install(ObjectIdentityMapper::new);
         install(RefIdentityMapper::new);
         install(RowIdIdentityMapper::new);

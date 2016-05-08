@@ -23,6 +23,7 @@ import static com.speedment.internal.core.field.predicate.PredicateUtil.*;
 /**
  *
  * @author ikost
+ * @since 2.2.4
  */
 @SuppressWarnings("rawtypes")
 public final class SqliteSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {

@@ -25,7 +25,6 @@ import com.speedment.util.tuple.Tuple2;
 import com.speedment.util.tuple.Tuples;
 import com.speedment.license.Software;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;

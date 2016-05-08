@@ -16,7 +16,9 @@
  */
 package com.speedment.internal.core.config.dbms;
 
+import com.speedment.config.db.Column;
 import com.speedment.config.db.Dbms;
+import com.speedment.config.db.Table;
 import com.speedment.config.db.parameters.DbmsType;
 import com.speedment.db.ConnectionUrlGenerator;
 import com.speedment.db.DatabaseNamingConvention;
@@ -42,12 +44,9 @@ public final class SqliteDbmsType {
 
     private final static class SqliteNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String ENCLOSER = "\"",
-                QUOTE = "'";
+        private final static String ENCLOSER = "\"", QUOTE = "'";
 
-        private final static Set<String> EXCLUDE_SET = Stream.of(
-                "sqlite_master"
-        ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+        private final static Set<String> EXCLUDE_SET = Stream.of("sqlite_master").collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
         @Override
         public Set<String> getSchemaExcludeSet() {
@@ -73,6 +72,17 @@ public final class SqliteDbmsType {
         protected String getFieldEncloserEnd() {
             return ENCLOSER;
         }
+
+        @Override
+        public String fullNameOf(Table table) {
+            return encloseField(table.getName());
+        }
+
+        @Override
+        public String fullNameOf(Column column) {
+            return encloseField(column.getName());
+        }
+
     }
 
     private final static class SqliteConnectionUrlGenerator implements ConnectionUrlGenerator {
@@ -110,8 +120,8 @@ public final class SqliteDbmsType {
                 new SqlTypeInfo("INT", Types.INTEGER, 0, 0, (short) 1, false),
                 new SqlTypeInfo("SMALLINT", Types.SMALLINT, 0, 0, (short) 1, false),
                 new SqlTypeInfo("MEDIUMINT", Types.INTEGER, 0, 0, (short) 1, false),
-                new SqlTypeInfo("BIGINT", Types.BIGINT, 0, 0, (short) 1, false),
-                new SqlTypeInfo("UNSIGNED BIG INT", Types.BIGINT, 0, 0, (short) 1, false),
+                new SqlTypeInfo("BIGINT", Types.BIGINT, 1000, 1000, (short) 1, false),
+                new SqlTypeInfo("UNSIGNED BIG INT", Types.BIGINT, 1000, 1000, (short) 1, true),
                 new SqlTypeInfo("INT2", Types.SMALLINT, 0, 0, (short) 1, false),
                 new SqlTypeInfo("INT8", Types.INTEGER, 0, 0, (short) 1, false),
                 new SqlTypeInfo("TINYINT", Types.TINYINT, 0, 0, (short) 1, false),
@@ -121,19 +131,19 @@ public final class SqliteDbmsType {
                 new SqlTypeInfo("DOUBLE PRECISION", Types.DOUBLE, 1000, 1000, (short) 1, false),
                 new SqlTypeInfo("NUMERIC", Types.NUMERIC, 1000, 1000, (short) 1, false),
                 new SqlTypeInfo("DECIMAL", Types.DECIMAL, 1000, 1000, (short) 1, false),
-                new SqlTypeInfo("BOOLEAN", Types.BOOLEAN, 1000, 1000, (short) 1, false),
-                new SqlTypeInfo("DATE", Types.DATE, 1000, 1000, (short) 1, false),
-                new SqlTypeInfo("DATETIME", Types.DATE, 1000, 1000, (short) 1, false),
+                new SqlTypeInfo("BOOLEAN", Types.BIT, 1000, 1000, (short) 1, false),
+                new SqlTypeInfo("DATE", Types.VARCHAR, 0, 0, (short) 1, true),
+                new SqlTypeInfo("DATETIME", Types.VARCHAR, 0, 0, (short) 1, true),
                 new SqlTypeInfo("TEXT", Types.VARCHAR, 0, 0, (short) 1, true),
-                new SqlTypeInfo("CLOB", Types.VARCHAR, 0, 0, (short) 1, true),
+                new SqlTypeInfo("CLOB", Types.CLOB, 0, 0, (short) 1, true),
                 new SqlTypeInfo("CHARACTER", Types.CHAR, 0, 0, (short) 1, true),
-                new SqlTypeInfo("VARCHAR", Types.VARCHAR, 0, 0, (short) 1, true),
-                new SqlTypeInfo("NCHAR", Types.VARCHAR, 0, 0, (short) 1, true),
+                new SqlTypeInfo("VARCHAR", Types.VARCHAR, 10485760, 10485760, (short) 1, true),
+                new SqlTypeInfo("NCHAR", Types.NCHAR, 0, 0, (short) 1, true),
                 new SqlTypeInfo("VARYING CHARACTER", Types.VARCHAR, 0, 0, (short) 1, true),
-                new SqlTypeInfo("NATIVE CHARACTER", Types.VARCHAR, 0, 0, (short) 1, true),
-                new SqlTypeInfo("NVARCHAR", Types.VARCHAR, 0, 0, (short) 1, true),
+                new SqlTypeInfo("NATIVE CHARACTER", Types.NCHAR, 0, 0, (short) 1, true),
+                new SqlTypeInfo("NVARCHAR", Types.NVARCHAR, 0, 0, (short) 1, true),
                 new SqlTypeInfo("BLOB", Types.BLOB, 0, 0, (short) 1, true),
-                new SqlTypeInfo("NULL", Types.NULL, 0, 0, (short) 1, true))
+                new SqlTypeInfo("NULL", Types.VARCHAR, 0, 0, (short) 1, true))
                 .collect(toSet());
     }
 }

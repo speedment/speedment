@@ -31,7 +31,6 @@ import java.util.HashSet;
 
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 

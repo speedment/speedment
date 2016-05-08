@@ -33,8 +33,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
-import javafx.scene.image.Image;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

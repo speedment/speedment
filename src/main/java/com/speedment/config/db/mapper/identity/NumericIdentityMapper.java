@@ -14,20 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.internal.core.config.db;
-
-import com.speedment.internal.core.config.AbstractChildDocument;
-import com.speedment.config.db.PrimaryKeyColumn;
-import com.speedment.config.db.Table;
-import java.util.Map;
+package com.speedment.config.db.mapper.identity;
 
 /**
  *
- * @author Emil Forslund
+ * @author ikost
  */
-public final class PrimaryKeyColumnImpl extends AbstractChildDocument<Table> implements PrimaryKeyColumn {
+public final class NumericIdentityMapper extends AbstractIdentityMapper<Double> {
 
-    public PrimaryKeyColumnImpl(Table parent, Map<String, Object> data) {
-        super(parent, data);
+    public NumericIdentityMapper() {
+        super(Double.class);
     }
 }
