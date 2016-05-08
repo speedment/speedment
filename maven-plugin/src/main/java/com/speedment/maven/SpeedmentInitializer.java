@@ -16,6 +16,8 @@
  */
 package com.speedment.maven;
 
+import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import java.io.File;
@@ -23,11 +25,13 @@ import java.util.function.Supplier;
 import org.apache.maven.plugin.logging.Log;
 import com.speedment.runtime.component.ComponentConstructor;
 import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.tool.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.component.UserInterfaceComponentImpl;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author Emil
+ * @author Emil Forslund
  */
 final class SpeedmentInitializer {
     
@@ -42,7 +46,11 @@ final class SpeedmentInitializer {
     }
     
     public Speedment build() {
-        final DefaultSpeedmentApplicationLifecycle lifecycle = new DefaultSpeedmentApplicationLifecycle(configFile);
+        final DefaultSpeedmentApplicationLifecycle lifecycle = new DefaultSpeedmentApplicationLifecycle(configFile)
+            .with(CodeGenerationComponentImpl::new)
+            .with(UserInterfaceComponentImpl::new)
+            .with(DocumentPropertyComponentImpl::new);
+        
         final ComponentConstructor<? extends Component>[] constructors = componentBuilders.get();
         
         if (constructors != null) {

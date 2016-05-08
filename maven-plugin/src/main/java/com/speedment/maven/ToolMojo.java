@@ -33,8 +33,8 @@ import static javafx.application.Application.launch;
  *
  * @author Emil Forslund
  */
-@Mojo(name = "gui", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
-public final class GUIMojo extends AbstractSpeedmentMojo {
+@Mojo(name = "tool", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+public final class ToolMojo extends AbstractSpeedmentMojo {
     
     @Parameter
     private ComponentConstructor<?>[] components;
@@ -65,6 +65,6 @@ public final class GUIMojo extends AbstractSpeedmentMojo {
 
     @Override
     protected String launchMessage() {
-        return "Running speedment:gui";
+        return "Running speedment:tool";
     }
 }
