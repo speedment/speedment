@@ -31,11 +31,7 @@
     
     <artifactId>runtime</artifactId>
     <packaging>bundle</packaging>
-    
-    <properties>
-        <mainClass>com.speedment.runtime.internal.ui.MainApp</mainClass>
-    </properties>
-    
+
     <name>Speedment - Runtime</name>
     <description>
         The runtime environment of Speedment that all projects must depend
