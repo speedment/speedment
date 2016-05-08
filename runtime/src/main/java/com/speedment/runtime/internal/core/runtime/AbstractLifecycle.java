@@ -17,6 +17,8 @@
 package com.speedment.runtime.internal.core.runtime;
 
 import com.speedment.runtime.component.Lifecyclable;
+import com.speedment.runtime.internal.logging.Logger;
+import com.speedment.runtime.internal.logging.LoggerManager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -52,6 +54,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Lifecyclable<T> {
     
+    private static final Logger LIFECYCLABLE_LOGGER = LoggerManager.getLogger(Lifecyclable.class);
     private static final Runnable NOTHING = () -> {};
 
     private State state;
@@ -164,27 +167,81 @@ public abstract class AbstractLifecycle<T extends Lifecyclable<T>> implements Li
     
     @Override
     public final T initialize() {
-        return Lifecyclable.super.initialize();
+        LIFECYCLABLE_LOGGER.debug("Initializing " + getClass().getSimpleName());
+        getState().checkNextState(State.INIITIALIZED);
+        preInitialize();
+        onInitialize();
+        setState(State.INIITIALIZED);
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
     
     @Override
     public final T load() {
-        return Lifecyclable.super.load();
+        if (getState() == State.CREATED) {
+            initialize();
+        }
+        LIFECYCLABLE_LOGGER.debug("Loading " + getClass().getSimpleName());
+        getState().checkNextState(State.LOADED);
+        preLoad();
+        onLoad();
+        setState(State.LOADED);
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
     
     @Override
     public final T resolve() {
-        return Lifecyclable.super.resolve();
+        if (getState() == State.CREATED) {
+            initialize();
+        }
+        if (getState() == State.INIITIALIZED) {
+            load();
+        }
+        LIFECYCLABLE_LOGGER.debug("Resolving " + getClass().getSimpleName());
+        getState().checkNextState(State.RESOLVED);
+        preResolve();
+        onResolve();
+        setState(State.RESOLVED);
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
     
     @Override
     public final T start() {
-        return Lifecyclable.super.start();
+        if (getState() == State.CREATED) {
+            initialize();
+        }
+        if (getState() == State.INIITIALIZED) {
+            load();
+        }
+        if (getState() == State.LOADED) {
+            resolve();
+        }
+        LIFECYCLABLE_LOGGER.debug("Starting " + getClass().getSimpleName());
+        getState().checkNextState(State.STARTED);
+        preStart();
+        onStart();
+        setState(State.STARTED);
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
 
     @Override
     public final T stop() {
-        return Lifecyclable.super.stop();
+        LIFECYCLABLE_LOGGER.debug("Stopping " + getClass().getSimpleName());
+        getState().checkNextState(State.STOPPED);
+        preStop();
+        onStop();
+        postStop();
+        setState(State.STOPPED);
+        @SuppressWarnings("unchecked")
+        final T self = (T) this;
+        return self;
     }
     
     @Override

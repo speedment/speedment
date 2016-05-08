@@ -32,8 +32,6 @@ import java.util.Optional;
  */
 public interface Lifecyclable<T extends Lifecyclable<T>> {
 
-    final Logger LIFECYCLABLE_LOGGER = LoggerManager.getLogger(Lifecyclable.class);
-
     /**
      * Sets the {@link State} of this {@code Lifecyclable} directly. This should
      * only be called internally.
@@ -80,16 +78,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @see #preInitialize()
      * @see #onInitialize()
      */
-    default T initialize() {
-        LIFECYCLABLE_LOGGER.debug("Initializing " + getClass().getSimpleName());
-        getState().checkNextState(State.INIITIALIZED);
-        preInitialize();
-        onInitialize();
-        setState(State.INIITIALIZED);
-        @SuppressWarnings("unchecked")
-        final T self = (T) this;
-        return self;
-    }
+    T initialize();
 
     /**
      * Overridable method that can add logic before the load phase.
@@ -122,19 +111,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @see #preLoad()
      * @see #onLoad()
      */
-    default T load() {
-        if (getState() == State.CREATED) {
-            initialize();
-        }
-        LIFECYCLABLE_LOGGER.debug("Loading " + getClass().getSimpleName());
-        getState().checkNextState(State.LOADED);
-        preLoad();
-        onLoad();
-        setState(State.LOADED);
-        @SuppressWarnings("unchecked")
-        final T self = (T) this;
-        return self;
-    }
+    T load();
 
     /**
      * Overridable method that can add logic before the resolve phase.
@@ -167,22 +144,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @see #preResolve()
      * @see #onResolve()
      */
-    default T resolve() {
-        if (getState() == State.CREATED) {
-            initialize();
-        }
-        if (getState() == State.INIITIALIZED) {
-            load();
-        }
-        LIFECYCLABLE_LOGGER.debug("Resolving " + getClass().getSimpleName());
-        getState().checkNextState(State.RESOLVED);
-        preResolve();
-        onResolve();
-        setState(State.RESOLVED);
-        @SuppressWarnings("unchecked")
-        final T self = (T) this;
-        return self;
-    }
+    T resolve();
 
     /**
      * Overridable method that can add logic before the start phase.
@@ -216,25 +178,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @see #preStart()
      * @see #onStart()
      */
-    default T start() {
-        if (getState() == State.CREATED) {
-            initialize();
-        }
-        if (getState() == State.INIITIALIZED) {
-            load();
-        }
-        if (getState() == State.LOADED) {
-            resolve();
-        }
-        LIFECYCLABLE_LOGGER.debug("Starting " + getClass().getSimpleName());
-        getState().checkNextState(State.STARTED);
-        preStart();
-        onStart();
-        setState(State.STARTED);
-        @SuppressWarnings("unchecked")
-        final T self = (T) this;
-        return self;
-    }
+    T start();
 
     /**
      * Overridable method that can add logic before the stopping phase.
@@ -280,17 +224,7 @@ public interface Lifecyclable<T extends Lifecyclable<T>> {
      * @see #onStop()
      * @see #postStop()
      */
-    default T stop() {
-        LIFECYCLABLE_LOGGER.debug("Stopping " + getClass().getSimpleName());
-        getState().checkNextState(State.STOPPED);
-        preStop();
-        onStop();
-        postStop();
-        setState(State.STOPPED);
-        @SuppressWarnings("unchecked")
-        final T self = (T) this;
-        return self;
-    }
+    T stop();
 
     /**
      * Returns {@code true} if this {@code Lifecyclable} is in the

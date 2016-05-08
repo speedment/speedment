@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.util;
+package com.speedment.tool.util;
 
 import com.speedment.runtime.config.db.Column;
 import com.speedment.runtime.config.db.Dbms;
