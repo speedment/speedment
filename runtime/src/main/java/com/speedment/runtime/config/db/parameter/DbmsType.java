@@ -25,7 +25,7 @@ import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.internal.core.config.dbms.DbmsTypeImpl;
+import com.speedment.runtime.internal.config.dbms.DbmsTypeImpl;
 import com.speedment.runtime.manager.SpeedmentPredicateView;
 import static com.speedment.runtime.stream.MapStream.comparing;
 import java.util.Comparator;

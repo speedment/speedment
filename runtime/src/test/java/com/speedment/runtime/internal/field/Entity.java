@@ -21,8 +21,6 @@ import com.speedment.runtime.config.db.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.FieldIdentifier;
 import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.internal.core.field.ComparableFieldImpl;
-import com.speedment.runtime.internal.core.field.StringFieldImpl;
 
 /**
  *

@@ -17,7 +17,7 @@
 package com.speedment.runtime.db.metadata;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.db.metadata.TypeInfoMetaDataImpl;
+import com.speedment.runtime.internal.db.metadata.TypeInfoMetaDataImpl;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;

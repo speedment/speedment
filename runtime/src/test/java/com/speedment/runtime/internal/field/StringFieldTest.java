@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import static com.speedment.runtime.internal.core.field.predicate.impl.string.BaseStringPredicate.ENDS_WITH_PREDICATE;
+import static com.speedment.runtime.internal.field.predicate.impl.string.BaseStringPredicate.ENDS_WITH_PREDICATE;
 import static com.speedment.runtime.internal.field.Entity.NAME;
 import java.util.List;
 import static org.junit.Assert.assertEquals;

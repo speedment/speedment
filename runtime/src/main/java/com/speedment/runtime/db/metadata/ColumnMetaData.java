@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db.metadata;
 
-import com.speedment.runtime.internal.core.db.metadata.ColumnMetaDataImpl;
+import com.speedment.runtime.internal.db.metadata.ColumnMetaDataImpl;
 import java.sql.ResultSet;
 
 /**

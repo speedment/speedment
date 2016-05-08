@@ -46,7 +46,7 @@ import com.speedment.generator.internal.manager.GeneratedEntityManagerImplTransl
 import com.speedment.generator.internal.manager.GeneratedEntityManagerTranslator;
 import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.runtime.internal.core.platform.component.impl.InternalOpenSourceComponent;
+import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.stream.MapStream;
 import java.util.List;

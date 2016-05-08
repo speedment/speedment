@@ -21,7 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.db.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.config.db.ProjectImpl;
+import com.speedment.runtime.internal.config.ProjectImpl;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

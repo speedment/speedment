@@ -19,7 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.stream.OptionalUtil;
+import com.speedment.runtime.internal.stream.OptionalUtil;
 import com.speedment.tool.util.NumericProperty;
 import com.speedment.tool.util.SimpleNumericProperty;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;

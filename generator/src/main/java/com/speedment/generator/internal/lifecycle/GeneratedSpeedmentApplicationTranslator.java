@@ -37,7 +37,7 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOI
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.runtime.internal.core.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

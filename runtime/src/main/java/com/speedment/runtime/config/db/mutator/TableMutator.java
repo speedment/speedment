@@ -24,10 +24,10 @@ import static com.speedment.runtime.config.db.Table.PRIMARY_KEY_COLUMNS;
 import com.speedment.runtime.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.ColumnImpl;
-import com.speedment.runtime.internal.core.config.db.ForeignKeyImpl;
-import com.speedment.runtime.internal.core.config.db.IndexImpl;
-import com.speedment.runtime.internal.core.config.db.PrimaryKeyColumnImpl;
+import com.speedment.runtime.internal.config.ColumnImpl;
+import com.speedment.runtime.internal.config.ForeignKeyImpl;
+import com.speedment.runtime.internal.config.IndexImpl;
+import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

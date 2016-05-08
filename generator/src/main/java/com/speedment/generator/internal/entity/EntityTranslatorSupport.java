@@ -37,12 +37,12 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocT
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.fika.codegen.internal.util.Formatting.DOT;
 import static com.speedment.fika.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.runtime.internal.core.field.ComparableFieldImpl;
-import com.speedment.runtime.internal.core.field.ComparableForeignKeyFieldImpl;
-import com.speedment.runtime.internal.core.field.ReferenceFieldImpl;
-import com.speedment.runtime.internal.core.field.ReferenceForeignKeyFieldImpl;
-import com.speedment.runtime.internal.core.field.StringFieldImpl;
-import com.speedment.runtime.internal.core.field.StringForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.ComparableFieldImpl;
+import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.ReferenceFieldImpl;
+import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.StringFieldImpl;
+import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;

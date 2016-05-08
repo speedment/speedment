@@ -41,7 +41,7 @@ import static com.speedment.fika.codegen.internal.util.Formatting.block;
 import static com.speedment.fika.codegen.internal.util.Formatting.indent;
 import static com.speedment.fika.codegen.internal.util.Formatting.nl;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.runtime.internal.core.manager.sql.AbstractSqlManager;
+import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 import java.sql.ResultSet;

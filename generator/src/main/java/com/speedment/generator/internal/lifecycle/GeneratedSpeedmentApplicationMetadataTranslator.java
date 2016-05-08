@@ -35,7 +35,7 @@ import com.speedment.fika.codegen.internal.model.value.ReferenceValue;
 import static com.speedment.fika.codegen.internal.util.Formatting.indent;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
-import com.speedment.runtime.internal.core.runtime.ApplicationMetadata;
+import com.speedment.runtime.internal.runtime.ApplicationMetadata;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;

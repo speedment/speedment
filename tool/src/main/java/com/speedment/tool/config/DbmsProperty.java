@@ -25,7 +25,7 @@ import static com.speedment.runtime.config.db.Dbms.USERNAME;
 import com.speedment.runtime.config.db.Project;
 import com.speedment.runtime.config.db.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.stream.OptionalUtil;
+import com.speedment.runtime.internal.stream.OptionalUtil;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;

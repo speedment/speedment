@@ -28,7 +28,7 @@ import com.speedment.runtime.config.db.Schema;
 import com.speedment.runtime.config.db.Table;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.runtime.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;

@@ -30,7 +30,7 @@ import com.speedment.runtime.config.db.trait.HasMutator;
 import com.speedment.runtime.config.db.trait.HasName;
 import com.speedment.runtime.config.db.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.config.dbms.StandardDbmsType;
+import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.Optional;

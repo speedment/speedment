@@ -21,7 +21,7 @@ import static com.speedment.runtime.config.db.Dbms.*;
 import com.speedment.runtime.config.db.Schema;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.SchemaImpl;
+import com.speedment.runtime.internal.config.SchemaImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

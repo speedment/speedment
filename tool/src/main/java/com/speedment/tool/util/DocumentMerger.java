@@ -19,7 +19,7 @@ package com.speedment.runtime.internal.util.document;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.db.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.config.BaseDocument;
+import com.speedment.runtime.internal.config.BaseDocument;
 import com.speedment.tool.config.DocumentProperty;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.HashSet;

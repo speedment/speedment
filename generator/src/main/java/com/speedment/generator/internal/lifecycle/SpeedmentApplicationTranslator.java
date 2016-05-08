@@ -23,7 +23,7 @@ import com.speedment.fika.codegen.model.File;
 import com.speedment.fika.codegen.model.Type;
 import com.speedment.runtime.config.db.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.internal.core.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
 
 /**
  *

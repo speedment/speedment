@@ -21,7 +21,7 @@ import com.speedment.tool.brand.Brand;
 import com.speedment.tool.notification.Notification;
 import com.speedment.runtime.config.db.trait.HasMainInterface;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.core.platform.component.impl.InternalOpenSourceComponent;
+import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.internal.license.OpenSourceLicense;
 import com.speedment.tool.UISession;

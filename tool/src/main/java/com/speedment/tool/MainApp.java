@@ -17,7 +17,7 @@
 package com.speedment.tool;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.internal.core.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
 import com.speedment.runtime.internal.logging.Logger;
 import com.speedment.runtime.internal.logging.LoggerManager;
 import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;

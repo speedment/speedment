@@ -17,11 +17,11 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
-import static com.speedment.runtime.internal.core.stream.autoclose.AbstractAutoClosingStream.composedClose;
-import com.speedment.runtime.internal.core.stream.autoclose.AutoClosingDoubleStream;
-import com.speedment.runtime.internal.core.stream.autoclose.AutoClosingIntStream;
-import com.speedment.runtime.internal.core.stream.autoclose.AutoClosingLongStream;
-import com.speedment.runtime.internal.core.stream.autoclose.AutoClosingReferenceStream;
+import static com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
+import com.speedment.runtime.internal.stream.autoclose.AutoClosingDoubleStream;
+import com.speedment.runtime.internal.stream.autoclose.AutoClosingIntStream;
+import com.speedment.runtime.internal.stream.autoclose.AutoClosingLongStream;
+import com.speedment.runtime.internal.stream.autoclose.AutoClosingReferenceStream;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import java.util.function.Function;
 import java.util.stream.BaseStream;

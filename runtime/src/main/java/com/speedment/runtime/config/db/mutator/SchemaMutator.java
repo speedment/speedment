@@ -23,7 +23,7 @@ import com.speedment.runtime.config.db.Table;
 import com.speedment.runtime.config.db.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.TableImpl;
+import com.speedment.runtime.internal.config.TableImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

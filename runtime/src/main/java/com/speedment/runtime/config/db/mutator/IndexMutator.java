@@ -21,7 +21,7 @@ import static com.speedment.runtime.config.db.Index.*;
 import com.speedment.runtime.config.db.IndexColumn;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.IndexColumnImpl;
+import com.speedment.runtime.internal.config.IndexColumnImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

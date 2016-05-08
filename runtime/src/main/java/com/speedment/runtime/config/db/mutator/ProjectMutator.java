@@ -24,7 +24,7 @@ import static com.speedment.runtime.config.db.Project.PACKAGE_LOCATION;
 import static com.speedment.runtime.config.db.Project.PACKAGE_NAME;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.DbmsImpl;
+import com.speedment.runtime.internal.config.DbmsImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

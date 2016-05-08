@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.manager;
 
-import com.speedment.runtime.internal.core.manager.sql.SqlPredicateFragmentImpl;
+import com.speedment.runtime.internal.manager.sql.SqlPredicateFragmentImpl;
 import java.util.Collection;
 import java.util.stream.Stream;
 

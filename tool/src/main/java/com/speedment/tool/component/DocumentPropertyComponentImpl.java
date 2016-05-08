@@ -23,7 +23,7 @@ import com.speedment.runtime.config.db.Index;
 import com.speedment.runtime.config.db.Project;
 import com.speedment.runtime.config.db.Schema;
 import com.speedment.runtime.config.db.Table;
-import com.speedment.runtime.internal.core.platform.component.impl.InternalOpenSourceComponent;
+import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.config.AbstractDocumentProperty;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;

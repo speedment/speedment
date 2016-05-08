@@ -21,7 +21,7 @@ import static com.speedment.runtime.config.db.ForeignKey.FOREIGN_KEY_COLUMNS;
 import com.speedment.runtime.config.db.ForeignKeyColumn;
 import com.speedment.runtime.config.db.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.db.mutator.trait.HasNameMutator;
-import com.speedment.runtime.internal.core.config.db.ForeignKeyColumnImpl;
+import com.speedment.runtime.internal.config.ForeignKeyColumnImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

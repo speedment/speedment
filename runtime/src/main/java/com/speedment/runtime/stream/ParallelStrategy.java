@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.stream;
 
-import com.speedment.runtime.internal.core.stream.parallelstrategy.ComputeIntensityExtremeParallelStrategy;
-import com.speedment.runtime.internal.core.stream.parallelstrategy.ComputeIntensityHighParallelStrategy;
-import com.speedment.runtime.internal.core.stream.parallelstrategy.ComputeIntensityMediumParallelStrategy;
-import com.speedment.runtime.internal.core.stream.parallelstrategy.ConfigurableIteratorSpliterator;
+import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityExtremeParallelStrategy;
+import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityHighParallelStrategy;
+import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityMediumParallelStrategy;
+import com.speedment.runtime.internal.stream.parallelstrategy.ConfigurableIteratorSpliterator;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;

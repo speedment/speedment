@@ -30,7 +30,7 @@ import com.speedment.runtime.config.db.Dbms;
 import com.speedment.runtime.config.db.Table;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.runtime.internal.core.manager.sql.SqlManager;
+import com.speedment.runtime.internal.manager.sql.SqlManager;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import java.util.Arrays;
 import java.util.stream.Collectors;
