@@ -37,7 +37,6 @@ import com.speedment.field.FieldIdentifier;
 import com.speedment.field.trait.FieldTrait;
 import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.internal.codegen.model.constant.DefaultType.OBJECT;
-import static com.speedment.internal.codegen.model.constant.DefaultType.STRING;
 import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
 import com.speedment.internal.codegen.model.value.ReferenceValue;
 import com.speedment.internal.core.code.EntityAndManagerTranslator;
@@ -109,7 +108,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                     .add(generatePrimaryKeyFields(getSupport(), file, () -> table.columns().filter(this::isPrimaryKey)))
                     .add(generateGetPrimaryKeyClassesField(file))
                     .add(generateGetPrimaryKeyClasses(file))
-                    .add(newCopyOf(file));
+                    .add(generateNewCopyOf(file));
                 
             })
             .build()
@@ -388,7 +387,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
     }
     
-    private Method newCopyOf(File file) {
+    private Method generateNewCopyOf(File file) {
         file.add(Import.of(getSupport().entityImplType()));
         
         final String varName = "source";
