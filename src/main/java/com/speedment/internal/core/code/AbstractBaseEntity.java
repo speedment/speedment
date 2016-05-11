@@ -81,6 +81,11 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
         return manager_().remove(selfAsEntity(), consumer);
     }
 
+    @Override
+    public ENTITY copy() {
+        return manager_().newCopyOf(selfAsEntity());
+    }
+    
     protected abstract Class<ENTITY> entityClass();
 
     @SuppressWarnings("unchecked")

@@ -133,6 +133,15 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreat
     ENTITY newEmptyEntity();
 
     /**
+     * Creates an returns a new entity. The new entity will have all its fields
+     * initialized to the values of the provided source entity.
+     *
+     * @param source entity
+     * @return a new entity
+     */
+    ENTITY newCopyOf(ENTITY source);
+
+    /**
      * Returns the entity class for this Manager.
      *
      * @return the entity class for this Manager

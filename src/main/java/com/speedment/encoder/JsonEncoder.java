@@ -132,8 +132,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
 
     @Override
     public String apply(ENTITY entity) {
-        requireNonNull(entity);
-        return "{"
+        return entity == null ? "null" : "{"
             + getters.values().stream()
             .map(g -> g.apply(entity))
             .collect(joining(","))

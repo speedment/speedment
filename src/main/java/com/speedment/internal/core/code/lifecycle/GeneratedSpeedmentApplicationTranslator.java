@@ -68,49 +68,53 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         
-        final Map<String, List<Table>> nameMap = traverseOver(getSupport().projectOrThrow(), Table.class)
-            .filter(HasEnabled::test)
-            .collect(Collectors.groupingBy(Table::getName));
-        
-        final Set<String> ambigousNames = MapStream.of(nameMap)
-            .filterValue(l -> l.size() > 1)
-            .keys()
-            .collect(toSet());
-        
-        final Method onInit = Method.of("onLoad", VOID)
-            .public_()
-            .add(OVERRIDE)
-            .add("super.onLoad();")
-            .add("loadAndSetProject();");
-        
-        final String methodName = "applyAndPut";
-        
-        traverseOver(getSupport().projectOrThrow(), Table.class)
-            .filter(HasEnabled::test)
-            .forEachOrdered(t -> {
-                final TranslatorSupport<Table> support = new TranslatorSupport<>(getSpeedment(), t);
-                final Type managerType = support.managerImplType();
-                final String managerName = support.managerImplName();
-                if (ambigousNames.contains(t.getName())) {
-                    onInit.add(methodName+"("+managerType.getName() + "::new);");
-                } else {
-                    file.add(Import.of(managerType));
-                    onInit.add(methodName+"(" + managerName + "::new);");
-                }
-
-            });
-        
-        onInit.add("loadCustomManagers();");
-
         return newBuilder(file, className)
-            .build()
-            .public_().abstract_()
-            .setSupertype(Type.of(SpeedmentApplicationLifecycle.class).add(Generic.of().add(applicationType())))
-            .add(Constructor.of()
-                .protected_()
-                .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
-            )
-            .add(onInit);
+            .forEveryProject((clazz, project) -> {
+                
+                final Map<String, List<Table>> nameMap = traverseOver(project, Table.class)
+                    .filter(HasEnabled::test)
+                    .collect(Collectors.groupingBy(Table::getName));
+
+                final Set<String> ambigousNames = MapStream.of(nameMap)
+                    .filterValue(l -> l.size() > 1)
+                    .keys()
+                    .collect(toSet());
+
+                final Method onInit = Method.of("onLoad", VOID)
+                    .public_()
+                    .add(OVERRIDE)
+                    .add("super.onLoad();")
+                    .add("loadAndSetProject();");
+
+                final String methodName = "applyAndPut";
+
+                traverseOver(project, Table.class)
+                    .filter(HasEnabled::test)
+                    .forEachOrdered(t -> {
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(getSpeedment(), t);
+                        final Type managerType = support.managerImplType();
+                        final String managerName = support.managerImplName();
+                        if (ambigousNames.contains(t.getName())) {
+                            onInit.add(methodName+"("+managerType.getName() + "::new);");
+                        } else {
+                            file.add(Import.of(managerType));
+                            onInit.add(methodName+"(" + managerName + "::new);");
+                        }
+
+                    });
+
+                onInit.add("loadCustomManagers();");
+                
+                clazz.public_().abstract_()
+                    .setSupertype(Type.of(SpeedmentApplicationLifecycle.class)
+                        .add(Generic.of().add(applicationType()))
+                    )
+                    .add(Constructor.of()
+                        .protected_()
+                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
+                    )
+                    .add(onInit);
+            }).build();
     }
     
     @Override

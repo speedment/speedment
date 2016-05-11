@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.3.2</version>
+    <version>2.3.3</version>
     <packaging>bundle</packaging>
     
     <properties>
@@ -255,6 +255,8 @@
                             <excludes>
                                 <exclude>**/README</exclude>
                                 <exclude>**/package-info.java</exclude>
+                                <exclude>**/nbactions.xml</exclude>
+                                <exclude>**/.versionsBackup</exclude>
                                 <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
                                 <exclude>README.md</exclude>
                                 <exclude>LICENSE</exclude>
