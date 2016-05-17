@@ -105,7 +105,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                     .add(generatePrimaryKeyFields(getSupport(), file, () -> table.columns().filter(this::isPrimaryKey)))
                     .add(generateGetPrimaryKeyClassesField(file))
                     .add(generateGetPrimaryKeyClasses(file))
-                    .add(newCopyOf(file));
+                    .add(generateNewCopyOf(file));
                 
             })
             .build()
@@ -384,7 +384,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
     }
     
-    private Method newCopyOf(File file) {
+    private Method generateNewCopyOf(File file) {
         file.add(Import.of(getSupport().entityImplType()));
         
         final String varName = "source";

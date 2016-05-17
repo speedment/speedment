@@ -35,7 +35,6 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultType.OBJ
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.fika.codegen.internal.util.Formatting.indent;
-import com.speedment.generator.internal.AbstractBaseEntity;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
