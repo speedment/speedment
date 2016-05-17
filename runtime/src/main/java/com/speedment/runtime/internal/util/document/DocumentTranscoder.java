@@ -16,31 +16,46 @@
  */
 package com.speedment.runtime.internal.util.document;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
+import com.speedment.runtime.internal.util.json.Json;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 /**
- *
- * @author Emil Forslund
+ * Various utility methods for transcoding and decoding documents into JSON.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
 @Api(version = "2.3")
 public final class DocumentTranscoder {
 
     public static final String ROOT = "config";
 
+    /**
+     * Returns a JSON representation of the specified project node.
+     * 
+     * @param project              the project
+     * @return                     the JSON representation
+     * @throws SpeedmentException  if the inputed object is not valid
+     */
     public static String save(Project project) throws SpeedmentException {
-        final Gson gson = newGson();
-        final String json = gson.toJson(project);
-        return json;
+        if (project == null) {
+            return "null";
+        } else {
+            try {
+                return Json.toJson(project.getData());
+            } catch (final IllegalArgumentException ex) {
+                throw new SpeedmentException(ex);
+            }
+        }
     }
 
     /**
@@ -60,9 +75,21 @@ public final class DocumentTranscoder {
         }
     }
 
+    /**
+     * Loads a new {@link Project} from the specified JSON string.
+     * 
+     * @param json  the input json
+     * @return      the parsed project
+     * 
+     * @throws SpeedmentException  
+     */
     public static Project load(String json) throws SpeedmentException {
-        final Gson gson = newGson();
-        return gson.fromJson(json, ProjectImpl.class);
+        try {
+            final Map<String, Object> data = (Map<String, Object>) Json.fromJson(json);
+            return new ProjectImpl(data);
+        } catch (final Exception ex) {
+            throw new SpeedmentException(ex);
+        }
     }
 
     /**
@@ -83,12 +110,9 @@ public final class DocumentTranscoder {
         }
     }
 
-    private static Gson newGson() {
-        return new GsonBuilder()
-            .setPrettyPrinting()
-            .create();
-    }
-
+    /**
+     * Utility classes should never be instantiated.
+     */
     private DocumentTranscoder() {
         instanceNotAllowed(getClass());
     }

@@ -1,4 +1,4 @@
-package com.speedment.runtime.internal.util.decoder;
+package com.speedment.runtime.internal.util.json;
 
 import java.util.concurrent.atomic.AtomicLong;
 

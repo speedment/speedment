@@ -1,0 +1,204 @@
+package com.speedment.runtime.internal.util.json;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
+
+/**
+ * An internal class that can serialize java objects into JSON code.
+ * 
+ * @author Emil Forslund
+ * @since  2.4.0
+ */
+final class JsonSerializer {
+    
+    private final OutputStream out;
+    private final boolean pretty;
+    private final int tabSize;
+    private int level = 0;
+    
+    JsonSerializer(OutputStream out, boolean pretty) {
+        this.out     = requireNonNull(out);
+        this.pretty  = pretty;
+        this.tabSize = pretty ? PRETTY_TAB_SIZE : 0;
+    }
+    
+    void print(Object unknown) throws IOException {
+        if (unknown == null) {
+            printNull();
+        } else {
+            final Class<?> type = unknown.getClass();
+            if (type == String.class) {
+                printString((String) unknown);
+            } else if (type == List.class) {
+                printList((List<Object>) unknown);
+            } else if (type == Map.class) {
+                printMap((Map<String, Object>) unknown);
+            } else if (type == Double.class) {
+                printDouble((Double) unknown);
+            } else if (type == Float.class) {
+                printDouble(((Float) unknown).doubleValue());
+            } else if (type == Long.class) {
+                printLong((Long) unknown);
+            } else if (type == Integer.class) {
+                printLong(((Integer) unknown).longValue());
+            } else if (type == Short.class) {
+                printLong(((Short) unknown).longValue());
+            } else if (type == Byte.class) {
+                printLong(((Byte) unknown).longValue());
+            } else if (type == Boolean.class) {
+                printBoolean((Boolean) unknown);
+            } else {
+                throw new IllegalArgumentException(
+                    "Can't parse unsupported type '" + type + "' into JSON."
+                );
+            }
+        }
+    }
+    
+    private void printMap(Map<String, Object> map) throws IOException {
+        out.write(BEGIN_OBJECT); // (begin the map)
+        level++;
+        
+        boolean first = true;
+        for (final Map.Entry<String, Object> entry : map.entrySet()) {
+            
+            if (first) {
+                first = false;
+            } else {
+                out.write(SEPARATOR);
+            }
+            
+            if (pretty) {
+                out.write(NEW_LINE);
+                printIndent();
+            }
+            
+            printString(entry.getKey());
+            
+            if (pretty) {
+                out.write(SPACE);
+            }
+            
+            out.write(ASSIGN);
+            
+            if (pretty) {
+                out.write(SPACE);
+            }
+            
+            print(entry.getValue());
+        }
+        
+        level--;
+        
+        if (pretty && !first) {
+            out.write(NEW_LINE);
+            printIndent();
+        }
+        
+        out.write(END_OBJECT); // (close the map)
+    }
+    
+    private void printList(List<Object> list) throws IOException {
+        out.write(BEGIN_ARRAY); // (begin the list)
+        level++;
+        
+        boolean first = true;
+        for (final Object object : list) {
+            
+            if (first) {
+                first = false;
+            } else {
+                out.write(SEPARATOR);
+            }
+            
+            if (pretty) {
+                out.write(NEW_LINE);
+                printIndent();
+            }
+            
+            print(object);
+        }
+        
+        level--;
+        
+        if (pretty && !first) {
+            out.write(NEW_LINE);
+            printIndent();
+        }
+        
+        out.write(END_ARRAY); // (close the list)
+    }
+    
+    private void printString(String string) throws IOException {
+        out.write(BEGIN_STRING);
+        out.write(string.replace("\"", "\\\"").getBytes());
+        out.write(END_STRING);
+    }
+    
+    private void printDouble(Double number) throws IOException {
+        out.write(Double.toString(number).getBytes());
+    }
+    
+    private void printLong(Long number) throws IOException {
+        out.write(Long.toString(number).getBytes());
+    }
+    
+    private void printBoolean(Boolean bool) throws IOException {
+        if (bool) {
+            out.write("true".getBytes());
+        } else {
+            out.write("false".getBytes());
+        }
+    }
+    
+    private void printNull() throws IOException {
+        out.write(0x6E); // n
+        out.write(0x75); // u
+        out.write(0x6C); // l
+        out.write(0x6C); // l
+    }
+    
+    private void printIndent() throws IOException {
+        switch (tabSize * level) {
+            case 16 : out.write(SPACE);
+            case 15 : out.write(SPACE);
+            case 14 : out.write(SPACE);
+            case 13 : out.write(SPACE);
+            case 12 : out.write(SPACE);
+            case 11 : out.write(SPACE);
+            case 10 : out.write(SPACE);
+            case 9  : out.write(SPACE);
+            case 8  : out.write(SPACE);
+            case 7  : out.write(SPACE);
+            case 6  : out.write(SPACE);
+            case 5  : out.write(SPACE);
+            case 4  : out.write(SPACE);
+            case 3  : out.write(SPACE);
+            case 2  : out.write(SPACE);
+            case 1  : out.write(SPACE);
+            case 0  : return;
+            default :
+                for (int i = 0; i < tabSize; i++) {
+                    out.write(SPACE);
+                }
+        }
+    }
+    
+    private final static int
+        BEGIN_OBJECT = 0x7B, // {
+        END_OBJECT   = 0x7D, // }
+        BEGIN_ARRAY  = 0x5B, // [
+        END_ARRAY    = 0x5D, // ]
+        BEGIN_STRING = 0x22, // "
+        END_STRING   = 0x22, // "
+        ASSIGN       = 0x3A, // :
+        SEPARATOR    = 0x2C, // ,
+        NEW_LINE     = 0x0A, // new-line
+        SPACE        = 0x20; // space
+    
+    
+    private final int PRETTY_TAB_SIZE = 2;
+}

@@ -1,4 +1,4 @@
-package com.speedment.runtime.internal.util.decoder;
+package com.speedment.runtime.internal.util.json;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @since  2.4.0
  */
-final class JsonParser implements AutoCloseable {
+final class JsonDeserializer implements AutoCloseable {
     
     private final static String ENCODING = "UTF-8";
     private final static int TAB_SIZE = 4;
@@ -35,7 +35,7 @@ final class JsonParser implements AutoCloseable {
     
     private int character;
     
-    JsonParser(InputStream in) throws UnsupportedEncodingException {
+    JsonDeserializer(InputStream in) throws UnsupportedEncodingException {
         reader = new InputStreamReader(in, ENCODING);
         row = new AtomicLong(0);
         col = new AtomicLong(0);
