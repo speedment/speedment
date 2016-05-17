@@ -85,6 +85,7 @@ public final class DocumentTranscoder {
      */
     public static Project load(String json) throws SpeedmentException {
         try {
+            @SuppressWarnings("unchecked")
             final Map<String, Object> data = (Map<String, Object>) Json.fromJson(json);
             return new ProjectImpl(data);
         } catch (final Exception ex) {

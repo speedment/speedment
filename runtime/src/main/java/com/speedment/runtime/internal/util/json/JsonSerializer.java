@@ -33,9 +33,13 @@ final class JsonSerializer {
             if (type == String.class) {
                 printString((String) unknown);
             } else if (type == List.class) {
-                printList((List<Object>) unknown);
+                @SuppressWarnings("unchecked")
+                final List<Object> list = (List<Object>) unknown;
+                printList(list);
             } else if (type == Map.class) {
-                printMap((Map<String, Object>) unknown);
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> map = (Map<String, Object>) unknown;
+                printMap(map);
             } else if (type == Double.class) {
                 printDouble((Double) unknown);
             } else if (type == Float.class) {
@@ -161,6 +165,7 @@ final class JsonSerializer {
         out.write(0x6C); // l
     }
     
+    @SuppressWarnings("fallthrough")
     private void printIndent() throws IOException {
         switch (tabSize * level) {
             case 16 : out.write(SPACE);
