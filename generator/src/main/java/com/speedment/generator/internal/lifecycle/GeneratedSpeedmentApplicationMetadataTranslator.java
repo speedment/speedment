@@ -118,22 +118,18 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         metadataField.set(new ReferenceValue("init()"));
         getMetadata.add("return METADATA;");
 
-        final Class result = newBuilder(file, className).build()
-            .public_()
-            .add(Type.of(ApplicationMetadata.class))
-            .add(metadataField)
-            .add(initializer)
-            .add(getMetadata);
-
-        subInitializers.forEach(result::add);
-
+        final Class result = newBuilder(file, className)
+            .forEveryProject((clazz, project) -> {
+                clazz.public_()
+                    .add(Type.of(ApplicationMetadata.class))
+                    .add(metadataField)
+                    .add(initializer)
+                    .add(getMetadata);
+                
+                subInitializers.forEach(clazz::add);
+            }).build();
+        
         return result;
-    }
-
-    private Method addSubMethodEnd(Method method) {
-        method.add(")");
-        method.add(".forEachOrdered(" + STRING_BUILDER_NAME + "::add);");
-        return method;
     }
 
     private Method addNewSubMethod(List<Method> methods) {
@@ -147,7 +143,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = getSpeedment().getInfoComponent().title();
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
 

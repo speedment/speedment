@@ -35,7 +35,6 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotati
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
 import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
 import java.util.List;
@@ -120,7 +119,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = getSpeedment().getInfoComponent().title();
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
     

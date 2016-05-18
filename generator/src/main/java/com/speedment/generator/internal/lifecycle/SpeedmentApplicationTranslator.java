@@ -48,9 +48,11 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        return newBuilder(file, className).build()
-            .public_().final_()
-            .setSupertype(generatedType());
+        return newBuilder(file, className)
+            .forEveryProject((clazz, project) -> {
+                clazz.public_().final_()
+                    .setSupertype(generatedType());
+            }).build();
     }
 
     @Override

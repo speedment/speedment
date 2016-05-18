@@ -48,23 +48,25 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        return newBuilder(file, getSupport().generatedManagerName()).build()
-            .public_()
-            .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
-            .add(generatePrimaryKeyFor(file))
-            .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-            .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                .add("return speedment()"
-                    + ".get(" + ProjectComponent.class.getSimpleName()
-                    + ".class).getProject().findTableByName(\""
-                    + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
-                )
-            )
-            .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
-                .add("return " + getSupport().managerName() + ".class;"))
-            .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
-                .add("return " + getSupport().entityName() + ".class;"))
-            .add(generateGetPrimaryKeyClasses(file));
+        return newBuilder(file, getSupport().generatedManagerName())
+            .forEveryTable((intf, table) -> {
+                intf.public_()
+                    .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
+                    .add(generatePrimaryKeyFor(file))
+                    .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+                    .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+                        .add("return speedment()"
+                            + ".get(" + ProjectComponent.class.getSimpleName()
+                            + ".class).getProject().findTableByName(\""
+                            + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
+                        )
+                    )
+                    .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
+                        .add("return " + getSupport().managerName() + ".class;"))
+                    .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
+                        .add("return " + getSupport().entityName() + ".class;"))
+                    .add(generateGetPrimaryKeyClasses(file));
+            }).build();
     }
 
     protected Method generatePrimaryKeyFor(File file) {
@@ -83,8 +85,6 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
 
         return method;
     }
-
-
 
     protected Method generateGetPrimaryKeyClasses(File file) {
         return Method.of("getPrimaryKeyClasses", pkTupleType()).add(OVERRIDE);
