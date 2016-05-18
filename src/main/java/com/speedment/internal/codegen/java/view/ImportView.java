@@ -79,10 +79,6 @@ public final class ImportView implements Transform<Import, String> {
             return false;
         }
 
-        if (mgr.isLoaded(type.getName())) {
-            return false;
-        }
-
         final Optional<String> current = mgr.getCurrentPackage();
         final Optional<String> suggested = packageName(type.getName());
 
