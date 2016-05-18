@@ -57,9 +57,6 @@ import static com.speedment.internal.codegen.util.Formatting.indent;
 import static com.speedment.internal.codegen.util.Formatting.nl;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.internal.core.code.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.util.JavaLanguageNamer;
-import java.util.Objects;
-import java.util.StringJoiner;
 import static java.util.stream.Collectors.joining;
 
 /**

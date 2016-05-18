@@ -101,22 +101,6 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
             subMethod.add(").forEachOrdered(" + STRING_BUILDER_NAME + "::append);");
         }
 
-//        int subMethodLineCount = 0;
-//        Method subMethod = addNewSubMethod(subInitializers);
-//        for (final String line : lines) {
-//
-//            subMethod.add(
-//                "\"" + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"" + (subMethodLineCount == 0 ? "" : ",")
-//            //                STRING_BUILDER_NAME + ".append(\""
-//            //                + line.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
-//            //                + "\\n\");"
-//            );
-//            if (subMethodLineCount++ > LINES_PER_METHOD) {
-//
-//                subMethod = addNewSubMethod(subInitializers);
-//                subMethodLineCount = 0;
-//            }
-//        }
         file.add(Import.of(Type.of(StringBuilder.class)));
         file.add(Import.of(Type.of(Stream.class)));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
@@ -128,22 +112,18 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
         metadataField.set(new ReferenceValue("init()"));
         getMetadata.add("return METADATA;");
 
-        final Class result = newBuilder(file, className).build()
-            .public_()
-            .add(Type.of(ApplicationMetadata.class))
-            .add(metadataField)
-            .add(initializer)
-            .add(getMetadata);
-
-        subInitializers.forEach(result::add);
-
+        final Class result = newBuilder(file, className)
+            .forEveryProject((clazz, project) -> {
+                clazz.public_()
+                    .add(Type.of(ApplicationMetadata.class))
+                    .add(metadataField)
+                    .add(initializer)
+                    .add(getMetadata);
+                
+                subInitializers.forEach(clazz::add);
+            }).build();
+        
         return result;
-    }
-
-    private Method addSubMethodEnd(Method method) {
-        method.add(")");
-        method.add(".forEachOrdered(" + STRING_BUILDER_NAME + "::add);");
-        return method;
     }
 
     private Method addNewSubMethod(List<Method> methods) {
@@ -157,7 +137,7 @@ public final class GeneratedSpeedmentApplicationMetadataTranslator extends Defau
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
 
