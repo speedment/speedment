@@ -28,6 +28,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.util.StringConverter;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
 
@@ -102,6 +103,24 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
             
             this.spinner.disableProperty().bind(auto.selectedProperty());
             this.spinner.setEditable(true);
+            
+            final StringConverter<Integer> sci  = spinner.getValueFactory().getConverter();
+            final StringConverter<Integer> sci2 = new StringConverter<Integer>() {
+                @Override
+                public Integer fromString(String value) {
+                    try {
+                        return sci.fromString(value);
+                    } catch (final NumberFormatException nfe) {
+                        return 0;
+                    }
+                }
+
+                @Override
+                public String toString(Integer value) {
+                   return sci.toString(value);
+                }
+            };
+            this.spinner.getValueFactory().setConverter(sci2);
 
             this.auto.selectedProperty().addListener((ob, o, isAuto) -> {
                 spinner.getValueFactory().valueProperty().unbind();
