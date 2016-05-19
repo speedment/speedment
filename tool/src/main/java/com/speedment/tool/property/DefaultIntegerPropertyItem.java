@@ -88,8 +88,8 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
         private final static double SPACING = 8.0d;
         
         private DefaultIntegerNode(IntegerProperty valueProperty, IntegerBinding defaultValue) {
-            this.auto         = new CheckBox("Auto");
-            this.spinner         = new Spinner<>(0, Short.MAX_VALUE, defaultValue.get(), 1);
+            this.auto    = new CheckBox("Auto");
+            this.spinner = new Spinner<>(0, Short.MAX_VALUE, defaultValue.get(), 1);
             
             final boolean isAutoByDefault = valueProperty.get() == defaultValue.get();
             
@@ -101,6 +101,7 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
             }
             
             this.spinner.disableProperty().bind(auto.selectedProperty());
+            this.spinner.setEditable(true);
 
             this.auto.selectedProperty().addListener((ob, o, isAuto) -> {
                 spinner.getValueFactory().valueProperty().unbind();
