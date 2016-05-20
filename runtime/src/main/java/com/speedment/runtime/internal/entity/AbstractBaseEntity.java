@@ -19,7 +19,6 @@ package com.speedment.runtime.internal.entity;
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.db.MetaResult;
-import com.speedment.runtime.encoder.JsonEncoder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
@@ -40,16 +39,13 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
      * @return  the {@link Speedment} instance
      */
     protected abstract Speedment speedment();
-   
-    @Override
-    public String toJson(JsonEncoder<ENTITY> encoder) {
-        return requireNonNull(encoder).apply((selfAsEntity()));
-    }
-
-    @Override
-    public String toJson() {
-        return manager_().toJson(selfAsEntity());
-    }
+    
+    /**
+     * The main interface for this entity type.
+     * 
+     * @return  the main interface
+     */
+    protected abstract Class<ENTITY> entityClass();
 
     @Override
     public ENTITY persist() throws SpeedmentException {
@@ -85,13 +81,6 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     public ENTITY copy() {
         return manager_().newCopyOf(selfAsEntity());
     }
-    
-    protected abstract Class<ENTITY> entityClass();
-
-    @SuppressWarnings("unchecked")
-    private ENTITY selfAsEntity() {
-        return (ENTITY) this;
-    }
 
     protected Manager<ENTITY> manager_() {
         return managerOf_(entityClass());
@@ -100,5 +89,9 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     protected <T> Manager<T> managerOf_(Class<T> entityClass) {
         return speedment().managerOf(requireNonNull(entityClass));
     }
-        
+    
+    @SuppressWarnings("unchecked")
+    private ENTITY selfAsEntity() {
+        return (ENTITY) this;
+    }
 }

@@ -18,7 +18,6 @@ package com.speedment.runtime.entity;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.db.MetaResult;
-import com.speedment.runtime.encoder.JsonEncoder;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.util.function.Consumer;
 
@@ -41,27 +40,6 @@ public interface Entity<ENTITY> {
      * @return Creates and returns a new copy of this entity
      */
     ENTITY copy();
-
-    /**
-     * Returns a JSON representation of this Entity using the default {@link
-     * JsonEncoder}. All of the fields in this Entity will appear in the
-     * returned JSON String.
-     *
-     * @return Returns a JSON representation of this Entity using the default
-     * {@link JsonEncoder}
-     */
-    String toJson();
-
-    /**
-     * Returns a JSON representation of this Entity using the provided {@link
-     * JsonEncoder}.
-     *
-     * @param encoder to use as a JSON encoder
-     * @return Returns a JSON representation of this Entity using the provided
-     * {@link JsonEncoder}
-     * @see JsonEncoder
-     */
-    String toJson(JsonEncoder<ENTITY> encoder);
 
     /**
      * Persists this entity to the underlying database and returns a potentially
