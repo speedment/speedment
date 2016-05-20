@@ -157,11 +157,6 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public String toJson(ENTITY entity) {
-        return inner.toJson(entity);
-    }
-
-    @Override
     public Stream<ENTITY> stream(StreamDecorator decorator) {
         return streamer.apply(decorator);
     }

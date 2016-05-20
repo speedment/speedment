@@ -23,7 +23,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.db.trait.HasCreateFromConnectionMethods;
-import com.speedment.runtime.encoder.Encoder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
@@ -161,18 +160,6 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreat
      * @return a tuple with the primary key classes for this Manager
      */
     Tuple getPrimaryKeyClasses();
-
-    // Json
-    /**
-     * Creates and returns a string representation of the given entity in the
-     * JSON format. The entity will be rendered using the entity's default JSON
-     * {@link Encoder}.
-     *
-     *
-     * @param entity to use
-     * @return a string representation of the given entity in the JSON format
-     */
-    String toJson(ENTITY entity);
 
     // Queries
     /**

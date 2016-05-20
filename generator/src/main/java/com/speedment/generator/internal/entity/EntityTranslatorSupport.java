@@ -20,7 +20,6 @@ import com.speedment.fika.codegen.model.Field;
 import com.speedment.fika.codegen.model.File;
 import com.speedment.fika.codegen.model.Generic;
 import com.speedment.fika.codegen.model.Import;
-import com.speedment.fika.codegen.model.Javadoc;
 import com.speedment.fika.codegen.model.Method;
 import com.speedment.fika.codegen.model.Type;
 import com.speedment.runtime.config.Column;
@@ -31,10 +30,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.SEE;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.fika.codegen.internal.util.Formatting.DOT;
 import static com.speedment.fika.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.runtime.internal.field.ComparableFieldImpl;
@@ -51,7 +46,6 @@ import com.speedment.generator.util.Pluralis;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import com.speedment.runtime.encoder.JsonEncoder;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.ComparableForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
@@ -202,33 +196,6 @@ public final class EntityTranslatorSupport {
     public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {
         requireNonNull(table);
         return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getJavaName()), javaLanguageNamer);
-    }
-
-    public static Method toJson() {
-        return Method.of("toJson", STRING)
-            .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}. "
-                + "All of the fields in this Entity will appear in the returned JSON String."
-            )
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the default {@link " + JsonEncoder.class.getSimpleName() + "}"))
-            );
-    }
-
-    public static Method toJsonExtended(Type entityType) {
-        requireNonNull(entityType);
-        final String paramName = "jsonEncoder";
-        return Method.of("toJson", STRING)
-            .add(Field.of(paramName, Type.of(JsonEncoder.class)
-                .add(Generic.of().add(entityType))))
-            .set(Javadoc.of(
-                "Returns a JSON representation of this Entity using the provided {@link "
-                + JsonEncoder.class.getSimpleName() + "}."
-            )
-                .add(PARAM.setValue(paramName).setText("to use as encoder"))
-                .add(RETURN.setText("Returns a JSON representation of this Entity using the provided {@link " + JsonEncoder.class.getSimpleName() + "}"))
-                .add(SEE.setText(JsonEncoder.class.getSimpleName()))
-            );
-
     }
 
     public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {

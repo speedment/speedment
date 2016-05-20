@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.manager;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.encoder.JsonEncoder;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
@@ -37,17 +36,8 @@ public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<
 
     protected final Speedment speedment;
 
-    private final JsonEncoder<ENTITY> sharedJasonFormatter;
-
     protected AbstractManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        sharedJasonFormatter = JsonEncoder.allOf(this);
-    }
-
-    @Override
-    public String toJson(ENTITY entity) {
-        requireNonNull(entity);
-        return sharedJasonFormatter.apply(entity);
     }
 
     @Override
