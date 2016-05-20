@@ -55,7 +55,6 @@ public class PrimaryKeyFactoryComponentImplTest {
         final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
-            .withPrintWelcomeMessage(false)
             .build();
         instance = new PrimaryKeyFactoryComponentImpl(speedment);
     }

@@ -78,8 +78,6 @@ public class ConnectionPoolComponentImplTest {
         final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
-            .withPrintWelcomeMessage(false)
-            .withPrintWelcomeMessage(false)
             .build();
         instance = new ConnectionPoolComponentImpl(speedment) {
 
