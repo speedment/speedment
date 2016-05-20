@@ -32,11 +32,11 @@ final class JsonSerializer {
             final Class<?> type = unknown.getClass();
             if (type == String.class) {
                 printString((String) unknown);
-            } else if (type == List.class) {
+            } else if (List.class.isAssignableFrom(type)) {
                 @SuppressWarnings("unchecked")
                 final List<Object> list = (List<Object>) unknown;
                 printList(list);
-            } else if (type == Map.class) {
+            } else if (Map.class.isAssignableFrom(type)) {
                 @SuppressWarnings("unchecked")
                 final Map<String, Object> map = (Map<String, Object>) unknown;
                 printMap(map);
