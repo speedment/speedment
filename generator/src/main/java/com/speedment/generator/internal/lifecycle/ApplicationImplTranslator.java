@@ -18,22 +18,23 @@ package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
-import com.speedment.fika.codegen.model.Class;
 import com.speedment.fika.codegen.model.File;
+import com.speedment.fika.codegen.model.Class;
 import com.speedment.fika.codegen.model.Type;
 import com.speedment.runtime.config.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 
 /**
  *
  * @author Emil Forslund
+ * @since  2.4.0
  */
-public final class SpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
+public final class ApplicationImplTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
-    private final String className = getSupport().typeName(getSupport().projectOrThrow()) + "Application";
+    private final String className = getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl";
     
-    public SpeedmentApplicationTranslator(
+    public ApplicationImplTranslator(
             Speedment speedment, 
             Generator generator, 
             Project project) {
@@ -51,21 +52,29 @@ public final class SpeedmentApplicationTranslator extends DefaultJavaClassTransl
         return newBuilder(file, className)
             .forEveryProject((clazz, project) -> {
                 clazz.public_().final_()
-                    .setSupertype(generatedType());
+                    .setSupertype(generatedImplType())
+                    .add(applicationType());
             }).build();
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A {@link " + SpeedmentApplicationLifecycle.class.getName() + 
-            "} class for the {@link " + Project.class.getName() + 
+        return "The default {@link " + AbstractApplicationBuilder.class.getName() + 
+            "} implementation class for the {@link " + Project.class.getName() + 
             "} named " + getSupport().projectOrThrow().getName() + ".";
     }
     
-    private Type generatedType() {
+    private Type applicationType() {
+        return Type.of(
+            getSupport().basePackageName() + "." + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
+        );
+    }
+    
+    private Type generatedImplType() {
         return Type.of(
             getSupport().basePackageName() + ".generated.Generated" + 
-            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
+            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );
     }
 }

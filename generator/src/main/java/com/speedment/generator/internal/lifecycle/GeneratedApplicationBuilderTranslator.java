@@ -35,29 +35,36 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotati
 import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import static com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
-import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
+import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator.METADATA;
+import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import com.speedment.fika.mapstream.MapStream;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
+ * @since  2.4.0
  */
-public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaClassTranslator<Project, Class> {
+public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClassTranslator<Project, Class> {
     
-    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application";
+    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
     
-    public GeneratedSpeedmentApplicationTranslator(Speedment speedment, Generator gen, Project doc) {
+    public GeneratedApplicationBuilderTranslator(Speedment speedment, Generator gen, Project doc) {
         super(speedment, gen, doc, Class::of);
     }
-    
+
     @Override
     public boolean isInGeneratedPackage() {
         return true;
@@ -103,14 +110,18 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
                     });
 
                 onInit.add("loadCustomManagers();");
+                file.add(Import.of(applicationType()));
+                file.add(Import.of(applicationImplType()));
                 
                 clazz.public_().abstract_()
-                    .setSupertype(Type.of(SpeedmentApplicationLifecycle.class)
+                    .setSupertype(Type.of(AbstractApplicationBuilder.class)
                         .add(Generic.of().add(applicationType()))
+                        .add(Generic.of().add(builderType()))
                     )
                     .add(Constructor.of()
                         .protected_()
-                        .add("setSpeedmentApplicationMetadata(new " + className + METADATA + "());")
+                        .add("super(new " + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl());")
+                        .add("setSpeedmentApplicationMetadata(new Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + "());")
                     )
                     .add(onInit);
             }).build();
@@ -125,7 +136,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     
     @Override
     protected String getJavadocRepresentText() {
-        return "A generated base {@link " + SpeedmentApplicationLifecycle.class.getName() + 
+        return "A generated base {@link " + AbstractApplicationBuilder.class.getName() + 
             "} class for the {@link " + Project.class.getName() + 
             "} named " + getSupport().projectOrThrow().getName() + ".";
     }
@@ -135,10 +146,24 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
         return className;
     }
     
-    protected Type applicationType() {
+    private Type builderType() {
+        return Type.of(
+            getSupport().basePackageName() + "." + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder"
+        );
+    }
+    
+    private Type applicationType() {
         return Type.of(
             getSupport().basePackageName() + "." + 
             getSupport().typeName(getSupport().projectOrThrow()) + "Application"
+        );
+    }
+    
+    private Type applicationImplType() {
+        return Type.of(
+            getSupport().basePackageName() + "." + 
+            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );
     }
 }

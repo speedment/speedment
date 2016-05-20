@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime;
+package com.speedment.runtime.entity;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.db.MetaResult;

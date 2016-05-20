@@ -28,10 +28,10 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import org.junit.Test;
@@ -253,7 +253,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     public void testRelativeName_5args() {
         System.out.println("Testing: relativeName(Document, Class, Name, String, Function<String, String>)");
 
-        final JavaLanguageNamer namer = new DefaultSpeedmentApplicationLifecycle()
+        final JavaLanguageNamer namer = new DefaultApplicationBuilder()
             .with(CodeGenerationComponentImpl::new)
             .build()
             .get(CodeGenerationComponent.class)

@@ -24,7 +24,7 @@ package com.speedment.runtime.internal.platform.component.impl;
 import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.connectionpool.PoolableConnection;
-import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -75,7 +75,7 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
+        final Speedment speedment = new DefaultApplicationBuilder()
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();

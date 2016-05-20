@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.internal.entity;
 
+import com.speedment.runtime.internal.entity.AbstractBaseEntity;
 import com.speedment.runtime.Speedment;
 import com.speedment.fika.codegen.Generator;
 import com.speedment.fika.codegen.model.Class;

@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.internal.entity;
+package com.speedment.runtime.internal.entity;
 
-import com.speedment.runtime.Entity;
+import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.encoder.JsonEncoder;

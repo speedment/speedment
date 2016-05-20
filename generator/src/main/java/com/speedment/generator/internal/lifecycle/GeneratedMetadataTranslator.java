@@ -32,30 +32,30 @@ import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocT
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.fika.codegen.internal.model.value.ReferenceValue;
-import static com.speedment.fika.codegen.internal.util.Formatting.indent;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.internal.runtime.ApplicationMetadata;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static com.speedment.fika.codegen.internal.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Per Minborg
  */
-public final class GeneratedSpeedmentApplicationMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
+public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
     private static final int LINES_PER_METHOD = 100;
     private static final String INIT_PART_METHOD_NAME = "initPart";
     private static final String STRING_BUILDER_NAME = "sb";
     public static final String METADATA = "Metadata";
 
-    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application" + METADATA;
+    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA;
 
-    public GeneratedSpeedmentApplicationMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
+    public GeneratedMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
         super(speedment, gen, doc, Class::of);
     }
 

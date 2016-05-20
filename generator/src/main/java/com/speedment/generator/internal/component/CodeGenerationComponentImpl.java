@@ -37,9 +37,8 @@ import com.speedment.generator.internal.entity.EntityImplTranslator;
 import com.speedment.generator.internal.entity.EntityTranslator;
 import com.speedment.generator.internal.entity.GeneratedEntityImplTranslator;
 import com.speedment.generator.internal.entity.GeneratedEntityTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedSpeedmentApplicationTranslator;
-import com.speedment.generator.internal.lifecycle.SpeedmentApplicationTranslator;
+import com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator;
+import com.speedment.generator.internal.lifecycle.ApplicationTranslator;
 import com.speedment.generator.internal.manager.EntityManagerImplTranslator;
 import com.speedment.generator.internal.manager.EntityManagerTranslator;
 import com.speedment.generator.internal.manager.GeneratedEntityManagerImplTranslator;
@@ -49,15 +48,20 @@ import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.fika.mapstream.MapStream;
+import com.speedment.generator.internal.lifecycle.ApplicationBuilderTranslator;
+import com.speedment.generator.internal.lifecycle.ApplicationImplTranslator;
+import com.speedment.generator.internal.lifecycle.GeneratedApplicationBuilderTranslator;
+import com.speedment.generator.internal.lifecycle.GeneratedApplicationImplTranslator;
+import com.speedment.generator.internal.lifecycle.GeneratedApplicationTranslator;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
@@ -81,9 +85,13 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Table.class, GENERATED_ENTITY_IMPL, GeneratedEntityImplTranslator::new);
         put(Table.class, GENERATED_MANAGER, GeneratedEntityManagerTranslator::new);
         put(Table.class, GENERATED_MANAGER_IMPL, GeneratedEntityManagerImplTranslator::new);
-        put(Project.class, APPLICATION, SpeedmentApplicationTranslator::new);
-        put(Project.class, GENERATED_APPLICATION, GeneratedSpeedmentApplicationTranslator::new);
-        put(Project.class, GENERATED_APPLICATION_METADATA, GeneratedSpeedmentApplicationMetadataTranslator::new);
+        put(Project.class, APPLICATION, ApplicationTranslator::new);
+        put(Project.class, APPLICATION_IMPL, ApplicationImplTranslator::new);
+        put(Project.class, APPLICATION_BUILDER, ApplicationBuilderTranslator::new);
+        put(Project.class, GENERATED_APPLICATION, GeneratedApplicationTranslator::new);
+        put(Project.class, GENERATED_APPLICATION_IMPL, GeneratedApplicationImplTranslator::new);
+        put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
+        put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
 
         javaLanguageNamer = new DefaultJavaLanguageNamer();
     }

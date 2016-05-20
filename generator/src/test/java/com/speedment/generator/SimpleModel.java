@@ -33,10 +33,11 @@ import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
-import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -149,7 +150,7 @@ public abstract class SimpleModel {
             )
             + "}";
 
-        speedment = new DefaultSpeedmentApplicationLifecycle(json)
+        speedment = new DefaultApplicationBuilder(json)
             .with(CodeGenerationComponentImpl::new)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)

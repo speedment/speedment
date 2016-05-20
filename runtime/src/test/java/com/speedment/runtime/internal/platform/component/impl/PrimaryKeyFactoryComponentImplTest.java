@@ -24,7 +24,7 @@ package com.speedment.runtime.internal.platform.component.impl;
 import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
-import com.speedment.runtime.internal.runtime.DefaultSpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +52,7 @@ public class PrimaryKeyFactoryComponentImplTest {
 
     @Before
     public void setUp() {
-        final Speedment speedment = new DefaultSpeedmentApplicationLifecycle()
+        final Speedment speedment = new DefaultApplicationBuilder()
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();

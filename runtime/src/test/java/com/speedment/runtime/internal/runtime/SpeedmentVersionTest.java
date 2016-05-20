@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.runtime;
 
-import com.speedment.runtime.internal.runtime.SpeedmentApplicationLifecycle;
+import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 import com.speedment.runtime.SpeedmentVersion;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +59,7 @@ public class SpeedmentVersionTest {
     private Package getPackage() {
 
         //System.out.println(SpeedmentApplicationLifecycle.class.getPackage().getImplementationVersion());
-        return SpeedmentApplicationLifecycle.class.getPackage();
+        return AbstractApplicationBuilder.class.getPackage();
     }
 
     private String getFromManifest(String tag) {

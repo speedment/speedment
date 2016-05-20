@@ -38,20 +38,18 @@ import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.fika.logger.Logger;
 import com.speedment.fika.logger.LoggerManager;
+import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.internal.util.Statistics;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.manager.Manager;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.util.tuple.Tuple2;
 import com.speedment.runtime.util.tuple.Tuple3;
 import com.speedment.runtime.util.tuple.Tuples;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -59,20 +57,28 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
- * This Class provides the foundation for a SpeedmentApplication and is needed
- * when initializing the Speedment framework. Specific SPeedment applications
- * can inherit from this class.
+ * This abstract class is implemented by classes that can build a 
+ * {@link Speedment} application.
  *
- * @param <T> The (self) type of the SpeedmentApplicationLifecycle
- * @author pemi
- * @since 2.0
+ * @param <APP>      the type that is being built
+ * @param <BUILDER>  the (self) type of the AbstractApplicationBuilder
+ * 
+ * @author  Per Minborg
+ * @since   2.0
  *
  */
-public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicationLifecycle<T>> extends AbstractLifecycle<T> implements Lifecyclable<T> {
+public abstract class AbstractApplicationBuilder<
+        APP extends Speedment,
+        BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
+    > extends AbstractLifecycle<BUILDER> 
+    implements SpeedmentBuilder<APP, BUILDER>, Lifecyclable<BUILDER> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(SpeedmentApplicationLifecycle.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
 
     private final List<Tuple3<Class<? extends Document>, String, Consumer<? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, Consumer<? extends Document>>> withsAll;
@@ -82,11 +88,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     private ApplicationMetadata speedmentApplicationMetadata;
 
-    protected final Speedment speedment;
+    protected final APP application;
 
-    public SpeedmentApplicationLifecycle() {
-        super();
-        speedment = new SpeedmentImpl();
+    protected AbstractApplicationBuilder(APP application) {
+        this.application = requireNonNull(application);
+        
         withsNamed = newList();
         withsAll = newList();
         checkDatabaseConnectivity = true;
@@ -94,284 +100,121 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         customManagers = new CopyOnWriteArrayList<>();
     }
 
-    /**
-     * Configures a parameter for the named ConfigEntity of a certain class. The
-     * consumer will then be applied after the configuration has been read and
-     * after the System properties have been applied.
-     *
-     * @param <C> the type of ConfigEntity that is to be used
-     * @param type the class of the type of ConfigEntity that is to be used
-     * @param name the fully qualified name of the ConfigEntity.
-     * @param consumer the consumer to apply
-     * @return this instance
-     */
-    public <C extends Document & HasEnabled> T with(final Class<C> type, final String name, final Consumer<C> consumer) {
+    @Override
+    public <C extends Document & HasEnabled> BUILDER with(final Class<C> type, final String name, final Consumer<C> consumer) {
         requireNonNulls(type, name, consumer);
         withsNamed.add(Tuples.of(type, name, consumer));
         return self();
     }
 
-    /**
-     * Configures a parameter for all ConfigEntity of a certain class. The
-     * consumer will then be applied after the configuration has been read and
-     * after the System properties have been applied.
-     *
-     * @param <C> the type of ConfigEntity that is to be used
-     * @param type the class of the type of ConfigEntity that is to be used
-     * @param consumer the consumer to apply
-     * @return this instance
-     */
-    public <C extends Document & HasEnabled> T with(final Class<C> type, final Consumer<C> consumer) {
+    @Override
+    public <C extends Document & HasEnabled> BUILDER with(final Class<C> type, final Consumer<C> consumer) {
         requireNonNulls(type, consumer);
         withsAll.add(Tuples.of(type, consumer));
         return self();
     }
 
-    /**
-     * Configures a password for all dbmses in this project. The password will
-     * then be applied after the configuration has been read and after the
-     * System properties have been applied.
-     * <p>
-     * This will not be saved in any configuration files!
-     *
-     * @param password to use for all dbms:es in this project
-     * @return this instance
-     */
-    public T withPassword(final char[] password) {
+    @Override
+    public BUILDER withPassword(final char[] password) {
         // password nullable
-        with(Dbms.class, dbms -> speedment.getPasswordComponent().put(dbms, password));
+        with(Dbms.class, dbms -> application.getPasswordComponent().put(dbms, password));
         return self();
     }
 
-    /**
-     * Configures a password for the named dbms. The password will then be
-     * applied after the configuration has been read and after the System
-     * properties have been applied.
-     * <p>
-     * This will not be saved in any configuration files!
-     *
-     * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms
-     * @return this instance
-     */
-    public T withPassword(final String dbmsName, final char[] password) {
+    @Override
+    public BUILDER withPassword(final String dbmsName, final char[] password) {
         // password nullable
-        with(Dbms.class, dbmsName, dbms -> speedment.getPasswordComponent().put(dbms, password));
+        with(Dbms.class, dbmsName, dbms -> application.getPasswordComponent().put(dbms, password));
         return self();
     }
 
-    /**
-     * Configures a password for all dbmses in this project. The password will
-     * then be applied after the configuration has been read and after the
-     * System properties have been applied.
-     * <p>
-     * This will not be saved in any configuration files!
-     *
-     * @param password to use for all dbms:es in this project
-     * @return this instance
-     */
-    public T withPassword(final String password) {
+    @Override
+    public BUILDER withPassword(final String password) {
         // password nullable
         return withPassword(stringToCharArray(password));
     }
 
-    /**
-     * Configures a password for the named dbms. The password will then be
-     * applied after the configuration has been read and after the System
-     * properties have been applied.
-     * <p>
-     * This will not be saved in any configuration files!
-     *
-     * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms
-     * @return this instance
-     */
-    public T withPassword(final String dbmsName, final String password) {
+    @Override
+    public BUILDER withPassword(final String dbmsName, final String password) {
         // password nullable
         return withPassword(dbmsName, stringToCharArray(password));
     }
 
-    /**
-     * Configures a username for all dbmses in this project. The username will
-     * then be applied after the configuration has been read and after the
-     * System properties have been applied.
-     *
-     * @param username to use for all dbms:es in this project
-     * @return this instance
-     */
-    public T withUsername(final String username) {
+    @Override
+    public BUILDER withUsername(final String username) {
         // username nullable
         with(Dbms.class, d -> d.mutator().setUsername(username));
         return self();
     }
 
-    /**
-     * Configures a username for the named dbms. The username will then be
-     * applied after the configuration has been read and after the System
-     * properties have been applied.
-     *
-     * @param dbmsName the name of the dbms
-     * @param username to use for the named dbms
-     * @return this instance
-     */
-    public T withUsername(final String dbmsName, final String username) {
+    @Override
+    public BUILDER withUsername(final String dbmsName, final String username) {
         // username nullable
         with(Dbms.class, dbmsName, d -> d.mutator().setUsername(username));
         return self();
     }
 
-    /**
-     * Configures an IP-address for all dbmses in this project. The IP-address
-     * will then be applied after the configuration has been read and after the
-     * System properties have been applied.
-     *
-     * @param ipAddress to use for all dbms:es in this project
-     * @return this instance
-     */
-    public T withIpAddress(final String ipAddress) {
+    @Override
+    public BUILDER withIpAddress(final String ipAddress) {
         requireNonNull(ipAddress);
         with(Dbms.class, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
 
-    /**
-     * Configures an IP-address for the named dbms. The IP-address will then be
-     * applied after the configuration has been read and after the System
-     * properties have been applied.
-     *
-     * @param dbmsName the name of the dbms
-     * @param ipAddress to use for the named dbms.
-     * @return this instance
-     */
-    public T withIpAddress(final String dbmsName, final String ipAddress) {
+    @Override
+    public BUILDER withIpAddress(final String dbmsName, final String ipAddress) {
         requireNonNull(ipAddress);
         with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
 
-    /**
-     * Configures a port for all dbmses in this project. The port will then be
-     * applied after the configuration has been read and after the System
-     * properties have been applied.
-     *
-     * @param port to use for all dbms:es in this project
-     * @return this instance
-     */
-    public T withPort(final int port) {
+    @Override
+    public BUILDER withPort(final int port) {
         with(Dbms.class, d -> d.mutator().setPort(port));
         return self();
     }
 
-    /**
-     * Configures a port for the named dbms. The port will then be applied after
-     * the configuration has been read and after the System properties have been
-     * applied.
-     *
-     * @param dbmsName the name of the dbms
-     * @param port to use for the named dbms
-     * @return this instance
-     */
-    public T withPort(final String dbmsName, final int port) {
+    @Override
+    public BUILDER withPort(final String dbmsName, final int port) {
         with(Dbms.class, dbmsName, d -> d.mutator().setPort(port));
         return self();
     }
 
-    /**
-     * Configures a new schema name for all schemas in this project. The new
-     * schema name will then be applied after the configuration has been read
-     * and after the System properties have been applied.
-     * <p>
-     * This method is useful for multi-tenant projects where there are several
-     * identical schemas separated only by their names.
-     *
-     * @param schemaName to use for all schemas this project
-     * @return this instance
-     */
-    public T withSchema(final String schemaName) {
+    @Override
+    public BUILDER withSchema(final String schemaName) {
         requireNonNull(schemaName);
         with(Schema.class, s -> s.mutator().setName(schemaName));
         return self();
     }
 
-    /**
-     * Configures a new schema name for the named old schema name. The new
-     * schema name will then be applied after the configuration has been read
-     * and after the System properties have been applied.
-     * <p>
-     * This method is useful for multi-tenant projects where there are several
-     * identical schemas separated only by their names.
-     *
-     * @param oldSchemaName the current name of a schema
-     * @param schemaName to use for the named schema
-     * @return this instance
-     */
-    public T withSchema(final String oldSchemaName, final String schemaName) {
+    @Override
+    public BUILDER withSchema(final String oldSchemaName, final String schemaName) {
         requireNonNulls(oldSchemaName, schemaName);
         with(Schema.class, oldSchemaName, s -> s.mutator().setName(schemaName));
         return self();
     }
 
-    /**
-     * Configures a connection URL for all dbmses in this project. The new
-     * connection URL will then be applied after the configuration has been read
-     * and after the System properties have been applied. If the connectionUrl
-     * is set to {@code null}, the connection URL will be calculated using the
-     * dbmses' default connection URL generator (e.g. using ipAddress, port,
-     * etc).
-     * <p>
-     *
-     * @param connectionUrl to use for all dbms this project or null
-     * @return this instance
-     */
-    public T withConnectionUrl(final String connectionUrl) {
+    @Override
+    public BUILDER withConnectionUrl(final String connectionUrl) {
         with(Dbms.class, d -> d.mutator().setConnectionUrl(connectionUrl));
         return self();
     }
 
-    /**
-     * Configures a connection URL for the named dbms in this project. The new
-     * connection URL will then be applied after the configuration has been read
-     * and after the System properties have been applied. If the connectionUrl
-     * is set to {@code null}, the connection URL will be calculated using the
-     * dbmses' default connection URL generator (e.g. using ipAddress, port,
-     * etc).
-     * <p>
-     *
-     * @param dbmsName the name of the dbms
-     * @param connectionUrl to use for the named dbms or null
-     * @return this instance
-     */
-    public T withConnectionUrl(final String dbmsName, final String connectionUrl) {
+    @Override
+    public BUILDER withConnectionUrl(final String dbmsName, final String connectionUrl) {
         requireNonNull(dbmsName);
         with(Dbms.class, dbmsName, s -> s.mutator().setName(connectionUrl));
         return self();
     }
 
-    /**
-     * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform by applying the provided component constructor with the
-     * internal Speedment instance.
-     *
-     * @param <C> the component constructor type
-     * @param componentConstructor to use when adding/replacing a component
-     * @return this instance
-     */
-    public <C extends Component> T with(final ComponentConstructor<C> componentConstructor) {
-        speedment.put(requireNonNull(componentConstructor).create(speedment));
+    @Override
+    public <C extends Component> BUILDER with(final ComponentConstructor<C> componentConstructor) {
+        application.put(requireNonNull(componentConstructor).create(application));
         return self();
     }
 
-    /**
-     * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform by first creating a new instance of the provided
-     * component constructor class and then applying the component constructor
-     * with the internal Speedment instance.
-     *
-     * @param <C> the component constructor type
-     * @param componentConstructorClass to use when adding/replacing a component
-     * @return this instance
-     */
-    public <C extends Component> T with(final Class<ComponentConstructor<C>> componentConstructorClass) {
+    @Override
+    public <C extends Component> BUILDER with(final Class<ComponentConstructor<C>> componentConstructorClass) {
         try {
             final ComponentConstructor<C> cc = componentConstructorClass.newInstance();
             return with(cc);
@@ -381,42 +224,20 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         throw new SpeedmentException("Unable to make a new instance of the " + componentConstructorClass + " class");
     }
 
-    /**
-     * Sets if an initial database check shall be performed upon build(). The
-     * default value is <code>true</code>
-     *
-     * @param <C> the component type
-     * @param checkDatabaseConnectivity if an initial database check shall be
-     * performed
-     * @return this instance
-     */
-    public <C extends Component> T withCheckDatabaseConnectivity(final boolean checkDatabaseConnectivity) {
+    @Override
+    public <C extends Component> BUILDER withCheckDatabaseConnectivity(final boolean checkDatabaseConnectivity) {
         this.checkDatabaseConnectivity = checkDatabaseConnectivity;
         return self();
     }
 
-    /**
-     * Sets if an initial validation if the configuration shall be performed
-     * upon build(). The default value is <code>true</code>
-     *
-     * @param <C> the component type
-     * @param validateRuntimeConfig if the configuration shall be performed
-     * @return this instance
-     */
-    public <C extends Component> T withValidateRuntimeConfig(final boolean validateRuntimeConfig) {
+    @Override
+    public <C extends Component> BUILDER withValidateRuntimeConfig(final boolean validateRuntimeConfig) {
         this.validateRuntimeConfig = validateRuntimeConfig;
         return self();
     }
 
-    /**
-     * Adds a custom manager constructor, being called before build to replace
-     * an existing manager.
-     *
-     * @param <C> the component type
-     * @param constructor to add
-     * @return this instance
-     */
-    public <C extends Component> T withManager(final Function<Speedment, Manager<?>> constructor) {
+    @Override
+    public <C extends Component> BUILDER withManager(final Function<Speedment, Manager<?>> constructor) {
         customManagers.add(constructor);
         return self();
     }
@@ -468,9 +289,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         bringRemainingUpTo(State.STARTED);
         Statistics.onNodeStarted();
 
-        final String title = speedment.getInfoComponent().title();
-        final String subTitle = speedment.getInfoComponent().subtitle();
-        final String version = speedment.getInfoComponent().version();
+        final String title = application.getInfoComponent().title();
+        final String subTitle = application.getInfoComponent().subtitle();
+        final String version = application.getInfoComponent().version();
 
         final String msg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
             + " API version is " + getSpecificationVersion();
@@ -478,43 +299,27 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
         printWelcomeMessage();
     }
 
-    protected void printWelcomeMessage() {
-
-        try {
-            final Package package_ = Runtime.class.getPackage();
-            final String javaMsg = package_.getSpecificationTitle()
-                + " " + package_.getSpecificationVersion()
-                + " by " + package_.getSpecificationVendor()
-                + ". Implementation "
-                + package_.getImplementationVendor()
-                + " " + package_.getImplementationVersion()
-                + " by " + package_.getImplementationVendor();
-            LOGGER.info(javaMsg);
-            if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
-                LOGGER.warn("The current Java version is outdated. Please upgrate to a more recent Java version.");
-            }
-        } catch (Exception e) {
-            LOGGER.info("Unknown Java version.");
-        }
-
-        final String title = speedment.getInfoComponent().title();
-        final String subTitle = speedment.getInfoComponent().subtitle();
-        final String version = speedment.getInfoComponent().version();
-
-        final String speedmentMsg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
-            + " API version is " + getSpecificationVersion();
-        LOGGER.info(speedmentMsg);
-        if (!SpeedmentVersion.isProductionMode()) {
-            LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
-        }
-
-    }
-
     @Override
     public void onStop() {
         super.onStop();
         forEachManagerInSeparateThread(Manager::stop);
         forEachComponentInSeparateThread(Component::stop);
+    }
+    
+    @Override
+    public APP build() {
+        if (!isStarted()) {
+            start();
+        }
+
+        return application;
+    }
+    
+    protected void loadCustomManagers() {
+        customManagers.forEach(mc -> {
+            final Manager<?> manager = mc.apply(application);
+            application.getManagerComponent().put(manager);
+        });
     }
 
     /**
@@ -559,22 +364,47 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 .forEachOrdered(consumer::accept);
         });
 
-        speedment.getProjectComponent().setProject(project);
+        application.getProjectComponent().setProject(project);
     }
+    
+    protected void printWelcomeMessage() {
 
-    public void loadCustomManagers() {
-        customManagers.forEach(mc -> {
-            final Manager<?> manager = mc.apply(speedment);
-            speedment.getManagerComponent().put(manager);
-        });
+        try {
+            final Package package_ = Runtime.class.getPackage();
+            final String javaMsg = package_.getSpecificationTitle()
+                + " " + package_.getSpecificationVersion()
+                + " by " + package_.getSpecificationVendor()
+                + ". Implementation "
+                + package_.getImplementationVendor()
+                + " " + package_.getImplementationVersion()
+                + " by " + package_.getImplementationVendor();
+            LOGGER.info(javaMsg);
+            if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
+                LOGGER.warn("The current Java version is outdated. Please upgrate to a more recent Java version.");
+            }
+        } catch (Exception e) {
+            LOGGER.info("Unknown Java version.");
+        }
+
+        final String title = application.getInfoComponent().title();
+        final String subTitle = application.getInfoComponent().subtitle();
+        final String version = application.getInfoComponent().version();
+
+        final String speedmentMsg = title + " (" + subTitle + ") version " + version + " by " + getImplementationVendor() + " started."
+            + " API version is " + getSpecificationVersion();
+        LOGGER.info(speedmentMsg);
+        if (!SpeedmentVersion.isProductionMode()) {
+            LOGGER.warn("This version is NOT INTEDNED FOR PRODUCTION USE!");
+        }
+
     }
 
     protected <ENTITY> void applyAndPut(Function<Speedment, Manager<ENTITY>> constructor) {
-        put(constructor.apply(speedment));
+        put(constructor.apply(application));
     }
 
     protected <ENTITY> void put(Manager<ENTITY> manager) {
-        speedment.getManagerComponent().put(manager);
+        application.getManagerComponent().put(manager);
     }
 
     /**
@@ -584,21 +414,13 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      * @param speedmentApplicationMetadata to use
      * @return this instance
      */
-    public T setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
+    protected BUILDER setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
         this.speedmentApplicationMetadata = requireNonNull(speedmentApplicationMetadata);
         return self();
     }
 
     protected ApplicationMetadata getSpeedmentApplicationMetadata() {
         return speedmentApplicationMetadata;
-    }
-
-    public Speedment build() {
-        if (!isStarted()) {
-            start();
-        }
-
-        return speedment;
     }
 
     /**
@@ -609,7 +431,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
      */
     protected void forEachManagerInSeparateThread(Consumer<Manager<?>> managerConsumer) {
         requireNonNull(managerConsumer);
-        final ManagerComponent mc = speedment.getManagerComponent();
+        final ManagerComponent mc = application.getManagerComponent();
         final List<Thread> threads = mc.stream()
             .map(mgr -> new Thread(()
                 -> managerConsumer.accept(mgr),
@@ -617,19 +439,19 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
             ))
             .collect(toList());
         threads.forEach(Thread::start);
-        threads.forEach(SpeedmentApplicationLifecycle::join);
+        threads.forEach(AbstractApplicationBuilder::join);
     }
 
     protected void forEachComponentInSeparateThread(Consumer<Component> componentConsumer) {
         requireNonNull(componentConsumer);
-        final List<Thread> threads = speedment.components()
+        final List<Thread> threads = application.components()
             .map(comp -> new Thread( // TODO: Change to ExecutorService
                 () -> componentConsumer.accept(comp),
                 comp.asSoftware().getName()
             ))
             .collect(toList());
         threads.forEach(Thread::start);
-        threads.forEach(SpeedmentApplicationLifecycle::join);
+        threads.forEach(AbstractApplicationBuilder::join);
     }
 
     private static void join(Thread t) {
@@ -645,14 +467,14 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     protected void validateRuntimeConfig() {
-        final Project project = speedment.getProjectComponent().getProject();
+        final Project project = application.getProjectComponent().getProject();
         if (project == null) {
             throw new SpeedmentException("No project defined");
         }
 
         project.dbmses().forEach(d -> {
             final String typeName = d.getTypeName();
-            final Optional<DbmsType> oDbmsType = speedment.getDbmsHandlerComponent().findByName(typeName);
+            final Optional<DbmsType> oDbmsType = application.getDbmsHandlerComponent().findByName(typeName);
             if (!oDbmsType.isPresent()) {
                 throw new SpeedmentException("The database type " + typeName + " is not registered with the " + DbmsHandlerComponent.class.getSimpleName());
             }
@@ -670,17 +492,17 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void makeConfigImmutable() {
         // If a project has been set for the lifecycle, wrap it in an immutable
         // for performance reasons.
-        final Project project = speedment.getProjectComponent().getProject();
+        final Project project = application.getProjectComponent().getProject();
         if (project != null) {
             final Project immutableProject = ImmutableProject.wrap(project);
-            speedment.getProjectComponent().setProject(immutableProject);
+            application.getProjectComponent().setProject(immutableProject);
         }
     }
 
     protected void checkDatabaseConnectivity() {
-        final Project project = speedment.getProjectComponent().getProject();
+        final Project project = application.getProjectComponent().getProject();
         project.dbmses().forEachOrdered(dbms -> {
-            final DbmsHandler dbmsHandler = speedment.getDbmsHandlerComponent().get(dbms);
+            final DbmsHandler dbmsHandler = application.getDbmsHandlerComponent().get(dbms);
             try {
                 LOGGER.info(dbmsHandler.getDbmsInfoString());
             } catch (Exception e) {
@@ -694,11 +516,11 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     }
 
     private void bringRemainingUpTo(State state) {
-        final ManagerComponent mc = speedment.getManagerComponent();
+        final ManagerComponent mc = application.getManagerComponent();
         List<Component> components;
         List<Manager<?>> managers;
         do {
-            components = notUpTo(state, speedment.components());
+            components = notUpTo(state, application.components());
             components.forEach(c -> bringUpTo(state, c));
             managers = notUpTo(state, mc.stream());
             managers.forEach(m -> bringUpTo(state, m));
