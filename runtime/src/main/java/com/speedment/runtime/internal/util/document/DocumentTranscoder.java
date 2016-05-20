@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,7 +52,9 @@ public final class DocumentTranscoder {
             return "null";
         } else {
             try {
-                return Json.toJson(project.getData());
+                final Map<String, Object> root = new HashMap<>();
+                root.put(ROOT, project.getData());
+                return Json.toJson(root);
             } catch (final IllegalArgumentException ex) {
                 throw new SpeedmentException(ex);
             }
@@ -86,7 +89,11 @@ public final class DocumentTranscoder {
     public static Project load(String json) throws SpeedmentException {
         try {
             @SuppressWarnings("unchecked")
-            final Map<String, Object> data = (Map<String, Object>) Json.fromJson(json);
+            final Map<String, Object> root = (Map<String, Object>) Json.fromJson(json);
+            
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> data = (Map<String, Object>) root.get(ROOT);
+            
             return new ProjectImpl(data);
         } catch (final Exception ex) {
             throw new SpeedmentException(ex);
