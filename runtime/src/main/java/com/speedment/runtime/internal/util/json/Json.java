@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * A utility class that can parse strings into ordinary java objects.
+ * <p>
+ * JSON is parsed using the {@code RFC 7159} specification.
  * 
  * @author Emil Forslund
  * @since  2.4.0
