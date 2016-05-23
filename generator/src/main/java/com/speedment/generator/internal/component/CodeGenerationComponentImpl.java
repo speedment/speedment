@@ -30,7 +30,7 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.fika.codegen.Generator;
-import com.speedment.fika.codegen.internal.java.JavaGenerator;
+import com.speedment.fika.codegen.java.JavaGenerator;
 import com.speedment.fika.codegen.model.ClassOrInterface;
 import com.speedment.generator.internal.TranslatorManagerImpl;
 import com.speedment.generator.internal.entity.EntityImplTranslator;
