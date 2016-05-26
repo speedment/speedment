@@ -34,8 +34,8 @@ import javafx.util.Duration;
  * place.
  * 
  * @author  jewelsea
- * @since   2.3
- * @see     https://gist.github.com/jewelsea/5683558
+ * @since   2.3.0
+ * @see     <a href="https://gist.github.com/jewelsea/5683558">Original Gist</a>
  */
 public final class LayoutAnimator implements ChangeListener<Number>, ListChangeListener<Node> {
 
@@ -50,7 +50,7 @@ public final class LayoutAnimator implements ChangeListener<Number>, ListChangeL
      *   animator.observe(myVbox.getChildren());
      * </code>
      *
-     * @param nodes
+     * @param nodes  the nodes to observe
      */
     public void observe(ObservableList<Node> nodes) {
         nodes.stream().forEach((node) -> {

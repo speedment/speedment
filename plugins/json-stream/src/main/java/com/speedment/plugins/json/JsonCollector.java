@@ -50,7 +50,7 @@ import static java.util.stream.Collectors.joining;
 public final class JsonCollector<ENTITY> implements Collector<ENTITY, List<String>, String> {
     
     /**
-     * Returns a collector that calls the {@link #toJson(java.lang.Object)}
+     * Returns a collector that calls the {@link #toJson(JsonEncoder)}
      * method for each element in the stream and joins the resulting stream
      * separated by commas and surrounded by square brackets.
      * <p>

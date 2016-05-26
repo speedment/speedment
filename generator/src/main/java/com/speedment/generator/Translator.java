@@ -302,9 +302,9 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
      * {@link Translator}. A builder is finalized using the {@link #build()} 
      * method.
      * 
-     * @param <T>  {@link com.speedment.codegen.model.Class Class}, 
-     *             {@link com.speedment.codegen.model.Interface Interface} or 
-     *             {@link com.speedment.codegen.model.Enum Enum} to build.
+     * @param <T>  {@link com.speedment.common.codegen.model.Class Class}, 
+     *             {@link com.speedment.common.codegen.model.Interface Interface} or 
+     *             {@link com.speedment.common.codegen.model.Enum Enum} to build.
      * 
      * @author  Emil Forslund
      * @since   2.3
@@ -540,9 +540,9 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
         Builder<T> forEveryForeignKeyReferencingThis(Phase phase, BiConsumer<T, ForeignKey> consumer);
         
         /**
-         * Builds the {@link com.speedment.codegen.model.Class Class}, 
-         * {@link com.speedment.codegen.model.Interface Interface} or 
-         * {@link com.speedment.codegen.model.Enum Enum} that has been prepared
+         * Builds the {@link com.speedment.common.codegen.model.Class Class}, 
+         * {@link com.speedment.common.codegen.model.Interface Interface} or 
+         * {@link com.speedment.common.codegen.model.Enum Enum} that has been prepared
          * by this {@code Builder}.
          * 
          * @return  the built instance
