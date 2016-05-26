@@ -20,9 +20,7 @@ import com.speedment.runtime.Speedment;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.common.codegen.Generator;
-import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import com.speedment.common.codegen.model.File;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
@@ -31,6 +29,7 @@ import com.speedment.generator.event.AfterGenerate;
 import com.speedment.generator.event.BeforeGenerate;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.internal.util.Formatting;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.internal.util.Statistics;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -112,15 +109,6 @@ public class TranslatorManagerImpl implements TranslatorManager {
             .collect(Collectors.toList())
         ).forEach(meta -> writeToFile(project, meta, true));
 
-        final List<Table> tables = traverseOver(project, Table.class)
-            .filter(HasEnabled::test)
-            .collect(toList());
-
-        gen.metaOn(tables, File.class).forEach(meta -> {
-            writeToFile(project, gen, meta);
-            fileCounter.incrementAndGet();
-        });
-
         speedment.getEventComponent().notify(new AfterGenerate(project, gen, this));
     }
 
@@ -130,16 +118,12 @@ public class TranslatorManagerImpl implements TranslatorManager {
     }
 
     @Override
-    public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
-        requireNonNull(meta);
+    public void writeToFile(Path path, String content, boolean overwriteExisting) {
+        requireNonNulls(path, content);
 
-        final String fname = project.getPackageLocation()
-            + "/"
-            + meta.getModel().getName();
-        final String content = meta.getResult();
-        final Path path = Paths.get(fname);
         try {
-            final boolean created = Optional.ofNullable(path.getParent()).map(p -> p.toFile().mkdirs()).orElse(false);
+            Optional.ofNullable(path.getParent())
+                .ifPresent(p -> p.toFile().mkdirs());
         } catch (SecurityException se) {
             throw new SpeedmentException("Unable to create directory " + path.toString(), se);
         }
@@ -153,61 +137,13 @@ public class TranslatorManagerImpl implements TranslatorManager {
                 fileCounter.incrementAndGet();
             }
         } catch (final IOException ex) {
-            LOGGER.error(ex, "Failed to write file " + fname);
+            LOGGER.error(ex, "Failed to write file " + path);
         }
-
-        //LOGGER.info("done");
-
-        printCode(fname, content);
 
         if (PRINT_CODE) {
-            System.out.println("*** BEGIN File:" + fname);
+            System.out.println("*** BEGIN File:" + path);
             System.out.println(content);
-            System.out.println("*** END   File:" + fname);
+            System.out.println("*** END   File:" + path);
         }
     }
-
-    public static void writeToFile(Project project, Generator gen, Meta<Table, File> meta) {
-        requireNonNull(project);
-        requireNonNull(gen);
-        requireNonNull(meta);
-
-        final Optional<String> content = gen.on(meta.getResult());
-
-        if (content.isPresent()) {
-            final String fname
-                = project.getPackageLocation()
-                + "/" + meta.getResult().getName();
-
-            final Path path = Paths.get(fname);
-            try {
-                final boolean created = Optional.ofNullable(path.getParent()).map(p -> p.toFile().mkdirs()).orElse(false);
-            } catch (SecurityException se) {
-                throw new SpeedmentException("Unable to create directory " + path.toString(), se);
-            }
-            try {
-                Files.write(path,
-                    content.get().getBytes(StandardCharsets.UTF_8)
-                );
-            } catch (IOException ex) {
-                LOGGER.error(ex, "Failed to create file " + fname);
-            }
-
-            LOGGER.info("done");
-
-            printCode(fname, content.get());
-
-        } else {
-            throw new IllegalArgumentException("Input file could not be generated.");
-        }
-    }
-
-    private static void printCode(final String fname, final String content) {
-        if (PRINT_CODE) {
-            System.out.println("*** BEGIN File:" + fname);
-            System.out.println(content);
-            System.out.println("*** END   File:" + fname);
-        }
-    }
-
 }

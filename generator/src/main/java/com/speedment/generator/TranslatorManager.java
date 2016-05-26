@@ -19,17 +19,27 @@ package com.speedment.generator;
 import com.speedment.runtime.config.Project;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public interface TranslatorManager {
 
-    public void accept(Project project);
+    void accept(Project project);
 
-    public int getFilesCreated();
-
-    public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting);
-
+    int getFilesCreated();
+    
+    default void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
+        writeToFile(project, meta.getModel().getName(), meta.getResult(), overwriteExisting);
+    }
+    
+    default void writeToFile(Project project, String filename, String content, boolean overwriteExisting) {
+        final String fname = project.getPackageLocation() + "/" + filename;
+        writeToFile(Paths.get(fname), content, overwriteExisting);
+    }
+    
+    void writeToFile(Path location, String content, boolean overwriteExisting);
 }

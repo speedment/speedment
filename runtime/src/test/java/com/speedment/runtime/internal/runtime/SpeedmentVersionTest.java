@@ -16,67 +16,22 @@
  */
 package com.speedment.runtime.internal.runtime;
 
-import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 import com.speedment.runtime.SpeedmentVersion;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.3.3";
-    private static final String EXPECTED_SPECIFICATION_VERSION = "2.3";
-
-    public SpeedmentVersionTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    private Package getPackage() {
-
-        //System.out.println(SpeedmentApplicationLifecycle.class.getPackage().getImplementationVersion());
-        return AbstractApplicationBuilder.class.getPackage();
-    }
-
-    private String getFromManifest(String tag) {
-        try (final InputStream pomPropertiesStream = SpeedmentVersion.class
-                .getResourceAsStream("/META-INF/MANIFEST.MF")) {
-            final Properties pomProperties = new Properties();
-            pomProperties.load(pomPropertiesStream);
-            return pomProperties.getProperty("Implementation-Version");
-        } catch (IOException ioe) {
-
-        }
-        throw new IllegalArgumentException(tag + " not found");
-    }
+    private static final String 
+        EXPECTED_IMPLEMENTATION_VERSION = "2.4.0",
+        EXPECTED_SPECIFICATION_VERSION  = "2.4";
 
     @Test
     public void testGetImplementationTitle() {
-        //String expResult = getPackage().getImplementationTitle();
         final String expResult = "Speedment";
         final String result = SpeedmentVersion.getImplementationTitle();
         assertEquals(expResult, result);
@@ -84,7 +39,6 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationVendor() {
-        //String expResult = getPackage().getImplementationVendor();
         final String expResult = "Speedment Inc.";
         final String result = SpeedmentVersion.getImplementationVendor();
         assertEquals(expResult, result);
@@ -92,9 +46,6 @@ public class SpeedmentVersionTest {
 
     @Test
     public void testGetImplementationVersion() {
-//        String expResult = getPackage().getImplementationVersion();
-//        String expResult2 = getFromManifest("ImplementationVersion");
-
         // Todo: Implement a real test. Like extract version from POM or MANIFEST.MF
         final String result = SpeedmentVersion.getImplementationVersion();
         assertEquals(EXPECTED_IMPLEMENTATION_VERSION, result);
@@ -106,27 +57,4 @@ public class SpeedmentVersionTest {
         final String result = SpeedmentVersion.getSpecificationVersion();
         assertEquals(expResult, result);
     }
-    
-//
-//    @Test
-//    public void testGetSpecificationTitle() {
-//        System.out.println("getSpecificationTitle");
-//        String expResult = getPackage().getSpecificationVendor();
-//        System.out.println(expResult);
-//        String result = SpeedmentVersion.getSpecificationVendor();
-//        assertEquals(expResult, result);
-//    }
-//
-//    @Test
-//    public void testGetSpecificationVendor() {
-//        System.out.println("getSpecificationVendor");
-//        String expResult = getPackage().getSpecificationVendor();
-//        System.out.println(expResult);
-//        String result = SpeedmentVersion.getSpecificationVendor();
-//        assertEquals(expResult, result);
-//    }
-//
-
-    
-
 }

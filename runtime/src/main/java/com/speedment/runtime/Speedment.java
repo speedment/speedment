@@ -55,7 +55,6 @@ public interface Speedment {
      * <li>{@link com.speedment.runtime.component.EntityManager EntityManager}</li>
      * <li>{@link com.speedment.runtime.component.EventComponent EventComponent}</li>
      * <li>{@link com.speedment.runtime.component.DbmsHandlerComponent DbmsHandlerComponent}</li>
-     * <li>{@link com.speedment.runtime.tool.component.DocumentPropertyComponent DocumentPropertyComponent}</li>
      * <li>{@link com.speedment.runtime.component.ManagerComponent ManagerComponent}</li>
      * <li>{@link com.speedment.runtime.component.PrimaryKeyFactoryComponent PrimaryKeyFactoryComponent}</li>
      * <li>{@link com.speedment.runtime.component.ProjectComponent ProjectComponent}</li>
@@ -65,7 +64,6 @@ public interface Speedment {
      * <li>{@link com.speedment.runtime.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.runtime.component.PasswordComponent PasswordComponent}</li>
      * <li>{@link com.speedment.runtime.component.InfoComponent InfoComponent}</li>
-     * 
      * </ul>
      *
      * @param <R> The intended return type
@@ -78,12 +76,14 @@ public interface Speedment {
      * Puts a new Component in the Speedment platform and returns the previous
      * Component (if any) with the same interface class.
      *
+     * @param <R> The Component type
      * @param item the new Component to put
      * @return the previous Component registered using that interface class, or
      * null of no one existed before
      */
-    Component put(Component item);
+    <R extends Component> R put(R item);
 
+    //Component put(Component item);
     /**
      * Obtains and returns the currently associated {@link Manager}
      * implementation for the given Entity interface Class. If no Manager exists
@@ -94,7 +94,7 @@ public interface Speedment {
      * <p>
      * {@code get(ManagerComponent.class).managerOf(entityClass) }
      *
-     * @param <ENTITY>  the Entity interface type
+     * @param <ENTITY> the Entity interface type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class
@@ -115,59 +115,119 @@ public interface Speedment {
      * any more.
      */
     void stop();
-    
+
     /**
      * Creates a new speedment instance and loads a new instance of each
      * component that this speedment instance has.
-     * 
-     * @return  the new instance
+     *
+     * @return the new instance
      */
     Speedment copyWithSameTypeOfComponents();
 
+    /**
+     * A shortcut for {@code get(EntityManager.class)}.
+     * 
+     * @return  the {@link EntityManager}
+     */
     default EntityManager getEntityManager() {
         return get(EntityManager.class);
     }
 
+    /**
+     * A shortcut for {@code get(DbmsHandlerComponent.class)}.
+     * 
+     * @return  the {@link DbmsHandlerComponent}
+     */
     default DbmsHandlerComponent getDbmsHandlerComponent() {
         return get(DbmsHandlerComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(ManagerComponent.class)}.
+     * 
+     * @return  the {@link ManagerComponent}
+     */
     default ManagerComponent getManagerComponent() {
         return get(ManagerComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(PrimaryKeyFactoryComponent.class)}.
+     * 
+     * @return  the {@link PrimaryKeyFactoryComponent}
+     */
     default PrimaryKeyFactoryComponent getPrimaryKeyFactoryComponent() {
         return get(PrimaryKeyFactoryComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(ProjectComponent.class)}.
+     * 
+     * @return  the {@link ProjectComponent}
+     */
     default ProjectComponent getProjectComponent() {
         return get(ProjectComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(ResultSetMapperComponent.class)}.
+     * 
+     * @return  the {@link ResultSetMapperComponent}
+     */
     default ResultSetMapperComponent getResultSetMapperComponent() {
         return get(ResultSetMapperComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(ConnectionPoolComponent.class)}.
+     * 
+     * @return  the {@link ConnectionPoolComponent}
+     */
     default ConnectionPoolComponent getConnectionPoolComponent() {
         return get(ConnectionPoolComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(StreamSupplierComponent.class)}.
+     * 
+     * @return  the {@link StreamSupplierComponent}
+     */
     default StreamSupplierComponent getStreamSupplierComponent() {
         return get(StreamSupplierComponent.class);
     }
 
+    /**
+     * A shortcut for {@code get(TypeMapperComponent.class)}.
+     * 
+     * @return  the {@link TypeMapperComponent}
+     */
     default TypeMapperComponent getTypeMapperComponent() {
         return get(TypeMapperComponent.class);
     }
-    
+
+    /**
+     * A shortcut for {@code get(EventComponent.class)}.
+     * 
+     * @return  the {@link EventComponent}
+     */
     default EventComponent getEventComponent() {
         return get(EventComponent.class);
     }
     
+    /**
+     * A shortcut for {@code get(PasswordComponent.class)}.
+     * 
+     * @return  the {@link PasswordComponent}
+     */
     default PasswordComponent getPasswordComponent() {
         return get(PasswordComponent.class);
     }
     
+    /**
+     * A shortcut for {@code get(InfoComponent.class)}.
+     * 
+     * @return  the {@link InfoComponent}
+     */
     default InfoComponent getInfoComponent() {
         return get(InfoComponent.class);
     }
