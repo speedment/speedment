@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.config.db.parameters;
+package com.speedment.runtime.config.parameters;
 
 import com.speedment.runtime.config.parameter.OrderType;
 import java.util.concurrent.atomic.AtomicBoolean;

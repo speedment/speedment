@@ -92,10 +92,10 @@ public final class DocumentUtil {
      * Returns a stream of child documents to a specified document by using the
      * supplied constructor.
      *
-     * @param <E> the expected child type
-     * @param document the parent document
-     * @param childConstructor child constructor
-     * @return
+     * @param <E>               the expected child type
+     * @param document          the parent document
+     * @param childConstructor  child constructor
+     * @return                  stream of children
      */
     @SuppressWarnings("unchecked")
     public static <E extends Document> Stream<E> childrenOf(
@@ -180,12 +180,13 @@ public final class DocumentUtil {
      * For example, {@code relativeName(column, Dbms.class, DATABASE_NAME)}
      * would return the String "dbms_name.schema_name.table_name.column_name".
      *
-     * @param <T> parent type
-     * @param <D> document type
-     * @param document to use
-     * @param from class
-     * @return the relative name for this Node from the point given by the
-     * parent Class
+     * @param <T>       parent type
+     * @param <D>       document type
+     * @param document  to use
+     * @param from      the document type to get the name from
+     * @param name      if java or database name should be used
+     * @return          the relative name for this Node from the point given by the
+     *                  parent Class
      */
     public static <T extends Document & HasName, D extends Document & HasName>
         String relativeName(D document, Class<T> from, Name name) {
@@ -200,13 +201,14 @@ public final class DocumentUtil {
      * For example, {@code relativeName(column, Dbms.class, DATABASE_NAME)}
      * would return the String "dbms_name.schema_name.table_name.column_name".
      *
-     * @param <T> parent type
-     * @param <D> Document type
-     * @param document to use
-     * @param from class
+     * @param <T>        parent type
+     * @param <D>        Document type
+     * @param document   to use
+     * @param from       class
+     * @param name       if java or database name should be used
      * @param nameMapper to apply to all names encountered during traversal
-     * @return the relative name for this Node from the point given by the
-     * parent Class
+     * @return           the relative name for this Node from the point given by the
+     *                   parent Class
      */
     public static <T extends Document & HasName, D extends Document & HasName>
         String relativeName(
@@ -227,14 +229,15 @@ public final class DocumentUtil {
      * String "dbms_name.schema_name.table_name.column_name" if the separator is
      * "."
      *
-     * @param <T> parent type
-     * @param <D> Document type
-     * @param document to use
-     * @param from class
-     * @param separator to use between the document names
-     * @param nameMapper to apply to all names encountered during traversal
-     * @return the relative name for this Node from the point given by the
-     * parent Class
+     * @param <T>         parent type
+     * @param <D>         Document type
+     * @param document    to use
+     * @param from        class
+     * @param name        if java or database name should be used
+     * @param separator   to use between the document names
+     * @param nameMapper  to apply to all names encountered during traversal
+     * @return            the relative name for this Node from the point 
+     *                    given by the parent Class
      */
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
         D document,
@@ -264,11 +267,10 @@ public final class DocumentUtil {
      * Creates a deep copy of the raw map in the specified document and wrap it
      * in a new typed document using the specified constructor.
      *
-     * @param <P> the parent type
-     * @param <DOC> the document type
-     * @param document the document
-     * @param constructor the document constructor
-     * @return the copy
+     * @param <DOC>        the document type
+     * @param document     the document
+     * @param constructor  the document constructor
+     * @return             the copy
      */
     public static <DOC extends Document> DOC deepCopy(
         DOC document,

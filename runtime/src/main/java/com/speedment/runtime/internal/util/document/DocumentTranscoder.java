@@ -84,7 +84,7 @@ public final class DocumentTranscoder {
      * @param json  the input json
      * @return      the parsed project
      * 
-     * @throws SpeedmentException  
+     * @throws SpeedmentException  if the file couldn't be loaded
      */
     public static Project load(String json) throws SpeedmentException {
         try {

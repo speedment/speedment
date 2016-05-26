@@ -1,5 +1,5 @@
 /**
- * Implementations of the {@link com.speedment.runtime.config.db.mapper.TypeMapper} 
+ * Implementations of the {@link com.speedment.runtime.config.mapper.TypeMapper} 
  * interface that map from temporal types to other types are located in this 
  * package.
  * <p>

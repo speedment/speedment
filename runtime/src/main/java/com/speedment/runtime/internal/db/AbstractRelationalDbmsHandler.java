@@ -542,8 +542,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Sets the autoIncrement property of a Column.
      *
      * @param column to use
-     * @param rs that contains column metadata (per
-     * connection.getMetaData().getColumns(...))
+     * @param md that contains column metadata (per connection.getMetaData().getColumns(...))
+     * @throws SQLException  if something goes wrong in JDBC
      */
     protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
         final String isAutoIncrementString = md.getIsAutoincrement();
@@ -558,9 +558,8 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g.
      * {@code Timestamp} or {@code String}).
      *
-     * @param typeName the TYPE_NAME value
-     * @param columnSize the COLUMN_SIZE value
-     * @param decimalDigits the DECIMAL_DIGITS value
+     * @param sqlTypeMapping  the type mappings to use
+     * @param md that contains column metadata (per connection.getMetaData().getColumns(...))
      * @return the mapped Class
      */
     protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
@@ -584,7 +583,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Returns the schema lookup name used when calling
      * connection.getMetaData().getXxxx(y, schemaLookupName, ...) methods.
      *
-     * @param table to use
+     * @param schema to use
      * @return the schema lookup name used when calling
      * connection.getMetaData().getXxxx(y, schemaLookupName, ...) methods
      */
@@ -596,7 +595,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
      * Returns the catalog lookup name used when calling
      * connection.getMetaData().getXxxx(catalogLookupName, ...) methods.
      *
-     * @param table to use
+     * @param schema to use
      * @return the catalog lookup name used when calling
      * connection.getMetaData().getXxxx(catalogLookupName, ...) methods
      */

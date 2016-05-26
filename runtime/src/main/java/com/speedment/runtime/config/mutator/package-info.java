@@ -1,5 +1,5 @@
 /**
- * Implementations of the {@link com.speedment.runtime.config.db.mutator.DocumentMutator} 
+ * Implementations of the {@link com.speedment.runtime.config.mutator.DocumentMutator} 
  * interface that help modify a {@link com.speedment.runtime.config.Document} in a 
  * type-safe manner are located in this package.
  * <p>
