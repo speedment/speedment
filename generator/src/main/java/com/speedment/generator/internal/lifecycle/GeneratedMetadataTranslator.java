@@ -17,21 +17,21 @@
 package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.fika.codegen.Generator;
-import com.speedment.fika.codegen.model.Class;
-import com.speedment.fika.codegen.model.Field;
-import com.speedment.fika.codegen.model.File;
-import com.speedment.fika.codegen.model.Import;
-import com.speedment.fika.codegen.model.Javadoc;
-import com.speedment.fika.codegen.model.Method;
-import com.speedment.fika.codegen.model.Type;
+import com.speedment.common.codegen.Generator;
+import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Project;
-import com.speedment.fika.codegen.internal.model.JavadocImpl;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultType.VOID;
-import com.speedment.fika.codegen.internal.model.value.ReferenceValue;
+import com.speedment.common.codegen.internal.model.JavadocImpl;
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.internal.runtime.ApplicationMetadata;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
-import static com.speedment.fika.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 
 /**

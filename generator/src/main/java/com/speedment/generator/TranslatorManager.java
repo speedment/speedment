@@ -17,8 +17,8 @@
 package com.speedment.generator;
 
 import com.speedment.runtime.config.Project;
-import com.speedment.fika.codegen.Meta;
-import com.speedment.fika.codegen.model.File;
+import com.speedment.common.codegen.Meta;
+import com.speedment.common.codegen.model.File;
 
 /**
  *

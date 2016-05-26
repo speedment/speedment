@@ -19,7 +19,7 @@ package com.speedment.runtime.internal.config;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.childrenOf;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.util.OptionalBoolean;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

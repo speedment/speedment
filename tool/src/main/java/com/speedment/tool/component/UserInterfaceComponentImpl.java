@@ -27,7 +27,7 @@ import com.speedment.runtime.internal.license.OpenSourceLicense;
 import com.speedment.tool.UISession;
 import com.speedment.tool.brand.DefaultBrand;
 import com.speedment.runtime.license.Software;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.List;

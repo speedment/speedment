@@ -20,8 +20,8 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.fika.codegen.model.ClassOrInterface;
-import com.speedment.fika.codegen.model.File;
+import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.codegen.model.File;
 import com.speedment.generator.util.JavaLanguageNamer;
 import java.util.function.Supplier;
 

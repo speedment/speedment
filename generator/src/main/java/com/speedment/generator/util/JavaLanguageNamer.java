@@ -18,7 +18,7 @@ package com.speedment.generator.util;
 
 import com.speedment.runtime.config.Project;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
-import static com.speedment.fika.codegen.internal.util.Formatting.ucfirst;
+import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;

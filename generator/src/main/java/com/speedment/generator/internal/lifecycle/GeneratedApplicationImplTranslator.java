@@ -17,15 +17,15 @@
 package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.fika.codegen.Generator;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.fika.codegen.internal.model.constant.DefaultType.WILDCARD;
-import com.speedment.fika.codegen.model.File;
-import com.speedment.fika.codegen.model.Class;
-import com.speedment.fika.codegen.model.Generic;
-import com.speedment.fika.codegen.model.Import;
-import com.speedment.fika.codegen.model.Method;
-import com.speedment.fika.codegen.model.Type;
+import com.speedment.common.codegen.Generator;
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.internal.runtime.AbstractSpeedment;

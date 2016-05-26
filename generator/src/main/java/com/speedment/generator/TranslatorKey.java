@@ -18,7 +18,7 @@ package com.speedment.generator;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.fika.codegen.model.ClassOrInterface;
+import com.speedment.common.codegen.model.ClassOrInterface;
 
 /**
  * A key associated with a specific {@link Translator}. This is used to 

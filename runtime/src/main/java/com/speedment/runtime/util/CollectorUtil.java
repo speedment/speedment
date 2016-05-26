@@ -17,7 +17,7 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.ArrayList;

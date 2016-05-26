@@ -18,8 +18,8 @@ package com.speedment.runtime.internal.util;
 
 import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.fika.logger.Logger;
-import com.speedment.fika.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.internal.util.analytics.AnalyticsUtil;
 import static com.speedment.runtime.internal.util.analytics.FocusPoint.APP_STARTED;
 import static com.speedment.runtime.internal.util.analytics.FocusPoint.GENERATE;

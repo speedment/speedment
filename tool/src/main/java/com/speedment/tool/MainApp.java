@@ -17,8 +17,8 @@
 package com.speedment.tool;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.fika.logger.Logger;
-import com.speedment.fika.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.internal.controller.ConnectController;

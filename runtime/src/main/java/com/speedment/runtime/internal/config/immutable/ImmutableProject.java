@@ -23,7 +23,7 @@ import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import java.nio.file.Path;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;

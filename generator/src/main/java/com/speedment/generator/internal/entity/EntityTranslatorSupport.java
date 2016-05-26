@@ -16,12 +16,12 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.fika.codegen.model.Field;
-import com.speedment.fika.codegen.model.File;
-import com.speedment.fika.codegen.model.Generic;
-import com.speedment.fika.codegen.model.Import;
-import com.speedment.fika.codegen.model.Method;
-import com.speedment.fika.codegen.model.Type;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
@@ -30,8 +30,8 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.fika.codegen.internal.util.Formatting.DOT;
-import static com.speedment.fika.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.common.codegen.internal.util.Formatting.DOT;
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.runtime.internal.field.ComparableFieldImpl;
 import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ReferenceFieldImpl;

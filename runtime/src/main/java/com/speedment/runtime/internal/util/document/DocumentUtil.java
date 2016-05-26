@@ -21,7 +21,7 @@ import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.internal.util.Trees;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.List;
 import java.util.Map;

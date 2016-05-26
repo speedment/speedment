@@ -40,7 +40,7 @@ import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
 import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.config.SchemaImpl;
 import com.speedment.runtime.internal.config.TableImpl;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import java.util.AbstractMap;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;

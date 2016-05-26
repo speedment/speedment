@@ -32,7 +32,7 @@ import com.speedment.tool.util.Loader;
 import static com.speedment.runtime.internal.util.Cast.cast;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
-import com.speedment.fika.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.event.UIEvent;
 import java.net.URL;
