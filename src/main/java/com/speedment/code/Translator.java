@@ -56,7 +56,7 @@ import java.util.stream.Stream;
  * @since        2.3
  */
 @Api(version = "2.3")
-public interface Translator<DOC extends Document & HasMainInterface, T extends ClassOrInterface<T>> extends Supplier<File> {
+public interface Translator<DOC extends Document & HasMainInterface, T> extends Supplier<File> {
 
     /**
      * Return this node or any ancestral node that is a {@link Project}. If no
@@ -310,7 +310,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T extends C
      * @since   2.3
      */
     @Api(version = "2.3")
-    interface Builder<T extends ClassOrInterface<T>> {
+    interface Builder<T> {
         
         /**
          * Executes the specified code for every document of the specified type 

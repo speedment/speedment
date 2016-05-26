@@ -68,7 +68,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.component.PasswordComponent PasswordComponent}</li>
      * <li>{@link com.speedment.component.UserInterfaceComponent UserInterfaceComponent}</li>
-     * 
+     *
      * </ul>
      *
      * @param <R> The intended return type
@@ -81,12 +81,14 @@ public interface Speedment {
      * Puts a new Component in the Speedment platform and returns the previous
      * Component (if any) with the same interface class.
      *
+     * @param <R> The Component type
      * @param item the new Component to put
      * @return the previous Component registered using that interface class, or
      * null of no one existed before
      */
-    Component put(Component item);
+    <R extends Component> R put(R item);
 
+    //Component put(Component item);
     /**
      * Obtains and returns the currently associated {@link Manager}
      * implementation for the given Entity interface Class. If no Manager exists
@@ -97,7 +99,7 @@ public interface Speedment {
      * <p>
      * {@code get(ManagerComponent.class).managerOf(entityClass) }
      *
-     * @param <ENTITY>  the Entity interface type
+     * @param <ENTITY> the Entity interface type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class
@@ -118,12 +120,12 @@ public interface Speedment {
      * any more.
      */
     void stop();
-    
+
     /**
      * Creates a new speedment instance and loads a new instance of each
      * component that this speedment instance has.
-     * 
-     * @return  the new instance
+     *
+     * @return the new instance
      */
     Speedment copyWithSameTypeOfComponents();
 
@@ -162,23 +164,23 @@ public interface Speedment {
     default TypeMapperComponent getTypeMapperComponent() {
         return get(TypeMapperComponent.class);
     }
-    
+
     default EventComponent getEventComponent() {
         return get(EventComponent.class);
     }
-    
+
     default UserInterfaceComponent getUserInterfaceComponent() {
         return get(UserInterfaceComponent.class);
     }
-    
+
     default PasswordComponent getPasswordComponent() {
         return get(PasswordComponent.class);
     }
-    
+
     default CodeGenerationComponent getCodeGenerationComponent() {
         return get(CodeGenerationComponent.class);
     }
-    
+
     default DocumentPropertyComponent getDocumentPropertyComponent() {
         return get(DocumentPropertyComponent.class);
     }
