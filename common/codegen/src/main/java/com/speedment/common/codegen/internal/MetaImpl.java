@@ -25,6 +25,7 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderStack;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Meta implementation.
@@ -32,69 +33,104 @@ import com.speedment.common.codegen.TransformFactory;
  * @param <A> the model type
  * @param <B> the result type
  */
-public class MetaImpl<A, B> implements Meta<A, B> {
+public final class MetaImpl<A, B> implements Meta<A, B> {
     
+    private final A model;
+    private final B result;
+    private final Transform<A, B> transform;
+    private final TransformFactory factory;
+    private final RenderStack stack;
+
+    private MetaImpl(A model, B result, Transform<A, B> transform, TransformFactory factory, RenderStack stack) {
+        this.model     = requireNonNull(model);
+        this.result    = requireNonNull(result);
+        this.transform = requireNonNull(transform);
+        this.factory   = requireNonNull(factory);
+        this.stack     = requireNonNull(stack);
+    }
+
+    @Override
+    public B getResult() {
+        return result;
+    }
+
+    @Override
+    public Transform<A, B> getTransform() {
+        return transform;
+    }
+
+    @Override
+    public TransformFactory getFactory() {
+        return factory;
+    }
+    
+    @Override
+    public A getModel() {
+        return model;
+    }
+
+    @Override
+    public RenderStack getRenderStack() {
+        return stack;
+    }
+
+    @Override
+    public String toString() {
+        return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + '}';
+    }
+   
+    public final static class Builder<A, B> implements Meta.Builder<A, B> {
+        
         private A model;
         private B result;
         private Transform<A, B> transform;
         private TransformFactory factory;
         private RenderStack stack;
-
-        public MetaImpl() {}
-
-        @Override
-        public B getResult() {
-            return result;
-        }
-
-        protected MetaImpl<A, B> setResult(B result) {
-            this.result = result;
-            return this;
-        }
-
-        @Override
-        public Transform<A, B> getTransform() {
-            return transform;
-        }
-
-        protected MetaImpl<A, B> setTransform(Transform<A, B> view) {
-            this.transform = view;
-            return this;
-        }
-
-        @Override
-        public TransformFactory getFactory() {
-            return factory;
-        }
-
-        protected MetaImpl<A, B> setFactory(TransformFactory factory) {
-            this.factory = factory;
-            return this;
-        }
-
-        @Override
-        public A getModel() {
-            return model;
+        
+        public Builder(A model, B result) {
+            this.model  = requireNonNull(model);
+            this.result = requireNonNull(result);
         }
         
-        public MetaImpl<A, B> setModel(A model) {
-            this.model = model;
-            return this;
-        }
-
         @Override
-        public RenderStack getRenderStack() {
-            return stack;
+        public Meta.Builder<A, B> withResult(B result) {
+            this.result = requireNonNull(result);
+            return this;
         }
         
-        public MetaImpl<A, B> setRenderStack(RenderStack stack) {
-            this.stack = stack;
+        @Override
+        public Meta.Builder<A, B> withTransform(Transform<A, B> transform) {
+            this.transform = requireNonNull(transform);
             return this;
         }
-
+        
         @Override
-        public String toString() {
-            return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + '}';
+        public Meta.Builder<A, B> withFactory(TransformFactory factory) {
+            this.factory = requireNonNull(factory);
+            return this;
         }
-   
+        
+        @Override
+        public Meta.Builder<A, B> withModel(A model) {
+            this.model = requireNonNull(model);
+            return this;
+        }
+        
+        @Override
+        public Meta.Builder<A, B> withRenderStack(RenderStack stack) {
+            this.stack = requireNonNull(stack);
+            return this;
+        }
+        
+        @Override
+        public Meta<A, B> build() {
+            return new MetaImpl<>(
+                model,
+                result,
+                transform,
+                factory,
+                stack
+            );
+        }
+    }
 }

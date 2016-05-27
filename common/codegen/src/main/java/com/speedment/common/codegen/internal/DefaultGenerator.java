@@ -97,10 +97,10 @@ public class DefaultGenerator implements Generator {
 
         return factories.stream().flatMap(factory ->
             BridgeTransform.create(factory, from.getClass(), to)
-            .map(t -> (Transform<A, B>) t)
-            .map(t -> transform(t, from, factory))
-            .filter(Optional::isPresent)
-            .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
+                .map(t -> (Transform<A, B>) t)
+                .map(t -> transform(t, from, factory))
+                .filter(Optional::isPresent)
+                .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
         );
     }
 
@@ -117,12 +117,11 @@ public class DefaultGenerator implements Generator {
 
         final Optional<Meta<A, B>> meta = transform
             .transform(this, model)
-            .map(s -> new MetaImpl<A, B>()
-            .setModel(model)
-            .setResult(s)
-            .setTransform(transform)
-            .setFactory(factory)
-            .setRenderStack(new DefaultRenderStack(renderStack))
+            .map(s -> Meta.builder(model, s)
+                .withTransform(transform)
+                .withFactory(factory)
+                .withRenderStack(new DefaultRenderStack(renderStack))
+                .build()
         );
         
         renderStack.pop();

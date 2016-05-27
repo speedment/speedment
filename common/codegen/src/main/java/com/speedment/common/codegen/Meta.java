@@ -16,117 +16,119 @@
  */
 package com.speedment.common.codegen;
 
+import com.speedment.common.codegen.internal.MetaImpl;
+
 /**
  * Meta information about the generation process.
- * 
- * @param <A>  the model type
- * @param <B>  the result type
- * @author  Emil Forslund
- * @since   2.0
+ *
+ * @param <A> the model type
+ * @param <B> the result type
+ * @author Emil Forslund
+ * @since 2.0
  */
 public interface Meta<A, B> {
-    
+
     /**
      * The model that was sent to the generator.
-     * @return  the model
+     *
+     * @return the model
      */
     A getModel();
-    
+
     /**
      * The result that was produced by the generator.
-     * @return  the model
+     *
+     * @return the model
      */
     B getResult();
-    
+
     /**
      * The transform that was used to produce the result.
-     * @return  the transform
+     *
+     * @return the transform
      */
     Transform<A, B> getTransform();
-    
+
     /**
      * The factory that created the transform.
-     * @return  the factory
+     *
+     * @return the factory
      */
     TransformFactory getFactory();
-    
+
     /**
-     * The render stack that represents which generation processes is waiting
-     * for this result.
-     * 
-     * @return  the current render stack
+     * The render stack that represents which generation processes is waiting for this result.
+     *
+     * @return the current render stack
      */
     RenderStack getRenderStack();
-    
-//    /**
-//     * Meta implementation.
-//     * 
-//     * @param <A> the model type
-//     * @param <B> the result type
-//     */
-//    class Impl<A, B> implements Meta<A, B> {
-//    
-//        private A model;
-//        private B result;
-//        private Transform<A, B> transform;
-//        private TransformFactory factory;
-//        private RenderStack stack;
-//
-//        Impl() {}
-//
-//        @Override
-//        public B getResult() {
-//            return result;
-//        }
-//
-//        protected Impl<A, B> setResult(B result) {
-//            this.result = result;
-//            return this;
-//        }
-//
-//        @Override
-//        public Transform<A, B> getTransform() {
-//            return transform;
-//        }
-//
-//        protected Impl<A, B> setTransform(Transform<A, B> view) {
-//            this.transform = view;
-//            return this;
-//        }
-//
-//        @Override
-//        public TransformFactory getFactory() {
-//            return factory;
-//        }
-//
-//        protected Impl<A, B> setFactory(TransformFactory factory) {
-//            this.factory = factory;
-//            return this;
-//        }
-//
-//        @Override
-//        public A getModel() {
-//            return model;
-//        }
-//        
-//        public Impl<A, B> setModel(A model) {
-//            this.model = model;
-//            return this;
-//        }
-//
-//        @Override
-//        public RenderStack getRenderStack() {
-//            return stack;
-//        }
-//        
-//        public Impl<A, B> setRenderStack(RenderStack stack) {
-//            this.stack = stack;
-//            return this;
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return "Impl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + '}';
-//        }
-//    }
+
+    /**
+     * Returns a new builder.
+     *
+     * @param <A> the model type
+     * @param <B> the result type
+     * @param model the model
+     * @param result the result
+     * @return the builder instance.
+     */
+    static <A, B> Meta.Builder<A, B> builder(A model, B result) {
+        return new MetaImpl.Builder<>(model, result);
+    }
+
+    /**
+     * Builder for {@link Meta} objects.
+     * 
+     * @param <A>  the model type
+     * @param <B>  the result type
+     */
+    interface Builder<A, B> {
+
+        /**
+         * The model that was sent to the generator.
+         *
+         * @param model
+         * @return the model
+         */
+        Builder<A, B> withModel(A model);
+
+        /**
+         * The result that was produced by the generator.
+         *
+         * @param result
+         * @return the model
+         */
+        Builder<A, B> withResult(B result);
+
+        /**
+         * The transform that was used to produce the result.
+         *
+         * @param transform
+         * @return the transform
+         */
+        Builder<A, B> withTransform(Transform<A, B> transform);
+
+        /**
+         * The factory that created the transform.
+         *
+         * @param factory
+         * @return the factory
+         */
+        Builder<A, B> withFactory(TransformFactory factory);
+
+        /**
+         * The render stack that represents which generation processes is waiting for this result.
+         *
+         * @param stack
+         * @return the current render stack
+         */
+        Builder<A, B> withRenderStack(RenderStack stack);
+        
+        /**
+         * Builds this instance.
+         * 
+         * @return  the built instance
+         */
+        Meta<A, B> build();
+    }
 }
