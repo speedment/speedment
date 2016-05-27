@@ -67,8 +67,6 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
 
-        file.add(Import.of(Type.of(Speedment.class)));
-
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
         return newBuilder(file, getSupport().generatedEntityImplName())
             /**
