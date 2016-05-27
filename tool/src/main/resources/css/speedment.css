@@ -65,7 +65,6 @@
 
 /*** Tree View ***/
 .tree-view {
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -94,7 +93,6 @@
 
 /*** Label ***/
 .label {
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -114,7 +112,6 @@
     -fx-border-width: 2px;
     -fx-border-style: solid;
     -fx-border-color: -fx-speedment-blue;
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
     -fx-opacity: 1.0;
@@ -165,7 +162,6 @@
     -fx-border-width: 2px;
     -fx-border-style: solid;
     -fx-border-color: -fx-speedment-blue;
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -182,7 +178,6 @@
     -fx-border-style: solid;
     -fx-border-color: -fx-speedment-blue;
     -fx-text-fill: black;
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -285,7 +280,6 @@
     -fx-border-color: -fx-speedment-green;
     -fx-text-fill: black;
     -fx-padding: 0px;
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }

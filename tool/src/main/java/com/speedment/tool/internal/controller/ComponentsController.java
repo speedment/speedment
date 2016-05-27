@@ -27,7 +27,6 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.tool.UISession;
 import com.speedment.tool.resource.SilkIcon;
-import com.speedment.tool.resource.SpeedmentFont;
 import com.speedment.tool.util.Loader;
 import static com.speedment.runtime.internal.util.Cast.cast;
 import com.speedment.runtime.license.License;
@@ -193,8 +192,6 @@ public final class ComponentsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         final Speedment speedment = session.getSpeedment();
         title.setTextFill(Color.web("#45a6fc")); // TODO Use styleClass instead
-        title.setFont(SpeedmentFont.HEADER.get());
-
         header.setText("Component Explorer");
 
         final RootItem root = new RootItem(speedment);
