@@ -23,6 +23,7 @@ package com.speedment.common.codegen.internal;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderStack;
+import com.speedment.common.codegen.RenderTree;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
 import static java.util.Objects.requireNonNull;
@@ -40,13 +41,22 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
     private final Transform<A, B> transform;
     private final TransformFactory factory;
     private final RenderStack stack;
+    private final RenderTree tree;
 
-    private MetaImpl(A model, B result, Transform<A, B> transform, TransformFactory factory, RenderStack stack) {
+    private MetaImpl(
+            A model, 
+            B result, 
+            Transform<A, B> transform, 
+            TransformFactory factory, 
+            RenderStack stack, 
+            RenderTree tree) {
+        
         this.model     = requireNonNull(model);
         this.result    = requireNonNull(result);
         this.transform = requireNonNull(transform);
         this.factory   = requireNonNull(factory);
         this.stack     = requireNonNull(stack);
+        this.tree      = requireNonNull(tree);
     }
 
     @Override
@@ -73,10 +83,15 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
     public RenderStack getRenderStack() {
         return stack;
     }
+    
+    @Override
+    public RenderTree getRenderTree() {
+        return tree;
+    }
 
     @Override
     public String toString() {
-        return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + '}';
+        return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + ", tree=" + tree + '}';
     }
    
     public final static class Builder<A, B> implements Meta.Builder<A, B> {
@@ -86,6 +101,7 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
         private Transform<A, B> transform;
         private TransformFactory factory;
         private RenderStack stack;
+        private RenderTree tree;
         
         public Builder(A model, B result) {
             this.model  = requireNonNull(model);
@@ -123,13 +139,20 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
         }
         
         @Override
+        public Meta.Builder<A, B> withRenderTree(RenderTree tree) {
+            this.tree = requireNonNull(tree);
+            return this;
+        }
+        
+        @Override
         public Meta<A, B> build() {
             return new MetaImpl<>(
                 model,
                 result,
                 transform,
                 factory,
-                stack
+                stack,
+                tree
             );
         }
     }

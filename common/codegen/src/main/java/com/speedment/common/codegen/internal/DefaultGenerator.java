@@ -20,12 +20,15 @@ import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderStack;
+import com.speedment.common.codegen.RenderTree;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link Generator} interface.
@@ -37,6 +40,7 @@ public class DefaultGenerator implements Generator {
 	private final DependencyManager mgr;
 	private final TransformFactory factory;
 	private final DefaultRenderStack renderStack;
+    private final LinkedList<RenderTree.Builder> renderTreeBuilder;
 	
 	/**
 	 * Creates a new generator. This constructor will use a 
@@ -56,9 +60,13 @@ public class DefaultGenerator implements Generator {
 	 * @param factory  the factory to use 
 	 */
 	public DefaultGenerator(DependencyManager mgr, TransformFactory factory) {
-		this.factory     = requireNonNull(factory);
-		this.mgr         = requireNonNull(mgr);
-		this.renderStack = new DefaultRenderStack();
+		this.factory           = requireNonNull(factory);
+		this.mgr               = requireNonNull(mgr);
+		this.renderStack       = new DefaultRenderStack();
+        this.renderTreeBuilder = new LinkedList<>();
+        
+        // Add initial builder.
+        this.renderTreeBuilder.add(RenderTree.builder());
 	}
 	
 	/**
@@ -83,8 +91,7 @@ public class DefaultGenerator implements Generator {
     @Override
     @SuppressWarnings("unchecked")
     public <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to) {
-        requireNonNull(from);
-        requireNonNull(to);
+        requireNonNulls(from, to);
         
         if (from instanceof Optional) {
             throw new UnsupportedOperationException(
@@ -105,22 +112,28 @@ public class DefaultGenerator implements Generator {
      */
     @Override
     public <A, B> Optional<Meta<A, B>> transform(Transform<A, B> transform, A model, TransformFactory factory) {
-        requireNonNull(transform);
-        requireNonNull(model);
-        requireNonNull(factory);
+        requireNonNulls(transform, model, factory);
 
+        final RenderTree.Builder parent = renderTreeBuilder.peek();
+        final RenderTree.Builder branch = RenderTree.builder();
+        
+        renderTreeBuilder.push(branch);
         renderStack.push(model);
-
+        
         final Optional<Meta<A, B>> meta = transform
             .transform(this, model)
             .map(s -> Meta.builder(model, s)
                 .withTransform(transform)
                 .withFactory(factory)
+                .withRenderTree(branch.build())
                 .withRenderStack(new DefaultRenderStack(renderStack))
                 .build()
         );
         
+        meta.ifPresent(parent::withBranch);
+        
         renderStack.pop();
+        renderTreeBuilder.pop();
         
         return meta;
     }

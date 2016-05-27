@@ -62,6 +62,13 @@ public interface Meta<A, B> {
      * @return the current render stack
      */
     RenderStack getRenderStack();
+    
+    /**
+     * Returns a tree representation of the current rendering process.
+     * 
+     * @return  the rendering tree
+     */
+    RenderTree getRenderTree();
 
     /**
      * Returns a new builder.
@@ -87,42 +94,50 @@ public interface Meta<A, B> {
         /**
          * The model that was sent to the generator.
          *
-         * @param model
-         * @return the model
+         * @param model  the model
+         * @return       a reference to this builder
          */
         Builder<A, B> withModel(A model);
 
         /**
          * The result that was produced by the generator.
          *
-         * @param result
-         * @return the model
+         * @param result  the result
+         * @return        a reference to this builder
          */
         Builder<A, B> withResult(B result);
 
         /**
          * The transform that was used to produce the result.
          *
-         * @param transform
-         * @return the transform
+         * @param transform  the transform
+         * @return           a reference to this builder
          */
         Builder<A, B> withTransform(Transform<A, B> transform);
 
         /**
          * The factory that created the transform.
          *
-         * @param factory
-         * @return the factory
+         * @param factory  the factory
+         * @return         a reference to this builder
          */
         Builder<A, B> withFactory(TransformFactory factory);
 
         /**
          * The render stack that represents which generation processes is waiting for this result.
          *
-         * @param stack
-         * @return the current render stack
+         * @param stack  the render stack
+         * @return       a reference to this builder
          */
         Builder<A, B> withRenderStack(RenderStack stack);
+        
+        /**
+         * Sets the tree that should represent the current rendering process.
+         * 
+         * @param tree  the render tree
+         * @return      a reference to this builder
+         */
+        Builder<A, B> withRenderTree(RenderTree tree);
         
         /**
          * Builds this instance.
