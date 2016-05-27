@@ -45,12 +45,6 @@ import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -110,6 +104,13 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     });
 
                 onInit.add("loadCustomManagers();");
+                
+                final Method onStart = Method.of("onStart", VOID)
+                    .public_()
+                    .add(OVERRIDE)
+                    .add("super.onStart();")
+                    .add("application.start();");
+                
                 file.add(Import.of(applicationType()));
                 file.add(Import.of(applicationImplType()));
                 
@@ -123,7 +124,8 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                         .add("super(new " + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl());")
                         .add("setSpeedmentApplicationMetadata(new Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + "());")
                     )
-                    .add(onInit);
+                    .add(onInit)
+                    .add(onStart);
             }).build();
     }
     
