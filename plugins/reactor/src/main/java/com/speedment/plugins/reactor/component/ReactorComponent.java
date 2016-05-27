@@ -40,10 +40,10 @@ import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.ChoicePropertyItem;
+import com.speedment.tool.util.IdentityStringConverter;
 import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
 import javafx.util.StringConverter;
-import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableList;
 
 /**
@@ -92,17 +92,7 @@ public final class ReactorComponent extends AbstractComponent {
                                     .collect(toList())
                             ),
                             table.stringPropertyOf(MERGE_ON, () -> null),
-                            new StringConverter<String>() {
-                                @Override
-                                public String toString(String str) {
-                                    return str;
-                                }
-
-                                @Override
-                                public String fromString(String str) {
-                                    return str;
-                                }
-                            }, 
+                            new IdentityStringConverter(), 
                             String.class,
                             "Merge events on", 
                             "This column will be used to merge events in a " + 
