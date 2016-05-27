@@ -17,6 +17,7 @@
 package com.speedment.plugins.springgenerator;
 
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.plugins.springgenerator.internal.ConfigurationTranslator;
 import com.speedment.plugins.springgenerator.internal.ControllerTranslator;
 import com.speedment.plugins.springgenerator.internal.GeneratedConfigurationTranslator;
 import com.speedment.plugins.springgenerator.internal.GeneratedControllerTranslator;
@@ -46,6 +47,11 @@ public final class SpringGeneratorComponent extends AbstractComponent {
     public void onResolve() {
         final CodeGenerationComponent code = 
             getSpeedment().get(CodeGenerationComponent.class);
+        
+        code.put(Project.class, 
+            SpringTranslatorKey.CONFIGURATION, 
+            ConfigurationTranslator::new
+        );
         
         code.put(Project.class, 
             SpringTranslatorKey.GENERATED_CONFIGURATION, 
