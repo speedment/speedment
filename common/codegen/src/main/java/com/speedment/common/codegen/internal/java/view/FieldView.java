@@ -25,6 +25,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
 import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
 import com.speedment.common.codegen.internal.java.view.trait.HasValueView;
+import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -55,4 +56,11 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
 		);
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String annotationSeparator() {
+        return SPACE;
+    }
 }

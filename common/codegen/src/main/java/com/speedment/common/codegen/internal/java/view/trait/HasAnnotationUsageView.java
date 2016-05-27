@@ -21,9 +21,7 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
 import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import com.speedment.common.codegen.model.ClassOrInterface;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -37,6 +35,15 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
     Transform<M, String> {
     
     /**
+     * The string separating different annotations.
+     * 
+     * @return  the annotation separator
+     */
+    default String annotationSeparator() {
+        return nl();
+    }
+    
+    /**
      * Renders all annotations in the specified model separated by new-line
      * characters.
      * 
@@ -45,12 +52,11 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
      * @return       the generated code
      */
     default String renderAnnotations(Generator gen, M model) {
-        if (model instanceof ClassOrInterface) {
-            return gen.onEach(model.getAnnotations())
-                .collect(joinIfNotEmpty(nl(), EMPTY, nl()));
-        } else {
-            return gen.onEach(model.getAnnotations())
-                .collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
-        }
+        return gen.onEach(model.getAnnotations())
+            .collect(joinIfNotEmpty(
+                annotationSeparator(), 
+                EMPTY, 
+                annotationSeparator()
+            ));
     }
 }

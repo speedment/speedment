@@ -63,8 +63,8 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
         
         return Optional.of(
             renderJavadoc(gen, model) +
-			renderModifiers(gen, model, STATIC, DEFAULT) +
             renderAnnotations(gen, model) +
+			renderModifiers(gen, model, STATIC, DEFAULT) +
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + "(" +
