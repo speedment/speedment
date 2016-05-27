@@ -32,6 +32,7 @@ import com.speedment.runtime.config.Table;
 public final class SpringTranslatorKey {
 
     public final static TranslatorKey<Project, Class> 
+        CONFIGURATION           = new TranslatorKeyImpl<>("Configuration", Class.class),
         GENERATED_CONFIGURATION = new TranslatorKeyImpl<>("GeneratedConfiguration", Class.class);
     
     public final static TranslatorKey<Table, Class> 
