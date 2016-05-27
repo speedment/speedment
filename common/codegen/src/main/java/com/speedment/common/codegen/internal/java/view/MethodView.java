@@ -18,46 +18,60 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
+import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
+import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
+import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
+import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
+import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
+import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
+import com.speedment.common.codegen.internal.java.view.trait.HasThrowsView;
+import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.Method;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Transforms from a {@link Method} to java code.
  * 
  * @author Emil Forslund
  */
-public final class MethodView implements Transform<Method, String> {
-    
-    private final static String THROWS = "throws ";
+public final class MethodView implements Transform<Method, String>,
+        HasNameView<Method>, 
+        HasTypeView<Method>,
+        HasThrowsView<Method>,
+        HasGenericsView<Method>,
+        HasFieldsView<Method>,
+        HasJavadocView<Method>, 
+        HasAnnotationUsageView<Method>,
+        HasCodeView<Method>, 
+        HasModifiersView<Method> {
 
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, Method model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
-		return Optional.of(
-			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
-			gen.onEach(model.getAnnotations()).collect(joinIfNotEmpty(nl(), EMPTY, nl())) +
-			gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
-			gen.onEach(model.getGenerics()).collect(joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE)) +
-			ifelse(gen.on(model.getType()), s -> s + SPACE, EMPTY) +
-			model.getName() +
-			gen.onEach(model.getFields()).collect(
-				Collectors.joining(COMMA_SPACE, PS, PE)
-			) + SPACE + 
-            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
-            block(
-				model.getCode().stream().collect(
-					Collectors.joining(nl())
-				)
-			)
-		);
+        return Optional.of(
+            renderJavadoc(gen, model) +
+            renderAnnotations(gen, model) +
+            renderModifiers(gen, model) +
+            renderGenerics(gen, model) +
+            renderType(gen, model) +
+            renderName(gen, model) + "(" +
+            renderFields(gen, model) + ") " +
+            renderThrows(gen, model) + 
+            renderCode(gen, model)
+        );
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String fieldSeparator() {
+        return ", ";
+    }
 }

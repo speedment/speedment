@@ -18,9 +18,13 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
+import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
+import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
+import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
+import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
 import com.speedment.common.codegen.model.InterfaceField;
 import static com.speedment.common.codegen.model.modifier.Modifier.FINAL;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -29,7 +33,12 @@ import java.util.Optional;
  * 
  * @author Emil Forslund
  */
-public final class InterfaceFieldView implements Transform<InterfaceField, String> {
+public final class InterfaceFieldView implements Transform<InterfaceField, String>,
+        HasJavadocView<InterfaceField>,
+        HasModifiersView<InterfaceField>,
+        HasAnnotationUsageView<InterfaceField>,
+        HasTypeView<InterfaceField>,
+        HasNameView<InterfaceField> {
     
     /**
      * {@inheritDoc}
@@ -40,12 +49,11 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
         requireNonNull(model);
         
 		return Optional.of(
-			gen.on(model.getJavadoc()).orElse(EMPTY) +	
-			(model.getModifiers().contains(FINAL) ?
-				gen.on(FINAL).get() + SPACE : EMPTY
-			) +		
-			gen.on(model.getType()).orElse(EMPTY) + SPACE +
-			model.getName()
+            renderJavadoc(gen, model) +
+            renderModifiers(gen, model, FINAL) +
+            renderAnnotations(gen, model) +
+			renderType(gen, model) +
+			renderName(gen, model)
 		);
 	}
 }

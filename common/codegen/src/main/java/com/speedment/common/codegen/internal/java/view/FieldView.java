@@ -47,8 +47,8 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
         
 		return Optional.of(
 			renderJavadoc(gen, model) +
+            renderModifiers(gen, model) +
             renderAnnotations(gen, model) +
-			renderModifiers(gen, model) +
 			renderType(gen, model) +
 			renderName(gen, model) +
 			renderValue(gen, model)

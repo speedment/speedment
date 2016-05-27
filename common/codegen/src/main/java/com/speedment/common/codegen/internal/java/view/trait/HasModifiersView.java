@@ -22,6 +22,10 @@ import com.speedment.common.codegen.model.trait.HasModifiers;
 import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.common.codegen.model.modifier.Modifier;
+import java.util.Set;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -36,14 +40,25 @@ public interface HasModifiersView<M extends HasModifiers<M>> extends
     
     /**
      * Render the modifiers-part of the model with an extra space appended
-     * afterwards. If no modifiers exists, an empty string is returned.
+     * afterwards. If no modifiers exists, an empty string is returned. If an
+     * non-empty array of allowed modifiers is provided, only those can
+     * be visible in the result.
      * 
-     * @param gen    the generator
-     * @param model  the model
-     * @return       the generated code
+     * @param gen      the generator
+     * @param model    the model
+     * @param allowed  set of modifiers that can be visible
+     * @return         the generated code
      */
-    default String renderModifiers(Generator gen, M model) {
-        return gen.onEach(model.getModifiers())
-            .collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
+    default String renderModifiers(Generator gen, M model, Modifier... allowed) {
+        final Set<Modifier> modifiers;
+        
+        if (allowed.length == 0) {
+            modifiers = model.getModifiers();
+        } else {
+            modifiers = Stream.of(allowed).collect(toSet());
+            modifiers.retainAll(model.getModifiers());
+        }
+        
+        return gen.onEach(modifiers).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
     }
 }

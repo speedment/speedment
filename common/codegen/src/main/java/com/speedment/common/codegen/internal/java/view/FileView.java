@@ -33,8 +33,10 @@ import java.util.Optional;
  * 
  * @author Emil Forslund
  */
-public final class FileView implements Transform<File, String>, HasJavadocView<File>, 
-    HasClassesView<File>, HasImportsView<File> {
+public final class FileView implements Transform<File, String>, 
+        HasImportsView<File>,    
+        HasJavadocView<File>, 
+        HasClassesView<File> {
     
 	private final static String PACKAGE_STRING = "package ";
 

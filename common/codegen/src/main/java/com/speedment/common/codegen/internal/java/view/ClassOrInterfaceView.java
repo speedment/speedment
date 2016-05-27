@@ -42,13 +42,20 @@ import java.util.stream.Stream;
  * components such as {@link ClassView}, {@link EnumView} and 
  * {@link InterfaceView}.
  * 
- * @param <M> The extending model type
- * @author Emil Forslund
+ * @param <M>  the extending model type
+ * @author     Emil Forslund
  */
-abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements 
-    Transform<M, String>, HasNameView<M>, HasModifiersView<M>, HasJavadocView<M>, 
-    HasGenericsView<M>, HasImplementsView<M>, HasInitalizersView<M>, HasMethodsView<M>,
-    HasClassesView<M>, HasAnnotationUsageView<M>, HasFieldsView<M> {
+abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Transform<M, String>, 
+        HasNameView<M>, 
+        HasModifiersView<M>, 
+        HasJavadocView<M>, 
+        HasGenericsView<M>,
+        HasImplementsView<M>, 
+        HasInitalizersView<M>, 
+        HasMethodsView<M>,
+        HasClassesView<M>, 
+        HasAnnotationUsageView<M>, 
+        HasFieldsView<M> {
     
 	protected final static String
 		CLASS_STRING = "class ",

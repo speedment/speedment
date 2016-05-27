@@ -87,6 +87,5 @@ public final class ImportView implements Transform<Import, String> {
         return !(current.isPresent()
             && suggested.isPresent()
             && current.get().equals(suggested.get()));
-
     }
 }

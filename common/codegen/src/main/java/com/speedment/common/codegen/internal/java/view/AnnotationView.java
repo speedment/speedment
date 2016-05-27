@@ -33,8 +33,9 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class AnnotationView implements Transform<Annotation, String>,
-    HasJavadocView<Annotation>, HasAnnotationUsageView<Annotation>,
-    HasNameView<Annotation> {
+        HasJavadocView<Annotation>,
+        HasAnnotationUsageView<Annotation>,
+        HasNameView<Annotation> {
 
     private final static String INTERFACE_STRING = "@interface ",
         DEFAULT_STRING = " default ";
@@ -55,13 +56,13 @@ public final class AnnotationView implements Transform<Annotation, String>,
             + block(
                 model.getFields().stream().map(f
                     -> // Field javadoc (optional)
-                    ifelse(gen.on(f.getJavadoc()), jd -> nl() + jd + nl(), EMPTY)
+                    renderJavadoc(gen, model)
                     + // Field declaration
                     gen.on(f.getType()) + SPACE + f.getName() + PS + PE
                     + // Default value (optional)
                     ifelse(gen.on(f.getValue()), v -> (DEFAULT_STRING + v), EMPTY)
                     + SC
-                ).collect(joining(nl()))
+                ).collect(joining(dnl()))
             )
         );
     }

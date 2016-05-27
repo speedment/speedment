@@ -18,9 +18,9 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
+import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.model.Initializer;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
@@ -29,7 +29,9 @@ import java.util.Optional;
  * 
  * @author Emil Forslund
  */
-public final class InitalizerView implements Transform<Initializer, String> {
+public final class InitalizerView implements Transform<Initializer, String>,
+        HasModifiersView<Initializer>,
+        HasCodeView<Initializer> {
 
     /**
      * {@inheritDoc}
@@ -40,8 +42,8 @@ public final class InitalizerView implements Transform<Initializer, String> {
         requireNonNull(model);
         
         return Optional.of(
-            gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
-            block(model.getCode().stream())
+            renderModifiers(gen, model) +
+            renderCode(gen, model)
         );
     }
 }
