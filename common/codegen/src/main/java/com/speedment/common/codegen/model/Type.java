@@ -22,8 +22,6 @@ import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasGenerics;
 import com.speedment.common.codegen.model.trait.HasName;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
 
 /**
  * A model that represents a type in code. When classes, enumerations and

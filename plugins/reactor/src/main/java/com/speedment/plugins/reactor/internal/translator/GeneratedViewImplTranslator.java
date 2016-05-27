@@ -17,15 +17,23 @@
 package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.Generator;
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
+import static com.speedment.common.codegen.internal.util.Formatting.dnl;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedViewImpl;
 import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
 /**
@@ -65,12 +73,43 @@ public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslato
                     .add(Type.of("Generated" + getSupport().entityName() + "View"))
                     .add(Constructor.of().public_().add(
                         "super(" + TranslatorUtil.mergingColumnField(table, getSupport()) + ");"
-                    ));
+                    ))
+                    .add(merge());
             }).build();
     }
 
     @Override
     protected String getJavadocRepresentText() {
         return "A materialized object view";
+    }
+    
+    private Method merge() {
+        final Type type       = getSupport().entityType();
+        final String typeName = getSupport().typeName();
+        final String varName  = getSupport().variableName();
+        
+        return Method.of("merge", type)
+            .add(OVERRIDE)
+            .protected_()
+            .add(Field.of("existing", type))
+            .add(Field.of("loaded", type))
+            .add(
+                "if (existing == null) " + block(
+                    "return loaded;"
+                ) + " else " + block(
+                    "final " + typeName + " " + varName + " = loaded.copy();",
+                    getSupport().tableOrThrow()
+                        .columns()
+                        .filter(Column::isNullable)
+                        .map(col -> "if (!" + varName + 
+                            ".get" + getSupport().typeName(col) + "().isPresent()) " + block(
+                                varName + ".set" + getSupport().typeName(col) + 
+                                "(existing.get" + getSupport().typeName(col) + 
+                                "().orElse(null));"
+                            )
+                        ).collect(joinIfNotEmpty(dnl(), nl(), dnl())) + 
+                        "return " + varName + ";"
+                )
+            );
     }
 }

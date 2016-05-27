@@ -41,6 +41,6 @@ public interface HasGenericsView<M extends HasGenerics<M>> extends
      */
     default String renderGenerics(Generator gen, M model) {
         return gen.onEach(model.getGenerics())
-            .collect(joinIfNotEmpty(", ", "<", "> "));
+            .collect(joinIfNotEmpty(", ", "<", ">"));
     }
 }
