@@ -56,8 +56,8 @@ public final class MethodView implements Transform<Method, String>,
         
         return Optional.of(
             renderJavadoc(gen, model) +
-            renderAnnotations(gen, model) +
             renderModifiers(gen, model) +
+            renderAnnotations(gen, model) +
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + "(" +
