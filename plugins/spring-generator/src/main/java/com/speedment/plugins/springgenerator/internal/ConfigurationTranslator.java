@@ -56,7 +56,7 @@ extends DefaultJavaClassTranslator<Project, Class> {
             .forEveryProject((clazz, project) -> {
                 clazz.public_();
                 clazz.add(AnnotationUsage.of(Type.of(Configuration.class)));
-                clazz.setSupertype(Type.of(getSupport().basePackageName() + ".generated.Generated" + getSupport().typeName() + "Controller"));
+                clazz.setSupertype(Type.of(getSupport().basePackageName() + ".generated.Generated" + getSupport().typeName() + "Configuration"));
             }).build();
     }
 }

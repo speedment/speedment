@@ -37,7 +37,6 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traver
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
@@ -74,7 +73,6 @@ extends DefaultJavaClassTranslator<Project, Class> {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_();
-                clazz.add(AnnotationUsage.of(Type.of(Configuration.class)));
                 clazz.setSupertype(Type.of(SpeedmentConfiguration.class));
                 
                 // Add constants
