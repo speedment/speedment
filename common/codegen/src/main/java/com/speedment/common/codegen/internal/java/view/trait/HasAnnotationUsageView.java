@@ -20,8 +20,10 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
 import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import com.speedment.common.codegen.model.ClassOrInterface;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -43,7 +45,12 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
      * @return       the generated code
      */
     default String renderAnnotations(Generator gen, M model) {
-        return gen.onEach(model.getAnnotations())
-            .collect(joinIfNotEmpty(nl(), EMPTY, nl()));
+        if (model instanceof ClassOrInterface) {
+            return gen.onEach(model.getAnnotations())
+                .collect(joinIfNotEmpty(nl(), EMPTY, nl()));
+        } else {
+            return gen.onEach(model.getAnnotations())
+                .collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
+        }
     }
 }
